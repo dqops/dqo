@@ -15,7 +15,7 @@ interface ISourceSchemasViewProps {
   onBack: () => void;
 }
 
-const SourceSchemasView = ({
+const SourceTablesView = ({
   connectionName,
   schemaName,
   onBack
@@ -75,12 +75,13 @@ const SourceSchemasView = ({
     <div className="py-4 px-8">
       <ConnectionActionGroup onImport={onBack} />
       <div className="flex justify-end space-x-4 mb-4">
-        <Button color="primary" label="Select All" onClick={selectAll} />
-        <Button color="primary" label="Unselect All" onClick={unselectAll} />
+        <Button color="primary" label="Select All" onClick={selectAll} disabled={selectedTables.length === tables.length} />
+        <Button color="primary" label="Unselect All" onClick={unselectAll} disabled={selectedTables.length === 0} />
         <Button
           color="primary"
           label="Import selected tables"
           onClick={importSelectedTables}
+          disabled={selectedTables.length === 0}
         />
         <Button
           color="primary"
@@ -108,17 +109,19 @@ const SourceSchemasView = ({
                 className="border-b border-gray-300 last:border-b-0"
               >
                 <td className="py-2 px-4 text-left">
-                  <Checkbox
-                    onChange={() => onSelectChange(item.tableName ?? '')}
-                    checked={selectedTables.indexOf(item.tableName ?? '') > -1}
-                  />
+                  <div className="flex">
+                    <Checkbox
+                      onChange={() => onSelectChange(item.tableName ?? '')}
+                      checked={selectedTables.indexOf(item.tableName ?? '') > -1}
+                    />
+                  </div>
                 </td>
                 <td className="py-2 px-4 text-left">{item.tableName}</td>
                 <td className="py-2 px-4 text-left">
                   <SvgIcon
                     name={item.alreadyImported ? 'check' : 'close'}
                     className={
-                      item.alreadyImported ? 'text-green-700' : 'text-red-700'
+                      item.alreadyImported ? 'text-primary' : 'text-red-700'
                     }
                     width={30}
                     height={22}
@@ -133,4 +136,4 @@ const SourceSchemasView = ({
   );
 };
 
-export default SourceSchemasView;
+export default SourceTablesView;

@@ -17,7 +17,7 @@ package ai.dqo.metadata.search;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
@@ -212,8 +212,8 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
     void findChecks_whenCalledForAll_thenReturnsNonEmptyArray() {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         checkSearchFilters.setCheckName("*");
-        TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
-        tableSpec.getChecks().setStandard(standard);
+        TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
+        tableSpec.getProfilingChecks().setStandard(standard);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         standard.setRowCount(check);
         table.setSpec(tableSpec);
@@ -227,8 +227,8 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
     @Test
     void findChecks_whenCalledForNonFilters_thenReturnsAll() {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
-        TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
-        tableSpec.getChecks().setStandard(standard);
+        TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
+        tableSpec.getProfilingChecks().setStandard(standard);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         standard.setRowCount(check);
         table.setSpec(tableSpec);
@@ -243,8 +243,8 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
     void findChecks_whenCalledForNotExistingName_thenReturnsEmptyArray() {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         checkSearchFilters.setCheckName("test");
-        TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
-        tableSpec.getChecks().setStandard(standard);
+        TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
+        tableSpec.getProfilingChecks().setStandard(standard);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         standard.setRowCount(check);
 		table.setSpec(tableSpec);

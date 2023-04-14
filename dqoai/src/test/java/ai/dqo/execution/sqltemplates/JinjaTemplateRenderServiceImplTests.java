@@ -22,14 +22,15 @@ import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
 import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
 import ai.dqo.core.configuration.DqoPythonConfigurationPropertiesObjectMother;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.metadata.sources.TableTargetSpec;
 import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
 import ai.dqo.utils.python.PythonCallerServiceImpl;
 import ai.dqo.utils.python.PythonVirtualEnvService;
@@ -44,6 +45,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class JinjaTemplateRenderServiceImplTests extends BaseTest {
     private JinjaTemplateRenderServiceImpl sut;
     private JinjaTemplateRenderParameters renderParameters;
+    private TableSpec table;
 
     @BeforeEach
     void setUp() {
@@ -53,13 +55,16 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
         PythonCallerServiceImpl pythonCallerService = new PythonCallerServiceImpl(
                 dqoConfigurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
 		this.sut = new JinjaTemplateRenderServiceImpl(pythonCallerService, pythonConfigurationProperties);
-		this.renderParameters = new JinjaTemplateRenderParameters(
+        table = new TableSpec();
+        table.setPhysicalTableName(new PhysicalTableName("schema1", "table1"));
+        this.renderParameters = new JinjaTemplateRenderParameters(
                 new ConnectionSpec(),
-                new TableSpec(),
+                table,
                 new ColumnSpec(),
                 null,
                 new TableStandardRowCountSensorParametersSpec(),
                 TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
+                new TimeWindowFilterParameters(),
                 new DataStreamMappingSpec(),
                 new SensorDefinitionSpec(),
                 new ProviderSensorDefinitionSpec(),
@@ -75,8 +80,7 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
 
     @Test
     void renderTemplate_whenSensorReferencingTable_thenRendersTemplateWithFilledField() {
-		this.renderParameters.getTable().setTarget(new TableTargetSpec("schema1", "table1"));
-        String result = this.sut.renderTemplate("select 1 from {{ table.target.table_name }}", this.renderParameters);
+        String result = this.sut.renderTemplate("select 1 from {{ target_table.table_name }}", this.renderParameters);
         Assertions.assertEquals("select 1 from table1", result);
     }
 }

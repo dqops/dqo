@@ -18,6 +18,10 @@ package ai.dqo.cli.commands.cloud.sync;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.cloud.sync.impl.CloudSynchronizationService;
+import ai.dqo.cli.terminal.TerminalFactory;
+import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.core.dqocloud.accesskey.DqoCloudCredentialsException;
+import ai.dqo.core.jobqueue.DqoQueueJobExecutionException;
 import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.core.synchronization.fileexchange.FileSynchronizationDirection;
 import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
@@ -32,16 +36,19 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "rules", description = "Synchronize local \"rules\" folder with custom rule definitions with DQO Cloud")
+@CommandLine.Command(name = "rules", header = "Synchronize local \"rules\" folder with custom rule definitions with DQO Cloud", description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"rules\" folder.")
 public class CloudSyncRulesCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
+    private TerminalFactory terminalFactory;
 
     public CloudSyncRulesCliCommand() {
     }
 
     @Autowired
-    public CloudSyncRulesCliCommand(CloudSynchronizationService cloudSynchronizationService) {
+    public CloudSyncRulesCliCommand(CloudSynchronizationService cloudSynchronizationService,
+                                    TerminalFactory terminalFactory) {
         this.cloudSynchronizationService = cloudSynchronizationService;
+        this.terminalFactory = terminalFactory;
     }
 
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, debug)", defaultValue = "summary")
@@ -90,6 +97,18 @@ public class CloudSyncRulesCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
-        return this.cloudSynchronizationService.synchronizeRoot(DqoRoot.rules, this.mode, this.direction, this.isHeadless(), true);
+        try {
+            return this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.rules, this.mode, this.direction, false, this.isHeadless(), true);
+        }
+        catch (DqoQueueJobExecutionException cex) {
+            if (cex.getRealCause() instanceof DqoCloudCredentialsException) {
+                TerminalWriter terminalWriter = this.terminalFactory.getWriter();
+                terminalWriter.writeLine("Invalid DQO Cloud credentials, please run \"cloud login\" to get a new DQO Cloud API Key.");
+                return -1;
+            }
+
+            throw cex;
+        }
     }
 }

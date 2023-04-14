@@ -18,7 +18,7 @@ package ai.dqo.cli.commands.table;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.table.impl.TableService;
+import ai.dqo.cli.commands.table.impl.TableCliService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.terminal.TerminalReader;
@@ -36,9 +36,9 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "add", description = "Add table with specified name")
+@CommandLine.Command(name = "add", header = "Add table with specified name", description = "Add a new table with the specified name to the database. It allows the user to create a new table in the application for performing various operations.")
 public class TableAddCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
-    private TableService tableImportService;
+    private TableCliService tableImportService;
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;
 
@@ -48,7 +48,7 @@ public class TableAddCliCommand extends BaseCommand implements ICommand, IConnec
     @Autowired
     public TableAddCliCommand(TerminalReader terminalReader,
 							  TerminalWriter terminalWriter,
-							  TableService tableImportService) {
+							  TableCliService tableImportService) {
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
         this.tableImportService = tableImportService;

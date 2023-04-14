@@ -31,7 +31,7 @@ import tech.tablesaw.api.Table;
  * for a single table and selected time ranges.
  */
 public class StatisticsSnapshot extends TableDataSnapshot {
-    public static final String PARQUET_FILE_NAME = "statistics.0.snappy.parquet";
+    public static final String PARQUET_FILE_NAME = "statistics.0.parquet";
 
     /**
      * Default constructor that creates a snapshot.
@@ -44,7 +44,7 @@ public class StatisticsSnapshot extends TableDataSnapshot {
                               PhysicalTableName tableName,
                               ParquetPartitionStorageService storageService,
                               Table newResults) {
-        super(connectionName, tableName, storageService, createProfilingResultsStorageSettings(), newResults);
+        super(connectionName, tableName, storageService, createStatisticsStorageSettings(), newResults);
     }
 
     /**
@@ -60,19 +60,19 @@ public class StatisticsSnapshot extends TableDataSnapshot {
                               ParquetPartitionStorageService storageService,
                               String[] columnNames,
                               Table tableResultsSample) {
-        super(connectionName, tableName, storageService, createProfilingResultsStorageSettings(), columnNames, tableResultsSample);
+        super(connectionName, tableName, storageService, createStatisticsStorageSettings(), columnNames, tableResultsSample);
     }
 
     /**
-     * Creates the storage settings for storing the profiling results.
+     * Creates the storage settings for storing the statistics results.
      * @return Storage settings.
      */
-    public static FileStorageSettings createProfilingResultsStorageSettings() {
+    public static FileStorageSettings createStatisticsStorageSettings() {
         return new FileStorageSettings(DqoRoot.data_statistics,
                 BuiltInFolderNames.STATISTICS,
                 PARQUET_FILE_NAME,
                 StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME,
                 StatisticsColumnNames.ID_COLUMN_NAME,
-                TablesawParquetWriteOptions.CompressionCodec.SNAPPY);
+                TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED);
     }
 }

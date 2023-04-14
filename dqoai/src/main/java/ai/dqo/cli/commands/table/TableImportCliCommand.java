@@ -18,8 +18,8 @@ package ai.dqo.cli.commands.table;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.cli.commands.table.impl.TableCliService;
 import ai.dqo.cli.commands.table.impl.TableImportFailedException;
-import ai.dqo.cli.commands.table.impl.TableService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.SchemaNameCompleter;
@@ -40,12 +40,12 @@ import tech.tablesaw.api.Table;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "import", description = "Import tables from a specified database")
+@CommandLine.Command(name = "import", header = "Import tables from a specified database", description = "Import the tables from the specified database into the application. It allows the user to import the tables from the database into the application for performing various database operations.")
 public class TableImportCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWriter;
-    private TableService tableImportService;
+    private TableCliService tableImportService;
 
     public TableImportCliCommand() {
     }
@@ -54,7 +54,7 @@ public class TableImportCliCommand extends BaseCommand implements ICommand, ICon
     public TableImportCliCommand(TerminalReader terminalReader,
 								 TerminalWriter terminalWriter,
                                  TerminalTableWritter terminalTableWriter,
-								 TableService tableImportService) {
+								 TableCliService tableImportService) {
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
         this.terminalTableWriter = terminalTableWriter;

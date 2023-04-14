@@ -16,6 +16,8 @@
 
 export enum CheckRunRecurringScheduleGroup {
   profiling = "profiling",
-  daily = "daily",
-  monthly = "monthly"
+  recurring_daily = "recurring_daily",
+  recurring_monthly = "recurring_monthly",
+  partitioned_daily = "partitioned_daily",
+  partitioned_monthly = "partitioned_monthly",
 }

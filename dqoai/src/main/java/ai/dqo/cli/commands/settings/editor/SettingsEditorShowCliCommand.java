@@ -32,7 +32,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "show", description = "Show editor settings")
+@CommandLine.Command(name = "show", header = "Show editor settings", description = "Display the current editor settings.")
 public class SettingsEditorShowCliCommand extends BaseCommand implements ICommand {
 	private SettingsService settingsService;
 	private TerminalReader terminalReader;

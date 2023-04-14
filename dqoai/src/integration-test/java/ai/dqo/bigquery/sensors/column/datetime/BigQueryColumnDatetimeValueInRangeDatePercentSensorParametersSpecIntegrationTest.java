@@ -57,9 +57,9 @@ public class BigQueryColumnDatetimeValueInRangeDatePercentSensorParametersSpecIn
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(sampleTableMetadata, "date_type", this.checkSpec);
         this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
 
         LocalDate lower = LocalDate.of(2022,1,1);
@@ -78,9 +78,9 @@ public class BigQueryColumnDatetimeValueInRangeDatePercentSensorParametersSpecIn
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(sampleTableMetadata, "date_type", this.checkSpec);
         this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
 
         LocalDate lower = LocalDate.of(2022,1,1);
@@ -99,9 +99,9 @@ public class BigQueryColumnDatetimeValueInRangeDatePercentSensorParametersSpecIn
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(sampleTableMetadata, "date_type", this.checkSpec);
         this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
 
         LocalDate lower = LocalDate.of(2022,1,1);
@@ -122,7 +122,7 @@ public class BigQueryColumnDatetimeValueInRangeDatePercentSensorParametersSpecIn
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(sampleTableMetadata, "date_type", this.checkSpec);
         this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
 
         LocalDate lower = LocalDate.of(2022,1,1);
@@ -143,7 +143,7 @@ public class BigQueryColumnDatetimeValueInRangeDatePercentSensorParametersSpecIn
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(sampleTableMetadata, "date_type", this.checkSpec);
         this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
 
         LocalDate lower = LocalDate.of(2022,1,1);

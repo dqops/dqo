@@ -42,16 +42,16 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
 
     /**
      * Finds an existing object given the object name.
-     * @param objectName Object name.
+     * @param connectionName Object name.
      * @param loadAllWhenMissing Forces loading all elements from the persistence store when the element is missing. When false, then simply checks if the element is in the dictionary.
      * @return Existing object (model wrapper) or null when the object was not found.
      */
-    public V getByObjectName(K objectName, boolean loadAllWhenMissing) {
-        V result = this.index.get(objectName);
+    public V getByObjectName(K connectionName, boolean loadAllWhenMissing) {
+        V result = this.index.get(connectionName);
         if (result == null) {
             if (loadAllWhenMissing) {
 				loadOnce();
-                result = this.index.get(objectName);
+                result = this.index.get(connectionName);
             }
         }
         return result;

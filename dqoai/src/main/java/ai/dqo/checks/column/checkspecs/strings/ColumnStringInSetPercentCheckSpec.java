@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnStringInSetPercentCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringInSetPercentSensorParametersSpec, MinPercentRule2ParametersSpec, MinPercentRule1ParametersSpec, MinPercentRule5ParametersSpec> {
+        extends AbstractCheckSpec<ColumnStringsStringInSetPercentSensorParametersSpec, MinPercentRule1ParametersSpec, MinPercentRule2ParametersSpec, MinPercentRule5ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStringInSetPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -51,15 +51,15 @@ public class ColumnStringInSetPercentCheckSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsStringInSetPercentSensorParametersSpec parameters = new ColumnStringsStringInSetPercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with empty strings in a column that raises a data quality error (alert).")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule2ParametersSpec error;
-
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule1ParametersSpec warning;
+
+    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with empty strings in a column that raises a data quality error (alert).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private MinPercentRule2ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -86,26 +86,6 @@ public class ColumnStringInSetPercentCheckSpec
     }
 
     /**
-     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
-     *
-     * @return Default "ERROR" alerting thresholds.
-     */
-    @Override
-    public MinPercentRule2ParametersSpec getError() {
-        return this.error;
-    }
-
-    /**
-     * Sets a new error level alerting threshold.
-     * @param error Error alerting threshold to set.
-     */
-    public void setError(MinPercentRule2ParametersSpec error) {
-        this.setDirtyIf(!Objects.equals(this.error, error));
-        this.error = error;
-        this.propagateHierarchyIdToField(error, "error");
-    }
-
-    /**
      * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
      *
      * @return Warning severity rule parameters.
@@ -123,6 +103,26 @@ public class ColumnStringInSetPercentCheckSpec
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
+    }
+
+    /**
+     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
+     *
+     * @return Default "ERROR" alerting thresholds.
+     */
+    @Override
+    public MinPercentRule2ParametersSpec getError() {
+        return this.error;
+    }
+
+    /**
+     * Sets a new error level alerting threshold.
+     * @param error Error alerting threshold to set.
+     */
+    public void setError(MinPercentRule2ParametersSpec error) {
+        this.setDirtyIf(!Objects.equals(this.error, error));
+        this.error = error;
+        this.propagateHierarchyIdToField(error, "error");
     }
 
     /**

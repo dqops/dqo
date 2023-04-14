@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.checks.progress;
 
-import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
+import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
 import ai.dqo.metadata.sources.TableSpec;
 
 /**
@@ -23,17 +23,17 @@ import ai.dqo.metadata.sources.TableSpec;
  */
 public class SavingRuleEvaluationResultsEvent extends CheckExecutionProgressEvent {
     private final TableSpec tableSpec;
-    private final RuleResultsSnapshot ruleResultsSnapshot;
+    private final CheckResultsSnapshot checkResultsSnapshot;
 
     /**
      * Creates a progress event.
      *
      * @param tableSpec                     Target table.
-     * @param ruleResultsSnapshot           Rule evaluation results (snapshot).
+     * @param checkResultsSnapshot           Rule evaluation results (snapshot).
      */
-    public SavingRuleEvaluationResultsEvent(TableSpec tableSpec, RuleResultsSnapshot ruleResultsSnapshot) {
+    public SavingRuleEvaluationResultsEvent(TableSpec tableSpec, CheckResultsSnapshot checkResultsSnapshot) {
         this.tableSpec = tableSpec;
-        this.ruleResultsSnapshot = ruleResultsSnapshot;
+        this.checkResultsSnapshot = checkResultsSnapshot;
     }
 
     /**
@@ -50,7 +50,7 @@ public class SavingRuleEvaluationResultsEvent extends CheckExecutionProgressEven
      *
      * @return Rule evaluation results.
      */
-    public RuleResultsSnapshot getRuleResultsSnapshot() {
-        return ruleResultsSnapshot;
+    public CheckResultsSnapshot getRuleResultsSnapshot() {
+        return checkResultsSnapshot;
     }
 }

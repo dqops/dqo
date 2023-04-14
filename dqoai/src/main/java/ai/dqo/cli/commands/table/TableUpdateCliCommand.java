@@ -18,7 +18,7 @@ package ai.dqo.cli.commands.table;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.table.impl.TableService;
+import ai.dqo.cli.commands.table.impl.TableCliService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
@@ -37,9 +37,9 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "update", description = "Update tables which match filters")
+@CommandLine.Command(name = "update", header = "Update tables that match a given condition", description = "Update the structure of one or more tables that match a given condition. It allows user to use various filters, such as table names  to narrow down the set of tables to update.")
 public class TableUpdateCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
-    private TableService tableImportService;
+    private TableCliService tableImportService;
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;
 
@@ -49,7 +49,7 @@ public class TableUpdateCliCommand extends BaseCommand implements ICommand, ICon
     @Autowired
     public TableUpdateCliCommand(TerminalReader terminalReader,
 								 TerminalWriter terminalWriter,
-								 TableService tableImportService) {
+								 TableCliService tableImportService) {
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
         this.tableImportService = tableImportService;

@@ -110,6 +110,12 @@ public class ConnectionWrapperImpl extends AbstractElementWrapper<String, Connec
         super.flush();
     }
 
+    @Override
+    public void markForDeletion() {
+        this.getTables().forEach(TableWrapper::markForDeletion);
+        super.markForDeletion();
+    }
+
     /**
      * Returns the child map on the spec class with all fields.
      *

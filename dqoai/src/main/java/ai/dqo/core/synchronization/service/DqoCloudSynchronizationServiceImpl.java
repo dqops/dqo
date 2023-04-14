@@ -15,14 +15,13 @@
  */
 package ai.dqo.core.synchronization.service;
 
-import ai.dqo.core.synchronization.filesystems.dqocloud.DqoCloudRemoteFileSystemServiceFactory;
-import ai.dqo.core.synchronization.contract.SynchronizationRoot;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.SynchronizationRoot;
+import ai.dqo.core.synchronization.fileexchange.*;
+import ai.dqo.core.synchronization.filesystems.dqocloud.DqoCloudRemoteFileSystemServiceFactory;
 import ai.dqo.core.synchronization.filesystems.local.LocalSynchronizationFileSystemFactory;
-import ai.dqo.core.synchronization.fileexchange.FileSynchronizationDirection;
-import ai.dqo.core.synchronization.fileexchange.FileSystemChangeSet;
-import ai.dqo.core.synchronization.fileexchange.FileSystemSynchronizationService;
-import ai.dqo.core.synchronization.fileexchange.SynchronizationResult;
 import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationListener;
 import ai.dqo.metadata.fileindices.FileIndexName;
 import ai.dqo.metadata.fileindices.FileIndexWrapper;
@@ -45,6 +44,8 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
     private FileSystemSynchronizationService fileSystemSynchronizationService;
     private LocalSynchronizationFileSystemFactory localSynchronizationFileSystemFactory;
     private DqoCloudRemoteFileSystemServiceFactory dqoCloudRemoteFileSystemServiceFactory;
+    private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private DqoCloudWarehouseService dqoCloudWarehouseService;
 
     /**
      * Dependency injection constructor.
@@ -52,25 +53,35 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
      * @param fileSystemSynchronizationService File system synchronization utility.
      * @param localSynchronizationFileSystemFactory User home file system factory.
      * @param dqoCloudRemoteFileSystemServiceFactory DQO Cloud remote file system factory.
+     * @param dqoCloudApiKeyProvider API key provider.
+     * @param dqoCloudWarehouseService DQO CLoud warehouse refresh service, used to refresh the native tables.
      */
     @Autowired
     public DqoCloudSynchronizationServiceImpl(UserHomeContextFactory userHomeContextFactory,
                                               FileSystemSynchronizationService fileSystemSynchronizationService,
                                               LocalSynchronizationFileSystemFactory localSynchronizationFileSystemFactory,
-                                              DqoCloudRemoteFileSystemServiceFactory dqoCloudRemoteFileSystemServiceFactory) {
+                                              DqoCloudRemoteFileSystemServiceFactory dqoCloudRemoteFileSystemServiceFactory,
+                                              DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
+                                              DqoCloudWarehouseService dqoCloudWarehouseService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.fileSystemSynchronizationService = fileSystemSynchronizationService;
         this.localSynchronizationFileSystemFactory = localSynchronizationFileSystemFactory;
         this.dqoCloudRemoteFileSystemServiceFactory = dqoCloudRemoteFileSystemServiceFactory;
+        this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
+        this.dqoCloudWarehouseService = dqoCloudWarehouseService;
     }
 
     /**
      * Performs synchronization of a given user home folder to the DQO Cloud.
      * @param dqoRoot User Home folder type to synchronize.
      * @param synchronizationDirection File synchronization direction (full, download, upload).
+     * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
-    public void synchronizeFolder(DqoRoot dqoRoot, FileSynchronizationDirection synchronizationDirection, FileSystemSynchronizationListener synchronizationListener) {
+    public void synchronizeFolder(DqoRoot dqoRoot,
+                                  FileSynchronizationDirection synchronizationDirection,
+                                  boolean forceRefreshNativeTable,
+                                  FileSystemSynchronizationListener synchronizationListener) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -100,8 +111,18 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
                 remoteFileIndexWrapper.getSpec().getFolder(),
                 Optional.empty()); // empty means that the file system should be scanned to find new files
 
+        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
         SynchronizationResult synchronizationResult = this.fileSystemSynchronizationService.synchronize(
-                sourceChangeSet, remoteChangeSet, dqoRoot, synchronizationDirection, synchronizationListener);
+                sourceChangeSet, remoteChangeSet, dqoRoot, synchronizationDirection, apiKey, synchronizationListener);
+
+        TargetTableModifiedPartitions targetTableModifiedPartitions = synchronizationResult.getTargetTableModifiedPartitions();
+        if (forceRefreshNativeTable) {
+            this.dqoCloudWarehouseService.refreshNativeTable(new TargetTableModifiedPartitions(dqoRoot));
+        } else {
+            if (targetTableModifiedPartitions.hasAnyChanges()) {
+                this.dqoCloudWarehouseService.refreshNativeTable(targetTableModifiedPartitions);
+            }
+        }
 
         if (localFileIndexWrapper.getSpec().getFolder() == null ||
                 !Objects.equals(localFileIndexWrapper.getSpec().getFolder().getHash(), synchronizationResult.getSourceFileIndex().getHash())) {
@@ -120,30 +141,37 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
      * Synchronizes all roots (sources, check definitions, data).
      *
      * @param synchronizationDirection File synchronization direction (full, download, upload).
+     * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
     @Override
-    public void synchronizeAll(FileSynchronizationDirection synchronizationDirection, FileSystemSynchronizationListener synchronizationListener) {
-        synchronizeFolder(DqoRoot.sources, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.sensors, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.rules, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.data_sensor_readouts, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.data_rule_results, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.data_errors, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.data_statistics, synchronizationDirection, synchronizationListener);
+    public void synchronizeAll(FileSynchronizationDirection synchronizationDirection,
+                               boolean forceRefreshNativeTable,
+                               FileSystemSynchronizationListener synchronizationListener) {
+        synchronizeFolder(DqoRoot.sources, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        synchronizeFolder(DqoRoot.sensors, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        synchronizeFolder(DqoRoot.rules, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        synchronizeFolder(DqoRoot.checks, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_sensor_readouts, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_check_results, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_errors, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_statistics, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
     }
 
     /**
      * Synchronizes only the data roots (sensor readouts, rule results).
      *
      * @param synchronizationDirection File synchronization direction (full, download, upload).
+     * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
     @Override
-    public void synchronizeData(FileSynchronizationDirection synchronizationDirection, FileSystemSynchronizationListener synchronizationListener) {
-        synchronizeFolder(DqoRoot.data_sensor_readouts, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.data_rule_results, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.data_errors, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.data_statistics, synchronizationDirection, synchronizationListener);
+    public void synchronizeData(FileSynchronizationDirection synchronizationDirection,
+                                boolean forceRefreshNativeTable,
+                                FileSystemSynchronizationListener synchronizationListener) {
+        synchronizeFolder(DqoRoot.data_sensor_readouts, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_check_results, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_errors, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_statistics, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
     }
 }

@@ -19,7 +19,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
 
   const renderStatus = () => {
     if (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
-      return <SvgIcon name="success" className="w-4 h-4 text-green-700" />;
+      return <SvgIcon name="success" className="w-4 h-4 text-primary" />;
     }
     if (job.status === DqoJobHistoryEntryModelStatusEnum.waiting) {
       return <SvgIcon name="waiting" className="w-4 h-4 text-yellow-700" />;
@@ -38,7 +38,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
   return (
     <Accordion open={open}>
       <AccordionHeader onClick={() => setOpen(!open)}>
-        <div className="flex justify-between items-center text-sm w-full">
+        <div className="flex justify-between items-center text-sm w-full text-gray-700">
           <div className="flex space-x-1 items-center">
             <div>{job.jobType}</div>
             {renderStatus()}
@@ -49,7 +49,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
         </div>
       </AccordionHeader>
       <AccordionBody>
-        <table>
+        <table className="text-gray-700">
           <tbody>
           <tr>
             <td className="px-2 capitalize">Status</td>

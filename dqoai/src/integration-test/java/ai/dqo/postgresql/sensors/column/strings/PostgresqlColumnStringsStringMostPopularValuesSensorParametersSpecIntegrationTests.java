@@ -60,7 +60,7 @@ public class PostgresqlColumnStringsStringMostPopularValuesSensorParametersSpecI
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -68,7 +68,7 @@ public class PostgresqlColumnStringsStringMostPopularValuesSensorParametersSpecI
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -80,7 +80,7 @@ public class PostgresqlColumnStringsStringMostPopularValuesSensorParametersSpecI
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHocOneDataStream_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfilingOneDataStream_thenReturnsValues() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -95,7 +95,7 @@ public class PostgresqlColumnStringsStringMostPopularValuesSensorParametersSpecI
         }});
         this.sampleTableMetadata.getTableSpec().getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -107,7 +107,7 @@ public class PostgresqlColumnStringsStringMostPopularValuesSensorParametersSpecI
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -115,7 +115,7 @@ public class PostgresqlColumnStringsStringMostPopularValuesSensorParametersSpecI
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -127,14 +127,14 @@ public class PostgresqlColumnStringsStringMostPopularValuesSensorParametersSpecI
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
         this.sut.setExpectedValues(values);
         this.sut.setTopValues(5L);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

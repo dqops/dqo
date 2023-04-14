@@ -15,13 +15,13 @@
  */
 package ai.dqo.core.scheduler.scan;
 
-import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.core.scheduler.quartz.JobKeys;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
 import ai.dqo.core.scheduler.synchronization.SchedulerFileSynchronizationService;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -61,7 +61,7 @@ public class RunPeriodicMetadataSynchronizationDqoJob extends DqoQueueJob<Void> 
     @Override
     public Void onExecute(DqoJobExecutionContext jobExecutionContext) {
         FileSystemSynchronizationReportingMode synchronizationMode = this.jobSchedulerService.getSynchronizationMode();
-        this.schedulerFileSynchronizationService.synchronizeAll(synchronizationMode);
+        this.schedulerFileSynchronizationService.synchronizeAll(synchronizationMode, false);
 
         UniqueSchedulesCollection activeSchedules = this.jobSchedulerService.getActiveSchedules(JobKeys.RUN_CHECKS);
         JobSchedulesDelta schedulesToAddOrRemove = this.scheduleChangeFinderService.findSchedulesToAddOrRemove(activeSchedules);

@@ -19,9 +19,9 @@ package ai.dqo.rest.controllers;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.data.ruleresults.services.CheckResultsDetailedParameters;
-import ai.dqo.data.ruleresults.services.RuleResultsDataService;
-import ai.dqo.data.ruleresults.services.models.CheckResultsDetailedDataModel;
+import ai.dqo.data.checkresults.services.CheckResultsDataService;
+import ai.dqo.data.checkresults.services.CheckResultsDetailedParameters;
+import ai.dqo.data.checkresults.services.models.CheckResultsDetailedDataModel;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -46,18 +46,18 @@ import java.util.Optional;
 @Api(value = "CheckResults", description = "Returns the complete results of executed checks on tables and columns.")
 public class CheckResultsController {
     private UserHomeContextFactory userHomeContextFactory;
-    private RuleResultsDataService ruleResultsDataService;
+    private CheckResultsDataService checkResultsDataService;
 
     /**
      * Dependency injection constructor.
      * @param userHomeContextFactory User home context factory.
-     * @param ruleResultsDataService Rule results data service.
+     * @param checkResultsDataService Rule results data service.
      */
     @Autowired
     public CheckResultsController(UserHomeContextFactory userHomeContextFactory,
-                                  RuleResultsDataService ruleResultsDataService) {
+                                  CheckResultsDataService checkResultsDataService) {
         this.userHomeContextFactory = userHomeContextFactory;
-        this.ruleResultsDataService = ruleResultsDataService;
+        this.checkResultsDataService = checkResultsDataService;
     }
 
     /**
@@ -71,16 +71,16 @@ public class CheckResultsController {
      * @return View of the recent check results.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/results")
-    @ApiOperation(value = "getTableAdHocChecksResults", notes = "Returns the complete results of the most recent check executions for all table level data quality ad-hoc checks on a table",
+    @ApiOperation(value = "getTableProfilingChecksResults", notes = "Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Complete view of the most recent check runs for table level data quality ad-hoc checks on a table returned",
+            @ApiResponse(code = 200, message = "Complete view of the most recent check runs for table level data quality profiling checks on a table returned",
                     response = CheckResultsDetailedDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getTableAdHocChecksResults(
+    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getTableProfilingChecksResults(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -107,19 +107,19 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.ADHOC, null);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null, false);
         CheckResultsDetailedParameters loadParams = new CheckResultsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.ruleResultsDataService.readCheckStatusesDetailed(
+        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 checks, loadParams);
         return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the complete results of the most recent checkpoint executions on a table given a connection name, table name and a time scale.
+     * Retrieves the complete results of the most recent recurring executions on a table given a connection name, table name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -127,19 +127,19 @@ public class CheckResultsController {
      * @param dataStreamName Data stream name.
      * @param monthStart     Month start boundary.
      * @param monthEnd       Month end boundary.
-     * @return View of the recent checkpoint results.
+     * @return View of the recent recurring results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/{timeScale}/results")
-    @ApiOperation(value = "getTableCheckpointsResults", notes = "Returns the complete results of the most recent table level checkpoint executions for the checkpoints at a requested time scale",
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/results")
+    @ApiOperation(value = "getTableRecurringResults", notes = "Returns the complete results of the most recent table level recurring executions for the recurring at a requested time scale",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Complete view of the most recent checkpoint executions for the checkpoints at a requested time scale on a table returned",
+            @ApiResponse(code = 200, message = "Complete view of the most recent recurring executions for the recurring at a requested time scale on a table returned",
                     response = CheckResultsDetailedDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getTableCheckpointsResults(
+    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getTableRecurringResults(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -167,14 +167,14 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checkpointPartition = tableSpec.getTableCheckRootContainer(CheckType.CHECKPOINT, timeScale);
+        AbstractRootChecksContainerSpec recurringPartition = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, false);
         CheckResultsDetailedParameters loadParams = new CheckResultsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.ruleResultsDataService.readCheckStatusesDetailed(
-                checkpointPartition, loadParams);
+        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
+                recurringPartition, loadParams);
         return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
     }
 
@@ -226,13 +226,13 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec partitionedCheckPartition = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        AbstractRootChecksContainerSpec partitionedCheckPartition = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
         CheckResultsDetailedParameters loadParams = new CheckResultsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.ruleResultsDataService.readCheckStatusesDetailed(
+        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 partitionedCheckPartition, new CheckResultsDetailedParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
     }
@@ -250,16 +250,16 @@ public class CheckResultsController {
      * @return View of the recent check results.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/results")
-    @ApiOperation(value = "getColumnAdHocChecksResults", notes = "Returns an overview of the most recent check executions for all column level data quality ad-hoc checks on a column",
+    @ApiOperation(value = "getColumnProfilingChecksResults", notes = "Returns an overview of the most recent check executions for all column level data quality profiling checks on a column",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Complete view of the most recent check runs for column level data quality ad-hoc checks on a column returned",
+            @ApiResponse(code = 200, message = "Complete view of the most recent check runs for column level data quality profiling checks on a column returned",
                     response = CheckResultsDetailedDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getColumnAdHocChecksResults(
+    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getColumnProfilingChecksResults(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -292,19 +292,19 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.ADHOC, null);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, false);
         CheckResultsDetailedParameters loadParams = new CheckResultsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.ruleResultsDataService.readCheckStatusesDetailed(
+        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 checks, loadParams);
         return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the complete view of the most recent checkpoint executions on a column given a connection name, table name, column name and a time scale.
+     * Retrieves the complete view of the most recent recurring executions on a column given a connection name, table name, column name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -313,19 +313,19 @@ public class CheckResultsController {
      * @param dataStreamName Data stream name.
      * @param monthStart     Month start boundary.
      * @param monthEnd       Month end boundary.
-     * @return View of the recent checkpoint results.
+     * @return View of the recent recurring results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timeScale}/results")
-    @ApiOperation(value = "getColumnCheckpointsResults", notes = "Returns a complete view of the recent column level checkpoint executions for the checkpoints at a requested time scale",
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/results")
+    @ApiOperation(value = "getColumnRecurringResults", notes = "Returns a complete view of the recent column level recurring executions for the recurring at a requested time scale",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "View of the recent checkpoint executions for the checkpoints at a requested time scale on a column returned",
+            @ApiResponse(code = 200, message = "View of the recent recurring executions for the recurring at a requested time scale on a column returned",
                     response = CheckResultsDetailedDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getColumnCheckpointsResults(
+    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getColumnRecurringResults(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -359,14 +359,14 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        AbstractRootChecksContainerSpec checkpointPartition = columnSpec.getColumnCheckRootContainer(CheckType.CHECKPOINT, timeScale);
+        AbstractRootChecksContainerSpec recurringPartition = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale, false);
         CheckResultsDetailedParameters loadParams = new CheckResultsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.ruleResultsDataService.readCheckStatusesDetailed(
-                checkpointPartition, loadParams);
+        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
+                recurringPartition, loadParams);
         return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
     }
 
@@ -426,13 +426,13 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        AbstractRootChecksContainerSpec partitionedCheckPartition = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        AbstractRootChecksContainerSpec partitionedCheckPartition = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
         CheckResultsDetailedParameters loadParams = new CheckResultsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.ruleResultsDataService.readCheckStatusesDetailed(
+        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 partitionedCheckPartition, loadParams);
         return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
     }

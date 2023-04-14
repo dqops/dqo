@@ -8,7 +8,6 @@ interface ILabelItemProps {
   label: string;
   onChange: (key: number, value: string) => void;
   onRemove: (key: number) => void;
-  isLast: boolean;
 }
 
 const LabelItem = ({
@@ -16,33 +15,31 @@ const LabelItem = ({
   label,
   onChange,
   onRemove,
-  isLast
 }: ILabelItemProps) => {
   return (
     <tr>
-      <td className="pr-4 min-w-40 py-2" colSpan={isLast ? 2 : 1}>
-        <div className={isLast ? "mr-8" : ""}>
+      <td className="pr-4 min-w-40 py-2">
+        <div>
           <Input
             className="focus:!ring-0 focus:!border"
             value={label}
             onChange={(e) => onChange(idx, e.target.value)}
-            error={!isLast && label === ''}
+            error={label === ''}
           />
         </div>
       </td>
-      {!isLast && (
-        <td className="px-8 max-w-34 min-w-34 py-2">
-          <div className="flex justify-center">
-            <IconButton
-              color="teal"
-              size="sm"
-              onClick={() => onRemove(idx)}
-            >
-              <SvgIcon name="delete" className="w-4" />
-            </IconButton>
-          </div>
-        </td>
-      )}
+      <td className="px-8 max-w-34 min-w-34 py-2">
+        <div className="flex justify-center">
+          <IconButton
+            color="teal"
+            size="sm"
+            onClick={() => onRemove(idx)}
+            className="!shadow-none"
+          >
+            <SvgIcon name="delete" className="w-4" />
+          </IconButton>
+        </div>
+      </td>
     </tr>
   );
 };

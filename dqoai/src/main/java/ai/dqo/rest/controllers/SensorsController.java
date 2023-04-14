@@ -24,6 +24,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.metadata.ProviderSensorModel;
+import ai.dqo.rest.models.metadata.SensorBasicModel;
 import ai.dqo.rest.models.metadata.SensorModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import com.google.common.base.Strings;
@@ -36,7 +37,9 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -870,6 +873,43 @@ public class SensorsController {
         providerSensorModel.setProviderSensorDefinitionSpec(providerSensorDefinitionSpec);
 
         return new ResponseEntity<>(Mono.just(providerSensorModel), HttpStatus.OK);
+    }
+
+    /**
+     * Returns all combined sensor basic model.
+     * @return sensor basic model.
+     */
+    @GetMapping("/combinedbasic")
+    @ApiOperation(value = "getAllSensorsBasic", notes = "Returns a list of combined basic sensors", response = SensorBasicModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = SensorBasicModel.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    public ResponseEntity<Mono<SensorBasicModel>> getAllSensorsBasic() {
+
+        SensorBasicModel sensorBasicModel = new SensorBasicModel();
+
+        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+        DqoHome dqoHome = dqoHomeContext.getDqoHome();
+        List<SensorDefinitionWrapper> sensorDefinitionList= dqoHome.getSensors().toList();
+
+        for (SensorDefinitionWrapper sensorDefinitionWrapper : sensorDefinitionList) {
+            String sensorName = sensorDefinitionWrapper.getName();
+            sensorBasicModel.addChild(sensorName, false);
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        List<SensorDefinitionWrapper> userHomeSensors = userHome.getSensors().toList();
+
+        for (SensorDefinitionWrapper sensorDefinitionWrapper : userHomeSensors) {
+            String sensorName = sensorDefinitionWrapper.getName();
+            sensorBasicModel.addChild(sensorName, true);
+        }
+
+        return new ResponseEntity<>(Mono.just(sensorBasicModel), HttpStatus.OK);
     }
 
 }

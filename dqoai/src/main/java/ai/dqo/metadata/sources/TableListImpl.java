@@ -48,7 +48,6 @@ public class TableListImpl extends AbstractIndexingList<PhysicalTableName, Table
     @Override
     public TableWrapper createAndAddNew(PhysicalTableName physicalTableName) {
         TableWrapper newTable = super.createAndAddNew(physicalTableName);
-        newTable.getSpec().getTarget().copyFrom(physicalTableName);
         return newTable;
     }
 
@@ -85,8 +84,7 @@ public class TableListImpl extends AbstractIndexingList<PhysicalTableName, Table
     @Override
     public void importTables(List<TableSpec> sourceTableSpecs, DataStreamMappingSpec defaultDataStreamMapping) {
         for (TableSpec sourceTableSpec : sourceTableSpecs) {
-            TableTargetSpec tableTarget = sourceTableSpec.getTarget();
-            PhysicalTableName sourceTablePhysicalName = tableTarget.toPhysicalTableName();
+            PhysicalTableName sourceTablePhysicalName = sourceTableSpec.getPhysicalTableName();
 
             TableWrapper existingTableWrapper = this.getByObjectName(sourceTablePhysicalName, true);
             if (existingTableWrapper == null) {
@@ -97,7 +95,6 @@ public class TableListImpl extends AbstractIndexingList<PhysicalTableName, Table
             else {
                 // merge columns and update
                 TableSpec existingTableSpec = existingTableWrapper.getSpec();
-                existingTableSpec.setTarget(sourceTableSpec.getTarget()); // replace the target
                 existingTableSpec.mergeColumnsFrom(sourceTableSpec);
             }
         }

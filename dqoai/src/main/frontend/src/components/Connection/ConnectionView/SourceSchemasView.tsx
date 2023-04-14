@@ -17,7 +17,18 @@ import { useParams } from "react-router-dom";
 const SourceSchemasView = () => {
   const { connection }: { connection: string } = useParams();
   const [loading, setLoading] = useState(false);
-  const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([]);
+  const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([
+    {
+      connectionName: 'bgTest',
+      schemaName: 'test',
+      alreadyImported: false,
+      importTableJobParameters: {
+        connectionName: 'bgTest',
+        schemaName: 'test',
+        tableNames: ['table 1', 'table 2', 'table 3']
+      }
+    }
+  ]);
 
   const [selectedSchema, setSelectedSchema] = useState<SchemaRemoteModel>();
   const { jobs } = useSelector((state: IRootState) => state.job);
@@ -75,7 +86,7 @@ const SourceSchemasView = () => {
         <table className="w-full">
           <thead>
             <tr>
-              <th className="py-2 px-4 text-left">Source Schema Name</th>
+              <th className="py-2 pr-4 text-left">Source Schema Name</th>
               <th className="py-2 px-4 text-left">Is already imported</th>
               <th />
             </tr>
@@ -86,12 +97,12 @@ const SourceSchemasView = () => {
                 key={item.schemaName}
                 className="border-b border-gray-300 last:border-b-0"
               >
-                <td className="py-2 px-4 text-left">{item.schemaName}</td>
+                <td className="py-2 pr-4 text-left">{item.schemaName}</td>
                 <td className="py-2 px-4 text-left">
                   <SvgIcon
                     name={item.alreadyImported ? 'check' : 'close'}
                     className={
-                      item.alreadyImported ? 'text-green-700' : 'text-red-700'
+                      item.alreadyImported ? 'text-primary' : 'text-red-700'
                     }
                     width={30}
                     height={22}

@@ -57,12 +57,12 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.checkSpec.setParameters(this.sut);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "strings_with_numbers", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfiling() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "strings_with_numbers", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(this.sampleTableMetadata, "strings_with_numbers", this.checkSpec, timeScale);
+    private SensorExecutionRunParameters getRunParametersRecurring(CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(this.sampleTableMetadata, "strings_with_numbers", this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
@@ -91,7 +91,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
     }
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -99,7 +99,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -131,15 +131,15 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -147,7 +147,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -189,14 +189,14 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -204,7 +204,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
@@ -241,8 +241,8 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -282,6 +282,8 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
                     TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                 WHERE %5$s
+                      AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                      AND analyzed_table.`date` < CURRENT_DATE()
                 GROUP BY time_period, time_period_utc, top_values
                 ORDER BY time_period, time_period_utc, total_values
                     ) top_col_values
@@ -293,15 +295,15 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -309,7 +311,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -349,14 +351,14 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -364,7 +366,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("result")));
@@ -405,8 +407,8 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -450,6 +452,8 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
                     TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                 WHERE %5$s
+                      AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                      AND analyzed_table.`date` < CURRENT_DATE()
                 GROUP BY stream_level_1, time_period, time_period_utc, top_values
                 ORDER BY stream_level_1, time_period, time_period_utc, total_values
                     ) top_col_values
@@ -461,15 +465,15 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -477,7 +481,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -528,14 +532,14 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -543,7 +547,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("result"),
@@ -588,8 +592,8 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -637,6 +641,8 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
                     TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                 WHERE %5$s
+                      AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                      AND analyzed_table.`date` < CURRENT_DATE()
                 GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, top_values
                 ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, total_values
                     ) top_col_values
@@ -648,8 +654,8 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }

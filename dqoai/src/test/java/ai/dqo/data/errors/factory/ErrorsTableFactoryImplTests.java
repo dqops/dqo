@@ -42,7 +42,7 @@ public class ErrorsTableFactoryImplTests extends BaseTest {
     @Test
     void createEmptyErrorsTable_whenCalled_thenCreatesTableWithSchema() {
         Table table = this.sut.createEmptyErrorsTable("empty");
-        Assertions.assertEquals(40, table.columnCount());
+        Assertions.assertEquals(42, table.columnCount());
     }
 
     // This is a special test, it produces an empty error parquet file in the target/parquet-samples/errors-empty.snappy.parquet file
@@ -55,12 +55,12 @@ public class ErrorsTableFactoryImplTests extends BaseTest {
             Files.createDirectories(parquetSamplesFolder);
         }
 
-        File targetParquetFile = parquetSamplesFolder.resolve("errors-empty.snappy.parquet").toFile();
+        File targetParquetFile = parquetSamplesFolder.resolve("errors-empty.parquet").toFile();
 
         TablesawParquetWriteOptions writeOptions = TablesawParquetWriteOptions
                 .builder(targetParquetFile)
                 .withOverwrite(true)
-                .withCompressionCode(TablesawParquetWriteOptions.CompressionCodec.SNAPPY)
+                .withCompressionCode(TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED)
                 .build();
 
         new TablesawParquetWriter().write(table, writeOptions);

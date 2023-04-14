@@ -88,10 +88,11 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
         long checkHashId = checkSpec.getHierarchyId().hashCode64();
 
         DoubleColumn actualValueColumn = normalizedSensorResults.getActualValueColumn();
+        DoubleColumn expectedValueColumn = normalizedSensorResults.getExpectedValueColumn();
         DateTimeColumn timePeriodColumn = normalizedSensorResults.getTimePeriodColumn();
         RuleEvaluationResult result = RuleEvaluationResult.makeEmptyFromSensorResults(normalizedSensorResults);
 
-        String ruleDefinitionName = checkSpec.getRuleDefinitionName();
+        String ruleDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getRuleName();
         RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleDefinitionName);
         RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleFindResult.getRuleDefinitionSpec().getTimeWindow();
 
@@ -117,10 +118,13 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
             for (int sliceRowIndex = 0; sliceRowIndex < dimensionTableSlice.rowCount() ; sliceRowIndex++) {
                 int allSensorResultsRowIndex = dimensionTableSlice.mappedRowNumber(sliceRowIndex);
                 Double actualValue = actualValueColumn.get(allSensorResultsRowIndex);
+                Double expectedValueFromSensor = expectedValueColumn != null && !expectedValueColumn.isMissing(allSensorResultsRowIndex) ?
+                        expectedValueColumn.get(allSensorResultsRowIndex) : null;
+
                 LocalDateTime timePeriodLocal = timePeriodColumn.get(allSensorResultsRowIndex);
                 HistoricDataPoint[] previousDataPoints = null; // combined data points from current readouts and historic sensor readouts
 
-                if (sensorRunParameters.getCheckType() == CheckType.ADHOC) {
+                if (sensorRunParameters.getCheckType() == CheckType.PROFILING) {
                     // these checks do not have real time periods, we just take the last data points, also we don't want the current sensor results
                     // because there should be none (only partitioned checks will have previous results from the most recent query), we will find them only in old data
 
@@ -174,8 +178,9 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 Double expectedValue = null;
 
                 if (fatalRule != null) {
-                    RuleExecutionRunParameters ruleRunParametersFatal = new RuleExecutionRunParameters(actualValue, fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultFatal = this.ruleRunner.executeRule(executionContext, ruleRunParametersFatal);
+                    RuleExecutionRunParameters ruleRunParametersFatal = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
+                            fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                    RuleExecutionResult ruleExecutionResultFatal = this.ruleRunner.executeRule(executionContext, ruleRunParametersFatal, sensorRunParameters);
 
                     if (!ruleExecutionResultFatal.isPassed()) {
                         highestSeverity = 3;
@@ -194,8 +199,9 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 }
 
                 if (errorRule != null) {
-                    RuleExecutionRunParameters ruleRunParametersError = new RuleExecutionRunParameters(actualValue, errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultError = this.ruleRunner.executeRule(executionContext, ruleRunParametersError);
+                    RuleExecutionRunParameters ruleRunParametersError = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
+                            errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                    RuleExecutionResult ruleExecutionResultError = this.ruleRunner.executeRule(executionContext, ruleRunParametersError, sensorRunParameters);
 
                     if (highestSeverity == null && !ruleExecutionResultError.isPassed()) {
                         highestSeverity = 2;
@@ -214,8 +220,9 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 }
 
                 if (warningRule != null) {
-                    RuleExecutionRunParameters ruleRunParametersWarning = new RuleExecutionRunParameters(actualValue, warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultWarning = this.ruleRunner.executeRule(executionContext, ruleRunParametersWarning);
+                    RuleExecutionRunParameters ruleRunParametersWarning = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
+                            warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
+                    RuleExecutionResult ruleExecutionResultWarning = this.ruleRunner.executeRule(executionContext, ruleRunParametersWarning, sensorRunParameters);
 
                     if (highestSeverity == null && !ruleExecutionResultWarning.isPassed()) {
                         highestSeverity = 1;

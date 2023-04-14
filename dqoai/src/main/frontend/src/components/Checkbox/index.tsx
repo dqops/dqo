@@ -29,7 +29,7 @@ const Checkbox = ({
   checkClassName,
 }: CheckboxProps) => {
   return (
-    <label className={clsx('relative cursor-pointer rounded-sm inline-flex items-center select-none', className, labelPosition === "left" ? 'flex-row-reverse' : '' )}>
+    <label className={clsx('block relative cursor-pointer rounded-sm inline-flex items-center select-none', className, labelPosition === "left" ? 'flex-row-reverse' : '' )}>
       <div className="relative">
         <input
           disabled={disabled}
@@ -41,7 +41,7 @@ const Checkbox = ({
         <span
           className={clsx(
             'absolute top-1/2 rounded-sm -translate-y-1/2 left-0 h-4 w-4 flex items-center justify-center text-sm',
-            checked ? checkClassName + ' bg-blue-600 border-0' : 'border',
+            checked ? checkClassName + ' bg-teal-500 border-0' : 'border',
             error ? 'border-red-500' : 'border-gray-150'
           )}
         >
@@ -64,7 +64,7 @@ const Checkbox = ({
               <div>
                 <SvgIcon
                   name="info"
-                  className="w-4 h-4 text-blue-700 cursor-pointer"
+                  className="w-4 h-4 text-gray-700 cursor-pointer"
                 />
               </div>
             </Tooltip>

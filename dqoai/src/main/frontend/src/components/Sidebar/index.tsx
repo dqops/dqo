@@ -11,7 +11,7 @@ const Sidebar = () => {
   const history = useHistory();
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
-  const { sidebarWidth, setSidebarWidth } = useTree();
+  const { sidebarWidth, setSidebarWidth, sourceRoute } = useTree();
 
   const startResizing = useCallback(() => {
     setIsResizing(true);
@@ -49,21 +49,24 @@ const Sidebar = () => {
       className="fixed top-16 left-0 border-r border-gray-300 h-screen overflow-y-auto overflow-x-hidden flex flex-col bg-white py-4 z-50"
       ref={sidebarRef}
       onMouseDown={(e) => e.preventDefault()}
-      style={{ width: sidebarWidth }}
+      style={{ width: sidebarWidth, maxHeight: 'calc(100vh - 64px)' }}
     >
       <div className="px-4 flex mb-0">
-        <Button
-          label="Create new connection"
-          color="primary"
-          className="px-4"
-          leftIcon={<SvgIcon name="add" className="mr-2 w-5" />}
-          onClick={() => history.push('/create')}
-        />
+        {sourceRoute === 'sources' ? (
+          <Button
+            label="Add connection"
+            color="primary"
+            className="px-4"
+            leftIcon={<SvgIcon name="add" className="text-white mr-2 w-5" />}
+            onClick={() => history.push('/create')}
+          />
+        ) : (
+          <div />
+        )}
       </div>
-      {/*<CustomTree />*/}
       <Tree />
       <div
-        className="cursor-ew-resize fixed top-16 bottom-0 w-2 transform -translate-x-1/2 z-50"
+        className="cursor-ew-resize fixed bottom-0 w-2 transform -translate-x-1/2 z-50 top-16"
         onMouseDown={startResizing}
         style={{ left: sidebarWidth }}
       />

@@ -17,7 +17,7 @@ package ai.dqo.metadata.id;
 
 import ai.dqo.BaseTest;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.metadata.sources.TableTargetSpec;
+import ai.dqo.metadata.sources.TimestampColumnsSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ public class ChildHierarchyNodeFieldMapImplTests extends BaseTest {
     void setUp() {
 		this.sut = new ChildHierarchyNodeFieldMapImpl<TableSpec>(ChildHierarchyNodeFieldMap.empty()) {
             {
-				put("target", t -> t.getTarget());
+				put("timestamp_columns", t -> t.getTimestampColumns());
             }
         };
     }
@@ -39,26 +39,26 @@ public class ChildHierarchyNodeFieldMapImplTests extends BaseTest {
     @Test
     void getFieldGetter_whenCalledOnExistingField_thenReturnsGetter() {
         TableSpec tableSpec = new TableSpec();
-        TableTargetSpec target = new TableTargetSpec();
-        tableSpec.setTarget(target);
+        TimestampColumnsSpec timestampColumns = new TimestampColumnsSpec();
+        tableSpec.setTimestampColumns(timestampColumns);
 
-        GetHierarchyChildNodeFunc<HierarchyNode> fieldGetter = this.sut.getFieldGetter("target");
+        GetHierarchyChildNodeFunc<HierarchyNode> fieldGetter = this.sut.getFieldGetter("timestamp_columns");
         Assertions.assertNotNull(fieldGetter);
-        Assertions.assertSame(target, fieldGetter.apply(tableSpec));
+        Assertions.assertSame(timestampColumns, fieldGetter.apply(tableSpec));
     }
 
     @Test
     void propagateHierarchyIdToChildren_whenHierarchyGiven_thenPropagatesToFieldsUsingTheirFieldPaths() {
         HierarchyId parentHierarchyId = new HierarchyId("parent");
         TableSpec tableSpec = new TableSpec();
-        TableTargetSpec target = new TableTargetSpec();
-        tableSpec.setTarget(target);
+        TimestampColumnsSpec timestampColumns = new TimestampColumnsSpec();
+        tableSpec.setTimestampColumns(timestampColumns);
 
 		this.sut.propagateHierarchyIdToChildren(tableSpec, parentHierarchyId);
-        HierarchyId childHierarchyId = target.getHierarchyId();
+        HierarchyId childHierarchyId = timestampColumns.getHierarchyId();
         Assertions.assertNotNull(childHierarchyId);
         Assertions.assertTrue(parentHierarchyId.isMyDescendant(childHierarchyId));
         Assertions.assertEquals(2, childHierarchyId.size());
-        Assertions.assertEquals("target", childHierarchyId.getLast());
+        Assertions.assertEquals("timestamp_columns", childHierarchyId.getLast());
     }
 }

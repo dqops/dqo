@@ -25,8 +25,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.google.common.base.Strings;
-import lombok.EqualsAndHashCode;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -34,7 +34,6 @@ import java.util.Objects;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@EqualsAndHashCode(callSuper = true)
 public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<ColumnTypeSnapshotSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
@@ -120,7 +119,7 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
         int indexOfClose = dataType.indexOf(')');
         if (indexOfOpen < 0 || indexOfClose != dataType.length() - 1) {
             // just a type name like "INT", we can use it as is
-            result.setColumnType(dataType);
+            result.setColumnType(dataType.toUpperCase(Locale.ROOT));
         } else {
             result.setColumnType(dataType.substring(0, indexOfOpen));
             String numbersSection = dataType.substring(indexOfOpen + 1, indexOfClose);
@@ -278,7 +277,20 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
      */
     public ColumnTypeSnapshotSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         ColumnTypeSnapshotSpec cloned = this.deepClone();
+        if (cloned.columnType != null) {
+            cloned.columnType = cloned.columnType.toUpperCase(Locale.ROOT);
+        }
         cloned.columnType = secretValueProvider.expandValue(cloned.columnType);
         return cloned;
+    }
+
+    @Override
+    public ColumnTypeSnapshotSpec clone() {
+        try {
+            ColumnTypeSnapshotSpec clone = (ColumnTypeSnapshotSpec) super.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

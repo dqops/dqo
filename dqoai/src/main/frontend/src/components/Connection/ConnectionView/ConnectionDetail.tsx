@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  ConnectionBasicModel,
   ConnectionRemoteModel,
   ConnectionRemoteModelConnectionStatusEnum,
   ConnectionSpecProviderTypeEnum
@@ -7,11 +8,10 @@ import {
 import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
 import SnowflakeConnection from '../../Dashboard/DatabaseConnection/SnowflakeConnection';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import {
   getConnectionBasic,
-  setIsUpdatedConnectionBasic,
   setConnectionBasic,
+  setIsUpdatedConnectionBasic,
   updateConnectionBasic
 } from '../../../redux/actions/connection.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
@@ -24,15 +24,21 @@ import { SourceConnectionApi } from "../../../services/apiClient";
 import ConfirmErrorModal from "../../Dashboard/DatabaseConnection/ConfirmErrorModal";
 import PostgreSQLConnection from "../../Dashboard/DatabaseConnection/PostgreSQLConnection";
 import RedshiftConnection from "../../Dashboard/DatabaseConnection/RedshiftConnection";
+import SqlServerConnection from "../../Dashboard/DatabaseConnection/SqlServerConnection";
+import { CheckTypes } from "../../../shared/routes";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 
 const ConnectionDetail = () => {
-  const { connection }: { connection: string } = useParams();
+  const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
 
-  const { connectionBasic, isUpdatedConnectionBasic } = useSelector(
-    (state: IRootState) => state.connection
-  );
+  const activeTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
-  const { isUpdating } = useSelector((state: IRootState) => state.connection);
+  const { connectionBasic, isUpdatedConnectionBasic, isUpdating }: {
+    connectionBasic?: ConnectionBasicModel
+    isUpdatedConnectionBasic?: boolean;
+    isUpdating?: boolean;
+  } = useSelector(getFirstLevelState(checkTypes));
+
   const dispatch = useActionDispatch();
   const [isTesting, setIsTesting] = useState(false);
   const [testResult, setTestResult] = useState<ConnectionRemoteModel>();
@@ -42,18 +48,18 @@ const ConnectionDetail = () => {
 
   useEffect(() => {
     if (connectionBasic?.connection_name !== connection) {
-      dispatch(getConnectionBasic(connection));
+      dispatch(getConnectionBasic(checkTypes, activeTab, connection));
     }
   }, [connection]);
 
   const onChange = (obj: any) => {
     dispatch(
-      setConnectionBasic({
+      setConnectionBasic(checkTypes, activeTab, {
         ...connectionBasic,
         ...obj
       })
     );
-    dispatch(setIsUpdatedConnectionBasic(true));
+    dispatch(setIsUpdatedConnectionBasic(checkTypes, activeTab, true));
   };
 
   const onConfirmSave = async () => {
@@ -62,10 +68,14 @@ const ConnectionDetail = () => {
     }
 
     await dispatch(
-      updateConnectionBasic(connection, connectionBasic)
+      updateConnectionBasic(checkTypes, activeTab, connection, connectionBasic)
     );
-    await dispatch(getConnectionBasic(connection));
-    dispatch(setIsUpdatedConnectionBasic(false));
+
+    if (connectionBasic?.connection_name !== connection) {
+      dispatch(getConnectionBasic(checkTypes, activeTab, connection));
+    }
+
+    dispatch(setIsUpdatedConnectionBasic(checkTypes, activeTab, false));
     setShowConfirm(false);
   };
 
@@ -147,6 +157,14 @@ const ConnectionDetail = () => {
           )
         }
         {connectionBasic?.provider_type ===
+          ConnectionSpecProviderTypeEnum.sqlserver && (
+            <SqlServerConnection
+              sqlserver={connectionBasic?.sqlserver}
+              onChange={(sqlserver) => onChange({ sqlserver })}
+            />
+          )
+        }
+        {connectionBasic?.provider_type ===
           ConnectionSpecProviderTypeEnum.postgresql && (
             <PostgreSQLConnection
               postgresql={connectionBasic?.postgresql}
@@ -158,11 +176,11 @@ const ConnectionDetail = () => {
 
       <div className="flex space-x-4 justify-end items-center mt-6 px-4 mb-5">
         {isTesting && (
-          <Loader isFull={false} className="w-8 h-8 !text-green-700" />
+          <Loader isFull={false} className="w-8 h-8 !text-primary" />
         )}
         {
           testResult?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS && (
-            <div className="text-green-700 text-sm">
+            <div className="text-primary text-sm">
               Connection successful
             </div>
           )

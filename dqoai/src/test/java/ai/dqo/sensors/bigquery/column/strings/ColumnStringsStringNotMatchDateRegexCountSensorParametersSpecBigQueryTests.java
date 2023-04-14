@@ -57,28 +57,28 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
         this.checkSpec.setParameters(this.sut);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "date_iso", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfiling() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "date_iso", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHocWithMonthDayYearDateType() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "date_mdy", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfilingWithMonthDayYearDateType() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "date_mdy", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHocWithDayMonthYearDateType() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "date_dmy", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfilingWithDayMonthYearDateType() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "date_dmy", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHocWithYearMonthDayDateType() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "date_ymd", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfilingWithYearMonthDayDateType() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "date_ymd", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHocWithMonthNameDayYearDateType() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "date_bdy", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfilingWithMonthNameDayYearDateType() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "date_bdy", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(this.sampleTableMetadata, "date_iso", this.checkSpec, timeScale);
+    private SensorExecutionRunParameters getRunParametersRecurring(CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(this.sampleTableMetadata, "date_iso", this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
@@ -108,9 +108,9 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
     }
 
     @Test
-    void renderSensorWithDateType_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -133,16 +133,16 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensorWithMonthDayYearDateType_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithMonthDayYearDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.MonthDayYear);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHocWithMonthDayYearDateType();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithMonthDayYearDateType();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -165,16 +165,16 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%m/%d/%Y'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensorWithDayMonthYearDateType_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithDayMonthYearDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.DayMonthYear);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHocWithDayMonthYearDateType();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithDayMonthYearDateType();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -197,16 +197,16 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%d/%m/%Y'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensorWithYearMonthDayDateType_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithYearMonthDayDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.YearMonthDay);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHocWithYearMonthDayDateType();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithYearMonthDayDateType();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -229,16 +229,16 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y/%m/%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensorWithMonthNameDayYearDateType_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithMonthNameDayYearDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.MonthNameDayYear);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHocWithMonthNameDayYearDateType();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithMonthNameDayYearDateType();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -261,16 +261,16 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%b %d, %Y'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -301,16 +301,16 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
@@ -336,8 +336,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -364,6 +364,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
             WHERE %6$s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -371,17 +373,17 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -410,16 +412,16 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("length_int")));
@@ -449,8 +451,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -481,6 +483,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
             WHERE %6$s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY stream_level_1, time_period, time_period_utc
             ORDER BY stream_level_1, time_period, time_period_utc""";
 
@@ -488,17 +492,17 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -537,16 +541,16 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
@@ -580,8 +584,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -616,6 +620,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
             WHERE %6$s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
@@ -623,8 +629,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }

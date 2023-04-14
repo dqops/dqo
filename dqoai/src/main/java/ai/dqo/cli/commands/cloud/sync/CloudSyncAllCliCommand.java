@@ -18,6 +18,10 @@ package ai.dqo.cli.commands.cloud.sync;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.cloud.sync.impl.CloudSynchronizationService;
+import ai.dqo.cli.terminal.TerminalFactory;
+import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.core.dqocloud.accesskey.DqoCloudCredentialsException;
+import ai.dqo.core.jobqueue.DqoQueueJobExecutionException;
 import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.core.synchronization.fileexchange.FileSynchronizationDirection;
 import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
@@ -32,16 +36,19 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "all", description = "Synchronize local files with DQO Cloud (sources, table rules, custom rules, custom sensors and data - sensor readouts and rule results)")
+@CommandLine.Command(name = "all", header = "Synchronize local files with DQO Cloud (sources, table rules, custom rules, custom sensors and data - sensor readouts and rule results)", description = "Uploads any local changes to the cloud and downloads any changes made to the cloud versions of the folders.")
 public class CloudSyncAllCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
+    private TerminalFactory terminalFactory;
 
     public CloudSyncAllCliCommand() {
     }
 
     @Autowired
-    public CloudSyncAllCliCommand(CloudSynchronizationService cloudSynchronizationService) {
+    public CloudSyncAllCliCommand(CloudSynchronizationService cloudSynchronizationService,
+                                  TerminalFactory terminalFactory) {
         this.cloudSynchronizationService = cloudSynchronizationService;
+        this.terminalFactory = terminalFactory;
     }
 
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, debug)", defaultValue = "summary")
@@ -49,6 +56,9 @@ public class CloudSyncAllCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"-d", "--direction"}, description = "File synchronization direction", defaultValue = "full")
     private FileSynchronizationDirection direction = FileSynchronizationDirection.full;
+
+    @CommandLine.Option(names = {"-r", "--refresh-data-warehouse"}, description = "Force refresh a whole table in the data quality data warehouse", defaultValue = "false")
+    private boolean forceRefreshNativeTable;
 
     /**
      * Returns the synchronization logging mode.
@@ -83,6 +93,22 @@ public class CloudSyncAllCliCommand extends BaseCommand implements ICommand {
     }
 
     /**
+     * Returns true when the native table should be refreshed fully.
+     * @return True when the native table must be fully refreshed.
+     */
+    public boolean isForceRefreshNativeTable() {
+        return forceRefreshNativeTable;
+    }
+
+    /**
+     * Sets the flag to fully refresh a native table.
+     * @param forceRefreshNativeTable True when the native table should be fully refreshed.
+     */
+    public void setForceRefreshNativeTable(boolean forceRefreshNativeTable) {
+        this.forceRefreshNativeTable = forceRefreshNativeTable;
+    }
+
+    /**
      * Computes a result, or throws an exception if unable to do so.
      *
      * @return computed result
@@ -90,37 +116,61 @@ public class CloudSyncAllCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
-        int synchronizeSourcesResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.sources, this.mode, this.direction, this.isHeadless(), true);
-        if (synchronizeSourcesResult < 0) {
-            return synchronizeSourcesResult;
-        }
+        try {
+            int synchronizeSourcesResult = this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.sources, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+            if (synchronizeSourcesResult < 0) {
+                return synchronizeSourcesResult;
+            }
 
-        int synchronizeRulesResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.rules, this.mode, this.direction, this.isHeadless(), true);
-        if (synchronizeRulesResult < 0) {
-            return synchronizeRulesResult;
-        }
+            int synchronizeSensorsResult = this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.sensors, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+            if (synchronizeSensorsResult < 0) {
+                return synchronizeSensorsResult;
+            }
 
-        int synchronizeSensorsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.sensors, this.mode, this.direction, this.isHeadless(), true);
-        if (synchronizeSensorsResult < 0) {
-            return synchronizeSensorsResult;
-        }
+            int synchronizeRulesResult = this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.rules, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+            if (synchronizeRulesResult < 0) {
+                return synchronizeRulesResult;
+            }
 
-        int synchronizeReadoutsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.data_sensor_readouts, this.mode, this.direction, this.isHeadless(), true);
-        if (synchronizeReadoutsResult < 0) {
-            return synchronizeReadoutsResult;
-        }
+            int synchronizeChecksResult = this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.checks, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+            if (synchronizeChecksResult < 0) {
+                return synchronizeChecksResult;
+            }
 
-        int synchronizeRuleResultsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.data_rule_results, this.mode, this.direction, this.isHeadless(), true);
-        if (synchronizeRuleResultsResult < 0) {
-            return synchronizeRuleResultsResult;
-        }
+            int synchronizeReadoutsResult = this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.data_sensor_readouts, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+            if (synchronizeReadoutsResult < 0) {
+                return synchronizeReadoutsResult;
+            }
 
-        int synchronizeErrorsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.data_errors, this.mode, this.direction, this.isHeadless(), true);
-        if (synchronizeErrorsResult < 0) {
-            return synchronizeErrorsResult;
-        }
+            int synchronizeRuleResultsResult = this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.data_check_results, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+            if (synchronizeRuleResultsResult < 0) {
+                return synchronizeRuleResultsResult;
+            }
 
-        int synchronizeStatisticsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.data_statistics, this.mode, this.direction, this.isHeadless(), true);
-        return synchronizeStatisticsResult;
+            int synchronizeErrorsResult = this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.data_errors, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+            if (synchronizeErrorsResult < 0) {
+                return synchronizeErrorsResult;
+            }
+
+            int synchronizeStatisticsResult = this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.data_statistics, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+            return synchronizeStatisticsResult;
+        }
+        catch (DqoQueueJobExecutionException cex) {
+            if (cex.getRealCause() instanceof DqoCloudCredentialsException) {
+                TerminalWriter terminalWriter = this.terminalFactory.getWriter();
+                terminalWriter.writeLine("Invalid DQO Cloud credentials, please run \"cloud login\" to get a new DQO Cloud API Key.");
+                return -1;
+            }
+
+            throw cex;
+        }
     }
 }

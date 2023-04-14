@@ -21,13 +21,8 @@ import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
-import ai.dqo.cli.converters.StringToLocalDateCliConverterAbstract;
 import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthEnd;
 import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthStart;
-import ai.dqo.cli.output.OutputFormatService;
-import ai.dqo.cli.terminal.FileWritter;
-import ai.dqo.cli.terminal.TerminalTableWritter;
-import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.PushJobResult;
@@ -35,7 +30,6 @@ import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.data.statistics.factory.StatisticsCollectorTarget;
-import ai.dqo.utils.serialization.JsonSerializer;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -44,19 +38,16 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * "data clean" 2nd level CLI command that deletes data selectively from the data.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "clean", description = "Delete stored data data matching specified filters")
+@CommandLine.Command(name = "clean", header = "Delete stored data that matches a given condition", description = "Delete stored data that matches certain conditions.It is important to use caution when using this command, as it will permanently delete the selected data and cannot be undone.")
 public class DataCleanCliCommand extends BaseCommand implements ICommand {
-    private TerminalWriter terminalWriter;
-    private TerminalTableWritter terminalTableWritter;
-    private JsonSerializer jsonSerializer;
-    private OutputFormatService outputFormatService;
-    private FileWritter fileWritter;
     private DqoJobQueue dqoJobQueue;
     private DqoQueueJobFactory dqoQueueJobFactory;
 
@@ -65,27 +56,12 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
 
     /**
      * Dependency injection constructor.
-     * @param terminalWriter Terminal writer.
-     * @param terminalTableWritter Terminal table writer.
-     * @param jsonSerializer Json serializer.
-     * @param outputFormatService Output format service.
-     * @param fileWritter File writer.
      * @param dqoJobQueue Job queue.
      * @param dqoQueueJobFactory Job queue factory.
      */
     @Autowired
-    public DataCleanCliCommand(TerminalWriter terminalWriter,
-                                   TerminalTableWritter terminalTableWritter,
-                                   JsonSerializer jsonSerializer,
-                                   OutputFormatService outputFormatService,
-                                   FileWritter fileWritter,
-                                   DqoJobQueue dqoJobQueue,
-                                   DqoQueueJobFactory dqoQueueJobFactory) {
-        this.terminalWriter = terminalWriter;
-        this.terminalTableWritter = terminalTableWritter;
-        this.jsonSerializer = jsonSerializer;
-        this.outputFormatService = outputFormatService;
-        this.fileWritter = fileWritter;
+    public DataCleanCliCommand(DqoJobQueue dqoJobQueue,
+                               DqoQueueJobFactory dqoQueueJobFactory) {
         this.dqoJobQueue = dqoJobQueue;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
     }
@@ -96,8 +72,8 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-st", "--statistics"}, description = "Delete the statistics")
     private boolean deleteStatistics = false;
 
-    @CommandLine.Option(names = {"-rr", "--rule-results"}, description = "Delete the rule results")
-    private boolean deleteRuleResults = false;
+    @CommandLine.Option(names = {"-cr", "--check-results"}, description = "Delete the check results")
+    private boolean deleteCheckResults = false;
 
     @CommandLine.Option(names = {"-sr", "--sensor-readouts"}, description = "Delete the sensor readouts")
     private boolean deleteSensorReadouts = false;
@@ -107,7 +83,7 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
             required = true)
     private String connection;
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table)",
+    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'",
             completionCandidates = FullTableNameCompleter.class,
             required = true)
     private String table;
@@ -162,10 +138,10 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
                 this.begin,
                 this.end
         );
-        
+
         deleteStoredDataJobParameters.setDeleteErrors(this.deleteErrors);
-        deleteStoredDataJobParameters.setDeleteProfilingResults(this.deleteStatistics);
-        deleteStoredDataJobParameters.setDeleteRuleResults(this.deleteRuleResults);
+        deleteStoredDataJobParameters.setDeleteStatistics(this.deleteStatistics);
+        deleteStoredDataJobParameters.setDeleteCheckResults(this.deleteCheckResults);
         deleteStoredDataJobParameters.setDeleteSensorReadouts(this.deleteSensorReadouts);
 
         if (!Strings.isNullOrEmpty(this.checkCategory)) {
@@ -185,7 +161,8 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
         }
 
         if (!Strings.isNullOrEmpty(this.column)) {
-            deleteStoredDataJobParameters.setColumnName(this.column);
+            List<String> columnNames = new LinkedList<>(){{add(column);}};
+            deleteStoredDataJobParameters.setColumnNames(columnNames);
         }
 
         if (!Strings.isNullOrEmpty(this.sensor)) {
@@ -211,7 +188,7 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
         if (this.statisticsTarget != null) {
             deleteStoredDataJobParameters.setCollectorTarget(this.statisticsTarget.name());
         }
-        
+
         return deleteStoredDataJobParameters;
     }
 

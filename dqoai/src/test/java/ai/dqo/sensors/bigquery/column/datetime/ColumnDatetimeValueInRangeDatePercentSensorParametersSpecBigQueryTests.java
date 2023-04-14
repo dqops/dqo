@@ -56,12 +56,12 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         this.checkSpec.setParameters(this.sut);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHoc(String columnName) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, columnName, this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfiling(String columnName) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, columnName, this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersCheckpoint(String columnName, CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(this.sampleTableMetadata, columnName, this.checkSpec, timeScale);
+    private SensorExecutionRunParameters getRunParametersRecurring(String columnName, CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(this.sampleTableMetadata, columnName, this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunParametersPartitioned(String columnName, CheckTimeScale timeScale, String timeSeriesColumn) {
@@ -91,14 +91,14 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
     }
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         LocalDate lower = LocalDate.of(2022,1,1);
         LocalDate upper = LocalDate.of(2022,1,10);
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
                 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc("date4");
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling("date4");
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -106,7 +106,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value
@@ -116,21 +116,21 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesNoDataStreamTypeString_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingNoTimeSeriesNoDataStreamTypeString_thenRendersCorrectSql() {
         LocalDate lower = LocalDate.of(2022,1,1);
         LocalDate upper = LocalDate.of(2022,1,10);
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
         
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc("date3");
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling("date3");
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -148,21 +148,21 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
         LocalDate lower = LocalDate.of(2022,1,1);
         LocalDate upper = LocalDate.of(2022,1,10);
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
         
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc("date4");
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling("date4");
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -174,7 +174,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                 SELECT
                     100.0 * SUM(
                         CASE
-                            WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                            WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*) AS actual_value,
@@ -188,28 +188,28 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
         LocalDate lower = LocalDate.of(2022,1,1);
         LocalDate upper = LocalDate.of(2022,1,10);
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
         
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint("date4", CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring("date4", CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value,
@@ -223,8 +223,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -244,7 +244,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value,
@@ -252,28 +252,30 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s
+                  AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
+                  AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
         LocalDate lower = LocalDate.of(2022,1,1);
         LocalDate upper = LocalDate.of(2022,1,10);
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
         
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc("date4");
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling("date4");
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -284,7 +286,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value,
@@ -297,21 +299,21 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
         LocalDate lower = LocalDate.of(2022,1,1);
         LocalDate upper = LocalDate.of(2022,1,10);
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
         
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint("date4", CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring("date4", CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
@@ -321,7 +323,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value,
@@ -336,8 +338,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -360,7 +362,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                 SELECT
                     100.0 * SUM(
                         CASE
-                            WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                            WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*) AS actual_value,
@@ -369,28 +371,30 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                     TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
                 FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                 WHERE %5$s
+                      AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
+                      AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
                 GROUP BY stream_level_1, time_period, time_period_utc
                 ORDER BY stream_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesTwoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingOneTimeSeriesTwoDataStream_thenRendersCorrectSql() {
         LocalDate lower = LocalDate.of(2022,1,1);
         LocalDate upper = LocalDate.of(2022,1,10);
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
         
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc("date4");
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling("date4");
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -406,7 +410,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value,
@@ -422,21 +426,21 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesTwoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesTwoDataStream_thenRendersCorrectSql() {
         LocalDate lower = LocalDate.of(2022,1,1);
         LocalDate upper = LocalDate.of(2022,1,10);
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
         
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint("date4", CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring("date4", CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
@@ -447,7 +451,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value,
@@ -463,8 +467,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -488,7 +492,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value,
@@ -498,14 +502,16 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s
+                  AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
+                  AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
             ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }

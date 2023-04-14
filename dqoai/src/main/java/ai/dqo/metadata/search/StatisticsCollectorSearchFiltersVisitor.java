@@ -19,13 +19,13 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
+import ai.dqo.sensors.AbstractSensorParametersSpec;
+import ai.dqo.statistics.AbstractRootStatisticsCollectorsContainerSpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorCategorySpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
-import ai.dqo.statistics.AbstractRootStatisticsCollectorsContainerSpec;
 import ai.dqo.statistics.StatisticsCollectorTarget;
 import ai.dqo.statistics.column.ColumnStatisticsCollectorsRootCategoriesSpec;
 import ai.dqo.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
-import ai.dqo.sensors.AbstractSensorParametersSpec;
 import com.google.common.base.Strings;
 
 import java.util.Set;
@@ -177,7 +177,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
             }
         }
 
-        TableStatisticsCollectorsRootCategoriesSpec statisticsCollector = tableSpec.getStatisticsCollector();
+        TableStatisticsCollectorsRootCategoriesSpec statisticsCollector = tableSpec.getStatistics();
         if (statisticsCollector == null) {
             // the default traversal will not see the statistics collector, we need to create the default statistics collector and traverse it
             statisticsCollector = new TableStatisticsCollectorsRootCategoriesSpec();
@@ -251,7 +251,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
             }
         }
 
-        ColumnStatisticsCollectorsRootCategoriesSpec statisticsCollector = columnSpec.getStatisticsCollector();
+        ColumnStatisticsCollectorsRootCategoriesSpec statisticsCollector = columnSpec.getStatistics();
         if (statisticsCollector == null) {
             // the default traversal will not see the statistics collector, we need to create the default statistics collector and traverse it
             statisticsCollector = new ColumnStatisticsCollectorsRootCategoriesSpec();
@@ -331,9 +331,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
                 return TreeNodeTraversalResult.SKIP_CHILDREN; // sensor is not configured (has no parameters, we don't know what to run)
             }
             String sensorDefinitionName = sensorParameters.getSensorDefinitionName();
-            String sensorEntryName = sensorParameters.getHierarchyId().getLast().toString();
-            if (!StringPatternComparer.matchSearchPattern(sensorDefinitionName, sensorNameFilter) &&
-                    !StringPatternComparer.matchSearchPattern(sensorEntryName, sensorNameFilter)) {
+            if (!StringPatternComparer.matchSearchPattern(sensorDefinitionName, sensorNameFilter)) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
         }

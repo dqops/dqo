@@ -47,10 +47,18 @@ function DashboardProvider(props: any) {
       };
 
       if (activeTab) {
-        const newTabs = isNew
-          ? [...tabs, newTab]
-          : tabs.map((item) => (item.value === activeTab ? newTab : item));
-        setTabs(newTabs);
+        const activeNode = tabs.find((item) => item.value === activeTab);
+        const editorTab = tabs.find((item) => item.type === 'editor');
+        if (activeNode?.type === 'editor') {
+          const newTabs = tabs.map((item) => (item.value === activeTab ? newTab : item));
+          setTabs(newTabs);
+        } else if (editorTab) {
+          const newTabs = tabs.map((item) => (item.value === editorTab.value ? newTab : item));
+          setTabs(newTabs);
+        } else {
+          const newTabs = isNew ? [...tabs, newTab ] : tabs.map((item) => (item.value === activeTab ? newTab : item));
+          setTabs(newTabs);
+        }
       } else {
         setTabs([newTab]);
       }
@@ -77,7 +85,6 @@ function DashboardProvider(props: any) {
   }, []);
 
   const toggleDashboardFolder = useCallback((key: string) => {
-    console.log('1');
     setDashboardStatus({
       ...dashboardStatus,
       [key]: !dashboardStatus[key]

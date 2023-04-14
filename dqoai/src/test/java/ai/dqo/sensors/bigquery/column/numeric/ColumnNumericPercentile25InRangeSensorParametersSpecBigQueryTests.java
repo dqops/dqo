@@ -54,12 +54,12 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
         this.checkSpec.setParameters(this.sut);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "value", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfiling() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "value", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(this.sampleTableMetadata, "value", this.checkSpec, timeScale);
+    private SensorExecutionRunParameters getRunParametersRecurring(CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(this.sampleTableMetadata, "value", this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
@@ -89,36 +89,43 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
     }
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-                SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
-                    FROM(
-                        SELECT
-                            PERCENTILE_CONT((%s), 0.25) OVER (PARTITION BY
-                        )
-                    AS actual_value         
-                FROM `%s`.`%s`.`%s` AS analyzed_table)
-                WHERE %s""";
+                SELECT 
+                    MAX(nested_table.actual_value) AS actual_value,
+                    nested_table.`time_period` AS time_period,
+                    nested_table.`time_period_utc` AS time_period_utc
+                FROM(
+                    SELECT
+                        PERCENTILE_CONT(
+                        (%s), 
+                        0.25)
+                        OVER (PARTITION BY
+                           \s
+                           \s
+                        ) AS actual_value         
+                    FROM `%s`.`%s`.`%s` AS analyzed_table
+                    WHERE %s) AS nested_table""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -127,55 +134,71 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
+                SELECT 
+                    MAX(nested_table.actual_value) AS actual_value,
+                    nested_table.`time_period` AS time_period,
+                    nested_table.`time_period_utc` AS time_period_utc
                 FROM(
                     SELECT
-                        PERCENTILE_CONT((%s), 0.25) OVER (PARTITION BY 
-                        TIMESTAMP(analyzed_table.`date`)
-                    )
-                AS actual_value,
-                analyzed_table.`date` AS time_period,
-                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table)
-            WHERE %s
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc""";
+                        PERCENTILE_CONT(
+                        (%s), 
+                        0.25) 
+                        OVER (PARTITION BY
+                           \s
+                    analyzed_table.`date`,
+                    TIMESTAMP(analyzed_table.`date`)
+                           \s
+                        ) AS actual_value,
+                    analyzed_table.`date` AS time_period,
+                    TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                    FROM `%s`.`%s`.`%s` AS analyzed_table
+                    WHERE %s) AS nested_table
+                GROUP BY time_period, time_period_utc
+                ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
+                SELECT 
+                    MAX(nested_table.actual_value) AS actual_value,
+                    nested_table.`time_period` AS time_period,
+                    nested_table.`time_period_utc` AS time_period_utc
                 FROM(
                     SELECT
-                        PERCENTILE_CONT((%s), 0.25) OVER (PARTITION BY
-                        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
-                    )
-                AS actual_value,
-                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table)
-            WHERE %s
-            GROUP BY time_period, time_period_utc
-            ORDER BY time_period, time_period_utc""";
+                        PERCENTILE_CONT(
+                        (%s), 
+                        0.25) 
+                        OVER (PARTITION BY
+                           \s
+                    DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH),
+                    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
+                           \s
+                        ) AS actual_value,
+                    DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                    FROM `%s`.`%s`.`%s` AS analyzed_table
+                    WHERE %s) AS nested_table
+                GROUP BY time_period, time_period_utc
+                ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -187,34 +210,44 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
-                FROM(
-                    SELECT
-                        PERCENTILE_CONT((%s), 0.25) OVER (PARTITION BY
-                        TIMESTAMP(analyzed_table.`date`)
-                    )
-                AS actual_value,
+            SELECT 
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc
+            FROM(
+                SELECT
+                    PERCENTILE_CONT(
+                    (%s), 
+                    0.25) 
+                    OVER (PARTITION BY
+                       \s
+                analyzed_table.`date`,
+                TIMESTAMP(analyzed_table.`date`)
+                       \s
+                    ) AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table)
-            WHERE %s
+                FROM `%s`.`%s`.`%s` AS analyzed_table
+                WHERE %s
+                      AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                      AND analyzed_table.`date` < CURRENT_DATE()) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -222,57 +255,74 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
-                FROM(
-                    SELECT
-                        PERCENTILE_CONT((%s), 0.25) OVER (PARTITION BY
-                    )
-                AS actual_value,
+            SELECT 
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc,
                 analyzed_table.`length_string` AS stream_level_1
-            FROM `%s`.`%s`.`%s` AS analyzed_table)
-            WHERE %s
+            FROM(
+                SELECT
+                    PERCENTILE_CONT(
+                    (%s), 
+                    0.25) 
+                    OVER (PARTITION BY
+                       \s
+                       \s     
+                analyzed_table.`length_string` AS stream_level_1
+                    ) AS actual_value
+                FROM `%s`.`%s`.`%s` AS analyzed_table
+                WHERE %s) AS nested_table
             GROUP BY stream_level_1
             ORDER BY stream_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
-                FROM(
-                    SELECT
-                        PERCENTILE_CONT((%s), 0.25) OVER (PARTITION BY
-                        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
-                    )
-                AS actual_value,
-                analyzed_table.`length_string` AS stream_level_1,
+            SELECT 
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc,
+                analyzed_table.`length_string` AS stream_level_1
+            FROM(
+                SELECT
+                    PERCENTILE_CONT(
+                    (%s), 
+                    0.25) 
+                    OVER (PARTITION BY
+                       \s
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH),
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
+                       \s
+                analyzed_table.`length_string` AS stream_level_1
+                    ) AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table)
-            WHERE %s
+                FROM `%s`.`%s`.`%s` AS analyzed_table
+                WHERE %s) AS nested_table
             GROUP BY stream_level_1, time_period, time_period_utc
             ORDER BY stream_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -287,35 +337,46 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
-                FROM(
-                    SELECT
-                        PERCENTILE_CONT((%s), 0.25) OVER (PARTITION BY
-                        TIMESTAMP(analyzed_table.`date`)
-                    )
-                AS actual_value,
-                analyzed_table.`length_string` AS stream_level_1,
+            SELECT 
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc,                
+                analyzed_table.`length_string` AS stream_level_1
+            FROM(
+                SELECT
+                    PERCENTILE_CONT(
+                    (%s), 
+                    0.25) 
+                    OVER (PARTITION BY
+                       \s
+                analyzed_table.`date`,
+                TIMESTAMP(analyzed_table.`date`)
+                       \s
+                analyzed_table.`length_string` AS stream_level_1
+                    ) AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table)
-            WHERE %s
+                FROM `%s`.`%s`.`%s` AS analyzed_table
+                WHERE %s
+                      AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                      AND analyzed_table.`date` < CURRENT_DATE()) AS nested_table
             GROUP BY stream_level_1, time_period, time_period_utc
             ORDER BY stream_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -329,36 +390,47 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
-                FROM(
-                    SELECT
-                        PERCENTILE_CONT((%s), 0.25) OVER (PARTITION BY
-                        TIMESTAMP(analyzed_table.`date`)
-                    )
-                AS actual_value,
+            SELECT 
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc,                
                 analyzed_table.`strings_with_numbers` AS stream_level_1,
                 analyzed_table.`mix_of_values` AS stream_level_2,
-                analyzed_table.`length_string` AS stream_level_3,
+                analyzed_table.`length_string` AS stream_level_3
+            FROM(
+                SELECT
+                    PERCENTILE_CONT(
+                    (%s), 
+                    0.25) 
+                    OVER (PARTITION BY
+                       \s
+                analyzed_table.`date`,
+                TIMESTAMP(analyzed_table.`date`)
+                       \s
+                analyzed_table.`strings_with_numbers` AS stream_level_1
+                analyzed_table.`mix_of_values` AS stream_level_2
+                analyzed_table.`length_string` AS stream_level_3
+                    ) AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table)
-            WHERE %s
+                FROM `%s`.`%s`.`%s` AS analyzed_table
+                WHERE %s) AS nested_table
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
@@ -367,28 +439,39 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
-                FROM(
-                    SELECT
-                        PERCENTILE_CONT((%s), 0.25) OVER (PARTITION BY
-                        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
-                    )
-                AS actual_value,
+            SELECT 
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc,
                 analyzed_table.`strings_with_numbers` AS stream_level_1,
                 analyzed_table.`mix_of_values` AS stream_level_2,
-                analyzed_table.`length_string` AS stream_level_3,
+                analyzed_table.`length_string` AS stream_level_3
+            FROM(
+                SELECT
+                    PERCENTILE_CONT(
+                    (%s), 
+                    0.25) 
+                    OVER (PARTITION BY
+                       \s
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH),
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))
+                       \s
+                analyzed_table.`strings_with_numbers` AS stream_level_1
+                analyzed_table.`mix_of_values` AS stream_level_2
+                analyzed_table.`length_string` AS stream_level_3
+                    ) AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table)
-            WHERE %s
+                FROM `%s`.`%s`.`%s` AS analyzed_table
+                WHERE %s) AS nested_table
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -405,28 +488,41 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
-                FROM(
-                    SELECT
-                        PERCENTILE_CONT((%s), 0.25) OVER (PARTITION BY
-                        TIMESTAMP(analyzed_table.`date`)
-                    )
-                AS actual_value,
+            SELECT 
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc,
                 analyzed_table.`strings_with_numbers` AS stream_level_1,
                 analyzed_table.`mix_of_values` AS stream_level_2,
-                analyzed_table.`length_string` AS stream_level_3,
+                analyzed_table.`length_string` AS stream_level_3
+            FROM(
+                SELECT
+                    PERCENTILE_CONT(
+                    (%s), 
+                    0.25) 
+                    OVER (PARTITION BY
+                       \s
+                analyzed_table.`date`,
+                TIMESTAMP(analyzed_table.`date`)
+                       \s
+                analyzed_table.`strings_with_numbers` AS stream_level_1
+                analyzed_table.`mix_of_values` AS stream_level_2
+                analyzed_table.`length_string` AS stream_level_3
+                    ) AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table)
-            WHERE %s
+                FROM `%s`.`%s`.`%s` AS analyzed_table
+                WHERE %s
+                      AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                      AND analyzed_table.`date` < CURRENT_DATE()) AS nested_table
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }

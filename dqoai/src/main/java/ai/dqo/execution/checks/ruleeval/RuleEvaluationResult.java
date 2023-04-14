@@ -15,9 +15,9 @@
  */
 package ai.dqo.execution.checks.ruleeval;
 
+import ai.dqo.data.checkresults.factory.CheckResultsColumnNames;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
-import ai.dqo.data.ruleresults.factory.RuleResultsColumnNames;
 import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
@@ -50,15 +50,15 @@ public class RuleEvaluationResult {
         this.ruleResultsTable = ruleResultsTable;
         this.actualValueColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         this.expectedValueColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
-		this.severityColumn = TableColumnUtility.getOrAddIntColumn(ruleResultsTable, RuleResultsColumnNames.SEVERITY_COLUMN_NAME);
-        this.includeInKpiColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, RuleResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME);
-        this.includeInSlaColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, RuleResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME);
-		this.fatalLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, RuleResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME);
-		this.fatalUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, RuleResultsColumnNames.FATAL_UPPER_BOUND_COLUMN_NAME);
-		this.errorLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, RuleResultsColumnNames.ERROR_LOWER_BOUND_COLUMN_NAME);
-		this.errorUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, RuleResultsColumnNames.ERROR_UPPER_BOUND_COLUMN_NAME);
-		this.warningLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, RuleResultsColumnNames.WARNING_LOWER_BOUND_COLUMN_NAME);
-		this.warningUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, RuleResultsColumnNames.WARNING_UPPER_BOUND_COLUMN_NAME);
+		this.severityColumn = TableColumnUtility.getOrAddIntColumn(ruleResultsTable, CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+        this.includeInKpiColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME);
+        this.includeInSlaColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME);
+		this.fatalLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME);
+		this.fatalUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, CheckResultsColumnNames.FATAL_UPPER_BOUND_COLUMN_NAME);
+		this.errorLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, CheckResultsColumnNames.ERROR_LOWER_BOUND_COLUMN_NAME);
+		this.errorUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, CheckResultsColumnNames.ERROR_UPPER_BOUND_COLUMN_NAME);
+		this.warningLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, CheckResultsColumnNames.WARNING_LOWER_BOUND_COLUMN_NAME);
+		this.warningUpperBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, CheckResultsColumnNames.WARNING_UPPER_BOUND_COLUMN_NAME);
     }
 
     /**

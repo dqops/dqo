@@ -27,21 +27,31 @@ public interface DqoCloudSynchronizationService {
      * Performs synchronization of a given user home folder to the DQO Cloud.
      * @param dqoRoot User Home folder type to synchronize.
      * @param synchronizationDirection File synchronization direction (full, download, upload).
+     * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
-    void synchronizeFolder(DqoRoot dqoRoot, FileSynchronizationDirection synchronizationDirection, FileSystemSynchronizationListener synchronizationListener);
+    void synchronizeFolder(DqoRoot dqoRoot,
+                           FileSynchronizationDirection synchronizationDirection,
+                           boolean forceRefreshNativeTable,
+                           FileSystemSynchronizationListener synchronizationListener);
 
     /**
      * Synchronizes all roots (sources, check definitions, data).
      * @param synchronizationDirection File synchronization direction (full, download, upload).
+     * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
-    void synchronizeAll(FileSynchronizationDirection synchronizationDirection, FileSystemSynchronizationListener synchronizationListener);
+    void synchronizeAll(FileSynchronizationDirection synchronizationDirection,
+                        boolean forceRefreshNativeTable,
+                        FileSystemSynchronizationListener synchronizationListener);
 
     /**
      * Synchronizes only the data roots (sensor readouts, rule results).
-     * @param synchronizationDirection File synchronization direction (full, download, upload).
+     * @param fileSynchronizationDirection File synchronization direction (full, download, upload).
+     * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
-    void synchronizeData(FileSynchronizationDirection fileSynchronizationDirection, FileSystemSynchronizationListener synchronizationListener);
+    void synchronizeData(FileSynchronizationDirection fileSynchronizationDirection,
+                         boolean forceRefreshNativeTable,
+                         FileSystemSynchronizationListener synchronizationListener);
 }

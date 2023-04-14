@@ -9,7 +9,7 @@ const ErrorItem = ({ error }: { error: IError }) => {
   return (
     <Accordion open={open}>
       <AccordionHeader onClick={() => setOpen(!open)}>
-        <div className="flex justify-between items-center text-sm w-full">
+        <div className="flex justify-between items-center text-sm w-full text-gray-700">
           <div className="flex space-x-1 items-center">
             <div>{error.name}</div>
           </div>
@@ -19,7 +19,7 @@ const ErrorItem = ({ error }: { error: IError }) => {
         </div>
       </AccordionHeader>
       <AccordionBody>
-        <div>
+        <div className="text-gray-700">
           {error.message}
         </div>
       </AccordionBody>

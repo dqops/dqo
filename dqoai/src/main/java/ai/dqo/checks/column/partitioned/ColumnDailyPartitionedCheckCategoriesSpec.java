@@ -19,15 +19,17 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.column.partitioned.accuracy.ColumnAccuracyDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.bool.ColumnBoolDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.consistency.ColumnConsistencyDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.integrity.ColumnIntegrityDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.pii.ColumnPiiDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.sql.ColumnSqlDailyPartitionedSpec;
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
-import ai.dqo.checks.column.partitioned.integrity.ColumnIntegrityDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -65,7 +67,8 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("sql", o -> o.sql);
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
-
+            put("accuracy", o -> o.accuracy);
+            put("consistency", o -> o.consistency);
         }
     };
 
@@ -113,6 +116,16 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnIntegrityDailyPartitionedChecksSpec integrity;
+
+    @JsonPropertyDescription("Daily partitioned checks for accuracy in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAccuracyDailyPartitionedChecksSpec accuracy;
+
+    @JsonPropertyDescription("Daily partitioned checks for consistency in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnConsistencyDailyPartitionedChecksSpec consistency;
 
     /**
      * Returns the container of daily null data quality partitioned checks.
@@ -277,6 +290,42 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     }
 
     /**
+     * Returns a container of custom accuracy checks on a column.
+     * @return Custom accuracy checks.
+     */
+    public ColumnAccuracyDailyPartitionedChecksSpec getAccuracy() {
+        return accuracy;
+    }
+
+    /**
+     * Sets a reference to a container of custom accuracy checks.
+     * @param accuracy Custom accuracy checks.
+     */
+    public void setAccuracy(ColumnAccuracyDailyPartitionedChecksSpec accuracy) {
+        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
+        this.accuracy = accuracy;
+        propagateHierarchyIdToField(accuracy, "accuracy");
+    }
+
+    /**
+     * Returns a container of custom accuracy checks on a column.
+     * @return Custom accuracy checks.
+     */
+    public ColumnConsistencyDailyPartitionedChecksSpec getConsistency() {
+        return consistency;
+    }
+
+    /**
+     * Sets a reference to a container of custom consistency checks.
+     * @param consistency Custom consistency checks.
+     */
+    public void setConsistency(ColumnConsistencyDailyPartitionedChecksSpec consistency) {
+        this.setDirtyIf(!Objects.equals(this.consistency, consistency));
+        this.consistency = consistency;
+        propagateHierarchyIdToField(consistency, "consistency");
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -344,6 +393,6 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @Override
     @JsonIgnore
     public CheckRunRecurringScheduleGroup getSchedulingGroup() {
-        return CheckRunRecurringScheduleGroup.daily;
+        return CheckRunRecurringScheduleGroup.partitioned_daily;
     }
 }

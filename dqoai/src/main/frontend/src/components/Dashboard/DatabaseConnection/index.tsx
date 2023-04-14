@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import Button from '../../Button';
 import Input from '../../Input';
@@ -10,8 +10,6 @@ import {
 } from '../../../api';
 import { ConnectionApiClient, SourceConnectionApi } from '../../../services/apiClient';
 import { useTree } from '../../../contexts/treeContext';
-import { useHistory, useParams } from 'react-router-dom';
-import { ROUTES } from "../../../shared/routes";
 import Loader from "../../Loader";
 import ErrorModal from "./ErrorModal";
 import ConfirmErrorModal from "./ConfirmErrorModal";
@@ -19,6 +17,8 @@ import PostgreSQLConnection from "./PostgreSQLConnection";
 import PostgreSQLLogo from '../../SvgIcon/svg/postgresql.svg';
 import RedshiftConnection from "./RedshiftConnection";
 import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
+import SqlServerConnection from "./SqlServerConnection";
+import SqlServerLogo from '../../SvgIcon/svg/mssql-server.svg';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -30,15 +30,14 @@ const DatabaseConnection = ({
   database,
   onChange
 }: IDatabaseConnectionProps) => {
-  const { checkTypes }: { checkTypes: any } = useParams();
   const { addConnection } = useTree();
-  const history = useHistory();
   const [isTesting, setIsTesting] = useState(false);
   const [testResult, setTestResult] = useState<ConnectionRemoteModel>();
   const [showError, setShowError] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [message, setMessage] = useState<string>();
+  const [nameError, setNameError] = useState('');
 
   const onConfirmSave = async () => {
     if (!database.connection_name) {
@@ -54,13 +53,26 @@ const DatabaseConnection = ({
       database.connection_name
     );
     addConnection(res.data);
-    history.push(`${ROUTES.CONNECTION_DETAIL(checkTypes, database.connection_name, 'schemas')}?import_schema=true`);
     setIsSaving(false);
     setShowConfirm(false);
   };
 
+  useEffect(() => {
+    if (!/^([A-Za-z0-9-_])*$/.test(database.connection_name as string)) {
+      setNameError('Database name should be alphanumeric characters');
+    }  else if (database.connection_name?.length && database.connection_name.length > 36) {
+          setNameError('Database name cannot be longer than 36 characters');
+    } else {
+      setNameError('');
+    }
+  }, [database?.connection_name]);
+
   const onSave = async () => {
     if (!database.connection_name) {
+      setNameError('Connection Name is required');
+      return;
+    }
+    if (nameError) {
       return;
     }
 
@@ -107,6 +119,8 @@ const DatabaseConnection = ({
         return 'PostgreSQL Connection Settings';
       case ConnectionBasicModelProviderTypeEnum.redshift:
         return 'Redshift Connection Settings';
+      case ConnectionBasicModelProviderTypeEnum.sqlserver:
+        return 'SQL Server Connection Settings';
       default:
         return 'Database Connection Settings'
     }
@@ -132,10 +146,16 @@ const DatabaseConnection = ({
       />
       ),
     [ConnectionBasicModelProviderTypeEnum.redshift]: (
-    <RedshiftConnection
-      redshift={database.redshift}
-      onChange={(redshift) => onChange({ ...database, redshift })}
-    />
+      <RedshiftConnection
+        redshift={database.redshift}
+        onChange={(redshift) => onChange({ ...database, redshift })}
+      />
+    ),
+    [ConnectionBasicModelProviderTypeEnum.sqlserver]: (
+      <SqlServerConnection
+        sqlserver={database.sqlserver}
+        onChange={(sqlserver) => onChange({ ...database, sqlserver })}
+      />
     )
   };
 
@@ -149,6 +169,8 @@ const DatabaseConnection = ({
         return PostgreSQLLogo;
       case ConnectionBasicModelProviderTypeEnum.redshift:
         return RedshiftLogo;
+      case ConnectionBasicModelProviderTypeEnum.sqlserver:
+        return SqlServerLogo;
       default:
         return '';
     }
@@ -171,11 +193,12 @@ const DatabaseConnection = ({
       <div className="bg-white rounded-lg px-4 py-6 border border-gray-100">
         <Input
           label="Connection Name"
-          className="mb-4"
           value={database.connection_name}
           onChange={(e) =>
             onChange({ ...database, connection_name: e.target.value })
           }
+          error={!!nameError}
+          helperText={nameError}
         />
 
         <div className="mt-6">
@@ -184,11 +207,11 @@ const DatabaseConnection = ({
 
         <div className="flex space-x-4 justify-end items-center mt-6">
           {isTesting && (
-            <Loader isFull={false} className="w-8 h-8 !text-green-700" />
+            <Loader isFull={false} className="w-8 h-8 !text-primary" />
           )}
           {
             testResult?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS && (
-              <div className="text-green-700 text-sm">
+              <div className="text-primary text-sm">
                 Connection successful
               </div>
             )

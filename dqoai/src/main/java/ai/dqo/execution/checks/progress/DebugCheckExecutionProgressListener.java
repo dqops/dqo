@@ -16,6 +16,7 @@
 package ai.dqo.execution.checks.progress;
 
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.progress.*;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +49,10 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
     @Override
     public void onSensorExecuted(SensorExecutedEvent event) {
         renderEventHeader();
-        String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
-        String checkName = event.getSensorRunParameters().getCheck().getCheckName();
-        String sensorDefinitionName = event.getSensorRunParameters().getSensorParameters().getSensorDefinitionName();
+        String tableName = event.getTableSpec().getPhysicalTableName().toString();
+        SensorExecutionRunParameters sensorRunParameters = event.getSensorRunParameters();
+        String checkName = sensorRunParameters.getCheck().getCheckName();
+        String sensorDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
         Table resultTable = event.getSensorResult().getResultTable();
         int sensorResultCount = resultTable.rowCount();
         this.terminalWriter.writeLine(String.format("Finished executing a sensor for a check %s on the table %s using a sensor definition %s, sensor result count: %d",
@@ -72,9 +74,10 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
     @Override
     public void onSensorFailed(SensorFailedEvent event) {
         renderEventHeader();
-        String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
-        String checkName = event.getSensorRunParameters().getCheck().getCheckName();
-        String sensorDefinitionName = event.getSensorRunParameters().getSensorParameters().getSensorDefinitionName();
+        String tableName = event.getTableSpec().getPhysicalTableName().toString();
+        SensorExecutionRunParameters sensorRunParameters = event.getSensorRunParameters();
+        String checkName = sensorRunParameters.getCheck().getCheckName();
+        String sensorDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
         this.terminalWriter.writeLine(String.format("Sensor failed with an error for a check %s on the table %s using a sensor definition %s",
                 checkName, tableName, sensorDefinitionName));
         this.terminalWriter.writeLine("Error message: " + event.getSensorExecutionException().getMessage());
@@ -99,7 +102,7 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
     @Override
     public void onRuleExecuted(RuleExecutedEvent event) {
         renderEventHeader();
-        String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
+        String tableName = event.getTableSpec().getPhysicalTableName().toString();
         String checkName = event.getSensorRunParameters().getCheck().getCheckName();
         Table ruleResultsTable = event.getRuleEvaluationResult().getRuleResultsTable();
         int evaluatedRulesCount = ruleResultsTable.rowCount();
@@ -123,7 +126,7 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
     @Override
     public void onRuleFailed(RuleFailedEvent event) {
         renderEventHeader();
-        String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
+        String tableName = event.getTableSpec().getPhysicalTableName().toString();
         String checkName = event.getSensorRunParameters().getCheck().getCheckName();
         this.terminalWriter.writeLine(String.format("Rule evaluation failed with an error for a check %s on the table %s using a rule definition %s",
                 checkName, tableName, event.getRuleDefinitionName()));

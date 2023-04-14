@@ -28,6 +28,8 @@ import ai.dqo.connectors.redshift.RedshiftConnectionProvider;
 import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionProvider;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
+import ai.dqo.connectors.sqlserver.SqlServerConnectionProvider;
+import ai.dqo.execution.checks.EffectiveSensorRuleNames;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderParameters;
@@ -45,7 +47,7 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.sources.TableYaml;
 import ai.dqo.metadata.userhome.UserHomeImpl;
 import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
+import ai.dqo.services.check.mapping.models.UICheckContainerModel;
 import ai.dqo.services.check.mapping.models.UICheckModel;
 import ai.dqo.services.check.mapping.models.UIQualityCategoryModel;
 import ai.dqo.services.check.matching.SimilarCheckMatchingService;
@@ -72,18 +74,26 @@ import java.util.*;
 @Component
 public class CheckDocumentationModelFactoryImpl implements CheckDocumentationModelFactory {
     private static final Map<String, String> TABLE_CATEGORY_HELP = new LinkedHashMap<>() {{
-       put("strings", "Here is the documentation for the strings category");
-       // TODO: add more
+       put("standard", "Evaluates the overall quality of the table by verifying the number of rows.");
+       put("timeliness", "Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.");
+       put("sql", "Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
+       put("availability", "Checks whether the table is accessible and available for use.");
     }};
 
     private static final Map<String, String> COLUMN_CATEGORY_HELP = new LinkedHashMap<>() {{
-        put("timeliness", "Here is the documentation for the timeliness category");
-        // TODO: add more
+        put("nulls", "Checks for the presence of null or missing values in a column.");
+        put("numeric", "Validates that the data in a numeric column is in the expected format or within predefined ranges.");
+        put("strings", "Validates that the data in a string column match the expected format or pattern.");
+        put("uniqueness", "Counts the number or percent of duplicate or unique values in a column.");
+        put("datetime", "Validates that the data in a date or time column is in the expected format and within predefined ranges.");
+        put("pii", "Checks for the presence of sensitive or personally identifiable information (PII) in a column such as email, phone, zip code, IP4 and IP6 addresses.");
+        put("sql", "Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
+        put("bool", "Calculates the percentage of data in a Boolean format.");
+        put("integrity", "Checks the referential integrity of a column against a column in another table.");
     }};
 
     private static final CommentFormatter commentFormatter = new CommentFormatter();
 
-    private DqoHomeContext dqoHomeContext;
     private SimilarCheckMatchingService similarCheckMatchingService;
     private SensorDocumentationModelFactory sensorDocumentationModelFactory;
     private RuleDocumentationModelFactory ruleDocumentationModelFactory;
@@ -93,7 +103,6 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
     /**
      * Creates a check documentation service.
-     * @param dqoHomeContext DQO Home.
      * @param similarCheckMatchingService Service that finds all similar checks that share the same sensor and rule.
      * @param sensorDocumentationModelFactory Sensor documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the sensor.
      * @param ruleDocumentationModelFactory Rule documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the rule.
@@ -102,14 +111,12 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      * @param jinjaTemplateRenderService Jinja template rendering service. Used to render how the SQL template will be filled for the given parameters.
      */
     @Autowired
-    public CheckDocumentationModelFactoryImpl(DqoHomeContext dqoHomeContext,
-                                              SimilarCheckMatchingService similarCheckMatchingService,
+    public CheckDocumentationModelFactoryImpl(SimilarCheckMatchingService similarCheckMatchingService,
                                               SensorDocumentationModelFactory sensorDocumentationModelFactory,
                                               RuleDocumentationModelFactory ruleDocumentationModelFactory,
                                               UiToSpecCheckMappingService uiToSpecCheckMappingService,
                                               YamlSerializer yamlSerializer,
                                               JinjaTemplateRenderService jinjaTemplateRenderService) {
-        this.dqoHomeContext = dqoHomeContext;
         this.similarCheckMatchingService = similarCheckMatchingService;
         this.sensorDocumentationModelFactory = sensorDocumentationModelFactory;
         this.ruleDocumentationModelFactory = ruleDocumentationModelFactory;
@@ -138,8 +145,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      */
     private TableSpec createTableSpec(boolean addAnalyzedColumn) {
         TableSpec tableSpec = new TableSpec();
-        tableSpec.getTarget().setSchemaName("target_schema");
-        tableSpec.getTarget().setTableName("target_table");
+        tableSpec.setPhysicalTableName(new PhysicalTableName("target_schema", "target_table"));
 
         if (addAnalyzedColumn) {
             ColumnSpec columnSpec = createColumnWithLabel("This is the column that is analyzed for data quality issues");
@@ -291,8 +297,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         AbstractRootChecksContainerSpec checkRootContainer =
             (similarCheckModel.getCheckTarget() == CheckTarget.table) ?
-                trimmedTableSpec.getTableCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale()) :
-                columnSpec.getColumnCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale());
+                trimmedTableSpec.getTableCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), false) :
+                columnSpec.getColumnCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), false);
         if (similarCheckModel.getCheckTarget() == CheckTarget.table) {
             trimmedTableSpec.setTableCheckRootContainer(checkRootContainer);
         }
@@ -300,7 +306,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             columnSpec.setColumnCheckRootContainer(checkRootContainer);
         }
 
-        UIAllChecksModel allChecksModel = new UIAllChecksModel();
+        UICheckContainerModel allChecksModel = new UICheckContainerModel();
         UIQualityCategoryModel uiCategoryModel = new UIQualityCategoryModel(similarCheckModel.getCategory());
         UICheckModel sampleCheckModel = checkModel.cloneForUpdate();
         sampleCheckModel.setConfigured(true);
@@ -316,7 +322,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         sampleCheckModel.applySampleValues();
         uiCategoryModel.getChecks().add(sampleCheckModel);
         allChecksModel.getCategories().add(uiCategoryModel);
-        this.uiToSpecCheckMappingService.updateAllChecksSpecs(allChecksModel, checkRootContainer);
+        this.uiToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checkRootContainer);
 
         HierarchyNode checkCategoryContainer = checkRootContainer.getChild(similarCheckModel.getCategory());
         if (checkCategoryContainer == null) {
@@ -374,8 +380,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     private List<String> createCheckSample(String yamlSample, SimilarCheckModel similarCheckModel, CheckDocumentationModel checkDocumentationModel) {
         List<String> checkSample = new ArrayList<>();
         boolean isCheckSection = false;
-        String checkBeginMarker = "checks:";
-        String checkpointBeginMarker = "checkpoints:";
+        String checkBeginMarker = "profiling_checks:";
+        String checkpointBeginMarker = "recurring_checks:";
         String partitionedCheckBeginMarker = "partitioned_checks:";
         String checkEndMarker = "";
         if (similarCheckModel.getCheckTarget() == CheckTarget.table) {
@@ -476,12 +482,15 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 TimeSeriesConfigurationProvider timeSeriesConfigurationProvider = (TimeSeriesConfigurationProvider)checkRootContainer;
                 ProviderDialectSettings providerDialectSettings = getProviderDialectSettings(providerType);
 
+                EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames(
+                        sensorDocumentation.getSensorName(), null);
                 SensorExecutionRunParameters sensorRunParameters = new SensorExecutionRunParameters(
                         connectionSpec,
                         tableSpec,
                         tableSpec.getColumns().getAt(0),
                         checkSpec,
                         null,
+                        effectiveSensorRuleNames,
                         checkRootContainer.getCheckType(),
                         timeSeriesConfigurationProvider.getTimeSeriesConfiguration(tableSpec),
                         null,
@@ -523,6 +532,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return PostgresqlConnectionProvider.DIALECT_SETTINGS;
             case redshift:
                 return RedshiftConnectionProvider.DIALECT_SETTINGS;
+            case sqlserver:
+                return SqlServerConnectionProvider.DIALECT_SETTINGS;
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }

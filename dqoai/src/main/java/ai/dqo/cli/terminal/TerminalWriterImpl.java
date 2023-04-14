@@ -15,6 +15,7 @@
  */
 package ai.dqo.cli.terminal;
 
+import ai.dqo.cli.terminal.ansi.UrlFormatter;
 import org.jline.terminal.Terminal;
 import org.jline.utils.InfoCmp;
 
@@ -24,9 +25,12 @@ import org.jline.utils.InfoCmp;
  */
 public class TerminalWriterImpl extends TerminalWriterAbstract {
     private final Terminal terminal;
+    private final UrlFormatter urlFormatter;
 
-    public TerminalWriterImpl(Terminal terminal) {
+    public TerminalWriterImpl(Terminal terminal,
+                              UrlFormatter urlFormatter) {
         this.terminal = terminal;
+        this.urlFormatter = urlFormatter;
     }
 
     /**
@@ -37,6 +41,17 @@ public class TerminalWriterImpl extends TerminalWriterAbstract {
     public void write(String text) {
 		this.terminal.writer().write(text);
 		this.terminal.flush();
+    }
+
+    /**
+     * Writes a URL to the terminal, formatted as a hyperlink if possible.
+     *
+     * @param url URL to be linked.
+     * @param text Text to be displayed if hyperlinked.
+     */
+    @Override
+    public void writeUrl(String url, String text) {
+        this.write(this.urlFormatter.getUrlAnsiString(url, text));
     }
 
     /**

@@ -37,5 +37,5 @@ public interface DqoCloudApiKeyProvider {
      * @throws DecoderException When the api key is invalid.
      */
     @NotNull
-    DqoCloudApiKey decodeApiKey(String apiKey) throws DecoderException;
+    DqoCloudApiKey decodeApiKey(String apiKey);
 }

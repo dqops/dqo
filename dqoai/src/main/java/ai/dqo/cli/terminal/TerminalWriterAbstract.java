@@ -36,6 +36,15 @@ public abstract class TerminalWriterAbstract implements TerminalWriter {
     public abstract void write(String text);
 
     /**
+     * Writes a URL to the terminal, formatted as a hyperlink if possible.
+     *
+     * @param url URL to be linked.
+     * @param text Text to be displayed if hyperlinked.
+     */
+    @Override
+    public abstract void writeUrl(String url, String text);
+
+    /**
      * Writes a line to the terminal followed by an end of line.
      * @param text Text to be written.
      */

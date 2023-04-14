@@ -20,8 +20,8 @@ import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
-import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.scheduler.JobSchedulerService;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import ai.dqo.utils.datetime.DurationParseUtility;
 import ai.dqo.utils.datetime.InvalidDurationFormatException;
@@ -38,7 +38,7 @@ import java.time.Duration;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "run", description = "Starts DQO in a server mode, continuously running a job scheduler that runs the data quality checks.")
+@CommandLine.Command(name = "run", header = "Starts DQO in a server mode, continuously running a job scheduler that runs the data quality checks", description = "This command is useful when you want to continuously monitor the quality of your data in real-time. The job scheduler runs in the background, allowing you to perform other tasks while the DQO is running.")
 public class RunCliCommand extends BaseCommand implements ICommand {
     public static final String POST_STARTUP_MESSAGE = "DQO was started in a server mode.";
 

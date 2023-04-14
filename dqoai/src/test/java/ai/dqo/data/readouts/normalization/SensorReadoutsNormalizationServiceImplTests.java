@@ -17,12 +17,13 @@ package ai.dqo.data.readouts.normalization;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.data.normalization.CommonTableNormalizationServiceImpl;
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactoryImpl;
+import ai.dqo.execution.checks.EffectiveSensorRuleNames;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
@@ -71,12 +72,13 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab1"));
 		tableSpec = tableWrapper.getSpec();
 		checkSpec = new TableRowCountCheckSpec();
-        tableSpec.getChecks().setStandard(new TableAdHocStandardChecksSpec());
-		tableSpec.getChecks().getStandard().setRowCount(checkSpec);
+        tableSpec.getProfilingChecks().setStandard(new TableProfilingStandardChecksSpec());
+		tableSpec.getProfilingChecks().getStandard().setRowCount(checkSpec);
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
                 null,
-                CheckType.ADHOC,
+                new EffectiveSensorRuleNames(checkSpec.getParameters().getSensorDefinitionName(), checkSpec.getRuleDefinitionName()),
+                CheckType.PROFILING,
                 null, // time series
                 new TimeWindowFilterParameters(),
                 null, // data stream mapping
@@ -216,8 +218,8 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertEquals(expectedTimePeriod, results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
         Assertions.assertEquals("all data", results.getDataStreamNameColumn().get(0));
-        Assertions.assertEquals("5873d7f9-4f57-2a17-7741-4bd9eede5d4e", results.getTimeSeriesIdColumn().get(0));
-        Assertions.assertEquals("2f9fc5c3-583e-ba99-ff52-a61c0648323f", results.getIdColumn().get(0));
+        Assertions.assertEquals("05fc3e30-ca9d-957f-7741-4bd9eede5d4e", results.getTimeSeriesIdColumn().get(0));
+        Assertions.assertEquals("72102c0a-ddf4-05f1-ff52-a61c0648323f", results.getIdColumn().get(0));
     }
 
     @Test

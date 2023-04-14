@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import {
   getConnectionLabels,
   setIsUpdatedLabels,
@@ -11,32 +10,33 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import LabelsView from '../LabelsView';
 import ConnectionActionGroup from './ConnectionActionGroup';
 import { useParams } from "react-router-dom";
+import { CheckTypes } from "../../../shared/routes";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 
 const ConnectionLabelsView = () => {
-  const { connection }: { connection: string } = useParams();
-  const { isUpdating, labels, isUpdatedLabels, connectionBasic } = useSelector(
-    (state: IRootState) => state.connection
-  );
+  const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
+  const { isUpdating, labels, isUpdatedLabels, connectionBasic } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
     if (!labels || connectionBasic?.connection_name !== connection) {
-      dispatch(getConnectionLabels(connection));
+      dispatch(getConnectionLabels(checkTypes, firstLevelActiveTab, connection));
     }
   }, [connection]);
 
   const onUpdate = async () => {
-    await dispatch(updateConnectionLabels(connection, labels || []));
-    await dispatch(getConnectionLabels(connection));
+    await dispatch(updateConnectionLabels(checkTypes, firstLevelActiveTab, connection, labels || []));
+    await dispatch(getConnectionLabels(checkTypes, firstLevelActiveTab, connection));
   };
 
   const handleChange = (value: string[]) => {
-    dispatch(setLabels(value));
-    dispatch(setIsUpdatedLabels(true));
+    dispatch(setLabels(checkTypes, firstLevelActiveTab, value));
+    dispatch(setIsUpdatedLabels(checkTypes, firstLevelActiveTab, true));
   };
 
   return (
-    <div>
+    <div className="px-4">
       <ConnectionActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdatedLabels}

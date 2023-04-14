@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/strings/string_in_set_count
+  rule_name: comparison/min_count
+  help_text: Verifies that the number of strings from set in a column does not exceed
+    the minimum accepted count. Stores the most recent row count for each day when
+    the data quality check was evaluated.

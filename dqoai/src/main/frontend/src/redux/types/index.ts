@@ -20,3 +20,4 @@ export * from './table.types';
 export * from './column.types';
 export * from './job.types';
 export * from './dashboard.types';
+export * from './source.types';

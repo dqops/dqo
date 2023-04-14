@@ -15,9 +15,9 @@
  */
 package ai.dqo.core.synchronization.jobs;
 
-import ai.dqo.core.synchronization.service.DqoCloudSynchronizationService;
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import ai.dqo.core.synchronization.service.DqoCloudSynchronizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -69,6 +69,7 @@ public class SynchronizeRootFolderDqoQueueJob extends DqoQueueJob<Void> {
         this.cloudSynchronizationService.synchronizeFolder(
                 this.parameters.getSynchronizationParameter().getFolder(),
                 this.parameters.getSynchronizationParameter().getDirection(),
+                this.parameters.getSynchronizationParameter().isForceRefreshNativeTable(),
                 this.parameters.getFileSystemSynchronizationListener());
         return null;
     }

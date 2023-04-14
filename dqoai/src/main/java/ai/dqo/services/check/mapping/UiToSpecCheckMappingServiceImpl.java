@@ -18,6 +18,7 @@ package ai.dqo.services.check.mapping;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
+import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.services.check.mapping.models.*;
@@ -48,14 +49,14 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
     }
 
     /**
-     * Updates the <code>checkCategoriesSpec</code> with the updates received from the UI in the <code>model</code>.
+     * Updates the <code>checkContainerSpec</code> with the updates received from the UI in the <code>model</code>.
      *
      * @param model               Data quality check UI model with the updates.
-     * @param checkCategoriesSpec The target check categories spec object that will be updated.
+     * @param checkContainerSpec The target check container spec object that will be updated.
      */
     @Override
-    public void updateAllChecksSpecs(UIAllChecksModel model, AbstractRootChecksContainerSpec checkCategoriesSpec) {
-        ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
+    public void updateCheckContainerSpec(UICheckContainerModel model, AbstractRootChecksContainerSpec checkContainerSpec) {
+        ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkContainerSpec.getClass());
         List<UIQualityCategoryModel> categoryModelList = model.getCategories();
         if (categoryModelList == null) {
             return;
@@ -65,17 +66,17 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
             String categoryDisplayName = categoryModel.getCategory();
             FieldInfo categoryFieldInfo = checkCategoriesClassInfo.getFieldByYamlName(categoryDisplayName);
             if (categoryFieldInfo == null) {
-                throw new DqoRuntimeException("Category " + categoryDisplayName + " not found on " + checkCategoriesSpec.getClass().getCanonicalName());
+                throw new DqoRuntimeException("Category " + categoryDisplayName + " not found on " + checkContainerSpec.getClass().getCanonicalName());
             }
 
-            AbstractSpec categorySpec = (AbstractSpec) categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
+            AbstractSpec categorySpec = (AbstractSpec) categoryFieldInfo.getFieldValueOrNewObject(checkContainerSpec);
 
             updateCategoryChecksSpec(categoryModel, categorySpec);
 
             if (categorySpec.isDefault()) {
-                categoryFieldInfo.setFieldValue(null, checkCategoriesSpec);
+                categoryFieldInfo.setFieldValue(null, checkContainerSpec);
             } else {
-                categoryFieldInfo.setFieldValue(categorySpec, checkCategoriesSpec);
+                categoryFieldInfo.setFieldValue(categorySpec, checkContainerSpec);
             }
         }
     }
@@ -132,6 +133,7 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
         checkSpec.setComments(checkModel.getComments());
         checkSpec.setDisabled(checkModel.isDisabled());
         checkSpec.setExcludeFromKpi(checkModel.isExcludeFromKpi());
+        checkSpec.setIncludeInSla(checkModel.isIncludeInSla());
         checkSpec.getParameters().setFilter(checkModel.getFilter());
         checkSpec.setDataStream(checkModel.getDataStream());
 
@@ -195,46 +197,53 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
 
         for (UIFieldModel fieldModel : fieldModels) {
             ParameterDefinitionSpec fieldModelDefinition = fieldModel.getDefinition();
-            String fieldName = fieldModelDefinition.getFieldName();
-            FieldInfo fieldInfo = parametersClassInfo.getField(fieldName);
+            String yamlFieldName = fieldModelDefinition.getFieldName();
+            FieldInfo fieldInfo = parametersClassInfo.getFieldByYamlName(yamlFieldName);
 
             if (fieldInfo == null) {
-                throw new RuntimeException("Field " + fieldName + " was not found on the target class " + targetParametersSpec.getClass().getName());
+                throw new RuntimeException("Field " + yamlFieldName + " was not found on the target class " + targetParametersSpec.getClass().getName());
+            }
+            
+            UIFieldModel fieldModelForUpdate = fieldModel.cloneForUpdate();
+            if (!fieldInfo.getDataType().equals(fieldModelForUpdate.getDefinition().getDataType())) {
+                Object fieldModelValue = fieldModelForUpdate.getValue();
+                fieldModelForUpdate.getDefinition().setDataType(fieldInfo.getDataType());
+                fieldModelForUpdate.setValue(fieldModelValue);
             }
 
             switch (fieldInfo.getDataType()) {
                 case string_type:
-                    fieldInfo.setFieldValue(fieldModel.getStringValue(), targetParametersSpec);
+                    fieldInfo.setFieldValue(fieldModelForUpdate.getStringValue(), targetParametersSpec);
                     break;
                 case boolean_type:
-                    fieldInfo.setFieldValue(fieldModel.getBooleanValue(), targetParametersSpec);
+                    fieldInfo.setFieldValue(fieldModelForUpdate.getBooleanValue(), targetParametersSpec);
                     break;
                 case integer_type:
-                    fieldInfo.setFieldValue(fieldModel.getIntegerValue(), targetParametersSpec);
+                    fieldInfo.setFieldValue(fieldModelForUpdate.getIntegerValue(), targetParametersSpec);
                     break;
                 case long_type:
-                    fieldInfo.setFieldValue(fieldModel.getLongValue(), targetParametersSpec);
+                    fieldInfo.setFieldValue(fieldModelForUpdate.getLongValue(), targetParametersSpec);
                     break;
                 case double_type:
-                    fieldInfo.setFieldValue(fieldModel.getDoubleValue(), targetParametersSpec);
+                    fieldInfo.setFieldValue(fieldModelForUpdate.getDoubleValue(), targetParametersSpec);
                     break;
                 case instant_type:
-                    fieldInfo.setFieldValue(fieldModel.getDateTimeValue(), targetParametersSpec);
+                    fieldInfo.setFieldValue(fieldModelForUpdate.getDateTimeValue(), targetParametersSpec);
                     break;
                 case column_name_type:
-                    fieldInfo.setFieldValue(fieldModel.getColumnNameValue(), targetParametersSpec);
+                    fieldInfo.setFieldValue(fieldModelForUpdate.getColumnNameValue(), targetParametersSpec);
                     break;
                 case enum_type:
-                    fieldInfo.setFieldValue(fieldModel.getEnumValue(), targetParametersSpec);
+                    fieldInfo.setFieldValue(fieldModelForUpdate.getEnumValue(), targetParametersSpec);
                     break;
                 case string_list_type:
-                    fieldInfo.setFieldValue(fieldModel.getStringListValue(), targetParametersSpec);
+                    fieldInfo.setFieldValue(fieldModelForUpdate.getStringListValue(), targetParametersSpec);
                     break;
                 case integer_list_type:
-                    fieldInfo.setFieldValue(fieldModel.getIntegerListValue(), targetParametersSpec);
+                    fieldInfo.setFieldValue(fieldModelForUpdate.getIntegerListValue(), targetParametersSpec);
                     break;
                 case date_type:
-                    fieldInfo.setFieldValue(fieldModel.getDateValue(), targetParametersSpec);
+                    fieldInfo.setFieldValue(fieldModelForUpdate.getDateValue(), targetParametersSpec);
                     break;
                 default:
                     throw new UnsupportedOperationException("Unsupported type: " + fieldInfo.getDataType().toString());

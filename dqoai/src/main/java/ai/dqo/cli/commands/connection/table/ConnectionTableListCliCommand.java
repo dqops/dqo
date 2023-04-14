@@ -19,7 +19,7 @@ import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.TabularOutputFormat;
-import ai.dqo.cli.commands.connection.impl.ConnectionService;
+import ai.dqo.cli.commands.connection.impl.ConnectionCliService;
 import ai.dqo.cli.terminal.*;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +35,9 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "list", description = "List tables for connection")
+@CommandLine.Command(name = "list", header = "List tables for the specified connection and schema name.", description = "List all the tables available in the database for the specified connection and schema. It allows the user to view all the tables in the database.")
 public class ConnectionTableListCliCommand extends BaseCommand implements ICommand {
-	private ConnectionService connectionService;
+	private ConnectionCliService connectionCliService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 	private TerminalTableWritter terminalTableWritter;
@@ -47,12 +47,12 @@ public class ConnectionTableListCliCommand extends BaseCommand implements IComma
 	}
 
 	@Autowired
-	public ConnectionTableListCliCommand(ConnectionService connectionService,
-										 TerminalReader terminalReader,
-										 TerminalWriter terminalWriter,
-										 TerminalTableWritter terminalTableWritter,
-										 FileWritter fileWritter) {
-		this.connectionService = connectionService;
+	public ConnectionTableListCliCommand(ConnectionCliService connectionCliService,
+                                         TerminalReader terminalReader,
+                                         TerminalWriter terminalWriter,
+                                         TerminalTableWritter terminalTableWritter,
+                                         FileWritter fileWritter) {
+		this.connectionCliService = connectionCliService;
 		this.terminalWriter = terminalWriter;
 		this.terminalReader = terminalReader;
 		this.terminalTableWritter = terminalTableWritter;
@@ -92,7 +92,7 @@ public class ConnectionTableListCliCommand extends BaseCommand implements IComma
 			this.schema = this.terminalReader.prompt("Schema name (--schema)", null, false);
 		}
 
-		CliOperationStatus cliOperationStatus = this.connectionService.loadTableList(connection, schema, table, this.getOutputFormat(), dimensions, labels);
+		CliOperationStatus cliOperationStatus = this.connectionCliService.loadTableList(connection, schema, table, this.getOutputFormat(), dimensions, labels);
 		if (cliOperationStatus.isSuccess()) {
 			if (this.getOutputFormat() == TabularOutputFormat.TABLE) {
 				if (this.isWriteToFile()) {

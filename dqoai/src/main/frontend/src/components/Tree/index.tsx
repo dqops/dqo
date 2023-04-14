@@ -8,16 +8,17 @@ import clsx from 'clsx';
 import { Tooltip } from '@material-tailwind/react';
 import ContextMenu from '../CustomTree/ContextMenu';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
+import { CheckTypes } from "../../shared/routes";
 
 const Tree = () => {
-  const { changeActiveTab, treeData, toggleOpenNode, activeTab, switchTab } = useTree();
+  const { changeActiveTab, treeData, toggleOpenNode, activeTab, switchTab, sourceRoute } = useTree();
   const [isOpen, setIsOpen] = useState(false);
   const { removeNode } = useTree();
   const [selectedNode, setSelectedNode] = useState<CustomTreeNode>();
 
   const handleNodeClick = (node: CustomTreeNode) => {
-    switchTab(node);
-    changeActiveTab(node);
+    switchTab(node, sourceRoute);
+    changeActiveTab(node, true);
   };
 
   const groupedData = groupBy(treeData, 'parentId');
@@ -54,12 +55,12 @@ const Tree = () => {
   };
 
   const renderIcon = (node: CustomTreeNode) => {
-    if (node.level === TREE_LEVEL.CHECK) {
+    if (node.level === TREE_LEVEL.CHECK || (node.level === TREE_LEVEL.COLUMN && sourceRoute === CheckTypes.SOURCES)) {
       return <div className="w-0 shrink-0" />;
     }
     return (
       <SvgIcon
-        className="w-4 min-w-4 text-black cursor-pointer shrink-0"
+        className="w-4 min-w-4 cursor-pointer shrink-0"
         name={!node.open ? 'arrow-alt-right' : 'arrow-alt-down'}
         onClick={() => {
           toggleOpenNode(node.id);
@@ -94,7 +95,7 @@ const Tree = () => {
               <div className="flex flex-1 justify-between items-center">
                 <div
                   className={clsx(
-                    `text-black flex-1 truncate mr-7`,
+                    `flex-1 truncate mr-7`,
                     node.hasCheck ? 'font-bold' : ''
                   )}
                 >
@@ -142,7 +143,7 @@ const Tree = () => {
   }, [selectedNode]);
 
   return (
-    <div className="pl-2 mt-4">
+    <div className={clsx("pl-2", sourceRoute === 'sources' ? 'mt-4' : 'mt-0')}>
       <div>{renderTree('null', 0)}</div>
       <ConfirmDialog
         open={isOpen}

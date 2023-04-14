@@ -18,7 +18,7 @@ package ai.dqo.cli.commands.column;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.column.impl.ColumnService;
+import ai.dqo.cli.commands.column.impl.ColumnCliService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
@@ -38,9 +38,9 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "rename", description = "Rename column which match filters")
+@CommandLine.Command(name = "rename", header = "Rename the column filtered by the given conditions", description = "Rename one or more columns in a table based on a specified condition.")
 public class ColumnRenameCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
-	private ColumnService columnService;
+	private ColumnCliService columnCliService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 
@@ -50,10 +50,10 @@ public class ColumnRenameCliCommand extends BaseCommand implements ICommand, ICo
 	@Autowired
 	public ColumnRenameCliCommand(TerminalReader terminalReader,
 								  TerminalWriter terminalWriter,
-								  ColumnService columnService) {
+								  ColumnCliService columnCliService) {
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
-		this.columnService = columnService;
+		this.columnCliService = columnCliService;
 	}
 
 	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name", required = false,
@@ -155,7 +155,7 @@ public class ColumnRenameCliCommand extends BaseCommand implements ICommand, ICo
 			this.columnName = this.terminalReader.prompt("New column name (--newColumn)", null, false);
 		}
 
-		CliOperationStatus cliOperationStatus = columnService.renameColumn(connectionName, fullTableName, columnName, newColumnName);
+		CliOperationStatus cliOperationStatus = columnCliService.renameColumn(connectionName, fullTableName, columnName, newColumnName);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 

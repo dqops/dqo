@@ -4,10 +4,7 @@ import { DataStreamBasicModel, UICheckModel } from '../../api';
 import TextArea from '../TextArea';
 import Select from '../Select';
 import { DataStreamsApi } from '../../services/apiClient';
-import { useHistory, useParams } from 'react-router-dom';
-import { useTree } from '../../contexts/treeContext';
-import { findTreeNode } from '../../utils/tree';
-import { TREE_LEVEL } from '../../shared/enums';
+import { useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import Button from "../Button";
 
@@ -19,9 +16,6 @@ interface ICheckSettingsTabProps {
 const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
   const { connection, schema, table }: { connection: string; schema: string; table: string;} = useParams();
   const [dataStreams, setDataStreams] = useState<DataStreamBasicModel[]>([]);
-  const { activeTab, treeData, changeActiveTab } = useTree();
-  const activeNode = findTreeNode(treeData, activeTab);
-  const history = useHistory();
 
   useEffect(() => {
     DataStreamsApi.getDataStreams(connection ?? '', schema ?? '', table).then(
@@ -56,10 +50,12 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
             <tr>
               <td className="px-4 py-2 w-60">Disable data quality check</td>
               <td className="px-4 py-2">
-                <Checkbox
-                  checked={check?.disabled}
-                  onChange={(value) => onChange({ ...check, disabled: value })}
-                />
+                <div className="flex">
+                  <Checkbox
+                    checked={check?.disabled}
+                    onChange={(value) => onChange({ ...check, disabled: value })}
+                  />
+                </div>
               </td>
             </tr>
             <tr>
@@ -89,12 +85,27 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
             <tr>
               <td className="px-4 py-2">Exclude from KPI</td>
               <td className="px-4 py-2">
-                <Checkbox
-                  checked={check?.exclude_from_kpi}
-                  onChange={(value) =>
-                    onChange({ ...check, exclude_from_kpi: value })
-                  }
-                />
+                <div className="flex">
+                  <Checkbox
+                    checked={check?.exclude_from_kpi}
+                    onChange={(value) =>
+                      onChange({ ...check, exclude_from_kpi: value })
+                    }
+                  />
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td className="px-4 py-2">Include in SLA</td>
+              <td className="px-4 py-2">
+                <div className="flex">
+                  <Checkbox
+                    checked={check?.include_in_sla}
+                    onChange={(value) =>
+                      onChange({ ...check, include_in_sla: value })
+                    }
+                  />
+                </div>
               </td>
             </tr>
             <tr>

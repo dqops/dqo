@@ -90,7 +90,7 @@ const SelectInput = ({
               <div>
                 <SvgIcon
                   name="info"
-                  className="w-4 h-4 text-blue-700 cursor-pointer"
+                  className="w-4 h-4 text-gray-700 cursor-pointer"
                 />
               </div>
             </Tooltip>
@@ -100,7 +100,7 @@ const SelectInput = ({
       <div className="relative w-full min-w-40" ref={ref}>
         <div
           className={clsx(
-            'cursor-pointer text-gray-900 h-9 pr-8 text-black rounded flex items-center text-sm border overflow-hidden',
+            'cursor-pointer text-gray-900 h-9 pr-8 rounded flex items-center text-sm border overflow-hidden',
             triggerClassName,
             disabled ? 'bg-gray-300 cursor-not-allowed' : '',
             error ? 'border-red-500' : 'border-gray-300'
@@ -116,7 +116,7 @@ const SelectInput = ({
           <SvgIcon
             name="chevron-down"
             className={clsx(
-              'absolute transform top-1/2 -translate-y-2/4 right-2 text-black w-4',
+              'absolute transform top-1/2 -translate-y-2/4 right-2 w-4',
               isOpen ? 'transform rotate-180' : ''
             )}
           />

@@ -50,6 +50,7 @@ import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -76,8 +77,15 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService, newLockManager, synchronizationStatusTracker);
 
-        this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker);
+        ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(newLockManager, localUserHomeFileStorageService);
+
+        this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(
+                parquetPartitionMetadataService,
+                localUserHomeProviderStub,
+                newLockManager,
+                HadoopConfigurationProviderObjectMother.getDefault(),
+                localUserHomeFileStorageService,
+                synchronizationStatusTracker);
 
         this.errorsStorageSettings = ErrorsSnapshot.createErrorsStorageSettings();
         this.errorsTableFactory = new ErrorsTableFactoryImpl(new SensorReadoutsTableFactoryImpl());
@@ -87,7 +95,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
                 this.errorsTableFactory
         );
 
-        this.sut = new ErrorsDeleteServiceImpl(errorsSnapshotFactory);
+        this.sut = new ErrorsDeleteServiceImpl(errorsSnapshotFactory, parquetPartitionMetadataService);
     }
 
     private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {
@@ -492,7 +500,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
             }});
             setDateStart(month);
             setDateEnd(month.plusMonths(1).minusDays(1));
-            setColumnName("col2");
+            setColumnNames(new ArrayList<>(){{add("col2");}});
             setSensorName("s2");
         }};
 

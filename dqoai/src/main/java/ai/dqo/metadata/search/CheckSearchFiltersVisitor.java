@@ -16,6 +16,7 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.checks.*;
+import ai.dqo.checks.custom.CustomCheckSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.*;
@@ -161,18 +162,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
         DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
         dataStreamSearcherObject.setTableDataStreams(tableSpec.getDataStreams());
 
-        if (enabledFilter != null) {
-            if (enabledFilter && tableSpec.isDisabled()) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-            if (!enabledFilter && !tableSpec.isDisabled()) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-        }
-
-        if (tableSpec.isDisabled()) {
+        if (tableSpec.isDisabled() && (enabledFilter == null || enabledFilter)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
@@ -220,13 +210,19 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
 
-        if (enabledFilter != null) {
-            if (enabledFilter && columnSpec.isDisabled()) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-            if (!enabledFilter && !columnSpec.isDisabled()) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
+        if (columnSpec.isDisabled() && (enabledFilter == null || enabledFilter)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        if (this.filters.getColumnDataType() != null
+                && !this.filters.getColumnDataType().equals(columnSpec.getTypeSnapshot().getColumnType())) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        Boolean columnIsNullable = columnSpec.getTypeSnapshot() == null ? null : columnSpec.getTypeSnapshot().getNullable();
+        if (this.filters.getColumnNullable() != null
+                && (columnIsNullable == null || this.filters.getColumnNullable() ^ columnIsNullable)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
         if (columnSpec.isDisabled()) {
@@ -254,7 +250,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec abstractCheckSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> abstractCheckSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
         DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
@@ -262,13 +258,9 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
 
         AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getParameters();
         boolean checkEnabled = !abstractCheckSpec.isDisabled();
-        if (enabledFilter != null) {
-            if (enabledFilter && !checkEnabled) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-            if (!enabledFilter && checkEnabled) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
+        if ((enabledFilter != null && (checkEnabled ^ enabledFilter))
+                || (enabledFilter == null && !checkEnabled)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
         DataStreamMappingSpec selectedDataStream =
@@ -295,9 +287,6 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
-        if (!checkEnabled) {
-            return TreeNodeTraversalResult.SKIP_CHILDREN;
-        }
 
         String checkNameFilter = this.filters.getCheckName();
         if (!Strings.isNullOrEmpty(checkNameFilter)) {
@@ -312,10 +301,18 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             if (sensorParameters == null) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN; // sensor is not configured (has no parameters, we don't know what to run)
             }
-            String sensorDefinitionName = sensorParameters.getSensorDefinitionName();
-            String sensorEntryName = sensorParameters.getHierarchyId().getLast().toString();
-            if (!StringPatternComparer.matchSearchPattern(sensorDefinitionName, sensorNameFilter) &&
-                    !StringPatternComparer.matchSearchPattern(sensorEntryName, sensorNameFilter)) {
+
+            String sensorDefinitionName;
+
+            if (abstractCheckSpec instanceof CustomCheckSpec) {
+                CustomCheckSpec customCheckSpec = (CustomCheckSpec) abstractCheckSpec;
+                sensorDefinitionName = customCheckSpec.getSensorName(); // we can filter by a sensor name only for custom checks that have an explicitly given a sensor name, user defined custom checks cannot be filtered this way
+            }
+            else {
+                sensorDefinitionName = sensorParameters.getSensorDefinitionName();
+            }
+
+            if (!StringPatternComparer.matchSearchPattern(sensorDefinitionName, sensorNameFilter)) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
         }
@@ -353,6 +350,11 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             if (checksContainerSpec.getCheckTimeScale() != checkTimeScaleFilter) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
+        }
+
+        CheckTarget checkTarget = this.filters.getColumnName() == null ? null : CheckTarget.column;
+        if (checkTarget != null && checkTarget != checksContainerSpec.getCheckTarget()) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
         return super.accept(checksContainerSpec, parameter);

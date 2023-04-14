@@ -18,7 +18,7 @@ package ai.dqo.cli.commands.column;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.column.impl.ColumnService;
+import ai.dqo.cli.commands.column.impl.ColumnCliService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
@@ -39,9 +39,9 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "add", description = "Add a column with specified details")
+@CommandLine.Command(name = "add", header = "Add a column with specified details", description = "Add a new column to a table with specific details. The new column is added to the YAML configuration file.")
 public class ColumnAddCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
-	private ColumnService columnService;
+	private ColumnCliService columnCliService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 
@@ -51,10 +51,10 @@ public class ColumnAddCliCommand extends BaseCommand implements ICommand, IConne
 	@Autowired
 	public ColumnAddCliCommand(TerminalReader terminalReader,
 							  TerminalWriter terminalWriter,
-							  ColumnService columnService) {
+							  ColumnCliService columnCliService) {
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
-		this.columnService = columnService;
+		this.columnCliService = columnCliService;
 	}
 
 	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name", required = false,
@@ -163,7 +163,7 @@ public class ColumnAddCliCommand extends BaseCommand implements ICommand, IConne
 		ColumnSpec columnSpec = new ColumnSpec(columnTypeSnapshotSpec);
 		columnSpec.setDisabled(false);
 
-		CliOperationStatus cliOperationStatus = columnService.addColumn(connectionName, fullTableName, columnName, columnSpec);
+		CliOperationStatus cliOperationStatus = columnCliService.addColumn(connectionName, fullTableName, columnName, columnSpec);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

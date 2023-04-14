@@ -16,8 +16,6 @@
 package ai.dqo.metadata.storage.localfiles.userhome;
 
 import ai.dqo.cli.terminal.TerminalFactory;
-import ai.dqo.cli.terminal.TerminalReader;
-import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.configuration.DqoLoggingConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.filesystem.BuiltInFolderNames;
@@ -154,6 +152,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.SOURCES));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.SENSORS));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.RULES));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.CHECKS));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.DATA));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.INDEX));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.LOGS));
@@ -166,6 +165,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                                 BuiltInFolderNames.DATA + "/\n" +
                                 BuiltInFolderNames.INDEX + "/\n" +
                                 BuiltInFolderNames.LOGS + "/\n" +
+                                ".venv/\n" +
                                 SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML + "\n";
 
                 Files.writeString(gitIgnorePath, gitIgnoreContent);

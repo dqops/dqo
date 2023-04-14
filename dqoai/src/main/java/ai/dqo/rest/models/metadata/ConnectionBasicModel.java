@@ -21,6 +21,7 @@ import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
+import ai.dqo.connectors.sqlserver.SqlServerParametersSpec;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
@@ -61,17 +62,20 @@ public class ConnectionBasicModel {
     @JsonPropertyDescription("Redshift connection parameters.")
     private RedshiftParametersSpec redshift;
 
+    @JsonPropertyDescription("SqlServer connection parameters.")
+    private SqlServerParametersSpec sqlserver;
+
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.")
     private CheckSearchFilters runChecksJobTemplate;
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run profiling checks within this connection.")
     private CheckSearchFilters runProfilingChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run whole table checks within this connection.")
-    private CheckSearchFilters runWholeTableChecksJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run recurring checks within this connection.")
+    private CheckSearchFilters runRecurringChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run time period partitioned checks within this connection.")
-    private CheckSearchFilters runTimePeriodChecksJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run partition partitioned checks within this connection.")
+    private CheckSearchFilters runPartitionChecksJobTemplate;
 
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collectors within this connection.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
@@ -94,6 +98,7 @@ public class ConnectionBasicModel {
             setSnowflake(connectionSpec.getSnowflake());
             setPostgresql(connectionSpec.getPostgresql());
             setRedshift(connectionSpec.getRedshift());
+            setSqlserver(connectionSpec.getSqlserver());
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -102,16 +107,16 @@ public class ConnectionBasicModel {
             setRunProfilingChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
-                setCheckType(CheckType.ADHOC);
+                setCheckType(CheckType.PROFILING);
                 setEnabled(true);
             }});
-            setRunWholeTableChecksJobTemplate(new CheckSearchFilters()
+            setRunRecurringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
-                setCheckType(CheckType.CHECKPOINT);
+                setCheckType(CheckType.RECURRING);
                 setEnabled(true);
             }});
-            setRunTimePeriodChecksJobTemplate(new CheckSearchFilters()
+            setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setCheckType(CheckType.PARTITIONED);
@@ -129,9 +134,9 @@ public class ConnectionBasicModel {
                 setDateStart(null);
                 setDateEnd(null);
 
-                setDeleteProfilingResults(true);
+                setDeleteStatistics(true);
                 setDeleteErrors(true);
-                setDeleteRuleResults(true);
+                setDeleteCheckResults(true);
                 setDeleteSensorReadouts(true);
             }});
         }};
@@ -147,5 +152,6 @@ public class ConnectionBasicModel {
         targetConnectionSpec.setSnowflake(this.getSnowflake());
         targetConnectionSpec.setPostgresql(this.getPostgresql());
         targetConnectionSpec.setRedshift(this.getRedshift());
+        targetConnectionSpec.setSqlserver(this.getSqlserver());
     }
 }

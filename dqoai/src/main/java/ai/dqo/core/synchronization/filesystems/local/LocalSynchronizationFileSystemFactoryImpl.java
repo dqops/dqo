@@ -16,8 +16,8 @@
 package ai.dqo.core.synchronization.filesystems.local;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
-import ai.dqo.core.synchronization.contract.SynchronizationRoot;
 import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.SynchronizationRoot;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -67,8 +67,8 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
             case data_sensor_readouts:
                 return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.SENSOR_READOUTS);
 
-            case data_rule_results:
-                return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.RULE_RESULTS);
+            case data_check_results:
+                return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.CHECK_RESULTS);
 
             case data_errors:
                 return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.ERRORS);
@@ -84,6 +84,9 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
 
             case rules:
                 return localUserHomePath.resolve(BuiltInFolderNames.RULES);
+
+            case checks:
+                return localUserHomePath.resolve(BuiltInFolderNames.CHECKS);
 
             default:
                 throw new IllegalArgumentException("Unsupported root: " +  rootType.toString());

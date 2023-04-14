@@ -23,7 +23,6 @@ import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.google.common.base.Strings;
-import org.apache.commons.codec.DecoderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -35,7 +34,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "set", description = "Set the default time zone")
+@CommandLine.Command(name = "set", header = "Set the default time zone", description = "Set the default time zone used by the DQO.")
 public class SettingsTimeZoneSetCliCommand extends BaseCommand implements ICommand {
 	private SettingsService settingsService;
 	private TerminalReader terminalReader;

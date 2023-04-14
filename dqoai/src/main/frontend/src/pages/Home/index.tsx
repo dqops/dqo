@@ -1,80 +1,133 @@
 import React from 'react';
 import Header from '../../components/Header';
 import Button from '../../components/Button';
-import Logo from '../../components/Logo';
+import { useHistory } from "react-router-dom";
 
 const HomePage = () => {
+  const history = useHistory();
+
   return (
-    <div className="flex min-h-screen overflow-hidden">
+    <div className="min-h-screen overflow-hidden">
       <Header />
-      <div className="flex w-full">
-        <div className="p-12 mt-16 flex-1">
-          <h1 className="text-3xl italic mb-4">Welcome to your DQO account</h1>
-          <div className="mb-3">
-            The navigation menu at the top of the page provides access the Data Quality Checks and Data Quality Dashboards sections.
-          </div>
-          <div className="mb-3">
-            In the Data Quality Dashboard section you can find examples of visualization dashboards showing the results of check execution.
-          </div>
-          <div className="mb-3">
-            If you are a new user, follow the instruction below on how to install and run the DQO application:
-          </div>
-          <ol className="list-decimal pl-4">
-            <li>
-              <div className="flex space-x-1 items-center">
-                <span>{"DQO requires Python version >= 3.6 and can be installed using pip. You can check your version of pip with"}</span>
-                <img src="/images/home/1.png" className="mb-2" alt="" />
+      <div className="mt-16">
+        <div className="bg-teal-500 text-white px-4 py-4 text-2xl font-bold mb-4">
+          Welcome do DQO
+        </div>
+        <div className="px-8 py-4 w-full">
+          <p className="font-bold text-xl mb-5">
+            To start monitoring your data, just follow these steps
+          </p>
+
+          <div className="w-full grid grid-cols-3 gap-20">
+            <div className="col-span-2">
+              <div className="mb-6">
+                <p className="font-semibold"><span className="mr-4">1.</span>Add a connection to your database</p>
+                <ul className="pl-8 list-disc list-outside">
+                  <li className="mb-2">
+                    <div className="inline-flex items-end gap-2">
+                      <span>
+                        Go to the Data Sources section and click
+                      </span>
+                      <img src="/images/home/addConnection.png" className="w-30" alt="" />
+                      <span>
+                        in the upper left corner.
+                      </span>
+                    </div>
+                  </li>
+                  <li className="mb-2">
+                    Fill in the connection parameters.
+                  </li>
+                  <li className="mb-2">
+                    Import tables for monitoring.
+                  </li>
+                </ul>
               </div>
-              <div>
-                {"You can install pip version with this command for Windows or MacOS:"}
+              <div className="mb-6">
+                <p className="font-semibold mb-4"><span className="mr-4">2.</span>Select and run Profiling data quality checks</p>
+                <ul className="pl-8 list-disc list-outside">
+                  <li className="mb-2">
+                    <div className="inline-flex items-end">
+                      Go to the Profiling section
+                    </div>
+                  </li>
+                  <li className="mb-2">
+                    <div className="inline-flex items-end">
+                      On the tree view on the left, find a table <img src="/images/home/table.png" alt="table" className="inline" />  or column <img src="/images/home/column.png" alt="column" className="inline" /> of interest by expanding the added connection.
+                    </div>
+                  </li>
+                  <li className="mb-2">
+                    <div className="inline-flex items-end">
+                      In the list of checks on the right,  enable the selected data quality checks by clicking the switch <img src="/images/home/switch-off.png" alt="" className="inline" /> .
+                    </div>
+                  </li>
+                  <li className="mb-2">
+                    <div className="inline-flex items-end">
+                      Adjust the threshold levels or leave the default option <img src="/images/home/min_count.png" alt="" className="w-25 inline ml-2" />.
+                    </div>
+                  </li>
+                  <li className="mb-2">
+                    <div className="inline-flex items-end">
+                      Click <img src="/images/home/save.png" alt="" className="inline w-30" /> in the upper right corner.
+                    </div>
+                  </li>
+                  <li className="mb-2">
+                    <div className="inline-flex items-end">
+                      Run data quality check by clicking the Run Check icon <img src="/images/home/play.png" alt="" className="inline" />.
+                    </div>
+                  </li>
+                </ul>
               </div>
-              <img src="/images/home/2.png" className="mb-2" alt="" />
-              <div>
-                or the following command for Linux
+              <div className="mb-6">
+                <p className="font-semibold mb-4"><span className="mr-4">3.</span>Evaluate the results</p>
+                <ul className="pl-8 list-disc list-outside">
+                  <li className="mb-2 leading-[2]">
+                    The square next to the check name will indicate the results of the check run: Valid, Warning, Error or Fatal <img src="/images/home/status-bar.png" alt="" className="inline" />.
+                    <br />You can check the details by placing the mouse cursor on the square.
+                  </li>
+                  <li className="mb-2">
+                    Click the Check Details icon <img src="/images/home/details.png" alt="" className="inline" />  to view more details.
+                  </li>
+                  <li className="mb-2">
+                    Go to the Data Quality Dashboards section to review KPIs (percentage of passed data quality checks).
+                  </li>
+                </ul>
               </div>
-              <img src="/images/home/3.png" className="mb-2" alt="" />
-            </li>
-            <li>
-              <div>Install the DQO app</div>
-              <img src="/images/home/4.png" className="mb-2" alt="" />
-            </li>
-            <li>
-              <div>Start the application</div>
-              <img src="/images/home/5.png" className="mb-2" alt="" />
-            </li>
-            <li>
-              <div>Log into dqo cloud</div>
-              <img src="/images/home/6.png" className="mb-2" alt="" />
-            </li>
-          </ol>
-    
-          <div className="mt-12 grid grid-cols-2 gap-8">
-            <div>
-              <div className="text-xl mb-5">
+            </div>
+            <div className="flex flex-col gap-4">
+              <p>Check the docs for more tutorials</p>
+              <a href="https://docs.dqo.ai/latest/">
+                <img src="/images/home/book.svg" className="w-20 mb-5" alt="" />
+              </a>
+              <p>
+                Download our best practices for effective <br />
+                data quality improvement
+              </p>
+              <a href="https://dqo.ai/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/" className="mb-4">
+                <img src="/images/home/download_practice.png" alt="" />
+              </a>
+
+              <p>
                 Contact us for more information
-              </div>
-               <a href="https://dqo.ai/contact-us"><Button label="Contact Us" color="success" variant="contained" className="bg-green-600" /></a>
-            </div>
-      
-            <div>
-              <div className="text-xl mb-3">
+              </p>
+              <a
+                className="w-40 bg-primary rounded-lg py-2 px-8 text-white mb-2"
+                href="https://dqo.ai/contact-us"
+              >
+                Contact Us
+              </a>
+
+              <p>
                 Check our progress on GitHub
-              </div>
-              <a href="https://github.com/dqoai/dqo"><img src="images/home/8.png" alt="" className="w-40" /></a>
-            </div>
-      
-            <div>
-              <div className="text-xl mb-5">
-                Download our best practices for effective data quality improvement
-              </div>
-              <a href="https://dqo.ai/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/"><img src="images/home/7.png" alt="" className="w-40" /></a>
-            </div>
-      
-            <div>
-              <div className="text-xl mb-3">
+              </p>
+              <a href="https://github.com/dqoai/dqo" className="mb-2">
+                <img src="/images/home/github.png" className="w-40" alt="" />
+              </a>
+              <p>
                 Back to home page
-              </div>
-              <a href="https://dqo.ai/"><Logo className="w-30" /></a>
+              </p>
+              <a href="https://dqo.ai/">
+                <img src="/logo.svg" className="w-40" alt="" />
+              </a>
             </div>
           </div>
         </div>

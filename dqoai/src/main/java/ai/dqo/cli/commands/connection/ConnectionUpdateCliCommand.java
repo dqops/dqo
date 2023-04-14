@@ -18,14 +18,9 @@ package ai.dqo.cli.commands.connection;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.connection.impl.ConnectionService;
+import ai.dqo.cli.commands.connection.impl.ConnectionCliService;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
-import ai.dqo.cli.completion.completers.ProviderTypeCompleter;
 import ai.dqo.cli.terminal.TerminalFactory;
-import ai.dqo.cli.terminal.TerminalReader;
-import ai.dqo.cli.terminal.TerminalWriter;
-import ai.dqo.connectors.ProviderType;
-import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -38,18 +33,18 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "update", description = "Update connection or connections which match filters")
+@CommandLine.Command(name = "update", header = "Update the connection(s) that match a given condition", description = "Update the connection or connections that match the conditions specified in the options with new details. It allows the user to modify existing connections in the application.")
 public class ConnectionUpdateCliCommand extends BaseCommand implements ICommand {
-    private ConnectionService connectionService;
+    private ConnectionCliService connectionCliService;
     private TerminalFactory terminalFactory;
 
     public ConnectionUpdateCliCommand() {
     }
 
     @Autowired
-    public ConnectionUpdateCliCommand(ConnectionService connectionService,
+    public ConnectionUpdateCliCommand(ConnectionCliService connectionCliService,
                                       TerminalFactory terminalFactory) {
-        this.connectionService = connectionService;
+        this.connectionCliService = connectionCliService;
         this.terminalFactory = terminalFactory;
     }
 
@@ -102,7 +97,7 @@ public class ConnectionUpdateCliCommand extends BaseCommand implements ICommand 
     public Integer call() throws Exception {
         ConnectionSpec connectionSpec = this.connection == null ? new ConnectionSpec() : this.connection;
 
-        CliOperationStatus cliOperationStatus = this.connectionService.updateConnection(this.name, connectionSpec);
+        CliOperationStatus cliOperationStatus = this.connectionCliService.updateConnection(this.name, connectionSpec);
         this.terminalFactory.getWriter().writeLine(cliOperationStatus.getMessage());
         return cliOperationStatus.isSuccess() ? 0 : -1;
     }

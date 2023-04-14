@@ -18,7 +18,7 @@ package ai.dqo.cli.commands.connection;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.connection.impl.ConnectionService;
+import ai.dqo.cli.commands.connection.impl.ConnectionCliService;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
@@ -34,9 +34,9 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "remove", description = "Remove connection or connections which match filters")
+@CommandLine.Command(name = "remove", header = "Remove the connection(s) that match a given condition", description = "Removes the connection or connections that match the conditions specified in the options. It allows the user to remove any unwanted connections that are no longer needed.")
 public class ConnectionRemoveCliCommand extends BaseCommand implements ICommand {
-    private ConnectionService connectionService;
+    private ConnectionCliService connectionCliService;
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;
 
@@ -44,10 +44,10 @@ public class ConnectionRemoveCliCommand extends BaseCommand implements ICommand 
     }
 
     @Autowired
-    public ConnectionRemoveCliCommand(ConnectionService connectionService,
-									  TerminalReader terminalReader,
-									  TerminalWriter terminalWriter) {
-        this.connectionService = connectionService;
+    public ConnectionRemoveCliCommand(ConnectionCliService connectionCliService,
+                                      TerminalReader terminalReader,
+                                      TerminalWriter terminalWriter) {
+        this.connectionCliService = connectionCliService;
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
     }
@@ -76,7 +76,7 @@ public class ConnectionRemoveCliCommand extends BaseCommand implements ICommand 
             name = "*";
         }
 
-        CliOperationStatus cliOperationStatus = this.connectionService.removeConnection(this.name);
+        CliOperationStatus cliOperationStatus = this.connectionCliService.removeConnection(this.name);
         this.terminalWriter.writeLine(cliOperationStatus.getMessage());
         return cliOperationStatus.isSuccess() ? 0 : -1;
     }

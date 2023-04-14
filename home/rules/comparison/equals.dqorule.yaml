@@ -1,5 +1,21 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
+  fields:
+  - field_name: expected_value
+    display_name: expected_value
+    help_text: Expected value for the actual_value returned by the sensor. The sensor
+      value should equal expected_value +/- the error_margin.
+    data_type: double
+    sample_values:
+    - 10.0
+  - field_name: error_margin
+    display_name: error_margin
+    help_text: Error margin for comparison.
+    data_type: double
+    sample_values:
+    - 0.01

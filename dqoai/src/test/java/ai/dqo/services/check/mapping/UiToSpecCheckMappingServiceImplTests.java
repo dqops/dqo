@@ -16,8 +16,8 @@
 package ai.dqo.services.check.mapping;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import ai.dqo.core.scheduler.quartz.*;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
@@ -26,7 +26,7 @@ import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.sources.TableSpecObjectMother;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
+import ai.dqo.services.check.mapping.models.UICheckContainerModel;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
@@ -68,19 +68,19 @@ public class UiToSpecCheckMappingServiceImplTests extends BaseTest {
 
     @Test
     void updateAllChecksSpecs_whenEmptyTableChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
-        TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.specToUiMapper.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
+        TableProfilingCheckCategoriesSpec tableCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
+        UICheckContainerModel uiModel = this.specToUiMapper.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, null, null);
 
-        this.sut.updateAllChecksSpecs(uiModel, tableCheckCategoriesSpec);
+        this.sut.updateCheckContainerSpec(uiModel, tableCheckCategoriesSpec);
     }
 
     @Test
     void updateAllChecksSpecs_whenEmptyColumnChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
-        ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnAdHocCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.specToUiMapper.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
+        ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
+        UICheckContainerModel uiModel = this.specToUiMapper.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, null, null);
 
-        this.sut.updateAllChecksSpecs(uiModel, columnCheckCategoriesSpec);
+        this.sut.updateCheckContainerSpec(uiModel, columnCheckCategoriesSpec);
     }
 }

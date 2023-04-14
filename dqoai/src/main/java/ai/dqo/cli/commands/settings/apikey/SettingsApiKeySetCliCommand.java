@@ -23,7 +23,6 @@ import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.google.common.base.Strings;
-import org.apache.commons.codec.DecoderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -35,7 +34,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "set", description = "Set api key")
+@CommandLine.Command(name = "set", header = "Set API key", description = "Set the API key used for accessing external services. This key is used to authenticate requests to the service.")
 public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand {
 	private SettingsService settingsService;
 	private TerminalReader terminalReader;
@@ -75,14 +74,14 @@ public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand
 	@Override
 	public Integer call() throws Exception {
 		if (Strings.isNullOrEmpty(this.key)) {
-			throwRequiredParameterMissingIfHeadless("<time zone>");
+			throwRequiredParameterMissingIfHeadless("key");
 			this.key = this.terminalReader.prompt("Api key", null, false);
 		}
 
 		try {
 			this.apiKeyProvider.decodeApiKey(this.key);
 		}
-		catch (DecoderException ex) {
+		catch (Exception ex) {
 			this.terminalWriter.writeLine("Invalid Cloud DQO API key: " + ex.getMessage());
 			return -1;
 		}

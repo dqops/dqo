@@ -51,12 +51,12 @@ public class DqoCloudSynchronizationServiceIntegrationTests extends BaseIntegrat
         postgresql.setDatabase("DB1");
         firstUserHomeContext.flush();
 
-        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, this.listener);
+        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, false, this.listener);
 
         // clean
         UserHomeContext cleanUserHome = UserHomeContextObjectMother.createDefaultHomeContext(true);
-        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, this.listener);  // this should download
-        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, this.listener);  // this should detect no changes...
+        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, false, this.listener);  // this should download
+        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, false, this.listener);  // this should detect no changes...
 
         UserHomeContext restoredUserHomeContext = UserHomeContextObjectMother.createDefaultHomeContext(false);
         ConnectionWrapper secondConnWrapper = restoredUserHomeContext.getUserHome().getConnections().getByObjectName("src1", true);
@@ -65,10 +65,10 @@ public class DqoCloudSynchronizationServiceIntegrationTests extends BaseIntegrat
 
         secondConnWrapper.markForDeletion();
         restoredUserHomeContext.flush();
-        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, this.listener);
+        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, false, this.listener);
 
         UserHomeContext userHomeAfterDelete = UserHomeContextObjectMother.createDefaultHomeContext(true);
-        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, this.listener);
+        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, false, this.listener);
         ConnectionWrapper connectionWrapperAfterDelete = userHomeAfterDelete.getUserHome().getConnections().getByObjectName("src1", true);
         Assertions.assertNull(connectionWrapperAfterDelete);
     }

@@ -1,8 +1,19 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 7
     min_periods_with_readouts: 3
+  fields:
+  - field_name: max_percent_within
+    display_name: max_percent_within
+    help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
+      \ within a moving average within the time window. Set the time window at the\
+      \ threshold level for all severity levels (low, medium, high) at once. The default\
+      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
+      \ exist to run the calculation."
+    data_type: double

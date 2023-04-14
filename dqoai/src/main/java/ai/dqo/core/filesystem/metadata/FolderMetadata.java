@@ -15,6 +15,9 @@
  */
 package ai.dqo.core.filesystem.metadata;
 
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyPayload;
+import ai.dqo.core.dqocloud.apikey.DqoCloudLimit;
+import ai.dqo.data.storage.HivePartitionPathUtility;
 import ai.dqo.utils.serialization.PathAsStringJsonDeserializer;
 import ai.dqo.utils.serialization.PathAsStringJsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,7 +32,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -505,7 +507,7 @@ public class FolderMetadata implements Cloneable {
             String fileName = myFile.getFileName();
             FileMetadata otherFile = otherFolderMetadata.files.get(fileName);
 
-            if (otherFile == null || !Arrays.equals(myFile.getFileHash(), otherFile.getFileHash())) {
+            if (otherFile == null || !Objects.equals(myFile.getMd5(), otherFile.getMd5())) {
                 if (differences == null) {
                     differences = new ArrayList<>();
                 }
@@ -584,7 +586,15 @@ public class FolderMetadata implements Cloneable {
         ArrayList<FolderMetadata> emptyFolders = null;
 
         if (!this.folders.isEmpty()) {
+            if (this.folders.isFrozen() && hasEmptyNestedFolders()) {
+                this.getMutableFolders(); // make the folder list unfrozen and mutable
+            }
+
             for (FolderMetadata childFolder : new ArrayList<>(this.folders)) {
+                if (childFolder.isFrozen() && childFolder.hasEmptyNestedFolders()) {
+                    childFolder = this.folders.getMutable(childFolder.getFolderName());
+                }
+
                 Collection<FolderMetadata> childEmptyFolders = childFolder.detachEmptyFolders();
                 if (childEmptyFolders != null) {
                     if (emptyFolders == null) {
@@ -604,5 +614,94 @@ public class FolderMetadata implements Cloneable {
         }
 
         return emptyFolders;
+    }
+
+    /**
+     * Checks if the folder has any empty nested folders. It must be called to decide that we have to unfreeze it to make changes to the index.
+     * @return True when there is at least one subfolder that is empty, false when all folders are unfrozen.
+     */
+    public boolean hasEmptyNestedFolders() {
+        if (this.files.isEmpty()) {
+            return true;
+        }
+
+        if (this.folders.isEmpty()) {
+            return false;
+        }
+
+        for (FolderMetadata nestedFolder : this.folders) {
+            if (nestedFolder.hasEmptyNestedFolders()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Removes connections and tables beyond the accepted limit, to match the license limitations.
+     * @param apiKeyPayload API Key payload with the license limits.
+     */
+    public void truncateToLicenseLimits(DqoCloudApiKeyPayload apiKeyPayload) {
+        Integer connectionsLimit = apiKeyPayload.getLimits().get(DqoCloudLimit.CONNECTIONS_LIMIT);
+        if (connectionsLimit != null && this.folders.size() > connectionsLimit) {
+            this.getMutableFolders().truncateToLimit(connectionsLimit,
+                    HivePartitionPathUtility::validHivePartitionConnectionFolderName,
+                    FolderTruncationMode.ASCENDING_SORTED_FIRST);
+        }
+
+        Integer tablesLimit = apiKeyPayload.getLimits().get(DqoCloudLimit.TABLES_LIMIT);
+        Integer tablesPerConnectionLimit = apiKeyPayload.getLimits().get(DqoCloudLimit.CONNECTION_TABLES_LIMIT);
+        if (tablesLimit != null || tablesPerConnectionLimit != null) {
+            int tablesCount = 0;
+            for (FolderMetadata connectionFolder : this.getMutableFolders()) {
+                if (!HivePartitionPathUtility.validHivePartitionConnectionFolderName(connectionFolder.getFolderName())) {
+                    continue;
+                }
+
+                if (tablesLimit != null && tablesCount + connectionFolder.folders.size() > tablesLimit) {
+                    FolderMetadata mutableConnectionFolder = this.getMutableFolders().getMutable(connectionFolder.getFolderName());
+                    mutableConnectionFolder.getMutableFolders().truncateToLimit(tablesLimit,
+                            HivePartitionPathUtility::validHivePartitionTableFolderName,
+                            FolderTruncationMode.ASCENDING_SORTED_FIRST);
+                } else {
+                    tablesCount += connectionFolder.folders.size();
+                }
+
+                if (tablesPerConnectionLimit != null) {
+                    if (connectionFolder.getFolders().size() > tablesPerConnectionLimit) {
+                        FolderMetadata mutableConnectionFolder = this.getMutableFolders().getMutable(connectionFolder.getFolderName());
+                        mutableConnectionFolder.getMutableFolders().truncateToLimit(tablesPerConnectionLimit,
+                                HivePartitionPathUtility::validHivePartitionTableFolderName,
+                                FolderTruncationMode.ASCENDING_SORTED_FIRST);
+                    }
+                }
+            }
+        }
+
+        Integer monthsLimit = apiKeyPayload.getLimits().get(DqoCloudLimit.MONTHS_LIMIT);
+        if (monthsLimit != null) {
+            for (FolderMetadata connectionFolder : this.getMutableFolders()) {
+                if (!HivePartitionPathUtility.validHivePartitionConnectionFolderName(connectionFolder.getFolderName())) {
+                    continue;
+                }
+
+                FolderMetadata mutableConnectionFolder = this.getMutableFolders().getMutable(connectionFolder.getFolderName());
+                FolderMetadataMap tableFolders = mutableConnectionFolder.getMutableFolders();
+
+                for (FolderMetadata tableFolder : tableFolders) {
+                    if (!HivePartitionPathUtility.validHivePartitionTableFolderName(tableFolder.getFolderName())) {
+                        continue;
+                    }
+
+                    if (tableFolder.getFolders().size() > monthsLimit) {
+                        FolderMetadata mutableTableFolder = tableFolders.getMutable(tableFolder.getFolderName());
+                        mutableTableFolder.getMutableFolders().truncateToLimit(monthsLimit,
+                                HivePartitionPathUtility::validHivePartitionMonthFolderName,
+                                FolderTruncationMode.DESCENDING_SORTED_FIRST);
+                    }
+                }
+            }
+        }
     }
 }

@@ -80,3 +80,12 @@ curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.co
 
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/1xTnP5V9xDEz2BQ2odSnu2bY1lvz_yaLXMblrBX-S260
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1xTnP5V9xDEz2BQ2odSnu2bY1lvz_yaLXMblrBX-S260/export?exportFormat=csv" > geographic_coordinate_system_test.csv
+
+REM Spreadsheet: https://docs.google.com/spreadsheets/d/1eP1AWS8yo7qdIYmkksfYIhhJI5BuvU5nfq3QqmbGwY4
+curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1eP1AWS8yo7qdIYmkksfYIhhJI5BuvU5nfq3QqmbGwY4/export?exportFormat=csv" > contains_ip4_test.csv
+
+REM Spreadsheet: https://docs.google.com/spreadsheets/d/16xP5gNKDbioeJFEIUdeSb10Yxu29AKpRDHwrTM54rMU
+curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/16xP5gNKDbioeJFEIUdeSb10Yxu29AKpRDHwrTM54rMU/export?exportFormat=csv" > contains_ip6_test.csv
+
+REM Spreadsheet: https://docs.google.com/spreadsheets/d/1VLTGDGo_9Qd503iSw93qDiuG0fCDXkjtm7cup78nS3I
+curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1VLTGDGo_9Qd503iSw93qDiuG0fCDXkjtm7cup78nS3I/export?exportFormat=csv" > detect_datatype_test.csv

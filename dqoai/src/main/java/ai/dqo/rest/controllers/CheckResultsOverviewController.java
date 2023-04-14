@@ -3,24 +3,9 @@ package ai.dqo.rest.controllers;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
-import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
-import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
-import ai.dqo.checks.column.checkpoints.ColumnMonthlyCheckpointCategoriesSpec;
-import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
-import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
-import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
-import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
-import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
-import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
-import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
-import ai.dqo.data.ruleresults.services.CheckResultsOverviewParameters;
-import ai.dqo.data.ruleresults.services.RuleResultsDataService;
-import ai.dqo.data.ruleresults.services.models.CheckResultsOverviewDataModel;
-import ai.dqo.metadata.id.HierarchyId;
+import ai.dqo.data.checkresults.services.CheckResultsDataService;
+import ai.dqo.data.checkresults.services.CheckResultsOverviewParameters;
+import ai.dqo.data.checkresults.services.models.CheckResultsOverviewDataModel;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -33,8 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
-import java.util.Objects;
-
 /**
  * Controller that returns the overview of the recent results and errors on tables and columns.
  */
@@ -44,18 +27,18 @@ import java.util.Objects;
 @Api(value = "CheckResultsOverview", description = "Returns the overview of the recently executed checks on tables and columns.")
 public class CheckResultsOverviewController {
     private UserHomeContextFactory userHomeContextFactory;
-    private RuleResultsDataService ruleResultsDataService;
+    private CheckResultsDataService checkResultsDataService;
 
     /**
      * Dependency injection constructor.
      * @param userHomeContextFactory User home context factory.
-     * @param ruleResultsDataService Rule results data service.
+     * @param checkResultsDataService Rule results data service.
      */
     @Autowired
     public CheckResultsOverviewController(UserHomeContextFactory userHomeContextFactory,
-                                          RuleResultsDataService ruleResultsDataService) {
+                                          CheckResultsDataService checkResultsDataService) {
         this.userHomeContextFactory = userHomeContextFactory;
-        this.ruleResultsDataService = ruleResultsDataService;
+        this.checkResultsDataService = checkResultsDataService;
     }
 
     /**
@@ -66,16 +49,16 @@ public class CheckResultsOverviewController {
      * @return Overview of the most recent check results.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/overview")
-    @ApiOperation(value = "getTableAdHocChecksOverview", notes = "Returns an overview of the most recent check executions for all table level data quality ad-hoc checks on a table",
+    @ApiOperation(value = "getTableProfilingChecksOverview", notes = "Returns an overview of the most recent check executions for all table level data quality profiling checks on a table",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Overview of the most recent check runs for table level data quality ad-hoc checks on a table returned",
+            @ApiResponse(code = 200, message = "Overview of the most recent check runs for table level data quality profiling checks on a table returned",
                     response = CheckResultsOverviewDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getTableAdHocChecksOverview(
+    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getTableProfilingChecksOverview(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -99,38 +82,32 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableAdHocCheckCategoriesSpec checks = Objects.requireNonNullElseGet(
-                tableSpec.getChecks(),
-                () -> {
-                    TableAdHocCheckCategoriesSpec container = new TableAdHocCheckCategoriesSpec();
-                    container.setHierarchyId(new HierarchyId(tableSpec.getHierarchyId(), "checks"));
-                    return container;
-                });
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null, false);
 
-        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
+        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checks, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the overview of the most recent checkpoint executions on a table given a connection name, table name and a time scale.
+     * Retrieves the overview of the most recent recurring executions on a table given a connection name, table name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timeScale      Time scale.
-     * @return Overview of the most recent checkpoint results.
+     * @return Overview of the most recent recurring results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/{timeScale}/overview")
-    @ApiOperation(value = "getTableCheckpointsOverview", notes = "Returns an overview of the most recent table level checkpoint executions for the checkpoints at a requested time scale",
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/overview")
+    @ApiOperation(value = "getTableRecurringOverview", notes = "Returns an overview of the most recent table level recurring executions for the recurring at a requested time scale",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "An overview of the most recent checkpoint executions for the checkpoints at a requested time scale on a table returned",
+            @ApiResponse(code = 200, message = "An overview of the most recent recurring executions for the recurring at a requested time scale on a table returned",
                     response = CheckResultsOverviewDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getTableCheckpointsOverview(
+    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getTableRecurringOverview(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -155,9 +132,9 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.CHECKPOINT, timeScale);
+        AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, false);
 
-        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
+        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
@@ -205,9 +182,9 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
 
-        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
+        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
@@ -221,16 +198,16 @@ public class CheckResultsOverviewController {
      * @return Overview of the most recent check results.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/overview")
-    @ApiOperation(value = "getColumnAdHocChecksOverview", notes = "Returns an overview of the most recent check executions for all column level data quality ad-hoc checks on a column",
+    @ApiOperation(value = "getColumnProfilingChecksOverview", notes = "Returns an overview of the most recent check executions for all column level data quality profiling checks on a column",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Overview of the most recent check runs for column level data quality ad-hoc checks on a column returned",
+            @ApiResponse(code = 200, message = "Overview of the most recent check runs for column level data quality profiling checks on a column returned",
                     response = CheckResultsOverviewDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getColumnAdHocChecksOverview(
+    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getColumnProfilingChecksOverview(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -260,33 +237,33 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.ADHOC, null);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, false);
 
-        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
+        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checks, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the overview of the most recent checkpoint executions on a column given a connection name, table name, column name and a time scale.
+     * Retrieves the overview of the most recent recurring executions on a column given a connection name, table name, column name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
      * @param timeScale      Time scale.
-     * @return Overview of the most recent checkpoint results.
+     * @return Overview of the most recent recurring results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timeScale}/overview")
-    @ApiOperation(value = "getColumnCheckpointsOverview", notes = "Returns an overview of the most recent column level checkpoint executions for the checkpoints at a requested time scale",
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/overview")
+    @ApiOperation(value = "getColumnRecurringOverview", notes = "Returns an overview of the most recent column level recurring executions for the recurring at a requested time scale",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "An overview of the most recent checkpoint executions for the checkpoints at a requested time scale on a column returned",
+            @ApiResponse(code = 200, message = "An overview of the most recent recurring executions for the recurring at a requested time scale on a column returned",
                     response = CheckResultsOverviewDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getColumnCheckpointsOverview(
+    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getColumnRecurringOverview(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -317,9 +294,9 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.CHECKPOINT, timeScale);
+        AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale, false);
 
-        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
+        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
@@ -374,9 +351,9 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
 
-        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
+        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }

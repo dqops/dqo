@@ -15,7 +15,6 @@
  */
 package ai.dqo.execution.sqltemplates;
 
-import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;

@@ -20,6 +20,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Parameters for the {@link DeleteStoredDataQueueJob} job that deletes data stored in user's ".data" directory.
@@ -27,21 +29,22 @@ import java.time.LocalDate;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class DeleteStoredDataQueueJobParameters implements Cloneable {
+    // @NotNull  // should be NotNull, but there are errors in TypeScript (CheckTableHeader.tsx)
     private String connectionName;
     private String schemaTableName;
     private LocalDate dateStart;
     private LocalDate dateEnd;
 
     private boolean deleteErrors = false;
-    private boolean deleteProfilingResults = false;
-    private boolean deleteRuleResults = false;
+    private boolean deleteStatistics = false;
+    private boolean deleteCheckResults = false;
     private boolean deleteSensorReadouts = false;
 
+    private List<String> columnNames;
     private String checkCategory;
     private String checkName;
     private String checkType;
     private String sensorName;
-    private String columnName;
     private String dataStreamName;
     private String qualityDimension;
     private String timeGradient;
@@ -79,16 +82,16 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
         return new DeleteStoredDataQueueJobParameters() {{
             setConnectionName(checkSearchFilters.getConnectionName());
             setSchemaTableName(checkSearchFilters.getSchemaTableName());
-            setColumnName(checkSearchFilters.getColumnName());
+            setColumnNames(new LinkedList<>(){{add(checkSearchFilters.getColumnName());}});
 
             setCheckType(checkSearchFilters.getCheckType() != null ? checkSearchFilters.getCheckType().getDisplayName() : null);
             setCheckName(checkSearchFilters.getCheckName());
             setSensorName(checkSearchFilters.getSensorName());
             setCheckCategory(checkSearchFilters.getCheckCategory());
 
-            setDeleteRuleResults(true);
+            setDeleteCheckResults(true);
             setDeleteErrors(true);
-            setDeleteProfilingResults(true);
+            setDeleteStatistics(true);
             setDeleteSensorReadouts(true);
         }};
     }

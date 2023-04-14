@@ -40,6 +40,17 @@ public class TerminalWriterSystemImpl extends TerminalWriterAbstract {
     }
 
     /**
+     * Writes a URL to the terminal, formatted as a hyperlink if possible.
+     *
+     * @param url URL to be linked.
+     * @param text Text to be displayed if hyperlinked.
+     */
+    @Override
+    public void writeUrl(String url, String text) {
+        write(text + " {" + url + "}");
+    }
+
+    /**
      * Clears the screen.
      */
     public void clearScreen() {

@@ -53,6 +53,13 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
     private FolderSynchronizationStatus rules = FolderSynchronizationStatus.unchanged;
 
     /**
+     * The synchronization status of the "checks" folder.
+     */
+    @JsonPropertyDescription("The synchronization status of the \"checks\" folder.")
+    @Setter(AccessLevel.NONE)
+    private FolderSynchronizationStatus checks = FolderSynchronizationStatus.unchanged;
+
+    /**
      * The synchronization status of the ".data/sensor_readouts" folder.
      */
     @JsonPropertyDescription("The synchronization status of the \".data/sensor_readouts\" folder.")
@@ -60,11 +67,11 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
     private FolderSynchronizationStatus dataSensorReadouts = FolderSynchronizationStatus.unchanged; // when using snake case, the enums in typescript/swagger will use _, making this enum the same as "data_sensor_readouts" in DqoRoot
 
     /**
-     * The synchronization status of the ".data/rule_results" folder.
+     * The synchronization status of the ".data/check_results" folder.
      */
-    @JsonPropertyDescription("The synchronization status of the \".data/rule_results\" folder.")
+    @JsonPropertyDescription("The synchronization status of the \".data/check_results\" folder.")
     @Setter(AccessLevel.NONE)
-    private FolderSynchronizationStatus dataRuleResults = FolderSynchronizationStatus.unchanged;
+    private FolderSynchronizationStatus dataCheckResults = FolderSynchronizationStatus.unchanged;
 
     /**
      * The synchronization status of the ".data/statistics" folder.
@@ -91,12 +98,14 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
                 return sensors;
             case rules:
                 return rules;
+            case checks:
+                return checks;
             case sources:
                 return sources;
             case data_sensor_readouts:
                 return dataSensorReadouts;
-            case data_rule_results:
-                return dataRuleResults;
+            case data_check_results:
+                return dataCheckResults;
             case data_errors:
                 return dataErrors;
             case data_statistics:
@@ -122,14 +131,17 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
             case rules:
                 this.rules = newStatus;
                 return;
+            case checks:
+                this.checks = newStatus;
+                return;
             case sources:
                 this.sources = newStatus;
                 return;
             case data_sensor_readouts:
                 this.dataSensorReadouts = newStatus;
                 return;
-            case data_rule_results:
-                this.dataRuleResults = newStatus;
+            case data_check_results:
+                this.dataCheckResults = newStatus;
                 return;
             case data_errors:
                 this.dataErrors = newStatus;

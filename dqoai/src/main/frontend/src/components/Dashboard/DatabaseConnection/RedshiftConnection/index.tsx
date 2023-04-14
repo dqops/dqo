@@ -1,10 +1,11 @@
 import React from 'react';
 
-import Input from '../../../Input';
 import SectionWrapper from '../../SectionWrapper';
 import { RedshiftParametersSpec } from "../../../../api";
 import SnowflakePropertiesView from "../SnowflakeProperties";
 import Checkbox from "../../../Checkbox";
+import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
+
 
 interface IRedshiftConnectionProps {
   redshift?: RedshiftParametersSpec;
@@ -27,36 +28,36 @@ const RedshiftConnection = ({
 
   return (
     <SectionWrapper title="Redshift connection parameters" className="mb-4">
-      <Input
+      <FieldTypeInput
         label="Host"
         className="mb-4"
         value={redshift?.host}
-        onChange={(e) => handleChange({ host: e.target.value })}
+        onChange={(value) => handleChange({ host: value })}
       />
-      <Input
+      <FieldTypeInput
         label="Port"
         className="mb-4"
-        value={redshift?.port || 5439}
-        onChange={(e) => handleChange({ port: e.target.value })}
+        value={(redshift?.port || 5439).toString()}
+        onChange={(value) => handleChange({ port: value })}
       />
-      <Input
+      <FieldTypeInput
         label="Database"
         className="mb-4"
         value={redshift?.database}
-        onChange={(e) => handleChange({ database: e.target.value })}
+        onChange={(value) => handleChange({ database: value })}
       />
-      <Input
+      <FieldTypeInput
         label="User name"
         className="mb-4"
         value={redshift?.user}
-        onChange={(e) => handleChange({ user: e.target.value })}
+        onChange={(value) => handleChange({ user: value })}
       />
-      <Input
+      <FieldTypeInput
         label="Password"
-        type="password"
+        maskingType="password"
         className="mb-4"
         value={redshift?.password}
-        onChange={(e) => handleChange({ password: e.target.value })}
+        onChange={(value) => handleChange({ password: value })}
       />
       <Checkbox
         checked={redshift?.ssl}

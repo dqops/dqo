@@ -17,6 +17,7 @@ package ai.dqo.metadata.storage.localfiles.userhome;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.filesystem.virtual.FolderTreeNode;
+import ai.dqo.metadata.storage.localfiles.checkdefinitions.FileCheckDefinitionListImpl;
 import ai.dqo.metadata.storage.localfiles.fileindices.FileFileIndexListImpl;
 import ai.dqo.metadata.storage.localfiles.ruledefinitions.FileRuleDefinitionListImpl;
 import ai.dqo.metadata.storage.localfiles.sensordefinitions.FileSensorDefinitionListImpl;
@@ -40,18 +41,20 @@ public class FileUserHomeImpl extends UserHomeImpl {
      * Creates a file based user home implementation.
      * @param sources Sources list.
      * @param sensors Custom sensor list.
-     * @param customRules Custom rules list.
+     * @param rules Custom rules list.
+     * @param checks Custom checks list.
      * @param settings Settings.
      * @param fileIndices File indices list.
      * @param userHomeContext User home context.
      */
     public FileUserHomeImpl(FileConnectionListImpl sources,
                             FileSensorDefinitionListImpl sensors,
-                            FileRuleDefinitionListImpl customRules,
+                            FileRuleDefinitionListImpl rules,
+                            FileCheckDefinitionListImpl checks,
                             FileSettingsWrapperImpl settings,
                             FileFileIndexListImpl fileIndices,
                             UserHomeContext userHomeContext) {
-        super(sources, sensors, customRules, settings, fileIndices);
+        super(sources, sensors, rules, checks, settings, fileIndices);
         this.userHomeContext = userHomeContext;
 		this.homeFolder = userHomeContext.getHomeRoot(); // just a convenience
     }
@@ -67,14 +70,16 @@ public class FileUserHomeImpl extends UserHomeImpl {
         FolderTreeNode sourcesFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.SOURCES);
         FolderTreeNode sensorsFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.SENSORS);
         FolderTreeNode rulesFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.RULES);
+        FolderTreeNode checksFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.CHECKS);
         FolderTreeNode indexFolder = userHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.INDEX);
         FolderTreeNode settingsFolder = userHomeContext.getHomeRoot();
         FileConnectionListImpl dataSources = new FileConnectionListImpl(sourcesFolder, yamlSerializer);
         FileSensorDefinitionListImpl sensors = new FileSensorDefinitionListImpl(sensorsFolder, yamlSerializer);
         FileRuleDefinitionListImpl rules = new FileRuleDefinitionListImpl(rulesFolder, yamlSerializer);
+        FileCheckDefinitionListImpl checks = new FileCheckDefinitionListImpl(checksFolder, yamlSerializer);
         FileSettingsWrapperImpl settings = new FileSettingsWrapperImpl(settingsFolder, yamlSerializer);
         FileFileIndexListImpl fileIndices = new FileFileIndexListImpl(indexFolder, jsonSerializer);
-        return new FileUserHomeImpl(dataSources, sensors, rules, settings, fileIndices, userHomeContext);
+        return new FileUserHomeImpl(dataSources, sensors, rules, checks, settings, fileIndices, userHomeContext);
     }
 
     /**

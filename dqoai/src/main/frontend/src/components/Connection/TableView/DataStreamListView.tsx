@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { DataStreamBasicModel } from "../../../api";
 import Button from "../../Button";
-import SvgIcon from "../../SvgIcon";
 import { DataStreamsApi } from "../../../services/apiClient";
+import ConfirmDialog from "../../CustomTree/ConfirmDialog";
+import { Checkbox } from "@material-tailwind/react";
+import SvgIcon from "../../SvgIcon";
 
 interface IDataStreamListViewProps {
   dataStreams: DataStreamBasicModel[];
@@ -17,6 +19,9 @@ const DataStreamListView = ({
   onCreate,
   onEdit
 }: IDataStreamListViewProps) => {
+  const [open, setOpen] = useState(false);
+  const [selectedStream, setSelectedStream] = useState<DataStreamBasicModel>();
+
   const setDefaultStream = async (stream: DataStreamBasicModel) => {
     try {
       await DataStreamsApi.setDefaultDataStream(
@@ -31,7 +36,11 @@ const DataStreamListView = ({
     }
   };
 
-  const deleteStream = async (stream: DataStreamBasicModel) => {
+  const deleteStream = async (stream?: DataStreamBasicModel) => {
+    if (!stream) {
+      return;
+    }
+
     try {
       await DataStreamsApi.deleteDataStream(
         stream.connection_name || '',
@@ -45,51 +54,58 @@ const DataStreamListView = ({
     }
   };
 
+  const openConfirmDeleteModal = (stream: DataStreamBasicModel) => {
+    setOpen(true);
+    setSelectedStream(stream);
+  };
+
   return (
     <div className="px-8 py-4">
       <table className="mb-4">
         <thead>
           <tr>
-            <th className="px-2 py-1">Data stream configuration name</th>
-            <th className="px-2 py-1" />
-            <th className="px-2 py-1" />
-            <th className="px-2 py-1" />
+            <th className="pr-2 py-2">Data stream configuration name</th>
+            <th className="px-2 py-2" />
+            <th className="px-2 py-2" />
+            <th className="px-2 py-2" />
           </tr>
         </thead>
         <tbody>
           {dataStreams.map((stream, index) => (
             <tr key={index}>
-              <td className="px-2 py-1 relative">
+              <td className="pr-2 py-2 relative flex items-center gap-2">
                 {stream.default_data_stream && (
-                  <SvgIcon
-                    name="star"
-                    className="w-4 text-indigo-700 absolute -left-4 top-1/2 transform -translate-y-1/2"
-                  />
+                  <div className="w-5 h-5 bg-primary rounded flex items-center justify-center">
+                    <SvgIcon name="check" className="text-white" />
+                  </div>
                 )}
-                {stream.data_stream_name}
+                <span>{stream.data_stream_name}</span>
               </td>
-              <td className="px-2 py-1">
+              <td className="px-2 py-2">
                 <Button
                   label="Edit"
                   color="primary"
                   variant="text"
+                  className="!py-0"
                   onClick={() => onEdit(stream)}
                 />
               </td>
-              <td className="px-2 py-1">
+              <td className="px-2 py-2">
                 <Button
                   label="Delete"
                   color="primary"
                   variant="text"
-                  onClick={() => deleteStream(stream)}
+                  className="!py-0"
+                  onClick={() => openConfirmDeleteModal(stream)}
                 />
               </td>
-              <td className="px-2 py-1">
+              <td className="px-2 py-2">
                 {!stream.default_data_stream ? (
                   <Button
                     label="Make Default"
                     color="primary"
                     variant="text"
+                    className="!py-0"
                     onClick={() => setDefaultStream(stream)}
                   />
                 ) : ''}
@@ -103,6 +119,12 @@ const DataStreamListView = ({
         label="New data stream configuration"
         color="primary"
         onClick={onCreate}
+      />
+      <ConfirmDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        message={`Are you sure to delete data stream ${selectedStream?.data_stream_name}?`}
+        onConfirm={() => deleteStream(selectedStream)}
       />
     </div>
   );

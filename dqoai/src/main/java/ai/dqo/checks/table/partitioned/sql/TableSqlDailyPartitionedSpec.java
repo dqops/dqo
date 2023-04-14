@@ -16,9 +16,9 @@
 package ai.dqo.checks.table.partitioned.sql;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregateExprCheckSpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionFailedCountCheckSpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregateExprCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;

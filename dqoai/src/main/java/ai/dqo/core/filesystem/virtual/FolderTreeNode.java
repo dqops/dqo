@@ -16,7 +16,6 @@
 package ai.dqo.core.filesystem.virtual;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
-import ai.dqo.core.filesystem.localfiles.LocalFileSystemException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -25,7 +24,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Folder node in a virtual file system tree.
@@ -217,10 +215,13 @@ public class FolderTreeNode {
                     return FolderKind.SOURCES;
                 }
                 else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.SENSORS)) {
-                    return FolderKind.CHECKS;
+                    return FolderKind.SENSORS;
                 }
                 else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.RULES)) {
                     return FolderKind.RULES;
+                }
+                else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.CHECKS)) {
+                    return FolderKind.CHECKS;
                 }
                 return FolderKind.FOREIGN;
             case CHECKS:
@@ -443,8 +444,8 @@ public class FolderTreeNode {
             }
 
             // remove deleted files from the tree
-			this.files.stream().collect(Collectors.toList())
-                    .stream().filter(node -> node.getStatus() == FileTreeNodeStatus.DELETED)
+            new ArrayList<>(this.files).stream()
+                    .filter(node -> node.getStatus() == FileTreeNodeStatus.DELETED)
                     .forEach(node -> this.files.remove(node));
         }
     }

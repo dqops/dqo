@@ -57,11 +57,11 @@ public class BigQueryColumnNumericNumbersInSetPercentSensorParametersSpecIntegra
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         List<Long> values = new ArrayList<>();
         this.sut.setValues(values);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "length_int", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -73,7 +73,7 @@ public class BigQueryColumnNumericNumbersInSetPercentSensorParametersSpecIntegra
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
         List<Long> values = new ArrayList<>();
         values.add(123L);
         values.add(1234L);
@@ -84,7 +84,7 @@ public class BigQueryColumnNumericNumbersInSetPercentSensorParametersSpecIntegra
         values.add(123456789L);
         this.sut.setValues(values);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "length_int", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -96,7 +96,7 @@ public class BigQueryColumnNumericNumbersInSetPercentSensorParametersSpecIntegra
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
         List<Long> values = new ArrayList<>();
         values.add(123L);
         values.add(1234L);
@@ -107,7 +107,7 @@ public class BigQueryColumnNumericNumbersInSetPercentSensorParametersSpecIntegra
         values.add(123456789L);
         this.sut.setValues(values);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "length_int", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

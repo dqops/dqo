@@ -10,26 +10,29 @@ import {
 } from '../../../redux/actions/connection.actions';
 import { DataStreamMappingSpec } from '../../../api';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import ConnectionActionGroup from './ConnectionActionGroup';
 import { useParams } from "react-router-dom";
+import { CheckTypes } from "../../../shared/routes";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 
 const ConnectionDataStream = () => {
-  const { connection }: { connection: string } = useParams();
+  const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
   const dispatch = useActionDispatch();
   const { connectionBasic, isUpdating, updatedDataStreamsMapping, isUpdatedDataStreamsMapping } =
-    useSelector((state: IRootState) => state.connection);
+    useSelector(getFirstLevelState(checkTypes));
+
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
     if (connectionBasic?.connection_name !== connection) {
-      dispatch(getConnectionBasic(connection));
-      dispatch(getConnectionDefaultDataStreamsMapping(connection));
+      dispatch(getConnectionBasic(checkTypes, firstLevelActiveTab, connection));
+      dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection));
     }
   }, [connection]);
 
   useEffect(() => {
     if (!updatedDataStreamsMapping || (connectionBasic && connectionBasic?.connection_name !== connection)) {
-      dispatch(getConnectionDefaultDataStreamsMapping(connection));
+      dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection));
     }
   }, [connection, connectionBasic]);
 
@@ -39,21 +42,28 @@ const ConnectionDataStream = () => {
     }
     await dispatch(
       updateConnectionDefaultDataStreamsMapping(
+        checkTypes,
+        firstLevelActiveTab,
         connection,
         updatedDataStreamsMapping
       )
     );
-    await dispatch(getConnectionDefaultDataStreamsMapping(connection));
-    dispatch(setIsUpdatedDataStreamsMapping(false));
+    await dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection));
+    dispatch(setIsUpdatedDataStreamsMapping(checkTypes, firstLevelActiveTab,false));
   };
 
   const handleChange = (value: DataStreamMappingSpec) => {
-    dispatch(setUpdatedDataStreamsMapping(value));
-    dispatch(setIsUpdatedDataStreamsMapping(true));
+    dispatch(setUpdatedDataStreamsMapping(checkTypes, firstLevelActiveTab, value));
+    dispatch(setIsUpdatedDataStreamsMapping(checkTypes, firstLevelActiveTab,true));
   };
 
   return (
-    <div>
+    <div className="px-4">
+      <div className="pt-6 px-4">
+        <p className="text-gray-700 italic text-base">
+          The following data stream configuration will be copied to the data stream configuration of tables that will be imported in the future.
+          This configuration does not affect tables that are already imported.      </p>
+      </div>
       <ConnectionActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdatedDataStreamsMapping}

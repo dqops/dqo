@@ -19,7 +19,7 @@ import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.TabularOutputFormat;
-import ai.dqo.cli.commands.table.impl.TableService;
+import ai.dqo.cli.commands.table.impl.TableCliService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.TableNameCompleter;
@@ -41,9 +41,9 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "list", description = "List tables which match filters")
+@CommandLine.Command(name = "list", header = "List tables filtered by the given conditions", description = "List all the tables that match a given condition. It allows the user to use various filters, such as table name or schema names to list filtered tables.")
 public class TableListCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
-    private TableService tableImportService;
+    private TableCliService tableImportService;
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWritter;
     private FileWritter fileWritter;
@@ -53,7 +53,7 @@ public class TableListCliCommand extends BaseCommand implements ICommand, IConne
 
     @Autowired
     public TableListCliCommand(TerminalWriter terminalWriter,
-							   TableService tableImportService,
+							   TableCliService tableImportService,
                                TerminalTableWritter terminalTableWritter,
                                FileWritter fileWritter) {
         this.tableImportService = tableImportService;

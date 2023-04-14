@@ -15,6 +15,7 @@
  */
 package ai.dqo.execution.sensors;
 
+import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -142,9 +143,11 @@ public class TimeWindowFilterParameters implements Cloneable {
     /**
      * Creates a copy of the configuration, copying (importing) also filters provided by a user.
      * @param userFilterParameters User filter parameters.
+     * @param partitionedChecksTimeScale Time series gradient for daily/monthly partitioned data. Should be null for non partitioned checks.
      * @return New object with user filters applied.
      */
-    public TimeWindowFilterParameters withUserFilters(TimeWindowFilterParameters userFilterParameters) {
+    public TimeWindowFilterParameters withUserFilters(TimeWindowFilterParameters userFilterParameters,
+                                                      TimeSeriesGradient partitionedChecksTimeScale) {
         if (userFilterParameters == null) {
             return this;
         }
@@ -167,18 +170,22 @@ public class TimeWindowFilterParameters implements Cloneable {
             cloned.monthlyPartitioningIncludeCurrentMonth = null;
         }
 
-        if (userFilterParameters.dailyPartitioningRecentDays != null) {
-            cloned.dailyPartitioningRecentDays = userFilterParameters.dailyPartitioningRecentDays;
-        }
-        if (userFilterParameters.dailyPartitioningIncludeToday != null) {
-            cloned.dailyPartitioningIncludeToday = userFilterParameters.dailyPartitioningIncludeToday;
+        if (partitionedChecksTimeScale == TimeSeriesGradient.day) {
+            if (userFilterParameters.dailyPartitioningRecentDays != null) {
+                cloned.dailyPartitioningRecentDays = userFilterParameters.dailyPartitioningRecentDays;
+            }
+            if (userFilterParameters.dailyPartitioningIncludeToday != null) {
+                cloned.dailyPartitioningIncludeToday = userFilterParameters.dailyPartitioningIncludeToday;
+            }
         }
 
-        if (userFilterParameters.monthlyPartitioningRecentMonths != null) {
-            cloned.monthlyPartitioningRecentMonths = userFilterParameters.monthlyPartitioningRecentMonths;
-        }
-        if (userFilterParameters.monthlyPartitioningIncludeCurrentMonth != null) {
-            cloned.monthlyPartitioningIncludeCurrentMonth = userFilterParameters.monthlyPartitioningIncludeCurrentMonth;
+        if (partitionedChecksTimeScale == TimeSeriesGradient.month) {
+            if (userFilterParameters.monthlyPartitioningRecentMonths != null) {
+                cloned.monthlyPartitioningRecentMonths = userFilterParameters.monthlyPartitioningRecentMonths;
+            }
+            if (userFilterParameters.monthlyPartitioningIncludeCurrentMonth != null) {
+                cloned.monthlyPartitioningIncludeCurrentMonth = userFilterParameters.monthlyPartitioningIncludeCurrentMonth;
+            }
         }
 
         return cloned;

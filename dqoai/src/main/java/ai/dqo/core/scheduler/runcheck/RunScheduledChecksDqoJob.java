@@ -16,7 +16,6 @@
 package ai.dqo.core.scheduler.runcheck;
 
 import ai.dqo.cli.terminal.TerminalTableWritter;
-import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.jobqueue.DqoJobExecutionContext;
 import ai.dqo.core.jobqueue.DqoJobType;
 import ai.dqo.core.jobqueue.DqoQueueJob;
@@ -24,6 +23,7 @@ import ai.dqo.core.jobqueue.JobConcurrencyConstraint;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.core.scheduler.synchronization.SchedulerFileSynchronizationService;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.ExecutionContextFactory;
 import ai.dqo.execution.checks.CheckExecutionService;
@@ -102,7 +102,7 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
         FileSystemSynchronizationReportingMode synchronizationMode = this.jobSchedulerService.getSynchronizationMode();
         CheckRunReportingMode checkRunReportingMode = this.jobSchedulerService.getCheckRunReportingMode();
 
-        this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode); // synchronize the data before running the checks, just in case that the files were removed remotely
+        this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode, false); // synchronize the data before running the checks, just in case that the files were removed remotely
 
         ExecutionContext executionContext = this.executionContextFactory.create();
 
@@ -111,7 +111,7 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
         CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecksForSchedule(
                 executionContext, this.cronSchedule, progressListener);
 
-        this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode); // push the updated data files (parquet) back to the cloud
+        this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode, false); // push the updated data files (parquet) back to the cloud
 
         return null;
     }

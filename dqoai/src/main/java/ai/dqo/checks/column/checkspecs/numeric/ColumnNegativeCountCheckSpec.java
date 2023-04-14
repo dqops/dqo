@@ -21,6 +21,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRule15ParametersSpec;
 import ai.dqo.sensors.column.numeric.ColumnNumericNegativeCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnNegativeCountCheckSpec
-        extends AbstractCheckSpec<ColumnNumericNegativeCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericNegativeCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule15ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNegativeCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -50,20 +51,20 @@ public class ColumnNegativeCountCheckSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericNegativeCountSensorParametersSpec parameters = new ColumnNumericNegativeCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec error;
-
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule10ParametersSpec warning;
+    private MaxCountRule0ParametersSpec warning;
+
+    @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private MaxCountRule10ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec fatal;
+    private MaxCountRule15ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -87,33 +88,12 @@ public class ColumnNegativeCountCheckSpec
     }
 
     /**
-     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
-     *
-     * @return Default "error" alerting thresholds.
-     */
-    @Override
-    public MaxCountRule0ParametersSpec getError() {
-        return this.error;
-    }
-
-    /**
-     * Sets a new error level alerting threshold.
-     *
-     * @param error Error alerting threshold to set.
-     */
-    public void setError(MaxCountRule0ParametersSpec error) {
-        this.setDirtyIf(!Objects.equals(this.error, error));
-        this.error = error;
-        this.propagateHierarchyIdToField(error, "error");
-    }
-
-    /**
      * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
      *
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxCountRule10ParametersSpec getWarning() {
+    public MaxCountRule0ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -122,10 +102,31 @@ public class ColumnNegativeCountCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxCountRule10ParametersSpec warning) {
+    public void setWarning(MaxCountRule0ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
+    }
+
+    /**
+     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
+     *
+     * @return Default "error" alerting thresholds.
+     */
+    @Override
+    public MaxCountRule10ParametersSpec getError() {
+        return this.error;
+    }
+
+    /**
+     * Sets a new error level alerting threshold.
+     *
+     * @param error Error alerting threshold to set.
+     */
+    public void setError(MaxCountRule10ParametersSpec error) {
+        this.setDirtyIf(!Objects.equals(this.error, error));
+        this.error = error;
+        this.propagateHierarchyIdToField(error, "error");
     }
 
     /**
@@ -134,7 +135,7 @@ public class ColumnNegativeCountCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxCountRule0ParametersSpec getFatal() {
+    public MaxCountRule15ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -143,7 +144,7 @@ public class ColumnNegativeCountCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxCountRule0ParametersSpec fatal) {
+    public void setFatal(MaxCountRule15ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

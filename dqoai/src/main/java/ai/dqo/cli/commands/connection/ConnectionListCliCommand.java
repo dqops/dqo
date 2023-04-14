@@ -18,7 +18,7 @@ package ai.dqo.cli.commands.connection;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.connection.impl.ConnectionService;
+import ai.dqo.cli.commands.connection.impl.ConnectionCliService;
 import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
 import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.FileWritter;
@@ -41,9 +41,9 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "list", description = "List connections which match filters")
+@CommandLine.Command(name = "list", header = "List connections that match a given condition", description = "Lists all the created connections for the logged-in user that match the conditions specified in the options. It allows the user to filter connections based on various parameters.")
 public class ConnectionListCliCommand extends BaseCommand implements ICommand {
-    private ConnectionService connectionService;
+    private ConnectionCliService connectionCliService;
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWritter;
     private OutputFormatService outputFormatService;
@@ -53,12 +53,12 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
     }
 
     @Autowired
-    public ConnectionListCliCommand(ConnectionService connectionService,
-									TerminalWriter terminalWriter,
+    public ConnectionListCliCommand(ConnectionCliService connectionCliService,
+                                    TerminalWriter terminalWriter,
                                     TerminalTableWritter terminalTableWritter,
                                     OutputFormatService outputFormatService,
                                     FileWritter fileWritter) {
-        this.connectionService = connectionService;
+        this.connectionCliService = connectionCliService;
         this.terminalWriter = terminalWriter;
         this.terminalTableWritter = terminalTableWritter;
         this.outputFormatService = outputFormatService;
@@ -101,7 +101,7 @@ public class ConnectionListCliCommand extends BaseCommand implements ICommand {
         if (Strings.isNullOrEmpty(name)) {
             name = "*";
         }
-        FormattedTableDto<ConnectionListModel> formattedTable = this.connectionService.loadConnectionTable(name, dimensions, labels);
+        FormattedTableDto<ConnectionListModel> formattedTable = this.connectionCliService.loadConnectionTable(name, dimensions, labels);
         switch(this.getOutputFormat()) {
             case CSV: {
                 String csvContent = this.outputFormatService.tableToCsv(formattedTable);

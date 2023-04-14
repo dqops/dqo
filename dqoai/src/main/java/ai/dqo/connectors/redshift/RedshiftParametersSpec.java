@@ -52,16 +52,16 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Redshift port name. The default port is 5432. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.")
     private String port;
 
-    @CommandLine.Option(names = {"--redshift-database"}, description = "Redshift database name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
-    @JsonPropertyDescription("Redshift database name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @CommandLine.Option(names = {"--redshift-database"}, description = "Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String database;
 
-    @CommandLine.Option(names = {"--redshift-user"}, description = "Redshift user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
-    @JsonPropertyDescription("Redshift user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @CommandLine.Option(names = {"--redshift-user"}, description = "Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String user;
 
-    @CommandLine.Option(names = {"--redshift-password"}, description = "Redshift database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
-    @JsonPropertyDescription("Redshift database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @CommandLine.Option(names = {"--redshift-password"}, description = "Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String password;
 
     @CommandLine.Option(names = {"--redshift-options"}, description = "Redshift connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")

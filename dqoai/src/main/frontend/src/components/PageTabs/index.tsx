@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
-import IconButton from '../IconButton';
-import SvgIcon from '../SvgIcon';
 import Tab, { TabOption } from './tab';
 
 export interface IPageTabsProps {
@@ -10,7 +8,7 @@ export interface IPageTabsProps {
   activeTab?: string;
   onChange?: any;
   onRemoveTab: (value: string) => void;
-  onAddTab: () => void;
+  limit?: number;
 }
 
 const PageTabs = ({
@@ -19,14 +17,20 @@ const PageTabs = ({
   activeTab,
   onChange,
   onRemoveTab,
-  onAddTab
+  limit = 10,
 }: IPageTabsProps) => {
   const onChangeTab = (tab: TabOption) => {
     onChange(tab.value);
   };
 
+  useMemo(() => {
+    if (tabs.length > limit) {
+      onRemoveTab(tabs[0].value);
+    }
+  }, [tabs, limit, onRemoveTab]);
+
   return (
-    <div className={`flex space-x-4 ${className}`}>
+    <div className={`flex space-x-4 overflow-x-auto min-h-10 max-h-10 ${className}`}>
       <div className="flex">
         {tabs.map((tab) => (
           <Tab
@@ -38,12 +42,6 @@ const PageTabs = ({
           />
         ))}
       </div>
-      <IconButton
-        className="bg-blue-100 hover:bg-opacity-80 w-8 h-8 m-1"
-        onClick={onAddTab}
-      >
-        <SvgIcon name="add" className="w-5 text-blue-500" />
-      </IconButton>
     </div>
   );
 };

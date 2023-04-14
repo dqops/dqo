@@ -82,6 +82,11 @@ public class SensorReadoutsColumnNames {
     public static final String TABLE_NAME_COLUMN_NAME = CommonColumnNames.TABLE_NAME_COLUMN_NAME;
 
     /**
+     * Column name for a table name pattern.
+     */
+    public static final String TABLE_NAME_PATTERN_COLUMN_NAME = CommonColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME;
+
+    /**
      * Column name for a table stage.
      */
     public static final String TABLE_STAGE_COLUMN_NAME = CommonColumnNames.TABLE_STAGE_COLUMN_NAME;
@@ -95,6 +100,11 @@ public class SensorReadoutsColumnNames {
      * Column name for a column name.
      */
     public static final String COLUMN_NAME_COLUMN_NAME = CommonColumnNames.COLUMN_NAME_COLUMN_NAME;
+
+    /**
+     * Column name for a column name pattern.
+     */
+    public static final String COLUMN_NAME_PATTERN_COLUMN_NAME = CommonColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME;
 
     /**
      * Column name for a check hash.
@@ -150,6 +160,8 @@ public class SensorReadoutsColumnNames {
      * List of column names that should be loaded from the parquet files when the recent readouts detailed view is needed.
      */
     public static final String[] COLUMN_NAMES_FOR_READOUTS_DETAILED = new String[] {
+            ID_COLUMN_NAME,
+
             ACTUAL_VALUE_COLUMN_NAME,
             EXPECTED_VALUE_COLUMN_NAME,
             CHECK_CATEGORY_COLUMN_NAME,

@@ -18,11 +18,11 @@ package ai.dqo.data.errors.models;
 
 import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import ai.dqo.data.models.ParquetDataFragmentFilter;
-import ai.dqo.data.normalization.CommonColumnNames;
 import lombok.Data;
 import org.apache.parquet.Strings;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -31,17 +31,12 @@ import java.util.Objects;
  */
 @Data
 public class ErrorsFragmentFilter extends ParquetDataFragmentFilter {
+    private List<String> columnNames;
     private String checkCategory;
-
     private String checkName;
-
     private String checkType;
-
-    private String columnName;
     private String sensorName;
-
     private String qualityDimension;
-
     private String timeGradient;
 
     /**
@@ -59,9 +54,6 @@ public class ErrorsFragmentFilter extends ParquetDataFragmentFilter {
         }
         if (!Strings.isNullOrEmpty(checkType)) {
             result.put(ErrorsColumnNames.CHECK_TYPE_COLUMN_NAME, checkType);
-        }
-        if (!Strings.isNullOrEmpty(columnName)) {
-            result.put(ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME, columnName);
         }
         if (!Strings.isNullOrEmpty(sensorName)) {
             result.put(ErrorsColumnNames.SENSOR_NAME_COLUMN_NAME, sensorName);
@@ -88,7 +80,7 @@ public class ErrorsFragmentFilter extends ParquetDataFragmentFilter {
             return false;
         if (!Objects.equals(checkName, that.checkName)) return false;
         if (!Objects.equals(checkType, that.checkType)) return false;
-        if (!Objects.equals(columnName, that.columnName)) return false;
+        if (!Objects.equals(columnNames, that.columnNames)) return false;
         if (!Objects.equals(sensorName, that.sensorName)) return false;
         if (!Objects.equals(qualityDimension, that.qualityDimension))
             return false;
@@ -101,7 +93,7 @@ public class ErrorsFragmentFilter extends ParquetDataFragmentFilter {
         result = 31 * result + (checkCategory != null ? checkCategory.hashCode() : 0);
         result = 31 * result + (checkName != null ? checkName.hashCode() : 0);
         result = 31 * result + (checkType != null ? checkType.hashCode() : 0);
-        result = 31 * result + (columnName != null ? columnName.hashCode() : 0);
+        result = 31 * result + (columnNames != null ? columnNames.hashCode() : 0);
         result = 31 * result + (sensorName != null ? sensorName.hashCode() : 0);
         result = 31 * result + (qualityDimension != null ? qualityDimension.hashCode() : 0);
         result = 31 * result + (timeGradient != null ? timeGradient.hashCode() : 0);

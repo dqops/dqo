@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import CommentsView from '../CommentsView';
 import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import { CommentSpec } from '../../../api';
 import {
   getTableComments,
@@ -12,44 +11,47 @@ import {
 } from '../../../redux/actions/table.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { useParams } from "react-router-dom";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
+import { CheckTypes } from "../../../shared/routes";
 
 const TableCommentView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
-  const { tableBasic, comments, isUpdating, isUpdatedComments } = useSelector(
-    (state: IRootState) => state.table
-  );
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
+  const { tableBasic, updatedComments, isUpdating, isUpdatedComments } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [text, setText] = useState('');
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
     if (
-      !comments ||
+      !updatedComments ||
       tableBasic?.connection_name !== connectionName ||
       tableBasic?.target?.schema_name !== schemaName ||
       tableBasic?.target?.table_name !== tableName
     ) {
-      dispatch(getTableComments(connectionName, schemaName, tableName));
+      dispatch(getTableComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
     }
   }, [connectionName, schemaName, tableName, tableBasic]);
 
   const onUpdate = async () => {
     await dispatch(
-      updateTableComments(connectionName, schemaName, tableName, [...comments, ...text ? [{
+      updateTableComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, [...updatedComments, ...text ? [{
         comment: text,
         comment_by: 'user',
         date: new Date().toISOString()
       }] : []])
     );
     setText('');
-    await dispatch(getTableComments(connectionName, schemaName, tableName));
+    await dispatch(getTableComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
+    dispatch(setIsUpdatedComments(checkTypes, firstLevelActiveTab, false));
   };
 
   const handleChange = (value: CommentSpec[]) => {
-    dispatch(setUpdatedComments(value));
+    dispatch(setUpdatedComments(checkTypes, firstLevelActiveTab, value));
+    dispatch(setIsUpdatedComments(checkTypes, firstLevelActiveTab, true));
   };
 
   return (
-    <div>
+    <div className="px-4">
       <ActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdatedComments}
@@ -59,8 +61,8 @@ const TableCommentView = () => {
         text={text}
         setText={setText}
         isUpdated={isUpdatedComments}
-        setIsUpdated={(value) => dispatch(setIsUpdatedComments(value))}
-        comments={comments}
+        setIsUpdated={(value) => dispatch(setIsUpdatedComments(checkTypes, firstLevelActiveTab, value))}
+        comments={updatedComments}
         onChange={handleChange}
       />
     </div>

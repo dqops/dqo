@@ -15,6 +15,7 @@
  */
 package ai.dqo.cli;
 
+import ai.dqo.connectors.jdbc.JdbcTypeColumnMapping;
 import ai.dqo.data.storage.TablesawParquetSupportFix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,9 +36,14 @@ public class CliApplication {
 	private static final Logger LOG = LoggerFactory.getLogger(CliApplication.class);
 
 	private static boolean runningOneShotMode;
+	private static boolean requiredWebServer;
 
 	public static boolean isRunningOneShotMode() {
 		return runningOneShotMode;
+	}
+
+	public static boolean isRequiredWebServer() {
+		return requiredWebServer;
 	}
 
 	/**
@@ -100,13 +106,14 @@ public class CliApplication {
 	public static void main(String[] args) {
 		try {
 			TablesawParquetSupportFix.ensureInitialized();
+			JdbcTypeColumnMapping.ensureInitializedJdbc();
 
-			boolean commandThatRequiresWebServer = isCommandThatRequiresWebServer(args);
+			requiredWebServer = isCommandThatRequiresWebServer(args);
 			runningOneShotMode = hasArgumentsForOneShot(args);
 
 			SpringApplication springApplication = new SpringApplication(CliApplication.class);
 			springApplication.setAdditionalProfiles("cli");
-			springApplication.setWebApplicationType(commandThatRequiresWebServer ? WebApplicationType.REACTIVE : WebApplicationType.NONE);
+			springApplication.setWebApplicationType(requiredWebServer ? WebApplicationType.REACTIVE : WebApplicationType.NONE);
 			springApplication.run(args);
 
 			// calls CliMainCommandRunner and calls commands in io.dqo.cli.command, find the right command there if you want to know what happens now

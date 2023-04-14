@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import Button from '../../components/Button';
 import ConfirmDialog from './ConfirmDialog';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import { ColumnApiClient } from '../../services/apiClient';
+import { getFirstLevelState } from "../../redux/selectors";
+import { useParams } from "react-router-dom";
+import { CheckTypes } from "../../shared/routes";
 
 interface IActionGroupProps {
   isDisabled?: boolean;
@@ -20,8 +22,9 @@ const ColumnActionGroup = ({
   onUpdate,
   shouldDelete = true
 }: IActionGroupProps) => {
+  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [isOpen, setIsOpen] = useState(false);
-  const { columnBasic } = useSelector((state: IRootState) => state.column);
+  const { columnBasic } = useSelector(getFirstLevelState(checkTypes));
 
   const removeColumn = async () => {
     if (columnBasic) {
@@ -38,9 +41,10 @@ const ColumnActionGroup = ({
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {shouldDelete && (
         <Button
-          variant="text"
-          color="info"
-          label="Delete"
+          className="!h-10"
+          color="primary"
+          variant="outlined"
+          label="Delete Column"
           onClick={() => setIsOpen(true)}
         />
       )}
@@ -49,7 +53,7 @@ const ColumnActionGroup = ({
         color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
         variant="contained"
         label="Save"
-        className="w-40"
+        className="w-40 !h-10"
         onClick={onUpdate}
         loading={isUpdating}
         disabled={isDisabled}

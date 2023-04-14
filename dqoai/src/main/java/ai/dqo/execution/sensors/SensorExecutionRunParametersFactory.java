@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
@@ -36,8 +37,9 @@ public interface SensorExecutionRunParametersFactory {
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
      * @param check Check specification.
+     * @param customCheckDefinition Optional custom check definition, required when the check is a custom check.
      * @param checkType Check type (adhoc, checkpoint, partitioned).
-     * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (ad-hoc, checkpoints, partitioned).
+     * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (profiling, checkpoints, partitioned).
      * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
      *                             When not provided, the defaults are copied from the table's incremental time window configuration for a matching partition time scale.
      * @param dialectSettings Dialect settings.
@@ -47,6 +49,7 @@ public interface SensorExecutionRunParametersFactory {
                                                         TableSpec table,
                                                         ColumnSpec column,
                                                         AbstractCheckSpec<?,?,?,?> check,
+                                                        CheckDefinitionSpec customCheckDefinition,
                                                         CheckType checkType,
                                                         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
                                                         TimeWindowFilterParameters userTimeWindowFilters,

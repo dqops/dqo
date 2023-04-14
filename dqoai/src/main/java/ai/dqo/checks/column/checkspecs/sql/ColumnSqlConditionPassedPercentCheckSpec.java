@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnSqlConditionPassedPercentCheckSpec
-        extends AbstractCheckSpec<ColumnSqlConditionPassedPercentSensorParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule100ParametersSpec, MinPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<ColumnSqlConditionPassedPercentSensorParametersSpec, MinPercentRule100ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnSqlConditionPassedPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -51,15 +51,15 @@ public class ColumnSqlConditionPassedPercentCheckSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnSqlConditionPassedPercentSensorParametersSpec parameters = new ColumnSqlConditionPassedPercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum acceptable percentage of rows passing the custom SQL condition (expression) that raises a data quality error (alert).")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule99ParametersSpec error;
-
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning when a minimum acceptable percentage of rows did not pass the custom SQL condition (expression). The warning is considered as a passed data quality check.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule100ParametersSpec warning;
+
+    @JsonPropertyDescription("Default alerting threshold for a minimum acceptable percentage of rows passing the custom SQL condition (expression) that raises a data quality error (alert).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private MinPercentRule99ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue when a minimum acceptable percentage of rows did not pass the custom SQL condition (expression). A fatal issue indicates a serious data quality problem that should result in stopping the data pipelines.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -86,26 +86,6 @@ public class ColumnSqlConditionPassedPercentCheckSpec
     }
 
     /**
-     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
-     *
-     * @return Default "ERROR" alerting thresholds.
-     */
-    @Override
-    public MinPercentRule99ParametersSpec getError() {
-        return this.error;
-    }
-
-    /**
-     * Sets a new error level alerting threshold.
-     * @param error Error alerting threshold to set.
-     */
-    public void setError(MinPercentRule99ParametersSpec error) {
-        this.setDirtyIf(!Objects.equals(this.error, error));
-        this.error = error;
-        this.propagateHierarchyIdToField(error, "error");
-    }
-
-    /**
      * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
      *
      * @return Warning severity rule parameters.
@@ -123,6 +103,26 @@ public class ColumnSqlConditionPassedPercentCheckSpec
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
+    }
+
+    /**
+     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
+     *
+     * @return Default "ERROR" alerting thresholds.
+     */
+    @Override
+    public MinPercentRule99ParametersSpec getError() {
+        return this.error;
+    }
+
+    /**
+     * Sets a new error level alerting threshold.
+     * @param error Error alerting threshold to set.
+     */
+    public void setError(MinPercentRule99ParametersSpec error) {
+        this.setDirtyIf(!Objects.equals(this.error, error));
+        this.error = error;
+        this.propagateHierarchyIdToField(error, "error");
     }
 
     /**

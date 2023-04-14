@@ -17,8 +17,7 @@ package ai.dqo.utils.docs.sensors;
 
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
-import ai.dqo.sensors.column.CustomColumnSensorParametersSpec;
-import ai.dqo.sensors.table.CustomTableSensorParametersSpec;
+import ai.dqo.sensors.CustomSensorParametersSpec;
 import ai.dqo.utils.docs.HandlebarsDocumentationUtilities;
 import ai.dqo.utils.docs.files.DocumentationFolder;
 import ai.dqo.utils.docs.files.DocumentationMarkdownFile;
@@ -58,7 +57,9 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
         List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = groupSensors(sensorDocumentationModels);
 
         for (SensorGroupedDocumentationModel sensorGroupedDocumentation : sensorGroupedDocumentationModels) {
-            DocumentationMarkdownFile documentationMarkdownFile = sensorsFolder.addNestedFile(sensorGroupedDocumentation.getTarget() + "/" + sensorGroupedDocumentation.getCategory() + " " + sensorGroupedDocumentation.getTarget() + " sensors" + ".md");
+            DocumentationMarkdownFile documentationMarkdownFile = sensorsFolder.addNestedFile(sensorGroupedDocumentation.getTarget() +
+                    "/" + sensorGroupedDocumentation.getCategory() + "-" +
+                    sensorGroupedDocumentation.getTarget().replace(' ', '-') + "-sensors" + ".md");
             documentationMarkdownFile.setRenderContext(sensorGroupedDocumentation);
 
             String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, sensorGroupedDocumentation);
@@ -80,8 +81,7 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
 
         for (Class<? extends AbstractSensorParametersSpec> sensorParametersClass : classes) {
             AbstractSensorParametersSpec abstractSensorParametersSpec = createSensorParameterInstance(sensorParametersClass);
-            if (abstractSensorParametersSpec instanceof CustomColumnSensorParametersSpec ||
-                    abstractSensorParametersSpec instanceof CustomTableSensorParametersSpec) {
+            if (abstractSensorParametersSpec instanceof CustomSensorParametersSpec) {
                 continue;
             }
             SensorDocumentationModel sensorDocumentation = this.sensorDocumentationModelFactory.createSensorDocumentation(abstractSensorParametersSpec);

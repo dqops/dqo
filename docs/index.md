@@ -1,27 +1,30 @@
-# DQO AI
+# What is DQO?
 
-## Who we are
-We are a team of data scientists and data engineers, working on Data Quality and Data Observability projects 
-for years.
+DQO is an DataOps friendly data quality monitoring tool with customizable data quality checks and data quality dashboards. DQO comes with XX predefined data quality checks which helps you monitor the quality of your data.  
 
-We have delivered thousands of data quality tests that are detecting anomalies and predicting possible issues using AI. 
-We are
-building Data Quality scorecards to track the KPIs. We have monitored the data on all mayor cloud providers (AWS, GCP,
-Azure). We are monitoring tables up to a petabyte scale on a daily basis.
+## DQO features
+- Intuitive graphic interface and access via CLI
+- Connects to BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server
+- ~100 build-in table and column checks with easy customization 
+- Table and column-level checks which allows writing your own SQL queries
+- Daily and monthly date partition testing
+- Data segmentation by up to 9 different data streams
+- Build-in scheduling
+- Calculation of data quality KPIs which can be displayed on multiple built-in data quality dashboards
 
-## DQO.ai
-DQO.ai is an open-source data observability tool that handles data quality analysis for you.
 
-It comes with predefined data checks – SQL queries, and rules – python functions, that evaluate the results.
-
-You can modify existing checks and rules, or create the new ones, based on your needs.
-
-All you need to do is set a configuration in YAML file.
-
-See how to use DQO.ai on end to end [examples on bigquery public data](examples/running_examples.md).
 ## Supported providers
 
-| Provider                                                                                                                 | Description                                                                                                     | Link                                          |
-|--------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|-----------------------------------------------|
-| <p align="center"><img src="https://www.vectorlogo.zone/logos/google_bigquery/google_bigquery-ar21.png" width="200"><p/> | Serverless, highly scalable, and cost-effective multicloud data warehouse <br/> hosted on Google Cloud Platform | [BigQuery](https://cloud.google.com/bigquery) |
-| <p align="center"><img src="https://www.vectorlogo.zone/logos/snowflake/snowflake-ar21.png" width="200"><p/>             | Cloud data platform                                                                                             | [Snowflake](https://www.snowflake.com/)       |
+You can use DQO with the most popular databases. [Learn here how to connect data source to DQO](working-with-dqo/adding-data-source-connection/bigquery.md)
+
+![Google BigQuery](./images/connections/google-bigquery.png) &nbsp; &nbsp; &nbsp; ![Snowflake](./images/connections/snowflake.png) &nbsp; &nbsp; &nbsp;  ![Amazon Redshift](./images/connections/amazon-redshift.png) &nbsp; &nbsp; &nbsp; ![PostgreSQL](./images/connections/postgresql.png) &nbsp; &nbsp; &nbsp; ![Microsoft SQL Server](./images/connections/microsoft-sql-server.png)
+
+
+## Additional resources
+
+Want to learn more about data quality? 
+
+Check out eBook ["A step-by-step guide to improve data quality"](https://dqo.ai/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/) created by the DQO Team based on their experience in data cleansing and data quality monitoring.
+
+![A step-by-step guide to improve data quality](./images/ebook.png "A step-by-step guide to improve data quality")
+

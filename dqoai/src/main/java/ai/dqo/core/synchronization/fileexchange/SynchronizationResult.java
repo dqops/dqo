@@ -23,15 +23,20 @@ import ai.dqo.core.filesystem.metadata.FolderMetadata;
 public class SynchronizationResult {
     private FolderMetadata sourceFileIndex;
     private FolderMetadata targetFileIndex;
+    private TargetTableModifiedPartitions targetTableModifiedPartitions;
 
     /**
      * Creates a synchronization result.
      * @param sourceFileIndex New source file index (will be a local file index).
      * @param targetFileIndex New target file index (of the remote file system).
+     * @param targetTableModifiedPartitions List of modified connections, tables. Only for data folders (parquet files).
      */
-    public SynchronizationResult(FolderMetadata sourceFileIndex, FolderMetadata targetFileIndex) {
+    public SynchronizationResult(FolderMetadata sourceFileIndex,
+                                 FolderMetadata targetFileIndex,
+                                 TargetTableModifiedPartitions targetTableModifiedPartitions) {
         this.sourceFileIndex = sourceFileIndex;
         this.targetFileIndex = targetFileIndex;
+        this.targetTableModifiedPartitions = targetTableModifiedPartitions;
     }
 
     /**
@@ -48,5 +53,13 @@ public class SynchronizationResult {
      */
     public FolderMetadata getTargetFileIndex() {
         return targetFileIndex;
+    }
+
+    /**
+     * Returns the list of modified connections, tables, dates.
+     * @return Modified partitions of a table.
+     */
+    public TargetTableModifiedPartitions getTargetTableModifiedPartitions() {
+        return targetTableModifiedPartitions;
     }
 }

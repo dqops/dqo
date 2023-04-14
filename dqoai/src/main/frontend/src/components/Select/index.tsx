@@ -84,7 +84,7 @@ const Select = ({
               <div>
                 <SvgIcon
                   name="info"
-                  className="w-4 h-4 text-blue-700 cursor-pointer"
+                  className="w-4 h-4 text-gray-700 cursor-pointer"
                 />
               </div>
             </Tooltip>
@@ -95,7 +95,7 @@ const Select = ({
         <MenuHandler ref={ref}>
           <div
             className={clsx(
-              'cursor-pointer text-gray-900 h-9 py-2 px-4 pr-10 text-black rounded flex items-center text-sm border whitespace-nowrap relative',
+              'cursor-pointer text-gray-900 h-9 py-2 px-4 pr-10 rounded flex items-center text-sm border whitespace-nowrap relative',
               triggerClassName,
               disabled ? 'bg-gray-300 bg-opacity-20 cursor-not-allowed' : '',
               error ? 'border-red-500' : 'border-gray-300'
@@ -104,7 +104,7 @@ const Select = ({
             {selectedOption ? selectedOption.label : placeholder}
             <SvgIcon
               name="chevron-down"
-              className="absolute transform top-1/2 -translate-y-2/4 right-2 text-black w-4"
+              className="absolute transform top-1/2 -translate-y-2/4 right-2 w-4"
             />
           </div>
         </MenuHandler>

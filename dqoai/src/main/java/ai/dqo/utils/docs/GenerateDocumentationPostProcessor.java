@@ -42,6 +42,9 @@ import ai.dqo.utils.docs.sensors.SensorDocumentationGenerator;
 import ai.dqo.utils.docs.sensors.SensorDocumentationGeneratorImpl;
 import ai.dqo.utils.docs.sensors.SensorDocumentationModelFactory;
 import ai.dqo.utils.docs.sensors.SensorDocumentationModelFactoryImpl;
+import ai.dqo.utils.docs.yaml.YamlDocumentationGenerator;
+import ai.dqo.utils.docs.yaml.YamlDocumentationGeneratorImpl;
+import ai.dqo.utils.docs.yaml.YamlDocumentationModelFactoryImpl;
 import ai.dqo.utils.python.PythonCallerServiceImpl;
 import ai.dqo.utils.python.PythonVirtualEnvServiceImpl;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
@@ -79,6 +82,7 @@ public class GenerateDocumentationPostProcessor {
             generateDocumentationForRules(projectDir, dqoHomeContext);
             generateDocumentationForCliCommands(projectDir);
             generateDocumentationForChecks(projectDir, dqoHomeContext);
+            generateDocumentationForYaml(projectDir);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,7 +160,7 @@ public class GenerateDocumentationPostProcessor {
      * @param projectRoot Path to the project root.
      */
     public static void generateDocumentationForCliCommands(Path projectRoot) {
-        Path cliDocPath = projectRoot.resolve("../docs/command_line_interface").toAbsolutePath().normalize();
+        Path cliDocPath = projectRoot.resolve("../docs/command-line-interface").toAbsolutePath().normalize();
         DocumentationFolder currentCliDocFiles = DocumentationFolderFactory.loadCurrentFiles(cliDocPath);
         CliCommandDocumentationGenerator cliCommandDocumentationGenerator = new CliCommandDocumentationGeneratorImpl(new CliCommandDocumentationModelFactoryImpl());
 
@@ -209,7 +213,6 @@ public class GenerateDocumentationPostProcessor {
                 configurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
 
         CheckDocumentationModelFactory checkDocumentationModelFactory = new CheckDocumentationModelFactoryImpl(
-                dqoHomeContext,
                 new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService),
                 createSensorDocumentationModelFactory(dqoHomeContext),
                 createRuleDocumentationModelFactory(projectRoot, dqoHomeContext),
@@ -217,5 +220,24 @@ public class GenerateDocumentationPostProcessor {
                 new YamlSerializerImpl(configurationProperties),
                 new JinjaTemplateRenderServiceImpl(pythonCallerService, pythonConfigurationProperties));
         return checkDocumentationModelFactory;
+    }
+
+    /**
+     * Generates documentation for yaml classes.
+     * @param projectRoot Path to the project root.
+     */
+    public static void generateDocumentationForYaml(Path projectRoot) {
+        Path yamlDocPath = projectRoot.resolve("../docs/reference/yaml").toAbsolutePath().normalize();
+        DocumentationFolder currentYamlDocFiles = DocumentationFolderFactory.loadCurrentFiles(yamlDocPath);
+        YamlDocumentationGenerator yamlDocumentationGenerator = new YamlDocumentationGeneratorImpl(new YamlDocumentationModelFactoryImpl());
+
+        DocumentationFolder renderedDocumentation = yamlDocumentationGenerator.renderYamlDocumentation(projectRoot);
+        renderedDocumentation.writeModifiedFiles(currentYamlDocFiles);
+
+        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
+        MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
+                renderedIndexYaml,
+                "########## INCLUDE YAML REFERENCE - DO NOT MODIFY MANUALLY",
+                "########## END INCLUDE YAML REFERENCE");
     }
 }

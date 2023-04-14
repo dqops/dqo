@@ -17,12 +17,9 @@ package ai.dqo.core.synchronization.contract;
 
 import ai.dqo.core.filesystem.metadata.FileMetadata;
 import ai.dqo.core.filesystem.metadata.FolderMetadata;
+import reactor.core.publisher.Mono;
 
 import java.io.InputStream;
-
-import reactor.core.publisher.Mono;
-import reactor.netty.ByteBufFlux;
-
 import java.nio.file.Path;
 
 /**
@@ -79,7 +76,7 @@ public interface FileSystemSynchronizationOperations {
      * @param fileSystemRoot File system root (with credentials).
      * @param relativeFilePath Relative file path inside the remote root.
      */
-    Mono<Path> deleteFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath);
+    Mono<FileMetadata> deleteFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath);
 
     /**
      * Deletes a folder.
@@ -112,9 +109,9 @@ public interface FileSystemSynchronizationOperations {
      * @param fileSystemRoot File system root (with credentials).
      * @param relativeFilePath Relative file path inside the root file system.
      * @param sourceStream Source stream that will be uploaded. The method should close this stream after the upload finishes.
-     * @param fileHash File hash that is expected.
+     * @param fileHashMd5Base64 MD5 file hash that is expected, encoded as a base64 string.
      */
-    void uploadFile(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, InputStream sourceStream, byte[] fileHash);
+    void uploadFile(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, InputStream sourceStream, String fileHashMd5Base64);
 
     /**
      * Downloads a file asynchronously, returning a flux of file content blocks.
@@ -129,10 +126,8 @@ public interface FileSystemSynchronizationOperations {
      * Uploads a file to the file system as an asynchronous operation using Flux.
      * @param fileSystemRoot File system root.
      * @param relativeFilePath Relative path to the uploaded file.
-     * @param bytesFlux Source flux with byte buffers to be uploaded.
-     * @param fileMetadata File metadata with the file length and file content hash.
+     * @param downloadFileResponseMono Mono that has a response with a downloaded file
      * @return Mono returned when the file was fully uploaded.
      */
-    Mono<Path> uploadFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, ByteBufFlux bytesFlux,
-                               FileMetadata fileMetadata);
+    Mono<FileMetadata> uploadFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, Mono<DownloadFileResponse> downloadFileResponseMono);
 }

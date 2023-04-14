@@ -16,6 +16,7 @@
 package ai.dqo.execution.checks.progress;
 
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.progress.*;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionPro
     public void onExecuteChecksOnTableStart(ExecuteChecksOnTableStartEvent event) {
         renderEventHeader();
         String connectionName = event.getConnectionWrapper().getName();
-        String tableName = event.getTargetTable().getTarget().toPhysicalTableName().toString();
+        String tableName = event.getTargetTable().getPhysicalTableName().toString();
         this.terminalWriter.writeLine(String.format("Executing data quality checks on table %s from connection %s", tableName, connectionName));
         renderEventFooter();
     }
@@ -57,9 +58,10 @@ public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionPro
     @Override
     public void onExecutingSensor(ExecutingSensorEvent event) {
         renderEventHeader();
-        String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
-        String checkName = event.getSensorRunParameters().getCheck().getCheckName();
-        String sensorDefinitionName = event.getSensorRunParameters().getSensorParameters().getSensorDefinitionName();
+        String tableName = event.getTableSpec().getPhysicalTableName().toString();
+        SensorExecutionRunParameters sensorRunParameters = event.getSensorRunParameters();
+        String checkName = sensorRunParameters.getCheck().getCheckName();
+        String sensorDefinitionName = sensorRunParameters.getSensorParameters().getSensorDefinitionName();
         this.terminalWriter.writeLine(String.format("Executing a sensor for a check %s on the table %s using a sensor definition %s",
                 checkName, tableName, sensorDefinitionName));
         renderEventFooter();
@@ -92,7 +94,7 @@ public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionPro
     @Override
     public void onRuleExecuted(RuleExecutedEvent event) {
         renderEventHeader();
-        String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
+        String tableName = event.getTableSpec().getPhysicalTableName().toString();
         String checkName = event.getSensorRunParameters().getCheck().getCheckName();
         Table ruleResultsTable = event.getRuleEvaluationResult().getRuleResultsTable();
         int evaluatedRulesCount = ruleResultsTable.rowCount();

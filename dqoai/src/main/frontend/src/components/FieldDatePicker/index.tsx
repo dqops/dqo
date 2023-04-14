@@ -67,7 +67,7 @@ const FieldDatePicker = ({
                 <div>
                   <SvgIcon
                     name="info"
-                    className="w-4 h-4 text-blue-700 cursor-pointer"
+                    className="w-4 h-4 text-gray-700 cursor-pointer"
                   />
                 </div>
               </Tooltip>
@@ -84,7 +84,7 @@ const FieldDatePicker = ({
             )}
             onClick={onClick}
           >
-            {moment(value).format("YYYY-MM-DD")}
+            {value ? moment(value).format("YYYY-MM-DD") : ''}
           </div>
           {isOpen && (
             <div className="absolute z-10 bg-white">

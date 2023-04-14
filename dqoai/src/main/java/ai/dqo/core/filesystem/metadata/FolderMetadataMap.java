@@ -19,6 +19,7 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -193,5 +194,25 @@ public class FolderMetadataMap extends AbstractCollection<FolderMetadata> {
      */
     public synchronized boolean removeByFolderName(String folderName) {
         return this.folders.remove(folderName) != null;
+    }
+
+    /**
+     * Drops outstanding child folders to match the limit. Outstanding folders are just detached.
+     * @param limit Limit of child folders to keep.
+     * @param isValidFolderName Lambda function used to filter the folder names.
+     * @param sortingOrder Sorting order for selecting the tables.
+     */
+    public void truncateToLimit(int limit, Function<String, Boolean> isValidFolderName, FolderTruncationMode sortingOrder) {
+        if (this.folders.size() <= limit) {
+            return;
+        }
+
+        List<String> foldersToDetach = this.folders.keySet().stream()
+                .filter(isValidFolderName::apply)
+                .sorted(sortingOrder == FolderTruncationMode.DESCENDING_SORTED_FIRST ? Comparator.naturalOrder() : Comparator.reverseOrder())
+                .limit(this.folders.size() - limit)
+                .collect(Collectors.toList());
+
+        foldersToDetach.forEach(folderName -> this.removeByFolderName(folderName));
     }
 }

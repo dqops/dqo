@@ -72,14 +72,6 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
           label: 'Schedule override',
           value: 'schedule'
         },
-        ...(check?.supports_time_series
-          ? [
-              {
-                label: 'Time series override',
-                value: 'time'
-              }
-            ]
-          : []),
         {
           label: 'Comments',
           value: 'comments'
@@ -133,13 +125,13 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
   const getColor = (status: CheckResultsOverviewDataModelStatusesEnum) => {
     switch (status) {
       case 'valid':
-        return 'bg-green-500';
+        return 'bg-teal-500';
       case 'warning':
-        return 'bg-yellow-500';
+        return 'bg-yellow-900';
       case 'error':
-        return 'bg-orange-500';
+        return 'bg-orange-900';
       case 'fatal':
-        return 'bg-red-500';
+        return 'bg-red-900';
       case 'execution_error':
         return 'bg-black';
       default:
@@ -183,8 +175,8 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
           check?.disabled ? 'line-through' : ''
         )}
       >
-        <td className="py-2 pr-4">
-          <div className="flex space-x-1 items-center min-w-60">
+        <td className="py-2 pl-4 pr-4 min-w-120 max-w-120">
+          <div className="flex space-x-1 items-center">
             {/*<div className="w-5">*/}
             {/*  <Checkbox checked={checked} onChange={setChecked} />*/}
             {/*</div>*/}
@@ -194,62 +186,111 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                 onChange={onChangeConfigured}
               />
             </div>
-            <SvgIcon
-              name={!check?.disabled ? 'stop' : 'disable'}
-              className={clsx(
-                'w-5 h-5 cursor-pointer',
-                !check?.disabled ? 'text-blue-700' : 'text-red-700'
-              )}
-              onClick={() =>
-                check?.configured &&
-                handleChange({ disabled: !check?.disabled })
-              }
-            />
-            <SvgIcon
-              name="cog"
-              className="w-5 h-5 text-blue-700 cursor-pointer"
-              onClick={openCheckSettings}
-            />
-            <SvgIcon
-              name={
-                check?.schedule_override?.disabled ? 'clock-off' : 'clock'
-              }
-              className={clsx(
-                'w-5 h-5 cursor-pointer',
-                check?.schedule_override
-                  ? 'text-gray-700'
-                  : 'text-black font-bold',
-                check?.schedule_override?.disabled ? 'line-through' : ''
-              )}
-              strokeWidth={check?.schedule_override ? 4 : 2}
-            />
+            <Tooltip
+              content={!check?.disabled ? 'Enabled' : 'Disabled'}
+              className="max-w-80 py-4 px-4 bg-gray-800"
+            >
+              <div>
+                <SvgIcon
+                  name={!check?.disabled ? 'stop' : 'disable'}
+                  className={clsx(
+                    'w-5 h-5 cursor-pointer',
+                    !check?.disabled ? 'text-gray-700' : 'text-red-700'
+                  )}
+                  onClick={() =>
+                    check?.configured &&
+                    handleChange({ disabled: !check?.disabled })
+                  }
+                />
+              </div>
+            </Tooltip>
+            <Tooltip
+              content="Settings"
+              className="max-w-80 py-4 px-4 bg-gray-800"
+            >
+              <div>
+                <SvgIcon
+                  name="cog"
+                  className="w-5 h-5 text-gray-700 cursor-pointer"
+                  onClick={openCheckSettings}
+                />
+              </div>
+            </Tooltip>
+            <Tooltip
+              content={check?.schedule_override?.disabled ? 'Schedule disabled' : 'Schedule enabled'}
+              className="max-w-80 py-4 px-4 bg-gray-800"
+            >
+              <div>
+                <SvgIcon
+                  name={
+                    check?.schedule_override?.disabled ? 'clock-off' : 'clock'
+                  }
+                  className={clsx(
+                    'w-5 h-5 cursor-pointer',
+                    check?.schedule_override
+                      ? 'text-gray-700'
+                      : 'font-bold',
+                    check?.schedule_override?.disabled ? 'line-through' : ''
+                  )}
+                  strokeWidth={check?.schedule_override ? 4 : 2}
+                />
+              </div>
+            </Tooltip>
             {(!job ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
-              <SvgIcon
-                name="play"
-                className="text-green-700 h-5 cursor-pointer"
-                onClick={onRunCheck}
-              />
+                <Tooltip
+                  content="Run Check"
+                  className="max-w-80 py-4 px-4 bg-gray-800"
+                >
+                  <div>
+                    <SvgIcon
+                      name="play"
+                      className="text-primary h-5 cursor-pointer"
+                      onClick={onRunCheck}
+                    />
+                  </div>
+                </Tooltip>
             )}
             {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
-              <SvgIcon
-                name="hourglass"
-                className="text-gray-700 h-5 cursor-pointer"
-              />
+              <Tooltip
+                content="Waiting"
+                className="max-w-80 py-4 px-4 bg-gray-800"
+              >
+                <div>
+                  <SvgIcon
+                    name="hourglass"
+                    className="text-gray-700 h-5 cursor-pointer"
+                  />
+                </div>
+              </Tooltip>
             )}
             {(job?.status === DqoJobHistoryEntryModelStatusEnum.running ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.queued) && (
-              <SvgIcon
-                name="hourglass"
-                className="text-gray-700 h-5 cursor-pointer"
-              />
+              <Tooltip
+                content="Running"
+                className="max-w-80 py-4 px-4 bg-gray-800"
+              >
+                <div>
+                  <SvgIcon
+                    name="hourglass"
+                    className="text-gray-700 h-5 cursor-pointer"
+                  />
+                </div>
+              </Tooltip>
             )}
-            <SvgIcon
-              name="rectangle-list"
-              className="text-gray-700 h-5 cursor-pointer"
-              onClick={toggleCheckDetails}
-            />
+            <Tooltip
+              content="Check Details"
+              className="max-w-80 py-4 px-4 bg-gray-800"
+            >
+              <div className="w-5 h-5">
+                <SvgIcon
+                  name="rectangle-list"
+                  className="text-gray-700 h-5 cursor-pointer"
+                  onClick={toggleCheckDetails}
+                />
+              </div>
+            </Tooltip>
             <Tooltip
               content={check.help_text}
               className="max-w-80 py-4 px-4 bg-gray-800"
@@ -257,7 +298,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
               <div className="w-5 h-5">
                 <SvgIcon
                   name="info"
-                  className="w-5 h-5 text-blue-700 cursor-pointer"
+                  className="w-5 h-5 text-gray-700 cursor-pointer"
                 />
               </div>
             </Tooltip>
@@ -286,7 +327,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
             <div className="text-sm">{check.check_name}</div>
           </div>
         </td>
-        <td className="py-2 px-4">
+        <td className="py-2 px-4 min-w-120 max-w-120">
           <div className="flex space-x-2">
             <div className="text-gray-700 text-sm w-full">
               <SensorParameters
@@ -298,6 +339,21 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
               />
             </div>
           </div>
+        </td>
+        <td className="py-2 px-4 bg-yellow-100">
+          <CheckRuleItem
+            disabled={isDisabled}
+            parameters={check?.rule?.warning}
+            onChange={(warning) =>
+              handleChange({
+                rule: {
+                  ...check?.rule,
+                  warning
+                }
+              })
+            }
+            type="warning"
+          />
         </td>
         <td className="py-2 px-4 bg-orange-100">
           <CheckRuleItem
@@ -329,22 +385,6 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
             type="fatal"
           />
         </td>
-        <td className="min-w-5 max-w-5 border-b" />
-        <td className="py-2 px-4 bg-yellow-100">
-          <CheckRuleItem
-            disabled={isDisabled}
-            parameters={check?.rule?.warning}
-            onChange={(warning) =>
-              handleChange({
-                rule: {
-                  ...check?.rule,
-                  warning
-                }
-              })
-            }
-            type="warning"
-          />
-        </td>
       </tr>
       {expanded && (
         <tr>
@@ -366,6 +406,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
             <CheckDetails
               check={check}
               onClose={closeCheckDetails}
+              job={job}
             />
           </td>
         </tr>

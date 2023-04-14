@@ -16,13 +16,13 @@
 package ai.dqo.metadata.sources;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
-import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
-import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
-import ai.dqo.checks.table.checkpoints.standard.TableStandardMonthlyCheckpointSpec;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
+import ai.dqo.checks.table.recurring.TableRecurringSpec;
+import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableMonthlyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringSpec;
+import ai.dqo.checks.table.recurring.standard.TableStandardMonthlyRecurringSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.groupings.DataStreamLevelSpecObjectMother;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
@@ -81,27 +81,6 @@ public class TableSpecTests extends BaseTest {
     }
 
     @Test
-    void isDirty_whenTableTargetSpecSet_thenIsDirtyIsTrue() {
-        TableTargetSpec tableTargetSpec = new TableTargetSpec();
-        tableTargetSpec.setTableName("other");
-		this.sut.setTarget(tableTargetSpec);
-        Assertions.assertEquals(tableTargetSpec, this.sut.getTarget());
-        Assertions.assertTrue(this.sut.isDirty());
-    }
-
-    @Test
-    void isDirty_whenSameTableTargetSpecObjectAsCurrentSet_thenIsDirtyIsTru() {
-        TableTargetSpec tableTargetSpec = new TableTargetSpec();
-        tableTargetSpec.setTableName("other");
-		this.sut.setTarget(tableTargetSpec);
-        Assertions.assertTrue(this.sut.isDirty());
-		this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setTarget(tableTargetSpec);
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
-    @Test
     void mergeColumnsFrom_whenNewColumnsInSource_thenAddsNewColumns() {
         TableSpec sourceTableSpec = new TableSpec();
         ColumnSpec col1Spec = new ColumnSpec(ColumnTypeSnapshotSpec.fromType("string"));
@@ -140,24 +119,24 @@ public class TableSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenDefaultChecksSpecSet_thenIsDirtyIsTrue() {
-        TableAdHocCheckCategoriesSpec adhocChecks = new TableAdHocCheckCategoriesSpec();
-        adhocChecks.setStandard(new TableAdHocStandardChecksSpec());
-        adhocChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
-		this.sut.setChecks(adhocChecks);
-        Assertions.assertEquals(this.sut.getChecks(), adhocChecks);
+        TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
+        profilingChecks.setStandard(new TableProfilingStandardChecksSpec());
+        profilingChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
+		this.sut.setProfilingChecks(profilingChecks);
+        Assertions.assertEquals(this.sut.getProfilingChecks(), profilingChecks);
         Assertions.assertTrue(this.sut.isDirty());
     }
 
     @Test
     void isDirty_whenSameDefaultChecksSpecObjectAsCurrentSet_thenIsDirtyIsFalse() {
-        TableAdHocCheckCategoriesSpec adhocChecks = new TableAdHocCheckCategoriesSpec();
-        adhocChecks.setStandard(new TableAdHocStandardChecksSpec());
-        adhocChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
-		this.sut.setChecks(adhocChecks);
+        TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
+        profilingChecks.setStandard(new TableProfilingStandardChecksSpec());
+        profilingChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
+		this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setChecks(adhocChecks);
+		this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertFalse(this.sut.isDirty());
     }
 
@@ -167,35 +146,35 @@ public class TableSpecTests extends BaseTest {
     }
 
     @Test
-    void hasAnyChecksConfigured_whenOneAdhocCheckConfigured_thenReturnsTrue() {
-        TableAdHocCheckCategoriesSpec adhocChecks = new TableAdHocCheckCategoriesSpec();
-        adhocChecks.setStandard(new TableAdHocStandardChecksSpec());
-        adhocChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
-        this.sut.setChecks(adhocChecks);
+    void hasAnyChecksConfigured_whenOneProfilingCheckConfigured_thenReturnsTrue() {
+        TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
+        profilingChecks.setStandard(new TableProfilingStandardChecksSpec());
+        profilingChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
+        this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
     }
 
     @Test
-    void hasAnyChecksConfigured_whenOneDailyCheckpointCheckConfigured_thenReturnsTrue() {
-        TableCheckpointsSpec checkpoints = new TableCheckpointsSpec();
-        TableDailyCheckpointCategoriesSpec daily = new TableDailyCheckpointCategoriesSpec();
-        TableStandardDailyCheckpointSpec standard = new TableStandardDailyCheckpointSpec();
-        standard.setDailyCheckpointRowCount(new TableRowCountCheckSpec());
+    void hasAnyChecksConfigured_whenOneDailyRecurringCheckConfigured_thenReturnsTrue() {
+        TableRecurringSpec recurring = new TableRecurringSpec();
+        TableDailyRecurringCategoriesSpec daily = new TableDailyRecurringCategoriesSpec();
+        TableStandardDailyRecurringSpec standard = new TableStandardDailyRecurringSpec();
+        standard.setDailyRowCount(new TableRowCountCheckSpec());
         daily.setStandard(standard);
-        checkpoints.setDaily(daily);
-        this.sut.setCheckpoints(checkpoints);
+        recurring.setDaily(daily);
+        this.sut.setRecurringChecks(recurring);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
     }
 
     @Test
-    void hasAnyChecksConfigured_whenOneMonthlyCheckpointCheckConfigured_thenReturnsTrue() {
-        TableCheckpointsSpec checkpoints = new TableCheckpointsSpec();
-        TableMonthlyCheckpointCategoriesSpec daily = new TableMonthlyCheckpointCategoriesSpec();
-        TableStandardMonthlyCheckpointSpec standard = new TableStandardMonthlyCheckpointSpec();
-        standard.setMonthlyCheckpointRowCount(new TableRowCountCheckSpec());
+    void hasAnyChecksConfigured_whenOneMonthlyRecurringCheckConfigured_thenReturnsTrue() {
+        TableRecurringSpec recurring = new TableRecurringSpec();
+        TableMonthlyRecurringCategoriesSpec daily = new TableMonthlyRecurringCategoriesSpec();
+        TableStandardMonthlyRecurringSpec standard = new TableStandardMonthlyRecurringSpec();
+        standard.setMonthlyRowCount(new TableRowCountCheckSpec());
         daily.setStandard(standard);
-        checkpoints.setMonthly(daily);
-        this.sut.setCheckpoints(checkpoints);
+        recurring.setMonthly(daily);
+        this.sut.setRecurringChecks(recurring);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
     }
 

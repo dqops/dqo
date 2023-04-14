@@ -28,6 +28,10 @@ if [ ! -d $DQO_USER_HOME ]; then
   mkdir $DQO_USER_HOME
 fi
 
+if [ -z $DQO_JAVA_OPTS ]; then
+  export DQO_JAVA_OPTS=-Xmx1024m
+fi
+
 # Figure out where java is.
 export DQO_RUNNER=java
 if [ -n $JAVA_HOME ]; then

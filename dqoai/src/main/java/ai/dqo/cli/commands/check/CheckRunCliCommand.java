@@ -20,12 +20,8 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.execution.sensors.TimeWindowFilterParameters;
-import ai.dqo.services.check.run.CheckService;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
-import ai.dqo.cli.completion.completers.ColumnNameCompleter;
-import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
-import ai.dqo.cli.completion.completers.FullTableNameCompleter;
+import ai.dqo.cli.completion.completers.*;
 import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.FileWritter;
 import ai.dqo.cli.terminal.TablesawDatasetTableModel;
@@ -35,7 +31,9 @@ import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.services.check.CheckService;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -50,7 +48,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "run", description = "Run data quality checks matching specified filters")
+@CommandLine.Command(name = "run", header = "Run data quality checks that match a given condition", description = "Run data quality checks on your dataset that match a given condition. The command output is a table with the results that provides insight into the data quality.")
 public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITableNameCommand {
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWritter;
@@ -90,7 +88,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
             completionCandidates = ConnectionNameCompleter.class)
     private String connection;
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports patterns like 'sch*.tab*'",
+    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'",
             completionCandidates = FullTableNameCompleter.class)
     private String table;
 
@@ -98,10 +96,12 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
             completionCandidates = ColumnNameCompleter.class)
     private String column;
 
-    @CommandLine.Option(names = {"-ch", "--check"}, description = "Data quality check name, supports patterns like '*_id'")
+    @CommandLine.Option(names = {"-ch", "--check"}, description = "Data quality check name, supports patterns like '*_id'",
+            completionCandidates = CheckNameCompleter.class)
     private String check;
 
-    @CommandLine.Option(names = {"-s", "--sensor"}, description = "Data quality sensor name (sensor definition or sensor name), supports patterns like 'table/validity/*'")
+    @CommandLine.Option(names = {"-s", "--sensor"}, description = "Data quality sensor name (sensor definition or sensor name), supports patterns like 'table/validity/*'",
+            completionCandidates = SensorNameCompleter.class)
     private String sensor;
 
     @CommandLine.Option(names = {"-e", "--enabled"}, description = "Runs only enabled or only disabled sensors, by default only enabled sensors are executed", defaultValue = "true")

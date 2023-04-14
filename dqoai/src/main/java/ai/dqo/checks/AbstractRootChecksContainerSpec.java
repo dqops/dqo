@@ -15,17 +15,23 @@
  */
 package ai.dqo.checks;
 
+import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildFieldEntry;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
+import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
+
+import java.util.Objects;
 
 /**
  * Base abstract class for check container node.
@@ -36,8 +42,32 @@ import lombok.EqualsAndHashCode;
 public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractRootChecksContainerSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
+            put("custom", o -> o.custom);
         }
     };
+
+    @JsonPropertyDescription("Dictionary of custom checks. The keys are check names.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private CustomCheckSpecMap custom;
+
+    /**
+     * Returns a dictionary of custom checks.
+     * @return Dictionary of custom checks.
+     */
+    public CustomCheckSpecMap getCustom() {
+        return custom;
+    }
+
+    /**
+     * Set a dictionary of custom checks.
+     * @param custom Dictionary of custom checks.
+     */
+    public void setCustom(CustomCheckSpecMap custom) {
+        this.setDirtyIf(!Objects.equals(this.custom, custom));
+        this.custom = custom;
+        propagateHierarchyIdToField(custom, "custom");
+    }
 
     /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
@@ -51,15 +81,15 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
     }
 
     /**
-     * Returns the type of checks (adhoc, checkpoint, partitioned).
+     * Returns the type of checks (profiling, recurring, partitioned).
      * @return Check type.
      */
     @JsonIgnore
     public abstract CheckType getCheckType();
 
     /**
-     * Returns the time scale for checkpoint and partitioned checks (daily, monthly, etc.).
-     * Adhoc checks do not have a time scale and return null.
+     * Returns the time scale for recurring and partitioned checks (daily, monthly, etc.).
+     * Profiling checks do not have a time scale and return null.
      * @return Time scale (daily, monthly, ...).
      */
     @JsonIgnore
@@ -93,6 +123,10 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
                     return true;
                 }
             }
+        }
+
+        if (this.custom != null && this.custom.size() > 0) {
+            return true;
         }
 
         return false;

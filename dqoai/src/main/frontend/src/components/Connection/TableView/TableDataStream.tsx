@@ -33,7 +33,7 @@ const TableDataStream = () => {
   };
 
   return (
-    <div>
+    <div className="my-1">
       {
         isEditing ? (
           <DataStreamEditView

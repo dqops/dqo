@@ -18,10 +18,13 @@ package ai.dqo.execution.checks;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.custom.CustomCheckSpec;
 import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.notifications.NotificationService;
+import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
+import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import ai.dqo.data.errors.normalization.ErrorsNormalizationService;
 import ai.dqo.data.errors.normalization.ErrorsNormalizedResult;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
@@ -30,8 +33,6 @@ import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizationService;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
-import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
-import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactory;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.*;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationResult;
@@ -45,6 +46,7 @@ import ai.dqo.execution.sensors.*;
 import ai.dqo.execution.sensors.progress.ExecutingSensorEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutedEvent;
 import ai.dqo.execution.sensors.progress.SensorFailedEvent;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -85,7 +87,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
     private final SensorReadoutsNormalizationService sensorReadoutsNormalizationService;
     private final RuleEvaluationService ruleEvaluationService;
     private final SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory;
-    private final RuleResultsSnapshotFactory ruleResultsSnapshotFactory;
+    private final CheckResultsSnapshotFactory checkResultsSnapshotFactory;
     private ErrorsNormalizationService errorsNormalizationService;
     private ErrorsSnapshotFactory errorsSnapshotFactory;
     private final ScheduledTargetChecksFindService scheduledTargetChecksFindService;
@@ -101,7 +103,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param sensorReadoutsNormalizationService Sensor dataset parse service.
      * @param ruleEvaluationService  Rule evaluation service.
      * @param sensorReadoutsSnapshotFactory Sensor readouts storage service.
-     * @param ruleResultsSnapshotFactory Rule evaluation result (alerts) snapshot factory.
+     * @param checkResultsSnapshotFactory Rule evaluation result (alerts) snapshot factory.
      * @param errorsNormalizationService Error normalization service - creates datasets with the error information.
      * @param errorsSnapshotFactory Error snapshot factory, provides read and write support for errors stored in tabular format.
      * @param scheduledTargetChecksFindService Service that finds matching checks that are assigned to a given schedule.
@@ -116,7 +118,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                      SensorReadoutsNormalizationService sensorReadoutsNormalizationService,
                                      RuleEvaluationService ruleEvaluationService,
                                      SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory,
-                                     RuleResultsSnapshotFactory ruleResultsSnapshotFactory,
+                                     CheckResultsSnapshotFactory checkResultsSnapshotFactory,
                                      ErrorsNormalizationService errorsNormalizationService,
                                      ErrorsSnapshotFactory errorsSnapshotFactory,
                                      ScheduledTargetChecksFindService scheduledTargetChecksFindService,
@@ -129,7 +131,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         this.sensorReadoutsNormalizationService = sensorReadoutsNormalizationService;
         this.ruleEvaluationService = ruleEvaluationService;
         this.sensorReadoutsSnapshotFactory = sensorReadoutsSnapshotFactory;
-        this.ruleResultsSnapshotFactory = ruleResultsSnapshotFactory;
+        this.checkResultsSnapshotFactory = checkResultsSnapshotFactory;
         this.errorsNormalizationService = errorsNormalizationService;
         this.errorsSnapshotFactory = errorsSnapshotFactory;
         this.scheduledTargetChecksFindService = scheduledTargetChecksFindService;
@@ -155,7 +157,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         Collection<TableWrapper> targetTables = listTargetTables(userHome, checkSearchFilters);
         CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
 
-        for (TableWrapper targetTable :  targetTables) {
+        for (TableWrapper targetTable : targetTables) {
             // TODO: we can increase DOP here by turning each call (running sensors on a single table) into a multi step pipeline, we will start up to DOP pipelines, we will start new when a pipeline has finished...
             ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
 			executeChecksOnTable(executionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, userTimeWindowFilters, progressListener,
@@ -233,13 +235,13 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         TableSpec tableSpec = targetTable.getSpec();
         progressListener.onExecuteChecksOnTableStart(new ExecuteChecksOnTableStartEvent(connectionWrapper, tableSpec, checks));
         String connectionName = connectionWrapper.getName();
-        PhysicalTableName physicalTableName = tableSpec.getTarget().toPhysicalTableName();
+        PhysicalTableName physicalTableName = tableSpec.getPhysicalTableName();
 
         SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
         Table allNormalizedSensorResultsTable = sensorReadoutsSnapshot.getTableDataChanges().getNewOrChangedRows();
 
-        RuleResultsSnapshot ruleResultsSnapshot = this.ruleResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
-        Table allRuleEvaluationResultsTable = ruleResultsSnapshot.getTableDataChanges().getNewOrChangedRows();
+        CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
+        Table allRuleEvaluationResultsTable = checkResultsSnapshot.getTableDataChanges().getNewOrChangedRows();
 
         ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
         Table allErrorsTable = errorsSnapshot.getTableDataChanges().getNewOrChangedRows();
@@ -306,7 +308,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 LocalDateTime maxTimePeriod = normalizedSensorResults.getTimePeriodColumn().max(); // most recent time period that was captured
                 LocalDateTime minTimePeriod = normalizedSensorResults.getTimePeriodColumn().min(); // oldest time period that was captured
 
-                String ruleDefinitionName = checkSpec.getRuleDefinitionName();
+                String ruleDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getRuleName();
 
                 if (ruleDefinitionName == null) {
                     // no rule to run, just the sensor...
@@ -316,13 +318,13 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                     RuleDefinitionFindResult ruleDefinitionFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleDefinitionName);
                     RuleDefinitionSpec ruleDefinitionSpec = ruleDefinitionFindResult.getRuleDefinitionSpec();
                     RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleDefinitionSpec.getTimeWindow();
-                    TimeSeriesGradient timeGradientForRuleScope = sensorRunParameters.getCheckType() == CheckType.ADHOC ? TimeSeriesGradient.day : timeGradient;
+                    TimeSeriesGradient timeGradientForRuleScope = sensorRunParameters.getCheckType() == CheckType.PROFILING ? TimeSeriesGradient.day : timeGradient;
                     LocalDateTime earliestRequiredReadout = ruleTimeWindowSettings == null ? minTimePeriod :
                             LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(
                                     minTimePeriod, ruleTimeWindowSettings.getPredictionTimeWindow(), timeGradientForRuleScope);
 
                     sensorReadoutsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // preload required historic sensor readouts
-                    ruleResultsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // will be used for notifications
+                    checkResultsSnapshot.ensureMonthsAreLoaded(earliestRequiredReadout.toLocalDate(), maxTimePeriod.toLocalDate()); // will be used for notifications
 
                     try {
                         RuleEvaluationResult ruleEvaluationResult = this.ruleEvaluationService.evaluateRules(
@@ -357,9 +359,9 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             sensorReadoutsSnapshot.save();
         }
 
-        if (ruleResultsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
-            progressListener.onSavingRuleEvaluationResults(new SavingRuleEvaluationResultsEvent(tableSpec, ruleResultsSnapshot));
-            ruleResultsSnapshot.save();
+        if (checkResultsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
+            progressListener.onSavingRuleEvaluationResults(new SavingRuleEvaluationResultsEvent(tableSpec, checkResultsSnapshot));
+            checkResultsSnapshot.save();
         }
 
         if (errorsSnapshot.getTableDataChanges().hasChanges() && !dummySensorExecution) {
@@ -375,7 +377,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 passedRules, warningIssuesCount, errorIssuesCount, fatalIssuesCount, erroredSensors + erroredRules);
 
         if (this.notificationService != null && (warningIssuesCount > 0 || errorIssuesCount > 0 || fatalIssuesCount > 0)) {
-            Mono<Void> notificationMono = this.notificationService.detectNewIssuesAndSendNotification(connectionWrapper.getSpec(), tableSpec, ruleResultsSnapshot);
+            Mono<Void> notificationMono = this.notificationService.detectNewIssuesAndSendNotification(connectionWrapper.getSpec(), tableSpec, checkResultsSnapshot);
             notificationMono.block(); // TODO: fire and forget
         }
     }
@@ -427,9 +429,18 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         assert checkCategoryRootProvider.isPresent();
         AbstractRootChecksContainerSpec rootChecksContainerSpec = (AbstractRootChecksContainerSpec)checkCategoryRootProvider.get();
         CheckType checkType = rootChecksContainerSpec.getCheckType();
+        CheckDefinitionSpec customCheckDefinitionSpec = null;
+
+        if (checkSpec instanceof CustomCheckSpec) {
+            CustomCheckSpec customCheckSpec = (CustomCheckSpec)checkSpec;
+            customCheckDefinitionSpec = userHome.getChecks().getCheckDefinitionSpec(
+                    rootChecksContainerSpec.getCheckTarget(),checkType,
+                    rootChecksContainerSpec.getCheckTimeScale(), customCheckSpec.getCheckName());
+        }
 
         SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
-                connectionSpec, tableSpec, columnSpec, checkSpec, checkType, timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
+                connectionSpec, tableSpec, columnSpec, checkSpec, customCheckDefinitionSpec, checkType,
+                timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
         return sensorRunParameters;
     }
 }

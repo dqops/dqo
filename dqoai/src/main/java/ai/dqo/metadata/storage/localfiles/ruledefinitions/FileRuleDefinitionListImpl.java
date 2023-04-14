@@ -115,9 +115,9 @@ public class FileRuleDefinitionListImpl extends RuleDefinitionListImpl {
             ruleFolderPath = ruleName.substring(0, indexOfFileLocation);
         }
         FolderTreeNode ruleParentFolderNode = this.rulesFolder.getOrAddFolderPath(ruleFolderPath);
-        FileRuleDefinitionWrapperImpl dataSourceModelWrapper =
+        FileRuleDefinitionWrapperImpl ruleModelWrapper =
                 new FileRuleDefinitionWrapperImpl(ruleParentFolderNode, ruleName, ruleModuleName, this.yamlSerializer);
-        dataSourceModelWrapper.setSpec(new RuleDefinitionSpec());
-        return dataSourceModelWrapper;
+        ruleModelWrapper.setSpec(new RuleDefinitionSpec());
+        return ruleModelWrapper;
     }
 }

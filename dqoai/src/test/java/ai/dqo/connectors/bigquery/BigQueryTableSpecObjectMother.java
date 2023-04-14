@@ -15,8 +15,8 @@
  */
 package ai.dqo.connectors.bigquery;
 
+import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.metadata.sources.TableTargetSpec;
 
 /**
  * Object mother that creates testable (known) tables to the user context.
@@ -42,7 +42,7 @@ public class BigQueryTableSpecObjectMother {
      * @return Table spec.
      */
     public static TableSpec create_bq_data_types_test() {
-        TableSpec table = new TableSpec(new TableTargetSpec(DATASET_NAME, TableNames.bq_data_types_test.name()));
+        TableSpec table = new TableSpec(new PhysicalTableName(DATASET_NAME, TableNames.bq_data_types_test.name()));
         // TODO: we can also add columns
 
         return table;
@@ -54,7 +54,7 @@ public class BigQueryTableSpecObjectMother {
      * @return Table spec.
      */
     public static TableSpec create_numerical_datetime_average_week() {
-        TableSpec table = new TableSpec(new TableTargetSpec(DATASET_NAME, TableNames.numerical_datetime_average_week.name()));
+        TableSpec table = new TableSpec(new PhysicalTableName(DATASET_NAME, TableNames.numerical_datetime_average_week.name()));
         // TODO: we can also add columns
 
         return table;

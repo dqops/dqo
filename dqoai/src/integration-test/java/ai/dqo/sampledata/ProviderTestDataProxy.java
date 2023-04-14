@@ -30,8 +30,6 @@ import java.util.Optional;
 public class ProviderTestDataProxy {
     private final ProviderType providerType;
     private final Map<ConnectionTablePair, SampleTableMetadata> existingTables = new HashMap<>();
-
-    private final Map<ConnectionTablePair, SampleTableMetadataForeign> existingForeignTables = new HashMap<>();
     private final Map<ConnectionSchemaPair, List<SourceTableModel>> tablesInSchemas = new HashMap<>();
 
     /**
@@ -48,7 +46,7 @@ public class ProviderTestDataProxy {
      * @return Provided sample table metadata or a cached copy if a table with the same name is already present in the target database.
      */
     public SampleTableMetadata ensureTableExists(SampleTableMetadata sampleTableMetadata) {
-        String targetTableName = sampleTableMetadata.getTableSpec().getTarget().getTableName();
+        String targetTableName = sampleTableMetadata.getTableSpec().getPhysicalTableName().getTableName();
         ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
         ConnectionTablePair connectionTablePair = new ConnectionTablePair(connectionSpec, targetTableName);
         if (existingTables.containsKey(connectionTablePair)) {
@@ -56,7 +54,7 @@ public class ProviderTestDataProxy {
         }
 
         ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(this.providerType);
-        String schemaName = sampleTableMetadata.getTableSpec().getTarget().getSchemaName();
+        String schemaName = sampleTableMetadata.getTableSpec().getPhysicalTableName().getSchemaName();
         ConnectionSchemaPair schemaListKey = new ConnectionSchemaPair(connectionSpec, schemaName);
         List<SourceTableModel> tablesInSchema = tablesInSchemas.get(schemaListKey);
         if (tablesInSchema == null) {
@@ -84,45 +82,4 @@ public class ProviderTestDataProxy {
         return sampleTableMetadata;
     }
 
-    /**
-     * Checks if a table exist on the target connection. Creates and loads the data into the table on the first call.
-     * @param sampleTableMetadataForeign Metadata and data of the sample table to make.
-     * @return Provided sample table metadata or a cached copy if a table with the same name is already present in the target database.
-     */
-    public SampleTableMetadataForeign ensureForeignTableExists(SampleTableMetadataForeign sampleTableMetadataForeign) {
-        String targetTableName = sampleTableMetadataForeign.getTableSpec().getTarget().getTableName();
-        ConnectionSpec connectionSpec = sampleTableMetadataForeign.getConnectionSpec();
-        ConnectionTablePair connectionTablePair = new ConnectionTablePair(connectionSpec, targetTableName);
-        if (existingTables.containsKey(connectionTablePair)) {
-            return existingForeignTables.get(connectionTablePair);
-        }
-
-        ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(this.providerType);
-        String schemaName = sampleTableMetadataForeign.getTableSpec().getTarget().getSchemaName();
-        ConnectionSchemaPair schemaListKey = new ConnectionSchemaPair(connectionSpec, schemaName);
-        List<SourceTableModel> tablesInSchema = tablesInSchemas.get(schemaListKey);
-        if (tablesInSchema == null) {
-            try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true)) {
-                tablesInSchema = sourceConnection.listTables(schemaName);
-                tablesInSchemas.put(schemaListKey, tablesInSchema);
-            }
-        }
-
-        Optional<SourceTableModel> existingSourceTable = tablesInSchema.stream().filter(t -> t.getTableName().getTableName().equals(targetTableName)).findFirst();
-        if (existingSourceTable.isPresent()) {
-            existingForeignTables.put(connectionTablePair, sampleTableMetadataForeign); // the table was already created
-            return sampleTableMetadataForeign;
-        }
-
-        // we need to create the target table
-        try (SourceConnection connectionForLoad = connectionProvider.createConnection(connectionSpec, true)) {
-            connectionForLoad.createTable(sampleTableMetadataForeign.getTableSpec());
-
-            // TODO: we may consider splitting the table into row segments (up to let's say 1000 rows) and insert that much, because some databases don't like long formatted SQLs
-            connectionForLoad.loadData(sampleTableMetadataForeign.getTableSpec(), sampleTableMetadataForeign.getTableData().getTable());
-        }
-
-        existingForeignTables.put(connectionTablePair, sampleTableMetadataForeign);
-        return sampleTableMetadataForeign;
-    }
 }

@@ -74,9 +74,6 @@ public class UICheckModel implements Cloneable {
     @JsonPropertyDescription("Threshold (alerting) rules defined for a check.")
     private UIRuleThresholdsModel rule;
 
-    @JsonPropertyDescription("The data quality check supports a custom time series configuration.")
-    private boolean supportsTimeSeries;
-
     @JsonPropertyDescription("The data quality check supports a custom data stream mapping configuration.")
     private boolean supportsDataStreams;
 
@@ -88,6 +85,7 @@ public class UICheckModel implements Cloneable {
 
     @JsonPropertyDescription("Model of configured schedule enabled on the check level.")
     private UIEffectiveScheduleModel effectiveSchedule;
+
     @JsonPropertyDescription("State of the scheduling override for this check.")
     private UIScheduleEnabledStatus scheduleEnabledStatus;
 
@@ -100,6 +98,9 @@ public class UICheckModel implements Cloneable {
     @JsonPropertyDescription("Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.")
     private boolean excludeFromKpi;
 
+    @JsonPropertyDescription("Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.")
+    private boolean includeInSla;
+
     @JsonPropertyDescription("True if the data quality check is configured (not null). When saving the data quality check configuration, set the flag to true for storing the check.")
     private boolean configured;
 
@@ -109,11 +110,14 @@ public class UICheckModel implements Cloneable {
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check")
+    @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check.")
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
     @JsonPropertyDescription("Name of a data stream mapping defined at a table that should be used for this check.")
     private String dataStream;
+
+    @JsonPropertyDescription("Type of the check's target (column, table, target).")
+    private UICheckTarget checkTarget;
 
     @JsonPropertyDescription("List of configuration errors that must be fixed before the data quality check could be executed.")
     private List<CheckConfigurationRequirementsError> configurationRequirementsErrors;

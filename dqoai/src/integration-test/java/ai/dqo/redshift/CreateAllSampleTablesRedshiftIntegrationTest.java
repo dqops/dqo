@@ -101,4 +101,18 @@ public class CreateAllSampleTablesRedshiftIntegrationTest extends BaseRedshiftIn
         SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_right_table, ProviderType.redshift);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
     }
+
+    @Test
+    void runTest_whenTestDataFileNamedTest_value_match_left_table_IsCreated_thenPutItInPostgresql() {
+
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.redshift);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+    }
+
+    @Test
+    void runTest_whenTestDataFileNamedTest_geographic_coordinate_system_test_IsCreated_thenPutItInPostgresql() {
+
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.geographic_coordinate_system_test, ProviderType.redshift);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+    }
 }

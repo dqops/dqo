@@ -36,6 +36,9 @@ public enum SpecificationKind {
     @JsonProperty("rule")
     RULE,
 
+    @JsonProperty("check")
+    CHECK,
+
     @JsonProperty("settings")
     SETTINGS,
 

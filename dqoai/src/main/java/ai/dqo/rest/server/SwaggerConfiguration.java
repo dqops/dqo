@@ -19,6 +19,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.ResourceHandlerRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
+import static ai.dqo.rest.server.LocalUrlAddresses.swaggerUiPath;
+
 /**
  * Spring boot swagger configuration. Configures how Swagger shows the UI.
  */
@@ -32,7 +34,7 @@ public class SwaggerConfiguration implements WebFluxConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String baseUrl = "";
         registry.
-                addResourceHandler(baseUrl + "/swagger-ui/**")
+                addResourceHandler(baseUrl + swaggerUiPath + "/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/swagger-ui-dist/4.15.5/")
                 .resourceChain(true);
 

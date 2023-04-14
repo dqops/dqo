@@ -15,10 +15,8 @@
  */
 package ai.dqo.postgresql;
 
-import ai.dqo.BaseIntegrationTest;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.sampledata.*;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -90,15 +88,29 @@ public class CreateAllSampleTablesPostgresqlIntegrationTest extends BasePostgres
     @Test
     void runTest_whenTestDataFileNamedTest_value_match_left_table_IsCreated_thenPutItInPostgresql() {
 
-        SampleTableMetadataForeign sampleTableMetadataForeign = SampleTableMetadataForeignObjectMother.createSampleTableMetadataForeignForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.postgresql);
-        IntegrationTestSampleDataForeignObjectMother.ensureForeignTableExists(sampleTableMetadataForeign);
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.postgresql);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
     }
 
     @Test
     void runTest_whenTestDataFileNamedTest_geographic_coordinate_system_test_IsCreated_thenPutItInPostgresql() {
 
-        SampleTableMetadataForeign sampleTableMetadataForeign = SampleTableMetadataForeignObjectMother.createSampleTableMetadataForeignForCsvFile(SampleCsvFileNames.geographic_coordinate_system_test, ProviderType.postgresql);
-        IntegrationTestSampleDataForeignObjectMother.ensureForeignTableExists(sampleTableMetadataForeign);
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.geographic_coordinate_system_test, ProviderType.postgresql);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+    }
+
+    @Test
+    void runTest_whenTestDataFileNamedTest_ip4_test_IsCreated_thenPutItInPostgresql() {
+
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip4_test, ProviderType.postgresql);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+    }
+
+    @Test
+    void runTest_whenTestDataFileNamedTest_ip6_test_IsCreated_thenPutItInPostgresql() {
+
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip6_test, ProviderType.postgresql);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
     }
 
 }

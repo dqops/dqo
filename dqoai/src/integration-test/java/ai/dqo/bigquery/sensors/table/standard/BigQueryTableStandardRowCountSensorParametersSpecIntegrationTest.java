@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.table.standard;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
@@ -52,14 +52,14 @@ public class BigQueryTableStandardRowCountSensorParametersSpecIntegrationTest ex
         this.sut = new TableStandardRowCountSensorParametersSpec();
         this.checkSpec = new TableRowCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        TableAdHocStandardChecksSpec category = new TableAdHocStandardChecksSpec();
-        this.sampleTableMetadata.getTableSpec().getChecks().setStandard(category);
+        TableProfilingStandardChecksSpec category = new TableProfilingStandardChecksSpec();
+        this.sampleTableMetadata.getTableSpec().getProfilingChecks().setStandard(category);
         category.setRowCount(this.checkSpec);
     }
 
     @Test
     void runSensor_whenSensorExecuted_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
                 sampleTableMetadata, this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -71,8 +71,8 @@ public class BigQueryTableStandardRowCountSensorParametersSpecIntegrationTest ex
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
+    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -84,8 +84,8 @@ public class BigQueryTableStandardRowCountSensorParametersSpecIntegrationTest ex
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
+    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

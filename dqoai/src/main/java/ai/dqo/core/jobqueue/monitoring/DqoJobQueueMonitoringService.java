@@ -15,8 +15,8 @@
  */
 package ai.dqo.core.jobqueue.monitoring;
 
-import ai.dqo.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
 import ai.dqo.core.jobqueue.DqoJobQueueEntry;
+import ai.dqo.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
 import reactor.core.publisher.Mono;
 
 import java.util.concurrent.TimeUnit;

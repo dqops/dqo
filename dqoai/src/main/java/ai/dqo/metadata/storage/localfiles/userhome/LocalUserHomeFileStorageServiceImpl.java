@@ -15,17 +15,17 @@
  */
 package ai.dqo.metadata.storage.localfiles.userhome;
 
-import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindService;
 import ai.dqo.core.filesystem.localfiles.LocalFileStorageServiceImpl;
-import ai.dqo.core.synchronization.status.FolderSynchronizationStatus;
-import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.core.filesystem.virtual.FileContent;
 import ai.dqo.core.filesystem.virtual.HomeFilePath;
 import ai.dqo.core.filesystem.virtual.HomeFolderPath;
 import ai.dqo.core.locks.AcquiredExclusiveWriteLock;
 import ai.dqo.core.locks.AcquiredSharedReadLock;
 import ai.dqo.core.locks.UserHomeLockManager;
+import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.status.FolderSynchronizationStatus;
+import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

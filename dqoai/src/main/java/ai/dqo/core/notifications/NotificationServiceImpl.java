@@ -1,8 +1,8 @@
 package ai.dqo.core.notifications;
 
+import ai.dqo.data.checkresults.factory.CheckResultsColumnNames;
+import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
-import ai.dqo.data.ruleresults.factory.RuleResultsColumnNames;
-import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
 import ai.dqo.metadata.notifications.NotificationSettingsSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
@@ -39,24 +39,24 @@ public class NotificationServiceImpl implements NotificationService {
      * Detects new data quality issues and sends a notification about a table that is affected.
      * @param connectionSpec Connection specification.
      * @param tableSpec Table specification.
-     * @param ruleResultsSnapshot Rule results snapshot with existing and new rule results.
+     * @param checkResultsSnapshot Rule results snapshot with existing and new rule results.
      */
     @Override
     public Mono<Void> detectNewIssuesAndSendNotification(ConnectionSpec connectionSpec,
                                                          TableSpec tableSpec,
-                                                         RuleResultsSnapshot ruleResultsSnapshot) {
+                                                         CheckResultsSnapshot checkResultsSnapshot) {
         NotificationSettingsSpec notificationSettings = connectionSpec.getNotifications();
         if (notificationSettings == null || Strings.isNullOrEmpty(notificationSettings.getWebhookUrl())) {
             return Mono.empty(); // the notifications not configured
         }
 
-        Table newOrChangedRows = ruleResultsSnapshot.getTableDataChanges().getNewOrChangedRows();
-        Selection hasAlertSelection = newOrChangedRows.intColumn(RuleResultsColumnNames.SEVERITY_COLUMN_NAME).isGreaterThan(0.0);
+        Table newOrChangedRows = checkResultsSnapshot.getTableDataChanges().getNewOrChangedRows();
+        Selection hasAlertSelection = newOrChangedRows.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME).isGreaterThan(0.0);
         Table rowsWithQualityIssues = newOrChangedRows.where(hasAlertSelection);
         TableSliceGroup newAlertsByTimeSeries = rowsWithQualityIssues.splitOn(SensorReadoutsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
-        Table allOldRuleResults = ruleResultsSnapshot.getAllData();
+        Table allOldRuleResults = checkResultsSnapshot.getAllData();
         Table allOldRuleResultsWithAlerts = allOldRuleResults.where(
-                allOldRuleResults.intColumn(RuleResultsColumnNames.SEVERITY_COLUMN_NAME).isGreaterThan(0.0));
+                allOldRuleResults.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME).isGreaterThan(0.0));
         StringColumn oldRuleResultTimeSeriesIdColumn = allOldRuleResultsWithAlerts.stringColumn(SensorReadoutsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
         Set<String> checksWithNewAlerts = new LinkedHashSet<>();
 
@@ -67,8 +67,8 @@ public class NotificationServiceImpl implements NotificationService {
             Table oldResultsForTimeSeries = allOldRuleResultsWithAlerts.where(oldRuleResultTimeSeriesIdColumn.isEqualTo(timeSeriesId));
             if (oldResultsForTimeSeries.rowCount() > 0) {
                 // find when we raised the last issue
-                Instant newAlertExecutedAt = newAlertsTimeSeriesData.instantColumn(RuleResultsColumnNames.EXECUTED_AT_COLUMN_NAME).get(0);
-                Instant mostRecentIssueExecutionTimestamp = oldResultsForTimeSeries.instantColumn(RuleResultsColumnNames.EXECUTED_AT_COLUMN_NAME).max();
+                Instant newAlertExecutedAt = newAlertsTimeSeriesData.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME).get(0);
+                Instant mostRecentIssueExecutionTimestamp = oldResultsForTimeSeries.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME).max();
                 Instant skipAlertsSince = newAlertExecutedAt.minus(notificationSettings.getHoursSinceLastAlert(), ChronoUnit.HOURS);
 
                 if (!mostRecentIssueExecutionTimestamp.isBefore(skipAlertsSince)) {
@@ -76,7 +76,7 @@ public class NotificationServiceImpl implements NotificationService {
                 }
             }
 
-            String checkName = newAlertsTimeSeriesData.stringColumn(RuleResultsColumnNames.CHECK_NAME_COLUMN_NAME).get(0);
+            String checkName = newAlertsTimeSeriesData.stringColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME).get(0);
             checksWithNewAlerts.add(checkName);
         }
 
@@ -97,8 +97,8 @@ public class NotificationServiceImpl implements NotificationService {
     protected Mono<Void> sendNotification(ConnectionSpec connectionSpec, TableSpec tableSpec, Set<String> checksWithNewAlerts) {
         NewIssueOnTableNotificationMessage notificationMessage = new NewIssueOnTableNotificationMessage();
         notificationMessage.setConnection(connectionSpec.getConnectionName());
-        notificationMessage.setSchema(tableSpec.getTarget().getSchemaName());
-        notificationMessage.setTable(tableSpec.getTarget().getTableName());
+        notificationMessage.setSchema(tableSpec.getPhysicalTableName().getSchemaName());
+        notificationMessage.setTable(tableSpec.getPhysicalTableName().getTableName());
         notificationMessage.setQualityChecks(checksWithNewAlerts);
 
         NotificationSettingsSpec notificationSettings = connectionSpec.getNotifications();

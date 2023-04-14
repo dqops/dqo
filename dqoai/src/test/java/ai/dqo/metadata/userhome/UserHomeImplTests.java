@@ -16,7 +16,7 @@
 package ai.dqo.metadata.userhome;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.sources.*;
@@ -52,8 +52,8 @@ public class UserHomeImplTests extends BaseTest {
         ConnectionWrapper connectionWrapper = this.sut.getConnections().createAndAddNew("src");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
-        tableSpec.getChecks().setStandard(standard);
+        TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
+        tableSpec.getProfilingChecks().setStandard(standard);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         standard.setRowCount(check);
 
@@ -67,8 +67,8 @@ public class UserHomeImplTests extends BaseTest {
         ConnectionWrapper connectionWrapper = this.sut.getConnections().createAndAddNew("src");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
-        tableSpec.getChecks().setStandard(standard);
+        TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
+        tableSpec.getProfilingChecks().setStandard(standard);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         standard.setRowCount(check);
 
@@ -82,8 +82,8 @@ public class UserHomeImplTests extends BaseTest {
         ConnectionWrapper connectionWrapper = this.sut.getConnections().createAndAddNew("src");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableAdHocStandardChecksSpec standard = new TableAdHocStandardChecksSpec();
-        tableSpec.getChecks().setStandard(standard);
+        TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
+        tableSpec.getProfilingChecks().setStandard(standard);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         standard.setRowCount(check);
 

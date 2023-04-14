@@ -26,6 +26,11 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "data", description = "Commands related to the data", subcommands = {DataCleanCliCommand.class})
+@CommandLine.Command(name = "data", description = "Commands related to the data",
+        subcommands = {
+                DataCleanCliCommand.class,
+                DataRepairCliCommand.class,
+//                DataStoragePerformanceCliCommand.class
+})
 public class DataCliCommand extends BaseCommand {
 }

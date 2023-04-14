@@ -16,10 +16,10 @@
 package ai.dqo.rest.controllers.remote;
 
 import ai.dqo.metadata.sources.ConnectionSpec;
-import ai.dqo.services.remote.connections.SourceConnectionsService;
 import ai.dqo.rest.models.metadata.ConnectionBasicModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.rest.models.remote.ConnectionTestModel;
+import ai.dqo.services.remote.connections.SourceConnectionsService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

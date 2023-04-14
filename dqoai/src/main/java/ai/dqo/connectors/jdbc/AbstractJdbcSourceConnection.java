@@ -117,7 +117,7 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
                     Table resultTable = Table.read().db(results, "query_result");
                     for (Column<?> column : resultTable.columns()) {
                         if (column.name() != null) {
-                            column.setName(column.name().toLowerCase(Locale.ENGLISH));
+                            column.setName(column.name().toLowerCase(Locale.ROOT));
                         }
                     }
                     return resultTable;

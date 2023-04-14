@@ -6,6 +6,7 @@ import { IRootState } from '../../../redux/reducers';
 import { ConnectionApiClient } from '../../../services/apiClient';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from "../../../shared/routes";
+import { useTree } from "../../../contexts/treeContext";
 
 interface IConnectionActionGroupProps {
   isDisabled?: boolean;
@@ -29,6 +30,7 @@ const ConnectionActionGroup = ({
     (state: IRootState) => state.connection
   );
   const history = useHistory();
+  const { sourceRoute } = useTree();
 
   const removeConnection = async () => {
     if (connectionBasic) {
@@ -38,7 +40,7 @@ const ConnectionActionGroup = ({
     }
   };
   const goToSchemas = (isImport = true) => {
-    history.push(`${ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connectionName, 'schemas')}${isImport ? '?import_schema=true' : ''}`)
+    history.push(`${ROUTES.CONNECTION_DETAIL(sourceRoute, connectionName, 'schemas')}${isImport ? '?import_schema=true' : ''}`)
 
     if (onImport) {
       onImport();
@@ -50,25 +52,28 @@ const ConnectionActionGroup = ({
       {isSourceScreen ? (
         <>
           <Button
-            variant="text"
-            color="info"
-            label="Delete"
+            className="!h-10"
+            variant="outlined"
+            color="primary"
+            label="Delete Connection"
             onClick={() => setIsOpen(true)}
           />
           <Button
+            className="!h-10"
             label="Import metadata"
-            color="info"
-            variant="text"
+            color="primary"
+            variant="outlined"
             onClick={() => goToSchemas()}
           />
         </>
       ) : (
         tab === 'schemas' ? (
           <Button
+            className="!h-10"
             label="Manage metadata"
-            color="info"
-            variant="text"
-            onClick={() => goToSchemas(false)}
+            color="primary"
+            variant="outlined"
+            onClick={() => goToSchemas()}
           />
         ) : null
       )}
@@ -78,7 +83,7 @@ const ConnectionActionGroup = ({
           color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
           variant="contained"
           label="Save"
-          className="w-40"
+          className="w-40 !h-10"
           onClick={onUpdate}
           loading={isUpdating}
           disabled={isDisabled}

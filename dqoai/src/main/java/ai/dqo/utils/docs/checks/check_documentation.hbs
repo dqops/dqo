@@ -13,8 +13,13 @@ ___
 {{#with "  "}}{{.}}{{/with}}
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|{{checkName}}|{{checkType}}|{{#if timeScale}}{{timeScale}}{{else}} {{/if}}|[{{sensor.sensorName}}](../../../../reference/sensors/{{target}}/{{sensor.category}}%20{{target}}%20sensors/#{{replace sensor.sensorName "_" "-"}})|[{{rule.ruleName}}](../../../../reference/rules/{{rule.category}}/#{{replace rule.ruleName "_" "-"}})|
+|{{checkName}}|{{checkType}}|{{#if timeScale}}{{timeScale}}{{else}} {{/if}}|[{{sensor.sensorName}}](../../../../reference/sensors/{{target}}/{{sensor.category}}-{{target}}-sensors/#{{replace sensor.sensorName "_" "-"}})|[{{rule.ruleName}}](../../../../reference/rules/{{rule.category}}/#{{replace rule.ruleName "_" "-"}})|
 {{#with "  "}}{{.}}{{/with}}
+**Enable check (Shell)**{{#with "  "}}{{.}}{{/with}}
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch={{checkName}}
+```
 **Run check (Shell)**{{#with "  "}}{{.}}{{/with}}
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

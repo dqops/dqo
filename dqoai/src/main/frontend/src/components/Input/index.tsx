@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FocusEvent } from 'react';
+import React, { ChangeEvent, FocusEvent, KeyboardEvent } from 'react';
 
 import clsx from 'clsx';
 
@@ -22,6 +22,7 @@ interface IInputProps {
   tooltipText?: string;
   disabled?: boolean;
   defaultValue?: string;
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const Input = ({
@@ -39,7 +40,8 @@ const Input = ({
   dataTestId,
   tooltipText,
   disabled,
-  defaultValue
+  defaultValue,
+  onKeyDown,
 }: IInputProps) => (
   <div>
     <div className="flex space-x-1">
@@ -60,7 +62,7 @@ const Input = ({
               <div>
                 <SvgIcon
                   name="info"
-                  className="w-4 h-4 text-blue-700 cursor-pointer"
+                  className="w-4 h-4 text-gray-700 cursor-pointer"
                 />
               </div>
             </Tooltip>
@@ -77,7 +79,7 @@ const Input = ({
         className={clsx(
           error
             ? 'border border-red-500'
-            : 'focus:ring-2 focus:ring-blue-400 focus:ring-opacity-80 focus:border-0 border-gray-300',
+            : 'focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300',
           'h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none block min-w-40 w-full sm:text-base rounded',
           className
         )}
@@ -86,6 +88,7 @@ const Input = ({
         onBlur={onBlur}
         data-testid={dataTestId}
         defaultValue={defaultValue}
+        onKeyDown={onKeyDown}
       />
       {value && (
         <div className="absolute top-1/2 right-4 transform -translate-y-1/2 w-4 h-4 flex justify-center items-center">
@@ -97,7 +100,7 @@ const Input = ({
         </div>
       )}
     </div>
-    {error && <div className="text-red-500 text-sm ml-2">{helperText}</div>}
+    {error && <div className="text-red-500 text-xs ml-2">{helperText}</div>}
   </div>
 );
 

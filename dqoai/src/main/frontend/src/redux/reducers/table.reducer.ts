@@ -19,9 +19,9 @@ import {
   TableBasicModel,
   TableModel,
   RecurringScheduleSpec,
-  TableAdHocCheckCategoriesSpec,
-  UIAllChecksModel,
-  DataStreamMappingSpec
+  TableProfilingCheckCategoriesSpec,
+  UICheckContainerModel,
+  DataStreamMappingSpec, TablePartitioningModel
 } from '../../api';
 import { TABLE_ACTION } from '../types';
 
@@ -41,12 +41,22 @@ export interface ITableState {
       updatedSchedule?: RecurringScheduleSpec;
       isUpdatedSchedule?: boolean;
     }
-    daily?: {
+    recurring_daily?: {
       schedule?: RecurringScheduleSpec;
       updatedSchedule?: RecurringScheduleSpec;
       isUpdatedSchedule?: boolean;
     }
-    monthly?: {
+    recurring_monthly?: {
+      schedule?: RecurringScheduleSpec;
+      updatedSchedule?: RecurringScheduleSpec;
+      isUpdatedSchedule?: boolean;
+    }
+    partitioned_daily?: {
+      schedule?: RecurringScheduleSpec;
+      updatedSchedule?: RecurringScheduleSpec;
+      isUpdatedSchedule?: boolean;
+    }
+    partitioned_monthly?: {
       schedule?: RecurringScheduleSpec;
       updatedSchedule?: RecurringScheduleSpec;
       isUpdatedSchedule?: boolean;
@@ -56,25 +66,29 @@ export interface ITableState {
   isUpdatedComments?: boolean;
   labels: string[];
   isUpdatedLabels?: boolean;
-  checks?: TableAdHocCheckCategoriesSpec;
-  checksUI?: UIAllChecksModel;
+  checks?: TableProfilingCheckCategoriesSpec;
+  checksUI?: UICheckContainerModel;
   isUpdatedChecksUi?: boolean;
   dataStreamsMapping?: DataStreamMappingSpec;
   isUpdatedDataStreamsMapping?: boolean;
-  dailyCheckpoints?: UIAllChecksModel;
-  isUpdatedDailyCheckpoints?: boolean;
-  monthlyCheckpoints?: UIAllChecksModel;
-  isUpdatedMonthlyCheckpoints?: boolean;
-  dailyPartitionedChecks?: UIAllChecksModel;
+  dailyRecurring?: UICheckContainerModel;
+  isUpdatedDailyRecurring?: boolean;
+  monthlyRecurring?: UICheckContainerModel;
+  isUpdatedMonthlyRecurring?: boolean;
+  dailyPartitionedChecks?: UICheckContainerModel;
   isUpdatedDailyPartitionedChecks?: boolean;
-  monthlyPartitionedChecks?: UIAllChecksModel;
+  monthlyPartitionedChecks?: UICheckContainerModel;
   isUpdatedMonthlyPartitionedChecks?: boolean;
-  checksUIFilter?: UIAllChecksModel;
+  checksUIFilter?: UICheckContainerModel;
   isUpdatedChecksUIFilter?: boolean;
-  checkpointsUIFilter?: UIAllChecksModel;
-  isUpdatedCheckpointsUIFilter?: boolean;
-  partitionedChecksUIFilter?: UIAllChecksModel;
+  recurringUIFilter?: UICheckContainerModel;
+  isUpdatedRecurringUIFilter?: boolean;
+  partitionedChecksUIFilter?: UICheckContainerModel;
   isUpdatedPartitionedChecksUIFilter?: boolean;
+  tablePartitioning?: TablePartitioningModel
+  isUpdatedTablePartitioning?: boolean;
+  loadingTablePartitioning: boolean;
+  updatingTablePartitioning: boolean;
 }
 
 const initialState: ITableState = {
@@ -84,7 +98,9 @@ const initialState: ITableState = {
   activeTable: '',
   isUpdating: false,
   comments: [],
-  labels: []
+  labels: [],
+  loadingTablePartitioning: false,
+  updatingTablePartitioning: false,
 };
 
 const tableReducer = (state = initialState, action: any) => {
@@ -335,39 +351,39 @@ const tableReducer = (state = initialState, action: any) => {
         isUpdating: false,
         error: action.error
       };
-    case TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS:
+    case TABLE_ACTION.GET_TABLE_DAILY_RECURRING:
       return {
         ...state,
         loading: true
       };
-    case TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS_SUCCESS:
+    case TABLE_ACTION.GET_TABLE_DAILY_RECURRING_SUCCESS:
       return {
         ...state,
         loading: false,
-        dailyCheckpoints: action.data,
-        isUpdatedDailyCheckpoints: false,
+        dailyRecurring: action.data,
+        isUpdatedDailyRecurring: false,
         error: null
       };
-    case TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS_ERROR:
+    case TABLE_ACTION.GET_TABLE_DAILY_RECURRING_ERROR:
       return {
         ...state,
         loading: false,
         error: action.error
       };
-    case TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS:
+    case TABLE_ACTION.GET_TABLE_MONTHLY_RECURRING:
       return {
         ...state,
         loading: true
       };
-    case TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS_SUCCESS:
+    case TABLE_ACTION.GET_TABLE_MONTHLY_RECURRING_SUCCESS:
       return {
         ...state,
         loading: false,
-        monthlyCheckpoints: action.data,
-        isUpdatedMonthlyCheckpoints: false,
+        monthlyRecurring: action.data,
+        isUpdatedMonthlyRecurring: false,
         error: null
       };
-    case TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS_ERROR:
+    case TABLE_ACTION.GET_TABLE_MONTHLY_RECURRING_ERROR:
       return {
         ...state,
         loading: false,
@@ -411,35 +427,35 @@ const tableReducer = (state = initialState, action: any) => {
         loading: false,
         error: action.error
       };
-    case TABLE_ACTION.UPDATE_TABLE_DAILY_CHECKPOINTS:
+    case TABLE_ACTION.UPDATE_TABLE_DAILY_RECURRING:
       return {
         ...state,
         isUpdating: true
       };
-    case TABLE_ACTION.UPDATE_TABLE_DAILY_CHECKPOINTS_SUCCESS:
+    case TABLE_ACTION.UPDATE_TABLE_DAILY_RECURRING_SUCCESS:
       return {
         ...state,
         isUpdating: false,
         error: null
       };
-    case TABLE_ACTION.UPDATE_TABLE_DAILY_CHECKPOINTS_ERROR:
+    case TABLE_ACTION.UPDATE_TABLE_DAILY_RECURRING_ERROR:
       return {
         ...state,
         isUpdating: false,
         error: action.error
       };
-    case TABLE_ACTION.UPDATE_TABLE_MONTHLY_CHECKPOINTS:
+    case TABLE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING:
       return {
         ...state,
         isUpdating: true
       };
-    case TABLE_ACTION.UPDATE_TABLE_MONTHLY_CHECKPOINTS_SUCCESS:
+    case TABLE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_SUCCESS:
       return {
         ...state,
         isUpdating: false,
         error: null
       };
-    case TABLE_ACTION.UPDATE_TABLE_MONTHLY_CHECKPOINTS_ERROR:
+    case TABLE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_ERROR:
       return {
         ...state,
         isUpdating: false,
@@ -479,12 +495,12 @@ const tableReducer = (state = initialState, action: any) => {
         isUpdating: false,
         error: action.error
       };
-    case TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER:
+    case TABLE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER:
       return {
         ...state,
         loading: true
       };
-    case TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER_SUCCESS:
+    case TABLE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -492,26 +508,26 @@ const tableReducer = (state = initialState, action: any) => {
         isUpdatedChecksUIFilter: false,
         error: null
       };
-    case TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER_ERROR:
+    case TABLE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER_ERROR:
       return {
         ...state,
         loading: false,
         error: action.error
       };
-    case TABLE_ACTION.GET_TABLE_CHECKPOINTS_UI_FILTER:
+    case TABLE_ACTION.GET_TABLE_RECURRING_UI_FILTER:
       return {
         ...state,
         loading: true
       };
-    case TABLE_ACTION.GET_TABLE_CHECKPOINTS_UI_FILTER_SUCCESS:
+    case TABLE_ACTION.GET_TABLE_RECURRING_UI_FILTER_SUCCESS:
       return {
         ...state,
         loading: false,
-        checkpointsUIFilter: action.data,
-        isUpdatedCheckpointsUIFilter: false,
+        RecurringUIFilter: action.data,
+        isUpdatedRecurringUIFilter: false,
         error: null
       };
-    case TABLE_ACTION.GET_TABLE_CHECKPOINTS_UI_FILTER_ERROR:
+    case TABLE_ACTION.GET_TABLE_RECURRING_UI_FILTER_ERROR:
       return {
         ...state,
         loading: false,
@@ -599,17 +615,17 @@ const tableReducer = (state = initialState, action: any) => {
         isUpdatedChecksUi: true,
         checksUI: action.checksUI
       };
-    case TABLE_ACTION.SET_TABLE_DAILY_CHECKPOINTS:
+    case TABLE_ACTION.SET_TABLE_DAILY_RECURRING:
       return {
         ...state,
-        isUpdatedDailyCheckpoints: true,
-        dailyCheckpoints: action.checksUI
+        isUpdatedDailyRecurring: true,
+        dailyRecurring: action.checksUI
       };
-    case TABLE_ACTION.SET_TABLE_MONTHLY_CHECKPOINTS:
+    case TABLE_ACTION.SET_TABLE_MONTHLY_RECURRING:
       return {
         ...state,
-        isUpdatedMonthlyCheckpoints: true,
-        monthlyCheckpoints: action.checksUI
+        isUpdatedMonthlyRecurring: true,
+        monthlyRecurring: action.checksUI
       };
     case TABLE_ACTION.SET_TABLE_PARTITIONED_DAILY_CHECKS:
       return {
@@ -635,17 +651,56 @@ const tableReducer = (state = initialState, action: any) => {
         isUpdatedChecksUIFilter: true,
         checksUIFilter: action.data
       }
-    case TABLE_ACTION.SET_UPDATED_CHECKPOINTS_UI_FILTER:
+    case TABLE_ACTION.SET_UPDATED_RECURRING_UI_FILTER:
       return {
         ...state,
-        isUpdatedCheckpointsUIFilter: true,
-        checkpointsUIFilter: action.data
+        isUpdatedRecurringUIFilter: true,
+        RecurringUIFilter: action.data
       }
     case TABLE_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER:
       return {
         ...state,
         isUpdatedPartitionedChecksUIFilter: true,
         partitionedChecksUIFilter: action.data
+      }
+    case TABLE_ACTION.GET_TABLE_TIME_STAMPS:
+      return {
+        ...state,
+        loading: true
+      }
+    case TABLE_ACTION.GET_TABLE_TIME_STAMPS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isUpdatedTablePartitioning: false,
+        tablePartitioning: action.data
+      }
+    case TABLE_ACTION.GET_TABLE_TIME_STAMPS_ERROR:
+      return {
+        ...state,
+        loading: false,
+      }
+
+    case TABLE_ACTION.UPDATE_TABLE_TIME_STAMPS:
+      return {
+        ...state,
+        updatingTablePartitioning: true
+      }
+    case TABLE_ACTION.UPDATE_TABLE_TIME_STAMPS_SUCCESS:
+      return {
+        ...state,
+        updatingTablePartitioning: false,
+      }
+    case TABLE_ACTION.UPDATE_TABLE_TIME_STAMPS_ERROR:
+      return {
+        ...state,
+        updatingTablePartitioning: false,
+      }
+    case TABLE_ACTION.SET_UPDATED_TABLE_TIME_STAMPS:
+      return {
+        ...state,
+        tablePartitioning: action.data,
+        isUpdatedTablePartitioning: true,
       }
     default:
       return state;

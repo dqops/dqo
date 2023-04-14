@@ -48,7 +48,7 @@ public class SensorExecutionRunParametersObjectMother {
      */
     public static SensorExecutionRunParameters createEmptyBigQuery() {
         return new SensorExecutionRunParameters(BigQueryConnectionSpecObjectMother.create(),
-                null, null, null, null, null, null, null, null, null, null);
+                null, null, null,  null,null, null, null, null, null, null, null);
     }
 
     /**
@@ -72,7 +72,7 @@ public class SensorExecutionRunParametersObjectMother {
         SensorExecutionRunParametersFactory factory = getFactory();
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(
-                connectionWrapper.getSpec(), tableWrapper.getSpec(), null, checkSpec, checkType, timeSeriesConfigurationSpec, null, dialectSettings);
+                connectionWrapper.getSpec(), tableWrapper.getSpec(), null, checkSpec, null, checkType, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -82,28 +82,28 @@ public class SensorExecutionRunParametersObjectMother {
      * @param checkSpec Check specification.
      * @return Sensor execution run parameters.
      */
-     public static SensorExecutionRunParameters createForTableForAdHocCheck(
+     public static SensorExecutionRunParameters createForTableForProfilingCheck(
              SampleTableMetadata sampleTableMetadata,
              AbstractCheckSpec<?,?,?,?> checkSpec) {
          ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
          ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
          TableSpec tableSpec = sampleTableMetadata.getTableSpec();
          SensorExecutionRunParametersFactory factory = getFactory();
-         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForAdhoc();
+         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForProfiling();
 
          SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
-                checkSpec, CheckType.ADHOC, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, null, CheckType.PROFILING, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
     /**
-     * Creates a sensor run parameters object to run a checkpoint check on a given sample table.
+     * Creates a sensor run parameters object to run a recurring check on a given sample table.
      * @param sampleTableMetadata Sample table metadata.
      * @param checkSpec Check specification.
      * @param timeScale Time scale (daily, monthly).
      * @return Sensor execution run parameters.
      */
-    public static SensorExecutionRunParameters createForTableForCheckpointCheck(
+    public static SensorExecutionRunParameters createForTableForRecurringCheck(
             SampleTableMetadata sampleTableMetadata,
             AbstractCheckSpec<?,?,?,?> checkSpec,
             CheckTimeScale timeScale) {
@@ -112,10 +112,10 @@ public class SensorExecutionRunParametersObjectMother {
         TableSpec tableSpec = sampleTableMetadata.getTableSpec();
         SensorExecutionRunParametersFactory factory = getFactory();
         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec =
-                TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForCheckpoint(timeScale);
+                TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForRecurring(timeScale);
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
-                checkSpec, CheckType.CHECKPOINT, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, null, CheckType.RECURRING, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -138,9 +138,17 @@ public class SensorExecutionRunParametersObjectMother {
         SensorExecutionRunParametersFactory factory = getFactory();
         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec =
                 TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(timeScale, datePartitioningColumn);
+        TimeWindowFilterParameters userTimeWindowFilters = new TimeWindowFilterParameters();
+
+        if (timeScale == CheckTimeScale.daily) {
+            userTimeWindowFilters.setDailyPartitioningRecentDays(365 * 10 + 3);  // TODO: analyze the last 10 years of data
+        }
+        else if (timeScale == CheckTimeScale.monthly) {
+            userTimeWindowFilters.setMonthlyPartitioningRecentMonths(12 * 10);   // TODO: analyze the last 10 years of data
+        }
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
-                checkSpec, CheckType.PARTITIONED, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, null, CheckType.PARTITIONED, timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -170,18 +178,18 @@ public class SensorExecutionRunParametersObjectMother {
         SensorExecutionRunParametersFactory factory = getFactory();
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, checkType, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, null, checkType, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
     /**
-     * Creates a sensor run parameters object to run an adhoc check on a given sample table, when a column is selected.
+     * Creates a sensor run parameters object to run an profiling check on a given sample table, when a column is selected.
      * @param sampleTableMetadata Sample table metadata.
      * @param columnName Target column name.
      * @param checkSpec Check specification.
      * @return Sensor execution run parameters.
      */
-    public static SensorExecutionRunParameters createForTableColumnForAdHocCheck(
+    public static SensorExecutionRunParameters createForTableColumnForProfilingCheck(
             SampleTableMetadata sampleTableMetadata,
             String columnName,
             AbstractCheckSpec<?,?,?,?> checkSpec) {
@@ -190,22 +198,22 @@ public class SensorExecutionRunParametersObjectMother {
         TableSpec tableSpec = sampleTableMetadata.getTableSpec();
         ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
         SensorExecutionRunParametersFactory factory = getFactory();
-        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForAdhoc();
+        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForProfiling();
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, CheckType.ADHOC, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, null, CheckType.PROFILING, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
     /**
-     * Creates a sensor run parameters object to run a checkpoint check on a given sample table, when a column is selected.
+     * Creates a sensor run parameters object to run a recurring check on a given sample table, when a column is selected.
      * @param sampleTableMetadata Sample table metadata.
      * @param columnName Target column name.
      * @param checkSpec Check specification.
-     * @param checkTimeScale Checkpoint time scale (daily or monthly).
+     * @param checkTimeScale Recurring time scale (daily or monthly).
      * @return Sensor execution run parameters.
      */
-    public static SensorExecutionRunParameters createForTableColumnForCheckpointCheck(
+    public static SensorExecutionRunParameters createForTableColumnForRecurringCheck(
             SampleTableMetadata sampleTableMetadata,
             String columnName,
             AbstractCheckSpec<?,?,?,?> checkSpec,
@@ -215,10 +223,10 @@ public class SensorExecutionRunParametersObjectMother {
         TableSpec tableSpec = sampleTableMetadata.getTableSpec();
         ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
         SensorExecutionRunParametersFactory factory = getFactory();
-        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForCheckpoint(checkTimeScale);
+        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForRecurring(checkTimeScale);
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, CheckType.CHECKPOINT, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, null, CheckType.RECURRING, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -227,7 +235,7 @@ public class SensorExecutionRunParametersObjectMother {
      * @param sampleTableMetadata Sample table metadata.
      * @param columnName Target column name.
      * @param checkSpec Check specification.
-     * @param checkTimeScale Checkpoint time scale (daily or monthly).
+     * @param checkTimeScale Recurring time scale (daily or monthly).
      * @param timePartitioningColumn The name of a date partitioning column.
      * @return Sensor execution run parameters.
      */
@@ -244,9 +252,17 @@ public class SensorExecutionRunParametersObjectMother {
         SensorExecutionRunParametersFactory factory = getFactory();
         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
                 checkTimeScale, timePartitioningColumn);
+        TimeWindowFilterParameters userTimeWindowFilters = new TimeWindowFilterParameters();
+
+        if (checkTimeScale == CheckTimeScale.daily) {
+            userTimeWindowFilters.setDailyPartitioningRecentDays(365 * 10 + 3);  // TODO: analyze the last 10 years of data
+        }
+        else if (checkTimeScale == CheckTimeScale.monthly) {
+            userTimeWindowFilters.setMonthlyPartitioningRecentMonths(12 * 10);   // TODO: analyze the last 10 years of data
+        }
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, CheckType.PARTITIONED, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, null, CheckType.PARTITIONED, timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
         return sensorExecutionRunParameters;
     }
 }

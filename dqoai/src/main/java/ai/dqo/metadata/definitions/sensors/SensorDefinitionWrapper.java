@@ -39,4 +39,10 @@ public interface SensorDefinitionWrapper extends ElementWrapper<SensorDefinition
      * @return List of provider specific implementations.
      */
     ProviderSensorDefinitionList getProviderSensors();
+
+    /**
+     * Creates a deep clone of the object.
+     * @return Deep cloned object.
+     */
+    SensorDefinitionWrapper clone();
 }

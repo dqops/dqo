@@ -18,8 +18,8 @@ package ai.dqo.cli.commands.scheduler;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
-import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.scheduler.JobSchedulerService;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -32,7 +32,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "start", description = "Starts a background job scheduler. This operation should be called only from the shell mode. When the dqo is started as 'dqo scheduler start' from the operating system, it will stop immediately.")
+@CommandLine.Command(name = "start", header = "Starts a background job scheduler", description = "This operation should be called only from the shell mode. When the DQO is started as 'dqo scheduler start' from the operating system, it will stop immediately.")
 public class SchedulerStartCliCommand extends BaseCommand implements ICommand {
     private JobSchedulerService jobSchedulerService;
     private DqoSchedulerConfigurationProperties schedulerConfigurationProperties;

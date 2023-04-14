@@ -41,14 +41,14 @@ public class SnowflakeColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec
     private ColumnIntegrityForeignKeyNotMatchCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
-    private SampleTableMetadataForeign sampleTableMetadataForeign;
+    private SampleTableMetadata sampleTableMetadataForeign;
 
     @BeforeEach
     void setUp() {
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_right_table, ProviderType.snowflake);
-        this.sampleTableMetadataForeign = SampleTableMetadataForeignObjectMother.createSampleTableMetadataForeignForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.bigquery);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-        IntegrationTestSampleDataForeignObjectMother.ensureForeignTableExists(sampleTableMetadataForeign);
+        this.sampleTableMetadataForeign = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.snowflake);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadata);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadataForeign);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec();
         this.checkSpec = new ColumnIntegrityForeignKeyNotMatchCountCheckSpec();
@@ -56,11 +56,11 @@ public class SnowflakeColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -72,11 +72,11 @@ public class SnowflakeColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
         this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -88,11 +88,11 @@ public class SnowflakeColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
         this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -116,7 +116,7 @@ public class SnowflakeColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(1L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -132,6 +132,6 @@ public class SnowflakeColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(1L, resultTable.column(0).get(0));
     }
 }
