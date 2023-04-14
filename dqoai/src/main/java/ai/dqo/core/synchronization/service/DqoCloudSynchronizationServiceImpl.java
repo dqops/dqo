@@ -120,7 +120,8 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
             this.dqoCloudWarehouseService.refreshNativeTable(new TargetTableModifiedPartitions(dqoRoot));
         } else {
             if (targetTableModifiedPartitions.hasAnyChanges()) {
-                this.dqoCloudWarehouseService.refreshNativeTable(targetTableModifiedPartitions);
+//                this.dqoCloudWarehouseService.refreshNativeTable(targetTableModifiedPartitions);   // TODO: full refresh for the moment
+                this.dqoCloudWarehouseService.refreshNativeTable(new TargetTableModifiedPartitions(dqoRoot));
             }
         }
 
