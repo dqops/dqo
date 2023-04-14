@@ -94,16 +94,16 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValuesInRangeIntegersPercentCheckSpec dailyPartitionValuesInRangeIntegersPercent;
 
-    @JsonPropertyDescription("The check counts those values with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts values below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValueBelowMinValueCountCheckSpec dailyPartitionValueBelowMinValueCount;
 
-    @JsonPropertyDescription("The check percentage of those values with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check percentage values below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValueBelowMinValuePercentCheckSpec dailyPartitionValueBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts those values with value above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts values above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValueAboveMaxValueCountCheckSpec dailyPartitionValueAboveMaxValueCount;
 
-    @JsonPropertyDescription("The check percentage of those values with value above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check percentage values above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValueAboveMaxValuePercentCheckSpec dailyPartitionValueAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
@@ -139,10 +139,10 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnPopulationStddevInRangeCheckSpec dailyPartitionPopulationStddevInRange;
 
-    @JsonPropertyDescription("Verifies that the sample Variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnSampleVarianceInRangeCheckSpec dailyPartitionSampleVarianceInRange;
 
-    @JsonPropertyDescription("Verifies that the population Variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnPopulationVarianceInRangeCheckSpec dailyPartitionPopulationVarianceInRange;
 
     @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")

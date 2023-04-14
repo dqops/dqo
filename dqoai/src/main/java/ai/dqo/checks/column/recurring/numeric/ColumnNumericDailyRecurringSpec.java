@@ -97,13 +97,13 @@ public class ColumnNumericDailyRecurringSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("The check counts those values with value below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValueBelowMinValueCountCheckSpec dailyValueBelowMinValueCount;
 
-    @JsonPropertyDescription("The check percentage of those values with value below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check percentage values below those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValueBelowMinValuePercentCheckSpec dailyValueBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts those values with value above the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts values below those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValueAboveMaxValueCountCheckSpec dailyValueAboveMaxValueCount;
 
-    @JsonPropertyDescription("The check percentage of those values with value below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check percentage values above those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValueAboveMaxValuePercentCheckSpec dailyValueAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")

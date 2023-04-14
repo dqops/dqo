@@ -92,19 +92,19 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMeanLengthCheckSpec dailyPartitionStringMeanLength;
 
-    @JsonPropertyDescription("The check counts those strings with length below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts those strings with length below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthBelowMinLengthCountCheckSpec dailyPartitionStringLengthBelowMinLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts percentage those strings with length below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthBelowMinLengthPercentCheckSpec dailyPartitionStringLengthBelowMinLengthPercent;
 
-    @JsonPropertyDescription("The check counts those strings with length above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts those strings with length above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthAboveMaxLengthCountCheckSpec dailyPartitionStringLengthAboveMaxLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts percentage of those strings with length above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec dailyPartitionStringLengthAboveMaxLengthPercent;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length in the range provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthInRangePercentCheckSpec dailyPartitionStringLengthInRangePercent;
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
@@ -116,7 +116,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringWhitespaceCountCheckSpec dailyPartitionStringWhitespaceCount;
 
-    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringWhitespacePercentCheckSpec dailyPartitionStringWhitespacePercent;
 
     @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")

@@ -91,19 +91,19 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length.")
     private ColumnStringMeanLengthCheckSpec stringMeanLength;
 
-    @JsonPropertyDescription("The check counts those strings with length below the one provided by the user in a column.")
+    @JsonPropertyDescription("The check counts those strings with length below those provided by the user in the column.")
     private ColumnStringLengthBelowMinLengthCountCheckSpec stringLengthBelowMinLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length below the one provided by the user in a column.")
+    @JsonPropertyDescription("The check counts percentage those strings with length below those provided by the user in the column.")
     private ColumnStringLengthBelowMinLengthPercentCheckSpec stringLengthBelowMinLengthPercent;
 
-    @JsonPropertyDescription("The check counts those strings with length above the one provided by the user in a column. ")
+    @JsonPropertyDescription("The check counts those strings with length above those provided by the user in the column. ")
     private ColumnStringLengthAboveMaxLengthCountCheckSpec stringLengthAboveMaxLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. ")
+    @JsonPropertyDescription("The check counts percentage of those strings with length above those provided by the user in the column. ")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec stringLengthAboveMaxLengthPercent;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length in the range provided by the user in a column. ")
+    @JsonPropertyDescription("The check counts the percentage of those strings with length in the range provided by the user in the column. ")
     private ColumnStringLengthInRangePercentCheckSpec stringLengthInRangePercent;
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted count.")

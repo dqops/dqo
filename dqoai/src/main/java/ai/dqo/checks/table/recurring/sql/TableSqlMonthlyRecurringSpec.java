@@ -51,7 +51,7 @@ public class TableSqlMonthlyRecurringSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that a set number of rows failed a custom SQL condition (expression).")
     private TableSqlConditionFailedCountCheckSpec monthlySqlConditionFailedCountOnTable;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.")
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
     private TableSqlAggregateExprCheckSpec monthlySqlAggregateExprTable;
 
     /**

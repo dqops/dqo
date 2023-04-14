@@ -92,19 +92,19 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringMeanLengthCheckSpec dailyStringMeanLength;
 
-    @JsonPropertyDescription("The check counts those strings with length below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts those strings with length below those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringLengthBelowMinLengthCountCheckSpec dailyStringLengthBelowMinLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts percentage those strings with length below those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringLengthBelowMinLengthPercentCheckSpec dailyStringLengthBelowMinLengthPercent;
 
-    @JsonPropertyDescription("The check counts those strings with length above the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts those strings with length above those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringLengthAboveMaxLengthCountCheckSpec dailyStringLengthAboveMaxLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts percentage of those strings with length above those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec dailyStringLengthAboveMaxLengthPercent;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length in the range provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the percentage of those strings with length in the range provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringLengthInRangePercentCheckSpec dailyStringLengthInRangePercent;
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
@@ -116,7 +116,7 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringWhitespaceCountCheckSpec dailyStringWhitespaceCount;
 
-    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringWhitespacePercentCheckSpec dailyStringWhitespacePercent;
 
     @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
