@@ -25,7 +25,7 @@ const SourceTablesView = ({
   const [tables, setTables] = useState<TableRemoteBasicModel[]>([]);
   const dispatch = useActionDispatch();
 
-  useEffect(() => {
+  const fetchSourceTables = async () => {
     setLoading(true);
     setSelectedTables([]);
     SourceTableApi.getRemoteTables(connectionName, schemaName)
@@ -35,6 +35,10 @@ const SourceTablesView = ({
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    fetchSourceTables();
   }, [connectionName, schemaName]);
 
   const selectAll = () => {
@@ -45,20 +49,24 @@ const SourceTablesView = ({
     setSelectedTables([]);
   };
 
-  const importSelectedTables = () => {
+  const importSelectedTables = async () => {
     JobApiClient.importTables({
       connectionName,
       schemaName,
       tableNames: selectedTables
+    }).then(() => {
+      fetchSourceTables();
     });
     dispatch(toggleMenu(true));
   };
 
-  const importAllTables = () => {
+  const importAllTables = async () => {
     JobApiClient.importTables({
       connectionName,
       schemaName,
       tableNames: tables.map((item) => item.tableName ?? '')
+    }).then(() => {
+      fetchSourceTables();
     });
     dispatch(toggleMenu(true));
   };
