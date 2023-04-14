@@ -811,7 +811,7 @@ ___
 ## **monthly sql aggregate expr table**  
   
 **Check description**  
-Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.  
+Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

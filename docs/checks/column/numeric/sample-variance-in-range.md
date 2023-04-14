@@ -1211,7 +1211,7 @@ ___
 ## **daily partition sample variance in range**  
   
 **Check description**  
-Verifies that the sample Variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.  
+Verifies that the sample variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

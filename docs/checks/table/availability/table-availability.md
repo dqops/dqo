@@ -8,7 +8,7 @@ ___
 ## **table availability**  
   
 **Check description**  
-Verifies that the number of rows in a table does not exceed the minimum accepted count.  
+Verifies availability on table in database using simple row count.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
