@@ -117,6 +117,7 @@ const TableColumns = ({
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
                 <IconButton
+                  size="sm"
                   className="bg-teal-500"
                   onClick={() => onRemoveColumn(column)}
                 >

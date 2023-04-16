@@ -21,13 +21,15 @@ interface ISensorParametersFieldSettingsProps {
   onChange: (field: UIFieldModel) => void;
   disabled?: boolean;
   className?: string;
+  onSave?: () => void;
 }
 
 const FieldControl = ({
   field,
   onChange,
   disabled,
-  className
+  className,
+  onSave,
 }: ISensorParametersFieldSettingsProps) => {
   const type = field?.definition?.data_type;
   const label = field?.definition?.display_name;
@@ -170,6 +172,7 @@ const FieldControl = ({
           onChange={(value: string[]) =>
             handleChange({ string_list_value: value })
           }
+          onSave={onSave}
         />
       )}
       {field?.definition?.data_type ===

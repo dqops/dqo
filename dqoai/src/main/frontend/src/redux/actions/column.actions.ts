@@ -17,57 +17,25 @@
 import { Dispatch } from 'redux';
 
 import { ColumnApiClient } from '../../services/apiClient';
-import { COLUMN_ACTION } from '../types';
-import { AxiosResponse } from 'axios';
+import { SOURCE_ACTION } from '../types';
 import { ColumnBasicModel, CommentSpec, UICheckContainerModel } from '../../api';
 import { CheckTypes } from "../../shared/routes";
 
-export const getColumnsRequest = () => ({
-  type: COLUMN_ACTION.GET_COLUMNS
-});
-
-export const getColumnsSuccess = (data: ColumnBasicModel[]) => ({
-  type: COLUMN_ACTION.GET_COLUMNS_SUCCESS,
-  data
-});
-
-export const getColumnsFailed = (error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMNS_ERROR,
-  error
-});
-
-export const getAllColumns =
-  (connectionName: string, schemaName: string, columnName: string) =>
-  async (dispatch: Dispatch) => {
-    dispatch(getColumnsRequest());
-    try {
-      const res: AxiosResponse<ColumnBasicModel[]> =
-        await ColumnApiClient.getColumns(
-          connectionName,
-          schemaName,
-          columnName
-        );
-      dispatch(getColumnsSuccess(res.data));
-    } catch (err) {
-      dispatch(getColumnsFailed(err));
-    }
-  };
-
 export const getColumnBasicRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.GET_COLUMN_BASIC,
+  type: SOURCE_ACTION.GET_COLUMN_BASIC,
   checkType,
   activeTab,
 });
 
 export const getColumnBasicSuccess = (checkType: CheckTypes, activeTab: string, data: ColumnBasicModel) => ({
-  type: COLUMN_ACTION.GET_COLUMN_BASIC_SUCCESS,
+  type: SOURCE_ACTION.GET_COLUMN_BASIC_SUCCESS,
   checkType,
   activeTab,
   data
 });
 
 export const getColumnBasicFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_BASIC_ERROR,
+  type: SOURCE_ACTION.GET_COLUMN_BASIC_ERROR,
   checkType,
   activeTab,
   error
@@ -98,19 +66,19 @@ export const getColumnBasic =
   };
 
 export const updateColumnBasicRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_BASIC,
+  type: SOURCE_ACTION.UPDATE_COLUMN_BASIC,
   checkType,
   activeTab,
 });
 
 export const updateColumnBasicSuccess = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_BASIC_SUCCESS,
+  type: SOURCE_ACTION.UPDATE_COLUMN_BASIC_SUCCESS,
   checkType,
   activeTab,
 });
 
 export const updateColumnBasicFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_BASIC_ERROR,
+  type: SOURCE_ACTION.UPDATE_COLUMN_BASIC_ERROR,
   checkType,
   activeTab,
   error
@@ -142,20 +110,20 @@ export const updateColumnBasic =
   };
 
 export const getColumnCommentsRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.GET_COLUMN_COMMENTS,
+  type: SOURCE_ACTION.GET_COLUMN_COMMENTS,
   checkType,
   activeTab,
 });
 
 export const getColumnCommentsSuccess = (checkType: CheckTypes, activeTab: string, data: CommentSpec[]) => ({
-  type: COLUMN_ACTION.GET_COLUMN_COMMENTS_SUCCESS,
+  type: SOURCE_ACTION.GET_COLUMN_COMMENTS_SUCCESS,
   checkType,
   activeTab,
   data
 });
 
 export const getColumnCommentsFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_COMMENTS_ERROR,
+  type: SOURCE_ACTION.GET_COLUMN_COMMENTS_ERROR,
   checkType,
   activeTab,
   error
@@ -185,19 +153,19 @@ export const getColumnComments =
   };
 
 export const updateColumnCommentsRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_COMMENTS,
+  type: SOURCE_ACTION.UPDATE_COLUMN_COMMENTS,
   checkType,
   activeTab,
 });
 
 export const updateColumnCommentsSuccess = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_COMMENTS_SUCCESS,
+  type: SOURCE_ACTION.UPDATE_COLUMN_COMMENTS_SUCCESS,
   checkType,
   activeTab,
 });
 
 export const updateColumnCommentsFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_COMMENTS_ERROR,
+  type: SOURCE_ACTION.UPDATE_COLUMN_COMMENTS_ERROR,
   checkType,
   activeTab,
   error
@@ -230,20 +198,20 @@ export const updateColumnComments =
   };
 
 export const getColumnLabelsRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.GET_COLUMN_LABELS,
+  type: SOURCE_ACTION.GET_COLUMN_LABELS,
   checkType,
   activeTab,
 });
 
 export const getColumnLabelsSuccess = (checkType: CheckTypes, activeTab: string, data: string[]) => ({
-  type: COLUMN_ACTION.GET_COLUMN_LABELS_SUCCESS,
+  type: SOURCE_ACTION.GET_COLUMN_LABELS_SUCCESS,
   checkType,
   activeTab,
   data
 });
 
 export const getColumnLabelsFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_LABELS_ERROR,
+  type: SOURCE_ACTION.GET_COLUMN_LABELS_ERROR,
   checkType,
   activeTab,
   error
@@ -274,19 +242,19 @@ export const getColumnLabels =
   };
 
 export const updateColumnLabelsRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_LABELS,
+  type: SOURCE_ACTION.UPDATE_COLUMN_LABELS,
   checkType,
   activeTab,
 });
 
 export const updateColumnLabelsSuccess = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_LABELS_SUCCESS,
+  type: SOURCE_ACTION.UPDATE_COLUMN_LABELS_SUCCESS,
   checkType,
   activeTab,
 });
 
 export const updateColumnLabelsFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_LABELS_ERROR,
+  type: SOURCE_ACTION.UPDATE_COLUMN_LABELS_ERROR,
   checkType,
   activeTab,
   error
@@ -318,20 +286,20 @@ export const updateColumnLabels =
   };
 
 export const getColumnChecksUIRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.GET_COLUMN_CHECKS_UI,
+  type: SOURCE_ACTION.GET_COLUMN_CHECKS_UI,
   checkType,
   activeTab,
 });
 
 export const getColumnChecksUISuccess = (checkType: CheckTypes, activeTab: string, data: UICheckContainerModel) => ({
-  type: COLUMN_ACTION.GET_COLUMN_CHECKS_UI_SUCCESS,
+  type: SOURCE_ACTION.GET_COLUMN_CHECKS_UI_SUCCESS,
   checkType,
   activeTab,
   data
 });
 
 export const getColumnChecksUIFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_CHECKS_UI_ERROR,
+  type: SOURCE_ACTION.GET_COLUMN_CHECKS_UI_ERROR,
   checkType,
   activeTab,
   error
@@ -362,19 +330,19 @@ export const getColumnChecksUi =
   };
 
 export const updateColumnCheckUIRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_LABELS,
+  type: SOURCE_ACTION.UPDATE_COLUMN_LABELS,
   checkType,
   activeTab,
 });
 
 export const updateColumnCheckUISuccess = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_LABELS_SUCCESS,
+  type: SOURCE_ACTION.UPDATE_COLUMN_LABELS_SUCCESS,
   checkType,
   activeTab,
 });
 
 export const updateColumnCheckUIFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_LABELS_ERROR,
+  type: SOURCE_ACTION.UPDATE_COLUMN_LABELS_ERROR,
   checkType,
   activeTab,
   error
@@ -407,20 +375,20 @@ export const updateColumnCheckUI =
   };
 
 export const getColumnDailyRecurringRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.GET_COLUMN_DAILY_RECURRING,
+  type: SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING,
   checkType,
   activeTab,
 });
 
 export const getColumnDailyRecurringSuccess = (checkType: CheckTypes, activeTab: string, data: UICheckContainerModel) => ({
-  type: COLUMN_ACTION.GET_COLUMN_DAILY_RECURRING_SUCCESS,
+  type: SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_SUCCESS,
   checkType,
   activeTab,
   data
 });
 
 export const getColumnDailyRecurringFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_DAILY_RECURRING_ERROR,
+  type: SOURCE_ACTION.GET_COLUMN_DAILY_RECURRING_ERROR,
   checkType,
   activeTab,
   error
@@ -452,19 +420,19 @@ export const getColumnDailyRecurring =
   };
 
 export const updateColumnDailyRecurringRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_DAILY_RECURRING,
+  type: SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING,
   checkType,
   activeTab,
 });
 
 export const updateColumnDailyRecurringSuccess = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_DAILY_RECURRING_SUCCESS,
+  type: SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_SUCCESS,
   checkType,
   activeTab,
 });
 
 export const updateColumnDailyRecurringFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_DAILY_RECURRING_ERROR,
+  type: SOURCE_ACTION.UPDATE_COLUMN_DAILY_RECURRING_ERROR,
   checkType,
   activeTab,
   error
@@ -498,20 +466,20 @@ export const updateColumnDailyRecurring =
   };
 
 export const getColumnMonthlyRecurringRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.GET_COLUMN_MONTHLY_RECURRING,
+  type: SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING,
   checkType,
   activeTab,
 });
 
 export const getColumnMonthlyRecurringSuccess = (checkType: CheckTypes, activeTab: string, data: UICheckContainerModel) => ({
-  type: COLUMN_ACTION.GET_COLUMN_MONTHLY_RECURRING_SUCCESS,
+  type: SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_SUCCESS,
   checkType,
   activeTab,
   data
 });
 
 export const getColumnMonthlyRecurringFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_MONTHLY_RECURRING_ERROR,
+  type: SOURCE_ACTION.GET_COLUMN_MONTHLY_RECURRING_ERROR,
   checkType,
   activeTab,
   error
@@ -543,19 +511,19 @@ export const getColumnMonthlyRecurring =
   };
 
 export const updateColumnMonthlyRecurringRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING,
+  type: SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING,
   checkType,
   activeTab,
 });
 
 export const updateColumnMonthlyRecurringSuccess = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_SUCCESS,
+  type: SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_SUCCESS,
   checkType,
   activeTab,
 });
 
 export const updateColumnMonthlyRecurringFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_ERROR,
+  type: SOURCE_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_ERROR,
   checkType,
   activeTab,
   error
@@ -589,7 +557,7 @@ export const updateColumnMonthlyRecurring =
   };
 
 export const getColumnDailyPartitionedChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS,
+  type: SOURCE_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS,
   checkType,
   activeTab,
 });
@@ -599,14 +567,14 @@ export const getColumnDailyPartitionedChecksSuccess = (
   activeTab: string,
   data: UICheckContainerModel
 ) => ({
-  type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS_SUCCESS,
+  type: SOURCE_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS_SUCCESS,
   checkType,
   activeTab,
   data
 });
 
 export const getColumnDailyPartitionedChecksFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS_ERROR,
+  type: SOURCE_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS_ERROR,
   checkType,
   activeTab,
   error
@@ -638,19 +606,19 @@ export const getColumnDailyPartitionedChecks =
   };
 
 export const updateColumnDailyPartitionedChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS,
+  type: SOURCE_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS,
   checkType,
   activeTab,
 });
 
 export const updateColumnDailyPartitionedChecksSuccess = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS_SUCCESS,
+  type: SOURCE_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS_SUCCESS,
   checkType,
   activeTab,
 });
 
 export const updateColumnDailyPartitionedChecksFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS_ERROR,
+  type: SOURCE_ACTION.UPDATE_COLUMN_PARTITIONED_DAILY_CHECKS_ERROR,
   checkType,
   activeTab,
   error
@@ -684,7 +652,7 @@ export const updateColumnDailyPartitionedChecks =
   };
 
 export const getColumnMonthlyPartitionedChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS,
+  type: SOURCE_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS,
   checkType,
   activeTab,
 });
@@ -694,14 +662,14 @@ export const getColumnMonthlyPartitionedChecksSuccess = (
   activeTab: string,
   data: UICheckContainerModel
 ) => ({
-  type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS_SUCCESS,
+  type: SOURCE_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS_SUCCESS,
   checkType,
   activeTab,
   data
 });
 
 export const getColumnMonthlyPartitionedChecksFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS_ERROR,
+  type: SOURCE_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS_ERROR,
   checkType,
   activeTab,
   error
@@ -733,19 +701,19 @@ export const getColumnMonthlyPartitionedChecks =
   };
 
 export const updateColumnMonthlyPartitionedChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS,
+  type: SOURCE_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS,
   checkType,
   activeTab
 });
 
 export const updateColumnMonthlyPartitionedChecksSuccess = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS_SUCCESS,
+  type: SOURCE_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS_SUCCESS,
   checkType,
   activeTab
 });
 
 export const updateColumnMonthlyPartitionedChecksFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS_ERROR,
+  type: SOURCE_ACTION.UPDATE_COLUMN_PARTITIONED_MONTHLY_CHECKS_ERROR,
   checkType,
   activeTab,
   error
@@ -779,49 +747,49 @@ export const updateColumnMonthlyPartitionedChecks =
   };
 
 export const setUpdatedColumnBasic = (checkType: CheckTypes, activeTab: string, column?: ColumnBasicModel) => ({
-  type: COLUMN_ACTION.SET_UPDATED_COLUMN_BASIC,
+  type: SOURCE_ACTION.SET_UPDATED_COLUMN_BASIC,
   checkType,
   activeTab,
   data: column
 });
 
 export const setUpdatedComments = (checkType: CheckTypes, activeTab: string, comments?: CommentSpec[]) => ({
-  type: COLUMN_ACTION.SET_UPDATED_COMMENTS,
+  type: SOURCE_ACTION.SET_UPDATED_COMMENTS,
   checkType,
   activeTab,
   data: comments
 });
 
 export const setIsUpdatedComments = (checkType: CheckTypes, activeTab: string, isUpdated?: boolean) => ({
-  type: COLUMN_ACTION.SET_IS_UPDATED_COMMENTS,
+  type: SOURCE_ACTION.SET_IS_UPDATED_COMMENTS,
   checkType,
   activeTab,
   data: isUpdated
 });
 
 export const setUpdatedLabels = (checkType: CheckTypes, activeTab: string, labels?: string[]) => ({
-  type: COLUMN_ACTION.SET_UPDATED_LABELS,
+  type: SOURCE_ACTION.SET_UPDATED_LABELS,
   checkType,
   activeTab,
   data: labels
 });
 
 export const setUpdatedChecksUi = (checkType: CheckTypes, activeTab: string, checksUI?: UICheckContainerModel) => ({
-  type: COLUMN_ACTION.SET_UPDATED_CHECKS_UI,
+  type: SOURCE_ACTION.SET_UPDATED_CHECKS_UI,
   checkType,
   activeTab,
   data: checksUI
 });
 
 export const setUpdatedDailyRecurring = (checkType: CheckTypes, activeTab: string, checksUI?: UICheckContainerModel) => ({
-  type: COLUMN_ACTION.SET_COLUMN_DAILY_RECURRING,
+  type: SOURCE_ACTION.SET_COLUMN_DAILY_RECURRING,
   checkType,
   activeTab,
   data: checksUI
 });
 
 export const setUpdatedMonthlyRecurring = (checkType: CheckTypes, activeTab: string, checksUI?: UICheckContainerModel) => ({
-  type: COLUMN_ACTION.SET_COLUMN_MONTHLY_RECURRING,
+  type: SOURCE_ACTION.SET_COLUMN_MONTHLY_RECURRING,
   checkType,
   activeTab,
   data: checksUI
@@ -832,7 +800,7 @@ export const setUpdatedDailyPartitionedChecks = (
   activeTab: string,
   checksUI?: UICheckContainerModel
 ) => ({
-  type: COLUMN_ACTION.SET_COLUMN_PARTITIONED_DAILY_CHECKS,
+  type: SOURCE_ACTION.SET_COLUMN_PARTITIONED_DAILY_CHECKS,
   checkType,
   activeTab,
   data: checksUI
@@ -843,14 +811,14 @@ export const setUpdatedMonthlyPartitionedChecks = (
   activeTab: string,
   checksUI?: UICheckContainerModel
 ) => ({
-  type: COLUMN_ACTION.SET_COLUMN_PARTITIONED_MONTHLY_CHECKS,
+  type: SOURCE_ACTION.SET_COLUMN_PARTITIONED_MONTHLY_CHECKS,
   checkType,
   activeTab,
   data: checksUI
 });
 
 export const getColumnProfilingChecksUIFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER,
+  type: SOURCE_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER,
   checkType,
   activeTab,
 });
@@ -860,14 +828,14 @@ export const getColumnProfilingChecksUIFilterSuccess = (
   activeTab: string,
   data: UICheckContainerModel
 ) => ({
-  type: COLUMN_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER_SUCCESS,
+  type: SOURCE_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER_SUCCESS,
   checkType,
   activeTab,
   data
 });
 
 export const getColumnProfilingChecksUIFilterFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER_ERROR,
+  type: SOURCE_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER_ERROR,
   checkType,
   activeTab,
   error
@@ -893,7 +861,7 @@ export const getColumnProfilingChecksUIFilter =
     };
 
 export const getColumnRecurringUIFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.GET_COLUMN_RECURRING_UI_FILTER,
+  type: SOURCE_ACTION.GET_COLUMN_RECURRING_UI_FILTER,
   checkType,
   activeTab,
 });
@@ -903,14 +871,14 @@ export const getColumnRecurringUIFilterSuccess = (
   activeTab: string,
   data: UICheckContainerModel
 ) => ({
-  type: COLUMN_ACTION.GET_COLUMN_RECURRING_UI_FILTER_SUCCESS,
+  type: SOURCE_ACTION.GET_COLUMN_RECURRING_UI_FILTER_SUCCESS,
   checkType,
   activeTab,
   data
 });
 
 export const getColumnRecurringUIFilterFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_RECURRING_UI_FILTER_ERROR,
+  type: SOURCE_ACTION.GET_COLUMN_RECURRING_UI_FILTER_ERROR,
   checkType,
   activeTab,
   error
@@ -937,7 +905,7 @@ export const getColumnRecurringUIFilter =
     };
 
 export const getColumnPartitionedChecksUIFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
-  type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_CHECKS_UI_FILTER,
+  type: SOURCE_ACTION.GET_COLUMN_PARTITIONED_CHECKS_UI_FILTER,
   checkType,
   activeTab,
 });
@@ -947,14 +915,14 @@ export const getColumnPartitionedChecksUIFilterSuccess = (
   activeTab: string,
   data: UICheckContainerModel
 ) => ({
-  type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_CHECKS_UI_FILTER_SUCCESS,
+  type: SOURCE_ACTION.GET_COLUMN_PARTITIONED_CHECKS_UI_FILTER_SUCCESS,
   checkType,
   activeTab,
   data
 });
 
 export const getColumnPartitionedChecksUIFilterFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_CHECKS_UI_FILTER_ERROR,
+  type: SOURCE_ACTION.GET_COLUMN_PARTITIONED_CHECKS_UI_FILTER_ERROR,
   checkType,
   activeTab,
   error
@@ -981,20 +949,20 @@ export const getColumnPartitionedChecksUIFilter =
     };
 
 export const setColumnUpdatedCheckUiFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
-  type: COLUMN_ACTION.SET_UPDATED_CHECKS_UI_FILTER,
+  type: SOURCE_ACTION.SET_UPDATED_CHECKS_UI_FILTER,
   checkType,
   activeTab,
   data: ui
 });
 
 export const setColumnUpdatedRecurringUIFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
-  type: COLUMN_ACTION.SET_UPDATED_RECURRING_UI_FILTER,
+  type: SOURCE_ACTION.SET_UPDATED_RECURRING_UI_FILTER,
   checkType,
   activeTab,
   data: ui
 });
 export const setColumnUpdatedPartitionedChecksUiFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
-  type: COLUMN_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER,
+  type: SOURCE_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER,
   checkType,
   activeTab,
   data: ui

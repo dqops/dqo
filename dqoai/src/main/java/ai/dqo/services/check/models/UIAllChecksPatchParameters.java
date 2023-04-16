@@ -29,26 +29,32 @@ import java.util.Map;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIAllChecksPatchParameters", description = "Parameter object for creating pruned patch trees of all fitting checks.")
+@ApiModel(value = "UIAllChecksPatchParameters", description = "Parameter object for creating pruned patch trees of all checks that fit the filters.")
 public class UIAllChecksPatchParameters {
     @JsonPropertyDescription("Filters addressing basic tree search parameters.")
     @NotNull
     CheckSearchFilters checkSearchFilters;
 
-    @JsonPropertyDescription("Disable warning level rule. If null, ignored.")
-    Boolean disableWarningLevel;
+    @JsonPropertyDescription("Override existing configurations if they're present. If false, apply updates only to the fields for which no configuration exists.")
+    boolean overrideConflicts;
+
+    @JsonPropertyDescription("Disable warning level rule.")
+    boolean disableWarningLevel;
+
+    @JsonPropertyDescription("Disable error level rule.")
+    boolean disableErrorLevel;
+
+    @JsonPropertyDescription("Disable fatal level rule.")
+    boolean disableFatalLevel;
+
+    @JsonPropertyDescription("Configurations for sensor parameters, example of an entry: \"expected_value\" -> 30, etc.")
+    Map<String, String> sensorOptions;
 
     @JsonPropertyDescription("Options for warning level rules on checks, example of an entry: \"min_count\" -> 20, etc. If null, warning level will be ignored.")
     Map<String, String> warningLevelOptions;
 
-    @JsonPropertyDescription("Disable error level rule. If null, ignored.")
-    Boolean disableErrorLevel;
-
     @JsonPropertyDescription("Options for error level rules on checks, example of an entry: \"min_count\" -> 10, etc. If null, error level will be ignored.")
     Map<String, String> errorLevelOptions;
-
-    @JsonPropertyDescription("Disable fatal level rule. If null, ignored.")
-    Boolean disableFatalLevel;
 
     @JsonPropertyDescription("Options for fatal level rules on checks, example of an entry: \"min_count\" -> 5, etc. If null, fatal level will be ignored.")
     Map<String, String> fatalLevelOptions;

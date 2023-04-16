@@ -4,6 +4,16 @@ kind: dashboards
 spec:
   - folder_name: Governance
     dashboards:
+      - dashboard_name: Total DQ KPIs per quality dimension
+        url: >-
+          https://lookerstudio.google.com/embed/reporting/1e2459aa-adb2-40ff-b9b1-d1eddcb0afad/page/c5B8C
+        width: 1400
+        height: 1300
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: 'all'
+          ds0.p_quality_dimension: 'all'
+          ds0.p_check_category: 'all'
       - dashboard_name: Total DQ KPIs per check type
         url: >-
           https://lookerstudio.google.com/embed/reporting/2e5a8add-14da-40f1-8b52-f5e469a4fda9/page/c5B8C
@@ -174,7 +184,7 @@ spec:
                   ds0.p_check_category: bool
       - folder_name: DQ KPIs profiling
         dashboards:
-          - dashboard_name: DQ KPIs per check type
+          - dashboard_name: DQ KPIs profiling
             url: >-
               https://lookerstudio.google.com/embed/reporting/2e5a8add-14da-40f1-8b52-f5e469a4fda9/page/c5B8C
             width: 1400
@@ -184,16 +194,7 @@ spec:
               ds0.p_check_type: profiling
               ds0.p_quality_dimension: 'all'
               ds0.p_check_category: 'all'
-          - dashboard_name: DQ KPIs per quality dimension
-            url: >-
-              https://lookerstudio.google.com/embed/reporting/1e2459aa-adb2-40ff-b9b1-d1eddcb0afad/page/c5B8C
-            width: 1400
-            height: 1300
-            dqo_cloud_credentials: true
-            parameters:
-              ds0.p_check_type: profiling
-              ds0.p_quality_dimension: 'all'
-              ds0.p_check_category: 'all'
+
         folders:
           - folder_name: DQ KPIs profiling per quality dimension
             dashboards:
@@ -1282,143 +1283,6 @@ spec:
                   ds0.p_check_type: 'all'
                   ds0.p_quality_dimension: 'all'
                   ds0.p_check_category: bool
-          - folder_name: Issues history
-            dashboards:
-              - dashboard_name: Total issues history
-                url: >-
-                  https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-                width: 1400
-                height: 2500
-                dqo_cloud_credentials: true
-                parameters:
-                  ds0.p_check_type: 'all'
-                  ds0.p_quality_dimension: 'all'
-                  ds0.p_check_category: 'all'
-            folders:
-              - folder_name: Total issues history per quality dimension
-                dashboards:
-                  - dashboard_name: Issues history validity
-                    url: >-
-                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-                    width: 1400
-                    height: 2500
-                    dqo_cloud_credentials: true
-                    parameters:
-                      ds0.p_check_type: 'all'
-                      ds0.p_quality_dimension: Validity
-                      ds0.p_check_category: 'all'
-                  - dashboard_name: Issues history reasonableness
-                    url: >-
-                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-                    width: 1400
-                    height: 2500
-                    dqo_cloud_credentials: true
-                    parameters:
-                      ds0.p_check_type: 'all'
-                      ds0.p_quality_dimension: Reasonableness
-                      ds0.p_check_category: 'all'
-                  - dashboard_name: Issues history completeness
-                    url: >-
-                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-                    width: 1400
-                    height: 2500
-                    dqo_cloud_credentials: true
-                    parameters:
-                      ds0.p_check_type: 'all'
-                      ds0.p_quality_dimension: Completeness
-                      ds0.p_check_category: 'all'
-              - folder_name: Total issues history per category
-                dashboards:
-                  - dashboard_name: Issues history - uniqueness
-                    url: >-
-                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-                    width: 1400
-                    height: 2500
-                    dqo_cloud_credentials: true
-                    parameters:
-                      ds0.p_check_type: 'all'
-                      ds0.p_quality_dimension: 'all'
-                      ds0.p_check_category: uniqueness
-                  - dashboard_name: Issues history - timeliness
-                    url: >-
-                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-                    width: 1400
-                    height: 2500
-                    dqo_cloud_credentials: true
-                    parameters:
-                      ds0.p_check_type: 'all'
-                      ds0.p_quality_dimension: 'all'
-                      ds0.p_check_category: timeliness
-                  - dashboard_name: Issues history - strings
-                    url: >-
-                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-                    width: 1400
-                    height: 2500
-                    dqo_cloud_credentials: true
-                    parameters:
-                      ds0.p_check_type: 'all'
-                      ds0.p_quality_dimension: 'all'
-                      ds0.p_check_category: strings
-                  - dashboard_name: Issues history - standard
-                    url: >-
-                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-                    width: 1400
-                    height: 2500
-                    dqo_cloud_credentials: true
-                    parameters:
-                      ds0.p_check_type: 'all'
-                      ds0.p_quality_dimension: 'all'
-                      ds0.p_check_category: standard
-                  - dashboard_name: Issues history - pii
-                    url: >-
-                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-                    width: 1400
-                    height: 2500
-                    dqo_cloud_credentials: true
-                    parameters:
-                      ds0.p_check_type: 'all'
-                      ds0.p_quality_dimension: 'all'
-                      ds0.p_check_category: pii
-                  - dashboard_name: Issues history - numeric
-                    url: >-
-                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-                    width: 1400
-                    height: 2500
-                    dqo_cloud_credentials: true
-                    parameters:
-                      ds0.p_check_type: 'all'
-                      ds0.p_quality_dimension: 'all'
-                      ds0.p_check_category: numeric
-                  - dashboard_name: Issues history - nulls
-                    url: >-
-                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-                    width: 1400
-                    height: 2500
-                    dqo_cloud_credentials: true
-                    parameters:
-                      ds0.p_check_type: 'all'
-                      ds0.p_quality_dimension: 'all'
-                      ds0.p_check_category: nulls
-                  - dashboard_name: Issues history - datetime
-                    url: >-
-                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-                    width: 1400
-                    height: 2500
-                    dqo_cloud_credentials: true
-                    parameters:
-                      ds0.p_check_type: 'all'
-                      ds0.p_quality_dimension: 'all'
-                      ds0.p_check_category: datetime
-                  - dashboard_name: Issues history - bool
-                    url: >-
-                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
-                    width: 1400
-                    height: 2500
-                    dqo_cloud_credentials: true
-                    parameters:
-                      ds0.p_check_type: 'all'
-                      ds0.p_quality_dimension: 'all'
-                      ds0.p_check_category: bool
           - folder_name: Issues per check
             dashboards:
               - dashboard_name: Total issues per check
@@ -3395,6 +3259,8 @@ spec:
                 dqo_cloud_credentials: true
                 parameters:
                   ds0.p_check_type: recurring
+                  ds0.p_quality_dimension: 'all'
+                  ds0.p_check_category: 'all'
   - folder_name: Technical
     folders:
       - folder_name: Total technical
@@ -3405,6 +3271,10 @@ spec:
             width: 1400
             height: 1400
             dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: 'all'
+              ds0.p_quality_dimension: 'all'
+              ds0.p_check_category: 'all'
           - dashboard_name: Total daily tests per check
             url: >-
               https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
@@ -3412,7 +3282,9 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type:
+              ds0.p_check_type: 'all'
+              ds0.p_quality_dimension: 'all'
+              ds0.p_check_category: 'all'
           - dashboard_name: Total daily tests per data stream, table
             url: >-
               https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
@@ -3420,7 +3292,9 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type:
+              ds0.p_check_type: 'all'
+              ds0.p_quality_dimension: 'all'
+              ds0.p_check_category: 'all'
           - dashboard_name: Total daily tests per data stream, check
             url: >-
               https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
@@ -3428,7 +3302,9 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type:
+              ds0.p_check_type: 'all'
+              ds0.p_quality_dimension: 'all'
+              ds0.p_check_category: 'all'
           - dashboard_name: Total scoreboard per table
             url: >-
               https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
@@ -3436,43 +3312,79 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type:
+              ds0.p_check_type: 'all'
+              ds0.p_quality_dimension: 'all'
+              ds0.p_check_category: 'all'
           - dashboard_name: Total scoreboard per check
             url: >-
               https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
             width: 1400
             height: 1400
             dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: 'all'
+              ds0.p_quality_dimension: 'all'
+              ds0.p_check_category: 'all'
+          - dashboard_name: Total scoreboard per data stream, table
+            url: >-
+              https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
+            width: 1400
+            height: 1400
+            dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: 'all'
+              ds0.p_quality_dimension: 'all'
+              ds0.p_check_category: 'all'
           - dashboard_name: Total scoreboard per data stream, check
             url: >-
               https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
             width: 1400
             height: 1400
             dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: 'all'
+              ds0.p_quality_dimension: 'all'
+              ds0.p_check_category: 'all'
           - dashboard_name: Total daily KPI per table
             url: >-
               https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
             width: 1400
             height: 1400
             dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: 'all'
+              ds0.p_quality_dimension: 'all'
+              ds0.p_check_category: 'all'
           - dashboard_name: Total daily KPI per check
             url: >-
               https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
             width: 1400
             height: 1400
             dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: 'all'
+              ds0.p_quality_dimension: 'all'
+              ds0.p_check_category: 'all'
           - dashboard_name: Total daily KPI per data stream, table
             url: >-
               https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
             width: 1400
             height: 1400
             dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: 'all'
+              ds0.p_quality_dimension: 'all'
+              ds0.p_check_category: 'all'
           - dashboard_name: Total daily KPI per data stream, check
             url: >-
               https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
             width: 1400
             height: 1400
             dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: 'all'
+              ds0.p_quality_dimension: 'all'
+              ds0.p_check_category: 'all'
         folders:
           - folder_name: Daily tests per table
             folders:
@@ -4934,6 +4846,10 @@ spec:
             width: 1400
             height: 1400
             dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: profiling
+              ds0.p_quality_dimension: 'all'
+              ds0.p_check_category: 'all'
           - dashboard_name: Scoreboard per data stream, table for profiling
             url: >-
               https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c

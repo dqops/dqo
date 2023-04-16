@@ -20,6 +20,7 @@ import { CheckRunRecurringScheduleGroup } from "../../shared/enums/scheduling.en
 
 export interface INestTab {
   url: string;
+  value: string;
   state: Record<string, unknown>;
   label: string;
 }
@@ -89,7 +90,7 @@ const setActiveTabState = (state: ISourceState, action: Action, data: Record<str
 const connectionReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case SOURCE_ACTION.ADD_FIRST_LEVEL_TAB: {
-      const existing = state[action.checkType].tabs.find((item) => item.url === action.data.url);
+      const existing = state[action.checkType].tabs.find((item) => item.value === action.data.value);
 
       if (existing) {
         return {
@@ -97,6 +98,10 @@ const connectionReducer = (state = initialState, action: Action) => {
           [action.checkType]: {
             ...state[action.checkType],
             activeTab: action.data.url,
+            tabs: state[action.checkType].tabs.map((item) => item.value === action.data.value ? ({
+              ...item,
+              ...action.data,
+            }) : item)
           }
         };
       }
@@ -424,7 +429,7 @@ const connectionReducer = (state = initialState, action: Action) => {
     case SOURCE_ACTION.GET_TABLE_COMMENTS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        comments: action.data,
+        updatedComments: action.data,
         isUpdatedComments: false,
         error: null
       });
@@ -833,7 +838,7 @@ const connectionReducer = (state = initialState, action: Action) => {
     case SOURCE_ACTION.GET_COLUMN_COMMENTS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        comments: action.data,
+        updatedComments: action.data,
         isUpdatedComments: false,
         error: null
       });

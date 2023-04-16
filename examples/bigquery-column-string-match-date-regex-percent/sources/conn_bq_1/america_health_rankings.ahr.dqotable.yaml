@@ -2,11 +2,9 @@
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: america_health_rankings
-    table_name: ahr
-  timestamp_columns:
-    partitioned_checks_timestamp_source: event_timestamp
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
   columns:
     edition:
       type_snapshot:
@@ -48,19 +46,20 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-      checks:
+      profiling_checks:
         strings:
           string_match_date_regex_percent:
             comments:
-              - date: 2023-03-03T11:09:57.430+00:00
+              - date: 2023-04-14T09:09:15.387+00:00
                 comment_by: user
                 comment: In this example values in "source_date" column are verified
-                  whether the percentage of values in the indicated format (YYYY-MM-DD) reaches the indicated thresholds.
+                  whether the percentage of values in the indicated format (YYYY-MM-DD)
+                  reaches the indicated thresholds.
             parameters:
               date_formats: YYYY-MM-DD
-            error:
-              min_percent: 98.0
             warning:
               min_percent: 99.0
+            error:
+              min_percent: 98.0
             fatal:
               min_percent: 95.0

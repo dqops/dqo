@@ -19,15 +19,8 @@ const TableLabelsView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
-    if (
-      !labels ||
-      tableBasic?.connection_name !== connectionName ||
-      tableBasic?.target?.schema_name !== schemaName ||
-      tableBasic?.target?.table_name !== tableName
-    ) {
-      dispatch(getTableLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
-    }
-  }, [connectionName, schemaName, tableName, tableBasic]);
+    dispatch(getTableLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     await dispatch(

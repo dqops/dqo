@@ -404,7 +404,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             if (!this.localUserHomeFileStorageService.deleteFile(
                     new HomeFilePath(
                             new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new)),
-                            ".%s.crc".formatted(homeRelativePath.getFileName().toString())
+                            String.format(".%s.crc", homeRelativePath.getFileName().toString())
                     )
             )) {
                 // Deleting .crc file failed.
