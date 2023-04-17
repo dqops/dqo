@@ -161,6 +161,12 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         }
         sortedNormalizedTable.addColumns(tableStageColumn);
 
+        IntColumn tablePriorityColumn = IntColumn.create(SensorReadoutsColumnNames.TABLE_PRIORITY_COLUMN_NAME, resultsRowCount);
+        if (sensorRunParameters.getTable().getPriority() != null) {
+            tablePriorityColumn.setMissingTo(sensorRunParameters.getTable().getPriority());
+        }
+        sortedNormalizedTable.addColumns(tablePriorityColumn);
+
         LongColumn columnHashColumn = LongColumn.create(SensorReadoutsColumnNames.COLUMN_HASH_COLUMN_NAME, resultsRowCount);
         Long columnHash = null;
         if (sensorRunParameters.getColumn() != null) {

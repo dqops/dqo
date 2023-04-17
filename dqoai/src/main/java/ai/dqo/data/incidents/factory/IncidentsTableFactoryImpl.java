@@ -33,7 +33,7 @@ public class IncidentsTableFactoryImpl implements IncidentsTableFactory {
         Table table = Table.create(tableName);
         table.addColumns(
                 StringColumn.create(IncidentsColumnNames.ID_COLUMN_NAME),
-                StringColumn.create(IncidentsColumnNames.TARGET_HASH_COLUMN_NAME),
+                LongColumn.create(IncidentsColumnNames.TARGET_HASH_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME),

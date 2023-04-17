@@ -107,6 +107,11 @@ public class SensorReadoutsColumnNames {
     public static final String TABLE_STAGE_COLUMN_NAME = CommonColumnNames.TABLE_STAGE_COLUMN_NAME;
 
     /**
+     * Column name for a table priority.
+     */
+    public static final String TABLE_PRIORITY_COLUMN_NAME = CommonColumnNames.TABLE_PRIORITY_COLUMN_NAME;
+
+    /**
      * Column name for a column hash.
      */
     public static final String COLUMN_HASH_COLUMN_NAME = CommonColumnNames.COLUMN_HASH_COLUMN_NAME;

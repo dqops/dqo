@@ -86,6 +86,11 @@ public final class CommonColumnNames {
     public static final String TABLE_STAGE_COLUMN_NAME = "table_stage";
 
     /**
+     * Column name for a table priority.
+     */
+    public static final String TABLE_PRIORITY_COLUMN_NAME = "table_priority";
+
+    /**
      * Column name for a column hash.
      */
     public static final String COLUMN_HASH_COLUMN_NAME = "column_hash";

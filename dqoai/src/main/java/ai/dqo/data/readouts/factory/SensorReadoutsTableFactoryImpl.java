@@ -56,6 +56,7 @@ public class SensorReadoutsTableFactoryImpl implements SensorReadoutsTableFactor
                 StringColumn.create(SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME),
                 StringColumn.create(SensorReadoutsColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME),
                 StringColumn.create(SensorReadoutsColumnNames.TABLE_STAGE_COLUMN_NAME),
+                IntColumn.create(SensorReadoutsColumnNames.TABLE_PRIORITY_COLUMN_NAME),
                 LongColumn.create(SensorReadoutsColumnNames.COLUMN_HASH_COLUMN_NAME),
                 StringColumn.create(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME),
                 StringColumn.create(SensorReadoutsColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME),

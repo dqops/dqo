@@ -27,6 +27,7 @@ import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.*;
+import ai.dqo.metadata.incidents.IncidentGroupingSpec;
 import ai.dqo.metadata.notifications.NotificationSettingsSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
@@ -44,7 +45,7 @@ import picocli.CommandLine;
 import java.util.Objects;
 
 /**
- * Connection specification.
+ * Data source (connection) specification.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -62,6 +63,7 @@ public class ConnectionSpec extends AbstractSpec {
             put("sqlserver", o -> o.sqlserver);
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
+            put("incident_grouping", o -> o.incidentGrouping);
             put("notifications", o -> o.notifications);
         }
     };
@@ -103,6 +105,12 @@ public class ConnectionSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private RecurringSchedulesSpec schedules;
+
+    @JsonPropertyDescription("Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.")
+    @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private IncidentGroupingSpec incidentGrouping = new IncidentGroupingSpec();
 
     @JsonPropertyDescription("Configuration of the notifications settings. Notifications are published when new data quality issues are detected.")
     @ToString.Exclude
@@ -277,6 +285,24 @@ public class ConnectionSpec extends AbstractSpec {
     }
 
     /**
+     * Returns the configuration of grouping failed data quality checks into data quality incidents.
+     * @return Grouping of failed data quality checks into incidents.
+     */
+    public IncidentGroupingSpec getIncidentGrouping() {
+        return incidentGrouping;
+    }
+
+    /**
+     * Sets the configuration of data quality issued into incidents.
+     * @param incidentGrouping New configuration of data quality issue grouping into incidents.
+     */
+    public void setIncidentGrouping(IncidentGroupingSpec incidentGrouping) {
+        setDirtyIf(!Objects.equals(this.incidentGrouping, incidentGrouping));
+        this.incidentGrouping = incidentGrouping;
+        propagateHierarchyIdToField(incidentGrouping, "incident_grouping");
+    }
+
+    /**
      * Returns the notification settings.
      * @return Notification settings.
      */
@@ -406,6 +432,9 @@ public class ConnectionSpec extends AbstractSpec {
             if (cloned.notifications != null) {
                 cloned.notifications = cloned.notifications.expandAndTrim(secretValueProvider);
             }
+            if (cloned.incidentGrouping != null) {
+                cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider);
+            }
             cloned.comments = null;
             cloned.schedules = null;
             return cloned;
@@ -427,6 +456,7 @@ public class ConnectionSpec extends AbstractSpec {
             cloned.comments = null;
             cloned.schedules = null;
             cloned.notifications = null;
+            cloned.incidentGrouping = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

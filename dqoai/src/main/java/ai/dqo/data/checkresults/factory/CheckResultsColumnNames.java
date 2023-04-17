@@ -27,6 +27,11 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
     public static final String SEVERITY_COLUMN_NAME = "severity";
 
     /**
+     * Column name for a matching data quality incident hash. The value is used to map a failed data quality check to an incident.
+     */
+    public static final String INCIDENT_HASH_COLUMN_NAME = "incident_hash";
+
+    /**
      * Column name for a boolean column that identifies data quality rule results that should be counted in the data quality KPI.
      */
     public static final String INCLUDE_IN_KPI_COLUMN_NAME = "include_in_kpi";

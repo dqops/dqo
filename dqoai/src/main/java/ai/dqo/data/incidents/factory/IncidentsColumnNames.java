@@ -22,7 +22,7 @@ import ai.dqo.data.normalization.CommonColumnNames;
  */
 public final class IncidentsColumnNames {
     /**
-     * Column name for a incident id (primary key), it is a UUID created from a hash of target affected by the incident (target_hash) and a time_period. This value identifies a single row.
+     * Column name for a incident id (primary key), it is a UUID created from a hash of target affected by the incident (target_hash) and a first_seen_utc. This value identifies a single row.
      */
     public static final String ID_COLUMN_NAME = CommonColumnNames.ID_COLUMN_NAME;
 
