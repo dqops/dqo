@@ -19,6 +19,7 @@ package ai.dqo.core.scheduler.quartz;
 import ai.dqo.core.scheduler.JobSchedulerException;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
+import com.google.common.base.Strings;
 import org.quartz.Trigger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,10 @@ public class SchedulesUtilityServiceImpl implements SchedulesUtilityService {
      */
     @Override
     public ZonedDateTime getTimeOfNextExecution(RecurringScheduleSpec scheduleSpec) {
+        if (Strings.isNullOrEmpty(scheduleSpec.getCronExpression())) {
+            return null;
+        }
+
         Trigger scheduleTrigger;
         try {
             scheduleTrigger = triggerFactory.createTrigger(scheduleSpec, JobKeys.DUMMY);
