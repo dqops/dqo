@@ -71,7 +71,7 @@ public class SensorsController {
      * Returns all combined sensor folder model.
      * @return sensor basic folder model.
      */
-    @GetMapping("/sensorfoldermodel")
+    @GetMapping
     @ApiOperation(value = "getSensorFolderModel", notes = "Returns all combined sensor folder model", response = SensorBasicFolderModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
