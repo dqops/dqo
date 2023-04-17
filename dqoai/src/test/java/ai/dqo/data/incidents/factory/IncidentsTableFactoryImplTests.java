@@ -43,13 +43,14 @@ public class IncidentsTableFactoryImplTests extends BaseTest {
     @Test
     void createEmptySensorReadoutsTable_whenCalled_thenCreatesTableWithSchema() {
         Table table = this.sut.createEmptyIncidentsTable("empty");
-        Assertions.assertEquals(18, table.columnCount());
+        Assertions.assertEquals(19, table.columnCount());
 
         int columnIndex = 0;
         Assertions.assertEquals(IncidentsColumnNames.ID_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.TARGET_HASH_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME, table.column(columnIndex++).name());
+        Assertions.assertEquals(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME, table.column(columnIndex++).name());

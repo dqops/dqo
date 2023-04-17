@@ -36,6 +36,7 @@ public class IncidentsTableFactoryImpl implements IncidentsTableFactory {
                 LongColumn.create(IncidentsColumnNames.TARGET_HASH_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME),
+                IntColumn.create(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME),
