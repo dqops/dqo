@@ -47,7 +47,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @SpringBootTest
 public class ColumnServiceImplTests extends BaseTest {
