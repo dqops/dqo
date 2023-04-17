@@ -15,6 +15,7 @@
  */
 package ai.dqo.rest.models.metadata;
 
+import ai.dqo.connectors.ProviderType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -23,23 +24,18 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Rule basic model that is returned by the REST API.
+ * Provider sensor basic model that is returned by the REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "RuleBasicModel", description = "Rule basic model")
-public class RuleBasicModel {
+@ApiModel(value = "ProviderSensorBasicModel", description = "Provider sensor basic model")
+public class ProviderSensorBasicModel {
 
-    @JsonPropertyDescription("Rule name")
-    private String ruleName;
+    @JsonPropertyDescription("Provider type.")
+    private ProviderType providerType;
 
-    @JsonPropertyDescription("Full rule name")
-    private String fullRuleName;
-
-    @JsonPropertyDescription("This rule has is a built-in rule.")
-    public boolean custom;
-
-    public RuleBasicModel(){}
+    @JsonPropertyDescription("This provider has is a built-in sensor.")
+    private boolean custom;
 
 }
