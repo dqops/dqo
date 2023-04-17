@@ -119,21 +119,7 @@ public class ConnectionServiceImpl implements ConnectionService {
             results.add(jobResult);
         }
 
-        // TODO: Diagnose the underlying problem and fix.
-        int tries = 0;
-        for (;;) {
-            try {
-                userHomeContext.flush();
-                break;
-            }
-            catch (ConcurrentModificationException e) {
-                if (tries >= 5) {
-                    throw e;
-                }
-                ++tries;
-            }
-        }
-
+        userHomeContext.flush();
         return results;
     }
 }
