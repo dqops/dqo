@@ -67,11 +67,6 @@ public final class IncidentsColumnNames {
     public static final String CHECK_NAME_COLUMN_NAME = "check_name";
 
     /**
-     * Column name for a column name.
-     */
-    public static final String COLUMN_NAME_COLUMN_NAME = CommonColumnNames.COLUMN_NAME_COLUMN_NAME;
-
-    /**
      * Rule severity (0, 1, 2, 3) for none, low, medium and high alerts.
      */
     public static final String HIGHEST_SEVERITY_COLUMN_NAME = "highest_severity";
