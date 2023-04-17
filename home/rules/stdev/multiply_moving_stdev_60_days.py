@@ -22,9 +22,9 @@ import scipy.stats
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class PercentMovingStdRuleParametersSpec:
-    multiple_stdev_above: float
-    multiple_stdev_below: float
+class MultipyMovingStdev60DaysRuleParametersSpec:
+    multiply_stdev_above: float
+    multiply_stdev_below: float
 
 
 class HistoricDataPoint:
@@ -36,13 +36,13 @@ class HistoricDataPoint:
 
 class RuleTimeWindowSettingsSpec:
     prediction_time_window: int
-    min_periods_with_readout: int
+    min_periods_with_readouts: int
 
 
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: PercentMovingStdRuleParametersSpec
+    parameters: MultipyMovingStdev60DaysRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -73,10 +73,10 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered_std = float(scipy.stats.tstd(filtered))
     filtered_mean = float(np.mean(filtered))
 
-    threshold_lower = filtered_mean - rule_parameters.parameters.multiple_stdev_below * filtered_std \
-        if rule_parameters.parameters.multiple_stdev_below is not None else None
-    threshold_upper = filtered_mean + rule_parameters.parameters.multiple_stdev_above * filtered_std \
-        if rule_parameters.parameters.multiple_stdev_above is not None else None
+    threshold_lower = filtered_mean - rule_parameters.parameters.multiply_stdev_below * filtered_std \
+        if rule_parameters.parameters.multiply_stdev_below is not None else None
+    threshold_upper = filtered_mean + rule_parameters.parameters.multiply_stdev_above * filtered_std \
+        if rule_parameters.parameters.multiply_stdev_above is not None else None
 
     if threshold_lower is not None and threshold_upper is not None:
         passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper

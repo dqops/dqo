@@ -1,5 +1,5 @@
 #
-# Copyright © 2021 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQO.ai (support@dqo.ai)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,13 +16,15 @@
 
 from datetime import datetime
 from typing import Sequence
+import numpy as np
 import scipy
 import scipy.stats
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class BelowStdevMultiply60DaysRuleParametersSpec:
-    stdev_multiplier_below: float
+class PercentileMoving7DaysRuleParametersSpec:
+    percentile_above: float
+    percentile_below: float
 
 
 class HistoricDataPoint:
@@ -40,14 +42,14 @@ class RuleTimeWindowSettingsSpec:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: BelowStdevMultiply60DaysRuleParametersSpec
+    parameters: PercentileMoving7DaysRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
 
 
 # default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+# what is the expected value for the rule and what are the lower boundaries of accepted values (optional)
 class RuleExecutionResult:
     passed: bool
     expected_value: float
@@ -63,23 +65,32 @@ class RuleExecutionResult:
 
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult(True, None, None)
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
 
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
-    filtered_std = float(scipy.stats.tstd(filtered))
-    filtered_mean = float(scipy.mean(filtered))
+    extracted = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered = np.array(extracted, dtype=float)
+    filtered_std = scipy.stats.tstd(filtered)
+    filtered_mean = np.mean(filtered)
 
-    multiple_stdev_below = abs(float(scipy.stats.norm.ppf(rule_parameters.parameters.stdev_multiplier_below/100.0 / 2, 0, 1)))
+    # Assumption: the historical data follows normal distribution
+    readout_distribution = scipy.stats.norm(loc=filtered_mean, scale=filtered_std)
 
-    threshold_lower = filtered_mean - multiple_stdev_below * filtered_std
+    threshold_lower = float(readout_distribution.ppf(rule_parameters.parameters.percentile_below / 100.0)) \
+        if rule_parameters.parameters.percentile_below is not None else None
+    threshold_upper = float(readout_distribution.ppf(1 - (rule_parameters.parameters.percentile_above / 100.0))) \
+        if rule_parameters.parameters.percentile_above is not None else None
 
-    if multiple_stdev_below != None:
-        passed = (threshold_lower <= rule_parameters.actual_value)
-    elif threshold_lower == None:
-        passed = rule_parameters.actual_value
+    if threshold_lower is not None and threshold_upper is not None:
+        passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
+    elif threshold_upper is not None:
+        passed = rule_parameters.actual_value <= threshold_upper
+    elif threshold_lower is not None:
+        passed = threshold_lower <= rule_parameters.actual_value
+    else:
+        raise ValueError("At least one threshold is required.")
 
-
-    expected_value = filtered_mean
+    expected_value = float(filtered_mean)
     lower_bound = threshold_lower
-    return RuleExecutionResult(passed, expected_value, lower_bound)
+    upper_bound = threshold_upper
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

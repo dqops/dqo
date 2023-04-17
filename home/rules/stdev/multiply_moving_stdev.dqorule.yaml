@@ -9,8 +9,8 @@ spec:
     prediction_time_window: 10
     min_periods_with_readouts: 5
   fields:
-  - field_name: multiple_stdev_above
-    display_name: multiple_stdev_above
+  - field_name: multiply_stdev_above
+    display_name: multiply_stdev_above
     help_text: "How many multiples of the estimated standard deviation the current\
       \ sensor readout could be above the moving average within the time window. Set\
       \ the time window at the threshold level for all severity levels (warning, error,\
@@ -19,8 +19,8 @@ spec:
     data_type: double
     sample_values:
     - 1.5
-  - field_name: multiple_stdev_below
-    display_name: multiple_stdev_below
+  - field_name: multiply_stdev_below
+    display_name: multiply_stdev_below
     help_text: "How many multiples of the estimated standard deviation the current\
       \ sensor readout could be below the moving average within the time window. Set\
       \ the time window at the threshold level for all severity levels (warning, error,\
