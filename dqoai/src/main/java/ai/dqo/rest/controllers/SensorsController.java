@@ -16,6 +16,8 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.connectors.ProviderType;
+import ai.dqo.core.jobqueue.DqoQueueJobId;
+import ai.dqo.metadata.basespecs.ElementWrapper;
 import ai.dqo.metadata.definitions.sensors.*;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
@@ -23,10 +25,12 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.rest.models.metadata.ProviderSensorBasicModel;
+import ai.dqo.rest.models.metadata.SensorBasicFolderModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
-import ai.dqo.rest.models.sensors.ProviderSensorModel;
-import ai.dqo.rest.models.sensors.SensorFolderModel;
-import ai.dqo.rest.models.sensors.SensorModel;
+import ai.dqo.rest.models.metadata.ProviderSensorModel;
+import ai.dqo.rest.models.metadata.SensorModel;
+import autovalue.shaded.com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +39,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * REST api controller to manage the list of sensors.
@@ -47,7 +52,6 @@ public class SensorsController {
 
     private DqoHomeContextFactory dqoHomeContextFactory;
     private UserHomeContextFactory userHomeContextFactory;
-    private final static String SENSORS = "Sensors";
 
 
     /**
@@ -62,131 +66,133 @@ public class SensorsController {
         this.userHomeContextFactory = userHomeContextFactory;
     }
 
+
     /**
-     * Returns a list of all sensors from both Dqo Home and User Home.
-     * The method creates a SensorFolderModel object that contains a list of SensorModels.
-     * Each SensorModel object represents a single sensor and contains its name, specification, and a map of ProviderSensorModels.
-     * ProviderSensorModels contain a SQL template and a ProviderSensorDefinitionSpec object.
-     * The method returns a ResponseEntity with the SensorFolderModel object and a HTTP status code.
-     * @return ResponseEntity<Mono<SensorFolderModel>> containing a list of all sensors
+     * Returns all combined sensor folder model.
+     * @return sensor basic folder model.
      */
-    @GetMapping
-    @ApiOperation(value = "getAllSensor", notes = "Returns a sensors folder model", response = SensorFolderModel.class)
+    @GetMapping("/sensorfoldermodel")
+    @ApiOperation(value = "getSensorFolderModel", notes = "Returns all combined sensor folder model", response = SensorBasicFolderModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = SensorFolderModel.class),
+            @ApiResponse(code = 200, message = "OK", response = SensorBasicFolderModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
-    public ResponseEntity<Mono<SensorFolderModel>> getAllSensors() {
+    public ResponseEntity<Mono<SensorBasicFolderModel>> getSensorFolderModel() {
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
-        SensorFolderModel sensorFolderModel = new SensorFolderModel(SENSORS);
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
         SensorDefinitionList dqoHomeSensorDefinitionList = dqoHome.getSensors();
 
+        SensorBasicFolderModel sensorFolderModel = new SensorBasicFolderModel();
+
+
         dqoHome.getSensors().forEach(sensorDefinitionWrapper -> {
             SensorDefinitionWrapper dqoHomeSensorDefinitionWrapper = dqoHomeSensorDefinitionList.getByObjectName(sensorDefinitionWrapper.getName(), true);
-            SensorModel dqoHomeSensorModel = new SensorModel(sensorDefinitionWrapper.getName(), sensorDefinitionWrapper.getSpec(), false);
+            List<ProviderSensorBasicModel> providerSensorBasicModelList = new ArrayList<>();
             for (ProviderType providerType : ProviderType.values()) {
                 ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = dqoHomeSensorDefinitionWrapper.getProviderSensors().getByObjectName(providerType, true);
-                ProviderSensorModel providerSensorModel = new ProviderSensorModel();
                 if (providerSensorDefinitionWrapper != null) {
-                    providerSensorModel.setSqlTemplate(providerSensorDefinitionWrapper.getSqlTemplate());
-                    providerSensorModel.setProviderSensorDefinitionSpec(providerSensorDefinitionWrapper.getSpec());
+                    ProviderSensorBasicModel providerSensorBasicModel = new ProviderSensorBasicModel();
+                    providerSensorBasicModel.setProviderType(providerType);
+                    providerSensorBasicModel.setCustom(false);
+                    providerSensorBasicModelList.add(providerSensorBasicModel);
+
                 }
-                dqoHomeSensorModel.getSensors().put(providerType, providerSensorModel);
             }
-            sensorFolderModel.addSensor(dqoHomeSensorModel);
+            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, false);
         });
 
         userHome.getSensors().forEach(sensorDefinitionWrapper -> {
-            SensorModel userHomeSensorModel = new SensorModel(sensorDefinitionWrapper.getName(), sensorDefinitionWrapper.getSpec(), true);
+            List<ProviderSensorBasicModel> providerSensorBasicModelList = new ArrayList<>();
             sensorDefinitionWrapper.getProviderSensors().forEach(providerSensorDefinitionWrapper -> {
-                ProviderSensorModel providerSensorModel = new ProviderSensorModel();
+                ProviderSensorBasicModel providerSensorBasicModel = new ProviderSensorBasicModel();
                 if (providerSensorDefinitionWrapper != null) {
-                    providerSensorModel.setSqlTemplate(providerSensorDefinitionWrapper.getSqlTemplate());
-                    providerSensorModel.setProviderSensorDefinitionSpec(providerSensorDefinitionWrapper.getSpec());
-                    providerSensorModel.setCustom(true);
+                    providerSensorBasicModel.setProviderType(providerSensorDefinitionWrapper.getProvider());
+                    providerSensorBasicModel.setCustom(true);
                 }
-                userHomeSensorModel.getSensors().put(providerSensorDefinitionWrapper.getProvider(), providerSensorModel);
+                providerSensorBasicModelList.add(providerSensorBasicModel);
             });
 
-            sensorFolderModel.addSensor(userHomeSensorModel);
+            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, true);
         });
 
         return new ResponseEntity<>(Mono.just(sensorFolderModel), HttpStatus.OK);
     }
 
     /**
-     * Retrieves a file sensor model.
-     * @param folders an array of folder names representing the path to the sensor model
+     * Returns the configuration of a sensor, first checking if it is a custom sensor,
+     * then checking if it is a built-in sensor.
+     * @param fullSensorName Full sensor name.
+     * @return Model of the sensor with specific sensor name.
      */
-    @GetMapping("/{folders}")
-    @ApiOperation(value = "getSensor", notes = "Returns a folder sensor model", response = SensorFolderModel.class)
+    @GetMapping("/{fullSensorName}")
+    @ApiOperation(value = "getSensor", notes = "Returns a sensor model", response = SensorModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = SensorFolderModel.class),
+            @ApiResponse(code = 200, message = "OK", response = SensorModel.class),
             @ApiResponse(code = 404, message = "Sensor name not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     public ResponseEntity<Mono<SensorModel>> getSensor(
-            @PathVariable String[] folders) {
+            @ApiParam("Full sensor name") @PathVariable String fullSensorName) {
+
+        if (Strings.isNullOrEmpty(fullSensorName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+        }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
-        SensorFolderModel sensorFolderModel = new SensorFolderModel(SENSORS);
+        SensorDefinitionList userHomeSensorDefinitionList = userHome.getSensors();
+        Optional<SensorDefinitionWrapper> userHomeSensorDefinitionWrapperOptional = Optional.ofNullable(userHomeSensorDefinitionList.getByObjectName(fullSensorName, true));
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
         SensorDefinitionList dqoHomeSensorDefinitionList = dqoHome.getSensors();
+        Optional<SensorDefinitionWrapper> dqoHomeSensorDefinitionWrapperOptional = Optional.ofNullable(dqoHomeSensorDefinitionList.getByObjectName(fullSensorName, true));
 
-        dqoHome.getSensors().forEach(sensorDefinitionWrapper -> {
-            SensorDefinitionWrapper dqoHomeSensorDefinitionWrapper = dqoHomeSensorDefinitionList.getByObjectName(sensorDefinitionWrapper.getName(), true);
-            SensorModel dqoHomeSensorModel = new SensorModel(sensorDefinitionWrapper.getName(), sensorDefinitionWrapper.getSpec(), false);
-            for (ProviderType providerType : ProviderType.values()) {
-                ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = dqoHomeSensorDefinitionWrapper.getProviderSensors().getByObjectName(providerType, true);
-                ProviderSensorModel providerSensorModel = new ProviderSensorModel();
-                if (providerSensorDefinitionWrapper != null) {
-                    providerSensorModel.setSqlTemplate(providerSensorDefinitionWrapper.getSqlTemplate());
-                    providerSensorModel.setProviderSensorDefinitionSpec(providerSensorDefinitionWrapper.getSpec());
-                }
-                dqoHomeSensorModel.getSensors().put(providerType, providerSensorModel);
-            }
-            sensorFolderModel.addSensor(dqoHomeSensorModel);
-        });
+        Optional<SensorDefinitionWrapper> sensorDefinitionWrapperOptional = userHomeSensorDefinitionWrapperOptional.or(() -> dqoHomeSensorDefinitionWrapperOptional);
 
-        userHome.getSensors().forEach(sensorDefinitionWrapper -> {
-            SensorModel userHomeSensorModel = new SensorModel(sensorDefinitionWrapper.getName(), sensorDefinitionWrapper.getSpec(), true);
-            sensorDefinitionWrapper.getProviderSensors().forEach(providerSensorDefinitionWrapper -> {
-                ProviderSensorModel providerSensorModel = new ProviderSensorModel();
-                if (providerSensorDefinitionWrapper != null) {
-                    providerSensorModel.setSqlTemplate(providerSensorDefinitionWrapper.getSqlTemplate());
-                    providerSensorModel.setProviderSensorDefinitionSpec(providerSensorDefinitionWrapper.getSpec());
-                    providerSensorModel.setCustom(true);
-                }
-                userHomeSensorModel.getSensors().put(providerSensorDefinitionWrapper.getProvider(), providerSensorModel);
-            });
-
-            sensorFolderModel.addSensor(userHomeSensorModel);
-        });
-
-        SensorModel sensorBasicModelMap = sensorFolderModel.getSensorModel(folders);
-
-        if (sensorBasicModelMap == null) {
+        if (sensorDefinitionWrapperOptional.isEmpty()) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(Mono.just(sensorBasicModelMap), HttpStatus.OK);
+        SensorModel sensorModel = new SensorModel();
+
+        dqoHomeSensorDefinitionWrapperOptional.ifPresent(sensorDefinitionWrapper -> {
+            sensorModel.setFullSensorName(sensorDefinitionWrapper.getName());
+            sensorModel.setSensorDefinitionSpec(sensorDefinitionWrapper.getSpec());
+            sensorModel.setCustom(false);
+            List<ProviderSensorModel> providerSensorBasicModelList = sensorDefinitionWrapper.getProviderSensors()
+                    .toList().stream()
+                    .map(providerSensorWrapper -> new ProviderSensorModel(providerSensorWrapper.getProvider(), providerSensorWrapper.getSpec(), providerSensorWrapper.getSqlTemplate(), false))
+                    .collect(Collectors.toList());
+            sensorModel.addProviderSensorModel(providerSensorBasicModelList);
+        });
+
+        sensorDefinitionWrapperOptional.ifPresent(sensorDefinitionWrapper -> {
+            sensorModel.setFullSensorName(sensorDefinitionWrapper.getName());
+            sensorModel.setSensorDefinitionSpec(sensorDefinitionWrapper.getSpec());
+            sensorModel.setCustom(true);
+            List<ProviderSensorModel> providerSensorBasicModelList = sensorDefinitionWrapper.getProviderSensors()
+                    .toList().stream()
+                    .map(providerSensorWrapper -> new ProviderSensorModel(providerSensorWrapper.getProvider(), providerSensorWrapper.getSpec(), providerSensorWrapper.getSqlTemplate(), userHomeSensorDefinitionWrapperOptional.isPresent()))
+                    .collect(Collectors.toList());
+            sensorModel.addProviderSensorModel(providerSensorBasicModelList);
+        });
+
+        return new ResponseEntity<>(Mono.just(sensorModel), HttpStatus.OK);
     }
 
     /**
      * Create a new sensor given sensor information.
-     * @param sensorModelMap a dictionary of sensor definitions
+     * @param fullSensorName Full sensor name
+     * @param sensorModel sensor model
      */
-    @PostMapping
+    @PostMapping("/{fullSensorName}")
     @ApiOperation(value = "createSensor", notes = "Creates (adds) a new sensor given sensor information.")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -197,322 +203,161 @@ public class SensorsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> createSensor(
-            @ApiParam("Dictionary of sensor definitions") @RequestBody SensorModel sensorModelMap) {
+            @ApiParam("Full sensor name") @PathVariable String fullSensorName,
+            @ApiParam("Dictionary of sensor definitions") @RequestBody SensorModel sensorModel) {
+
+        if (Strings.isNullOrEmpty(fullSensorName) || sensorModel == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+        }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
         SensorDefinitionList userHomeSensorDefinitionList= userHome.getSensors();
 
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-        SensorDefinitionList dqoHomeSensorDefinitionList = dqoHome.getSensors();
-
-        SensorDefinitionWrapper dqoHomeSensorDefinitionWrapper = dqoHomeSensorDefinitionList.getByObjectName(sensorModelMap.getSensorName(), true);
-        SensorDefinitionWrapper userHomeSensorDefinitionWrapper = userHomeSensorDefinitionList.getByObjectName(sensorModelMap.getSensorName(), true);
+        SensorDefinitionWrapper userHomeSensorDefinitionWrapper = userHomeSensorDefinitionList.getByObjectName(fullSensorName, true);
 
         if(userHomeSensorDefinitionWrapper != null){
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
         }
 
-        if(dqoHomeSensorDefinitionWrapper == null){
-            SensorDefinitionWrapper newUserHomeSensorDefinitionWrapper = userHomeSensorDefinitionList.createAndAddNew(sensorModelMap.getSensorName());
-            newUserHomeSensorDefinitionWrapper.setSpec(sensorModelMap.getSensorDefinitionSpec());
-            userHomeContext.flush();
-
-            SensorDefinitionWrapper sensorDefinitionWrapper = userHomeSensorDefinitionList.getByObjectName(sensorModelMap.getSensorName(), true);
-            ProviderSensorDefinitionList providerSensorDefinitionList = sensorDefinitionWrapper.getProviderSensors();
-            for (Map.Entry<ProviderType, ProviderSensorModel> sensorsMap : sensorModelMap.getSensors().entrySet()) {
-                if(sensorsMap.getValue().getProviderSensorDefinitionSpec() == null || sensorsMap.getValue().getSqlTemplate() == null){
-                    continue;
-                }
-                ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = providerSensorDefinitionList.createAndAddNew(sensorsMap.getKey());
-                providerSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-                providerSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
-
-                userHomeContext.flush();
-            }
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
-        }
-
-        SensorDefinitionWrapper newUserHomeSensorDefinitionWrapper = userHomeSensorDefinitionList.createAndAddNew(sensorModelMap.getSensorName());
-        newUserHomeSensorDefinitionWrapper.setSpec(sensorModelMap.getSensorDefinitionSpec());
+        SensorDefinitionWrapper sensorDefinitionWrapper = userHomeSensorDefinitionList.createAndAddNew(fullSensorName);
         userHomeContext.flush();
-        ProviderSensorDefinitionList providerSensorDefinitionList = newUserHomeSensorDefinitionWrapper.getProviderSensors();
-        ProviderSensorDefinitionList dqoHomeProviderSensorDefinitionList = dqoHomeSensorDefinitionWrapper.getProviderSensors();
 
-        int countUnique = 0;
-        for (Map.Entry<ProviderType, ProviderSensorModel> sensorsMap : sensorModelMap.getSensors().entrySet()) {
-            if(sensorsMap.getValue().getProviderSensorDefinitionSpec() == null || sensorsMap.getValue().getSqlTemplate() == null){
-                continue;
-            }
-            ProviderSensorDefinitionWrapper dqoHomeProviderSensor = dqoHomeProviderSensorDefinitionList.getByObjectName(sensorsMap.getKey(),true);
-            if(dqoHomeProviderSensor.getSpec().equals(sensorsMap.getValue().getProviderSensorDefinitionSpec()) && dqoHomeProviderSensor.getSqlTemplate().equals(sensorsMap.getValue().getSqlTemplate())){
-                continue;
-            }
-            ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = providerSensorDefinitionList.createAndAddNew(sensorsMap.getKey());
-            providerSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-            providerSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
+        sensorDefinitionWrapper.setSpec(sensorModel.getSensorDefinitionSpec());
+        ProviderSensorDefinitionList providerSensorDefinitionList = sensorDefinitionWrapper.getProviderSensors();
+        sensorModel.getProviderSensorList().forEach(n -> {
+            ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = providerSensorDefinitionList.createAndAddNew(n.getProviderType());
+            providerSensorDefinitionWrapper.setSqlTemplate(n.getSqlTemplate());
+            providerSensorDefinitionWrapper.setSpec(n.getProviderSensorDefinitionSpec());
             userHomeContext.flush();
-            countUnique++;
-        }
-        if(countUnique==0){
-            newUserHomeSensorDefinitionWrapper.markForDeletion();
-            userHomeContext.flush();
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
-        }
+        });
+
         return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
     }
 
     /**
-     * Updates an existing sensor folder. If the user edits the definition of an existing sensor in Dqo Home,
-     * any custom sensor associated with that definition will be deleted.
-     * @param sensorModelMap Dictionary of sensor definitions
+     * Updates an existing sensor, creating possibly a custom sensor,
+     * or removes sensor if custom definition is same as Dqo Home sensor
+     * @param sensorModel sensor model
      */
-    @PutMapping
-    @ApiOperation(value = "updateSensor", notes = "Updates an existing sensor folder")
+    @PutMapping("/{fullSensorName}")
+    @ApiOperation(value = "updateSensor", notes = "Updates an existing sensor, making a custom sensor definition if it is not present. \n" +
+            "Removes sensor if custom definition is same as Dqo Home sensor")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Sensor folder model successfully updated"),
+            @ApiResponse(code = 204, message = "Sensor model successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
-            @ApiResponse(code = 404, message = "Folder not found"),
+            @ApiResponse(code = 404, message = "Sensor not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> updateSensor(
-            @ApiParam("Dictionary of sensor definitions") @RequestBody SensorModel sensorModelMap) {
+            @ApiParam("Full sensor name") @PathVariable String fullSensorName,
+            @ApiParam("Dictionary of sensor definitions") @RequestBody SensorModel sensorModel) {
+
+        if (Strings.isNullOrEmpty(fullSensorName) || sensorModel == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+        }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
         SensorDefinitionList userHomeSensorDefinitionList = userHome.getSensors();
+        SensorDefinitionWrapper userHomeSensorDefinitionWrapper = userHomeSensorDefinitionList.getByObjectName(fullSensorName,true);
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
         SensorDefinitionList dqoHomeSensorDefinitionList = dqoHome.getSensors();
+        SensorDefinitionWrapper dqoHomeSensorDefinitionWrapper = dqoHomeSensorDefinitionList.getByObjectName(fullSensorName,true);
 
-        SensorDefinitionWrapper dqoHomeSensorDefinitionWrapper = dqoHomeSensorDefinitionList.getByObjectName(sensorModelMap.getSensorName(), true);
-        SensorDefinitionWrapper userHomeSensorDefinitionWrapper = userHomeSensorDefinitionList.getByObjectName(sensorModelMap.getSensorName(), true);
-        ProviderSensorDefinitionList userHomeProviderSensorDefinitionList;
+        if (userHomeSensorDefinitionWrapper == null && dqoHomeSensorDefinitionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+        List<ProviderSensorModel> providerSensorModels = sensorModel.getProviderSensorList();
 
+        ProviderSensorDefinitionList dqoHomeSensorDefinitionWrapperProviderSensors = dqoHomeSensorDefinitionWrapper.getProviderSensors();
 
-        if (dqoHomeSensorDefinitionWrapper == null) {
-            userHomeSensorDefinitionWrapper.setSpec(sensorModelMap.getSensorDefinitionSpec());
-            userHomeContext.flush();
-            ProviderSensorDefinitionList customProviderSensorDefinitionList = userHomeSensorDefinitionWrapper.getProviderSensors();
-            for (Map.Entry<ProviderType, ProviderSensorModel> sensorsMap : sensorModelMap.getSensors().entrySet()) {
-                ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = customProviderSensorDefinitionList.getByObjectName(sensorsMap.getKey(), true);
-                if (providerSensorDefinitionWrapper == null) {
-                    ProviderSensorDefinitionWrapper newUserHomeProviderSensorDefinitionWrapper = customProviderSensorDefinitionList.createAndAddNew(sensorsMap.getKey());
-                    newUserHomeProviderSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
-                    newUserHomeProviderSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-                    userHomeContext.flush();
-                } else if ((!providerSensorDefinitionWrapper.getSpec().equals(sensorsMap.getValue().getProviderSensorDefinitionSpec())
-                        || !providerSensorDefinitionWrapper.getSqlTemplate().equals(sensorsMap.getValue().getSqlTemplate()))) {
-                    ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper = customProviderSensorDefinitionList.getByObjectName(sensorsMap.getKey(), true);
-                    userHomeProviderSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-                    userHomeProviderSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
-                    userHomeContext.flush();
+        if(userHomeSensorDefinitionWrapper == null){
+            if(!sensorModel.equalsSensorDqo(dqoHomeSensorDefinitionWrapper)){
+                SensorDefinitionWrapper sensorDefinitionWrapper = userHomeSensorDefinitionList.createAndAddNew(fullSensorName);
+                sensorDefinitionWrapper.setSpec(sensorModel.getSensorDefinitionSpec());
+                userHomeContext.flush();
+                ProviderSensorDefinitionList providerSensorDefinitionList = sensorDefinitionWrapper.getProviderSensors();
+                for (ProviderSensorModel providerSensorModel: providerSensorModels){
+                    ProviderSensorDefinitionWrapper providerSensorDefinition = dqoHomeSensorDefinitionWrapperProviderSensors.getByObjectName(providerSensorModel.getProviderType(), true);
+                    if(!providerSensorModel.equalsProviderSensorDqo(providerSensorDefinition)){
+                        ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper = providerSensorDefinitionList.createAndAddNew(providerSensorModel.getProviderType());
+                        userHomeProviderSensorDefinitionWrapper.setSpec(providerSensorModel.getProviderSensorDefinitionSpec());
+                        userHomeProviderSensorDefinitionWrapper.setSqlTemplate(providerSensorModel.getSqlTemplate());
+                        userHomeContext.flush();
+                    }
                 }
             }
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
         }
 
-        ProviderSensorDefinitionList dqoHomeProviderSensorDefinitionList = dqoHomeSensorDefinitionWrapper.getProviderSensors();
+        ProviderSensorDefinitionList providerSensorDefinitionList = userHomeSensorDefinitionWrapper.getProviderSensors();
 
-        if (sensorModelMap.isCustom()) {
-            if (!dqoHomeSensorDefinitionWrapper.getSpec().equals(sensorModelMap.getSensorDefinitionSpec())) {
-                userHomeSensorDefinitionWrapper.setSpec(sensorModelMap.getSensorDefinitionSpec());
-                userHomeContext.flush();
-                userHomeProviderSensorDefinitionList = userHomeSensorDefinitionWrapper.getProviderSensors();
-                for (Map.Entry<ProviderType, ProviderSensorModel> sensorsMap : sensorModelMap.getSensors().entrySet()) {
-                    ProviderSensorDefinitionWrapper dqoHomeProviderSensorDefinitionWrapper = dqoHomeProviderSensorDefinitionList.getByObjectName(sensorsMap.getKey(), true);
-                    ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper = userHomeProviderSensorDefinitionList.getByObjectName(sensorsMap.getKey(), true);
-                    if(sensorsMap.getValue().isCustom()){
-                        if(dqoHomeProviderSensorDefinitionWrapper.getSpec().equals(sensorsMap.getValue().getProviderSensorDefinitionSpec()) || dqoHomeProviderSensorDefinitionWrapper.getSqlTemplate().equals(sensorsMap.getValue().getSqlTemplate())){
-                            userHomeProviderSensorDefinitionWrapper.markForDeletion();
-                            userHomeContext.flush();
-                        } else {
-                            userHomeProviderSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-                            userHomeProviderSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
-                            userHomeContext.flush();
-                        }
-                    } else {
-                        if (dqoHomeProviderSensorDefinitionWrapper == null && userHomeProviderSensorDefinitionWrapper == null) {
-                            ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = userHomeProviderSensorDefinitionList.createAndAddNew(sensorsMap.getKey());
-                            providerSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-                            providerSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
-                            userHomeContext.flush();
-                            continue;
-                        }
-                        if (dqoHomeProviderSensorDefinitionWrapper == null) {
-                            userHomeProviderSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-                            userHomeProviderSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
-                            userHomeContext.flush();
-                            continue;
-                        }
-                        if (!dqoHomeProviderSensorDefinitionWrapper.getSpec().equals(sensorsMap.getValue().getProviderSensorDefinitionSpec()) || !dqoHomeProviderSensorDefinitionWrapper.getSqlTemplate().equals(sensorsMap.getValue().getSqlTemplate())) {
-                            ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = userHomeProviderSensorDefinitionList.createAndAddNew(sensorsMap.getKey());
-                            providerSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-                            providerSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
-                            userHomeContext.flush();
-                        }
-                    }
-                }
-            } else {
-                userHomeSensorDefinitionWrapper.setSpec(sensorModelMap.getSensorDefinitionSpec());
-                userHomeContext.flush();
-                userHomeProviderSensorDefinitionList = userHomeSensorDefinitionWrapper.getProviderSensors();
-                boolean isProvidersSensorsNull = true;
-                for (Map.Entry<ProviderType, ProviderSensorModel> sensorsMap : sensorModelMap.getSensors().entrySet()) {
-                    ProviderSensorDefinitionWrapper dqoHomeProviderSensorDefinitionWrapper = dqoHomeProviderSensorDefinitionList.getByObjectName(sensorsMap.getKey(), true);
-                    ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper = userHomeProviderSensorDefinitionList.getByObjectName(sensorsMap.getKey(), true);
-                    if(sensorsMap.getValue().isCustom()){
-                        if(dqoHomeProviderSensorDefinitionWrapper.getSpec().equals(sensorsMap.getValue().getProviderSensorDefinitionSpec()) || dqoHomeProviderSensorDefinitionWrapper.getSqlTemplate().equals(sensorsMap.getValue().getSqlTemplate())){
-                            userHomeProviderSensorDefinitionWrapper.markForDeletion();
-                        } else {
-                            userHomeProviderSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-                            userHomeProviderSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
-                        }
-                        userHomeContext.flush();
-                        isProvidersSensorsNull = false;
-                    } else {
-                        if (dqoHomeProviderSensorDefinitionWrapper == null && userHomeProviderSensorDefinitionWrapper == null) {
-                            ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = userHomeProviderSensorDefinitionList.createAndAddNew(sensorsMap.getKey());
-                            providerSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-                            providerSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
-                            userHomeContext.flush();
-                            isProvidersSensorsNull = false;
-                        } else if (dqoHomeProviderSensorDefinitionWrapper == null) {
-                            userHomeProviderSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-                            userHomeProviderSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
-                            userHomeContext.flush();
-                            isProvidersSensorsNull = false;
-                        } else if (!dqoHomeProviderSensorDefinitionWrapper.getSpec().equals(sensorsMap.getValue().getProviderSensorDefinitionSpec()) || !dqoHomeProviderSensorDefinitionWrapper.getSqlTemplate().equals(sensorsMap.getValue().getSqlTemplate())) {
-                            ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = userHomeProviderSensorDefinitionList.createAndAddNew(sensorsMap.getKey());
-                            providerSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-                            providerSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
-                            userHomeContext.flush();
-                            isProvidersSensorsNull = false;
-                        }
-                    }
-                }
-                if(isProvidersSensorsNull){
-                    userHomeSensorDefinitionWrapper.markForDeletion();
+        if(sensorModel.equalsSensorDqo(dqoHomeSensorDefinitionWrapper)){
+            for (ProviderSensorModel providerSensorModel: providerSensorModels){
+                ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper = providerSensorDefinitionList.getByObjectName(providerSensorModel.getProviderType(), true);
+                if(userHomeProviderSensorDefinitionWrapper != null){
+                    userHomeProviderSensorDefinitionWrapper.markForDeletion();
                     userHomeContext.flush();
                 }
             }
-        }
-        else {
-            if (!dqoHomeSensorDefinitionWrapper.getSpec().equals(sensorModelMap.getSensorDefinitionSpec())) {
-                SensorDefinitionWrapper newUserHomeSensorDefinitionWrapper = userHomeSensorDefinitionList.createAndAddNew(sensorModelMap.getSensorName());
-                newUserHomeSensorDefinitionWrapper.setSpec(sensorModelMap.getSensorDefinitionSpec());
+            userHomeSensorDefinitionWrapper.markForDeletion();
+            userHomeContext.flush();
+        } else {
+            for (ProviderSensorModel providerSensorModel: providerSensorModels){
+                ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper = providerSensorDefinitionList.getByObjectName(providerSensorModel.getProviderType(), true);
+                ProviderSensorDefinitionWrapper dqoHomeProviderSensorDefinitionWrapper = dqoHomeSensorDefinitionWrapperProviderSensors.getByObjectName(providerSensorModel.getProviderType(), true);
+                if(!providerSensorModel.equalsProviderSensorDqo(dqoHomeProviderSensorDefinitionWrapper) && userHomeProviderSensorDefinitionWrapper == null){
+                    userHomeProviderSensorDefinitionWrapper = providerSensorDefinitionList.createAndAddNew(providerSensorModel.getProviderType());
+                    userHomeProviderSensorDefinitionWrapper.setSpec(providerSensorModel.getProviderSensorDefinitionSpec());
+                    userHomeProviderSensorDefinitionWrapper.setSqlTemplate(providerSensorModel.getSqlTemplate());
+                } else if (!providerSensorModel.equalsProviderSensorDqo(dqoHomeProviderSensorDefinitionWrapper) && userHomeProviderSensorDefinitionWrapper != null) {
+                    userHomeProviderSensorDefinitionWrapper.setSpec(providerSensorModel.getProviderSensorDefinitionSpec());
+                    userHomeProviderSensorDefinitionWrapper.setSqlTemplate(providerSensorModel.getSqlTemplate());
+                } else if (userHomeProviderSensorDefinitionWrapper != null){
+                    userHomeProviderSensorDefinitionWrapper.markForDeletion();
+                }
                 userHomeContext.flush();
-                for (Map.Entry<ProviderType, ProviderSensorModel> sensorsMap : sensorModelMap.getSensors().entrySet()) {
-                    ProviderSensorDefinitionWrapper dqoHomeProviderSensorDefinitionWrapper = dqoHomeProviderSensorDefinitionList.getByObjectName(sensorsMap.getKey(), true);
-                    ProviderSensorDefinitionList newUserProviderSensorDefinitionList = newUserHomeSensorDefinitionWrapper.getProviderSensors();
-                    if (dqoHomeProviderSensorDefinitionWrapper == null) {
-                        ProviderSensorDefinitionWrapper newUserHomeProviderSensorDefinitionWrapper = newUserProviderSensorDefinitionList.createAndAddNew(sensorsMap.getKey());
-                        newUserHomeProviderSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
-                        newUserHomeProviderSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-                        userHomeContext.flush();
-                    } else if ((!dqoHomeProviderSensorDefinitionWrapper.getSpec().equals(sensorsMap.getValue().getProviderSensorDefinitionSpec())
-                            || !dqoHomeProviderSensorDefinitionWrapper.getSqlTemplate().equals(sensorsMap.getValue().getSqlTemplate()))
-                            && !sensorsMap.getValue().isCustom()) {
-                        ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper = newUserProviderSensorDefinitionList.createAndAddNew(sensorsMap.getKey());
-                        userHomeProviderSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-                        userHomeProviderSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
-                        userHomeContext.flush();
-                    }
-                }
-            } else {
-                boolean isProvidersSensorsNull = false;
-                for (Map.Entry<ProviderType, ProviderSensorModel> sensorsMap : sensorModelMap.getSensors().entrySet()) {
-                    ProviderSensorDefinitionWrapper dqoHomeProviderSensorDefinitionWrapper = dqoHomeProviderSensorDefinitionList.getByObjectName(sensorsMap.getKey(), true);
-                    if(sensorsMap.getValue().getProviderSensorDefinitionSpec() == null || sensorsMap.getValue().getSqlTemplate() == null){
-                        continue;
-                    }
-                    if (dqoHomeProviderSensorDefinitionWrapper == null && sensorsMap.getValue().getProviderSensorDefinitionSpec() != null && sensorsMap.getValue().getSqlTemplate() != null) {
-                        isProvidersSensorsNull = true;
-                        break;
-                    }
-                    if (!dqoHomeProviderSensorDefinitionWrapper.getSpec().equals(sensorsMap.getValue().getProviderSensorDefinitionSpec())
-                            || !dqoHomeProviderSensorDefinitionWrapper.getSqlTemplate().equals(sensorsMap.getValue().getSqlTemplate())){
-                        isProvidersSensorsNull = true;
-                        break;
-                    }
-                }
-                if (isProvidersSensorsNull) {
-                    SensorDefinitionWrapper newUserHomeSensorDefinitionWrapper = userHomeSensorDefinitionList.createAndAddNew(sensorModelMap.getSensorName());
-                    newUserHomeSensorDefinitionWrapper.setSpec(sensorModelMap.getSensorDefinitionSpec());
-                    userHomeContext.flush();
-                    for (Map.Entry<ProviderType, ProviderSensorModel> sensorsMap : sensorModelMap.getSensors().entrySet()) {
-                        ProviderSensorDefinitionWrapper dqoHomeProviderSensorDefinitionWrapper = dqoHomeProviderSensorDefinitionList.getByObjectName(sensorsMap.getKey(), true);
-                        ProviderSensorDefinitionList newUserProviderSensorDefinitionList = newUserHomeSensorDefinitionWrapper.getProviderSensors();
-                        if (dqoHomeProviderSensorDefinitionWrapper == null) {
-                            ProviderSensorDefinitionWrapper newUserHomeProviderSensorDefinitionWrapper = newUserProviderSensorDefinitionList.createAndAddNew(sensorsMap.getKey());
-                            newUserHomeProviderSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
-                            newUserHomeProviderSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-                            userHomeContext.flush();
-                            continue;
-                        }
-                        if ((!dqoHomeProviderSensorDefinitionWrapper.getSpec().equals(sensorsMap.getValue().getProviderSensorDefinitionSpec())
-                                || !dqoHomeProviderSensorDefinitionWrapper.getSqlTemplate().equals(sensorsMap.getValue().getSqlTemplate()))
-                                && !sensorsMap.getValue().isCustom()) {
-                            ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper = newUserProviderSensorDefinitionList.createAndAddNew(sensorsMap.getKey());
-                            userHomeProviderSensorDefinitionWrapper.setSpec(sensorsMap.getValue().getProviderSensorDefinitionSpec());
-                            userHomeProviderSensorDefinitionWrapper.setSqlTemplate(sensorsMap.getValue().getSqlTemplate());
-                            userHomeContext.flush();
-                        }
-                    }
-                }
             }
         }
+
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
     }
 
     /**
-     * Deletes a sensor.
-     * This method handles the HTTP DELETE requests on the "{/folders}" endpoint to delete a sensor. The folders parameter
-     * is an array of strings representing the path to the sensor to be deleted. The method first looks up the sensor in the
-     * user's home directory using the provided folders, and then deletes it from the system. If the sensor is not found,
-     * the method returns an HTTP NOT_FOUND response. If the deletion is successful, the method returns an HTTP NO_CONTENT
-     * response.
-     @return A ResponseEntity with a Mono that emits no elements and only completes when the sensor is deleted successfully.
+     * Deletes a custom sensor definition.
+     * @param fullSensorName  Full sensor name.
+     * @return Empty response.
      */
-    @DeleteMapping("/{folders}")
-    @ApiOperation(value = "deleteSensor", notes = "Deletes a sensor")
+    @DeleteMapping("/{fullSensorName}")
+    @ApiOperation(value = "deleteSensor", notes = "Deletes a custom sensor definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Sensor successfully deleted"),
-            @ApiResponse(code = 404, message = "Sensor not found"),
+            @ApiResponse(code = 200, message = "Custom sensor definition successfully deleted", response = DqoQueueJobId.class),
+            @ApiResponse(code = 404, message = "Custom sensor not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> deleteSensor(
-            @PathVariable String[] folders) {
+            @ApiParam("Full sensor name") @PathVariable String fullSensorName) {
+
+        if (Strings.isNullOrEmpty(fullSensorName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
+        }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
-        SensorDefinitionList sensorDefinitionList= userHome.getSensors();
 
-        StringBuilder sensorName = new StringBuilder();
-        sensorName.append(folders[0]);
-        for (int i = 1; i < folders.length; i++) {
-            sensorName.append("/");
-            sensorName.append(folders[i]);
-        }
+        SensorDefinitionList userSensorDefinitionList = userHome.getSensors();
+        SensorDefinitionWrapper userSensorDefinitionWrapper = userSensorDefinitionList.getByObjectName(fullSensorName, true);
 
-        SensorDefinitionWrapper sensorDefinitionWrapper = sensorDefinitionList.getByObjectName(sensorName.toString(), true);
-
-        if (sensorDefinitionWrapper == null) {
+        if (userSensorDefinitionWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
         }
-
-        ProviderSensorDefinitionList providerSensorDefinitionList = sensorDefinitionWrapper.getProviderSensors();
-        providerSensorDefinitionList.forEach(s -> {
-            ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = providerSensorDefinitionList.getByObjectName(s.getProvider(), true);
-            providerSensorDefinitionWrapper.markForDeletion();
-            userHomeContext.flush();
-        });
-
-        sensorDefinitionWrapper.markForDeletion();
+        userSensorDefinitionWrapper.markForDeletion();
+        userSensorDefinitionWrapper.getProviderSensors().toList().forEach(ElementWrapper::markForDeletion);
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);

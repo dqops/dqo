@@ -13,33 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package ai.dqo.rest.models.metadata;
 
-package ai.dqo.rest.models.sensors;
-
-import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
+import ai.dqo.connectors.ProviderType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Provider sensor model returned from REST API.
+ * Provider sensor basic model that is returned by the REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "SensorBasicModel", description = "Sensor basic model")
-public class ProviderSensorModel {
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@ApiModel(value = "ProviderSensorBasicModel", description = "Provider sensor basic model")
+public class ProviderSensorBasicModel {
 
-    @JsonPropertyDescription("Provider Sensor definition spec")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private ProviderSensorDefinitionSpec providerSensorDefinitionSpec;
+    @JsonPropertyDescription("Provider type.")
+    private ProviderType providerType;
 
-    @JsonPropertyDescription("Provider Sql template")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String sqlTemplate;
-
-    @JsonPropertyDescription("Whether the provider sensor is a User Home sensor")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonPropertyDescription("This provider has is a built-in sensor.")
     private boolean custom;
-    public ProviderSensorModel(){}
+
 }
