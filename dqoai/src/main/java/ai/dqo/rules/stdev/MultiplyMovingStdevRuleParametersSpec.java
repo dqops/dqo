@@ -34,8 +34,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MultipleMovingStdevRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MultipleMovingStdevRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class MultiplyMovingStdevRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<MultiplyMovingStdevRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -47,7 +47,7 @@ public class MultipleMovingStdevRuleParametersSpec extends AbstractRuleParameter
             " fatal) at once. The default is a 14 time periods (days, etc.) time window," +
             " but at least 7 readouts must exist to run the calculation.")
     @SampleValues(values = "1.5")
-    private Double multipleStdevAbove;
+    private Double multiplyStdevAbove;
 
     @JsonPropertyDescription("How many multiples of the estimated standard deviation the current" +
             " sensor readout could be below the moving average within the time window. Set" +
@@ -55,40 +55,40 @@ public class MultipleMovingStdevRuleParametersSpec extends AbstractRuleParameter
             " fatal) at once. The default is a 14 time periods (days, etc.) time window," +
             " but at least 7 readouts must exist to run the calculation.")
     @SampleValues(values = "2.5")
-    private Double multipleStdevBelow;
+    private Double multiplyStdevBelow;
 
     /**
      * Multiplied factor used to calculate a multiplied stdev.
      * @return Multiple factor to calculate multiplied stdev.
      */
-    public Double getMultipleStdevAbove() {
-        return multipleStdevAbove;
+    public Double getMultiplyStdevAbove() {
+        return multiplyStdevAbove;
     }
 
     /**
      *  Sets a multiple factor to calculate multiplied stdev.
-     * @param multipleStdevAbove Multiple factor.
+     * @param multiplyStdevAbove Multiple factor.
      */
-    public void setMultipleStdevAbove(Double multipleStdevAbove) {
-        this.setDirtyIf(!Objects.equals(this.multipleStdevAbove, multipleStdevAbove));
-        this.multipleStdevAbove = multipleStdevAbove;
+    public void setMultiplyStdevAbove(Double multiplyStdevAbove) {
+        this.setDirtyIf(!Objects.equals(this.multiplyStdevAbove, multiplyStdevAbove));
+        this.multiplyStdevAbove = multiplyStdevAbove;
     }
 
     /**
      * Multiplied factor used to calculate a multiplied stdev.
      * @return Multiple factor used to calculate a multiplied stdev.
      */
-    public Double getMultipleStdevBelow() {
-        return multipleStdevBelow;
+    public Double getMultiplyStdevBelow() {
+        return multiplyStdevBelow;
     }
 
     /**
      * Sets multiple factor to calculate multiplied stdev.
-     * @param multipleStdevBelow Multiple factor.
+     * @param multiplyStdevBelow Multiple factor.
      */
-    public void setMultipleStdevBelow(Double multipleStdevBelow) {
-        this.setDirtyIf(!Objects.equals(this.multipleStdevBelow, multipleStdevBelow));
-        this.multipleStdevBelow = multipleStdevBelow;
+    public void setMultiplyStdevBelow(Double multiplyStdevBelow) {
+        this.setDirtyIf(!Objects.equals(this.multiplyStdevBelow, multiplyStdevBelow));
+        this.multiplyStdevBelow = multiplyStdevBelow;
     }
 
 
@@ -109,6 +109,6 @@ public class MultipleMovingStdevRuleParametersSpec extends AbstractRuleParameter
      */
     @Override
     public String getRuleDefinitionName() {
-        return "stdev/multiple_moving_stdev";
+        return "stdev/multiply_moving_stdev";
     }
 }

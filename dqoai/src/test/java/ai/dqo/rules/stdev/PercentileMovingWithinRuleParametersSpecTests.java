@@ -37,8 +37,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class BelowStdevMultiply30DaysRuleParametersSpecTests extends BaseTest {
-    private BelowStdevMultiply30DaysRule1ParametersSpec sut;
+public class PercentileMovingWithinRuleParametersSpecTests extends BaseTest {
+    private PercentileMovingWithinRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -48,17 +48,17 @@ public class BelowStdevMultiply30DaysRuleParametersSpecTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new BelowStdevMultiply30DaysRule1ParametersSpec();
+        this.sut = new PercentileMovingWithinRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
-        this.readoutTimestamp = LocalDateTime.of(2022, 02, 15, 0, 0);
+        this.readoutTimestamp = LocalDateTime.of(2022, 2, 15, 0, 0);
         this.sensorReadouts = new Double[this.timeWindowSettings.getPredictionTimeWindow()];
     }
 
     @Test
     void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsPassed() {
-        this.sut.setStdevMultiplierBelow(10.0);
+        this.sut.setPercentileWithin(80.0);
 
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             if(i % 2 == 0) {
@@ -67,14 +67,17 @@ public class BelowStdevMultiply30DaysRuleParametersSpecTests extends BaseTest {
                 this.sensorReadouts[i] = 25.0;
             }
         }
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(11.63, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(13.25, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(26.75, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test

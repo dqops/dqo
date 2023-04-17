@@ -22,9 +22,8 @@ import scipy.stats
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class PercentileMoving7DaysRuleParametersSpec:
-    percentile_above: float
-    percentile_below: float
+class MultiplyMovingStdevWithinRuleParametersSpec:
+    multiply_stdev: float
 
 
 class HistoricDataPoint:
@@ -36,20 +35,20 @@ class HistoricDataPoint:
 
 class RuleTimeWindowSettingsSpec:
     prediction_time_window: int
-    min_periods_with_readouts: int
+    min_periods_with_readout: int
 
 
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: PercentileMoving7DaysRuleParametersSpec
+    parameters: MultiplyMovingStdevWithinRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
 
 
 # default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the lower boundaries of accepted values (optional)
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
 class RuleExecutionResult:
     passed: bool
     expected_value: float
@@ -70,27 +69,16 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     extracted = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
     filtered = np.array(extracted, dtype=float)
-    filtered_std = scipy.stats.tstd(filtered)
-    filtered_mean = np.mean(filtered)
+    filtered_std = float(scipy.stats.tstd(filtered))
+    filtered_mean = float(np.mean(filtered))
 
-    # Assumption: the historical data follows normal distribution
-    readout_distribution = scipy.stats.norm(loc=filtered_mean, scale=filtered_std)
+    stdev_span = rule_parameters.parameters.multiply_stdev * filtered_std
+    threshold_lower = filtered_mean - stdev_span / 2
+    threshold_upper = filtered_mean + stdev_span / 2
 
-    threshold_lower = float(readout_distribution.ppf(rule_parameters.parameters.percentile_below / 100.0)) \
-        if rule_parameters.parameters.percentile_below is not None else None
-    threshold_upper = float(readout_distribution.ppf(1 - (rule_parameters.parameters.percentile_above / 100.0))) \
-        if rule_parameters.parameters.percentile_above is not None else None
+    passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
 
-    if threshold_lower is not None and threshold_upper is not None:
-        passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
-    elif threshold_upper is not None:
-        passed = rule_parameters.actual_value <= threshold_upper
-    elif threshold_lower is not None:
-        passed = threshold_lower <= rule_parameters.actual_value
-    else:
-        raise ValueError("At least one threshold is required.")
-
-    expected_value = float(filtered_mean)
+    expected_value = filtered_mean
     lower_bound = threshold_lower
     upper_bound = threshold_upper
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

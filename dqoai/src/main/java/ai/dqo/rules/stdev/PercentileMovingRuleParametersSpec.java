@@ -34,8 +34,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class PercentileMovingStdevRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<PercentileMovingStdevRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class PercentileMovingRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<PercentileMovingRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -62,7 +62,7 @@ public class PercentileMovingStdevRuleParametersSpec extends AbstractRuleParamet
     /**
      * Default constructor.
      */
-    public PercentileMovingStdevRuleParametersSpec() {
+    public PercentileMovingRuleParametersSpec() {
         this.percentileBelow = null;
         this.percentileAbove = null;
     }
@@ -123,6 +123,6 @@ public class PercentileMovingStdevRuleParametersSpec extends AbstractRuleParamet
      */
     @Override
     public String getRuleDefinitionName() {
-        return "stdev/percentile_moving_stdev";
+        return "stdev/percentile_moving";
     }
 }

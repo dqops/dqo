@@ -15,6 +15,7 @@
  */
 package ai.dqo.rules.stdev;
 
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.AbstractRuleParametersSpec;
@@ -27,42 +28,42 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+ * Data quality rule that verifies if a data quality sensor readout value
+ * doesn't excessively deviate from the moving average of a time window.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BelowPercentPopulationStdev60DaysRule5ParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<BelowPercentPopulationStdev60DaysRule5ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class MultiplyMovingStdevWithinRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<MultiplyMovingStdevWithinRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 60 readouts must exist to run the calculation.")
-    private Double percentPopulationBelow = 5.0;
 
-    /**
-     * Default constructor.
-     */
-    public BelowPercentPopulationStdev60DaysRule5ParametersSpec() {
-        this.percentPopulationBelow = null;
-    }
+    @JsonPropertyDescription("How many multiples of the estimated standard deviation within the moving average" +
+            " the current sensor readout could be, with regards to the time window. Set" +
+            " the time window at the threshold level for all severity levels (warning, error," +
+            " fatal) at once. The default is a 14 time periods (days, etc.) time window," +
+            " but at least 7 readouts must exist to run the calculation.")
+    @SampleValues(values = "1.5")
+    private Double multiplyStdev;
 
     /**
      * Multiplied factor used to calculate a multiplied stdev.
-     * @return Multiple factor used to calculate a multiplied stdev.
+     * @return Multiple factor to calculate multiplied stdev.
      */
-    public Double getPercentPopulationBelow() {
-        return percentPopulationBelow;
+    public Double getMultiplyStdev() {
+        return multiplyStdev;
     }
 
     /**
-     * Sets multiple factor to calculate multiplied stdev.
-     * @param percentPopulationBelow Multiple factor.
+     *  Sets a multiple factor to calculate multiplied stdev.
+     * @param multiplyStdev Multiple factor.
      */
-    public void setPercentPopulationBelow(Double percentPopulationBelow) {
-        this.setDirtyIf(!Objects.equals(this.percentPopulationBelow, percentPopulationBelow));
-        this.percentPopulationBelow = percentPopulationBelow;
+    public void setMultiplyStdev(Double multiplyStdev) {
+        this.setDirtyIf(!Objects.equals(this.multiplyStdev, multiplyStdev));
+        this.multiplyStdev = multiplyStdev;
     }
 
     /**
@@ -82,6 +83,6 @@ public class BelowPercentPopulationStdev60DaysRule5ParametersSpec extends Abstra
      */
     @Override
     public String getRuleDefinitionName() {
-        return "stdev/below_percent_population_stdev_60_days";
+        return "stdev/multiply_moving_stdev_within";
     }
 }
