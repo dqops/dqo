@@ -1,9 +1,9 @@
 # Adding data source connection
 
 In the Getting started example, we describe how to add a connection to [BigQuery public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime) 
-using graphic interface.
+using the graphic interface.
 
-For a full description of how to add a data source connection to other providers or add connection using CLI, see [Working with DQO](../../working-with-dqo/adding-data-source-connection/index.md).
+For a full description of how to add a data source connection to other providers or add connection using CLI, see [Working with DQO section](../../working-with-dqo/adding-data-source-connection/index.md).
 
 ## Prerequisite credentials
 

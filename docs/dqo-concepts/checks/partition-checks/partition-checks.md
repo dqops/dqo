@@ -94,4 +94,4 @@ nulls_percent.
 
 ## What's next
 
-- [Explore how to add partition checks](../../../working-with-dqo/adding-data-quality-checks/adding-data-quality-checks.md)
+- [Explore how to add partition checks](../../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md)
