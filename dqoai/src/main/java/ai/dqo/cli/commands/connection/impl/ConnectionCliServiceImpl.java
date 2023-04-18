@@ -446,30 +446,30 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
             return cliOperationStatus;
         }
 
-        List<ConnectionWrapper> connectionWrappers = connectionSpecs.stream()
-                .map(spec -> connections.getByObjectName(spec.getConnectionName(), true))
+        List<String> connectionNames = connectionSpecs.stream()
+                .map(ConnectionSpec::getConnectionName)
                 .collect(Collectors.toList());
 
         List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.connectionService.deleteConnections(
-                connectionWrappers, userHomeContext);
+                connectionNames);
 
         try {
             for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
                 job.getFuture().get();
             }
         } catch (InterruptedException e) {
-            cliOperationStatus.setSuccessMessage(String.format("Removed %d connections.", connectionWrappers.size())
+            cliOperationStatus.setSuccessMessage(String.format("Removed %d connections.", connectionNames.size())
                     + " Deleting results for these connections has been cancelled."
             );
             return cliOperationStatus;
         } catch (ExecutionException e) {
-            cliOperationStatus.setSuccessMessage(String.format("Removed %d connections.", connectionWrappers.size())
+            cliOperationStatus.setSuccessMessage(String.format("Removed %d connections.", connectionNames.size())
                     + " An exception occurred while deleting results for these connections."
             );
             return cliOperationStatus;
         }
 
-        cliOperationStatus.setSuccessMessage(String.format("Successfully removed %d connections", connectionSpecs.size()));
+        cliOperationStatus.setSuccessMessage(String.format("Successfully removed %d connections", connectionNames.size()));
         return cliOperationStatus;
     }
 

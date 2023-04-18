@@ -27,24 +27,10 @@ import ai.dqo.checks.column.recurring.numeric.ColumnNumericDailyRecurringSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
-import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
-import ai.dqo.core.configuration.DqoUserConfigurationPropertiesObjectMother;
-import ai.dqo.core.jobqueue.*;
-import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
-import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringServiceImpl;
-import ai.dqo.core.locks.UserHomeLockManager;
-import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
+import ai.dqo.core.jobqueue.DqoJobQueue;
+import ai.dqo.core.jobqueue.DqoQueueJobFactory;
+import ai.dqo.core.jobqueue.DqoQueueJobFactoryImpl;
 import ai.dqo.core.scheduler.quartz.*;
-import ai.dqo.core.synchronization.filesystems.local.LocalFileSystemSynchronizationOperations;
-import ai.dqo.core.synchronization.filesystems.local.LocalFileSystemSynchronizationOperationsImpl;
-import ai.dqo.core.synchronization.filesystems.local.LocalSynchronizationFileSystemFactory;
-import ai.dqo.core.synchronization.filesystems.local.LocalSynchronizationFileSystemFactoryImpl;
-import ai.dqo.core.synchronization.status.FileSynchronizationChangeDetectionService;
-import ai.dqo.core.synchronization.status.FileSynchronizationChangeDetectionServiceImpl;
-import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
-import ai.dqo.core.synchronization.status.SynchronizationStatusTrackerStub;
-import ai.dqo.data.local.LocalDqoUserHomePathProvider;
-import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
 import ai.dqo.execution.ExecutionContextFactory;
 import ai.dqo.execution.ExecutionContextFactoryImpl;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindService;
@@ -65,6 +51,7 @@ import ai.dqo.services.check.mapping.*;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;
+import ai.dqo.utils.jobs.DqoJobQueueObjectMother;
 import ai.dqo.utils.reflection.ReflectionService;
 import ai.dqo.utils.reflection.ReflectionServiceSingleton;
 import ai.dqo.utils.serialization.JsonSerializerImpl;
@@ -104,30 +91,7 @@ public class CheckServiceImplTests extends BaseTest {
         UIAllChecksPatchApplier uiAllChecksPatchApplier = new UIAllChecksPatchApplierImpl(uiToSpecCheckMappingService);
 
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
-
-        DqoQueueConfigurationProperties dqoQueueConfigurationProperties = new DqoQueueConfigurationProperties();
-        DqoJobConcurrencyLimiter dqoJobConcurrencyLimiter = new DqoJobConcurrencyLimiterImpl();
-        DqoJobIdGenerator dqoJobIdGenerator = new DqoJobIdGeneratorImpl();
-        DqoJobQueueMonitoringService dqoJobQueueMonitoringService = new DqoJobQueueMonitoringServiceImpl(dqoJobIdGenerator, dqoQueueConfigurationProperties);
-        LocalFileSystemSynchronizationOperations localFileSystemSynchronizationOperations = new LocalFileSystemSynchronizationOperationsImpl();
-        LocalDqoUserHomePathProvider localDqoUserHomePathProvider = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(
-                DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration());
-        LocalSynchronizationFileSystemFactory localSynchronizationFileSystemFactory = new LocalSynchronizationFileSystemFactoryImpl(
-                localFileSystemSynchronizationOperations,
-                localDqoUserHomePathProvider);
-        SynchronizationStatusTracker synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
-        UserHomeLockManager userHomeLockManager = UserHomeLockManagerObjectMother.getDefaultGlobalLockManager();
-        FileSynchronizationChangeDetectionService fileSynchronizationChangeDetectionService = new FileSynchronizationChangeDetectionServiceImpl(
-                userHomeContextFactory,
-                localSynchronizationFileSystemFactory,
-                userHomeLockManager,
-                synchronizationStatusTracker);
-        DqoJobQueue dqoJobQueue = new DqoJobQueueImpl(
-                dqoQueueConfigurationProperties,
-                dqoJobConcurrencyLimiter,
-                dqoJobIdGenerator,
-                dqoJobQueueMonitoringService,
-                fileSynchronizationChangeDetectionService);
+        DqoJobQueue dqoJobQueue = DqoJobQueueObjectMother.getDefault();
 
         this.sut = new CheckServiceImpl(
                 uiAllChecksPatchFactory,

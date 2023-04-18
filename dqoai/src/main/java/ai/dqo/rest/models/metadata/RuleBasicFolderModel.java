@@ -39,7 +39,7 @@ public class RuleBasicFolderModel {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, RuleBasicFolderModel> folders;
 
-    @JsonPropertyDescription("Whether the rule is a User Home rule.")
+    @JsonPropertyDescription("Rule basic model list")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<RuleBasicModel> rules;
 

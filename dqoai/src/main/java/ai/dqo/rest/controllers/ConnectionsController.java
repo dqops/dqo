@@ -770,8 +770,7 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        PushJobResult<DeleteStoredDataQueueJobResult> backgroundJob = this.connectionService.deleteConnection(
-                connectionWrapper, userHomeContext);
+        PushJobResult<DeleteStoredDataQueueJobResult> backgroundJob = this.connectionService.deleteConnection(connectionName);
         return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
     }
 }

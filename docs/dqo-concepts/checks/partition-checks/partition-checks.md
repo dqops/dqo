@@ -94,4 +94,8 @@ nulls_percent.
 
 ## What's next
 
-- [Explore how to add partition checks](../../../working-with-dqo/adding-data-quality-checks/adding-data-quality-checks.md)
+- [Learn more about advanced profiling checks](../advanced-profiling/advanced-profiling.md)
+- [Learn more about recurring checks](../recurring-checks/recurring-checks.md)
+
+
+

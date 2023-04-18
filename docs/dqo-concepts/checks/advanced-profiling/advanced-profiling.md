@@ -55,4 +55,5 @@ be raised.
 
 ## What's next
 
-- [Explore how to add advanced profiling checks](../../../working-with-dqo/adding-data-quality-checks/adding-data-quality-checks.md)
+- [Learn more about recurring checks](../recurring-checks/recurring-checks.md)
+- [Learn more about partition checks](../partition-checks/partition-checks.md)

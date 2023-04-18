@@ -21,8 +21,7 @@ import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
-import ai.dqo.metadata.sources.ColumnSpec;
-import ai.dqo.metadata.sources.TableWrapper;
+import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
@@ -32,7 +31,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -51,91 +49,115 @@ public class ColumnServiceImpl implements ColumnService {
     }
 
     /**
+     * Finds a column located in provided user home.
+     * @param userHome       User home.
+     * @param connectionName Connection name.
+     * @param tableName      Table name.
+     * @param columnName     Column name.
+     * @return Column spec with the requested column.
+     */
+    @Override
+    public ColumnSpec getColumn(UserHome userHome,
+                                String connectionName,
+                                PhysicalTableName tableName,
+                                String columnName) {
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return null;
+        }
+
+        TableList tableList = connectionWrapper.getTables();
+        TableWrapper tableWrapper = tableList.getByObjectName(tableName, true);
+        if (tableWrapper == null) {
+            return null;
+        }
+
+        return tableWrapper.getSpec().getColumns().get(columnName);
+    }
+
+    /**
      * Deletes column from metadata and flushes user context.
      * Cleans all stored data from .data folder related to this column.
-     *
-     * @param columnSpec Column spec.
+     * @param connectionName Connection name
+     * @param tableName      Physical table name.
+     * @param columnName     Column name.
      * @return Asynchronous job result object for deferred background operations.
      */
     @Override
-    public PushJobResult<DeleteStoredDataQueueJobResult> deleteColumn(ColumnSpec columnSpec) {
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> jobResultList = this.deleteColumns(
-                new LinkedList<>(){{add(columnSpec);}}
-        );
-        return jobResultList.get(0);
+    public PushJobResult<DeleteStoredDataQueueJobResult> deleteColumn(String connectionName,
+                                                                      PhysicalTableName tableName,
+                                                                      String columnName) {
+        List<String> columnNameList = new LinkedList<>();
+        columnNameList.add(columnName);
+
+        Map<PhysicalTableName, Iterable<String>> tableToColumnMapping = new HashMap<>();
+        tableToColumnMapping.put(tableName, columnNameList);
+
+        Map<String, Map<PhysicalTableName, Iterable<String>>> connToTabToColMapping = new HashMap<>();
+        connToTabToColMapping.put(connectionName, tableToColumnMapping);
+
+        List<PushJobResult<DeleteStoredDataQueueJobResult>> jobResultList = this.deleteColumns(connToTabToColMapping);
+
+        return jobResultList.isEmpty() ? null : jobResultList.get(0);
     }
 
     /**
      * Deletes columns from metadata and flushes user context.
      * Cleans all stored data from .data folder related to these columns.
-     *
-     * @param columnSpecs Iterable of column specs.
+     * @param connectionToTableToColumns Mapping for every connection to a mapping for every table for which columns need to be deleted.
      * @return List of asynchronous job result objects for deferred background operations.
      */
     @Override
-    public List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteColumns(Iterable<ColumnSpec> columnSpecs) {
+    public List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteColumns(
+            Map<String, Map<PhysicalTableName, Iterable<String>>> connectionToTableToColumns) {
         UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
-        for (ColumnSpec columnSpec: columnSpecs) {
-            TableWrapper table = userHome.findTableFor(columnSpec.getHierarchyId());
-            table.getSpec().getColumns().remove(columnSpec.getColumnName());
+        List<DeleteStoredDataQueueJobParameters> deleteStoredDataParameters = new ArrayList<>();
+
+        for (Map.Entry<String, Map<PhysicalTableName, Iterable<String>>> connToTabToColsEntry :
+                connectionToTableToColumns.entrySet()) {
+            String connectionName = connToTabToColsEntry.getKey();
+
+            for (Map.Entry<PhysicalTableName, Iterable<String>> tableToColsEntry :
+                    connToTabToColsEntry.getValue().entrySet()) {
+                PhysicalTableName tableName = tableToColsEntry.getKey();
+                List<String> columnNamesRemoved = new ArrayList<>();
+
+                for (String columnName : tableToColsEntry.getValue()) {
+                    ColumnSpec columnSpec = this.getColumn(userHome, connectionName, tableName, columnName);
+                    if (columnSpec == null) {
+                        continue;
+                    }
+
+                    TableWrapper table = userHome.findTableFor(columnSpec.getHierarchyId());
+                    table.getSpec().getColumns().remove(columnName);
+                    columnNamesRemoved.add(columnName);
+                }
+
+                DeleteStoredDataQueueJobParameters param = new DeleteStoredDataQueueJobParameters() {{
+                    setConnectionName(connectionName);
+                    setSchemaTableName(tableName.toTableSearchFilter());
+                    setColumnNames(columnNamesRemoved);
+                    setDeleteStatistics(true);
+                    setDeleteCheckResults(true);
+                    setDeleteSensorReadouts(true);
+                    setDeleteErrors(true);
+                }};
+                deleteStoredDataParameters.add(param);
+            }
+        }
+
+        List<PushJobResult<DeleteStoredDataQueueJobResult>> results = new ArrayList<>();
+        for (DeleteStoredDataQueueJobParameters param : deleteStoredDataParameters) {
+            DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
+            deleteStoredDataJob.setDeletionParameters(param);
+            PushJobResult<DeleteStoredDataQueueJobResult> jobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob);
+            results.add(jobResult);
         }
 
         userHomeContext.flush();
-
-        List<DeleteStoredDataQueueJobParameters> deleteStoredDataParameters = this.getDeleteStoredDataQueueJobParameters(userHome, columnSpecs);
-
-        return deleteStoredDataParameters.stream()
-                .map(param -> {
-                    DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
-                    deleteStoredDataJob.setDeletionParameters(param);
-                    return this.dqoJobQueue.pushJob(deleteStoredDataJob);
-                }).collect(Collectors.toList());
-    }
-
-    /**
-     * Get parameters for delete stored data job, pointing to all results related to specific columns.
-     * @param userHome User home.
-     * @param columnSpecs Column specs.
-     * @return List of delete stored data job parameters.
-     */
-    protected List<DeleteStoredDataQueueJobParameters> getDeleteStoredDataQueueJobParameters(
-            UserHome userHome,
-            Iterable<ColumnSpec> columnSpecs) {
-        Map<String, Map<String, List<String>>> connectionToTableToColumnsMapping = new HashMap<>();
-        for (ColumnSpec columnSpec: columnSpecs) {
-            TableWrapper tableWrapper = userHome.findTableFor(columnSpec.getHierarchyId());
-
-            String connection = userHome.findConnectionFor(tableWrapper.getHierarchyId()).getName();
-            if (!connectionToTableToColumnsMapping.containsKey(connection)) {
-                connectionToTableToColumnsMapping.put(connection, new HashMap<>());
-            }
-
-            Map<String, List<String>> tableToColumnsMapping = connectionToTableToColumnsMapping.get(connection);
-            String table = tableWrapper.getPhysicalTableName().toTableSearchFilter();
-            if (!tableToColumnsMapping.containsKey(table)) {
-                tableToColumnsMapping.put(table, new ArrayList<>());
-            }
-            tableToColumnsMapping.get(table).add(columnSpec.getColumnName());
-        }
-
-        List<DeleteStoredDataQueueJobParameters> parameters = new ArrayList<>();
-        connectionToTableToColumnsMapping.forEach(
-                (connection, tableToColumnsMapping) -> tableToColumnsMapping.forEach(
-                        (table, columns) -> {
-                            DeleteStoredDataQueueJobParameters param = new DeleteStoredDataQueueJobParameters() {{
-                                setConnectionName(connection);
-                                setSchemaTableName(table);
-                                setColumnNames(columns);
-                                setDeleteStatistics(true);
-                                setDeleteCheckResults(true);
-                                setDeleteSensorReadouts(true);
-                                setDeleteErrors(true);
-                            }};
-                            parameters.add(param);
-                        }
-                ));
-        return parameters;
+        return results;
     }
 }

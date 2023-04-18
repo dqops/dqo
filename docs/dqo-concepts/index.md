@@ -22,7 +22,7 @@ These topics introduce the basic concepts of DQO.
     Description of data quality KPIs. The results of data quality measurements calculated as a percentage of passed data quality checks for each table, database, or connection.
 
 
- - **[Data quality dashboards](./dashboards/dashboards.md)**
+ - **[Data quality dashboards](./data-quality-dashboards/data-quality-dashboards.md)**
 
     Overview of data quality dashboards. Built-in dashboards for displaying data quality KPI.
 
@@ -40,11 +40,6 @@ These topics introduce the basic concepts of DQO.
 - **[Data storage](./data-storage/data-storage.md)**
 
     Description how data is stored in DQO.
-
-
-- **[Architecture](./architecture/architecture.md)**
-
-    Overview of DQO Architecture.
 
 
 - **[Working with YAML files](./working-with-yaml-files/working-with-yaml-files.md)**
