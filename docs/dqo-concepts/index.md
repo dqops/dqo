@@ -22,7 +22,7 @@ These topics introduce the basic concepts of DQO.
     Description of data quality KPIs. The results of data quality measurements calculated as a percentage of passed data quality checks for each table, database, or connection.
 
 
- - **[Data quality dashboards](./dashboards/dashboards.md)**
+ - **[Data quality dashboards](./data-quality-dashboards/data-quality-dashboards.md)**
 
     Overview of data quality dashboards. Built-in dashboards for displaying data quality KPI.
 

@@ -56,7 +56,7 @@ You can access the full lists of available checks with detailed descriptions by 
 
 ## Severity levels
 
-Checks evaluate the results using rules.  There are 3 severity levels in DQO: warning, error and fatal
+Checks evaluate the results using rules. There are 3 severity levels in DQO: warning, error and fatal
 
 - **Warning**. A warning level alerting threshold raises warnings for less important data quality issues. Warnings are
   not treated as data quality issues. Data quality checks that did not pass the warning alerting rule, but did pass the
@@ -272,4 +272,4 @@ identification of the source of the data quality issue.
 - [Learn more about advanced profiling checks](./advanced-profiling/advanced-profiling.md)
 - [Learn more about recurring checks](./recurring-checks/recurring-checks.md)
 - [Learn more about partition checks](./partition-checks/partition-checks.md)
-- [Explore how to add checks](../../working-with-dqo/adding-data-quality-checks/adding-data-quality-checks.md)
+- [Explore how to add checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md)

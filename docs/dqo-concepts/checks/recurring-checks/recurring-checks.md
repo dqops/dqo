@@ -99,4 +99,4 @@ is stored.
 
 ## What's next 
 
-- [Explore how to add recurring checks](../../../working-with-dqo/adding-data-quality-checks/adding-data-quality-checks.md)
+- [Explore how to add recurring checks](../../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md)

@@ -10,9 +10,8 @@ nav:
     - 'getting-started/index.md'
     - Installation: 'getting-started/installation/installation.md'
     - Connect to a data source: 'getting-started/adding-data-source-connection/adding-data-source-connection.md'
-    - Run initial profiling: 'getting-started/run-initial-profiling/run-initial-profiling.md'
     - Run data quality checks: 'getting-started/run-data-quality-checks/run-data-quality-checks.md'
-    - Inspect results: 'getting-started/inspect-results/inspect-results.md'
+    - Inspect results on the dashboards: 'getting-started/review-results-on-dashboards/review-results-on-dashboards.md'
   - DQO concepts:
     - 'dqo-concepts/index.md'
     - Architecture: 'dqo-concepts/architecture/architecture.md'
@@ -24,17 +23,17 @@ nav:
     - Sensors: 'dqo-concepts/sensors/sensors.md'
     - Rules: 'dqo-concepts/rules/rules.md'
     - Data quality KPIs: 'dqo-concepts/data-quality-kpis/data-quality-kpis.md'
-    - Dashboards: 'dqo-concepts/dashboards/dashboards.md'
+    - Dashboards: 'dqo-concepts/data-quality-dashboards/data-quality-dashboards.md'
     - Data quality dimensions: 'dqo-concepts/data-quality-dimensions/data-quality-dimensions.md'
     - Data stream segmentation: 'dqo-concepts/data-stream-segmentation/data-stream-segmentation.md'
-    - Data storage: 'dqo-concepts\data-storage\data-storage.md'
+    - Data storage: 'dqo-concepts/data-storage/data-storage.md'
     - Working with YAML files: 'dqo-concepts/working-with-yaml-files/working-with-yaml-files.md'
     - Working with CLI: 'dqo-concepts/working-with-cli/working-with-cli.md'
   - Working with DQO:
     - 'working-with-dqo/index.md'
     - Installation:
       - Install DQO from Git: 'working-with-dqo/install-dqo-from-git/install-dqo-from-git.md'
-      - Log in to DQO Cloud: 'working-with-dqo/login-to-dqo-cloud/log-in-to-dqo-cloud.md'
+      - Log in to DQO Cloud: 'working-with-dqo/log-in-to-dqo-cloud/log-in-to-dqo-cloud.md'
     - Adding connections:
       - 'working-with-dqo/adding-data-source-connection/index.md'
       - BigQuery: 'working-with-dqo/adding-data-source-connection/bigquery.md'
@@ -42,6 +41,10 @@ nav:
       - Redshift: 'working-with-dqo/adding-data-source-connection/redshift.md'
       - PostgreSQL: 'working-with-dqo/adding-data-source-connection/postgresql.md'
       - SQL Server: 'working-with-dqo/adding-data-source-connection/sql-server.md'
+    - Run data quality checks:
+      - 'working-with-dqo/run-data-quality-checks/index.md'
+      - Run data quality checks: 'working-with-dqo/run-data-quality-checks/run-data-quality-checks.md'
+      - Timeliness data quality checks: 'working-with-dqo/run-data-quality-checks/timeliness-data-quality-checks.md'
     - DQO Shell:
       - 'working-with-dqo/dqo-shell/index.md'
       - Run modes: 'working-with-dqo/dqo-shell/run-modes.md'
@@ -53,7 +56,6 @@ nav:
       - Timezone configuration: 'working-with-dqo/scheduler/timezone_configuration.md'
     - Notifications: 'working-with-dqo/notifications/notifications.md'
     - Initial profiling: 'working-with-dqo/initial-profiling/initial-profiling.md'
-    - Adding new data quality check: 'working-with-dqo/adding-data-quality-checks/adding-data-quality-checks.md'
     - Removing data quality results: 'working-with-dqo/removing-data-quality-results/removing-data-quality-results.md'
     - Setting up data streams: 'working-with-dqo/setting-up-data-stream/index.md'
   - Examples:
