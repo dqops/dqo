@@ -216,6 +216,7 @@ public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
     /**
      * Calculates an incident hash that is used for grouping similar data quality issues into data quality incidents.
      * This method will decide which values are used for the data quality issue calculation picking the required parameters into a hash calculation.
+     * @param connectionName Connection name.
      * @param physicalTableName Physical table name affected by a data quality issue.
      * @param dataStreamName Data stream name.
      * @param dataQualityDimension Data quality dimension name.
@@ -224,13 +225,15 @@ public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
      * @param checkName Data quality check name.
      * @return Hash of the data quality incident.
      */
-    public long calculateIncidentHash(PhysicalTableName physicalTableName,
+    public long calculateIncidentHash(String connectionName,
+                                      PhysicalTableName physicalTableName,
                                       String dataStreamName,
                                       String dataQualityDimension,
                                       String checkCategory,
                                       String checkType,
                                       String checkName) {
         ArrayList<String> hashedComponents = new ArrayList<>();
+        hashedComponents.add(connectionName);
         hashedComponents.add(physicalTableName.getSchemaName());
         hashedComponents.add(physicalTableName.getTableName());
         if (this.divideByDataStream && dataStreamName != null) {

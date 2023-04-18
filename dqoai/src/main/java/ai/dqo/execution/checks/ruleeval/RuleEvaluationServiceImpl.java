@@ -257,7 +257,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     String checkType = !normalizedSensorResults.getCheckTypeColumn().isMissing(allSensorResultsRowIndex) ?
                             normalizedSensorResults.getCheckTypeColumn().get(allSensorResultsRowIndex) : null;
                     String checkName = checkSpec.getCheckName();
-                    long incidentHash = incidentGrouping.calculateIncidentHash(sensorRunParameters.getTable().getPhysicalTableName(),
+                    long incidentHash = incidentGrouping.calculateIncidentHash(sensorRunParameters.getConnection().getConnectionName(),
+                            sensorRunParameters.getTable().getPhysicalTableName(),
                             dataStreamName, qualityDimension, checkCategory, checkType, checkName);
                     result.getIncidentHashColumn().set(targetRowIndex, incidentHash);
                 }
