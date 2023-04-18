@@ -74,16 +74,20 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     differences_std = float(scipy.stats.tstd(differences))
     differences_mean = float(np.mean(differences))
 
-    last_readout = filtered[-1]
+    last_readout = float(filtered[-1])
     actual_difference = rule_parameters.actual_value - last_readout
 
-    # Assumption: the change rate in historical data follows normal distribution
-    readout_distribution = scipy.stats.norm(loc=differences_mean, scale=differences_std)
+    if differences_std == 0:
+        threshold_lower = float(differences_mean) if rule_parameters.parameters.percentile_below is not None else None
+        threshold_upper = float(differences_mean) if rule_parameters.parameters.percentile_above is not None else None
+    else:
+        # Assumption: the change rate in historical data follows normal distribution
+        readout_distribution = scipy.stats.norm(loc=differences_mean, scale=differences_std)
 
-    threshold_lower = float(readout_distribution.ppf(rule_parameters.parameters.percentile_below / 100.0)) \
-        if rule_parameters.parameters.percentile_below is not None else None
-    threshold_upper = float(readout_distribution.ppf(1 - (rule_parameters.parameters.percentile_above / 100.0))) \
-        if rule_parameters.parameters.percentile_above is not None else None
+        threshold_lower = float(readout_distribution.ppf(rule_parameters.parameters.percentile_below / 100.0)) \
+            if rule_parameters.parameters.percentile_below is not None else None
+        threshold_upper = float(readout_distribution.ppf(1 - (rule_parameters.parameters.percentile_above / 100.0))) \
+            if rule_parameters.parameters.percentile_above is not None else None
 
     if threshold_lower is not None and threshold_upper is not None:
         passed = threshold_lower <= actual_difference <= threshold_upper

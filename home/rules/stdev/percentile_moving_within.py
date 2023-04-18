@@ -72,12 +72,16 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered_std = scipy.stats.tstd(filtered)
     filtered_mean = np.mean(filtered)
 
-    # Assumption: the historical data follows normal distribution
-    readout_distribution = scipy.stats.norm(loc=filtered_mean, scale=filtered_std)
-    one_sided_tail = (1 - rule_parameters.parameters.percentile_within / 100.0) / 2
+    if filtered_std == 0:
+        threshold_lower = float(filtered_mean)
+        threshold_upper = float(filtered_mean)
+    else:
+        # Assumption: the historical data follows normal distribution
+        readout_distribution = scipy.stats.norm(loc=filtered_mean, scale=filtered_std)
+        one_sided_tail = (1 - rule_parameters.parameters.percentile_within / 100.0) / 2
 
-    threshold_lower = float(readout_distribution.ppf(one_sided_tail))
-    threshold_upper = float(readout_distribution.ppf(1 - one_sided_tail))
+        threshold_lower = float(readout_distribution.ppf(one_sided_tail))
+        threshold_upper = float(readout_distribution.ppf(1 - one_sided_tail))
 
     passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper
 

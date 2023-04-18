@@ -73,7 +73,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     differences_std = float(scipy.stats.tstd(differences))
     differences_mean = float(np.mean(differences))
 
-    last_readout = filtered[-1]
+    last_readout = float(filtered[-1])
     actual_difference = rule_parameters.actual_value - last_readout
 
     stdev_span = rule_parameters.parameters.multiply_stdev * differences_std

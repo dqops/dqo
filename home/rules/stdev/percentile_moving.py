@@ -73,13 +73,17 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered_std = scipy.stats.tstd(filtered)
     filtered_mean = np.mean(filtered)
 
-    # Assumption: the historical data follows normal distribution
-    readout_distribution = scipy.stats.norm(loc=filtered_mean, scale=filtered_std)
+    if filtered_std == 0:
+        threshold_lower = float(filtered_mean) if rule_parameters.parameters.percentile_below is not None else None
+        threshold_upper = float(filtered_mean) if rule_parameters.parameters.percentile_above is not None else None
+    else:
+        # Assumption: the historical data follows normal distribution
+        readout_distribution = scipy.stats.norm(loc=filtered_mean, scale=filtered_std)
 
-    threshold_lower = float(readout_distribution.ppf(rule_parameters.parameters.percentile_below / 100.0)) \
-        if rule_parameters.parameters.percentile_below is not None else None
-    threshold_upper = float(readout_distribution.ppf(1 - (rule_parameters.parameters.percentile_above / 100.0))) \
-        if rule_parameters.parameters.percentile_above is not None else None
+        threshold_lower = float(readout_distribution.ppf(rule_parameters.parameters.percentile_below / 100.0)) \
+            if rule_parameters.parameters.percentile_below is not None else None
+        threshold_upper = float(readout_distribution.ppf(1 - (rule_parameters.parameters.percentile_above / 100.0))) \
+            if rule_parameters.parameters.percentile_above is not None else None
 
     if threshold_lower is not None and threshold_upper is not None:
         passed = threshold_lower <= rule_parameters.actual_value <= threshold_upper

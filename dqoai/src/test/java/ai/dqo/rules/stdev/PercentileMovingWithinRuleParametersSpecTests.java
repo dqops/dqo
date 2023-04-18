@@ -35,6 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 
 @SpringBootTest
 public class PercentileMovingWithinRuleParametersSpecTests extends BaseTest {
@@ -78,6 +79,24 @@ public class PercentileMovingWithinRuleParametersSpecTests extends BaseTest {
         Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(13.25, ruleExecutionResult.getLowerBound(), 0.1);
         Assertions.assertEquals(26.75, ruleExecutionResult.getUpperBound(), 0.1);
+    }
+
+    @Test
+    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreEqual_thenReturnsPassed() {
+        this.sut.setPercentileWithin(80.0);
+
+        Arrays.fill(this.sensorReadouts, 10.0);
+
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
+                this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
+
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(10.0,
+                this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
+
+        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertEquals(10.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(10.0, ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(10.0, ruleExecutionResult.getUpperBound());
     }
 
     @Test
