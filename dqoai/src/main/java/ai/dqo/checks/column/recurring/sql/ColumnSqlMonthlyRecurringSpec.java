@@ -45,13 +45,13 @@ public class ColumnSqlMonthlyRecurringSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
+    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnSqlConditionPassedPercentCheckSpec monthlySqlConditionPassedPercentOnColumn;
 
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
+    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression). Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnSqlConditionFailedCountCheckSpec monthlySqlConditionFailedCountOnColumn;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnSqlAggregateExprCheckSpec monthlySqlAggregateExprColumn;
 
     /**
