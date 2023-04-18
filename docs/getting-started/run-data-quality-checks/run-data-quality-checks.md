@@ -8,7 +8,7 @@ and column-level [nulls_percent](../../checks/column/nulls/not-nulls-percent.md)
 
 For more information about checks, see [DQO concepts section](../../dqo-concepts/checks/index.md). 
 
-## Run table-level advanced profiling check using the graphic interface
+## Run table-level advanced profiling check
 
 1. In DQO User Interface Console go to the Profiling section.
 
@@ -42,7 +42,7 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
     A table will appear with more details about the run check.
 
 
-## Run column-level advanced profiling check using graphic interface
+## Run column-level advanced profiling check
 
 1. In the tree view on the left navigate to "clearance_status" column
 
@@ -71,4 +71,4 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
 
 ## Next step
 
-Now that you have run the checks, you can [inspect the results on the dashboards](../../getting-started/review-results-on-dashboards/review-results-on-dashboards.md).
+Now that you have run the checks, you can [review the results on the dashboards](../../getting-started/review-results-on-dashboards/review-results-on-dashboards.md).

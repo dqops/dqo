@@ -1,10 +1,10 @@
-# Inspect results on the dashboards
+# Review results on the dashboards
 
 In the [previous step](../run-data-quality-checks/run-data-quality-checks.md) we run two data quality check: table-level
 [row_count](../../checks/table/standard/row-count.md) and column-level [nulls_percent](../../checks/column/nulls/not-nulls-percent.md)
 on BigQuery public dataset Austin Crime Data. 
 
-Now let's inspect the results with the data quality dashboards. This is a unique feature of DQO allowing for the display of [data quality KPI](../../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
+Now let's review the results on the data quality dashboards. This is a unique feature of DQO allowing for the display of [data quality KPI](../../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
 
 In DQO, you can choose from a variety of built-in dashboard groups.
 
@@ -56,12 +56,6 @@ You can find it in the Issue Details group.
     list of tables affected by the issues. In our example, there is only one table with one data quality issue. 
     You can filter the results by clicking on the check category or the table.  
 
-## Next steps
 
 You have completed our quick tutorial and now know how to add connections, run data quality checks and view results in 
 DQO using the graphic interface.
-
-But we have much more to offer.
-
-Go to the [Working with DQO section](../../working-with-dqo/) to learn how to run other types of checks, add schedules and
-data streams, and learn how to use the command line interface.

@@ -21,7 +21,7 @@ Try our [tutorial](./getting-started/index.md) to learn how to start monitoring 
 
 You can use DQO with the most popular databases. [Learn here how to connect a data source to DQO](./working-with-dqo/adding-data-source-connection/index.md).
 
-![Google BigQuery](./images/connections/google-bigquery.png) &nbsp; &nbsp; &nbsp; ![Snowflake](./images/connections/snowflake.png) &nbsp; &nbsp; &nbsp;  ![Amazon Redshift](./images/connections/amazon-redshift.png) &nbsp; &nbsp; &nbsp; ![PostgreSQL](./images/connections/postgresql.png) &nbsp; &nbsp; &nbsp; ![Microsoft SQL Server](./images/connections/microsoft-sql-server.png)
+![Google BigQuery](./images/connections/google-bigquery.png) &nbsp; &nbsp; &nbsp; ![Snowflake](./images/connections/snowflake.png) &nbsp; &nbsp; &nbsp; ![Amazon Redshift](./images/connections/amazon-redshift.png) &nbsp; &nbsp; &nbsp; ![PostgreSQL](./images/connections/postgresql.png) &nbsp; &nbsp; &nbsp; ![Microsoft SQL Server](./images/connections/microsoft-sql-server.png)
 
 ## Additional resources
 

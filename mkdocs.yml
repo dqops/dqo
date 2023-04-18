@@ -11,7 +11,7 @@ nav:
     - Installation: 'getting-started/installation/installation.md'
     - Connect to a data source: 'getting-started/adding-data-source-connection/adding-data-source-connection.md'
     - Run data quality checks: 'getting-started/run-data-quality-checks/run-data-quality-checks.md'
-    - Inspect results on the dashboards: 'getting-started/review-results-on-dashboards/review-results-on-dashboards.md'
+    - Review results on the dashboards: 'getting-started/review-results-on-dashboards/review-results-on-dashboards.md'
   - DQO concepts:
     - 'dqo-concepts/index.md'
     - Checks:
