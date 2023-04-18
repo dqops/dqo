@@ -198,7 +198,8 @@ function TreeProvider(props: any) {
       run_checks_job_template: table[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof TableBasicModel] as CheckSearchFilters,
       collect_statistics_job_template: table.collect_statistics_job_template,
       data_clean_job_template: table.data_clean_job_template,
-      open: false
+      open: false,
+      configured: table.has_any_configured_checks || table.has_any_configured_partition_checks || table.has_any_configured_profiling_checks || table.has_any_configured_recurring_checks
     }));
     resetTreeData(node, items);
   };
@@ -362,7 +363,8 @@ function TreeProvider(props: any) {
       run_checks_job_template: column[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof ColumnBasicModel] as CheckSearchFilters,
       collect_statistics_job_template: column.collect_statistics_job_template,
       data_clean_job_template: column.data_clean_job_template,
-      open: false
+      open: false,
+      configured: column.has_any_configured_checks || column.has_any_configured_partition_checks || column.has_any_configured_profiling_checks || column.has_any_configured_recurring_checks
     }));
     resetTreeData(node, items);
   };
