@@ -153,8 +153,6 @@ Hive-compatible data can query the output files of the data quality tool. Data c
 Apache Spark, DataBricks, Google BigQuery, Presto, Trino, SQL Server PolyBase, AWS Athena, and AWS Redshift Spectrum.
 
 Data cleaning is as simple as deleting a file from a folder, which can be done using the DQO user interface or CLI. 
-More information about [deleting results](../../working-with-dqo/removing-data-quality-results/removing-data-quality-results.md) 
-can be found in Working with DQO section.
 
 ## Testing date partitions
 
@@ -272,4 +270,3 @@ identification of the source of the data quality issue.
 - [Learn more about advanced profiling checks](./advanced-profiling/advanced-profiling.md)
 - [Learn more about recurring checks](./recurring-checks/recurring-checks.md)
 - [Learn more about partition checks](./partition-checks/partition-checks.md)
-- [Explore how to add checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md)

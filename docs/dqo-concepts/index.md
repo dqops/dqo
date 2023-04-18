@@ -42,11 +42,6 @@ These topics introduce the basic concepts of DQO.
     Description how data is stored in DQO.
 
 
-- **[Architecture](./architecture/architecture.md)**
-
-    Overview of DQO Architecture.
-
-
 - **[Working with YAML files](./working-with-yaml-files/working-with-yaml-files.md)**
 
     Introduction to working with YAML configuration files in DQO.

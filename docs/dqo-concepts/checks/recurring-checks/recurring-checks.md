@@ -99,4 +99,5 @@ is stored.
 
 ## What's next 
 
-- [Explore how to add recurring checks](../../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md)
+- [Learn more about advanced profiling checks](../advanced-profiling/advanced-profiling.md)
+- [Learn more about partition checks](../partition-checks/partition-checks.md)
