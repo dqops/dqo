@@ -13,31 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.connectors;
+package ai.dqo.mysql;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import ai.dqo.BaseIntegrationTest;
 
 /**
- *  Data source provider type (dialect type).
- *  We will use lower case names to avoid issues with parsing, even if the enum names are not named following the Java naming convention.
+ * Base class for MySQL integration tests.
  */
-public enum ProviderType {
-    @JsonProperty("bigquery")
-    bigquery,
-
-    @JsonProperty("snowflake")
-    snowflake,
-
-    @JsonProperty("postgresql")
-    postgresql,
-
-    @JsonProperty("redshift")
-    redshift,
-
-    @JsonProperty("sqlserver")
-    sqlserver,
-
-    @JsonProperty("mysql")
-    mysql,
-    // TODO: add more connectors
+public abstract class BaseMysqlIntegrationTest extends BaseIntegrationTest {
 }

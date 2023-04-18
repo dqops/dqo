@@ -21,6 +21,8 @@ import RedshiftConnection from "./RedshiftConnection";
 import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
 import SqlServerConnection from "./SqlServerConnection";
 import SqlServerLogo from '../../SvgIcon/svg/mssql-server.svg';
+import MySQLConnection from "./MySQLConnection";
+import MySQLLogo from '../../SvgIcon/svg/mysql.svg';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -125,6 +127,8 @@ const DatabaseConnection = ({
         return 'Redshift Connection Settings';
       case ConnectionBasicModelProviderTypeEnum.sqlserver:
         return 'SQL Server Connection Settings';
+        case ConnectionBasicModelProviderTypeEnum.mysql:
+          return 'MYSQL Connection Settings';
       default:
         return 'Database Connection Settings'
     }
@@ -160,6 +164,12 @@ const DatabaseConnection = ({
         sqlserver={database.sqlserver}
         onChange={(sqlserver) => onChange({ ...database, sqlserver })}
       />
+    ),
+    [ConnectionBasicModelProviderTypeEnum.mysql]: (
+      <MySQLConnection
+        mysql={database.mysql}
+        onChange={(mysql) => onChange({ ...database, mysql })}
+      />
     )
   };
 
@@ -175,6 +185,8 @@ const DatabaseConnection = ({
         return RedshiftLogo;
       case ConnectionBasicModelProviderTypeEnum.sqlserver:
         return SqlServerLogo;
+      case ConnectionBasicModelProviderTypeEnum.mysql:
+        return MySQLLogo;
       default:
         return '';
     }

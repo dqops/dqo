@@ -16,39 +16,46 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
       </div>
       <div className="grid grid-cols-2 gap-6">
         <div
-          className="bg-white rounded-lg shadow-lg px-4 py-8 flex-1 cursor-pointer border border-gray-100 min-h-40 flex flex-col items-center justify-center"
+          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
           onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.bigquery)}
         >
           <SvgIcon name="big-query" className="mb-3 w-16" />
           <div className="text-3xl font-semibold text-gray-700">Bigquery</div>
         </div>
         <div
-          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 min-h-40 flex flex-col items-center justify-center"
+          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
           onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.snowflake)}
         >
           <SvgIcon name="snowflake" className="mb-3 w-16 text-blue-500" />
           <div className="text-3xl font-semibold text-gray-700">Snowflake</div>
         </div>
         <div
-          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 min-h-40 flex flex-col items-center justify-center"
+          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
           onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.postgresql)}
         >
           <SvgIcon name="postgresql" className="mb-3 w-16 text-blue-500" />
           <div className="text-3xl font-semibold text-gray-700">PostgreSQL</div>
         </div>
         <div
-          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 min-h-40 flex flex-col items-center justify-center"
+          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
           onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.redshift)}
         >
           <SvgIcon name="redshift" className="mb-3 w-16 text-blue-500" />
           <div className="text-3xl font-semibold text-gray-700">Redshift</div>
         </div>
         <div
-          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 min-h-40 flex flex-col items-center justify-center"
+          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
           onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.sqlserver)}
         >
           <SvgIcon name="sqlserver" className="mb-3 w-20 text-blue-500" />
           <div className="text-3xl font-semibold text-gray-700">Microsoft SQL Server</div>
+        </div>
+        <div
+          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
+          onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.mysql)}
+        >
+          <SvgIcon name="mysql" className="mb-3 w-20 text-blue-500" />
+          <div className="text-3xl font-semibold text-gray-700">MySQL</div>
         </div>
       </div>
     </div>

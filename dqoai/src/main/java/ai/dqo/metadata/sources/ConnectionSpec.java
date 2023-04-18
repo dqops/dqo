@@ -18,6 +18,7 @@ package ai.dqo.metadata.sources;
 import ai.dqo.connectors.ConnectionProviderSpecificParameters;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
+import ai.dqo.connectors.mysql.MysqlParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
@@ -60,6 +61,7 @@ public class ConnectionSpec extends AbstractSpec {
             put("postgresql", o -> o.postgresql);
             put("redshift", o -> o.redshift);
             put("sqlserver", o -> o.sqlserver);
+            put("mysql", o -> o.mysql);
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
             put("notifications", o -> o.notifications);
@@ -88,6 +90,10 @@ public class ConnectionSpec extends AbstractSpec {
     @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("SQL Server connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).")
     private SqlServerParametersSpec sqlserver;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("MySQL connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).")
+    private MysqlParametersSpec mysql;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel executions of checks on this connection.")
     private Integer parallelRunsLimit;
@@ -225,20 +231,38 @@ public class ConnectionSpec extends AbstractSpec {
 
     /**
      * Returns the connection parameters for SQL Server.
-     * @return Redshift connection parameters.
+     * @return SQL Server connection parameters.
      */
     public SqlServerParametersSpec getSqlserver() {
         return sqlserver;
     }
 
     /**
-     * Sets the Redshift connection parameters.
-     * @param sqlserver New Redshift connection parameters.
+     * Sets the SQL Server connection parameters.
+     * @param sqlserver New SQL Server connection parameters.
      */
     public void setSqlserver(SqlServerParametersSpec sqlserver) {
         setDirtyIf(!Objects.equals(this.sqlserver, sqlserver));
         this.sqlserver = sqlserver;
         propagateHierarchyIdToField(sqlserver, "sqlserver");
+    }
+
+    /**
+     * Returns the connection parameters for MySQL.
+     * @return MySQL connection parameters.
+     */
+    public MysqlParametersSpec getMysql() {
+        return mysql;
+    }
+
+    /**
+     * Sets the MySQL connection parameters.
+     * @param mysql New MySQL connection parameters.
+     */
+    public void setMysql(MysqlParametersSpec mysql) {
+        setDirtyIf(!Objects.equals(this.mysql, mysql));
+        this.mysql = mysql;
+        propagateHierarchyIdToField(mysql, "mysql");
     }
 
     /**
@@ -402,6 +426,9 @@ public class ConnectionSpec extends AbstractSpec {
             }
             if (cloned.sqlserver != null) {
                 cloned.sqlserver = cloned.sqlserver.expandAndTrim(secretValueProvider);
+            }
+            if (cloned.mysql != null) {
+                cloned.mysql = cloned.mysql.expandAndTrim(secretValueProvider);
             }
             if (cloned.notifications != null) {
                 cloned.notifications = cloned.notifications.expandAndTrim(secretValueProvider);

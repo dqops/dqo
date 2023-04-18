@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.connectors.sqlserver;
+package ai.dqo.connectors.mysql;
 
 import ai.dqo.connectors.ConnectionProviderSpecificParameters;
 import ai.dqo.core.secrets.SecretValueProvider;
@@ -32,47 +32,47 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Microsoft SQL Server connection parameters.
+ * MySql connection parameters.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class SqlServerParametersSpec extends BaseProviderParametersSpec
+public class MysqlParametersSpec extends BaseProviderParametersSpec
         implements ConnectionProviderSpecificParameters {
-    private static final ChildHierarchyNodeFieldMapImpl<SqlServerParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
+    private static final ChildHierarchyNodeFieldMapImpl<MysqlParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
         {
         }
     };
 
-    @CommandLine.Option(names = {"--sqlserver-host"}, description = "SQL Server host name")
-    @JsonPropertyDescription("SQL Server host name. Supports also a ${SQLSERVER_HOST} configuration with a custom environment variable.")
+    @CommandLine.Option(names = {"--mysql-host"}, description = "MySQL host name")
+    @JsonPropertyDescription("MySQL host name. Supports also a ${MYSQL_HOST} configuration with a custom environment variable.")
     private String host;
 
-    @CommandLine.Option(names = {"--sqlserver-port"}, description = "SQL Server port number", defaultValue = "1433")
-    @JsonPropertyDescription("SQL Server port name. The default port is 1433. Supports also a ${SQLSERVER_PORT} configuration with a custom environment variable.")
+    @CommandLine.Option(names = {"--mysql-port"}, description = "MySQL port number", defaultValue = "3306")
+    @JsonPropertyDescription("MySQL port name. The default port is 3306. Supports also a ${MYSQL_PORT} configuration with a custom environment variable.")
     private String port;
 
-    @CommandLine.Option(names = {"--sqlserver-database"}, description = "SQL Server database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("SQL Server database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--mysql-database"}, description = "MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String database;
 
-    @CommandLine.Option(names = {"--sqlserver-user"}, description = "SQL Server user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("SQL Server user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--mysql-user"}, description = "MySQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("MySQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String user;
 
-    @CommandLine.Option(names = {"--sqlserver-password"}, description = "SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--mysql-password"}, description = "MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String password;
 
-    @CommandLine.Option(names = {"--sqlserver-options"}, description = "SQL Server connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
-    @JsonPropertyDescription("SQL Server connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.")
+    @CommandLine.Option(names = {"--mysql-options"}, description = "MySQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
+    @JsonPropertyDescription("MySQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable.")
     private String options;
 
-    @CommandLine.Option(names = {"--sqlserver-ssl"}, description = "Connecting to SQL Server with SSL disabled", defaultValue = "false")
-    @JsonPropertyDescription("Connecting to SQL Server with SSL disabled. The default value is false.")
+    @CommandLine.Option(names = {"--mysql-ssl"}, description = "Connect to MySQL using SSL", defaultValue = "false")
+    @JsonPropertyDescription("Connect to MySQL using SSL. The default value is false.")
     private Boolean ssl;
 
-    @CommandLine.Option(names = {"-S"}, description = "SQL Server additional properties that are added to the JDBC connection string")
+    @CommandLine.Option(names = {"-M"}, description = "MySQL additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
 
@@ -94,7 +94,7 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the port name. The value should store an environment variable expression or a numeric MS SQL Server port name.
+     * Returns the port name. The value should store an environment variable expression or a numeric mysql port name.
      * @return Port name or an expression to be extracted.
      */
     public String getPort() {
@@ -226,8 +226,8 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
      * Creates and returns a deep copy of this object.
      */
     @Override
-    public SqlServerParametersSpec deepClone() {
-        SqlServerParametersSpec cloned = (SqlServerParametersSpec) super.deepClone();
+    public MysqlParametersSpec deepClone() {
+        MysqlParametersSpec cloned = (MysqlParametersSpec)super.deepClone();
         return cloned;
     }
 
@@ -235,8 +235,8 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
      * Creates a trimmed and expanded version of the object without unwanted properties, but with all variables like ${ENV_VAR} expanded.
      * @return Trimmed and expanded version of this object.
      */
-    public SqlServerParametersSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        SqlServerParametersSpec cloned = this.deepClone();
+    public MysqlParametersSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+        MysqlParametersSpec cloned = this.deepClone();
         cloned.host = secretValueProvider.expandValue(cloned.host);
         cloned.port = secretValueProvider.expandValue(cloned.port);
         cloned.database = secretValueProvider.expandValue(cloned.database);
