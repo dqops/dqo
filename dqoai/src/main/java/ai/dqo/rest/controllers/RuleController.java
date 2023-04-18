@@ -234,15 +234,15 @@ public class RuleController {
      * Returns all combined rule folder model.
      * @return rule basic tree model.
      */
-    @GetMapping("/foldermodel")
-    @ApiOperation(value = "getFolderModel", notes = "Returns all combined rule folder model", response = RuleBasicFolderModel.class)
+    @GetMapping()
+    @ApiOperation(value = "getRuleFolderTree", notes = "Returns a tree of all rules available in DQO, both built-in rules and user defined or customized rules.",
+            response = RuleBasicFolderModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = RuleBasicFolderModel.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
-    public ResponseEntity<Mono<RuleBasicFolderModel>> getFolderModel() {
-
+    public ResponseEntity<Mono<RuleBasicFolderModel>> getRuleFolderTree() {
         RuleBasicFolderModel ruleBasicFolderModel = new RuleBasicFolderModel();
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();

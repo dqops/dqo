@@ -66,63 +66,6 @@ public class SensorsController {
         this.userHomeContextFactory = userHomeContextFactory;
     }
 
-
-    /**
-     * Returns all combined sensor folder model.
-     * @return sensor basic folder model.
-     */
-    @GetMapping
-    @ApiOperation(value = "getSensorFolderModel", notes = "Returns all combined sensor folder model", response = SensorBasicFolderModel.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = SensorBasicFolderModel.class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
-    })
-    public ResponseEntity<Mono<SensorBasicFolderModel>> getSensorFolderModel() {
-
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-        SensorDefinitionList dqoHomeSensorDefinitionList = dqoHome.getSensors();
-
-        SensorBasicFolderModel sensorFolderModel = new SensorBasicFolderModel();
-
-
-        dqoHome.getSensors().forEach(sensorDefinitionWrapper -> {
-            SensorDefinitionWrapper dqoHomeSensorDefinitionWrapper = dqoHomeSensorDefinitionList.getByObjectName(sensorDefinitionWrapper.getName(), true);
-            List<ProviderSensorBasicModel> providerSensorBasicModelList = new ArrayList<>();
-            for (ProviderType providerType : ProviderType.values()) {
-                ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = dqoHomeSensorDefinitionWrapper.getProviderSensors().getByObjectName(providerType, true);
-                if (providerSensorDefinitionWrapper != null) {
-                    ProviderSensorBasicModel providerSensorBasicModel = new ProviderSensorBasicModel();
-                    providerSensorBasicModel.setProviderType(providerType);
-                    providerSensorBasicModel.setCustom(false);
-                    providerSensorBasicModelList.add(providerSensorBasicModel);
-
-                }
-            }
-            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, false);
-        });
-
-        userHome.getSensors().forEach(sensorDefinitionWrapper -> {
-            List<ProviderSensorBasicModel> providerSensorBasicModelList = new ArrayList<>();
-            sensorDefinitionWrapper.getProviderSensors().forEach(providerSensorDefinitionWrapper -> {
-                ProviderSensorBasicModel providerSensorBasicModel = new ProviderSensorBasicModel();
-                if (providerSensorDefinitionWrapper != null) {
-                    providerSensorBasicModel.setProviderType(providerSensorDefinitionWrapper.getProvider());
-                    providerSensorBasicModel.setCustom(true);
-                }
-                providerSensorBasicModelList.add(providerSensorBasicModel);
-            });
-
-            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, true);
-        });
-
-        return new ResponseEntity<>(Mono.just(sensorFolderModel), HttpStatus.OK);
-    }
-
     /**
      * Returns the configuration of a sensor, first checking if it is a custom sensor,
      * then checking if it is a built-in sensor.
@@ -361,5 +304,62 @@ public class SensorsController {
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
+    }
+
+    /**
+     * Returns all combined sensor folder model.
+     * @return sensor basic folder model.
+     */
+    @GetMapping
+    @ApiOperation(value = "getSensorFolderTree", notes = "Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
+            response = SensorBasicFolderModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = SensorBasicFolderModel.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    public ResponseEntity<Mono<SensorBasicFolderModel>> getSensorFolderTree() {
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+        DqoHome dqoHome = dqoHomeContext.getDqoHome();
+        SensorDefinitionList dqoHomeSensorDefinitionList = dqoHome.getSensors();
+
+        SensorBasicFolderModel sensorFolderModel = new SensorBasicFolderModel();
+
+
+        dqoHome.getSensors().forEach(sensorDefinitionWrapper -> {
+            SensorDefinitionWrapper dqoHomeSensorDefinitionWrapper = dqoHomeSensorDefinitionList.getByObjectName(sensorDefinitionWrapper.getName(), true);
+            List<ProviderSensorBasicModel> providerSensorBasicModelList = new ArrayList<>();
+            for (ProviderType providerType : ProviderType.values()) {
+                ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = dqoHomeSensorDefinitionWrapper.getProviderSensors().getByObjectName(providerType, true);
+                if (providerSensorDefinitionWrapper != null) {
+                    ProviderSensorBasicModel providerSensorBasicModel = new ProviderSensorBasicModel();
+                    providerSensorBasicModel.setProviderType(providerType);
+                    providerSensorBasicModel.setCustom(false);
+                    providerSensorBasicModelList.add(providerSensorBasicModel);
+
+                }
+            }
+            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, false);
+        });
+
+        userHome.getSensors().forEach(sensorDefinitionWrapper -> {
+            List<ProviderSensorBasicModel> providerSensorBasicModelList = new ArrayList<>();
+            sensorDefinitionWrapper.getProviderSensors().forEach(providerSensorDefinitionWrapper -> {
+                ProviderSensorBasicModel providerSensorBasicModel = new ProviderSensorBasicModel();
+                if (providerSensorDefinitionWrapper != null) {
+                    providerSensorBasicModel.setProviderType(providerSensorDefinitionWrapper.getProvider());
+                    providerSensorBasicModel.setCustom(true);
+                }
+                providerSensorBasicModelList.add(providerSensorBasicModel);
+            });
+
+            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, true);
+        });
+
+        return new ResponseEntity<>(Mono.just(sensorFolderModel), HttpStatus.OK);
     }
 }
