@@ -17,23 +17,9 @@
 package ai.dqo.services.metadata;
 
 import ai.dqo.BaseTest;
-import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
-import ai.dqo.core.configuration.DqoUserConfigurationPropertiesObjectMother;
-import ai.dqo.core.jobqueue.*;
-import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
-import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringServiceImpl;
-import ai.dqo.core.locks.UserHomeLockManager;
-import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
-import ai.dqo.core.synchronization.filesystems.local.LocalFileSystemSynchronizationOperations;
-import ai.dqo.core.synchronization.filesystems.local.LocalFileSystemSynchronizationOperationsImpl;
-import ai.dqo.core.synchronization.filesystems.local.LocalSynchronizationFileSystemFactory;
-import ai.dqo.core.synchronization.filesystems.local.LocalSynchronizationFileSystemFactoryImpl;
-import ai.dqo.core.synchronization.status.FileSynchronizationChangeDetectionService;
-import ai.dqo.core.synchronization.status.FileSynchronizationChangeDetectionServiceImpl;
-import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
-import ai.dqo.core.synchronization.status.SynchronizationStatusTrackerStub;
-import ai.dqo.data.local.LocalDqoUserHomePathProvider;
-import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
+import ai.dqo.core.jobqueue.DqoJobQueue;
+import ai.dqo.core.jobqueue.DqoQueueJobFactory;
+import ai.dqo.core.jobqueue.DqoQueueJobFactoryImpl;
 import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
@@ -42,6 +28,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.utils.BeanFactoryObjectMother;
+import ai.dqo.utils.jobs.DqoJobQueueObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,30 +49,7 @@ public class ConnectionServiceImplTests extends BaseTest {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
 
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
-
-        DqoQueueConfigurationProperties dqoQueueConfigurationProperties = new DqoQueueConfigurationProperties();
-        DqoJobConcurrencyLimiter dqoJobConcurrencyLimiter = new DqoJobConcurrencyLimiterImpl();
-        DqoJobIdGenerator dqoJobIdGenerator = new DqoJobIdGeneratorImpl();
-        DqoJobQueueMonitoringService dqoJobQueueMonitoringService = new DqoJobQueueMonitoringServiceImpl(dqoJobIdGenerator, dqoQueueConfigurationProperties);
-        LocalFileSystemSynchronizationOperations localFileSystemSynchronizationOperations = new LocalFileSystemSynchronizationOperationsImpl();
-        LocalDqoUserHomePathProvider localDqoUserHomePathProvider = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(
-                DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration());
-        LocalSynchronizationFileSystemFactory localSynchronizationFileSystemFactory = new LocalSynchronizationFileSystemFactoryImpl(
-                localFileSystemSynchronizationOperations,
-                localDqoUserHomePathProvider);
-        SynchronizationStatusTracker synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
-        UserHomeLockManager userHomeLockManager = UserHomeLockManagerObjectMother.getDefaultGlobalLockManager();
-        FileSynchronizationChangeDetectionService fileSynchronizationChangeDetectionService = new FileSynchronizationChangeDetectionServiceImpl(
-                userHomeContextFactory,
-                localSynchronizationFileSystemFactory,
-                userHomeLockManager,
-                synchronizationStatusTracker);
-        this.dqoJobQueue = new DqoJobQueueImpl(
-                dqoQueueConfigurationProperties,
-                dqoJobConcurrencyLimiter,
-                dqoJobIdGenerator,
-                dqoJobQueueMonitoringService,
-                fileSynchronizationChangeDetectionService);
+        this.dqoJobQueue = DqoJobQueueObjectMother.getDefault();
 
         this.sut = new ConnectionServiceImpl(
                 this.userHomeContextFactory,
@@ -106,32 +70,27 @@ public class ConnectionServiceImplTests extends BaseTest {
     @Test
     void getConnection_whenConnectionExists_getsRequestedConnection() {
         UserHome userHome = createHierarchyTree();
-        this.dqoJobQueue.start();
-
+        
         String connectionName = "conn1";
         ConnectionWrapper connectionWrapper = this.sut.getConnection(userHome, connectionName);
 
         Assertions.assertNotNull(connectionWrapper);
-        this.dqoJobQueue.stop();
     }
 
     @Test
     void getConnection_whenConnectionDoesntExist_getsNull() {
         UserHome userHome = createHierarchyTree();
-        this.dqoJobQueue.start();
-
+        
         String connectionName = "conn3";
         ConnectionWrapper connectionWrapper = this.sut.getConnection(userHome, connectionName);
 
         Assertions.assertNull(connectionWrapper);
-        this.dqoJobQueue.stop();
     }
 
     @Test
     void deleteConnection_whenConnectionExists_deletesConnection() {
         createHierarchyTree();
-        this.dqoJobQueue.start();
-
+        
         String connectionName = "conn1";
         this.sut.deleteConnection(connectionName);
 
@@ -143,14 +102,12 @@ public class ConnectionServiceImplTests extends BaseTest {
         ConnectionWrapper otherConnection = connectionList.getByObjectName("conn2", true);
         Assertions.assertTrue(deletedConnection == null || deletedConnection.getStatus() == InstanceStatus.DELETED);
         Assertions.assertTrue(otherConnection != null && otherConnection.getStatus() == InstanceStatus.UNCHANGED);
-        this.dqoJobQueue.stop();
     }
 
     @Test
     void deleteConnection_whenConnectionDoesntExist_doNothing() {
         createHierarchyTree();
-        this.dqoJobQueue.start();
-
+        
         String connectionName = "conn3";
         this.sut.deleteConnection(connectionName);
 
@@ -159,14 +116,12 @@ public class ConnectionServiceImplTests extends BaseTest {
 
         List<ConnectionWrapper> connectionList = this.filterDeletedConnections(userHome.getConnections());
         Assertions.assertEquals(2, connectionList.size());
-        this.dqoJobQueue.stop();
     }
 
     @Test
     void deleteConnections_whenConnectionsExist_deletesConnections() {
         createHierarchyTree();
-        this.dqoJobQueue.start();
-
+        
         List<String> connectionNames = new ArrayList<>();
         connectionNames.add("conn1");
         connectionNames.add("conn2");
@@ -178,14 +133,12 @@ public class ConnectionServiceImplTests extends BaseTest {
 
         List<ConnectionWrapper> connectionList = this.filterDeletedConnections(userHome.getConnections());
         Assertions.assertEquals(0, connectionList.size());
-        this.dqoJobQueue.stop();
     }
 
     @Test
     void deleteConnections_whenSomeConnectionDoesntExist_deletesConnectionsThatExist() {
         createHierarchyTree();
-        this.dqoJobQueue.start();
-
+        
         List<String> connectionNames = new ArrayList<>();
         connectionNames.add("conn1");
         connectionNames.add("conn3");
@@ -199,7 +152,6 @@ public class ConnectionServiceImplTests extends BaseTest {
         Assertions.assertEquals(1, connectionList.size());
         ConnectionWrapper remainingConnection = connectionList.get(0);
         Assertions.assertEquals("conn2", remainingConnection.getName());
-        this.dqoJobQueue.stop();
     }
 
     private List<ConnectionWrapper> filterDeletedConnections(ConnectionList connectionList) {

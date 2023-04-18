@@ -17,23 +17,9 @@
 package ai.dqo.services.metadata;
 
 import ai.dqo.BaseTest;
-import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
-import ai.dqo.core.configuration.DqoUserConfigurationPropertiesObjectMother;
-import ai.dqo.core.jobqueue.*;
-import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
-import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringServiceImpl;
-import ai.dqo.core.locks.UserHomeLockManager;
-import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
-import ai.dqo.core.synchronization.filesystems.local.LocalFileSystemSynchronizationOperations;
-import ai.dqo.core.synchronization.filesystems.local.LocalFileSystemSynchronizationOperationsImpl;
-import ai.dqo.core.synchronization.filesystems.local.LocalSynchronizationFileSystemFactory;
-import ai.dqo.core.synchronization.filesystems.local.LocalSynchronizationFileSystemFactoryImpl;
-import ai.dqo.core.synchronization.status.FileSynchronizationChangeDetectionService;
-import ai.dqo.core.synchronization.status.FileSynchronizationChangeDetectionServiceImpl;
-import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
-import ai.dqo.core.synchronization.status.SynchronizationStatusTrackerStub;
-import ai.dqo.data.local.LocalDqoUserHomePathProvider;
-import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
+import ai.dqo.core.jobqueue.DqoJobQueue;
+import ai.dqo.core.jobqueue.DqoQueueJobFactory;
+import ai.dqo.core.jobqueue.DqoQueueJobFactoryImpl;
 import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -44,6 +30,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.utils.BeanFactoryObjectMother;
+import ai.dqo.utils.jobs.DqoJobQueueObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -66,30 +53,7 @@ public class TableServiceImplTests extends BaseTest {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
 
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
-
-        DqoQueueConfigurationProperties dqoQueueConfigurationProperties = new DqoQueueConfigurationProperties();
-        DqoJobConcurrencyLimiter dqoJobConcurrencyLimiter = new DqoJobConcurrencyLimiterImpl();
-        DqoJobIdGenerator dqoJobIdGenerator = new DqoJobIdGeneratorImpl();
-        DqoJobQueueMonitoringService dqoJobQueueMonitoringService = new DqoJobQueueMonitoringServiceImpl(dqoJobIdGenerator, dqoQueueConfigurationProperties);
-        LocalFileSystemSynchronizationOperations localFileSystemSynchronizationOperations = new LocalFileSystemSynchronizationOperationsImpl();
-        LocalDqoUserHomePathProvider localDqoUserHomePathProvider = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(
-                DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration());
-        LocalSynchronizationFileSystemFactory localSynchronizationFileSystemFactory = new LocalSynchronizationFileSystemFactoryImpl(
-                localFileSystemSynchronizationOperations,
-                localDqoUserHomePathProvider);
-        SynchronizationStatusTracker synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
-        UserHomeLockManager userHomeLockManager = UserHomeLockManagerObjectMother.getDefaultGlobalLockManager();
-        FileSynchronizationChangeDetectionService fileSynchronizationChangeDetectionService = new FileSynchronizationChangeDetectionServiceImpl(
-                userHomeContextFactory,
-                localSynchronizationFileSystemFactory,
-                userHomeLockManager,
-                synchronizationStatusTracker);
-        this.dqoJobQueue = new DqoJobQueueImpl(
-                dqoQueueConfigurationProperties,
-                dqoJobConcurrencyLimiter,
-                dqoJobIdGenerator,
-                dqoJobQueueMonitoringService,
-                fileSynchronizationChangeDetectionService);
+        this.dqoJobQueue = DqoJobQueueObjectMother.getDefault();
 
         this.sut = new TableServiceImpl(
                 this.userHomeContextFactory,
@@ -114,46 +78,39 @@ public class TableServiceImplTests extends BaseTest {
     @Test
     void getTable_whenConnectionAndTableExist_getsRequestedTable() {
         UserHome userHome = createHierarchyTree();
-        this.dqoJobQueue.start();
 
         String connectionName = "conn";
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         TableWrapper tableWrapper = this.sut.getTable(userHome, connectionName, tableName);
 
         Assertions.assertNotNull(tableWrapper);
-        this.dqoJobQueue.stop();
     }
 
     @Test
     void getTable_whenTableDoesntExist_getsNull() {
         UserHome userHome = createHierarchyTree();
-        this.dqoJobQueue.start();
 
         String connectionName = "conn";
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab3");
         TableWrapper tableWrapper = this.sut.getTable(userHome, connectionName, tableName);
 
         Assertions.assertNull(tableWrapper);
-        this.dqoJobQueue.stop();
     }
 
     @Test
     void getTable_whenConnectionDoesntExist_getsNull() {
         UserHome userHome = createHierarchyTree();
-        this.dqoJobQueue.start();
 
         String connectionName = "con";
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         TableWrapper tableWrapper = this.sut.getTable(userHome, connectionName, tableName);
 
         Assertions.assertNull(tableWrapper);
-        this.dqoJobQueue.stop();
     }
 
     @Test
     void deleteTable_whenConnectionAndTableExist_deletesTable() {
         createHierarchyTree();
-        this.dqoJobQueue.start();
 
         String connectionName = "conn";
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
@@ -169,13 +126,11 @@ public class TableServiceImplTests extends BaseTest {
                 new PhysicalTableName("sch", "tab2"), true);
         Assertions.assertTrue(deletedTable == null || deletedTable.getStatus() == InstanceStatus.DELETED);
         Assertions.assertTrue(otherTable != null && otherTable.getStatus() == InstanceStatus.UNCHANGED);
-        this.dqoJobQueue.stop();
     }
 
     @Test
     void deleteTable_whenTableDoesntExist_doNothing() {
         createHierarchyTree();
-        this.dqoJobQueue.start();
 
         String connectionName = "conn";
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab3");
@@ -187,13 +142,11 @@ public class TableServiceImplTests extends BaseTest {
 
         List<TableWrapper> tableList = this.filterDeletedTables(connectionWrapper.getTables());
         Assertions.assertEquals(2, tableList.size());
-        this.dqoJobQueue.stop();
     }
 
     @Test
     void deleteTables_whenTablesExist_deletesTables() {
         createHierarchyTree();
-        this.dqoJobQueue.start();
 
         String connectionName = "conn";
         List<PhysicalTableName> tableNames = new ArrayList<>();
@@ -210,13 +163,11 @@ public class TableServiceImplTests extends BaseTest {
 
         List<TableWrapper> tableList = this.filterDeletedTables(connectionWrapper.getTables());
         Assertions.assertEquals(0, tableList.size());
-        this.dqoJobQueue.stop();
     }
 
     @Test
     void deleteTables_whenSomeTableDoesntExist_deletesTablesThatExist() {
         createHierarchyTree();
-        this.dqoJobQueue.start();
 
         String connectionName = "conn";
         List<PhysicalTableName> tableNames = new ArrayList<>();
@@ -235,7 +186,6 @@ public class TableServiceImplTests extends BaseTest {
         Assertions.assertEquals(1, tableList.size());
         TableWrapper remainingTable = tableList.get(0);
         Assertions.assertEquals(new PhysicalTableName("sch", "tab2"), remainingTable.getPhysicalTableName());
-        this.dqoJobQueue.stop();
     }
 
     private List<TableWrapper> filterDeletedTables(TableList tableList) {
