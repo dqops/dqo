@@ -40,8 +40,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -214,7 +213,8 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 			return cliOperationStatus;
 		}
 
-		List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.columnService.deleteColumns(columnSpecs);
+		List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.columnService.deleteColumns(
+				this.convertColumnSpecsToHierarchyMapping(userHome, columnSpecs));
 
 		try {
 			for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
@@ -234,6 +234,41 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 
 		cliOperationStatus.setSuccessMessage(String.format("Successfully removed %d columns.", columnSpecs.size()));
 		return cliOperationStatus;
+	}
+
+	/**
+	 * Converts an iterable of column specs into a connection -> table -> column mapping,
+	 * provided user home for read operations.
+	 * @param userHome    User home used for read operations on the hierarchy tree.
+	 * @param columnSpecs Iterable of column specs.
+	 * @return Hierarchy mapping of column specs wrt the connection level.
+	 */
+	protected Map<String, Map<PhysicalTableName, Iterable<String>>> convertColumnSpecsToHierarchyMapping(
+			UserHome userHome, Iterable<ColumnSpec> columnSpecs) {
+		Map<String, Map<PhysicalTableName, List<String>>> connectionToTableToColumnsMapping = new HashMap<>();
+		for (ColumnSpec columnSpec: columnSpecs) {
+			TableWrapper tableWrapper = userHome.findTableFor(columnSpec.getHierarchyId());
+
+			String connectionName = userHome.findConnectionFor(tableWrapper.getHierarchyId()).getName();
+			if (!connectionToTableToColumnsMapping.containsKey(connectionName)) {
+				connectionToTableToColumnsMapping.put(connectionName, new HashMap<>());
+			}
+
+			Map<PhysicalTableName, List<String>> tableToColumnsMapping = connectionToTableToColumnsMapping.get(connectionName);
+			PhysicalTableName tableName = tableWrapper.getPhysicalTableName();
+			if (!tableToColumnsMapping.containsKey(tableName)) {
+				tableToColumnsMapping.put(tableName, new ArrayList<>());
+			}
+			tableToColumnsMapping.get(tableName).add(columnSpec.getColumnName());
+		}
+
+		Map<String, Map<PhysicalTableName, Iterable<String>>> result = new HashMap<>();
+		for (Map.Entry<String, Map<PhysicalTableName, List<String>>> connectionMapping: connectionToTableToColumnsMapping.entrySet()) {
+			// Convert Map<PhysicalTableName, List<String>> to Map<PhysicalTableName, Iterable<String>>.
+			result.put(connectionMapping.getKey(), new HashMap<>(connectionMapping.getValue()));
+		}
+
+		return result;
 	}
 
 	/**

@@ -47,8 +47,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -329,7 +328,12 @@ public class TableCliServiceImpl implements TableCliService {
             return cliOperationStatus;
         }
 
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.tableService.deleteTables(tableWrappers);
+        Map<String, Iterable<PhysicalTableName>> connToTablesMap = new HashMap<>();
+        List<PhysicalTableName> tableNames = tableWrappers.stream()
+                .map(TableWrapper::getPhysicalTableName)
+                .collect(Collectors.toList());
+        connToTablesMap.put(connectionName, tableNames);
+        List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs =this.tableService.deleteTables(connToTablesMap);
 
         try {
             for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {

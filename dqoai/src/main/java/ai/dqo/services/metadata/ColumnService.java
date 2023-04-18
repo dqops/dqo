@@ -19,26 +19,47 @@ package ai.dqo.services.metadata;
 import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.metadata.sources.ColumnSpec;
+import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.metadata.userhome.UserHome;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Service that performs column operations.
  */
 public interface ColumnService {
     /**
+     * Finds a column located in provided user home.
+     * @param userHome       User home.
+     * @param connectionName Connection name.
+     * @param tableName      Table name.
+     * @param columnName     Column name.
+     * @return Column spec with the requested column.
+     */
+    ColumnSpec getColumn(UserHome userHome,
+                         String connectionName,
+                         PhysicalTableName tableName,
+                         String columnName);
+
+    /**
      * Deletes column from metadata and flushes user context.
      * Cleans all stored data from .data folder related to this column.
-     * @param columnSpec Column spec.
+     * @param connectionName Connection name
+     * @param tableName      Physical table name.
+     * @param columnName     Column name.
      * @return Asynchronous job result object for deferred background operations.
      */
-    PushJobResult<DeleteStoredDataQueueJobResult> deleteColumn(ColumnSpec columnSpec);
+    PushJobResult<DeleteStoredDataQueueJobResult> deleteColumn(String connectionName,
+                                                               PhysicalTableName tableName,
+                                                               String columnName);
 
     /**
      * Deletes columns from metadata and flushes user context.
      * Cleans all stored data from .data folder related to these columns.
-     * @param columnSpecs Iterable of column specs.
+     * @param connectionToTableToColumns Mapping for every connection to a mapping for every table for which columns need to be deleted.
      * @return List of asynchronous job result objects for deferred background operations.
      */
-    List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteColumns(Iterable<ColumnSpec> columnSpecs);
+    List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteColumns(
+            Map<String, Map<PhysicalTableName, Iterable<String>>> connectionToTableToColumns);
 }
