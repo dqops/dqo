@@ -1,17 +1,17 @@
 import React from 'react';
-import SnowflakePropertyItem from './SnowflakePropertyItem';
+import JdbcPropertyItem from './JdbcPropertyItem';
 import { convertArrayToObject, convertObjectToArray } from "../../../../utils/object";
 
 interface IProperties {
   [key: string]: string;
 }
 
-interface ISnowflakePropertiesViewProps {
+interface IJdbcPropertiesViewProps {
   properties?: IProperties;
   onChange: (properties: IProperties) => void;
 }
 
-const SnowflakePropertiesView = ({ properties, onChange }: ISnowflakePropertiesViewProps) => {
+const JdbcPropertiesView = ({ properties, onChange }: IJdbcPropertiesViewProps) => {
   const entries: [string, string][] = convertObjectToArray(properties).concat([['', '']]);
 
   const onRemove = (key: number) => {
@@ -33,7 +33,7 @@ const SnowflakePropertiesView = ({ properties, onChange }: ISnowflakePropertiesV
         </thead>
         <tbody>
           {entries.map(([key, value], index) => (
-            <SnowflakePropertyItem
+            <JdbcPropertyItem
               key={index}
               idx={index}
               name={key}
@@ -49,4 +49,4 @@ const SnowflakePropertiesView = ({ properties, onChange }: ISnowflakePropertiesV
   );
 };
 
-export default SnowflakePropertiesView;
+export default JdbcPropertiesView;
