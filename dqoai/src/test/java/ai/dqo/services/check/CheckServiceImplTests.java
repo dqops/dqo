@@ -82,7 +82,7 @@ public class CheckServiceImplTests extends BaseTest {
         TriggerFactory triggerFactory = new TriggerFactoryImpl(jobDataMapAdapter, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(triggerFactory, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         SpecToUiCheckMappingService specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService, schedulesUtilityService);
-        UIAllChecksPatchFactory uiAllChecksPatchFactory = new UIAllChecksPatchFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
+        UIAllChecksModelFactory uiAllChecksModelFactory = new UIAllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
 
         UiToSpecCheckMappingService uiToSpecCheckMappingService = new UiToSpecCheckMappingServiceImpl(reflectionService);
         UIAllChecksPatchApplier uiAllChecksPatchApplier = new UIAllChecksPatchApplierImpl(uiToSpecCheckMappingService);
@@ -91,7 +91,7 @@ public class CheckServiceImplTests extends BaseTest {
         ParentDqoJobQueue dqoJobQueue = DqoJobQueueObjectMother.getDefaultParentJobQueue();
 
         this.sut = new CheckServiceImpl(
-                uiAllChecksPatchFactory,
+                uiAllChecksModelFactory,
                 uiAllChecksPatchApplier,
                 dqoQueueJobFactory,
                 dqoJobQueue,

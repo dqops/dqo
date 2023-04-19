@@ -40,13 +40,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
+public class UIAllChecksModelFactoryImpl implements UIAllChecksModelFactory {
     ExecutionContextFactory executionContextFactory;
     HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher;
     SpecToUiCheckMappingService specToUiCheckMappingService;
 
     @Autowired
-    public UIAllChecksPatchFactoryImpl(ExecutionContextFactory executionContextFactory,
+    public UIAllChecksModelFactoryImpl(ExecutionContextFactory executionContextFactory,
                                        HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
                                        SpecToUiCheckMappingService specToUiCheckMappingService) {
         this.executionContextFactory = executionContextFactory;

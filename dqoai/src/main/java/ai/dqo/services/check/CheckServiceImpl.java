@@ -35,7 +35,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.services.check.mapping.UIAllChecksPatchApplier;
-import ai.dqo.services.check.mapping.UIAllChecksPatchFactory;
+import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
 import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import ai.dqo.utils.conversion.StringTypeCaster;
@@ -52,7 +52,7 @@ import java.util.stream.Stream;
  */
 @Service
 public class CheckServiceImpl implements CheckService {
-    private UIAllChecksPatchFactory uiAllChecksPatchFactory;
+    private UIAllChecksModelFactory uiAllChecksModelFactory;
     private UIAllChecksPatchApplier uiAllChecksPatchApplier;
     private DqoQueueJobFactory dqoQueueJobFactory;
     private ParentDqoJobQueue parentDqoJobQueue;
@@ -60,19 +60,19 @@ public class CheckServiceImpl implements CheckService {
 
     /**
      * Default injection constructor.
-     * @param uiAllChecksPatchFactory UI all checks patch factory for creating patches to be updated.
+     * @param uiAllChecksModelFactory UI all checks patch factory for creating patches to be updated.
      * @param uiAllChecksPatchApplier UI all checks patch applier for affecting the hierarchy tree with changes from the patch.
      * @param dqoQueueJobFactory Job factory used to create a new instance of a job.
      * @param parentDqoJobQueue DQO job queue to execute the operation.
      * @param userHomeContextFactory User home context factory.
      */
     @Autowired
-    public CheckServiceImpl(UIAllChecksPatchFactory uiAllChecksPatchFactory,
+    public CheckServiceImpl(UIAllChecksModelFactory uiAllChecksModelFactory,
                             UIAllChecksPatchApplier uiAllChecksPatchApplier,
                             DqoQueueJobFactory dqoQueueJobFactory,
                             ParentDqoJobQueue parentDqoJobQueue,
                             UserHomeContextFactory userHomeContextFactory) {
-        this.uiAllChecksPatchFactory = uiAllChecksPatchFactory;
+        this.uiAllChecksModelFactory = uiAllChecksModelFactory;
         this.uiAllChecksPatchApplier = uiAllChecksPatchApplier;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.parentDqoJobQueue = parentDqoJobQueue;
@@ -135,7 +135,7 @@ public class CheckServiceImpl implements CheckService {
             return new ArrayList<>();
         }
 
-        List<UIAllChecksModel> patches = this.uiAllChecksPatchFactory.fromCheckSearchFilters(parameters.getCheckSearchFilters());
+        List<UIAllChecksModel> patches = this.uiAllChecksModelFactory.fromCheckSearchFilters(parameters.getCheckSearchFilters());
 
         Stream<UICheckContainerModel> columnCheckContainers = patches.stream()
                 .map(UIAllChecksModel::getColumnChecksModel)

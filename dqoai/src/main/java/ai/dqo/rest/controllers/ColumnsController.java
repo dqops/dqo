@@ -395,7 +395,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Data quality profiling checks on a requested column of the table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling")
     @ApiOperation(value = "getColumnProfilingChecks", notes = "Return the configuration of column level data quality profiling checks on a column", response = ColumnProfilingCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -498,7 +498,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Daily data quality partitioned checks on a requested column of the table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/daily")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily")
     @ApiOperation(value = "getColumnPartitionedChecksDaily", notes = "Return the configuration of daily column level data quality partitioned checks on a column", response = ColumnDailyPartitionedCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -534,7 +534,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Monthly data quality partitioned checks on a requested column of the table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/monthly")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly")
     @ApiOperation(value = "getColumnPartitionedChecksMonthly", notes = "Return the configuration of monthly column level data quality partitioned checks on a column", response = ColumnMonthlyPartitionedCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -571,7 +571,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return UI friendly model of data quality profiling checks on a requested column.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui")
     @ApiOperation(value = "getColumnProfilingChecksUI", notes = "Return a UI friendly model of data quality profiling checks on a column", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -701,7 +701,7 @@ public class ColumnsController {
      * @param timeScale  Time scale.
      * @return UI friendly model of data quality partitioned checks on a requested column for a requested time scale.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timeScale}/ui")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui")
     @ApiOperation(value = "getColumnPartitionedChecksUI", notes = "Return a UI friendly model of column level data quality partitioned checks on a column", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -767,7 +767,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Simplistic UI friendly data quality profiling check list on a requested column.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui/basic")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui/basic")
     @ApiOperation(value = "getColumnProfilingChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality profiling checks on a column", response = UICheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -872,7 +872,7 @@ public class ColumnsController {
      * @param timeScale  Time scale.
      * @return Simplistic UI friendly data quality partitioned checks list on a requested column for a requested time scale.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timeScale}/ui/basic")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui/basic")
     @ApiOperation(value = "getColumnPartitionedChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality partitioned checks on a column", response = UICheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -926,7 +926,7 @@ public class ColumnsController {
      * @param checkName      Check name.
      * @return UI friendly model of data quality profiling checks on a requested column.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui/filter/{checkCategory}/{checkName}")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui/filter/{checkCategory}/{checkName}")
     @ApiOperation(value = "getColumnProfilingChecksUIFilter", notes = "Return a UI friendly model of data quality profiling checks on a column filtered by category and check name", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1068,7 +1068,7 @@ public class ColumnsController {
      * @param checkName      Check name.
      * @return UI friendly model of data quality partitioned checks on a requested column for a requested time scale, filtered by category and check name.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timeScale}/ui/filter/{checkCategory}/{checkName}")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui/filter/{checkCategory}/{checkName}")
     @ApiOperation(value = "getColumnPartitionedChecksUIFilter", notes = "Return a UI friendly model of column level data quality partitioned checks on a column, filtered by category and check name", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1397,7 +1397,7 @@ public class ColumnsController {
      * @param columnCheckCategoriesSpec New configuration of the column level data quality profiling checks to configure on a column or an empty optional to clear the list of profiling checks.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling")
     @ApiOperation(value = "updateColumnProfilingChecks", notes = "Updates configuration of column level data quality profiling checks on a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1560,7 +1560,7 @@ public class ColumnsController {
      * @param columnDailyPartitionedChecksSpec New configuration of the daily column level data quality partitioned checks to configure on a column or an empty optional to clear the list of daily partitioned checks.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/daily")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily")
     @ApiOperation(value = "updateColumnPartitionedChecksDaily", notes = "Updates configuration of daily column level data quality partitioned checks on a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1617,7 +1617,7 @@ public class ColumnsController {
      * @param columnMonthlyPartitionedChecksSpec New configuration of the monthly column level data quality partitioned checks to configure on a column or an empty optional to clear the list of monthly partitioned checks.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/monthly")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly")
     @ApiOperation(value = "updateColumnPartitionedChecksMonthly", notes = "Updates configuration of monthly column level data quality partitioned checks on a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1675,7 +1675,7 @@ public class ColumnsController {
      * @param uiCheckContainerModel     UI model of the column level data quality checks to be applied on the configuration of the data quality profiling checks on a column. Only data quality dimensions and data quality checks that are present in the UI model are updated (patched).
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui")
     @ApiOperation(value = "updateColumnProfilingChecksUI", notes = "Updates configuration of column level data quality profiling checks on a column from a UI friendly model.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1788,7 +1788,7 @@ public class ColumnsController {
      * @param uiAllChecksModel          UI model of the column level data quality checks to be applied on the configuration of the data quality partitioned checks on a column, for a given time scale. Only data quality dimensions and data quality checks that are present in the UI model are updated (patched).
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timeScale}/ui")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui")
     @ApiOperation(value = "updateColumnPartitionedChecksUI", notes = "Updates configuration of column level data quality partitioned checks on a column, for a given time scale, from a UI friendly model.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {

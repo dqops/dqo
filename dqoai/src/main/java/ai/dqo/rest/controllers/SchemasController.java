@@ -15,13 +15,16 @@
  */
 package ai.dqo.rest.controllers;
 
-import ai.dqo.metadata.sources.ConnectionList;
-import ai.dqo.metadata.sources.ConnectionWrapper;
+import ai.dqo.checks.CheckType;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
+import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.metadata.SchemaModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
+import ai.dqo.rest.models.check.CheckTemplate;
+import ai.dqo.services.metadata.SchemaService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -41,10 +44,13 @@ import java.util.stream.Stream;
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Schemas", description = "Schema management")
 public class SchemasController {
+    private final SchemaService schemaService;
     private UserHomeContextFactory userHomeContextFactory;
 
     @Autowired
-    public SchemasController(UserHomeContextFactory userHomeContextFactory) {
+    public SchemasController(SchemaService schemaService,
+                             UserHomeContextFactory userHomeContextFactory) {
+        this.schemaService = schemaService;
         this.userHomeContextFactory = userHomeContextFactory;
     }
 
@@ -83,5 +89,37 @@ public class SchemasController {
                 .map(s -> SchemaModel.fromSchemaNameStrings(connectionName, s));
 
         return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK);
+    }
+
+    /**
+     * Retrieves the list of profiling checks templates on the given schema.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @return Data quality checks templates on a requested schema.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/bulkenable/profiling")
+    @ApiOperation(value = "getSchemaProfilingTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate.class),
+            @ApiResponse(code = 404, message = "Connection or schema not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Flux<CheckTemplate>> getSchemaProfilingTemplates(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
+        if (tableWrappers == null) {
+            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
+                connectionName, schemaName, CheckType.PROFILING,
+                null, null, null, null);
+
+        return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
     }
 }

@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Factory for {@link UIAllChecksModel}.
  */
-public interface UIAllChecksPatchFactory {
+public interface UIAllChecksModelFactory {
     /**
      * Creates a list of {@link UIAllChecksModel}s based on provided filters.
      * @param checkSearchFilters Check search filters.

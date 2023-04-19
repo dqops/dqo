@@ -69,7 +69,7 @@ public class CheckResultsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent check results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/results")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/results")
     @ApiOperation(value = "getTableProfilingChecksResults", notes = "Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -188,7 +188,7 @@ public class CheckResultsController {
      * @param monthEnd       Month end boundary.
      * @return View of the most recent partitioned checks results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/{timeScale}/results")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/results")
     @ApiOperation(value = "getTablePartitionedChecksResults", notes = "Returns a complete view of the recent table level partitioned checks executions for a requested time scale", response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -248,7 +248,7 @@ public class CheckResultsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent check results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/results")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/results")
     @ApiOperation(value = "getColumnProfilingChecksResults", notes = "Returns an overview of the most recent check executions for all column level data quality profiling checks on a column",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -381,7 +381,7 @@ public class CheckResultsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent partitioned checks results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timeScale}/results")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/results")
     @ApiOperation(value = "getColumnPartitionedChecksResults", notes = "Returns an overview of the most recent column level partitioned checks executions for a requested time scale",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
