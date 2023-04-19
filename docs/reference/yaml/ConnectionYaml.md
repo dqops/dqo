@@ -24,6 +24,7 @@ ___
 |parallel_runs_limit|The concurrency limit for the maximum number of parallel executions of checks on this connection.|integer| | | |
 |[default_data_stream_mapping](#datastreammappingspec)|Default data streams configuration for all tables. The configuration may be overridden on table, column and check level. Data streams are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning.|object| | | |
 |[schedules](#recurringschedulesspec)|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|object| | | |
+|[incident_grouping](#incidentgroupingspec)|Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.|object| | | |
 |[notifications](#notificationsettingsspec)|Configuration of the notifications settings. Notifications are published when new data quality issues are detected.|object| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|object| | | |
 |[labels](#labelsetspec)|Custom labels that were assigned to the connection. Labels are used for searching for tables when filtered data quality checks are executed.|object| | | |
@@ -152,6 +153,20 @@ ___
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |cron_expression|Unix style cron expression that specifies when to execute scheduled operations like running data quality checks or synchronizing the configuration with the cloud.|string| | | |
 |disabled|Disables the schedule. When the value of this &#x27;disable&#x27; field is false, the schedule is stored in the metadata but it is not activated to run data quality checks.|boolean| | | |
+
+___  
+
+## IncidentGroupingSpec  
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|minimum_severity|Minimum severity level of data quality issues that are grouped into incidents. The default minimum severity level is &#x27;warning&#x27;. Other supported severity levels are &#x27;error&#x27; and &#x27;fatal&#x27;.|enum|warning<br/>error<br/>fatal<br/>| | |
+|grouping_level|Grouping level of failed data quality checks for creating higher level data quality incidents. The default grouping level is by a table and a data quality dimension pair (i.e. a consistency data quality issue detected on a table X).|enum|table_dimension_category_type<br/>table_dimension<br/>table<br/>table_dimension_category<br/>table_dimension_category_name<br/>| | |
+|divide_by_data_stream|Create separate data quality incidents for each data stream, creating different incidents for different data streams. By default, data streams are ignored for grouping data quality issues into data quality incidents.|boolean| | | |
+|max_incident_length_days|The maximum length of a data quality incident in days. When a new data quality issue is detected after max_incident_length_days days since a similar data quality was first seen, a new data quality incident is created that will capture all following data quality issues for the next max_incident_length_days days. The default value is 60 days.|integer| | | |
+|mute_for_days|The number of days that all similar data quality issues are muted when a a data quality incident is closed in the &#x27;mute&#x27; status.|integer| | | |
+|disabled|Disables data quality incident creation for failed data quality checks on the data source.|boolean| | | |
 
 ___  
 
