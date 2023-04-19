@@ -50,7 +50,7 @@ import ai.dqo.metadata.definitions.checks.CheckDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.metadata.groupings.TimeSeriesMode;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
@@ -59,6 +59,7 @@ import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.rules.HistoricDataPointsGrouping;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.utils.datetime.LocalDateTimePeriodUtility;
 import com.google.common.base.Strings;
@@ -261,7 +262,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             try {
                 SensorExecutionRunParameters sensorRunParameters = prepareSensorRunParameters(userHome, checkSpec, userTimeWindowFilters);
                 TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getTimeSeries();
-                TimeSeriesGradient timeGradient = effectiveTimeSeries.getTimeGradient();
+                TimePeriodGradient timeGradient = effectiveTimeSeries.getTimeGradient();
 
                 if (sensorRunParameters.getTimeSeries().getMode() == TimeSeriesMode.timestamp_column &&
                         Strings.isNullOrEmpty(sensorRunParameters.getTimeSeries().getTimestampColumn())) {
@@ -318,7 +319,10 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                     RuleDefinitionFindResult ruleDefinitionFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleDefinitionName);
                     RuleDefinitionSpec ruleDefinitionSpec = ruleDefinitionFindResult.getRuleDefinitionSpec();
                     RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleDefinitionSpec.getTimeWindow();
-                    TimeSeriesGradient timeGradientForRuleScope = sensorRunParameters.getCheckType() == CheckType.PROFILING ? TimeSeriesGradient.day : timeGradient;
+                    TimePeriodGradient timeGradientForRuleScope = ruleTimeWindowSettings != null ?
+                            (ruleTimeWindowSettings.getHistoricDataPointGrouping() != HistoricDataPointsGrouping.last_n_readouts ?
+                                    ruleTimeWindowSettings.getHistoricDataPointGrouping().toTimePeriodGradient() : TimePeriodGradient.day) : TimePeriodGradient.day;
+
                     LocalDateTime earliestRequiredReadout = ruleTimeWindowSettings == null ? minTimePeriod :
                             LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(
                                     minTimePeriod, ruleTimeWindowSettings.getPredictionTimeWindow(), timeGradientForRuleScope);

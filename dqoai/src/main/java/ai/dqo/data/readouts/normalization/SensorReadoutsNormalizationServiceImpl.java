@@ -19,7 +19,7 @@ import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import ai.dqo.utils.tables.TableColumnUtility;
@@ -55,12 +55,12 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      * Analyzes a given dataset, fixes wrong column types, calculates a data stream hash, sorts the data,
      * prepares the data for using in a sensor. Returns a new table with fixed column types.
      * @param sensorExecutionResult Sensor execution result with the table that contains returned data.
-     * @param timeSeriesGradient Time series gradient.
+     * @param timePeriodGradient Time series gradient.
      * @param sensorRunParameters Sensor run parameters.
      * @return Metadata object that describes the sensor result table. Contains also a normalized results table.
      */
     public SensorReadoutsNormalizedResult normalizeResults(SensorExecutionResult sensorExecutionResult,
-                                                           TimeSeriesGradient timeSeriesGradient,
+                                                           TimePeriodGradient timePeriodGradient,
                                                            SensorExecutionRunParameters sensorRunParameters) {
         Table resultsTable = sensorExecutionResult.getResultTable();
         int resultsRowCount = resultsTable.rowCount();
@@ -84,7 +84,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
             normalizedResults.addColumns(DoubleColumn.create(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME, resultsRowCount));
         }
 
-        DateTimeColumn timePeriodColumn = makeNormalizedTimePeriodColumn(resultsTable, defaultTimeZone, timeSeriesGradient);
+        DateTimeColumn timePeriodColumn = makeNormalizedTimePeriodColumn(resultsTable, defaultTimeZone, timePeriodGradient);
         normalizedResults.addColumns(timePeriodColumn);
 
         InstantColumn normalizedTimePeriodUtcColumn = makeNormalizedTimePeriodUtcColumn(resultsTable, timePeriodColumn,
@@ -121,8 +121,8 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         // TODO: add a data stream name to the sorted normalized table (generate it)
 
         StringColumn timeGradientColumn = StringColumn.create(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME, resultsRowCount);
-        if (timeSeriesGradient != null) {
-            timeGradientColumn.setMissingTo(timeSeriesGradient.name());
+        if (timePeriodGradient != null) {
+            timeGradientColumn.setMissingTo(timePeriodGradient.name());
         }
         sortedNormalizedTable.insertColumn(4, timeGradientColumn);
 
@@ -334,14 +334,14 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      * Any values that are not aligned at the beginning of the time series gradient (week, day, month, etc.) are truncated to the beginning of the period.
      * @param resultsTable Result table to extract the time_period column.
      * @param defaultTimeZone Default DQO time zone, used to create a time period value if the time period was not received from a sensor result.
-     * @param timeSeriesGradient Time series gradient (for truncation).
+     * @param timePeriodGradient Time series gradient (for truncation).
      * @return A copy of a time_period column that is truncated, normalized to a datetime without the time zone.
      */
-    public DateTimeColumn makeNormalizedTimePeriodColumn(Table resultsTable, ZoneId defaultTimeZone, TimeSeriesGradient timeSeriesGradient) {
+    public DateTimeColumn makeNormalizedTimePeriodColumn(Table resultsTable, ZoneId defaultTimeZone, TimePeriodGradient timePeriodGradient) {
         DateTimeColumn newTimestampColumn = DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, resultsTable.rowCount());
         LocalDateTime timeNow = LocalDateTime.now();
-        LocalDateTime truncatedNow = timeSeriesGradient != null ?
-                LocalDateTimeTruncateUtility.truncateTimePeriod(timeNow, timeSeriesGradient) : timeNow;
+        LocalDateTime truncatedNow = timePeriodGradient != null ?
+                LocalDateTimeTruncateUtility.truncateTimePeriod(timeNow, timePeriodGradient) : timeNow;
 
         Column<?> currentColumn = TableColumnUtility.findColumn(resultsTable, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
         if (currentColumn == null) {
@@ -361,8 +361,8 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
                 }
                 else {
                     LocalDateTime localDateTime = LocalDateTime.of(localDate, LocalTime.MIDNIGHT);
-                    LocalDateTime truncatedDate =  timeSeriesGradient != null ?
-                            LocalDateTimeTruncateUtility.truncateTimePeriod(localDateTime, timeSeriesGradient) : localDateTime;
+                    LocalDateTime truncatedDate =  timePeriodGradient != null ?
+                            LocalDateTimeTruncateUtility.truncateTimePeriod(localDateTime, timePeriodGradient) : localDateTime;
                     newTimestampColumn.set(i, truncatedDate);
                 }
             }
@@ -379,8 +379,8 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
                     newTimestampColumn.set(i, truncatedNow);
                 }
                 else {
-                    LocalDateTime truncatedDate = timeSeriesGradient != null ?
-                            LocalDateTimeTruncateUtility.truncateTimePeriod(localDateTime, timeSeriesGradient) : localDateTime;
+                    LocalDateTime truncatedDate = timePeriodGradient != null ?
+                            LocalDateTimeTruncateUtility.truncateTimePeriod(localDateTime, timePeriodGradient) : localDateTime;
                     newTimestampColumn.set(i, truncatedDate);
                 }
             }
@@ -398,8 +398,8 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
                 }
                 else {
                     LocalDateTime localDateTimeFromInstant = LocalDateTime.ofInstant(instant, defaultTimeZone);
-                    LocalDateTime truncatedInstant = timeSeriesGradient != null ?
-                            LocalDateTimeTruncateUtility.truncateTimePeriod(localDateTimeFromInstant, timeSeriesGradient) : localDateTimeFromInstant;
+                    LocalDateTime truncatedInstant = timePeriodGradient != null ?
+                            LocalDateTimeTruncateUtility.truncateTimePeriod(localDateTimeFromInstant, timePeriodGradient) : localDateTimeFromInstant;
                     newTimestampColumn.set(i, truncatedInstant);
                 }
             }

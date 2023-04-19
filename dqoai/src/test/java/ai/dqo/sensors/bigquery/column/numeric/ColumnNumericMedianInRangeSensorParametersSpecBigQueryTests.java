@@ -128,7 +128,7 @@ public class ColumnNumericMedianInRangeSensorParametersSpecBigQueryTests extends
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
-            setTimeGradient(TimeSeriesGradient.day);
+            setTimeGradient(TimePeriodGradient.day);
             setTimestampColumn("date");
         }});
 
@@ -379,7 +379,7 @@ public class ColumnNumericMedianInRangeSensorParametersSpecBigQueryTests extends
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
-            setTimeGradient(TimeSeriesGradient.day);
+            setTimeGradient(TimePeriodGradient.day);
             setTimestampColumn("date");
         }});
         runParameters.setDataStreams(
