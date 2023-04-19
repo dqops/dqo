@@ -1,6 +1,6 @@
 {
   "name": "my-app",
-  "version": "0.1.0",
+  "version": "0.2.0-alpha0",
   "private": true,
   "dependencies": {
     "@material-tailwind/react": "^1.2.4",
