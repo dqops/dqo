@@ -2,7 +2,7 @@ import React from 'react';
 
 import SectionWrapper from '../../SectionWrapper';
 import { PostgresqlParametersSpec } from "../../../../api";
-import SnowflakePropertiesView from "../SnowflakeProperties";
+import JdbcPropertiesView from "../JdbcProperties";
 import Checkbox from "../../../Checkbox";
 import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
 
@@ -59,7 +59,7 @@ const PostgreSQLConnection = ({
         label="Use SSL"
         labelPosition="left"
       />
-      <SnowflakePropertiesView
+      <JdbcPropertiesView
         properties={postgresql?.properties}
         onChange={(properties) => handleChange({ properties })}
       />
