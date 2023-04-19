@@ -243,8 +243,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -290,7 +290,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -526,9 +526,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -573,7 +573,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -851,8 +851,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -898,7 +898,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -1136,9 +1136,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -1183,7 +1183,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -1461,8 +1461,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -1508,7 +1508,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -1746,9 +1746,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -1793,7 +1793,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -2071,8 +2071,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -2118,7 +2118,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -2356,9 +2356,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -2403,7 +2403,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -2681,8 +2681,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -2728,7 +2728,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -2966,9 +2966,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -3013,7 +3013,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -3291,8 +3291,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -3338,7 +3338,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -3576,9 +3576,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -3623,7 +3623,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -3899,8 +3899,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -3946,7 +3946,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -4183,9 +4183,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -4230,7 +4230,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -4510,8 +4510,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -4557,7 +4557,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -4796,9 +4796,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -4843,7 +4843,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -5123,8 +5123,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -5170,7 +5170,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -5409,9 +5409,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -5456,7 +5456,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -5736,8 +5736,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -5783,7 +5783,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -6022,9 +6022,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -6069,7 +6069,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -6349,8 +6349,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -6396,7 +6396,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -6635,9 +6635,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -6682,7 +6682,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -6962,8 +6962,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -7009,7 +7009,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -7248,9 +7248,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -7295,7 +7295,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -7571,8 +7571,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -7618,7 +7618,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -7855,9 +7855,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -7902,7 +7902,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -8182,8 +8182,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -8229,7 +8229,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -8468,9 +8468,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -8515,7 +8515,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -8795,8 +8795,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -8842,7 +8842,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -9081,9 +9081,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -9128,7 +9128,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -9408,8 +9408,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -9455,7 +9455,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -9694,9 +9694,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -9741,7 +9741,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -10021,8 +10021,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -10068,7 +10068,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -10307,9 +10307,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -10354,7 +10354,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -10634,8 +10634,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -10681,7 +10681,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -10920,9 +10920,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -10967,7 +10967,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -11243,8 +11243,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -11290,7 +11290,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -11527,9 +11527,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -11574,7 +11574,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -11854,8 +11854,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -11901,7 +11901,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -12140,9 +12140,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -12187,7 +12187,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -12467,8 +12467,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -12514,7 +12514,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -12753,9 +12753,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -12800,7 +12800,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -13080,8 +13080,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -13127,7 +13127,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -13366,9 +13366,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -13413,7 +13413,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -13693,8 +13693,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -13740,7 +13740,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -13979,9 +13979,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -14026,7 +14026,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -14306,8 +14306,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -14353,7 +14353,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -14592,9 +14592,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -14639,7 +14639,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -14915,8 +14915,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -14962,7 +14962,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -15199,9 +15199,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -15246,7 +15246,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -15526,8 +15526,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -15573,7 +15573,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -15812,9 +15812,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -15859,7 +15859,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -16139,8 +16139,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -16186,7 +16186,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -16425,9 +16425,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -16472,7 +16472,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -16752,8 +16752,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -16799,7 +16799,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -17038,9 +17038,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -17085,7 +17085,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -17365,8 +17365,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -17412,7 +17412,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -17651,9 +17651,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -17698,7 +17698,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,
@@ -17978,8 +17978,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -18025,7 +18025,7 @@ spec:
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -18264,9 +18264,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -18311,7 +18311,7 @@ spec:
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ORDER BY nested_table.[time_period], nested_table.[time_period_utc] {{- lib.render_data_stream_projections('analyzed_table') }}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             MAX(nested_table.actual_value) AS actual_value,

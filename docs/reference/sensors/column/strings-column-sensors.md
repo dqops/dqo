@@ -2860,7 +2860,8 @@ Column level sensor that calculates the percentage of values that does fit a giv
             WHEN COUNT_BIG(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'                    THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT_BIG(*)
