@@ -69,7 +69,7 @@ const ProfilingView = ({
       )
     );
     await dispatch(
-      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, false)
     );
   };
 

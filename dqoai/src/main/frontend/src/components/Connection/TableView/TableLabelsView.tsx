@@ -26,7 +26,7 @@ const TableLabelsView = () => {
     await dispatch(
       updateTableLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, labels)
     );
-    await dispatch(getTableLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
+    await dispatch(getTableLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false));
   };
 
   const handleChange = (value: string[]) => {

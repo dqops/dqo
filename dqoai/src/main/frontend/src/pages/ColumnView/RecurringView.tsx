@@ -115,7 +115,8 @@ const RecurringView = () => {
           connection,
           schema,
           table,
-          column
+          column,
+          false
         )
       );
     } else {
@@ -139,7 +140,8 @@ const RecurringView = () => {
           connection,
           schema,
           table,
-          column
+          column,
+          false
         )
       );
     }

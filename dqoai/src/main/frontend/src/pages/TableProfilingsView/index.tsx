@@ -49,7 +49,7 @@ const TableProfilingsView = () => {
       )
     );
     await dispatch(
-      getTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+      getTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
     );
   };
 

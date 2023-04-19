@@ -53,7 +53,7 @@ const TableMonthlyPartitionedChecksView = () => {
       )
     );
     await dispatch(
-      getTableMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+      getTableMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
     );
     setIsUpdated(false);
   };

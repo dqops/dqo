@@ -43,7 +43,7 @@ const TableProfilingChecksUIFilterView = () => {
       checksUIFilter
     );
     dispatch(
-      getTableProfilingChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName)
+      getTableProfilingChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName, false)
     );
     setIsUpdating(false);
   };

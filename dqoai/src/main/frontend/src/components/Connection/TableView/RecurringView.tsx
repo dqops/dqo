@@ -84,7 +84,7 @@ const RecurringView = () => {
         )
       );
       await dispatch(
-        getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+        getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
       );
     } else {
       if (!monthlyRecurring) return;
@@ -100,7 +100,7 @@ const RecurringView = () => {
         )
       );
       await dispatch(
-        getTableMonthlyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+        getTableMonthlyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
       );
     }
   };
