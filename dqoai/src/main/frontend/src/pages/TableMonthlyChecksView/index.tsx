@@ -54,7 +54,7 @@ const TableMonthlyChecksView = () => {
     setIsUpdated(false);
 
     await dispatch(
-      getTableMonthlyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+      getTableMonthlyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
     );
   };
 

@@ -40,7 +40,7 @@ const ProfilingView = () => {
       updateTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, checksUI)
     );
     await dispatch(
-      getTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+      getTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
     );
   };
 

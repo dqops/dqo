@@ -1,17 +1,17 @@
 import React from 'react';
-import SnowflakePropertyItem from './SnowflakePropertyItem';
+import JdbcPropertyItem from './JdbcPropertyItem';
 import { convertArrayToObject, convertObjectToArray } from "../../../../utils/object";
 
 interface IProperties {
   [key: string]: string;
 }
 
-interface ISnowflakePropertiesViewProps {
+interface IJdbcPropertiesViewProps {
   properties?: IProperties;
   onChange: (properties: IProperties) => void;
 }
 
-const SnowflakePropertiesView = ({ properties, onChange }: ISnowflakePropertiesViewProps) => {
+const JdbcPropertiesView = ({ properties, onChange }: IJdbcPropertiesViewProps) => {
   const entries: [string, string][] = convertObjectToArray(properties).concat([['', '']]);
 
   const onRemove = (key: number) => {
@@ -27,13 +27,13 @@ const SnowflakePropertiesView = ({ properties, onChange }: ISnowflakePropertiesV
     <div className="py-4">
       <table className="my-3 w-full">
         <thead>
-          <th className="text-left min-w-40 w-full pr-4 py-2">JDBC connection property</th>
-          <th className="text-left min-w-40 w-full pr-4 py-2">Value</th>
+          <th className="text-left min-w-40 pr-4 py-2">JDBC connection property</th>
+          <th className="text-left min-w-40 pr-4 py-2">Value</th>
           <th className="px-8 min-w-40 py-2">Action</th>
         </thead>
         <tbody>
           {entries.map(([key, value], index) => (
-            <SnowflakePropertyItem
+            <JdbcPropertyItem
               key={index}
               idx={index}
               name={key}
@@ -49,4 +49,4 @@ const SnowflakePropertiesView = ({ properties, onChange }: ISnowflakePropertiesV
   );
 };
 
-export default SnowflakePropertiesView;
+export default JdbcPropertiesView;

@@ -46,7 +46,7 @@ const TablePartitionedChecksUIFilterView = () => {
     );
 
     await dispatch(
-      getTablePartitionedChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName)
+      getTablePartitionedChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName, false)
     );
     setIsUpdating(false);
   };

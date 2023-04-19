@@ -64,7 +64,7 @@ const ColumnCommentsView = ({
       )
     );
     await dispatch(
-      getColumnComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+      getColumnComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, false)
     );
     dispatch(setIsUpdatedComments(checkTypes, firstLevelActiveTab, false));
   };

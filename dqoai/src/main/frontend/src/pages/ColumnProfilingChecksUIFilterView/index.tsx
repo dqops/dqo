@@ -44,7 +44,7 @@ const ColumnProfilingChecksUIFilterView = () => {
       checksUIFilter
     );
     await dispatch(
-      getColumnProfilingChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, category, checkName)
+      getColumnProfilingChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, category, checkName, false)
     );
     setIsUpdating(false);
   };

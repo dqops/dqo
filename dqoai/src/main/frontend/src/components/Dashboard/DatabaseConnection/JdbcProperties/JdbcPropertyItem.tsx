@@ -4,7 +4,7 @@ import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
 import { IconButton } from "@material-tailwind/react";
 import SvgIcon from "../../../SvgIcon";
 
-interface ISnowflakePropertyItemProps {
+interface IJdbcPropertyItemProps {
   idx: number;
   name: string;
   value: string;
@@ -13,24 +13,24 @@ interface ISnowflakePropertyItemProps {
   onChange: (key: number, value: [string, string]) => void;
 }
 
-const SnowflakePropertyItem = ({
+const JdbcPropertyItem = ({
   name,
   value,
   isLast,
   idx,
   onRemove,
   onChange
-}: ISnowflakePropertyItemProps) => {
+}: IJdbcPropertyItemProps) => {
 
   return (
     <tr>
-      <td className="pr-4 min-w-40 py-2">
+      <td className="pr-4 min-w-40 py-2 w-1/2">
         <Input
           value={name}
           onChange={(e) => onChange(idx, [e.target.value, value])}
         />
       </td>
-      <td className="pr-4 min-w-40 py-2">
+      <td className="pr-4 min-w-40 py-2 w-1/2">
         <FieldTypeInput
           value={value}
           onChange={(val) => onChange(idx, [name, val])}
@@ -55,4 +55,4 @@ const SnowflakePropertyItem = ({
   );
 };
 
-export default SnowflakePropertyItem;
+export default JdbcPropertyItem;

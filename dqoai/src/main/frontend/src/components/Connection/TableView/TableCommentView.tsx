@@ -41,7 +41,7 @@ const TableCommentView = () => {
       }] : []])
     );
     setText('');
-    await dispatch(getTableComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
+    await dispatch(getTableComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false));
     dispatch(setIsUpdatedComments(checkTypes, firstLevelActiveTab, false));
   };
 

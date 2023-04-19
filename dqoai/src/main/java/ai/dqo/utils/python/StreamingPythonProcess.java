@@ -173,6 +173,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
             Map<String, String> systemEnvVariables = System.getenv();
             HashMap<String, String> processEnvVariables = new HashMap<>(systemEnvVariables);
             processEnvVariables.put("PYTHONUNBUFFERED", "1");
+            processEnvVariables.put("PYTHONIOENCODING", "utf-8");
             processEnvVariables.remove("PYTHONHOME");
             for (Map.Entry<String, String> venvEnvironmentVarKeyValPair : pythonVirtualEnv.getEnvironmentVariables().entrySet()) {
                 processEnvVariables.put(venvEnvironmentVarKeyValPair.getKey(), venvEnvironmentVarKeyValPair.getValue());
