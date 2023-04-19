@@ -69,7 +69,8 @@ const ColumnDailyChecksView = () => {
         connectionName,
         schemaName,
         tableName,
-        columnName
+        columnName,
+        false
       )
     );
     setIsUpdated(false);

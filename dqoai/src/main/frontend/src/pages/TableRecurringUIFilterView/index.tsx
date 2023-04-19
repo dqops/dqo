@@ -45,7 +45,7 @@ const TableRecurringUIFilterView = () => {
     );
 
     await dispatch(
-      getTableRecurringUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName)
+      getTableRecurringUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName, false)
     );
     setIsUpdating(false);
   };
