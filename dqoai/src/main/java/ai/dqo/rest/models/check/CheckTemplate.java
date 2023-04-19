@@ -15,6 +15,7 @@
  */
 package ai.dqo.rest.models.check;
 
+import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.services.check.mapping.models.UICheckContainerTypeModel;
@@ -39,13 +40,19 @@ import java.util.stream.Collectors;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "CheckTemplate", description = "Model depicting a named data quality check that can potentially be enabled, regardless to its position in hierarchy tree.")
 public class CheckTemplate {
+    @JsonPropertyDescription("Check target (table, column)")
+    private CheckTarget checkTarget;
+
+    @JsonPropertyDescription("Data quality check category.")
+    private String checkCategory;
+
     @JsonPropertyDescription("Data quality check name that is used in YAML.")
     private String checkName;
 
     @JsonPropertyDescription("Help text that describes the data quality check.")
     private String helpText;
 
-    @JsonPropertyDescription("Type of the check's target (column, table, target) with time-scale.")
+    @JsonPropertyDescription("Check type with time-scale.")
     private UICheckContainerTypeModel checkContainerType;
 
     @JsonPropertyDescription("Full sensor name.")
@@ -61,14 +68,21 @@ public class CheckTemplate {
     /**
      * Creates a {@link CheckTemplate} instance based on <code>uiCheckModel</code>.
      * @param uiCheckModel              Base uiCheckModel.
+     * @param checkCategory             Check category.
      * @param uiCheckContainerTypeModel Check container type parameter for the new instance.
+     * @param checkTarget               Check target.
      * @return New instance of {@link CheckTemplate}.
      */
-    public static CheckTemplate fromUiCheckModel(UICheckModel uiCheckModel, UICheckContainerTypeModel uiCheckContainerTypeModel) {
+    public static CheckTemplate fromUiCheckModel(UICheckModel uiCheckModel,
+                                                 String checkCategory,
+                                                 UICheckContainerTypeModel uiCheckContainerTypeModel,
+                                                 CheckTarget checkTarget) {
         CheckTemplate checkTemplate = new CheckTemplate();
         checkTemplate.setCheckName(uiCheckModel.getCheckName());
         checkTemplate.setHelpText(uiCheckModel.getHelpText());
         checkTemplate.setSensorName(uiCheckModel.getSensorName());
+        checkTemplate.setCheckTarget(checkTarget);
+        checkTemplate.setCheckCategory(checkCategory);
 
         UICheckContainerTypeModel checkContainerTypeModel = new UICheckContainerTypeModel(
                 uiCheckContainerTypeModel.getCheckType(), uiCheckContainerTypeModel.getCheckTimeScale());

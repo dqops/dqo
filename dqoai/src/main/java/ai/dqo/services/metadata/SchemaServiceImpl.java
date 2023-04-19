@@ -27,10 +27,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.check.CheckTemplate;
 import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
-import ai.dqo.services.check.mapping.models.UICheckContainerModel;
-import ai.dqo.services.check.mapping.models.UICheckContainerTypeModel;
-import ai.dqo.services.check.mapping.models.UICheckModel;
+import ai.dqo.services.check.mapping.models.*;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -133,34 +130,55 @@ public class SchemaServiceImpl implements SchemaService {
                 .flatMap(model -> model.getUiTableChecksModels().stream())
                 .flatMap(model -> model.getCheckContainers().values().stream());
 
-        Stream<UICheckContainerModel> checkContainers;
-        switch (checkTarget) {
-            case table:
-                checkContainers = tableCheckContainers;
-                break;
-            case column:
-                checkContainers = columnCheckContainers;
-                break;
-            default:
-                checkContainers = Stream.concat(columnCheckContainers, tableCheckContainers);
-        }
+        UICheckContainerTypeModel uiCheckContainerTypeModel = new UICheckContainerTypeModel(checkType, checkTimeScale);
 
-        Stream<UICheckModel> checks = checkContainers
-                .flatMap(model -> model.getCategories().stream())
-                .flatMap(model -> model.getChecks().stream());
-
-        Map<String, UICheckModel> checkNameToExampleCheck = new HashMap<>();
-        for (Iterator<UICheckModel> it = checks.iterator(); it.hasNext();) {
-            UICheckModel checkModel = it.next();
-
-            if (!checkNameToExampleCheck.containsKey(checkModel.getCheckName())) {
-                checkNameToExampleCheck.put(checkModel.getCheckName(), checkModel);
+        Stream<CheckTemplate> checkTemplates;
+        if (checkTarget == null) {
+            checkTemplates = Stream.concat(
+                    this.getCheckTemplatesFromCheckContainers(columnCheckContainers, uiCheckContainerTypeModel, CheckTarget.column),
+                    this.getCheckTemplatesFromCheckContainers(tableCheckContainers, uiCheckContainerTypeModel, CheckTarget.table));
+        } else {
+            switch (checkTarget) {
+                case column:
+                    checkTemplates = this.getCheckTemplatesFromCheckContainers(columnCheckContainers, uiCheckContainerTypeModel, CheckTarget.column);
+                    break;
+                case table:
+                    checkTemplates = this.getCheckTemplatesFromCheckContainers(tableCheckContainers, uiCheckContainerTypeModel, CheckTarget.table);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unsupported check target: " + checkTarget.name());
             }
         }
 
-        UICheckContainerTypeModel uiCheckContainerTypeModel = new UICheckContainerTypeModel(checkType, checkTimeScale);
-        return checkNameToExampleCheck.values().stream()
-                .map(uiCheckModel -> CheckTemplate.fromUiCheckModel(uiCheckModel, uiCheckContainerTypeModel))
-                .collect(Collectors.toList());
+        return checkTemplates.collect(Collectors.toList());
+    }
+
+    /**
+     * Generates a distinct {@link CheckTemplate} stream from {@link UICheckContainerModel} stream,
+     * provided parameters specifying the source of the base stream.
+     * @param checkContainers    Base check containers stream.
+     * @param checkTarget        Check target specifying the source of the base stream.
+     * @param checkContainerType Check container type specifying the source of the base stream.
+     * @return Stream of check templates modelling the checks that are present in the base stream.
+     */
+    protected Stream<CheckTemplate> getCheckTemplatesFromCheckContainers(Stream<UICheckContainerModel> checkContainers,
+                                                                         UICheckContainerTypeModel checkContainerType,
+                                                                         CheckTarget checkTarget) {
+        return checkContainers
+                .flatMap(model -> model.getCategories().stream())
+                .map(categoryModel -> {
+                    Map<String, UICheckModel> checkNameToExampleCheck = new HashMap<>();
+                    for (UICheckModel checkModel: categoryModel.getChecks()) {
+                        if (!checkNameToExampleCheck.containsKey(checkModel.getCheckName())) {
+                            checkNameToExampleCheck.put(checkModel.getCheckName(), checkModel);
+                        }
+                    }
+
+                    return checkNameToExampleCheck.values().stream()
+                            .map(uiCheckModel -> CheckTemplate.fromUiCheckModel(
+                                    uiCheckModel, categoryModel.getCategory(), checkContainerType, checkTarget)
+                            );
+                })
+                .reduce(Stream.empty(), Stream::concat);
     }
 }

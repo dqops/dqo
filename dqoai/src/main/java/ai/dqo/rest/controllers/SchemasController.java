@@ -15,6 +15,8 @@
  */
 package ai.dqo.rest.controllers;
 
+import ai.dqo.checks.CheckTarget;
+import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.metadata.sources.*;
@@ -32,7 +34,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -95,6 +99,9 @@ public class SchemasController {
      * Retrieves the list of profiling checks templates on the given schema.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
+     * @param checkTarget    (Optional) Filter on check target.
+     * @param checkCategory  (Optional) Filter on check category.
+     * @param checkName      (Optional) Filter on check name.
      * @return Data quality checks templates on a requested schema.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/bulkenable/profiling")
@@ -107,7 +114,10 @@ public class SchemasController {
     })
     public ResponseEntity<Flux<CheckTemplate>> getSchemaProfilingTemplates(
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName) {
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
+            @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
+            @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -118,7 +128,87 @@ public class SchemasController {
 
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
                 connectionName, schemaName, CheckType.PROFILING,
-                null, null, null, null);
+                null, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null));
+
+        return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves the list of recurring checks templates on the given schema.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param timeScale      Check time scale.
+     * @param checkTarget    (Optional) Filter on check target.
+     * @param checkCategory  (Optional) Filter on check category.
+     * @param checkName      (Optional) Filter on check name.
+     * @return Data quality checks templates on a requested schema.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/bulkenable/recurring/{timeScale}")
+    @ApiOperation(value = "getSchemaRecurringTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate.class),
+            @ApiResponse(code = 404, message = "Connection or schema not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Flux<CheckTemplate>> getSchemaRecurringTemplates(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
+            @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
+            @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
+            @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
+        if (tableWrappers == null) {
+            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
+                connectionName, schemaName, CheckType.RECURRING,
+                timeScale, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null));
+
+        return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves the list of partitioned checks templates on the given schema.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param timeScale      Check time scale.
+     * @param checkTarget    (Optional) Filter on check target.
+     * @param checkCategory  (Optional) Filter on check category.
+     * @param checkName      (Optional) Filter on check name.
+     * @return Data quality checks templates on a requested schema.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/bulkenable/partitioned/{timeScale}")
+    @ApiOperation(value = "getSchemaPartitionedTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate.class),
+            @ApiResponse(code = 404, message = "Connection or schema not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Flux<CheckTemplate>> getSchemaPartitionedTemplates(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
+            @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
+            @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
+            @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
+        if (tableWrappers == null) {
+            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
+                connectionName, schemaName, CheckType.PARTITIONED,
+                timeScale, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null));
 
         return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
     }
