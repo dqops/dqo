@@ -142,7 +142,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
 
   useEffect(() => {
     fetchCheckDetails();
-  }, []);
+  }, [month, dataStreamName]);
 
   useEffect(() => {
     if(job && (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded || job.status === DqoJobHistoryEntryModelStatusEnum.failed)) {
