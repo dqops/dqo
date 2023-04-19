@@ -1,7 +1,7 @@
 **string in set count** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a maximum number of empty strings in a monitored column.
+Column level check that the number of strings from a set in a column does not exceed the minimum accepted count.
 
 ___
 
