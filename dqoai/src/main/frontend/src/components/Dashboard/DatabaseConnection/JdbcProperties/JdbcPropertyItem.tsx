@@ -24,13 +24,13 @@ const JdbcPropertyItem = ({
 
   return (
     <tr>
-      <td className="pr-4 min-w-40 py-2">
+      <td className="pr-4 min-w-40 py-2 w-1/2">
         <Input
           value={name}
           onChange={(e) => onChange(idx, [e.target.value, value])}
         />
       </td>
-      <td className="pr-4 min-w-40 py-2">
+      <td className="pr-4 min-w-40 py-2 w-1/2">
         <FieldTypeInput
           value={value}
           onChange={(val) => onChange(idx, [name, val])}
