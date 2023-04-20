@@ -29,6 +29,8 @@ import TableRecurringUIFilterView from "./pages/TableRecurringUIFilterView";
 import TablePartitionedChecksUIFilterView from "./pages/TablePartitionedChecksUIFilterView";
 import { ROUTES } from "./shared/routes";
 import Definitions from "./pages/Definitions";
+import SensorDetail from "./pages/SensorDetail";
+import RuleDetail from "./pages/RuleDetail";
 
 const Routes = () => {
   return (
@@ -57,6 +59,8 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.COLUMN_PARTITIONED_FILTER} component={ColumnPartitionedChecksUIFilterView} />
       <Route exact path={ROUTES.PATTERNS.HOME} component={HomePage} />
       <Route exact path={ROUTES.PATTERNS.DASHBOARDS} component={Dashboards} />
+      <Route exact path={ROUTES.PATTERNS.SENSOR_DETAIL} component={SensorDetail} />
+      <Route exact path={ROUTES.PATTERNS.RULE_DETAIL} component={RuleDetail} />
       <Route exact path={ROUTES.PATTERNS.DEFINITIONS} component={Definitions} />
       <Route exact path={ROUTES.PATTERNS.QUALITY_CHECKS} component={ChecksPage} />
       <Redirect from={ROUTES.PATTERNS.INDEX} to={ROUTES.PATTERNS.HOME} />

@@ -1,12 +1,14 @@
 import React from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { getSensorFolderTree, toggleSensorFolderTree } from "../../redux/actions/sensor.actions";
+import { addFirstLevelTab, getSensorFolderTree, toggleSensorFolderTree } from "../../redux/actions/sensor.actions";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { IRootState } from "../../redux/reducers";
-import { RuleBasicFolderModel, SensorBasicFolderModel } from "../../api";
+import { RuleBasicFolderModel, RuleBasicModel, SensorBasicFolderModel, SensorBasicModel } from "../../api";
 import SvgIcon from "../SvgIcon";
 import { getRuleFolderTree, toggleRuleFolderTree } from "../../redux/actions/rule.actions";
+import clsx from "clsx";
+import { ROUTES } from "../../shared/routes";
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
@@ -24,6 +26,28 @@ export const DefinitionTree = () => {
 
   const toggleRuleFolder = (key: string) => {
     dispatch(toggleRuleFolderTree(key));
+  };
+
+  const openSensorFirstLevelTab = (sensor: SensorBasicModel) => {
+    dispatch(addFirstLevelTab({
+      url: ROUTES.SENSOR_DETAIL(sensor.sensor_name ?? ""),
+      value: ROUTES.SENSOR_DETAIL_VALUE(sensor.sensor_name ?? ""),
+      state: {
+        full_sensor_name: sensor.full_sensor_name
+      },
+      label: sensor.sensor_name
+    }))
+  };
+
+  const openRuleFirstLevelTab = (rule: RuleBasicModel) => {
+    dispatch(addFirstLevelTab({
+      url: ROUTES.RULE_DETAIL(rule.rule_name ?? ""),
+      value: ROUTES.RULE_DETAIL_VALUE(rule.rule_name ?? ""),
+      state: {
+        full_rule_name: rule.full_rule_name
+      },
+      label: rule.rule_name
+    }))
   };
 
   const renderSensorFolderTree = (folder?: SensorBasicFolderModel) => {
@@ -53,7 +77,11 @@ export const DefinitionTree = () => {
           {folder.sensors?.map((sensor) => (
             <div
               key={sensor.full_sensor_name}
-              className="cursor-pointer flex space-x-1.5 items-center mb-1 h-5"
+              className={clsx(
+                "cursor-pointer flex space-x-1.5 items-center mb-1 h-5",
+                sensor.custom ? "font-bold" : ""
+              )}
+              onClick={() => openSensorFirstLevelTab(sensor)}
             >
               <SvgIcon name="grid" className="w-4 h-4 min-w-4 shrink-0" />
               <div className="text-[13px] leading-1.5 whitespace-nowrap">{sensor.sensor_name}</div>
@@ -91,7 +119,11 @@ export const DefinitionTree = () => {
           {folder.rules?.map((rule) => (
             <div
               key={rule.full_rule_name}
-              className="cursor-pointer flex space-x-1.5 items-center mb-1 h-5"
+              className={clsx(
+                "cursor-pointer flex space-x-1.5 items-center mb-1 h-5",
+                rule.custom ? "font-bold" : ""
+              )}
+              onClick={() => openRuleFirstLevelTab(rule)}
             >
               <SvgIcon name="grid" className="w-4 h-4 min-w-4 shrink-0" />
               <div className="text-[13px] leading-1.5 whitespace-nowrap">{rule.rule_name}</div>
