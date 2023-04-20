@@ -14,12 +14,9 @@
 /// limitations under the License.
 ///
 
-export * from './connection.types';
-export * from './schema.types';
-export * from './table.types';
-export * from './column.types';
-export * from './job.types';
-export * from './dashboard.types';
-export * from './source.types';
-export * from './sensor.types';
-export * from './rule.types';
+export enum RULE_ACTION {
+  GET_RULE_FOLDER_TREE = 'RULE_ACTION/GET_RULE_FOLDER_TREE',
+  GET_RULE_FOLDER_TREE_SUCCESS = 'RULE_ACTION/GET_RULE_FOLDER_TREE_SUCCESS',
+  GET_RULE_FOLDER_TREE_ERROR = 'RULE_ACTION/GET_RULE_FOLDER_TREE_ERROR',
+  TOGGLE_RULE_FOLDER = 'RULE_ACTION/TOGGLE_RULE_FOLDER'
+}
