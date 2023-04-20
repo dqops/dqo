@@ -85,7 +85,7 @@ const ScheduleDetail = () => {
   useEffect(() => {
     setTabs(prev => prev.map(tab => ({ ...tab, isUpdate: false })))
     dispatch(resetTableSchedulingGroup(checkTypes, firstLevelActiveTab));
-  }, [connectionName, schemaName, tableName])
+  }, [checkTypes, firstLevelActiveTab])
 
   return (
     <div className="py-4 px-8">

@@ -2,11 +2,9 @@
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: austin_311
-    table_name: 311_service_requests
-  timestamp_columns:
-    partitioned_checks_timestamp_source: event_timestamp
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
   columns:
     unique_key:
       type_snapshot:
@@ -40,22 +38,22 @@ spec:
       type_snapshot:
         column_type: TIMESTAMP
         nullable: true
-      checks:
+      profiling_checks:
         datetime:
           datetime_value_in_range_date_percent:
             comments:
-              - date: 2023-03-03T11:09:57.430+00:00
+              - date: 2023-04-14T08:56:30.517+00:00
                 comment_by: user
                 comment: In this example values in "close_date" column are verified
-                  whether the percentage of values within the indicated range (2018-01-01 - 2018-12-30) does not
-                  exceed the indicated thresholds.
+                  whether the percentage of values within the indicated range (2018-01-01
+                  - 2018-12-30) does not exceed the indicated thresholds.
             parameters:
-              min_value: 2018-01-01
+              min_value: 2017-12-31
               max_value: 2018-12-30
-            error:
-              max_percent: 2.0
             warning:
               max_percent: 1.0
+            error:
+              max_percent: 2.0
             fatal:
               max_percent: 5.0
     incident_address:

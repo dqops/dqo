@@ -25,7 +25,7 @@ import ai.dqo.execution.checks.EffectiveSensorRuleNames;
 import ai.dqo.metadata.definitions.checks.CheckDefinitionSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.metadata.groupings.TimeSeriesMode;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
@@ -170,7 +170,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         TimeWindowFilterParameters resultFilter = new TimeWindowFilterParameters();
 
 
-        TimeSeriesGradient partitioningTimeGradient = timeSeriesConfigurationSpec.getMode() == TimeSeriesMode.timestamp_column ?
+        TimePeriodGradient partitioningTimeGradient = timeSeriesConfigurationSpec.getMode() == TimeSeriesMode.timestamp_column ?
                 timeSeriesConfigurationSpec.getTimeGradient() : null;
         switch (partitioningTimeGradient) {
             case day:

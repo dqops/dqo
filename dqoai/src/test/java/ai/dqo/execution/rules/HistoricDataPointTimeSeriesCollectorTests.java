@@ -18,7 +18,7 @@ package ai.dqo.execution.rules;
 import ai.dqo.BaseTest;
 import ai.dqo.data.readouts.factory.SensorReadoutTableFactoryObjectMother;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ public class HistoricDataPointTimeSeriesCollectorTests extends BaseTest {
 
     @Test
     void getHistoricDataPointsBefore_whenDayAndNoPreviousData_thenReturnsEmptyArray() {
-        HistoricDataPointTimeSeriesCollector sut = new HistoricDataPointTimeSeriesCollector(this.table, TimeSeriesGradient.day, ZoneId.of("UTC"));
+        HistoricDataPointTimeSeriesCollector sut = new HistoricDataPointTimeSeriesCollector(this.table, TimePeriodGradient.day, ZoneId.of("UTC"));
         HistoricDataPoint[] dataPoints = sut.getHistoricDataPointsBefore(LocalDateTime.of(2022, 1, 15, 0, 0, 0), 14);
         Assertions.assertNotNull(dataPoints);
         Assertions.assertEquals(14, dataPoints.length);
@@ -58,7 +58,7 @@ public class HistoricDataPointTimeSeriesCollectorTests extends BaseTest {
                     LocalDateTime.of(2022, 1, i, 0, 0, 0));
         }
 
-        HistoricDataPointTimeSeriesCollector sut = new HistoricDataPointTimeSeriesCollector(this.table, TimeSeriesGradient.day, ZoneId.of("UTC"));
+        HistoricDataPointTimeSeriesCollector sut = new HistoricDataPointTimeSeriesCollector(this.table, TimePeriodGradient.day, ZoneId.of("UTC"));
         HistoricDataPoint[] dataPoints = sut.getHistoricDataPointsBefore(LocalDateTime.of(2022, 1, 20, 0, 0, 0), 14);
         Assertions.assertNotNull(dataPoints);
         Assertions.assertEquals(14, dataPoints.length);
@@ -82,7 +82,7 @@ public class HistoricDataPointTimeSeriesCollectorTests extends BaseTest {
             }
         }
 
-        HistoricDataPointTimeSeriesCollector sut = new HistoricDataPointTimeSeriesCollector(this.table, TimeSeriesGradient.day, ZoneId.of("UTC"));
+        HistoricDataPointTimeSeriesCollector sut = new HistoricDataPointTimeSeriesCollector(this.table, TimePeriodGradient.day, ZoneId.of("UTC"));
         HistoricDataPoint[] dataPoints = sut.getHistoricDataPointsBefore(LocalDateTime.of(2022, 1, 20, 0, 0, 0), 14);
         Assertions.assertNotNull(dataPoints);
         Assertions.assertEquals(14, dataPoints.length);
@@ -108,7 +108,7 @@ public class HistoricDataPointTimeSeriesCollectorTests extends BaseTest {
                     LocalDateTime.of(2022, 1, i, 0, 0, 0));
         }
 
-        HistoricDataPointTimeSeriesCollector sut = new HistoricDataPointTimeSeriesCollector(this.table, TimeSeriesGradient.day, ZoneId.of("UTC"));
+        HistoricDataPointTimeSeriesCollector sut = new HistoricDataPointTimeSeriesCollector(this.table, TimePeriodGradient.day, ZoneId.of("UTC"));
         HistoricDataPoint[] dataPoints = sut.getHistoricDataPointsBefore(LocalDateTime.of(2022, 1, 20, 0, 0, 0), 14);
         Assertions.assertNotNull(dataPoints);
         Assertions.assertEquals(14, dataPoints.length);
@@ -126,7 +126,7 @@ public class HistoricDataPointTimeSeriesCollectorTests extends BaseTest {
 
     @Test
     void getHistoricContinuousResultsBefore_whenNoPreviousData_thenReturnsEmptyArray() {
-        HistoricDataPointTimeSeriesCollector sut = new HistoricDataPointTimeSeriesCollector(this.table, TimeSeriesGradient.day, ZoneId.of("UTC"));
+        HistoricDataPointTimeSeriesCollector sut = new HistoricDataPointTimeSeriesCollector(this.table, TimePeriodGradient.day, ZoneId.of("UTC"));
         HistoricDataPoint[] dataPoints = sut.getHistoricContinuousResultsBefore(LocalDateTime.of(2022, 1, 15, 0, 0, 0), 14);
         Assertions.assertNotNull(dataPoints);
         Assertions.assertEquals(14, dataPoints.length);
@@ -142,7 +142,7 @@ public class HistoricDataPointTimeSeriesCollectorTests extends BaseTest {
                     LocalDateTime.of(2022, 1, i, 0, 0, 0));
         }
 
-        HistoricDataPointTimeSeriesCollector sut = new HistoricDataPointTimeSeriesCollector(this.table, TimeSeriesGradient.day, ZoneId.of("UTC"));
+        HistoricDataPointTimeSeriesCollector sut = new HistoricDataPointTimeSeriesCollector(this.table, TimePeriodGradient.day, ZoneId.of("UTC"));
         HistoricDataPoint[] dataPoints = sut.getHistoricContinuousResultsBefore(LocalDateTime.of(2022, 1, 20, 0, 0, 0), 14);
         Assertions.assertNotNull(dataPoints);
         Assertions.assertEquals(14, dataPoints.length);
@@ -167,7 +167,7 @@ public class HistoricDataPointTimeSeriesCollectorTests extends BaseTest {
                     LocalDateTime.of(2022, 1, i, 0, 0, 0));
         }
 
-        HistoricDataPointTimeSeriesCollector sut = new HistoricDataPointTimeSeriesCollector(this.table, TimeSeriesGradient.day, ZoneId.of("UTC"));
+        HistoricDataPointTimeSeriesCollector sut = new HistoricDataPointTimeSeriesCollector(this.table, TimePeriodGradient.day, ZoneId.of("UTC"));
         HistoricDataPoint[] dataPoints = sut.getHistoricContinuousResultsBefore(LocalDateTime.of(2022, 1, 20, 0, 0, 0), 14);
         Assertions.assertNotNull(dataPoints);
         Assertions.assertEquals(14, dataPoints.length);

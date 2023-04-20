@@ -38,7 +38,7 @@ const TableDailyPartitionedChecksView = () => {
     dispatch(
       getTableDailyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
     );
-  }, [connectionName, schemaName, tableName]);
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     if (!updatedChecksUI) return;
@@ -54,7 +54,7 @@ const TableDailyPartitionedChecksView = () => {
       )
     );
     await dispatch(
-      getTableDailyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+      getTableDailyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
     );
     setIsUpdated(false);
   };

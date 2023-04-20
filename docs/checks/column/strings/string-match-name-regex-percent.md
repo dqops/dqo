@@ -253,8 +253,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -263,7 +263,8 @@ spec:
             WHEN COUNT_BIG(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'                    THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT_BIG(*)
@@ -275,7 +276,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -283,7 +284,8 @@ spec:
             WHEN COUNT_BIG(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'                    THEN 1
+                    WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT_BIG(*)
@@ -516,9 +518,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
@@ -526,7 +528,8 @@ spec:
                 WHEN COUNT_BIG(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'                    THEN 1
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT_BIG(*)
@@ -538,14 +541,15 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             CASE
                 WHEN COUNT_BIG(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'                    THEN 1
+                        WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT_BIG(*)
@@ -821,8 +825,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -831,7 +835,8 @@ spec:
             WHEN COUNT_BIG(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'                    THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT_BIG(*)
@@ -843,7 +848,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -851,7 +856,8 @@ spec:
             WHEN COUNT_BIG(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'                    THEN 1
+                    WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT_BIG(*)
@@ -1085,9 +1091,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
@@ -1095,7 +1101,8 @@ spec:
                 WHEN COUNT_BIG(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'                    THEN 1
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT_BIG(*)
@@ -1107,14 +1114,15 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             CASE
                 WHEN COUNT_BIG(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'                    THEN 1
+                        WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT_BIG(*)
@@ -1390,8 +1398,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -1400,7 +1408,8 @@ spec:
             WHEN COUNT_BIG(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'                    THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT_BIG(*)
@@ -1412,7 +1421,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -1420,7 +1429,8 @@ spec:
             WHEN COUNT_BIG(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'                    THEN 1
+                    WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT_BIG(*)
@@ -1654,9 +1664,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
@@ -1664,7 +1674,8 @@ spec:
                 WHEN COUNT_BIG(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'                    THEN 1
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT_BIG(*)
@@ -1676,14 +1687,15 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             CASE
                 WHEN COUNT_BIG(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'                    THEN 1
+                        WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT_BIG(*)
@@ -1959,8 +1971,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -1969,7 +1981,8 @@ spec:
             WHEN COUNT_BIG(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'                    THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT_BIG(*)
@@ -1981,7 +1994,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -1989,7 +2002,8 @@ spec:
             WHEN COUNT_BIG(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'                    THEN 1
+                    WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT_BIG(*)
@@ -2227,9 +2241,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
@@ -2237,7 +2251,8 @@ spec:
                 WHEN COUNT_BIG(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'                    THEN 1
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT_BIG(*)
@@ -2249,14 +2264,15 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             CASE
                 WHEN COUNT_BIG(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'                    THEN 1
+                        WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT_BIG(*)
@@ -2529,8 +2545,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -2539,7 +2555,8 @@ spec:
             WHEN COUNT_BIG(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'                    THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT_BIG(*)
@@ -2551,7 +2568,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -2559,7 +2576,8 @@ spec:
             WHEN COUNT_BIG(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'                    THEN 1
+                    WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT_BIG(*)
@@ -2797,9 +2815,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
@@ -2807,7 +2825,8 @@ spec:
                 WHEN COUNT_BIG(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'                    THEN 1
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT_BIG(*)
@@ -2819,14 +2838,15 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             CASE
                 WHEN COUNT_BIG(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'                    THEN 1
+                        WHEN analyzed_table.[target_column] LIKE '%[^ -~]%'
+                            THEN 1
                         ELSE 0
                     END
                 ) / COUNT_BIG(*)

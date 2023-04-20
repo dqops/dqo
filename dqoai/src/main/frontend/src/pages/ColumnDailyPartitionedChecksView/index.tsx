@@ -68,7 +68,8 @@ const ColumnDailyPartitionedChecksView = () => {
         connectionName,
         schemaName,
         tableName,
-        columnName
+        columnName,
+        false
       )
     );
     setIsUpdated(false);

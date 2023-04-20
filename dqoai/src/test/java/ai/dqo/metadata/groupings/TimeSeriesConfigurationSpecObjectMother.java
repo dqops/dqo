@@ -26,7 +26,7 @@ public class TimeSeriesConfigurationSpecObjectMother {
      * @param gradient Gradient.
      * @return Time series.
      */
-    public static TimeSeriesConfigurationSpec createCurrentTimeSeries(TimeSeriesGradient gradient) {
+    public static TimeSeriesConfigurationSpec createCurrentTimeSeries(TimePeriodGradient gradient) {
         TimeSeriesConfigurationSpec timeSeries = new TimeSeriesConfigurationSpec();
         timeSeries.setMode(TimeSeriesMode.current_time);
         timeSeries.setTimeGradient(gradient);
@@ -39,7 +39,7 @@ public class TimeSeriesConfigurationSpecObjectMother {
      * @param gradient Gradient.
      * @return Time series.
      */
-    public static TimeSeriesConfigurationSpec createTimestampColumnTimeSeries(String timestampColumnName, TimeSeriesGradient gradient) {
+    public static TimeSeriesConfigurationSpec createTimestampColumnTimeSeries(String timestampColumnName, TimePeriodGradient gradient) {
         TimeSeriesConfigurationSpec timeSeries = new TimeSeriesConfigurationSpec();
         timeSeries.setMode(TimeSeriesMode.timestamp_column);
         timeSeries.setTimestampColumn(timestampColumnName);
@@ -54,7 +54,7 @@ public class TimeSeriesConfigurationSpecObjectMother {
     public static TimeSeriesConfigurationSpec createTimeSeriesForProfiling() {
         TimeSeriesConfigurationSpec timeSeries = new TimeSeriesConfigurationSpec();
         timeSeries.setMode(TimeSeriesMode.current_time);
-        timeSeries.setTimeGradient(TimeSeriesGradient.millisecond);
+        timeSeries.setTimeGradient(TimePeriodGradient.millisecond);
         return timeSeries;
     }
 
@@ -68,10 +68,10 @@ public class TimeSeriesConfigurationSpecObjectMother {
         timeSeries.setMode(TimeSeriesMode.current_time);
         switch (checkTimeScale) {
             case daily:
-                timeSeries.setTimeGradient(TimeSeriesGradient.day);
+                timeSeries.setTimeGradient(TimePeriodGradient.day);
                 break;
             case monthly:
-                timeSeries.setTimeGradient(TimeSeriesGradient.month);
+                timeSeries.setTimeGradient(TimePeriodGradient.month);
                 break;
         }
         return timeSeries;
@@ -89,10 +89,10 @@ public class TimeSeriesConfigurationSpecObjectMother {
         timeSeries.setTimestampColumn(datePartitioningColumn);
         switch (checkTimeScale) {
             case daily:
-                timeSeries.setTimeGradient(TimeSeriesGradient.day);
+                timeSeries.setTimeGradient(TimePeriodGradient.day);
                 break;
             case monthly:
-                timeSeries.setTimeGradient(TimeSeriesGradient.month);
+                timeSeries.setTimeGradient(TimePeriodGradient.month);
                 break;
         }
         return timeSeries;

@@ -62,5 +62,4 @@ In DQO you can set up data stream globally for all tables in the connection or i
 You can set up data streams in Data Sources section by clicking at the connection or individual table in the tree and 
 selecting Data Streams tab. 
 
-[Read here how to set up data stream](../../working-with-dqo/setting-up-data-stream/index.md).
 

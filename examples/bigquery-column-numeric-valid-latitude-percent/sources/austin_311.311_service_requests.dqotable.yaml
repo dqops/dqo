@@ -2,11 +2,9 @@
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: austin_311
-    table_name: 311_service_requests
-  timestamp_columns:
-    partitioned_checks_timestamp_source: event_timestamp
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
   columns:
     unique_key:
       type_snapshot:
@@ -76,18 +74,19 @@ spec:
       type_snapshot:
         column_type: FLOAT64
         nullable: true
-      checks:
+      profiling_checks:
         numeric:
           valid_latitude_percent:
             comments:
-              - date: 2023-03-03T11:09:57.430+00:00
+              - date: 2023-04-14T09:03:21.495+00:00
                 comment_by: user
-                comment: In this example values in "latitude" column are verified
-                  whether the percentage of values within the latitude range does not exceed the indicated thresholds.
-            error:
-              max_percent: 98.0
+                comment: In this example values in "latitude" column are verified whether
+                  the percentage of values within the latitude range does not exceed
+                  the indicated thresholds.
             warning:
               max_percent: 99.0
+            error:
+              max_percent: 98.0
             fatal:
               max_percent: 95.0
     longitude:

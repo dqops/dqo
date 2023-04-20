@@ -8,6 +8,7 @@ spec:
   time_window:
     prediction_time_window: 10
     min_periods_with_readouts: 5
+    historic_data_point_grouping: day
   fields:
   - field_name: percentile_stdev_above
     display_name: percentile_stdev_above

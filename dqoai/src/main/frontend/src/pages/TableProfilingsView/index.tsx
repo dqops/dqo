@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
@@ -32,7 +31,7 @@ const TableProfilingsView = () => {
 
   useEffect(() => {
     dispatch(getTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
-  }, [connectionName, schemaName, tableName]);
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     if (!updatedChecksUI) {
@@ -50,7 +49,7 @@ const TableProfilingsView = () => {
       )
     );
     await dispatch(
-      getTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+      getTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
     );
   };
 

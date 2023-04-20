@@ -352,8 +352,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -400,7 +400,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -741,9 +741,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -789,7 +789,7 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             CASE
@@ -1172,8 +1172,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -1220,7 +1220,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -1562,9 +1562,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -1610,7 +1610,7 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             CASE
@@ -1993,8 +1993,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -2041,7 +2041,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -2383,9 +2383,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -2431,7 +2431,7 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             CASE
@@ -2814,8 +2814,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -2862,7 +2862,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -3208,9 +3208,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -3256,7 +3256,7 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             CASE
@@ -3636,8 +3636,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -3684,7 +3684,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -4030,9 +4030,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
@@ -4078,7 +4078,7 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             CASE

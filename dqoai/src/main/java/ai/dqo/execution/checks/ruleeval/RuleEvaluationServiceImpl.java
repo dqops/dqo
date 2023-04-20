@@ -28,8 +28,9 @@ import ai.dqo.execution.rules.*;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindService;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.rules.AbstractRuleParametersSpec;
+import ai.dqo.rules.HistoricDataPointsGrouping;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +102,11 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
             LongColumn dimensionColumn = (LongColumn) dimensionSensorResults.column(SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME);
             Long timeSeriesDimensionId = dimensionColumn.get(0);
             SensorReadoutsTimeSeriesData historicTimeSeriesData = historicReadoutsTimeSeries.findTimeSeriesData(checkHashId, timeSeriesDimensionId);
-            TimeSeriesGradient timeGradient = sensorRunParameters.getTimeSeries().getTimeGradient();
+            HistoricDataPointsGrouping historicDataPointGrouping = ruleTimeWindowSettings != null ? ruleTimeWindowSettings.getHistoricDataPointGrouping() : null;
+            TimePeriodGradient timeGradient = historicDataPointGrouping != null ? historicDataPointGrouping.toTimePeriodGradient() : TimePeriodGradient.day;
+            if (timeGradient == null) {
+                timeGradient = TimePeriodGradient.day; // timeGradient could be null for rules that require a continuous array of any results, we will use days as a fallback to define the time window
+            }
 
             ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
             HistoricDataPointTimeSeriesCollector previousDataPointTimeSeriesCollectorCurrent = new HistoricDataPointTimeSeriesCollector(
@@ -124,7 +129,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 LocalDateTime timePeriodLocal = timePeriodColumn.get(allSensorResultsRowIndex);
                 HistoricDataPoint[] previousDataPoints = null; // combined data points from current readouts and historic sensor readouts
 
-                if (sensorRunParameters.getCheckType() == CheckType.PROFILING) {
+                if (historicDataPointGrouping == HistoricDataPointsGrouping.last_n_readouts) {
                     // these checks do not have real time periods, we just take the last data points, also we don't want the current sensor results
                     // because there should be none (only partitioned checks will have previous results from the most recent query), we will find them only in old data
 

@@ -30,7 +30,11 @@ import {
   DashboardsApiFactory,
   TimezonesApiFactory,
   SourceConnectionControllerApiFactory,
-  CheckResultsApiFactory, SensorReadoutsApiFactory, ErrorsApiFactory
+  CheckResultsApiFactory,
+  SensorReadoutsApiFactory,
+  ErrorsApiFactory,
+  SensorsApiFactory,
+  RulesApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -110,6 +114,18 @@ export const SensorReadoutsApi = SensorReadoutsApiFactory(
 );
 
 export const ErrorsApi = ErrorsApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
+
+export const SensorsApi = SensorsApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
+
+export const RulesApi = RulesApiFactory(
   new Configuration(),
   '',
   axios

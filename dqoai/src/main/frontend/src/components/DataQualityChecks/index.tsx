@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import CheckCategoriesView from "./CheckCategoriesView";
 import TableHeader from "./CheckTableHeader";
 import Loader from "../Loader";
+import { CheckTypes } from "../../shared/routes";
 
 interface IDataQualityChecksProps {
   checksUI?: UICheckContainerModel;
@@ -18,7 +19,7 @@ interface IDataQualityChecksProps {
 }
 
 const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview = [], getCheckOverview, onUpdate, loading }: IDataQualityChecksProps) => {
-  const { connection, schema, table, column }: { connection: string, schema: string, table: string, column: string } = useParams();
+  const { checkTypes, connection, schema, table, column, timeScale }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string, timeScale: 'daily' | 'monthly' } = useParams();
 
   const { sidebarWidth } = useTree();
   const handleChangeDataDataStreams = (
@@ -47,7 +48,7 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
 
   useEffect(() => {
     getCheckOverview();
-  }, [connection, schema, table, column]);
+  }, [checkTypes, connection, schema, table, column, timeScale]);
 
   if (loading) {
     return (

@@ -22,8 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Sensor basic model that is returned by the REST API.
@@ -34,52 +33,40 @@ import java.util.Map;
 @ApiModel(value = "SensorBasicModel", description = "Sensor basic model")
 public class SensorBasicModel {
 
-    @JsonPropertyDescription("A map of folder-level children sensors.")
-    private Map<String, SensorBasicModel> folders;
+    @JsonPropertyDescription("Sensor name")
+    private String sensorName;
 
-    @JsonPropertyDescription("Whether the sensor is a User Home sensor.")
-    private Boolean custom = null;
+    @JsonPropertyDescription("Full sensor name")
+    private String fullSensorName;
 
-    public SensorBasicModel() {}
+    @JsonPropertyDescription("This sensor has is a built-in sensor.")
+    private boolean custom;
 
-    public SensorBasicModel(Map<String, SensorBasicModel> folders) {
-        this.folders = folders;
-    }
+    @JsonPropertyDescription("Provider sensor basic model list")
+    private List<ProviderSensorBasicModel> providerSensorBasicModels;
 
-    /**
-     * Adds a child sensor to the folder-level map.
-     * @param path     The path of the child sensor.
-     * @param custom Whether the child sensor is User Home or not.
-     */
-    public void addChild(String path, Boolean custom) {
-        if (this.folders == null) {
-            this.folders = new HashMap<>();
-        }
-        String[] parts = path.split("/", 2);
-        String name = parts[0];
-        String childFolder = parts.length > 1 ? parts[1] : null;
-        SensorBasicModel child = this.folders.get(name);
-        if (child == null) {
-            child = new SensorBasicModel();
-            this.folders.put(name, child);
-        }
-        if (childFolder != null) {
-            child.addChild(childFolder, custom);
-        }
-        if (child.getFolders() == null && childFolder == null) {
-            child.setCustom(custom);
-        }
-    }
+    public SensorBasicModel(){}
 
-    public Map<String, SensorBasicModel> getFolders() {
-        return this.folders;
-    }
-
-    public Boolean getCustom() {
-        return this.custom;
-    }
-
-    public void setCustom(Boolean custom) {
+    public SensorBasicModel(String sensorName, String fullSensorName, boolean custom, List<ProviderSensorBasicModel> providerSensorBasicModels) {
+        this.sensorName = sensorName;
+        this.fullSensorName = fullSensorName;
         this.custom = custom;
+        this.providerSensorBasicModels = providerSensorBasicModels;
+    }
+
+    public void addProviderSensorBasicModel(List<ProviderSensorBasicModel> providerSensorBasicModels) {
+        for (ProviderSensorBasicModel newModel : providerSensorBasicModels) {
+            boolean modelExists = false;
+            for (ProviderSensorBasicModel model : this.providerSensorBasicModels) {
+                if (model.getProviderType() == newModel.getProviderType()) {
+                    model.setCustom(newModel.isCustom());
+                    modelExists = true;
+                    break;
+                }
+            }
+            if (!modelExists) {
+                this.providerSensorBasicModels.add(newModel);
+            }
+        }
     }
 }

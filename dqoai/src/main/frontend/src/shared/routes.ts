@@ -23,6 +23,18 @@ export const ROUTES = {
   COLUMN_PARTITIONED: (checkTypes: string, connection: string, schema: string, table: string, column: string, timePartitioned: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}/partitioned/${timePartitioned}`,
   COLUMN_PARTITIONED_UI_FILTER: (checkTypes: string, connection: string, schema: string, table: string, column: string, timePartitioned: string, category: string, checkName: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}/partitioned/${timePartitioned}/${category}/${checkName}`,
 
+  CONNECTION_LEVEL_VALUE: (checkTypes: string, connection: string) => `/${checkTypes}/connection/${connection}`,
+  SCHEMA_LEVEL_VALUE: (checkTypes: string, connection: string, schema: string) => `/${checkTypes}/connection/${connection}/schema/${schema}`,
+  TABLE_LEVEL_VALUE: (checkTypes: string, connection: string, schema: string, table: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}`,
+  TABLE_PROFILINGS_VALUE: (checkTypes: string, connection: string, schema: string, table: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/checks/advanced-profiling`,
+  TABLE_RECURRING_VALUE: (checkTypes: string, connection: string, schema: string, table: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/recurring`,
+  TABLE_PARTITIONED_VALUE: (checkTypes: string, connection: string, schema: string, table: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/partitioned`,
+  TABLE_COLUMNS_VALUE: (checkTypes: string, connection: string, schema: string, table: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/all`,
+  COLUMN_PROFILINGS_VALUE: (checkTypes: string, connection: string, schema: string, table: string, column: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}/checks/advanced-profiling`,
+  COLUMN_RECURRING_VALUE: (checkTypes: string, connection: string, schema: string, table: string, column: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}/recurring`,
+  COLUMN_PARTITIONED_VALUE: (checkTypes: string, connection: string, schema: string, table: string, column: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}/partitioned`,
+  COLUMN_LEVEL_VALUE: (checkTypes: string, connection: string, schema: string, table: string, column: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}`,
+
   PATTERNS: {
     INDEX: '/',
     CONNECTION: '/:checkTypes/connection/:connection/:tab',
@@ -49,6 +61,7 @@ export const ROUTES = {
     QUALITY_CHECKS: '/:checkTypes',
     HOME: '/home',
     DASHBOARDS: '/dashboards',
-    CREATE: '/create'
+    CREATE: '/create',
+    DEFINITIONS: '/definitions',
   }
 };

@@ -15,7 +15,7 @@
  */
 package ai.dqo.utils.datetime;
 
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -32,7 +32,7 @@ public class LocalDateTimePeriodUtility {
      * @param gradient Time gradient.
      * @return Number of time periods. The type of the time period (weeks, days, etc.) is configured as the time gradient.
      */
-    public static long calculateDifferenceInPeriodsCount(LocalDateTime start, LocalDateTime end, TimeSeriesGradient gradient) {
+    public static long calculateDifferenceInPeriodsCount(LocalDateTime start, LocalDateTime end, TimePeriodGradient gradient) {
         switch (gradient) {
             case year:
                 return start.until(end, ChronoUnit.YEARS);
@@ -58,7 +58,7 @@ public class LocalDateTimePeriodUtility {
      * @param gradient Time gradient.
      * @return Date before the given number of periods.
      */
-    public static LocalDateTime calculateLocalDateTimeMinusTimePeriods(LocalDateTime readoutTimestamp, int timePeriodsCount, TimeSeriesGradient gradient) {
+    public static LocalDateTime calculateLocalDateTimeMinusTimePeriods(LocalDateTime readoutTimestamp, int timePeriodsCount, TimePeriodGradient gradient) {
         switch (gradient) {
             case year:
                 return readoutTimestamp.minus(timePeriodsCount, ChronoUnit.YEARS);

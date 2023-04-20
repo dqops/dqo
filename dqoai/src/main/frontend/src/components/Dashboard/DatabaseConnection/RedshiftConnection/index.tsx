@@ -2,7 +2,7 @@ import React from 'react';
 
 import SectionWrapper from '../../SectionWrapper';
 import { RedshiftParametersSpec } from "../../../../api";
-import SnowflakePropertiesView from "../SnowflakeProperties";
+import JdbcPropertiesView from "../JdbcProperties";
 import Checkbox from "../../../Checkbox";
 import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
 
@@ -66,7 +66,7 @@ const RedshiftConnection = ({
         labelPosition="left"
       />
 
-      <SnowflakePropertiesView
+      <JdbcPropertiesView
         properties={redshift?.properties}
         onChange={(properties) => handleChange({ properties })}
       />

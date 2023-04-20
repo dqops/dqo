@@ -91,21 +91,21 @@ Enable data quality checks matching specified filters
 
 **Command-line synopsis**
 ```
-$ dqo [dqo options...] check enable [-hn] [-err] [-ftl] [-fw] [-hl] [-wrn] [-c=<connection>]
-              [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
-              [-ct=<checkType>] [-dt=<datatypeFilter>] [-of=<outputFormat>]
-              [-s=<sensor>] [-t=<table>] [-ts=<timeScale>]
-              [-E=<String=String>]... [-F=<String=String>]...
+$ dqo [dqo options...] check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+              [-ch=<check>] [-col=<column>] [-ct=<checkType>]
+              [-dt=<datatypeFilter>] [-of=<outputFormat>] [-sn=<sensor>]
+              [-t=<table>] [-ts=<timeScale>] [-E=<String=String>]...
+              [-F=<String=String>]... [-S=<String=String>]...
               [-W=<String=String>]...
 
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> check enable [-hn] [-err] [-ftl] [-fw] [-hl] [-wrn] [-c=<connection>]
-              [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
-              [-ct=<checkType>] [-dt=<datatypeFilter>] [-of=<outputFormat>]
-              [-s=<sensor>] [-t=<table>] [-ts=<timeScale>]
-              [-E=<String=String>]... [-F=<String=String>]...
+dqo.ai> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+              [-ch=<check>] [-col=<column>] [-ct=<checkType>]
+              [-dt=<datatypeFilter>] [-of=<outputFormat>] [-sn=<sensor>]
+              [-t=<table>] [-ts=<timeScale>] [-E=<String=String>]...
+              [-F=<String=String>]... [-S=<String=String>]...
               [-W=<String=String>]...
 
 ```
@@ -120,35 +120,31 @@ dqo.ai> check enable [-hn] [-err] [-ftl] [-fw] [-hl] [-wrn] [-c=<connection>]
 |`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
 |`-c`<br/>`--connection`<br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
 |`-dt`<br/>`--data-type`<br/>|Datatype of columns on which to enable checks.| ||
-|`-err`<br/>`--error`<br/>|Enable error rules on checks.| ||
 |`-E`<br/>`--error-rule`<br/>|Error level rule options.
 Usage:
-	-E&lt;rule_name&gt;,
-	-E&lt;rule_name&gt;&#x3D;false,
-	--error-rule&#x3D;&lt;rule_name&gt;,
-	--error-rule&#x3D;&lt;rule_name&gt;&#x3D;false.| ||
-|`-ftl`<br/>`--fatal`<br/>|Enable fatal rules on checks.| ||
+	-E&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;,
+	--error-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
 |`-F`<br/>`--fatal-rule`<br/>|Fatal level rule options.
 Usage:
-	-F&lt;rule_name&gt;,
-	-F&lt;rule_name&gt;&#x3D;false,
-	--fatal-rule&#x3D;&lt;rule_name&gt;,
-	--fatal-rule&#x3D;&lt;rule_name&gt;&#x3D;false.| ||
+	-F&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;,
+	--fatal-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-n`<br/>`--nullable`<br/>|Enable check only on nullable columns (false for explicitly non-nullable columns).| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|`-s`<br/>`--sensor`<br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
+|`-o`<br/>`--override`<br/>|Override existing configuration of selected checks.| ||
+|`-sn`<br/>`--sensor`<br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
+|`-S`<br/>`--sensor-param`<br/>|Configuration parameters for the sensor.
+Usage:
+	-S&lt;param_name&gt;&#x3D;&lt;param_value&gt;,
+	--sensor-param&#x3D;&lt;param_name&gt;&#x3D;&lt;param_value&gt;| ||
 |`-t`<br/>`--table`<br/>|Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;| ||
 |`-ts`<br/>`--time-scale`<br/>|Time scale for checkpoint and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
-|`-wrn`<br/>`--warning`<br/>|Enable warning rules on checks.| ||
 |`-W`<br/>`--warning-rule`<br/>|Warning level rule options.
 Usage:
-	-W&lt;rule_name&gt;,
-	-W&lt;rule_name&gt;&#x3D;false,
-	--warning-rule&#x3D;&lt;rule_name&gt;,
-	--warning-rule&#x3D;&lt;rule_name&gt;&#x3D;false.| ||
+	-W&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;,
+	--warning-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
 
 
 

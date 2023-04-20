@@ -2150,30 +2150,9 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
         }
 
-        PushJobResult<DeleteStoredDataQueueJobResult> backgroundJob = this.tableService.deleteTable(tableWrapper);
+        PushJobResult<DeleteStoredDataQueueJobResult> backgroundJob = this.tableService.deleteTable(
+                connectionName, tableWrapper.getPhysicalTableName());
+
         return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
-    }
-
-
-    protected TableSpec getTableSpec(
-            String connectionName,
-            String schemaName,
-            String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return null;
-        }
-
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return null;
-        }
-
-        return tableWrapper.getSpec();
     }
 }

@@ -27,7 +27,7 @@ public interface SchedulesUtilityService {
     /**
      * Gets the time of the upcoming execution.
      * @param scheduleSpec Schedule spec for which to get the scheduled time.
-     * @return Date and time of the next execution.
+     * @return Date and time of the next execution. Null if <code>scheduleSpec</code> is invalid.
      */
     ZonedDateTime getTimeOfNextExecution(RecurringScheduleSpec scheduleSpec);
 }

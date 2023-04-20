@@ -18,8 +18,12 @@ package ai.dqo.services.metadata;
 
 import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
+import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
+import ai.dqo.metadata.userhome.UserHome;
 
 import java.util.List;
 
@@ -28,22 +32,26 @@ import java.util.List;
  */
 public interface ConnectionService {
     /**
+     * Finds a connection located in provided user home.
+     * @param userHome       User home.
+     * @param connectionName Connection name.
+     * @return Connection wrapper with the requested connection.
+     */
+    ConnectionWrapper getConnection(UserHome userHome, String connectionName);
+
+    /**
      * Deletes connection from metadata and flushes user context.
      * Cleans all stored data from .data folder related to this connection.
-     * @param connectionWrapper Connection wrapper.
-     * @param userHomeContext   User home context in which the wrapper has been opened.
+     * @param connectionName Connection name.
      * @return Asynchronous job result object for deferred background operations.
      */
-    PushJobResult<DeleteStoredDataQueueJobResult> deleteConnection(ConnectionWrapper connectionWrapper,
-                                                                   UserHomeContext userHomeContext);
+    PushJobResult<DeleteStoredDataQueueJobResult> deleteConnection(String connectionName);
 
     /**
      * Deletes connections from metadata and flushes user context.
      * Cleans all stored data from .data folder related to these connections.
-     * @param connectionWrappers Iterable of connection wrappers.
-     * @param userHomeContext    User home context in which the wrappers have been opened.
+     * @param connectionNames Iterable of connection names.
      * @return List of asynchronous job result objects for deferred background operations.
      */
-    List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteConnections(Iterable<ConnectionWrapper> connectionWrappers,
-                                                                          UserHomeContext userHomeContext);
+    List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteConnections(Iterable<String> connectionNames);
 }
