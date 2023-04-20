@@ -14,11 +14,9 @@
 /// limitations under the License.
 ///
 
-export * from './connection.types';
-export * from './schema.types';
-export * from './table.types';
-export * from './column.types';
-export * from './job.types';
-export * from './dashboard.types';
-export * from './source.types';
-export * from './sensor.types';
+export enum SENSOR_ACTION {
+  GET_SENSOR_FOLDER_TREE = 'SENSOR_ACTION/GET_SENSOR_FOLDER_TREE',
+  GET_SENSOR_FOLDER_TREE_SUCCESS = 'SENSOR_ACTION/GET_SENSOR_FOLDER_TREE_SUCCESS',
+  GET_SENSOR_FOLDER_TREE_ERROR = 'SENSOR_ACTION/GET_SENSOR_FOLDER_TREE_ERROR',
+  TOGGLE_SENSOR_FOLDER = 'SENSOR_ACTION/TOGGLE_SENSOR_FOLDER'
+}

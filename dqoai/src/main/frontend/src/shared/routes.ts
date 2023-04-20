@@ -61,6 +61,7 @@ export const ROUTES = {
     QUALITY_CHECKS: '/:checkTypes',
     HOME: '/home',
     DASHBOARDS: '/dashboards',
-    CREATE: '/create'
+    CREATE: '/create',
+    DEFINITIONS: '/definitions',
   }
 };
