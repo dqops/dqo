@@ -750,6 +750,7 @@ spec:
   time_window:
     prediction_time_window: 30
     min_periods_with_readouts: 0
+    historic_data_point_grouping: last_n_readouts
   fields:
   - field_name: max_failures
     display_name: max_failures
@@ -1444,6 +1445,10 @@ kind: rule
 spec:
   type: python
   mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 0
+    historic_data_point_grouping: last_n_readouts
 ```
 
 

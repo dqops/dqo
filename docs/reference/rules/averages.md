@@ -30,6 +30,7 @@ spec:
   time_window:
     prediction_time_window: 30
     min_periods_with_readouts: 10
+    historic_data_point_grouping: day
   fields:
   - field_name: max_percent_above
     display_name: max_percent_above
@@ -148,6 +149,7 @@ spec:
   time_window:
     prediction_time_window: 60
     min_periods_with_readouts: 20
+    historic_data_point_grouping: day
   fields:
   - field_name: max_percent_above
     display_name: max_percent_above
@@ -266,6 +268,7 @@ spec:
   time_window:
     prediction_time_window: 7
     min_periods_with_readouts: 3
+    historic_data_point_grouping: day
   fields:
   - field_name: max_percent_above
     display_name: max_percent_above
@@ -384,6 +387,7 @@ spec:
   time_window:
     prediction_time_window: 10
     min_periods_with_readouts: 5
+    historic_data_point_grouping: day
   fields:
   - field_name: max_percent_above
     display_name: max_percent_above
@@ -505,6 +509,7 @@ spec:
   time_window:
     prediction_time_window: 30
     min_periods_with_readouts: 10
+    historic_data_point_grouping: day
   fields:
   - field_name: max_percent_within
     display_name: max_percent_within
@@ -613,6 +618,7 @@ spec:
   time_window:
     prediction_time_window: 60
     min_periods_with_readouts: 20
+    historic_data_point_grouping: day
   fields:
   - field_name: max_percent_within
     display_name: max_percent_within
@@ -721,6 +727,7 @@ spec:
   time_window:
     prediction_time_window: 7
     min_periods_with_readouts: 3
+    historic_data_point_grouping: day
   fields:
   - field_name: max_percent_within
     display_name: max_percent_within
