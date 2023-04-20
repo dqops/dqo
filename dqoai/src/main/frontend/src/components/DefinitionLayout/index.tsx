@@ -1,14 +1,43 @@
-import React from 'react';
+import React, { useEffect, useMemo } from 'react';
 
-import LeftView from "../Dashboards/LeftView";
 import Header from "../Header";
 import DefinitionTree from "./DefinitionTree";
+import { useDispatch, useSelector } from "react-redux";
+import { IRootState } from "../../redux/reducers";
+import PageTabs from "../PageTabs";
+import { useHistory } from "react-router-dom";
+import { closeFirstLevelTab, setActiveFirstLevelTab } from "../../redux/actions/sensor.actions";
 
 interface LayoutProps {
   children?: any;
 }
 
 const DefinitionLayout = ({ children }: LayoutProps) => {
+  const { tabs: pageTabs, activeTab } = useSelector((state: IRootState) => state.sensor);
+  const dispatch= useDispatch();
+  const history = useHistory();
+
+  const handleChange = (value: string) => {
+    dispatch(setActiveFirstLevelTab(value));
+  };
+
+  const closeTab = (value: string) => {
+    dispatch(closeFirstLevelTab(value))
+  };
+
+  const tabOptions = useMemo(() => {
+    return pageTabs?.map((item) => ({
+      value: item.url,
+      label: item.label
+    })) || [];
+  }, [pageTabs]);
+
+  useEffect(() => {
+    if (activeTab) {
+      history.push(activeTab);
+    }
+  }, [activeTab])
+
   return (
     <div className="flex min-h-screen overflow-hidden">
       <Header />
@@ -21,7 +50,25 @@ const DefinitionLayout = ({ children }: LayoutProps) => {
             maxWidth: `calc(100vw - 320px)`
           }}
         >
-          {children}
+          <div className="flex-1 h-full flex flex-col">
+            <PageTabs
+              tabs={tabOptions}
+              activeTab={activeTab}
+              onChange={handleChange}
+              onRemoveTab={closeTab}
+              limit={10}
+            />
+            <div
+              className="flex-1 bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
+              style={{ maxHeight: "calc(100vh - 80px)" }}
+            >
+              {!!activeTab && (
+                <div>
+                  {children}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

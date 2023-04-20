@@ -18,18 +18,35 @@ import {
   SensorBasicFolderModel,
 } from '../../api';
 import { SENSOR_ACTION } from '../types';
+import { Action, INestTab, ISourceState } from "./source.reducer";
 
 export interface ISensorState {
   sensorFolderTree?: SensorBasicFolderModel;
   loading: boolean;
   error: any;
-  sensorState: Record<string, boolean>
+  sensorState: Record<string, boolean>;
+  tabs: INestTab[];
+  activeTab?: string;
 }
 
 const initialState: ISensorState = {
   loading: false,
   error: null,
-  sensorState: {}
+  sensorState: {},
+  tabs: [],
+};
+
+const setActiveTabState = (state: ISensorState, action: Action, data: Record<string, unknown>) => {
+  return {
+    ...state,
+    tabs: state.tabs.map((item) => item.url === state.activeTab ? ({
+      ...item,
+      state: {
+        ...item.state,
+        ...data
+      }
+    }) : item)
+  }
 };
 
 const sensorReducer = (state = initialState, action: any) => {
@@ -60,6 +77,85 @@ const sensorReducer = (state = initialState, action: any) => {
           [action.key]: !state.sensorState[action.key]
         }
       };
+    case SENSOR_ACTION.ADD_FIRST_LEVEL_TAB: {
+      const existing = state.tabs?.find((item) => item.value === action.data.value);
+
+      if (existing) {
+        return {
+          ...state,
+          activeTab: action.data.url,
+          tabs: state.tabs.map((item) => item.value === action.data.value ? ({
+            ...item,
+            ...action.data,
+          }) : item)
+        };
+      }
+
+      return {
+        ...state,
+        activeTab: action.data.url,
+        tabs: [
+          ...state.tabs || [],
+          action.data,
+        ]
+      };
+    }
+    case SENSOR_ACTION.SET_ACTIVE_FIRST_LEVEL_TAB: {
+      return {
+        ...state,
+        activeTab: action.data,
+      }
+    }
+    case SENSOR_ACTION.CLOSE_FIRST_LEVEL_TAB: {
+      const index = state.tabs?.findIndex((item) => item.url === action.data);
+      let activeTab = state.activeTab;
+
+      if (state.activeTab === action.data) {
+        if (index > 0) {
+          activeTab = state.tabs[index-1].url;
+        } else if (index < state.tabs.length - 1) {
+          activeTab = state.tabs[index+1].url;
+        }
+      }
+
+      return {
+        ...state,
+        tabs: state.tabs.filter((item) => item.url !== action.data),
+        activeTab
+      }
+    }
+    case SENSOR_ACTION.GET_SENSOR_DETAIL: {
+      return setActiveTabState(state, action,{
+        loading: true,
+      });
+    }
+    case SENSOR_ACTION.GET_SENSOR_DETAIL_SUCCESS: {
+      return setActiveTabState(state, action,{
+        loading: false,
+        sensorDetail: action.data
+      });
+    }
+    case SENSOR_ACTION.GET_SENSOR_DETAIL_FAILED: {
+      return setActiveTabState(state, action,{
+        loading: false,
+      });
+    }
+    case SENSOR_ACTION.GET_RULE_DETAIL: {
+      return setActiveTabState(state, action,{
+        loading: true,
+      });
+    }
+    case SENSOR_ACTION.GET_RULE_DETAIL_SUCCESS: {
+      return setActiveTabState(state, action,{
+        loading: false,
+        ruleDetail: action.data
+      });
+    }
+    case SENSOR_ACTION.GET_RULE_DETAIL_FAILED: {
+      return setActiveTabState(state, action,{
+        loading: false,
+      });
+    }
     default:
       return state;
   }

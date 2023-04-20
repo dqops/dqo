@@ -16,10 +16,10 @@
 
 import { Dispatch } from 'redux';
 
-import { SensorsApi } from '../../services/apiClient';
+import { RulesApi, SensorsApi } from '../../services/apiClient';
 import { SENSOR_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
-import { SensorBasicFolderModel } from "../../api";
+import { RuleModel, SensorBasicFolderModel, SensorModel } from "../../api";
 
 export const getSensorFolderTreeRequest = () => ({
   type: SENSOR_ACTION.GET_SENSOR_FOLDER_TREE
@@ -50,3 +50,68 @@ export const toggleSensorFolderTree = (key: string) => ({
   type: SENSOR_ACTION.TOGGLE_SENSOR_FOLDER,
   key,
 });
+
+export const addFirstLevelTab = (data: any) => ({
+  type: SENSOR_ACTION.ADD_FIRST_LEVEL_TAB,
+  data,
+});
+
+export const setActiveFirstLevelTab = (data: any) => ({
+  type: SENSOR_ACTION.SET_ACTIVE_FIRST_LEVEL_TAB,
+  data
+});
+
+
+export const closeFirstLevelTab = (data: any) => ({
+  type: SENSOR_ACTION.CLOSE_FIRST_LEVEL_TAB,
+  data,
+});
+
+export const getSensorRequest = () => ({
+  type: SENSOR_ACTION.GET_SENSOR_DETAIL
+});
+
+export const getSensorSuccess = (data: SensorModel) => ({
+  type: SENSOR_ACTION.GET_SENSOR_DETAIL_SUCCESS,
+  data
+});
+
+export const getSensorFailed = (error: unknown) => ({
+  type: SENSOR_ACTION.GET_SENSOR_DETAIL_FAILED,
+  error
+});
+
+export const getSensor = (sensorName: string) => async (dispatch: Dispatch) => {
+  dispatch(getSensorRequest());
+  try {
+    const res: AxiosResponse<SensorModel> =
+      await SensorsApi.getSensor(sensorName);
+    dispatch(getSensorSuccess(res.data));
+  } catch (err) {
+    dispatch(getSensorFailed(err));
+  }
+};
+export const getRuleRequest = () => ({
+  type: SENSOR_ACTION.GET_RULE_DETAIL
+});
+
+export const getRuleSuccess = (data: RuleModel) => ({
+  type: SENSOR_ACTION.GET_RULE_DETAIL_SUCCESS,
+  data
+});
+
+export const getRuleFailed = (error: unknown) => ({
+  type: SENSOR_ACTION.GET_RULE_DETAIL_FAILED,
+  error
+});
+
+export const getRule = (ruleName: string) => async (dispatch: Dispatch) => {
+  dispatch(getRuleRequest());
+  try {
+    const res: AxiosResponse<RuleModel> =
+      await RulesApi.getRule(ruleName);
+    dispatch(getRuleSuccess(res.data));
+  } catch (err) {
+    dispatch(getRuleFailed(err));
+  }
+};
