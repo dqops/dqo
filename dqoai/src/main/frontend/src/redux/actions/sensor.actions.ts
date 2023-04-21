@@ -120,3 +120,8 @@ export const setUpdatedRule = (rule: RuleModel) => ({
   type: SENSOR_ACTION.SET_UPDATED_RULE,
   data: rule
 });
+
+export const setUpdatedSensor = (rule: RuleModel) => ({
+  type: SENSOR_ACTION.SET_UPDATED_SENSOR,
+  data: rule
+});

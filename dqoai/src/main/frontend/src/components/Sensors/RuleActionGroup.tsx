@@ -3,12 +3,12 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { getFirstLevelSensorState } from "../../redux/selectors";
 
-export const SensorActionGroup = () => {
-  const { sensorDetail } = useSelector(getFirstLevelSensorState);
+export const RuleActionGroup = () => {
+  const { ruleDetail } = useSelector(getFirstLevelSensorState);
 
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
-      {sensorDetail?.custom && (
+      {ruleDetail?.custom && (
         <Button
           color="primary"
           variant="outlined"
