@@ -63,7 +63,7 @@ For more information on the `run` command, please refer to the [Command-line int
 
 ## Synchronizing data
 
-All the YAML configuration files with data source metadata and schedules configuration are stored in `sources\userhome` folder. 
+All the YAML configuration files with data source metadata and schedules configuration are stored in `sources/userhome` folder. 
 You can read more about the [data storage in DQO here](../../dqo-concepts/data-storage/data-storage.md). 
 
 DQO allows you to modify the frequency of data synchronization when the scheduler is run in a server mode
