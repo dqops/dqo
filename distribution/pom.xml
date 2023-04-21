@@ -11,7 +11,7 @@
 
 	<groupId>ai.dqo</groupId>
 	<artifactId>dqo-distribution</artifactId>
-	<version>0.1.0</version>
+	<version>0.2.0-alpha0</version>
 	<name>dqo-distribution</name>
 	<description>DQO data quality observer final assembly</description>
 	<packaging>pom</packaging>

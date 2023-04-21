@@ -6,11 +6,11 @@
 		<relativePath>../pom.xml</relativePath>
 		<groupId>ai.dqo</groupId>
 		<artifactId>dqo-data-quality-observer</artifactId>
-		<version>0.1.0</version>
+		<version>0.2.0-alpha0</version>
 	</parent>
 	<groupId>ai.dqo</groupId>
 	<artifactId>dqo-lib</artifactId>
-	<version>0.1.0</version>
+	<version>0.2.0-alpha0</version>
 	<name>lib</name>
 	<description>POM for a list of dependencies to libraries that should be distributed in the "lib" folder, especially all JDBC drivers.</description>
 	<packaging>jar</packaging>
