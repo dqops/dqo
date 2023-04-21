@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { ParameterDefinitionSpec } from "../../api";
-import Input from "../../components/Input";
+import Input from "../Input";
 import { IconButton } from "@material-tailwind/react";
-import SvgIcon from "../../components/SvgIcon";
+import SvgIcon from "../SvgIcon";
 
 type RuleParametersProps = {
   fields: Array<ParameterDefinitionSpec>;

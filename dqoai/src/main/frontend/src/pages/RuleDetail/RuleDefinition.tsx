@@ -1,12 +1,12 @@
 import React from "react";
 import Select from "../../components/Select";
-import { SensorActionGroup } from "../../components/Sensors/SensorActionGroup";
+import { RuleActionGroup } from "../../components/Sensors/RuleActionGroup";
 import Input from "../../components/Input";
 import { RuleModel, RuleModelModeEnum, RuleModelTypeEnum } from "../../api";
 import NumberInput from "../../components/NumberInput";
 import SectionWrapper from "../../components/Dashboard/SectionWrapper";
-import RuleFields from "./RuleFields";
-import RuleParameters from "./RuleParameters";
+import RuleFields from "../../components/Sensors/RuleFields";
+import RuleParameters from "../../components/Sensors/RuleParameters";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { setUpdatedRule } from "../../redux/actions/sensor.actions";
 
@@ -29,7 +29,7 @@ export const RuleDefinition = ({ rule }: RuleDefinitionProps) => {
 
   return (
     <div className="p-4">
-      <SensorActionGroup />
+      <RuleActionGroup />
 
       {rule && (
         <>

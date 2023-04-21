@@ -4,13 +4,13 @@ import {
   ParameterDefinitionSpecDataTypeEnum,
   ParameterDefinitionSpecDisplayHintEnum
 } from "../../api";
-import Input from "../../components/Input";
-import TextArea from "../../components/TextArea";
-import Select from "../../components/Select";
-import Checkbox from "../../components/Checkbox";
-import StringListField from "../../components/StringListField";
+import Input from "../Input";
+import TextArea from "../TextArea";
+import Select from "../Select";
+import Checkbox from "../Checkbox";
+import StringListField from "../StringListField";
 import { IconButton } from "@material-tailwind/react";
-import SvgIcon from "../../components/SvgIcon";
+import SvgIcon from "../SvgIcon";
 
 type RuleFieldRowProps = {
   field: ParameterDefinitionSpec;
@@ -36,6 +36,7 @@ const RuleFieldRow = ({ field, onChange }: RuleFieldRowProps) => {
           onChange={(e) => onChange({
             field_name: e.target.value
           })}
+          error={!field.field_name}
         />
       </td>
       <td className="px-4 py-2  align-top w-40">
@@ -44,6 +45,7 @@ const RuleFieldRow = ({ field, onChange }: RuleFieldRowProps) => {
           onChange={(e) => onChange({
             display_name: e.target.value
           })}
+          error={!field.display_name}
         />
       </td>
       <td className="px-4 py-2  align-top">
@@ -60,6 +62,7 @@ const RuleFieldRow = ({ field, onChange }: RuleFieldRowProps) => {
           value={field.data_type}
           onChange={(data_type) => onChange({ data_type })}
           options={dataTypeOptions}
+          error={!field.data_type}
         />
       </td>
       <td className="px-4 py-2  align-top w-40">

@@ -7,42 +7,39 @@ import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { getSensor } from "../../redux/actions/sensor.actions";
 import Tabs from "../../components/Tabs";
 import SensorDefinition from "./SensorDefinition";
+import { ITab } from "../../shared/interfaces";
 
-const tabs = [
+const initTabs = [
   {
     label: 'Sensor definition',
     value: 'definition'
   },
-  {
-    label: 'BigQuery',
-    value: 'bigquery'
-  },
-  {
-    label: 'Snowflake',
-    value: 'snowflake'
-  },
-  {
-    label: 'Postgresql',
-    value: 'postgresql'
-  },
-  {
-    label: 'Redshift',
-    value: 'redshift'
-  },
-  {
-    label: 'SQL Server',
-    value: 'sqlServer'
-  }
 ];
 
 export const SensorDetail = () => {
-  const { full_sensor_name } = useSelector(getFirstLevelSensorState);
+  const [tabs, setTabs] = useState<ITab[]>(initTabs);
+  const { full_sensor_name, sensorDetail } = useSelector(getFirstLevelSensorState);
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
 
   useEffect(() => {
     dispatch(getSensor(full_sensor_name))
   }, [full_sensor_name]);
+
+  useEffect(() => {
+    const newTabs = [...initTabs];
+
+    if (sensorDetail?.provider_sensor_list) {
+      for (const provider of sensorDetail.provider_sensor_list) {
+        newTabs.push({
+          label: provider.providerType,
+          value: provider.providerType
+        })
+      }
+
+      setTabs(newTabs);
+    }
+  }, [sensorDetail]);
 
   return (
     <DefinitionLayout>
@@ -58,7 +55,7 @@ export const SensorDetail = () => {
           <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         </div>
         {activeTab === 'definition' && (
-          <SensorDefinition />
+          <SensorDefinition sensor={sensorDetail} />
         )}
       </div>
     </DefinitionLayout>
