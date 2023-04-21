@@ -115,3 +115,8 @@ export const getRule = (ruleName: string) => async (dispatch: Dispatch) => {
     dispatch(getRuleFailed(err));
   }
 };
+
+export const setUpdatedRule = (rule: RuleModel) => ({
+  type: SENSOR_ACTION.SET_UPDATED_RULE,
+  data: rule
+});

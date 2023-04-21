@@ -20,7 +20,7 @@ const tabs = [
 ];
 
 export const SensorDetail = () => {
-  const { full_rule_name } = useSelector(getFirstLevelSensorState);
+  const { full_rule_name, ruleDetail } = useSelector(getFirstLevelSensorState);
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
 
@@ -42,7 +42,7 @@ export const SensorDetail = () => {
           <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         </div>
         {activeTab === 'definition' && (
-          <RuleDefinition />
+          <RuleDefinition rule={ruleDetail} />
         )}
       </div>
     </DefinitionLayout>
