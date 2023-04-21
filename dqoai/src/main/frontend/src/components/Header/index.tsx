@@ -116,7 +116,7 @@ const Header = () => {
             Data Quality Dashboards
           </div>
           <div
-            className={clsx("px-4 cursor-pointer", location.pathname === '/definitions' ? 'font-bold' : '' )}
+            className={clsx("px-4 cursor-pointer", location.pathname.startsWith('/definitions') ? 'font-bold' : '' )}
             onClick={() => history.push('/definitions')}
           >
             Definitions

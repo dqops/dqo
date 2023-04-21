@@ -7,6 +7,7 @@ import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { getRule } from "../../redux/actions/sensor.actions";
 import Tabs from "../../components/Tabs";
 import RuleDefinition from "./RuleDefinition";
+import PythonCode from "./PythonCode";
 
 const tabs = [
   {
@@ -43,6 +44,9 @@ export const SensorDetail = () => {
         </div>
         {activeTab === 'definition' && (
           <RuleDefinition rule={ruleDetail} />
+        )}
+        {activeTab === 'python_code' && (
+          <PythonCode rule={ruleDetail} />
         )}
       </div>
     </DefinitionLayout>
