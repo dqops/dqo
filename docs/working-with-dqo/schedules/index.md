@@ -86,6 +86,6 @@ with the following parameter:
 ```
 $ dqo --dqo.scheduler.enable-cloud-sync=<true/false>
 ```
-To enable type synchronization type `true`, to disable it type `false`.
+To enable synchronization type `true`, to disable it type `false`.
 
 You can also configure this parameter by setting `DQO_SCHEDULER_ENABLE_CLOUD_SYNC=<TRUE/FALSE>` environment variable.
