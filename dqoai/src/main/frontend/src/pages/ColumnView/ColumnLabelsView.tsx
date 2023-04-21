@@ -50,7 +50,7 @@ const ColumnLabelsView = ({
       )
     );
     await dispatch(
-      getColumnLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+      getColumnLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, false)
     );
     dispatch(setIsUpdatedLabels(checkTypes, firstLevelActiveTab, false));
   };

@@ -23,6 +23,8 @@ import columnReducer, { IColumnState } from './column.reducer';
 import jobReducer, { IJobsState } from './job.reducer';
 import dashboardReducer, { IDashboardState } from "./dashboard.reducer";
 import sourceReducer, { ISourceState } from "./source.reducer";
+import sensorReducer, { ISensorState } from "./sensor.reducer";
+import ruleReducer, { IRuleState } from "./rule.reducer";
 
 export interface IRootState {
   connection: IConnectionState;
@@ -32,6 +34,8 @@ export interface IRootState {
   job: IJobsState;
   dashboard: IDashboardState;
   source: ISourceState;
+  sensor: ISensorState;
+  rule: IRuleState;
 }
 
 const rootReducer = combineReducers<IRootState>({
@@ -42,6 +46,8 @@ const rootReducer = combineReducers<IRootState>({
   job: jobReducer,
   dashboard: dashboardReducer,
   source: sourceReducer,
+  sensor: sensorReducer,
+  rule: ruleReducer,
 });
 
 export default rootReducer;

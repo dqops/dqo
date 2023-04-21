@@ -16,7 +16,7 @@
 package ai.dqo.execution.rules;
 
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.utils.datetime.LocalDateTimePeriodUtility;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
@@ -38,7 +38,7 @@ public class HistoricDataPointTimeSeriesCollector {
     private final DateTimeColumn timePeriodColumn;
     private final InstantColumn timePeriodUtcColumn;
     private final DoubleColumn actualValueColumn;
-    private final TimeSeriesGradient gradient;
+    private final TimePeriodGradient gradient;
     private final ZoneId timeZoneId;
     private LongIndex timePeriodIndex;
 
@@ -50,7 +50,7 @@ public class HistoricDataPointTimeSeriesCollector {
      * @param timeZoneId Time zone of the data source to convert the local time to the absolute instants.
      */
     public HistoricDataPointTimeSeriesCollector(Table timeSeriesData,
-												TimeSeriesGradient gradient,
+												TimePeriodGradient gradient,
 												ZoneId timeZoneId) {
         this.timeSeriesData = timeSeriesData;
 		this.timePeriodColumn = (DateTimeColumn) timeSeriesData.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
@@ -99,10 +99,6 @@ public class HistoricDataPointTimeSeriesCollector {
             int timePeriodsDifference = (int)LocalDateTimePeriodUtility.calculateDifferenceInPeriodsCount(rowTruncatedTimePeriod, readoutTimestamp, this.gradient);
             ZoneOffset zoneOffsetFix = ZoneOffset.ofTotalSeconds((int) timeZoneOffsetDuration.getSeconds());
             Instant rowTimePeriodInstant = rowTruncatedTimePeriod.toInstant(zoneOffsetFix);
-
-            if (Duration.between(rowTimePeriodInstant, rowTimePeriodUtc).getSeconds() > 10) {
-                throw new DqoRuntimeException("Time zone conversion failed, we need to reverse the minus sign");
-            }
 
             HistoricDataPoint historicDataPoint = new HistoricDataPoint(rowTimePeriodInstant, rowTruncatedTimePeriod, -timePeriodsDifference, rowActualValue);
             historicDataPoints[timePeriodsCount - timePeriodsDifference] = historicDataPoint;

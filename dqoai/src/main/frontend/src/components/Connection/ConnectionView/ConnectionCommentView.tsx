@@ -39,7 +39,7 @@ const ConnectionCommentView = () => {
         date: new Date().toISOString()
       }] : []])
     );
-    await dispatch(getConnectionComments(checkTypes, firstLevelActiveTab, connection));
+    await dispatch(getConnectionComments(checkTypes, firstLevelActiveTab, connection, false));
     dispatch(setIsUpdatedComments(checkTypes, firstLevelActiveTab, false));
   };
 

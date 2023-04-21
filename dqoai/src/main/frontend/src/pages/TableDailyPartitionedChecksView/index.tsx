@@ -54,7 +54,7 @@ const TableDailyPartitionedChecksView = () => {
       )
     );
     await dispatch(
-      getTableDailyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+      getTableDailyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
     );
     setIsUpdated(false);
   };

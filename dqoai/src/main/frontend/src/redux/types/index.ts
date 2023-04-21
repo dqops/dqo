@@ -21,3 +21,5 @@ export * from './column.types';
 export * from './job.types';
 export * from './dashboard.types';
 export * from './source.types';
+export * from './sensor.types';
+export * from './rule.types';

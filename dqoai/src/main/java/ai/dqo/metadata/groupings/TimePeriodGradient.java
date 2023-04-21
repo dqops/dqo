@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Time series gradient type (daily, monthly, quarterly, monthly, weekly, hourly).
  */
-public enum TimeSeriesGradient {
+public enum TimePeriodGradient {
     @JsonProperty("year")
     year,
 

@@ -52,7 +52,7 @@ const TableDailyChecksView = () => {
       )
     );
     await dispatch(
-      getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+      getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
     );
     setIsUpdated(false);
   };

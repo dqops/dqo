@@ -135,10 +135,13 @@ export const getColumnComments =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    columnName: string
+    columnName: string,
+    loading = true
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(getColumnCommentsRequest(checkType, activeTab));
+    if (loading) {
+      dispatch(getColumnCommentsRequest(checkType, activeTab));
+    }
     try {
       const res = await ColumnApiClient.getColumnComments(
         connectionName,
@@ -224,10 +227,13 @@ export const getColumnLabels =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    columnName: string
+    columnName: string,
+    loading = true,
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(getColumnLabelsRequest(checkType, activeTab));
+    if (loading) {
+      dispatch(getColumnLabelsRequest(checkType, activeTab));
+    }
     try {
       const res = await ColumnApiClient.getColumnLabels(
         connectionName,
@@ -312,10 +318,13 @@ export const getColumnChecksUi =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    columnName: string
+    columnName: string,
+    loading = true,
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(getColumnChecksUIRequest(checkType, activeTab));
+    if (loading) {
+      dispatch(getColumnChecksUIRequest(checkType, activeTab));
+    }
     try {
       const res = await ColumnApiClient.getColumnProfilingChecksUI(
         connectionName,
@@ -401,10 +410,13 @@ export const getColumnDailyRecurring =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    columnName: string
+    columnName: string,
+    loading = true
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(getColumnDailyRecurringRequest(checkType, activeTab));
+    if (loading) {
+      dispatch(getColumnDailyRecurringRequest(checkType, activeTab));
+    }
     try {
       const res = await ColumnApiClient.getColumnRecurringUI(
         connectionName,
@@ -492,10 +504,13 @@ export const getColumnMonthlyRecurring =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    columnName: string
+    columnName: string,
+    loading = true,
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(getColumnMonthlyRecurringRequest(checkType, activeTab));
+    if (loading) {
+      dispatch(getColumnMonthlyRecurringRequest(checkType, activeTab));
+    }
     try {
       const res = await ColumnApiClient.getColumnRecurringUI(
         connectionName,
@@ -587,10 +602,13 @@ export const getColumnDailyPartitionedChecks =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    columnName: string
+    columnName: string,
+    loading = true
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(getColumnDailyPartitionedChecksRequest(checkType, activeTab));
+    if (loading) {
+      dispatch(getColumnDailyPartitionedChecksRequest(checkType, activeTab));
+    }
     try {
       const res = await ColumnApiClient.getColumnPartitionedChecksUI(
         connectionName,
@@ -682,10 +700,13 @@ export const getColumnMonthlyPartitionedChecks =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    columnName: string
+    columnName: string,
+    loading = true,
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(getColumnMonthlyPartitionedChecksRequest(checkType, activeTab));
+    if (loading) {
+      dispatch(getColumnMonthlyPartitionedChecksRequest(checkType, activeTab));
+    }
     try {
       const res = await ColumnApiClient.getColumnPartitionedChecksUI(
         connectionName,
@@ -842,9 +863,11 @@ export const getColumnProfilingChecksUIFilterFailed = (checkType: CheckTypes, ac
 });
 
 export const getColumnProfilingChecksUIFilter =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, columnName: string, category: string, checkName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, columnName: string, category: string, checkName: string, loading = true) =>
     async (dispatch: Dispatch) => {
-      dispatch(getColumnProfilingChecksUIFilterRequest(checkType, activeTab));
+      if (loading) {
+        dispatch(getColumnProfilingChecksUIFilterRequest(checkType, activeTab));
+      }
       try {
         const res = await ColumnApiClient.getColumnProfilingChecksUIFilter(
           connectionName,
@@ -885,9 +908,11 @@ export const getColumnRecurringUIFilterFailed = (checkType: CheckTypes, activeTa
 });
 
 export const getColumnRecurringUIFilter =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, columnName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, columnName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string, loading = true) =>
     async (dispatch: Dispatch) => {
-      dispatch(getColumnRecurringUIFilterRequest(checkType, activeTab));
+      if (loading) {
+        dispatch(getColumnRecurringUIFilterRequest(checkType, activeTab));
+      }
       try {
         const res = await ColumnApiClient.getColumnRecurringUIFilter(
           connectionName,
@@ -929,9 +954,11 @@ export const getColumnPartitionedChecksUIFilterFailed = (checkType: CheckTypes, 
 });
 
 export const getColumnPartitionedChecksUIFilter =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, columnName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, columnName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string, loading = true) =>
     async (dispatch: Dispatch) => {
-      dispatch(getColumnPartitionedChecksUIFilterRequest(checkType, activeTab));
+      if (loading) {
+        dispatch(getColumnPartitionedChecksUIFilterRequest(checkType, activeTab));
+      }
       try {
         const res = await ColumnApiClient.getColumnPartitionedChecksUIFilter(
           connectionName,

@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.rules;
 
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.utils.datetime.LocalDateTimePeriodUtility;
 
@@ -36,7 +36,7 @@ public class HistoricDataPointObjectMother {
      * @return Array of historic data points.
      */
     public static HistoricDataPoint[] fillHistoricReadouts(RuleTimeWindowSettingsSpec timeWindowSettingsSpec,
-                                                           TimeSeriesGradient gradient,
+                                                           TimePeriodGradient gradient,
                                                            LocalDateTime readoutTimestamp,
                                                            Double... values) {
         HistoricDataPoint[] historicDataPoints = new HistoricDataPoint[timeWindowSettingsSpec.getPredictionTimeWindow()];

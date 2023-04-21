@@ -29,7 +29,7 @@ import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactory;
 import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
@@ -281,8 +281,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
         if (timeScale != null) {
             StringColumn timeGradientColumn = sourceTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
-            TimeSeriesGradient timeSeriesGradient = timeScale.toTimeSeriesGradient();
-            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timeSeriesGradient.name()));
+            TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
+            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
         }
 
         StringColumn columnNameColumn = sourceTable.stringColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);

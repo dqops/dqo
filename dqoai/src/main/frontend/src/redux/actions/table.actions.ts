@@ -197,9 +197,11 @@ export const getTableCommentsFailed = (error: unknown) => ({
 });
 
 export const getTableComments =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, loading = true) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableCommentsRequest(checkType, activeTab));
+    if (loading) {
+      dispatch(getTableCommentsRequest(checkType, activeTab));
+    }
     try {
       const res = await TableApiClient.getTableComments(
         connectionName,
@@ -267,9 +269,11 @@ export const getTableLabelsFailed = (error: unknown) => ({
 });
 
 export const getTableLabels =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, loading = true) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableLabelsRequest(checkType, activeTab));
+    if (loading) {
+      dispatch(getTableLabelsRequest(checkType, activeTab));
+    }
     try {
       const res = await TableApiClient.getTableLabels(
         connectionName,
@@ -370,9 +374,11 @@ export const getTableChecksUiFailed = (error: unknown) => ({
 });
 
 export const getTableProfilingChecksUI =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, loading = true) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableChecksUiRequest(checkType, activeTab));
+    if (loading) {
+      dispatch(getTableChecksUiRequest(checkType, activeTab));
+    }
     try {
       const res = await TableApiClient.getTableProfilingChecksUI(
         connectionName,
@@ -514,9 +520,11 @@ export const getTableDailyRecurringFailed = (error: unknown) => ({
 });
 
 export const getTableDailyRecurring =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, loading = true) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableDailyRecurringRequest(checkType, activeTab));
+    if (loading) {
+      dispatch(getTableDailyRecurringRequest(checkType, activeTab));
+    }
     try {
       const res = await TableApiClient.getTableRecurringUI(
         connectionName,
@@ -587,9 +595,11 @@ export const getTableMonthlyRecurringFailed = (error: unknown) => ({
 });
 
 export const getTableMonthlyRecurring =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, loading = true) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableMonthlyRecurringRequest(checkType, activeTab));
+    if (loading) {
+      dispatch(getTableMonthlyRecurringRequest(checkType, activeTab));
+    }
     try {
       const res = await TableApiClient.getTableRecurringUI(
         connectionName,
@@ -666,9 +676,11 @@ export const getTableDailyPartitionedChecksFailed = (error: unknown) => ({
 });
 
 export const getTableDailyPartitionedChecks =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, loading = true) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableDailyPartitionedChecksRequest(checkType, activeTab));
+    if (loading) {
+      dispatch(getTableDailyPartitionedChecksRequest(checkType, activeTab));
+    }
     try {
       const res = await TableApiClient.getTablePartitionedChecksUI(
         connectionName,
@@ -745,9 +757,11 @@ export const getTableMonthlyPartitionedChecksFailed = (error: unknown) => ({
 });
 
 export const getTableMonthlyPartitionedChecks =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, loading = true) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableMonthlyPartitionedChecksRequest(checkType, activeTab));
+    if (loading) {
+      dispatch(getTableMonthlyPartitionedChecksRequest(checkType, activeTab));
+    }
     try {
       const res = await TableApiClient.getTablePartitionedChecksUI(
         connectionName,
@@ -925,9 +939,11 @@ export const getTableProfilingChecksUIFilterFailed = (error: unknown) => ({
 });
 
 export const getTableProfilingChecksUIFilter =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, category: string, checkName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, category: string, checkName: string, loading = true) =>
     async (dispatch: Dispatch) => {
-      dispatch(getTableProfilingChecksUIFilterRequest(checkType, activeTab));
+      if (loading) {
+        dispatch(getTableProfilingChecksUIFilterRequest(checkType, activeTab));
+      }
       try {
         const res = await TableApiClient.getTableProfilingChecksUIFilter(
           connectionName,
@@ -963,9 +979,11 @@ export const getTableRecurringUIFilterFailed = (error: unknown) => ({
 });
 
 export const getTableRecurringUIFilter =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string, loading = true) =>
     async (dispatch: Dispatch) => {
-      dispatch(getTableRecurringUIFilterRequest(checkType, activeTab));
+      if (loading) {
+        dispatch(getTableRecurringUIFilterRequest(checkType, activeTab));
+      }
       try {
         const res = await TableApiClient.getTableRecurringUIFilter(
           connectionName,
@@ -1002,9 +1020,11 @@ export const getTablePartitionedChecksUIFilterFailed = (error: unknown) => ({
 });
 
 export const getTablePartitionedChecksUIFilter =
-  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string, loading = true) =>
     async (dispatch: Dispatch) => {
-      dispatch(getTablePartitionedChecksUIFilterRequest(checkType, activeTab));
+      if (loading) {
+        dispatch(getTablePartitionedChecksUIFilterRequest(checkType, activeTab));
+      }
       try {
         const res = await TableApiClient.getTablePartitionedChecksUIFilter(
           connectionName,

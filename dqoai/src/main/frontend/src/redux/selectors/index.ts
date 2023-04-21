@@ -28,3 +28,9 @@ export const getFirstLevelActiveTab = (checkType: CheckTypes) => (state: IRootSt
 
   return activeTab;
 };
+
+export const getFirstLevelSensorState = (state: IRootState) => {
+  const { tabs, activeTab = ''} = state.sensor;
+
+  return tabs.find((item) => item.url === activeTab)?.state || {} as any;
+};

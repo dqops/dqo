@@ -198,8 +198,10 @@ export const getConnectionCommentsFailed = (error: unknown) => ({
 });
 
 export const getConnectionComments =
-  (checkType: CheckTypes, activeTab: string, connectionName: string) => async (dispatch: Dispatch) => {
-    dispatch(getConnectionCommentsRequest(checkType, activeTab));
+  (checkType: CheckTypes, activeTab: string, connectionName: string, loading = true) => async (dispatch: Dispatch) => {
+    if(loading) {
+      dispatch(getConnectionCommentsRequest(checkType, activeTab));
+    }
     try {
       const res = await ConnectionApiClient.getConnectionComments(
         connectionName
@@ -258,8 +260,10 @@ export const getConnectionLabelsFailed = (error: unknown) => ({
 });
 
 export const getConnectionLabels =
-  (checkType: CheckTypes, activeTab: string, connectionName: string) => async (dispatch: Dispatch) => {
-    dispatch(getConnectionLabelsRequest(checkType, activeTab));
+  (checkType: CheckTypes, activeTab: string, connectionName: string, loading = true) => async (dispatch: Dispatch) => {
+    if (loading) {
+      dispatch(getConnectionLabelsRequest(checkType, activeTab));
+    }
     try {
       const res = await ConnectionApiClient.getConnectionLabels(connectionName);
       dispatch(getConnectionLabelsSuccess(checkType, activeTab, res.data || []));
@@ -321,8 +325,10 @@ export const getConnectionDefaultDataStreamsMappingFailed = (
 });
 
 export const getConnectionDefaultDataStreamsMapping =
-  (checkType: CheckTypes, activeTab: string, connectionName: string) => async (dispatch: Dispatch) => {
-    dispatch(getConnectionDefaultDataStreamsMappingRequest(checkType, activeTab));
+  (checkType: CheckTypes, activeTab: string, connectionName: string, loading = true) => async (dispatch: Dispatch) => {
+    if (loading) {
+      dispatch(getConnectionDefaultDataStreamsMappingRequest(checkType, activeTab));
+    }
     try {
       const res =
         await ConnectionApiClient.getConnectionDefaultDataStreamsMapping(

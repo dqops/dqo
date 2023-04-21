@@ -21,8 +21,7 @@ import ai.dqo.execution.rules.HistoricDataPoint;
 import ai.dqo.execution.rules.HistoricDataPointObjectMother;
 import ai.dqo.execution.rules.RuleExecutionResult;
 import ai.dqo.execution.rules.runners.python.PythonRuleRunnerObjectMother;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
-import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpecObjectMother;
@@ -72,7 +71,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         Double[] previousReadouts = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
         this.sensorReadouts = previousReadouts;
 
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -90,7 +89,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         Double[] previousReadouts = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
         this.sensorReadouts = previousReadouts;
 
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -108,7 +107,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         Double[] previousReadouts = {1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
         this.sensorReadouts = previousReadouts;
 
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -126,7 +125,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         Double[] previousReadouts = {1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, null, null, null};
         this.sensorReadouts = previousReadouts;
 
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -144,7 +143,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         Double[] previousReadouts = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, null, 0.0, 0.0, null, null, null};
         this.sensorReadouts = previousReadouts;
 
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -162,7 +161,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         Double[] previousReadouts = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
         this.sensorReadouts = previousReadouts;
 
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -180,7 +179,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         Double[] previousReadouts = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
         this.sensorReadouts = previousReadouts;
 
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -198,7 +197,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         Double[] previousReadouts = {0.0, 1.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, null, 0.0, 0.0, 0.0};
         this.sensorReadouts = previousReadouts;
 
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -216,7 +215,7 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
         Double[] previousReadouts = {0.0, null, null, null, null, null, 0.0, null, 0.0, null};
         this.sensorReadouts = previousReadouts;
 
-        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimeSeriesGradient.day, this.readoutTimestamp, this.sensorReadouts);
+        HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);

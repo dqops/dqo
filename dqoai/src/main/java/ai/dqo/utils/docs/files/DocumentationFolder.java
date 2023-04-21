@@ -20,6 +20,7 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -182,7 +183,7 @@ public class DocumentationFolder {
                         StandardOpenOption.TRUNCATE_EXISTING);
             }
             catch (Exception ex) {
-                throw new RuntimeException("Cannot write file " + documentationFile.getDirectPath() + ", error: " + ex.getMessage(), ex);
+                System.err.println("Cannot write file " + documentationFile.getDirectPath() + ", error: " + ex.getMessage() + ", exception type: " + ex.getClass().toString());
             }
         }
     }

@@ -22,7 +22,7 @@ import ai.dqo.execution.rules.RuleExecutionResult;
 import ai.dqo.execution.rules.RuleExecutionRunParameters;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResultObjectMother;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.utils.BeanFactoryObjectMother;
@@ -54,7 +54,7 @@ public class PythonRuleRunnerObjectMother {
     public static RuleExecutionResult executeBuiltInRule(Double actualValue, Double expectedValue, AbstractRuleParametersSpec ruleParameters) {
         PythonRuleRunner ruleRunner = getDefault();
         ExecutionContext executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
-        LocalDateTime today = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimeSeriesGradient.day);
+        LocalDateTime today = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimePeriodGradient.day);
         RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, expectedValue,
                 ruleParameters, today, null, new RuleTimeWindowSettingsSpec());
         RuleDefinitionFindResult ruleDefinitionFindResult = RuleDefinitionFindResultObjectMother.findDqoHomeRuleDefinition(ruleParameters.getRuleDefinitionName());

@@ -16,6 +16,7 @@
 package ai.dqo.data.readouts.normalization;
 
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.*;
 
@@ -145,7 +146,7 @@ public class SensorReadoutsNormalizedResult {
 
     /**
      * Time gradient column that returns the time gradient that was used by the sensor. It is a lower case name of
-     * a time gradient from {@link ai.dqo.metadata.groupings.TimeSeriesGradient} enumeration.
+     * a time gradient from {@link TimePeriodGradient} enumeration.
      * @return Time gradient name, e.q. "day", "week", "month".
      */
     public StringColumn getTimeGradientColumn() {
