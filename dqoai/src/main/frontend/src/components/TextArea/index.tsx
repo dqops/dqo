@@ -39,25 +39,27 @@ const TextArea = ({
   disabled
 }: ITextAreaProps) => (
   <div>
-    <label
-      htmlFor={name}
-      className="block text-sm font-regular text-blue-dark-700 mb-1 flex space-x-1 items-center"
-    >
-      <span>{label}</span>
-      {!!tooltipText && (
-        <Tooltip
-          content={tooltipText}
-          className="max-w-80 py-4 px-4 bg-gray-800"
-        >
-          <div>
-            <SvgIcon
-              name="info"
-              className="w-4 h-4 text-gray-700 cursor-pointer"
-            />
-          </div>
-        </Tooltip>
-      )}
-    </label>
+    {label && (
+      <label
+        htmlFor={name}
+        className="block text-sm font-regular text-blue-dark-700 mb-1 flex space-x-1 items-center"
+      >
+        <span>{label}</span>
+        {!!tooltipText && (
+          <Tooltip
+            content={tooltipText}
+            className="max-w-80 py-4 px-4 bg-gray-800"
+          >
+            <div>
+              <SvgIcon
+                name="info"
+                className="w-4 h-4 text-gray-700 cursor-pointer"
+              />
+            </div>
+          </Tooltip>
+        )}
+      </label>
+    )}
     <div className="relative">
       <textarea
         data-testid={dataTestId || 'text-area'}
