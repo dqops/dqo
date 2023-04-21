@@ -39,10 +39,10 @@ nav:
       - PostgreSQL: 'working-with-dqo/adding-data-source-connection/postgresql.md'
       - SQL Server: 'working-with-dqo/adding-data-source-connection/sql-server.md'
     - Schedules:
-      - 'working-with-dqo\schedules\index.md'
-      - Configuring the schedules by modifying the YAML files: 'working-with-dqo\schedules\configuring_schedules_by_modifying_yaml_file.md'
-      - Time zone configuration: 'working-with-dqo\schedules\timezone_configuration.md'
-      - Cron formatting: 'working-with-dqo\schedules\cron_formatting.md'
+      - 'working-with-dqo/schedules/index.md'
+      - Configuring the schedules by modifying the YAML files: 'working-with-dqo/schedules/configuring_schedules_by_modifying_yaml_file.md'
+      - Time zone configuration: 'working-with-dqo/schedules/timezone_configuration.md'
+      - Cron formatting: 'working-with-dqo/schedules/cron_formatting.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
     - dqo: 'command-line-interface/dqo.md'
