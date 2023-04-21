@@ -42,7 +42,7 @@ These topics introduce the basic concepts of DQO.
     Description how data is stored in DQO.
 
 
-- **[Working with YAML files](./working-with-yaml-files/working-with-yaml-files.md)**
+- **[Working with the YAML files](./working-with-yaml-files/working-with-yaml-files.md)**
 
     Introduction to working with YAML configuration files in DQO.
 

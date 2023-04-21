@@ -7,10 +7,10 @@ Advanced profiling is a type of check that should be used to profile data and ru
 of [recurring checks](../recurring-checks/recurring-checks.md) or [partition checks](../partition-checks/partition-checks.md)
 are the most appropriate for monitoring the quality of data.
 
-## Checks configuration in YAML file
+## Checks configuration in the YAML file
 Advance profiling data quality checks, like other data quality checks in DQO checks are defined as YAML files.
 
-Below is an example of YAML file showing sample configuration of an advanced profiling column data quality check nulls_percent.
+Below is an example of the YAML file showing sample configuration of an advanced profiling column data quality check nulls_percent.
 
 ``` yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json

@@ -109,7 +109,7 @@ character can be used at the beginning, in the middle or at the end of the name.
 
 ## Connections configuration files
 
-Connection configurations are stored in YAML files in the `./userhome/sources` folder. The name of the connection is also 
+Connection configurations are stored in the YAML files in the `./userhome/sources` folder. The name of the connection is also 
 the name of the folder where the configuration file is stored. 
 
 Below is a sample YAML file showing an example configuration of the BigQuery data source connection.

@@ -80,4 +80,4 @@ user-defined [data quality sensors](../sensors/sensors.md) in Jinja2 templating 
 SQL queries.
 
 The `sources` folder contains [YAML configuration files](../working-with-yaml-files/working-with-yaml-files.md) for 
-each connection and table
+each connection and table.
