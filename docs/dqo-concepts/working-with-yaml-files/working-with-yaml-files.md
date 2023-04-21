@@ -52,7 +52,7 @@ be raised.
 
 ## Editing the YAML files
 
-YAMl configuration files are located in the `userhome/sources` folder. The complete DQO YAML schema can e found 
+YAMl configuration files are located in the `./sources` folder. The complete DQO YAML schema can e found 
 [here](https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json). 
 
 The YAML files in DQO support code completion in code editors, such as Visual Studio Code.
