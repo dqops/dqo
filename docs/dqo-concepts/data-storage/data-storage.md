@@ -3,7 +3,7 @@
 In DQO, sensor readouts and check results are stored as Apache Parquet files following the Apache
 Hive compatible folder tree, partitioned by connection name, table name, and month.
 For example, rule results for February 2023 for a single table would be stored in a file
-`userhome/.data/rule_results/c=bigquery-public-data/t=america_health_rankings.ahr/m=2023-02-01/rule_results.0.parquet`.
+`/.data/rule_results/c=bigquery-public-data/t=america_health_rankings.ahr/m=2023-02-01/rule_results.0.parquet`.
 
 The data is stored locally in `userhome` folder, allowing true multi-cloud data collection without accessing any
 sensitive data through an external cloud or SaaS solution.
@@ -80,4 +80,4 @@ user-defined [data quality sensors](../sensors/sensors.md) in Jinja2 templating 
 SQL queries.
 
 The `sources` folder contains [YAML configuration files](../working-with-yaml-files/working-with-yaml-files.md) for 
-each connection and table
+each connection and table.

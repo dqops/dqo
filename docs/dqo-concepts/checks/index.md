@@ -95,7 +95,7 @@ Data quality checks are defined as YAML files that support code completion in co
 Data quality check definitions can be stored in the source code repository, and versioned along with any other data
 pipeline or machine learning code.
 
-Below is an example of YAML file showing sample configuration of an advanced profiling column data quality check nulls_percent.
+Below is an example of the YAML file showing sample configuration of an advanced profiling column data quality check nulls_percent.
 
 ``` yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
@@ -270,3 +270,4 @@ identification of the source of the data quality issue.
 - [Learn more about advanced profiling checks](./advanced-profiling/advanced-profiling.md)
 - [Learn more about recurring checks](./recurring-checks/recurring-checks.md)
 - [Learn more about partition checks](./partition-checks/partition-checks.md)
+- [Learn how to configure schedules](../../working-with-dqo/schedules/index.md)

@@ -9,10 +9,10 @@ Daily recurring checks stores the most recent sensor readouts for each day when
 the data quality check was run. While monthly recurring checks store the most recent sensor readout for each month
 when the data quality check was run.
 
-## Checks configuration in YAML file
+## Checks configuration in the YAML file
 Recurring data quality checks, like other data quality checks in DQO, are defined as YAML files.
 
-Below is an example of YAML file showing sample configuration of a daily and monthly recurring column data quality check
+Below is an example of the YAML file showing sample configuration of a daily and monthly recurring column data quality check
 nulls_percent.
 
 === "Daily recurring check"
