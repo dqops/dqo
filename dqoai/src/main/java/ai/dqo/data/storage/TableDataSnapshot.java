@@ -232,10 +232,12 @@ public class TableDataSnapshot {
      * Loads missing months to extend the time range of monthly partitions that are kept in a snapshot.
      * @param start The date of the start month. It could be any date within the month, because the whole month is always loaded.
      * @param end The date of the end month. It could be any date within the month, because the whole month is always loaded.
+     * @return true when additional months were loaded, false when all months in the requested range were already loaded
      */
-    public void ensureMonthsAreLoaded(@NotNull LocalDate start, @NotNull LocalDate end) {
+    public boolean ensureMonthsAreLoaded(@NotNull LocalDate start, @NotNull LocalDate end) {
         LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(start);
         LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(end);
+        boolean anyMonthLoaded = false;
 
         if (this.firstLoadedMonth == null) {
             // no data ever loaded
@@ -250,7 +252,7 @@ public class TableDataSnapshot {
                 }
                 updateSchemaForLoadedPartitions(loadedPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedPartitions);
-                return;
+                return true;
             }
         }
 
@@ -265,6 +267,7 @@ public class TableDataSnapshot {
             if (loadedEarlierPartitions != null) {
                 updateSchemaForLoadedPartitions(loadedEarlierPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
+                anyMonthLoaded = true;
             }
         }
 
@@ -279,8 +282,11 @@ public class TableDataSnapshot {
             if (loadedLaterPartitions != null) {
                 updateSchemaForLoadedPartitions(loadedLaterPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
+                anyMonthLoaded = true;
             }
         }
+
+        return anyMonthLoaded;
     }
 
     /**

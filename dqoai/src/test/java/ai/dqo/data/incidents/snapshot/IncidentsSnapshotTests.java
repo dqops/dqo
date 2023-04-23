@@ -90,17 +90,17 @@ public class IncidentsSnapshotTests extends BaseTest {
         Table sourceTable = this.incidentsTableFactory.createEmptyIncidentsTable("tab");
         Row row1 = sourceTable.appendRow();
         sourceTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME).set(row1.getRowNumber(), 10);
-        sourceTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_UTC_COLUMN_NAME).
+        sourceTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME).
                 set(row1.getRowNumber(), LocalDateTime.of(2022, 1, 10, 14, 10, 55).toInstant(ZoneOffset.UTC));
 
         Row row2 = sourceTable.appendRow();
         sourceTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME).set(row2.getRowNumber(), 20);
-        sourceTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_UTC_COLUMN_NAME).
+        sourceTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME).
                 set(row2.getRowNumber(), LocalDateTime.of(2022, 2, 10, 14, 20, 55).toInstant(ZoneOffset.UTC));
 
         Row row3 = sourceTable.appendRow();
         sourceTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME).set(row3.getRowNumber(), 30);
-        sourceTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_UTC_COLUMN_NAME).
+        sourceTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME).
                 set(row3.getRowNumber(), LocalDateTime.of(2022, 3, 10, 14, 30, 55).toInstant(ZoneOffset.UTC));
 
         IncidentsSnapshot tempSut = new IncidentsSnapshot("conn", this.parquetStorageService, sourceTable);
@@ -130,7 +130,7 @@ public class IncidentsSnapshotTests extends BaseTest {
                     add(LocalDateTime.of(2022, 2, 10, 14, 20, 55).toInstant(ZoneOffset.UTC));
                     add(LocalDateTime.of(2022, 3, 10, 14, 30, 55).toInstant(ZoneOffset.UTC));
                 }},
-                table.instantColumn(IncidentsColumnNames.FIRST_SEEN_UTC_COLUMN_NAME).sorted(Comparator.comparing(dt -> dt))
+                table.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME).sorted(Comparator.comparing(dt -> dt))
         );
     }
 
@@ -171,7 +171,7 @@ public class IncidentsSnapshotTests extends BaseTest {
                     add(LocalDateTime.of(2022, 2, 10, 14, 20, 55).toInstant(ZoneOffset.UTC));
                     add(LocalDateTime.of(2022, 3, 10, 14, 30, 55).toInstant(ZoneOffset.UTC));
                 }},
-                table.instantColumn(IncidentsColumnNames.FIRST_SEEN_UTC_COLUMN_NAME).sorted(Comparator.comparing(dt -> dt))
+                table.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME).sorted(Comparator.comparing(dt -> dt))
         );
     }
 
@@ -197,7 +197,7 @@ public class IncidentsSnapshotTests extends BaseTest {
                     add(LocalDateTime.of(2022, 2, 10, 14, 20, 55).toInstant(ZoneOffset.UTC));
                     add(LocalDateTime.of(2022, 3, 10, 14, 30, 55).toInstant(ZoneOffset.UTC));
                 }},
-                table.instantColumn(IncidentsColumnNames.FIRST_SEEN_UTC_COLUMN_NAME).sorted(Comparator.comparing(dt -> dt))
+                table.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME).sorted(Comparator.comparing(dt -> dt))
         );
     }
 }

@@ -33,7 +33,7 @@ public class IncidentsTableFactoryImpl implements IncidentsTableFactory {
         Table table = Table.create(tableName);
         table.addColumns(
                 StringColumn.create(IncidentsColumnNames.ID_COLUMN_NAME),
-                LongColumn.create(IncidentsColumnNames.TARGET_HASH_COLUMN_NAME),
+                LongColumn.create(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME),
                 IntColumn.create(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME),
@@ -43,8 +43,9 @@ public class IncidentsTableFactoryImpl implements IncidentsTableFactory {
                 StringColumn.create(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME),
                 IntColumn.create(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME),
-                InstantColumn.create(IncidentsColumnNames.FIRST_SEEN_UTC_COLUMN_NAME),
-                InstantColumn.create(IncidentsColumnNames.LAST_SEEN_UTC_COLUMN_NAME),
+                InstantColumn.create(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME),
+                InstantColumn.create(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME),
+                InstantColumn.create(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME),
                 IntColumn.create(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.CREATED_BY_COLUMN_NAME),

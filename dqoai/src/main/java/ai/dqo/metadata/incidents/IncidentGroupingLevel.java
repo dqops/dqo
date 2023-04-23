@@ -51,4 +51,39 @@ public enum IncidentGroupingLevel {
      */
     @JsonProperty("table_dimension_category_name")
     table_dimension_category_check_name;
+
+    /**
+     * Groups incidents by dimension.
+     * @return True when grouping by dimension.
+     */
+    public boolean groupByDimension() {
+        return this != table;
+    }
+
+    /**
+     * Group incidents also by a check category.
+     * @return Group by a check category.
+     */
+    public boolean groupByCheckCategory() {
+        return this == table_dimension_category ||
+               this == table_dimension_category_check_type ||
+               this == table_dimension_category_check_name;
+    }
+
+    /**
+     * Group incidents also by a check type.
+     * @return Group by a check type.
+     */
+    public boolean groupByCheckType() {
+        return this == table_dimension_category_check_type ||
+               this == table_dimension_category_check_name;
+    }
+
+    /**
+     * Group incidents by the check name (the lowest check tree identifier).
+     * @return Group by a check name.
+     */
+    public boolean groupByCheckName() {
+        return this == table_dimension_category_check_name;
+    }
 }

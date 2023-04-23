@@ -16,8 +16,6 @@
 package ai.dqo.data.incidents.factory;
 
 import ai.dqo.BaseTest;
-import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
-import ai.dqo.data.readouts.factory.SensorReadoutsTableFactoryImpl;
 import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetWriter;
 import org.junit.jupiter.api.Assertions;
@@ -43,11 +41,11 @@ public class IncidentsTableFactoryImplTests extends BaseTest {
     @Test
     void createEmptySensorReadoutsTable_whenCalled_thenCreatesTableWithSchema() {
         Table table = this.sut.createEmptyIncidentsTable("empty");
-        Assertions.assertEquals(19, table.columnCount());
+        Assertions.assertEquals(20, table.columnCount());
 
         int columnIndex = 0;
         Assertions.assertEquals(IncidentsColumnNames.ID_COLUMN_NAME, table.column(columnIndex++).name());
-        Assertions.assertEquals(IncidentsColumnNames.TARGET_HASH_COLUMN_NAME, table.column(columnIndex++).name());
+        Assertions.assertEquals(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME, table.column(columnIndex++).name());
@@ -57,8 +55,9 @@ public class IncidentsTableFactoryImplTests extends BaseTest {
         Assertions.assertEquals(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME, table.column(columnIndex++).name());
-        Assertions.assertEquals(IncidentsColumnNames.FIRST_SEEN_UTC_COLUMN_NAME, table.column(columnIndex++).name());
-        Assertions.assertEquals(IncidentsColumnNames.LAST_SEEN_UTC_COLUMN_NAME, table.column(columnIndex++).name());
+        Assertions.assertEquals(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME, table.column(columnIndex++).name());
+        Assertions.assertEquals(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME, table.column(columnIndex++).name());
+        Assertions.assertEquals(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.CREATED_BY_COLUMN_NAME, table.column(columnIndex++).name());

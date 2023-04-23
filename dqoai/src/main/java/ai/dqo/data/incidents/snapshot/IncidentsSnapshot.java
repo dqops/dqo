@@ -65,7 +65,7 @@ public class IncidentsSnapshot extends TableDataSnapshot {
         return new FileStorageSettings(DqoRoot.data_incidents,
                 BuiltInFolderNames.INCIDENTS,
                 PARQUET_FILE_NAME,
-                IncidentsColumnNames.FIRST_SEEN_UTC_COLUMN_NAME,
+                IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME,
                 IncidentsColumnNames.ID_COLUMN_NAME,
                 TablePartitioningPattern.CM);
     }

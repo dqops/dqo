@@ -29,8 +29,6 @@ import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpe
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.connectors.ConnectionProviderRegistryObjectMother;
 import ai.dqo.connectors.ProviderType;
-import ai.dqo.core.notifications.NotificationService;
-import ai.dqo.core.notifications.NotificationServiceImpl;
 import ai.dqo.data.errors.normalization.ErrorsNormalizationService;
 import ai.dqo.data.errors.normalization.ErrorsNormalizationServiceImpl;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactoryObjectMother;
@@ -136,7 +134,6 @@ public class CheckExecutionServiceImplTests extends BaseTest {
 
         ScheduledTargetChecksFindService scheduledTargetChecksFindService = new ScheduledTargetChecksFindServiceImpl(
                 hierarchyNodeTreeSearcher);
-        NotificationService notificationService = new NotificationServiceImpl();
 
         this.sut = new CheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,
@@ -151,7 +148,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 ErrorsSnapshotFactoryObjectMother.createDummyErrorsStorageService(),
                 scheduledTargetChecksFindService,
                 RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService(),
-                notificationService);
+                null);
     }
 
     @Test

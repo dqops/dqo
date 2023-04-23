@@ -71,6 +71,9 @@ public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
+    @JsonPropertyDescription("Webhook URL where the notification messages describing new incidents are pushed using a HTTP POST request.")
+    private String webhookUrl;
+
     /**
      * Returns the minimum severity level of failed data quality checks that a grouped into incidents.
      * @return Minimum severity level for grouping.
@@ -174,6 +177,23 @@ public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Returns the URL where notifications are pushed using a HTTP POST request.
+     * @return Webhook url.
+     */
+    public String getWebhookUrl() {
+        return webhookUrl;
+    }
+
+    /**
+     * Sets an url to a HTTP webhook where notifications are posted.
+     * @param webhookUrl Webhook url.
+     */
+    public void setWebhookUrl(String webhookUrl) {
+        this.setDirtyIf(!Objects.equals(this.webhookUrl, webhookUrl));
+        this.webhookUrl = webhookUrl;
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -210,6 +230,7 @@ public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
      */
     public IncidentGroupingSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         IncidentGroupingSpec cloned = this.deepClone();
+        cloned.webhookUrl = secretValueProvider.expandValue(cloned.webhookUrl);
         return cloned;
     }
 

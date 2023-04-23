@@ -27,9 +27,9 @@ public final class IncidentsColumnNames {
     public static final String ID_COLUMN_NAME = CommonColumnNames.ID_COLUMN_NAME;
 
     /**
-     * Column name for a hash of the target.
+     * Column name for a hash of the incident.
      */
-    public static final String TARGET_HASH_COLUMN_NAME = "target_hash";
+    public static final String INCIDENT_HASH_COLUMN_NAME = "incident_hash";
 
     /**
      * Column name for a table schema.
@@ -77,14 +77,19 @@ public final class IncidentsColumnNames {
     public static final String HIGHEST_SEVERITY_COLUMN_NAME = "highest_severity";
 
     /**
-     * Column name that stores the exact time when the incident was raised (seen) for the first time, as a UTC timestamp: first_seen_utc.
+     * Column name that stores the exact time when the incident was raised (seen) for the first time, as a UTC timestamp: first_seen.
      */
-    public static final String FIRST_SEEN_UTC_COLUMN_NAME = "first_seen_utc";
+    public static final String FIRST_SEEN_COLUMN_NAME = "first_seen";
 
     /**
-     * Column name that stores the exact time when the incident was raised (seen) for the last time, as a UTC timestamp: last_seen_utc.
+     * Column name that stores the exact time when the incident was raised (seen) for the last time, as a UTC timestamp: last_seen.
      */
-    public static final String LAST_SEEN_UTC_COLUMN_NAME = "last_seen_utc";
+    public static final String LAST_SEEN_COLUMN_NAME = "last_seen";
+
+    /**
+     * Column name that stores the timestamp of the end of the incident when new issues will not be appended to this incident, as a UTC timestamp: incident_until.
+     */
+    public static final String INCIDENT_UNTIL_COLUMN_NAME = "incident_until";
 
     /**
      * Column name that stores the number of checks that failed.
