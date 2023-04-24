@@ -54,7 +54,7 @@ To add BigQuery data source connection to DQO you need the following:
     There are several tabs to explore:
 
     - Table - provide details about the table and allows you to add filters or stage names (for example, "Ingestion")
-    - Schedule - allows setting schedule for running checks. 
+    - Schedule - allows setting schedule for running checks. [Learn how to configure schedules](../../working-with-dqo/schedules/index.md)
     - Comments - allows adding comments to your tables
     - Labels - allows adding labels to your tables
     - Data streams - allows configuring columns for data streams segmentation. Learn more about [data streams segmentation in Concept section](../../dqo-concepts/data-stream-segmentation/data-stream-segmentation.md). 

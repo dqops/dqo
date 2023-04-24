@@ -79,11 +79,20 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
         List<? extends Class<? extends AbstractSensorParametersSpec>> classes = TargetClassSearchUtility.findClasses(
                 "ai.dqo.sensors", projectRootPath, AbstractSensorParametersSpec.class);
 
+        Set<String> documentedSensorNames = new HashSet<>();
+
         for (Class<? extends AbstractSensorParametersSpec> sensorParametersClass : classes) {
             AbstractSensorParametersSpec abstractSensorParametersSpec = createSensorParameterInstance(sensorParametersClass);
             if (abstractSensorParametersSpec instanceof CustomSensorParametersSpec) {
                 continue;
             }
+
+            String sensorDefinitionName = abstractSensorParametersSpec.getSensorDefinitionName();
+            if (documentedSensorNames.contains(sensorDefinitionName)) {
+                continue; // additional sensor parameters specification class with different parameters for an already documented sensor
+            }
+            documentedSensorNames.add(sensorDefinitionName);
+
             SensorDocumentationModel sensorDocumentation = this.sensorDocumentationModelFactory.createSensorDocumentation(abstractSensorParametersSpec);
 
             if (sensorDocumentation == null) {

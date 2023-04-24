@@ -102,7 +102,7 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
             // ignore exceptions here, we will use UTC as a fallback
         }
 
-        return ZoneId.of("UTC");
+        return ZoneId.systemDefault();
     }
 
     /**

@@ -78,11 +78,20 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
         List<? extends Class<? extends AbstractRuleParametersSpec>> classes = TargetClassSearchUtility.findClasses(
                 "ai.dqo.rules", projectRootPath, AbstractRuleParametersSpec.class);
 
+        Set<String> documentedRuleNames = new HashSet<>();
+
         for (Class<? extends AbstractRuleParametersSpec> ruleParametersClass : classes) {
             AbstractRuleParametersSpec abstractRuleParametersSpec = createRuleParameterInstance(ruleParametersClass);
             if (abstractRuleParametersSpec instanceof CustomRuleParametersSpec) {
                 continue;
             }
+
+            String ruleDefinitionName = abstractRuleParametersSpec.getRuleDefinitionName();
+            if (documentedRuleNames.contains(ruleDefinitionName)) {
+                continue; // additional sensor parameters specification class with different parameters for an already documented sensor
+            }
+            documentedRuleNames.add(ruleDefinitionName);
+
             RuleDocumentationModel ruleDocumentation = this.ruleDocumentationModelFactory.createRuleDocumentation(abstractRuleParametersSpec);
 
             if (ruleDocumentation == null) {

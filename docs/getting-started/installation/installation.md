@@ -5,7 +5,8 @@
 To use DQO you need:
 
   - Python version 3.6 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
-  - Ability to install Python packages with pip.   
+  - Ability to install Python packages with pip.
+  - Installed JDK software (version 17) and set JAVA_HOME environment variable.
 
 ## Install DQO with pip manager
 
