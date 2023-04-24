@@ -231,7 +231,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         this.sampleTable.getTableSpec().setPartitionedChecks(samplePartitionedCheck);
 
-        ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>> responseEntity = this.sut.getTablePartitionedDaily(
+        ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>> responseEntity = this.sut.getTablePartitionedChecksDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
@@ -257,7 +257,7 @@ public class TablesControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getTableRecurringUI_whenTableRequested_thenReturnsRecurringUi(CheckTimeScale timePartition) {
+    void getTableRecurringChecksUI_whenTableRequested_thenReturnsRecurringChecksUI(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
         ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableRecurringChecksUI(
@@ -276,7 +276,7 @@ public class TablesControllerUTTests extends BaseTest {
     void getTablePartitionedChecksUI_whenTableRequested_thenReturnsPartitionedChecksUi(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTablePartitionedUI(
+        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTablePartitionedChecksUI(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -304,7 +304,7 @@ public class TablesControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getTableRecurringUIBasic_whenTableRequested_thenReturnsRecurringUiBasic(CheckTimeScale timePartition) {
+    void getTableRecurringChecksUIBasic_whenTableRequested_thenReturnsRecurringChecksUIBasic(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
         ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTableRecurringChecksUIBasic(
@@ -323,7 +323,7 @@ public class TablesControllerUTTests extends BaseTest {
     void getTablePartitionedChecksUIBasic_whenTableRequested_thenReturnsPartitionedChecksUiBasic(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTablePartitionedUIBasic(
+        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTablePartitionedChecksUIBasic(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -413,7 +413,7 @@ public class TablesControllerUTTests extends BaseTest {
         TablePartitionedChecksRootSpec samplePartitionedCheck = new TablePartitionedChecksRootSpec();
         samplePartitionedCheck.setDaily(dailyPartitionedCheck);
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTablePartitionedDaily(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTablePartitionedChecksDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),

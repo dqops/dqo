@@ -723,7 +723,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
-      const res = await TableApiClient.getTableRecurringUI(
+      const res = await TableApiClient.getTableRecurringChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -735,7 +735,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
-      const res = await TableApiClient.getTableRecurringUI(
+      const res = await TableApiClient.getTableRecurringChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -784,7 +784,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
-      const res = await ColumnApiClient.getColumnRecurringUI(
+      const res = await ColumnApiClient.getColumnRecurringChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -797,7 +797,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
-      const res = await ColumnApiClient.getColumnRecurringUI(
+      const res = await ColumnApiClient.getColumnRecurringChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -930,8 +930,8 @@ function TreeProvider(props: any) {
       let url = '';
       let value = '';
       if (node.level === TREE_LEVEL.TABLE_CHECKS) {
-        url = ROUTES.TABLE_PROFILINGS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
-        value = ROUTES.TABLE_PROFILINGS_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
+        url = ROUTES.TABLE_PROFILING(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
+        value = ROUTES.TABLE_PROFILING_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
       } else if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
         url = ROUTES.TABLE_RECURRING(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily');
         value = ROUTES.TABLE_RECURRING_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
@@ -963,8 +963,8 @@ function TreeProvider(props: any) {
       let url = '';
       let value = '';
       if (node?.level === TREE_LEVEL.COLUMN_CHECKS) {
-        url = ROUTES.COLUMN_PROFILINGS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
-        value = ROUTES.COLUMN_PROFILINGS_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
+        url = ROUTES.COLUMN_PROFILING(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
+        value = ROUTES.COLUMN_PROFILING_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
       } else if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
         url = ROUTES.COLUMN_RECURRING(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily');
         value = ROUTES.COLUMN_RECURRING_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
@@ -998,7 +998,7 @@ function TreeProvider(props: any) {
 
         let url = '';
         if (parentNode?.level === TREE_LEVEL.TABLE_CHECKS) {
-          url = ROUTES.TABLE_PROFILINGS_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.category ?? '', node.label);
+          url = ROUTES.TABLE_PROFILING_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.category ?? '', node.label);
         } else if (parentNode.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
           url = ROUTES.TABLE_RECURRING_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily', node.category ?? '', node.label);
         } else if (parentNode.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
@@ -1025,7 +1025,7 @@ function TreeProvider(props: any) {
 
         let url = '';
         if (parentNode?.level === TREE_LEVEL.COLUMN_CHECKS) {
-          url = ROUTES.COLUMN_PROFILINGS_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', node.category ?? '', node.label);
+          url = ROUTES.COLUMN_PROFILING_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', node.category ?? '', node.label);
         } else if (parentNode.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
           url = ROUTES.COLUMN_RECURRING_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily', node.category ?? '', node.label)
         } else if (parentNode.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {

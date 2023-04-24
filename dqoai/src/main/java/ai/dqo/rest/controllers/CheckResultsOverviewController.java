@@ -64,7 +64,7 @@ public class CheckResultsOverviewController {
      * @return Overview of the most recent check results.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/overview")
-    @ApiOperation(value = "getTableProfilingOverview", notes = "Returns an overview of the most recent check executions for all table level data quality profiling checks on a table",
+    @ApiOperation(value = "getTableProfilingChecksOverview", notes = "Returns an overview of the most recent check executions for all table level data quality profiling checks on a table",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -73,7 +73,7 @@ public class CheckResultsOverviewController {
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getTableProfilingOverview(
+    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getTableProfilingChecksOverview(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -113,7 +113,7 @@ public class CheckResultsOverviewController {
      * @return Overview of the most recent recurring results.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/overview")
-    @ApiOperation(value = "getTableRecurringOverview", notes = "Returns an overview of the most recent table level recurring executions for the recurring at a requested time scale",
+    @ApiOperation(value = "getTableRecurringChecksOverview", notes = "Returns an overview of the most recent table level recurring executions for the recurring at a requested time scale",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -122,7 +122,7 @@ public class CheckResultsOverviewController {
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getTableRecurringOverview(
+    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getTableRecurringChecksOverview(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -163,7 +163,7 @@ public class CheckResultsOverviewController {
      * @return Overview of the most recent partitioned checks results.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/overview")
-    @ApiOperation(value = "getTablePartitionedOverview", notes = "Returns an overview of the most recent table level partitioned checks executions for a requested time scale",
+    @ApiOperation(value = "getTablePartitionedChecksOverview", notes = "Returns an overview of the most recent table level partitioned checks executions for a requested time scale",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -172,7 +172,7 @@ public class CheckResultsOverviewController {
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getTablePartitionedOverview(
+    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getTablePartitionedChecksOverview(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -213,7 +213,7 @@ public class CheckResultsOverviewController {
      * @return Overview of the most recent check results.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/overview")
-    @ApiOperation(value = "getColumnProfilingOverview", notes = "Returns an overview of the most recent check executions for all column level data quality profiling checks on a column",
+    @ApiOperation(value = "getColumnProfilingChecksOverview", notes = "Returns an overview of the most recent check executions for all column level data quality profiling checks on a column",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -222,7 +222,7 @@ public class CheckResultsOverviewController {
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getColumnProfilingOverview(
+    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getColumnProfilingChecksOverview(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -269,7 +269,7 @@ public class CheckResultsOverviewController {
      * @return Overview of the most recent recurring results.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/overview")
-    @ApiOperation(value = "getColumnRecurringOverview", notes = "Returns an overview of the most recent column level recurring executions for the recurring at a requested time scale",
+    @ApiOperation(value = "getColumnRecurringChecksOverview", notes = "Returns an overview of the most recent column level recurring executions for the recurring at a requested time scale",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -278,7 +278,7 @@ public class CheckResultsOverviewController {
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getColumnRecurringOverview(
+    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getColumnRecurringChecksOverview(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -326,7 +326,7 @@ public class CheckResultsOverviewController {
      * @return Overview of the most recent partitioned checks results.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/overview")
-    @ApiOperation(value = "getColumnPartitionedOverview", notes = "Returns an overview of the most recent column level partitioned checks executions for a requested time scale",
+    @ApiOperation(value = "getColumnPartitionedChecksOverview", notes = "Returns an overview of the most recent column level partitioned checks executions for a requested time scale",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -335,7 +335,7 @@ public class CheckResultsOverviewController {
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getColumnPartitionedOverview(
+    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getColumnPartitionedChecksOverview(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,

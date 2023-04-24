@@ -6,20 +6,19 @@ import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api'
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import Button from '../../components/Button';
 import {
-  getColumnDailyRecurring,
-  updateColumnDailyRecurring
+  getColumnMonthlyRecurring,
+  updateColumnMonthlyRecurring
 } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi } from '../../services/apiClient';
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckTypes } from "../../shared/routes";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import ColumnNavigation from "../../components/ColumnNavigation";
 
-const ColumnDailyChecksView = () => {
+const ColumnMonthlyChecksView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
-
-  const { dailyRecurring, isUpdating, loading } = useSelector(getFirstLevelState(checkTypes));
+  const { monthlyRecurring, isUpdating, loading } = useSelector(getFirstLevelState(checkTypes));
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UICheckContainerModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
@@ -27,18 +26,18 @@ const ColumnDailyChecksView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnRecurringOverview(connectionName, schemaName, tableName, columnName, 'daily').then((res) => {
+    CheckResultOverviewApi.getColumnRecurringChecksOverview(connectionName, schemaName, tableName, columnName, 'monthly').then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
 
   useEffect(() => {
-    setUpdatedChecksUI(dailyRecurring);
-  }, [dailyRecurring]);
+    setUpdatedChecksUI(monthlyRecurring);
+  }, [monthlyRecurring]);
 
   useEffect(() => {
     dispatch(
-      getColumnDailyRecurring(
+      getColumnMonthlyRecurring(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -53,7 +52,7 @@ const ColumnDailyChecksView = () => {
     if (!updatedChecksUI) return;
 
     await dispatch(
-      updateColumnDailyRecurring(
+      updateColumnMonthlyRecurring(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -64,7 +63,7 @@ const ColumnDailyChecksView = () => {
       )
     );
     await dispatch(
-      getColumnDailyRecurring(
+      getColumnMonthlyRecurring(
         checkTypes,
         firstLevelActiveTab,
         connectionName,
@@ -87,7 +86,7 @@ const ColumnDailyChecksView = () => {
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
         <div className="flex items-center space-x-2" style={{ maxWidth: `calc(100% - 180px)` }}>
           <SvgIcon name="column-check" className="w-5 h-5 shrink-0" />
-          <div className="text-xl font-semibold truncate">{`Daily recurring checks ${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
+          <div className="text-xl font-semibold truncate">{`Monthly recurring checks ${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
         </div>
         <Button
           color={isUpdated ? 'primary' : 'secondary'}
@@ -98,7 +97,7 @@ const ColumnDailyChecksView = () => {
           loading={isUpdating}
         />
       </div>
-      <ColumnNavigation defaultTab="daily" />
+      <ColumnNavigation defaultTab="monthly" />
       <div>
         <DataQualityChecks
           onUpdate={onUpdate}
@@ -114,4 +113,4 @@ const ColumnDailyChecksView = () => {
   );
 };
 
-export default ColumnDailyChecksView;
+export default ColumnMonthlyChecksView;
