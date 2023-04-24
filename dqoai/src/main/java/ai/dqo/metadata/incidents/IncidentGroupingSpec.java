@@ -56,8 +56,8 @@ public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Minimum severity level of data quality issues that are grouped into incidents. The default minimum severity level is 'warning'. Other supported severity levels are 'error' and 'fatal'.")
     private MinimumGroupingSeverityLevel minimumSeverity = MinimumGroupingSeverityLevel.warning;
 
-    @JsonPropertyDescription("Grouping level of failed data quality checks for creating higher level data quality incidents. The default grouping level is by a table and a data quality dimension pair (i.e. a consistency data quality issue detected on a table X).")
-    private IncidentGroupingLevel groupingLevel = IncidentGroupingLevel.table_dimension;
+    @JsonPropertyDescription("Grouping level of failed data quality checks for creating higher level data quality incidents. The default grouping level is by a table, a data quality dimension and a check category (i.e. a consistency data quality incident detected on a table X in the numeric checks category).")
+    private IncidentGroupingLevel groupingLevel = IncidentGroupingLevel.table_dimension_category;
 
     @JsonPropertyDescription("Create separate data quality incidents for each data stream, creating different incidents for different data streams. By default, data streams are ignored for grouping data quality issues into data quality incidents.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)

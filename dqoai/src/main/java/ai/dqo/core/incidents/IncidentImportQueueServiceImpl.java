@@ -128,7 +128,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
         private IncidentsSnapshot incidentsSnapshot;
         private Map<Long, IntArrayList> existingIncidentByHashRowIndexes;
         private Table allExistingIncidentRows;
-        private Map<Long, Integer> newIncidentByHashRowIndexes;
+        private Map<Long, IntArrayList> newIncidentByHashRowIndexes;
         private Table allNewIncidentRows;
 
         /**
@@ -280,6 +280,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             IntColumn highestSeverityNewIncidentsColumn = this.allNewIncidentRows.intColumn(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME);
             InstantColumn lastSeenNewIncidentsColumn = this.allNewIncidentRows.instantColumn(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME);
             InstantColumn incidentUntilNewIncidentsColumn = this.allNewIncidentRows.instantColumn(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME);
+            StringColumn statusNewIncidentsColumn = this.allNewIncidentRows.stringColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
 
             int[] issuesRowIndexes = selectionOfSeverityAlerts.toArray();
             for (int i = 0; i < issuesRowIndexes.length; i++) {
@@ -303,23 +304,31 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     this.existingIncidentByHashRowIndexes = findIncidentRowIndexes(this.allExistingIncidentRows);
                 }
 
-                Integer newOrUpdatedIncidentRowIndex = this.newIncidentByHashRowIndexes.get(incidentHash);
-                if (newOrUpdatedIncidentRowIndex != null) {
-                    // update the incident
-                    int rowIndexInt = newOrUpdatedIncidentRowIndex;
+                IntArrayList newOrUpdatedIncidentRowIndexes = this.newIncidentByHashRowIndexes.get(incidentHash);
+                if (newOrUpdatedIncidentRowIndexes != null) {
+                    // update the active incident
 
-                    if (!executedAt.isAfter(incidentUntilNewIncidentsColumn.get(rowIndexInt))) {
-                        failedChecksNewIncidentsColumn.set(rowIndexInt, failedChecksNewIncidentsColumn.get(newOrUpdatedIncidentRowIndex) + 1);
-                        Integer highestSeenSeverity = highestSeverityNewIncidentsColumn.get(newOrUpdatedIncidentRowIndex);
-                        if (highestSeenSeverity < severity) {
-                            highestSeverityNewIncidentsColumn.set(rowIndexInt, severity);
-                        }
-                        Instant lastSeen = lastSeenNewIncidentsColumn.get(rowIndexInt);
-                        if (lastSeen.isBefore(executedAt)) {
-                            lastSeenNewIncidentsColumn.set(rowIndexInt, executedAt);
-                        }
+                    boolean incidentUpdated = false;
+                    for (Integer newRowIndex : newOrUpdatedIncidentRowIndexes) {
+                        if (!Objects.equals(statusNewIncidentsColumn.get(newRowIndex), IncidentStatus.resolved) &&
+                                !executedAt.isAfter(incidentUntilNewIncidentsColumn.get(newRowIndex))) {
+                            failedChecksNewIncidentsColumn.set(newRowIndex.intValue(), failedChecksNewIncidentsColumn.get(newRowIndex) + 1);
+                            Integer highestSeenSeverity = highestSeverityNewIncidentsColumn.get(newRowIndex);
+                            if (highestSeenSeverity < severity) {
+                                highestSeverityNewIncidentsColumn.set(newRowIndex.intValue(), severity);
+                            }
+                            Instant lastSeen = lastSeenNewIncidentsColumn.get(newRowIndex);
+                            if (lastSeen.isBefore(executedAt)) {
+                                lastSeenNewIncidentsColumn.set(newRowIndex, executedAt);
+                            }
 
-                        continue;
+                            incidentUpdated = true;
+                            break;
+                        }
+                    }
+
+                    if (incidentUpdated) {
+                        continue;  // skipping the next part, no need to copy an incident from existing incidents
                     }
                 }
 
@@ -345,7 +354,11 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     // this is a new incident, we don't know anything about it
                     Row newIncidentRow = this.allNewIncidentRows.appendRow();
                     int newIncidentRowIndex = newIncidentRow.getRowNumber();
-                    this.newIncidentByHashRowIndexes.put(incidentHash, newIncidentRowIndex);
+                    if (newOrUpdatedIncidentRowIndexes != null) {
+                        newOrUpdatedIncidentRowIndexes.add(newIncidentRowIndex);
+                    } else {
+                        this.newIncidentByHashRowIndexes.put(incidentHash, new IntArrayList(new int[] { newIncidentRowIndex }));
+                    }
                     newIncidentsRowIndexes.add(newIncidentRowIndex);
                     UUID incidentIdUuid = new UUID(incidentHash, Hashing.combineOrdered(
                             new ArrayList<>() {{
@@ -360,7 +373,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
 
                     PhysicalTableName physicalTableName = nextTableImportBatch.getTable().getPhysicalTableName();
                     newIncidentRow.setString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME, physicalTableName.getSchemaName());
-                    newIncidentRow.setString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME, physicalTableName.getTableName());
+                    newIncidentRow.setString(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME, physicalTableName.getTableName());
 
                     Integer tablePriority = nextTableImportBatch.getTable().getPriority();
                     if (tablePriority != null) {
@@ -401,9 +414,13 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     }
                 } else {
                     // copy the row for update and increment values...
-                    int updatedIncidentRowIndex = this.allExistingIncidentRows.rowCount();
-                    this.allExistingIncidentRows.copyRowsToTable(new int[] { existingOpenIncidentRowIndex }, this.allNewIncidentRows);
-                    this.newIncidentByHashRowIndexes.put(incidentHash, updatedIncidentRowIndex);
+                    int updatedIncidentRowIndex = this.allNewIncidentRows.rowCount();
+                    this.allNewIncidentRows.addRow(existingOpenIncidentRowIndex, this.allExistingIncidentRows);
+                    if (newOrUpdatedIncidentRowIndexes != null) {
+                        newOrUpdatedIncidentRowIndexes.add(updatedIncidentRowIndex);
+                    } else {
+                        this.newIncidentByHashRowIndexes.put(incidentHash, new IntArrayList(new int[] { updatedIncidentRowIndex }));
+                    }
 
                     failedChecksNewIncidentsColumn.set(updatedIncidentRowIndex, failedChecksNewIncidentsColumn.get(updatedIncidentRowIndex) + 1);
                     Integer highestSeenSeverity = highestSeverityNewIncidentsColumn.get(updatedIncidentRowIndex);
@@ -437,6 +454,10 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
         public Map<Long, IntArrayList> findIncidentRowIndexes(Table incidentTable) {
             Map<Long, IntArrayList> resultMap = new LinkedHashMap<>();
 
+            if (incidentTable == null) {
+                return resultMap;
+            }
+
             LongColumn incidentHashColumn = incidentTable.longColumn(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME);
             int rowCount = incidentHashColumn.size();
 
@@ -464,6 +485,10 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                 this.allNewIncidentRows = this.incidentsSnapshot.getTableDataChanges().getNewOrChangedRows();
             }
 
+            if (this.newIncidentByHashRowIndexes == null) {
+                this.newIncidentByHashRowIndexes = new LinkedHashMap<>();
+            }
+
             LocalDate monthOfIncidentFirstSeen = LocalDate.of(incidentStatusChangeParameters.getFirstSeenYear(),
                     incidentStatusChangeParameters.getFirstSeenMonth(), 1);
             boolean newMonthsLoaded = this.incidentsSnapshot.ensureMonthsAreLoaded(monthOfIncidentFirstSeen, monthOfIncidentFirstSeen);;
@@ -486,17 +511,37 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     return IncidentNotificationMessage.fromIncidentRow(this.allNewIncidentRows.row(newRowIndex),
                             incidentStatusChangeParameters.getConnectionName());
                 }
-            } else {
+            } else if (this.allExistingIncidentRows != null) {
                 Selection existingRowsIncidentIdSelection = this.allExistingIncidentRows.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME)
                         .isEqualTo(incidentStatusChangeParameters.getIncidentId());
                 if (existingRowsIncidentIdSelection.isEmpty()) {
-                    // incident not found
+                    // incident not found, skipping because changing the status is a background async operation that is not returning the result
                     return null;
                 }
 
                 int[] existingIncidentRowIndexes = existingRowsIncidentIdSelection.toArray();
-                this.allExistingIncidentRows.copyRowsToTable(existingIncidentRowIndexes, this.allNewIncidentRows);
-//                this.newIncidentByHashRowIndexes.put(incidentHash, updatedIncidentRowIndex);
+                assert existingIncidentRowIndexes.length == 1;
+                int targetNewIncidentsRowIndex = this.allNewIncidentRows.rowCount();
+                this.allNewIncidentRows.addRow(existingIncidentRowIndexes[0], this.allExistingIncidentRows);
+                Long incidentHash = this.allNewIncidentRows.longColumn(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME)
+                        .get(targetNewIncidentsRowIndex);
+
+                IntArrayList newRowIndexes = this.newIncidentByHashRowIndexes.get(incidentHash);
+                if (newRowIndexes != null) {
+                    newRowIndexes.add(targetNewIncidentsRowIndex);
+                }
+                else {
+                    this.newIncidentByHashRowIndexes.put(incidentHash, new IntArrayList(new int[] { targetNewIncidentsRowIndex }));
+                }
+
+                StringColumn newRowStatusColumn = this.allNewIncidentRows.stringColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
+                String currentStatus = newRowStatusColumn.get(targetNewIncidentsRowIndex);
+                if (!Objects.equals(currentStatus, newStatusString)) {
+                    newRowStatusColumn.set(targetNewIncidentsRowIndex, newStatusString);
+
+                    return IncidentNotificationMessage.fromIncidentRow(this.allNewIncidentRows.row(targetNewIncidentsRowIndex),
+                            incidentStatusChangeParameters.getConnectionName());
+                }
             }
 
             return null;
