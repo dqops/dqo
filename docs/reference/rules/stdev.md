@@ -29,6 +29,7 @@ spec:
   time_window:
     prediction_time_window: 30
     min_periods_with_readouts: 10
+    historic_data_point_grouping: day
   fields:
   - field_name: percent_population_below
     display_name: percent_population_below
@@ -139,6 +140,7 @@ spec:
   time_window:
     prediction_time_window: 60
     min_periods_with_readouts: 20
+    historic_data_point_grouping: day
   fields:
   - field_name: percent_population_below
     display_name: percent_population_below
@@ -248,6 +250,7 @@ spec:
   time_window:
     prediction_time_window: 7
     min_periods_with_readouts: 3
+    historic_data_point_grouping: day
   fields:
   - field_name: percent_population_below
     display_name: percent_population_below
@@ -358,6 +361,7 @@ spec:
   time_window:
     prediction_time_window: 30
     min_periods_with_readouts: 10
+    historic_data_point_grouping: day
   fields:
   - field_name: stdev_multiplier_below
     display_name: stdev_multiplier_below
@@ -474,6 +478,7 @@ spec:
   time_window:
     prediction_time_window: 60
     min_periods_with_readouts: 20
+    historic_data_point_grouping: day
   fields:
   - field_name: stdev_multiplier_below
     display_name: stdev_multiplier_below
@@ -589,6 +594,7 @@ spec:
   time_window:
     prediction_time_window: 7
     min_periods_with_readouts: 3
+    historic_data_point_grouping: day
   fields:
   - field_name: stdev_multiplier_below
     display_name: stdev_multiplier_below
@@ -706,6 +712,7 @@ spec:
   time_window:
     prediction_time_window: 10
     min_periods_with_readouts: 5
+    historic_data_point_grouping: day
   fields:
   - field_name: multiple_stdev_above
     display_name: multiple_stdev_above
@@ -840,6 +847,7 @@ spec:
   time_window:
     prediction_time_window: 10
     min_periods_with_readouts: 5
+    historic_data_point_grouping: day
   fields:
   - field_name: percentile_stdev_above
     display_name: percentile_stdev_above
