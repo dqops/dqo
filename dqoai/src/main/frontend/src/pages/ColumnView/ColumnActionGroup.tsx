@@ -6,6 +6,7 @@ import { ColumnApiClient } from '../../services/apiClient';
 import { getFirstLevelState } from "../../redux/selectors";
 import { useParams } from "react-router-dom";
 import { CheckTypes } from "../../shared/routes";
+import clsx from "clsx";
 
 interface IActionGroupProps {
   isDisabled?: boolean;
@@ -13,6 +14,10 @@ interface IActionGroupProps {
   isUpdating?: boolean;
   isUpdated?: boolean;
   shouldDelete?: boolean;
+
+  isStatistics?: boolean;
+  onCollectStatistics?: () => void;
+  runningStatistics?: boolean;
 }
 
 const ColumnActionGroup = ({
@@ -20,7 +25,10 @@ const ColumnActionGroup = ({
   isUpdating,
   isDisabled,
   onUpdate,
-  shouldDelete = true
+  shouldDelete = true,
+  isStatistics,
+  onCollectStatistics,
+  runningStatistics
 }: IActionGroupProps) => {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [isOpen, setIsOpen] = useState(false);
@@ -49,15 +57,27 @@ const ColumnActionGroup = ({
         />
       )}
 
-      <Button
-        color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
-        variant="contained"
-        label="Save"
-        className="w-40 !h-10"
-        onClick={onUpdate}
-        loading={isUpdating}
-        disabled={isDisabled}
-      />
+      {isStatistics ? (
+        <Button
+          color="primary"
+          variant="outlined"
+          label="Collect Statistics"
+          className={clsx("!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white")}
+          onClick={onCollectStatistics}
+          loading={runningStatistics}
+          disabled={runningStatistics}
+        />
+      ) : (
+        <Button
+          color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
+          variant="contained"
+          label="Save"
+          className="w-40 !h-10"
+          onClick={onUpdate}
+          loading={isUpdating}
+          disabled={isDisabled}
+        />
+      )}
       <ConfirmDialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
