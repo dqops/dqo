@@ -17,23 +17,26 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
-import ai.dqo.checks.table.recurring.TableRecurringSpec;
-import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
-import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.checks.table.partitioned.standard.TableStandardDailyPartitionedChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
+import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoJobQueueObjectMother;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.DqoQueueJobFactoryImpl;
 import ai.dqo.data.statistics.services.StatisticsDataServiceImpl;
-import ai.dqo.data.statistics.snapshot.StatisticsSnapshotFactoryImpl;
+import ai.dqo.execution.ExecutionContextFactory;
+import ai.dqo.execution.ExecutionContextFactoryImpl;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
+import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
+import ai.dqo.metadata.search.HierarchyNodeTreeSearcherImpl;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactoryObjectMother;
@@ -41,23 +44,27 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import ai.dqo.rules.comparison.MinCountRuleWarningParametersSpec;
-import ai.dqo.services.check.mapping.utils.UICheckContainerBasicModelUtility;
-import ai.dqo.services.check.mapping.models.UICheckContainerModel;
-import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
-import ai.dqo.services.check.mapping.UiToSpecCheckMappingServiceImpl;
+import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.rest.models.metadata.TableBasicModel;
 import ai.dqo.rest.models.metadata.TableModel;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MinCountRuleFatalParametersSpec;
+import ai.dqo.rules.comparison.MinCountRuleWarningParametersSpec;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
+import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
+import ai.dqo.services.check.mapping.UIAllChecksModelFactoryImpl;
+import ai.dqo.services.check.mapping.UiToSpecCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
+import ai.dqo.services.check.mapping.models.UICheckContainerModel;
+import ai.dqo.services.check.mapping.utils.UICheckContainerBasicModelUtility;
 import ai.dqo.services.metadata.TableService;
 import ai.dqo.services.metadata.TableServiceImpl;
 import ai.dqo.utils.BeanFactoryObjectMother;
-import ai.dqo.utils.reflection.ReflectionServiceImpl;
+import ai.dqo.utils.reflection.ReflectionService;
+import ai.dqo.utils.reflection.ReflectionServiceSingleton;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -81,18 +88,25 @@ public class TablesControllerUTTests extends BaseTest {
     @BeforeEach
     void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
+
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
         DqoJobQueue dqoJobQueue = DqoJobQueueObjectMother.getDefaultJobQueue();
-        TableService tableService = new TableServiceImpl(this.userHomeContextFactory, dqoQueueJobFactory, dqoJobQueue);
 
-        ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
-        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, new SensorDefinitionFindServiceImpl());
-        UiToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new UiToSpecCheckMappingServiceImpl(reflectionService);
         DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
+        ExecutionContextFactory executionContextFactory = new ExecutionContextFactoryImpl(userHomeContextFactory, dqoHomeContextFactory);
+        HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
+        ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
+
+        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, new SensorDefinitionFindServiceImpl());
+        UIAllChecksModelFactory uiAllChecksModelFactory = new UIAllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
+
+        TableService tableService = new TableServiceImpl(this.userHomeContextFactory, dqoQueueJobFactory, dqoJobQueue, uiAllChecksModelFactory);
+
+        UiToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new UiToSpecCheckMappingServiceImpl(reflectionService);
+
         StatisticsDataServiceImpl statisticsDataService = new StatisticsDataServiceImpl(null, null); // TODO: configure dependencies if we want to unit test statistics
-        this.sut = new TablesController(tableService, this.userHomeContextFactory, dqoHomeContextFactory,
-                specToUiCheckMappingService, uiToSpecCheckMappingService,
-                statisticsDataService);
+
+        this.sut = new TablesController(tableService, this.userHomeContextFactory, dqoHomeContextFactory, specToUiCheckMappingService, uiToSpecCheckMappingService, statisticsDataService);
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
     }
@@ -156,7 +170,7 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableProfilingChecksUI(
+        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableProfilingUI(
                 this.sampleTable.getConnectionName(),
                 tableSpec.getPhysicalTableName().getSchemaName(),
                 tableSpec.getPhysicalTableName().getTableName());
@@ -182,12 +196,12 @@ public class TablesControllerUTTests extends BaseTest {
         standardDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
         TableDailyRecurringCategoriesSpec dailyRecurring = new TableDailyRecurringCategoriesSpec();
         dailyRecurring.setStandard(standardDailyRecurringSpec);
-        TableRecurringSpec sampleRecurring = new TableRecurringSpec();
+        TableRecurringChecksSpec sampleRecurring = new TableRecurringChecksSpec();
         sampleRecurring.setDaily(dailyRecurring);
         
         this.sampleTable.getTableSpec().setRecurringChecks(sampleRecurring);
 
-        ResponseEntity<Mono<TableDailyRecurringCategoriesSpec>> responseEntity = this.sut.getTableRecurringDaily(
+        ResponseEntity<Mono<TableDailyRecurringCategoriesSpec>> responseEntity = this.sut.getTableRecurringChecksDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
@@ -217,7 +231,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         this.sampleTable.getTableSpec().setPartitionedChecks(samplePartitionedCheck);
 
-        ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>> responseEntity = this.sut.getTablePartitionedChecksDaily(
+        ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>> responseEntity = this.sut.getTablePartitionedDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
@@ -231,7 +245,7 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableProfilingChecksUI(
+        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableProfilingUI(
                 this.sampleTable.getConnectionName(),
                 tableSpec.getPhysicalTableName().getSchemaName(),
                 tableSpec.getPhysicalTableName().getTableName());
@@ -246,7 +260,7 @@ public class TablesControllerUTTests extends BaseTest {
     void getTableRecurringUI_whenTableRequested_thenReturnsRecurringUi(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableRecurringUI(
+        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableRecurringChecksUI(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -262,7 +276,7 @@ public class TablesControllerUTTests extends BaseTest {
     void getTablePartitionedChecksUI_whenTableRequested_thenReturnsPartitionedChecksUi(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTablePartitionedChecksUI(
+        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTablePartitionedUI(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -278,7 +292,7 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTableProfilingChecksUIBasic(
+        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTableProfilingUIBasic(
                 this.sampleTable.getConnectionName(),
                 tableSpec.getPhysicalTableName().getSchemaName(),
                 tableSpec.getPhysicalTableName().getTableName());
@@ -293,7 +307,7 @@ public class TablesControllerUTTests extends BaseTest {
     void getTableRecurringUIBasic_whenTableRequested_thenReturnsRecurringUiBasic(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTableRecurringUIBasic(
+        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTableRecurringChecksUIBasic(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -309,7 +323,7 @@ public class TablesControllerUTTests extends BaseTest {
     void getTablePartitionedChecksUIBasic_whenTableRequested_thenReturnsPartitionedChecksUiBasic(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTablePartitionedChecksUIBasic(
+        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTablePartitionedUIBasic(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -364,10 +378,10 @@ public class TablesControllerUTTests extends BaseTest {
         standardDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
         TableDailyRecurringCategoriesSpec dailyRecurring = new TableDailyRecurringCategoriesSpec();
         dailyRecurring.setStandard(standardDailyRecurringSpec);
-        TableRecurringSpec sampleRecurring = new TableRecurringSpec();
+        TableRecurringChecksSpec sampleRecurring = new TableRecurringChecksSpec();
         sampleRecurring.setDaily(dailyRecurring);
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableRecurringDaily(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableRecurringChecksDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -399,7 +413,7 @@ public class TablesControllerUTTests extends BaseTest {
         TablePartitionedChecksRootSpec samplePartitionedCheck = new TablePartitionedChecksRootSpec();
         samplePartitionedCheck.setDaily(dailyPartitionedCheck);
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTablePartitionedChecksDaily(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTablePartitionedDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),

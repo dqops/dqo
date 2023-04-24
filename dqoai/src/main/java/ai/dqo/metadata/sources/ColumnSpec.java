@@ -22,8 +22,8 @@ import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpe
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import ai.dqo.checks.column.recurring.ColumnDailyRecurringCategoriesSpec;
-import ai.dqo.checks.column.recurring.ColumnMonthlyRecurringCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnMonthlyRecurringCheckCategoriesSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
@@ -178,8 +178,8 @@ public class ColumnSpec extends AbstractSpec {
     }
 
     /**
-     * Sets a new configuration of column level data quality checks.
-     * @param profilingChecks New checks configuration.
+     * Sets a new configuration of column level profiling data quality checks.
+     * @param profilingChecks New profiling checks configuration.
      */
     public void setProfilingChecks(ColumnProfilingCheckCategoriesSpec profilingChecks) {
 		setDirtyIf(!Objects.equals(this.profilingChecks, profilingChecks));
@@ -188,7 +188,7 @@ public class ColumnSpec extends AbstractSpec {
     }
 
     /**
-     * Returns configuration of enabled column level recurring.
+     * Returns configuration of enabled column level recurring checks.
      * @return Column level recurring.
      */
     public ColumnRecurringSpec getRecurringChecks() {
@@ -196,8 +196,8 @@ public class ColumnSpec extends AbstractSpec {
     }
 
     /**
-     * Sets a new configuration of column level data quality recurring.
-     * @param recurringChecks New recurring configuration.
+     * Sets a new configuration of column level data quality recurring checks.
+     * @param recurringChecks New recurring checks configuration.
      */
     public void setRecurringChecks(ColumnRecurringSpec recurringChecks) {
         setDirtyIf(!Objects.equals(this.recurringChecks, recurringChecks));
@@ -214,7 +214,7 @@ public class ColumnSpec extends AbstractSpec {
     }
 
     /**
-     * Sets a new configuration of column level date/time partitioned data quality recurring.
+     * Sets a new configuration of column level date/time partitioned data quality checks.
      * @param partitionedChecks New configuration of date/time partitioned checks.
      */
     public void setPartitionedChecks(ColumnPartitionedChecksRootSpec partitionedChecks) {
@@ -320,7 +320,7 @@ public class ColumnSpec extends AbstractSpec {
                             return recurringSpec.getDaily();
                         }
 
-                        ColumnDailyRecurringCategoriesSpec dailyRecurringCategoriesSpec = new ColumnDailyRecurringCategoriesSpec();
+                        ColumnDailyRecurringCheckCategoriesSpec dailyRecurringCategoriesSpec = new ColumnDailyRecurringCheckCategoriesSpec();
                         dailyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "daily"));
                         if (attachCheckContainer) {
                             recurringSpec.setDaily(dailyRecurringCategoriesSpec);
@@ -332,7 +332,7 @@ public class ColumnSpec extends AbstractSpec {
                             return recurringSpec.getMonthly();
                         }
 
-                        ColumnMonthlyRecurringCategoriesSpec monthlyRecurringCategoriesSpec = new ColumnMonthlyRecurringCategoriesSpec();
+                        ColumnMonthlyRecurringCheckCategoriesSpec monthlyRecurringCategoriesSpec = new ColumnMonthlyRecurringCheckCategoriesSpec();
                         monthlyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "monthly"));
                         if (attachCheckContainer) {
                             recurringSpec.setMonthly(monthlyRecurringCategoriesSpec);
@@ -404,19 +404,19 @@ public class ColumnSpec extends AbstractSpec {
         if (checkRootContainer instanceof ColumnProfilingCheckCategoriesSpec) {
             this.setProfilingChecks((ColumnProfilingCheckCategoriesSpec)checkRootContainer);
         }
-        else if (checkRootContainer instanceof ColumnDailyRecurringCategoriesSpec) {
+        else if (checkRootContainer instanceof ColumnDailyRecurringCheckCategoriesSpec) {
             if (this.recurringChecks == null) {
                 this.setRecurringChecks(new ColumnRecurringSpec());
             }
 
-            this.getRecurringChecks().setDaily((ColumnDailyRecurringCategoriesSpec)checkRootContainer);
+            this.getRecurringChecks().setDaily((ColumnDailyRecurringCheckCategoriesSpec)checkRootContainer);
         }
-        else if (checkRootContainer instanceof ColumnMonthlyRecurringCategoriesSpec) {
+        else if (checkRootContainer instanceof ColumnMonthlyRecurringCheckCategoriesSpec) {
             if (this.recurringChecks == null) {
                 this.setRecurringChecks(new ColumnRecurringSpec());
             }
 
-            this.getRecurringChecks().setMonthly((ColumnMonthlyRecurringCategoriesSpec)checkRootContainer);
+            this.getRecurringChecks().setMonthly((ColumnMonthlyRecurringCheckCategoriesSpec)checkRootContainer);
         }
         else if (checkRootContainer instanceof ColumnDailyPartitionedCheckCategoriesSpec) {
             if (this.partitionedChecks == null) {

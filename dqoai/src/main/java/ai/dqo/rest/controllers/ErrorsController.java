@@ -225,14 +225,14 @@ public class ErrorsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec partitionedChecks = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
+        AbstractRootChecksContainerSpec Partitioned = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
         ErrorsDetailedDataModel[] errorsDetailedDataModels = this.errorsDataService.readErrorsDetailed(
-                partitionedChecks, loadParams);
+                Partitioned, loadParams);
         return new ResponseEntity<>(Flux.fromArray(errorsDetailedDataModels), HttpStatus.OK); // 200
     }
 
@@ -424,14 +424,14 @@ public class ErrorsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec partitionedChecks = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
+        AbstractRootChecksContainerSpec Partitioned = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
         ErrorsDetailedDataModel[] errorsDetailedDataModels = this.errorsDataService.readErrorsDetailed(
-                partitionedChecks, loadParams);
+                Partitioned, loadParams);
         return new ResponseEntity<>(Flux.fromArray(errorsDetailedDataModels), HttpStatus.OK); // 200
     }
 }

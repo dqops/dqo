@@ -22,8 +22,8 @@ import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
 import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
-import ai.dqo.checks.table.recurring.TableRecurringSpec;
 import ai.dqo.metadata.incidents.IncidentGroupingSpec;
+import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.metadata.comments.CommentSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.dashboards.*;
@@ -555,14 +555,14 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     }
 
     /**
-     * Accepts a container of table level checkpoints (daily, monthly, etc.)
+     * Accepts a container of table level recurring checks (daily, monthly, etc.)
      *
-     * @param tableRecurringSpec Table level checkpoints container.
+     * @param tableRecurringChecksSpec Table level recurring checks container.
      * @param parameter            Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableRecurringSpec tableRecurringSpec, T parameter) {
+    public TreeNodeTraversalResult accept(TableRecurringChecksSpec tableRecurringChecksSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -579,9 +579,9 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     }
 
     /**
-     * Accepts a container of column level checkpoints (daily, monthly, etc.)
+     * Accepts a container of column level recurring checks (daily, monthly, etc.)
      *
-     * @param columnRecurringSpec Column level checkpoints container.
+     * @param columnRecurringSpec Column level recurring checks container.
      * @param parameter             Additional visitor's parameter.
      * @return Accept's result.
      */

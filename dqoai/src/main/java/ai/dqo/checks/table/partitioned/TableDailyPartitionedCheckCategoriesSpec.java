@@ -42,7 +42,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of table level daily checkpoints. Contains categories of daily checkpoints.
+ * Container of table level daily partitioned checks. Contains categories of daily partitioned checks.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -92,16 +92,16 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     }
 
     /**
-     * Returns a container of table level timeliness checkpoints.
-     * @return Custom timeliness checkpoints.
+     * Returns a container of table level timeliness partitioned checks.
+     * @return Custom timeliness partitioned checks.
      */
     public TableTimelinessDailyPartitionedChecksSpec getTimeliness() {
         return timeliness;
     }
 
     /**
-     * Sets a reference to a container of timeliness checkpoints.
-     * @param timeliness Custom timeliness checkpoints.
+     * Sets a reference to a container of timeliness partitioned checks.
+     * @param timeliness Custom timeliness partitioned checks.
      */
     public void setTimeliness(TableTimelinessDailyPartitionedChecksSpec timeliness) {
         this.setDirtyIf(!Objects.equals(this.timeliness, timeliness));
@@ -154,7 +154,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     }
 
     /**
-     * Returns the type of checks (adhoc, checkpoint, partitioned).
+     * Returns the type of checks (profiling, recurring, partitioned).
      *
      * @return Check type.
      */
@@ -165,8 +165,8 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     }
 
     /**
-     * Returns the time range for checkpoint and partitioned checks (daily, monthly, etc.).
-     * Adhoc checks do not have a time range and return null.
+     * Returns the time range for partitioned check and partitioned checks (daily, monthly, etc.).
+     * Profiling checks do not have a time range and return null.
      *
      * @return Time range (daily, monthly, ...).
      */

@@ -45,12 +45,12 @@ public class ColumnRecurringSpec extends AbstractSpec {
     @JsonPropertyDescription("Configuration of daily recurring evaluated at a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnDailyRecurringCategoriesSpec daily;
+    private ColumnDailyRecurringCheckCategoriesSpec daily;
 
     @JsonPropertyDescription("Configuration of monthly recurring evaluated at a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnMonthlyRecurringCategoriesSpec monthly;
+    private ColumnMonthlyRecurringCheckCategoriesSpec monthly;
 
     // TODO: add other time periods that make sense (hourly, weekly, etc.)
 
@@ -59,36 +59,36 @@ public class ColumnRecurringSpec extends AbstractSpec {
      *
      * @return Daily recurring.
      */
-    public ColumnDailyRecurringCategoriesSpec getDaily() {
+    public ColumnDailyRecurringCheckCategoriesSpec getDaily() {
         return daily;
     }
 
     /**
-     * Sets the daily check points container.
+     * Sets the daily recurring checks container.
      *
-     * @param daily New daily check points container.
+     * @param daily New daily recurring checks container.
      */
-    public void setDaily(ColumnDailyRecurringCategoriesSpec daily) {
+    public void setDaily(ColumnDailyRecurringCheckCategoriesSpec daily) {
         this.setDirtyIf(!Objects.equals(this.daily, daily));
         this.daily = daily;
         this.propagateHierarchyIdToField(daily, "daily");
     }
 
     /**
-     * Returns monthly recurring.
+     * Returns monthly recurring checks.
      *
-     * @return Monthly recurring.
+     * @return Monthly recurring checks.
      */
-    public ColumnMonthlyRecurringCategoriesSpec getMonthly() {
+    public ColumnMonthlyRecurringCheckCategoriesSpec getMonthly() {
         return monthly;
     }
 
     /**
-     * Sets the monthly check points container.
+     * Sets the monthly recurring checks container.
      *
-     * @param monthly New monthly check points container.
+     * @param monthly New monthly recurring checks container.
      */
-    public void setMonthly(ColumnMonthlyRecurringCategoriesSpec monthly) {
+    public void setMonthly(ColumnMonthlyRecurringCheckCategoriesSpec monthly) {
         this.setDirtyIf(!Objects.equals(this.monthly, monthly));
         this.monthly = monthly;
         this.propagateHierarchyIdToField(monthly, "monthly");

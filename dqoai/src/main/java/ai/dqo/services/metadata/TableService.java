@@ -15,11 +15,14 @@
  */
 package ai.dqo.services.metadata;
 
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
 import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
-import ai.dqo.metadata.sources.*;
-import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
+import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.rest.models.check.CheckTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -38,6 +41,23 @@ public interface TableService {
     TableWrapper getTable(UserHome userHome,
                           String connectionName,
                           PhysicalTableName tableName);
+
+    /**
+     * Retrieves a list of column level check templates on the given table.
+     * @param connectionName Connection name.
+     * @param tableName      Table name.
+     * @param checkType      (Optional) Check type.
+     * @param checkTimeScale (Optional) Check time-scale.
+     * @param checkCategory  (Optional) Check category.
+     * @param checkName      (Optional) Check name.
+     * @return List of column level check templates on the requested table, matching the optional filters. Null if table doesn't exist.
+     */
+    List<CheckTemplate> getCheckTemplates(String connectionName,
+                                          PhysicalTableName tableName,
+                                          CheckType checkType,
+                                          CheckTimeScale checkTimeScale,
+                                          String checkCategory,
+                                          String checkName);
 
     /**
      * Deletes table from metadata and flushes user context.

@@ -213,7 +213,7 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
 
     /**
      * Returns the time range for recurring and partitioned checks (daily, monthly, etc.).
-     * Adhoc checks do not have a time range and return null.
+     * Profiling checks do not have a time range and return null.
      *
      * @return Time range (daily, monthly, ...).
      */

@@ -20,7 +20,7 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingNullsChecksSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
-import ai.dqo.checks.column.recurring.ColumnDailyRecurringCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
 import ai.dqo.checks.column.recurring.nulls.ColumnNullsDailyRecurringSpec;
 import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
@@ -305,7 +305,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         ColumnNullsDailyRecurringSpec nullDailyRecurring = new ColumnNullsDailyRecurringSpec();
         nullDailyRecurring.setDailyNullsCount(nullsChecksSpec);
-        ColumnDailyRecurringCategoriesSpec dailyRecurring = new ColumnDailyRecurringCategoriesSpec();
+        ColumnDailyRecurringCheckCategoriesSpec dailyRecurring = new ColumnDailyRecurringCheckCategoriesSpec();
         dailyRecurring.setNulls(nullDailyRecurring);
         ColumnRecurringSpec sampleRecurring = new ColumnRecurringSpec();
         sampleRecurring.setDaily(dailyRecurring);

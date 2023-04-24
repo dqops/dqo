@@ -21,7 +21,7 @@ import ai.dqo.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.strings.ColumnStringLengthAboveMaxLengthCountCheckSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingStringsChecksSpec;
-import ai.dqo.checks.column.recurring.ColumnDailyRecurringCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
 import ai.dqo.checks.column.recurring.numeric.ColumnNumericDailyRecurringSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
@@ -154,7 +154,7 @@ public class CheckServiceImplTests extends BaseTest {
 
         ColumnRecurringSpec col23recurringSpec = new ColumnRecurringSpec();
         col23.setRecurringChecks(col23recurringSpec);
-        ColumnDailyRecurringCategoriesSpec col23categoriesSpec = new ColumnDailyRecurringCategoriesSpec();
+        ColumnDailyRecurringCheckCategoriesSpec col23categoriesSpec = new ColumnDailyRecurringCheckCategoriesSpec();
         col23recurringSpec.setDaily(col23categoriesSpec);
         ColumnNumericDailyRecurringSpec col23numericChecksSpec = new ColumnNumericDailyRecurringSpec();
         col23categoriesSpec.setNumeric(col23numericChecksSpec);
