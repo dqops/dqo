@@ -44,6 +44,7 @@ import ai.dqo.metadata.groupings.DataStreamLevelSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.incidents.IncidentWebhookNotificationsSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.metadata.settings.SettingsSpec;
@@ -558,4 +559,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(IncidentGroupingSpec incidentGroupingSpec, P parameter);
+
+    /**
+     * Accepts an incident notifications using webhooks configuration.
+     * @param incidentWebhookNotificationsSpec Webhooks for incident notifications.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(IncidentWebhookNotificationsSpec incidentWebhookNotificationsSpec, P parameter);
 }

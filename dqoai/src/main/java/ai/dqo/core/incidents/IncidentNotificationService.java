@@ -28,5 +28,5 @@ public interface IncidentNotificationService {
      * @param newMessages List of new data quality incidents that will be sent as a payload.
      * @param incidentGrouping Incident grouping that identifies the notification target (where to send the notifications).
      */
-    void sendNotifications(List<NewIncidentNotificationMessage> newMessages, IncidentGroupingSpec incidentGrouping);
+    void sendNotifications(List<IncidentNotificationMessage> newMessages, IncidentGroupingSpec incidentGrouping);
 }

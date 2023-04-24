@@ -40,6 +40,7 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Data quality incident import service. Works in the background and imports new data quality incidents.
@@ -154,7 +155,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                             }
                         }
 
-                        List<NewIncidentNotificationMessage> newIncidentsNotificationMessages = importBatch(nextTableImportBatch);
+                        List<IncidentNotificationMessage> newIncidentsNotificationMessages = importBatch(nextTableImportBatch);
                         if (newIncidentsNotificationMessages != null) {
                             // sending notifications
                             incidentNotificationService.sendNotifications(newIncidentsNotificationMessages,
@@ -186,7 +187,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
          * executed checks, not just an old list of checks for which we are creating incidents.
          * @param nextTableImportBatch Next table incident batch that should be loaded.
          */
-        public List<NewIncidentNotificationMessage> importBatch(TableIncidentImportBatch nextTableImportBatch) {
+        public List<IncidentNotificationMessage> importBatch(TableIncidentImportBatch nextTableImportBatch) {
             ConnectionSpec connection = nextTableImportBatch.getConnection();
             IncidentGroupingSpec incidentGrouping = connection.getIncidentGrouping();
             if (incidentGrouping == null || incidentGrouping.isDisabled()) {
@@ -199,7 +200,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             InstantColumn executedAtColumn = newCheckResults.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
             LongColumn checkResultIncidentHashColumn = newCheckResults.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME);
             Selection selectionOfSeverityAlerts = severityColumn.isGreaterThanOrEqualTo(minimumSeverityLevel);
-            List<NewIncidentNotificationMessage> newIncidentNotificationMessages = new ArrayList<>();
+            List<Integer> newIncidentsRowIndexes = new ArrayList<>();
 
             if (selectionOfSeverityAlerts.isEmpty()) {
                 return null; // no alerts with a severity at the threshold when we create incidents
@@ -289,10 +290,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     Row newIncidentRow = this.allNewIncidentRows.appendRow();
                     int newIncidentRowIndex = newIncidentRow.getRowNumber();
                     this.newIncidentByHashRowIndexes.put(incidentHash, newIncidentRowIndex);
-                    NewIncidentNotificationMessage newIncidentNotificationMessage = new NewIncidentNotificationMessage();
-                    newIncidentNotificationMessages.add(newIncidentNotificationMessage);
-                    newIncidentNotificationMessage.setNewIncidentRowIndex(newIncidentRowIndex);
-
+                    newIncidentsRowIndexes.add(newIncidentRowIndex);
                     UUID incidentIdUuid = new UUID(incidentHash, Hashing.combineOrdered(
                             new ArrayList<>() {{
                                 add(Hashing.farmHashFingerprint64().hashString(connectionName, StandardCharsets.UTF_8));
@@ -301,33 +299,23 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                             }}).asLong());
 
                     String incidentId = incidentIdUuid.toString();
-                    newIncidentNotificationMessage.setIncidentId(incidentId);
                     newIncidentRow.setString(IncidentsColumnNames.ID_COLUMN_NAME, incidentId);
-
-                    newIncidentNotificationMessage.setIncidentHash(incidentHash);
                     newIncidentRow.setLong(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME, incidentHash);
 
                     PhysicalTableName physicalTableName = nextTableImportBatch.getTable().getPhysicalTableName();
-                    newIncidentNotificationMessage.setConnection(connectionName);
-                    newIncidentNotificationMessage.setSchema(physicalTableName.getSchemaName());
                     newIncidentRow.setString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME, physicalTableName.getSchemaName());
-                    newIncidentNotificationMessage.setTable(physicalTableName.getTableName());
                     newIncidentRow.setString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME, physicalTableName.getTableName());
 
                     Integer tablePriority = nextTableImportBatch.getTable().getPriority();
                     if (tablePriority != null) {
                         newIncidentRow.setInt(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME, tablePriority);
-                        newIncidentNotificationMessage.setTablePriority(tablePriority);
                     }
                     if (incidentGrouping.isDivideByDataStream()) {
                         String dataStreamName = newCheckResults.getString(checkResultRowIndex, CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
                         newIncidentRow.setString(IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME, dataStreamName);
-                        newIncidentNotificationMessage.setDataStreamName(dataStreamName);
                     }
 
-                    newIncidentNotificationMessage.setHighestSeverity(severity);
                     newIncidentRow.setInt(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME, severity);
-                    newIncidentNotificationMessage.setFirstSeen(executedAt);
                     newIncidentRow.setInstant(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME, executedAt);
                     newIncidentRow.setInstant(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME, executedAt);
                     newIncidentRow.setInstant(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME,
@@ -339,25 +327,21 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     if (incidentGroupingLevel.groupByDimension()) {
                         String qualityDimension = newCheckResults.getString(checkResultRowIndex, CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
                         newIncidentRow.setString(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, qualityDimension);
-                        newIncidentNotificationMessage.setQualityDimension(qualityDimension);
                     }
 
                     if (incidentGroupingLevel.groupByCheckCategory()) {
                         String checkCategory = newCheckResults.getString(checkResultRowIndex, CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
                         newIncidentRow.setString(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME, checkCategory);
-                        newIncidentNotificationMessage.setCheckCategory(checkCategory);
                     }
 
                     if (incidentGroupingLevel.groupByCheckType()) {
                         String checkType = newCheckResults.getString(checkResultRowIndex, CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
                         newIncidentRow.setString(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME, checkType);
-                        newIncidentNotificationMessage.setCheckType(checkType);
                     }
 
                     if (incidentGroupingLevel.groupByCheckName()) {
                         String checkName = newCheckResults.getString(checkResultRowIndex, CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
                         newIncidentRow.setString(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME, checkName);
-                        newIncidentNotificationMessage.setCheckName(checkName);
                     }
                 } else {
                     // copy the row for update and increment values...
@@ -377,13 +361,16 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                 }
             }
 
-            for (NewIncidentNotificationMessage newIncidentNotificationMessage : newIncidentNotificationMessages) {
-                Integer failedChecksCount = this.allNewIncidentRows.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME)
-                        .get(newIncidentNotificationMessage.getNewIncidentRowIndex());
-                newIncidentNotificationMessage.setFailedChecksCount(failedChecksCount);
-            }
+            List<IncidentNotificationMessage> incidentNotificationMessages = newIncidentsRowIndexes.stream()
+                    .map(newIncidentRowIndex -> {
+                        Row incidentRow = this.allNewIncidentRows.row(newIncidentRowIndex);
+                        IncidentNotificationMessage newIncidentNotificationMessage =
+                                IncidentNotificationMessage.fromIncidentRow(incidentRow, connectionName);
+                        return newIncidentNotificationMessage;
+                    })
+                    .collect(Collectors.toList());
 
-            return newIncidentNotificationMessages;
+            return incidentNotificationMessages;
         }
 
         /**

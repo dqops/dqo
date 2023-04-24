@@ -45,6 +45,7 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.incidents.IncidentWebhookNotificationsSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.metadata.settings.SettingsSpec;
@@ -802,6 +803,18 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(IncidentGroupingSpec incidentGroupingSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts an incident notifications using webhooks configuration.
+     *
+     * @param incidentWebhookNotificationsSpec Webhooks for incident notifications.
+     * @param parameter                        Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(IncidentWebhookNotificationsSpec incidentWebhookNotificationsSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

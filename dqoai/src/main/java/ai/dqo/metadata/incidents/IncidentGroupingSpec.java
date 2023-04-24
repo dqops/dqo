@@ -16,17 +16,18 @@
 
 package ai.dqo.metadata.incidents;
 
-import ai.dqo.checks.CheckType;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import lombok.EqualsAndHashCode;
@@ -48,6 +49,7 @@ import java.util.stream.Collectors;
 public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<IncidentGroupingSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
+            put("webhooks", o -> o.webhooks);
         }
     };
 
@@ -71,8 +73,10 @@ public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
-    @JsonPropertyDescription("Webhook URL where the notification messages describing new incidents are pushed using a HTTP POST request.")
-    private String webhookUrl;
+    @JsonPropertyDescription("Configuration of Webhook URLs for new or updated incident notifications.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private IncidentWebhookNotificationsSpec webhooks;
 
     /**
      * Returns the minimum severity level of failed data quality checks that a grouped into incidents.
@@ -177,20 +181,21 @@ public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns the URL where notifications are pushed using a HTTP POST request.
-     * @return Webhook url.
+     * Returns the configuration of webhooks used for incident notifications.
+     * @return Webhooks configuration for incidents.
      */
-    public String getWebhookUrl() {
-        return webhookUrl;
+    public IncidentWebhookNotificationsSpec getWebhooks() {
+        return webhooks;
     }
 
     /**
-     * Sets an url to a HTTP webhook where notifications are posted.
-     * @param webhookUrl Webhook url.
+     * Sets a new configuration of incident notification webhooks.
+     * @param webhooks New configuration of incident notification webhooks.
      */
-    public void setWebhookUrl(String webhookUrl) {
-        this.setDirtyIf(!Objects.equals(this.webhookUrl, webhookUrl));
-        this.webhookUrl = webhookUrl;
+    public void setWebhooks(IncidentWebhookNotificationsSpec webhooks) {
+        setDirtyIf(!Objects.equals(this.webhooks, webhooks));
+        this.webhooks = webhooks;
+        propagateHierarchyIdToField(webhooks, "webhooks");
     }
 
     /**
@@ -230,7 +235,9 @@ public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
      */
     public IncidentGroupingSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         IncidentGroupingSpec cloned = this.deepClone();
-        cloned.webhookUrl = secretValueProvider.expandValue(cloned.webhookUrl);
+        if (cloned.webhooks != null) {
+            cloned.webhooks = cloned.webhooks.expandAndTrim(secretValueProvider);
+        }
         return cloned;
     }
 

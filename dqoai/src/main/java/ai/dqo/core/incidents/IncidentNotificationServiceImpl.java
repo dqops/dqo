@@ -16,6 +16,7 @@
 package ai.dqo.core.incidents;
 
 import ai.dqo.metadata.incidents.IncidentGroupingSpec;
+import ai.dqo.metadata.incidents.IncidentWebhookNotificationsSpec;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
 import org.apache.parquet.Strings;
@@ -48,8 +49,8 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      * @param incidentGrouping Incident grouping that identifies the notification target (where to send the notifications).
      */
     @Override
-    public void sendNotifications(List<NewIncidentNotificationMessage> newMessages, IncidentGroupingSpec incidentGrouping) {
-        if (incidentGrouping == null || Strings.isNullOrEmpty(incidentGrouping.getWebhookUrl())) {
+    public void sendNotifications(List<IncidentNotificationMessage> newMessages, IncidentGroupingSpec incidentGrouping) {
+        if (incidentGrouping == null || incidentGrouping.getWebhooks() == null) {
             return;
         }
 
@@ -61,13 +62,17 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      * Sends all notifications, one by one.
      * @param newMessages Messages with new data quality incidents.
      * @param incidentGrouping Incident grouping configuration with the webhook.
-     * @return Awaitable object.
+     * @return Awaitable Mono object.
      */
-    protected Mono<Void> sendAllNotifications(List<NewIncidentNotificationMessage> newMessages, IncidentGroupingSpec incidentGrouping) {
+    protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages, IncidentGroupingSpec incidentGrouping) {
+        final IncidentWebhookNotificationsSpec webhooksSpec = incidentGrouping.getWebhooks();
+
         Mono<Void> allNotificationsSent = Flux.fromIterable(newMessages)
-                .flatMap(message -> sendNotification(message, incidentGrouping.getWebhookUrl()))
+                .filter(message -> !Strings.isNullOrEmpty(webhooksSpec.getWebhookUrlForStatus(message.getStatus())))
+                .flatMap(message -> sendNotification(message, webhooksSpec.getWebhookUrlForStatus(message.getStatus())))
                 .onErrorContinue((Throwable ex, Object msg) -> {
-                    log.error("Failed to send notification to webhook url: " + incidentGrouping.getWebhookUrl() + ", message: " + ex.getMessage(), ex);
+                    log.error("Failed to send notification to webhook: " +
+                            msg.toString() + ", message: " + ex.getMessage(), ex);
                 })
                 .subscribeOn(Schedulers.parallel())
                 .then();
@@ -79,19 +84,19 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      * Sets a single notification with one incident.
      * @param newIncidentNotificationMessage New incident notification payload.
      * @param webhookUrl Target webhook url.
-     * @return Mono.
+     * @return Mono that returns the target webhook url.
      */
-    protected Mono<Void> sendNotification(NewIncidentNotificationMessage newIncidentNotificationMessage, String webhookUrl) {
+    protected Mono<String> sendNotification(IncidentNotificationMessage newIncidentNotificationMessage, String webhookUrl) {
         WebClient webClient = WebClient.builder()
                 .baseUrl(webhookUrl)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
 
         WebClient.ResponseSpec responseSpec = webClient.method(HttpMethod.POST)
-                .body(Mono.just(newIncidentNotificationMessage), NewIncidentNotificationMessage.class)
+                .body(Mono.just(newIncidentNotificationMessage), IncidentNotificationMessage.class)
                 .retrieve();
 
         Mono<ResponseEntity<Void>> responseEntityMono = responseSpec.toBodilessEntity();
-        return responseEntityMono.retry(3).then();
+        return responseEntityMono.retry(3).thenReturn(webhookUrl);
     }
 }
