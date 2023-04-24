@@ -37,6 +37,7 @@ import tech.tablesaw.selection.Selection;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -54,7 +55,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
     private IncidentsSnapshotFactory incidentsSnapshotFactory;
     private IncidentNotificationService incidentNotificationService;
     private final Object connectionsLock = new Object();
-    private final Map<String, ConnectionIncidentLoader> connectionIncidentLoaders = new LinkedHashMap<>();
+    private final Map<String, ConnectionIncidentTableUpdater> connectionIncidentLoaders = new LinkedHashMap<>();
 
     /**
      * Creates an incident import queue service.
@@ -77,16 +78,40 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
         String connectionName = tableIncidentImportBatch.getConnection().getConnectionName();
 
         synchronized (this.connectionsLock) {
-            ConnectionIncidentLoader connectionIncidentLoader = this.connectionIncidentLoaders.get(connectionName);
-            if (connectionIncidentLoader == null) {
+            ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(connectionName);
+            if (connectionIncidentTableUpdater == null) {
                 // create and start a new connection incident loader
-                connectionIncidentLoader = new ConnectionIncidentLoader(connectionName, tableIncidentImportBatch);
-                connectionIncidentLoaders.put(connectionName, connectionIncidentLoader);
-                connectionIncidentLoader.start();
+                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(connectionName, tableIncidentImportBatch, null);
+                connectionIncidentLoaders.put(connectionName, connectionIncidentTableUpdater);
+                connectionIncidentTableUpdater.start();
             }
             else {
                 // append a new table to be loaded
-                connectionIncidentLoader.queueTableForImport(tableIncidentImportBatch);
+                connectionIncidentTableUpdater.queueTableForImport(tableIncidentImportBatch);
+            }
+        }
+    }
+
+    /**
+     * Sets a new incident status on an incident.
+     *
+     * @param incidentStatusChangeParameters Parameters of the incident whose status will be updated.
+     */
+    @Override
+    public void setIncidentStatus(IncidentStatusChangeParameters incidentStatusChangeParameters) {
+        String connectionName = incidentStatusChangeParameters.getConnectionName();
+
+        synchronized (this.connectionsLock) {
+            ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(connectionName);
+            if (connectionIncidentTableUpdater == null) {
+                // create and start a new connection incident loader
+                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(connectionName, null, incidentStatusChangeParameters);
+                connectionIncidentLoaders.put(connectionName, connectionIncidentTableUpdater);
+                connectionIncidentTableUpdater.start();
+            }
+            else {
+                // append a new status update to the queue
+                connectionIncidentTableUpdater.queueIncidentStatusChange(incidentStatusChangeParameters);
             }
         }
     }
@@ -94,8 +119,9 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
     /**
      * Class that manages a queue of loading incidents on a single connection level.
      */
-    public class ConnectionIncidentLoader {
-        private final Queue<TableIncidentImportBatch> tableIncidentsQueue = new LinkedList<>(); // access protected by the "lock" object from the parent class
+    public class ConnectionIncidentTableUpdater {
+        private final Queue<TableIncidentImportBatch> tableIncidentsQueue = new LinkedList<>();
+        private final Queue<IncidentStatusChangeParameters> statusChangeQueue = new LinkedList<>();
         private final Object loaderLock = new Object();
         private String connectionName;
         private IncidentsSnapshot incidentsSnapshot;
@@ -107,11 +133,19 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
         /**
          * Creates an incident loader queue for a named connection.
          * @param connectionName Target connection name.
+         * @param tableIncidentImportBatch Optional table incident import batch to be queued.
+         * @param incidentStatusChangeParameters Optional incident status change parameter to be queued.
          */
-        public ConnectionIncidentLoader(String connectionName,
-                                        TableIncidentImportBatch tableIncidentImportBatch) {
+        public ConnectionIncidentTableUpdater(String connectionName,
+                                              TableIncidentImportBatch tableIncidentImportBatch,
+                                              IncidentStatusChangeParameters incidentStatusChangeParameters) {
             this.connectionName = connectionName;
-            this.tableIncidentsQueue.add(tableIncidentImportBatch);
+            if (tableIncidentImportBatch != null) {
+                this.tableIncidentsQueue.add(tableIncidentImportBatch);
+            }
+            if (incidentStatusChangeParameters != null) {
+                this.statusChangeQueue.add(incidentStatusChangeParameters);
+            }
         }
 
         /**
@@ -122,6 +156,16 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
         public void queueTableForImport(TableIncidentImportBatch tableIncidentImportBatch) {
             synchronized (this.loaderLock) {
                 this.tableIncidentsQueue.add(tableIncidentImportBatch);
+            }
+        }
+
+        /**
+         * Queues an incident status change operation.
+         * @param incidentStatusChangeParameters Incident status change operation to be executed synchronously.
+         */
+        public void queueIncidentStatusChange(IncidentStatusChangeParameters incidentStatusChangeParameters) {
+            synchronized (this.loaderLock) {
+                this.statusChangeQueue.add(incidentStatusChangeParameters);
             }
         }
 
@@ -139,7 +183,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             try {
                 while (true) {
                     synchronized (connectionsLock) {
-                        if (this.tableIncidentsQueue.isEmpty()) {
+                        if (this.tableIncidentsQueue.isEmpty() && this.statusChangeQueue.isEmpty()) {
                             connectionIncidentLoaders.remove(connectionName);
                             return;
                         }
@@ -147,19 +191,34 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
 
                     while (true) { // processing multiple tables as a bigger multi-table batch, before flushing
                         TableIncidentImportBatch nextTableImportBatch;
+                        IncidentStatusChangeParameters incidentStatusChangeParameters = null;
 
                         synchronized (loaderLock) {
                             nextTableImportBatch = this.tableIncidentsQueue.poll();
                             if (nextTableImportBatch == null) {
-                                break; // flushing
+                                incidentStatusChangeParameters = this.statusChangeQueue.poll();
+                                if (incidentStatusChangeParameters == null) {
+                                    break; // flushing
+                                }
                             }
                         }
 
-                        List<IncidentNotificationMessage> newIncidentsNotificationMessages = importBatch(nextTableImportBatch);
-                        if (newIncidentsNotificationMessages != null) {
-                            // sending notifications
-                            incidentNotificationService.sendNotifications(newIncidentsNotificationMessages,
-                                    nextTableImportBatch.getConnection().getIncidentGrouping());
+                        if (nextTableImportBatch != null) {
+                            List<IncidentNotificationMessage> newIncidentsNotificationMessages = importBatch(nextTableImportBatch);
+                            if (newIncidentsNotificationMessages != null) {
+                                // sending notifications
+                                incidentNotificationService.sendNotifications(newIncidentsNotificationMessages,
+                                        nextTableImportBatch.getConnection().getIncidentGrouping());
+                            }
+                        }
+
+                        if (incidentStatusChangeParameters != null) {
+                            List<IncidentNotificationMessage> changedIncidentsNotificationMessages = changeIncidentStatus(incidentStatusChangeParameters);
+                            if (changedIncidentsNotificationMessages != null) {
+                                // sending notifications
+                                incidentNotificationService.sendNotifications(changedIncidentsNotificationMessages,
+                                        nextTableImportBatch.getConnection().getIncidentGrouping());
+                            }
                         }
                     }
 
@@ -239,12 +298,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                         executedAt.atOffset(ZoneOffset.UTC).toLocalDate());
                 if (newMonthsLoaded) {
                     this.allExistingIncidentRows = this.incidentsSnapshot.getAllData();
-                    if (this.allExistingIncidentRows != null) {
-                        this.existingIncidentByHashRowIndexes = findIncidentRowIndexes(this.allExistingIncidentRows);
-                    }
-                    else {
-                        this.existingIncidentByHashRowIndexes = new LinkedHashMap<>();
-                    }
+                    this.existingIncidentByHashRowIndexes = findIncidentRowIndexes(this.allExistingIncidentRows);
                 }
 
                 Integer newOrUpdatedIncidentRowIndex = this.newIncidentByHashRowIndexes.get(incidentHash);
@@ -395,6 +449,53 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             }
 
             return resultMap;
+        }
+
+        /**
+         * Updates an incident status. Sends notifications if the status is changed.
+         * @param incidentStatusChangeParameters Incident notification parameters with a new incident status.
+         * @return Incident notification message for an updated incident.
+         */
+        public IncidentNotificationMessage changeIncidentStatus(IncidentStatusChangeParameters incidentStatusChangeParameters) {
+            if (this.incidentsSnapshot == null) {
+                this.incidentsSnapshot = incidentsSnapshotFactory.createSnapshot(this.connectionName); // load previous snapshots
+                this.allNewIncidentRows = this.incidentsSnapshot.getTableDataChanges().getNewOrChangedRows();
+            }
+
+            LocalDate monthOfIncidentFirstSeen = LocalDate.of(incidentStatusChangeParameters.getFirstSeenYear(),
+                    incidentStatusChangeParameters.getFirstSeenMonth(), 1);
+            boolean newMonthsLoaded = this.incidentsSnapshot.ensureMonthsAreLoaded(monthOfIncidentFirstSeen, monthOfIncidentFirstSeen);;
+            if (newMonthsLoaded) {
+                this.allExistingIncidentRows = this.incidentsSnapshot.getAllData();
+                this.existingIncidentByHashRowIndexes = findIncidentRowIndexes(this.allExistingIncidentRows);
+            }
+
+            String newStatusString = incidentStatusChangeParameters.getNewIncidentStatus().name();
+            Selection newRowsIncidentIdSelection = this.allNewIncidentRows.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME)
+                    .isEqualTo(incidentStatusChangeParameters.getIncidentId());
+            if (!newRowsIncidentIdSelection.isEmpty()) {
+                // the updated row has other updates awaiting
+                int newRowIndex = newRowsIncidentIdSelection.get(0);
+                StringColumn newRowStatusColumn = this.allNewIncidentRows.stringColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
+                String currentStatus = newRowStatusColumn.get(newRowIndex);
+                if (!Objects.equals(currentStatus, newStatusString)) {
+                    newRowStatusColumn.set(newRowIndex, newStatusString);
+
+                    return IncidentNotificationMessage.fromIncidentRow(this.allNewIncidentRows.row(newRowIndex),
+                            incidentStatusChangeParameters.getConnectionName());
+                }
+            } else {
+                Selection existingRowsIncidentIdSelection = this.allExistingIncidentRows.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME)
+                        .isEqualTo(incidentStatusChangeParameters.getIncidentId());
+                if (existingRowsIncidentIdSelection.isEmpty()) {
+                    // incident not found
+                    return null;
+                }
+
+                int[] existingIncidentRowIndexes = existingRowsIncidentIdSelection.toArray();
+                this.allExistingIncidentRows.copyRowsToTable(existingIncidentRowIndexes, this.allNewIncidentRows);
+                this.newIncidentByHashRowIndexes.put(incidentHash, updatedIncidentRowIndex);
+            }
         }
     }
 }

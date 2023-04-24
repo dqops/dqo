@@ -29,4 +29,10 @@ public interface IncidentImportQueueService {
      * @param tableIncidentImportBatch Issues (failed data quality check results) detected on a single table that should be loaded to the incidents table.
      */
     void importTableIncidents(TableIncidentImportBatch tableIncidentImportBatch);
+
+    /**
+     * Sets a new incident status on an incident.
+     * @param incidentStatusChangeParameters Parameters of the incident whose status will be updated.
+     */
+    void setIncidentStatus(IncidentStatusChangeParameters incidentStatusChangeParameters);
 }
