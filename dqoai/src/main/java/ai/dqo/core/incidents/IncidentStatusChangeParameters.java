@@ -60,4 +60,19 @@ public class IncidentStatusChangeParameters {
      */
     @JsonPropertyDescription("New incident status to be assigned to an incident. Activates a new notification if a status is changed.")
     private IncidentStatus newIncidentStatus;
+
+    public IncidentStatusChangeParameters() {
+    }
+
+    public IncidentStatusChangeParameters(String connectionName,
+                                          int firstSeenYear,
+                                          int firstSeenMonth,
+                                          String incidentId,
+                                          IncidentStatus newIncidentStatus) {
+        this.connectionName = connectionName;
+        this.firstSeenYear = firstSeenYear;
+        this.firstSeenMonth = firstSeenMonth;
+        this.incidentId = incidentId;
+        this.newIncidentStatus = newIncidentStatus;
+    }
 }
