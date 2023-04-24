@@ -18,7 +18,6 @@ package ai.dqo.rest.controllers;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -34,7 +33,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -105,14 +103,14 @@ public class SchemasController {
      * @return Data quality checks templates on a requested schema.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/bulkenable/profiling")
-    @ApiOperation(value = "getSchemaProfilingTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate.class)
+    @ApiOperation(value = "getSchemaProfilingChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate.class),
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckTemplate>> getSchemaProfilingTemplates(
+    public ResponseEntity<Flux<CheckTemplate>> getSchemaProfilingChecksTemplates(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam(value = "Check target", required = false) @RequestParam(required = false) Optional<CheckTarget> checkTarget,
@@ -144,14 +142,14 @@ public class SchemasController {
      * @return Data quality checks templates on a requested schema.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/bulkenable/recurring/{timeScale}")
-    @ApiOperation(value = "getSchemaRecurringTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate.class)
+    @ApiOperation(value = "getSchemaRecurringChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate.class),
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckTemplate>> getSchemaRecurringTemplates(
+    public ResponseEntity<Flux<CheckTemplate>> getSchemaRecurringChecksTemplates(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
@@ -184,14 +182,14 @@ public class SchemasController {
      * @return Data quality checks templates on a requested schema.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/bulkenable/partitioned/{timeScale}")
-    @ApiOperation(value = "getSchemaPartitionedTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate.class)
+    @ApiOperation(value = "getSchemaPartitionedChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate.class),
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckTemplate>> getSchemaPartitionedTemplates(
+    public ResponseEntity<Flux<CheckTemplate>> getSchemaPartitionedChecksTemplates(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,

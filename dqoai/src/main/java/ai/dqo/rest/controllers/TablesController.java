@@ -1338,7 +1338,7 @@ public class TablesController {
      * @param checkName      (Optional) Filter on check name.
      * @return Data quality checks templates on a requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/bulkenable/partitioned/{timeScale}")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/partitioned/{timeScale}")
     @ApiOperation(value = "getTablePartitionedChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
