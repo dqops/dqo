@@ -25,6 +25,7 @@ import ai.dqo.metadata.incidents.IncidentGroupingLevel;
 import ai.dqo.metadata.incidents.IncidentGroupingSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.PhysicalTableName;
+import com.google.common.collect.Lists;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
@@ -213,10 +214,11 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                         }
 
                         if (incidentStatusChangeParameters != null) {
-                            List<IncidentNotificationMessage> changedIncidentsNotificationMessages = changeIncidentStatus(incidentStatusChangeParameters);
-                            if (changedIncidentsNotificationMessages != null) {
+                            IncidentNotificationMessage changedIncidentsNotificationMessage = changeIncidentStatus(incidentStatusChangeParameters);
+                            if (changedIncidentsNotificationMessage != null) {
                                 // sending notifications
-                                incidentNotificationService.sendNotifications(changedIncidentsNotificationMessages,
+                                ArrayList<IncidentNotificationMessage> statusChangeNotificationMessages = Lists.newArrayList(changedIncidentsNotificationMessage);
+                                incidentNotificationService.sendNotifications(statusChangeNotificationMessages,
                                         nextTableImportBatch.getConnection().getIncidentGrouping());
                             }
                         }
@@ -494,8 +496,10 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
 
                 int[] existingIncidentRowIndexes = existingRowsIncidentIdSelection.toArray();
                 this.allExistingIncidentRows.copyRowsToTable(existingIncidentRowIndexes, this.allNewIncidentRows);
-                this.newIncidentByHashRowIndexes.put(incidentHash, updatedIncidentRowIndex);
+//                this.newIncidentByHashRowIndexes.put(incidentHash, updatedIncidentRowIndex);
             }
+
+            return null;
         }
     }
 }
