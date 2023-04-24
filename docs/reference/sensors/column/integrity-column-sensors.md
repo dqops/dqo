@@ -5,7 +5,7 @@
 column/integrity/foreign_key_match_percent
 ```
 **Description**  
-Column level sensor that calculates the percentage of values that matches values in column of another table.
+Column level sensor that calculates the percentage of values that match values in column of another table.
 
 **Parameters**  
   
@@ -130,7 +130,7 @@ ___
 column/integrity/foreign_key_not_match_count
 ```
 **Description**  
-Column level sensor that calculates the count of values that does not matche values in column of another table.
+Column level sensor that calculates the count of values that does not match values in column of another table.
 
 **Parameters**  
   

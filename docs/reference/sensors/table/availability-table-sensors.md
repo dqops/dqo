@@ -5,7 +5,7 @@
 table/availability/table_availability
 ```
 **Description**  
-Tabular sensor that executes a row count query on a table.
+Table availability sensor that executes a row count query.
 
 
 

@@ -1277,7 +1277,7 @@ ___
 column/numeric/population_stddev
 ```
 **Description**  
-Column level sensor that counts negative values in a column.
+Column level sensor that counts population standard deviation of all values in a column.
 
 
 
