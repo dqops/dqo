@@ -29,7 +29,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level sensor that calculates the percentage of values that matches values in column of another table.
+ * Column level sensor that calculates the percentage of values that match values in column of another table.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
