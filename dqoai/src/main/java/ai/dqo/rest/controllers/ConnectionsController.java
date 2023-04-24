@@ -20,6 +20,7 @@ import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.incidents.IncidentGroupingSpec;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
@@ -54,7 +55,7 @@ import java.util.stream.Stream;
 @RestController
 @RequestMapping("/api/connections")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "Connections", description = "Connection management")
+@Api(value = "Connections", description = "Manages connections to monitored data sources")
 public class ConnectionsController {
     private final ConnectionService connectionService;
     private final UserHomeContextFactory userHomeContextFactory;
@@ -74,7 +75,7 @@ public class ConnectionsController {
      * @return List of connections.
      */
     @GetMapping
-    @ApiOperation(value = "getAllConnections", notes = "Returns a list of connection", response = ConnectionBasicModel[].class)
+    @ApiOperation(value = "getAllConnections", notes = "Returns a list of connections (data sources)", response = ConnectionBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = ConnectionBasicModel[].class),
@@ -280,6 +281,37 @@ public class ConnectionsController {
         DataStreamMappingSpec dataStreamsSpec = connectionSpec.getDefaultDataStreamMapping();
 
         return new ResponseEntity<>(Mono.justOrEmpty(dataStreamsSpec), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves the configuration of data quality incident grouping and incident notifications.
+     * @param connectionName Connection name.
+     * @return Incident grouping and notification settings.
+     */
+    @GetMapping("/{connectionName}/incidentgrouping")
+    @ApiOperation(value = "getConnectionIncidentGrouping", notes = "Retrieves the configuration of data quality incident grouping and incident notifications",
+            response = IncidentGroupingSpec.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Connection's incident grouping configuration returned", response = IncidentGroupingSpec.class),
+            @ApiResponse(code = 404, message = "Connection not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<IncidentGroupingSpec>> getConnectionIncidentGrouping(
+            @ApiParam("Connection name") @PathVariable String connectionName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+
+        IncidentGroupingSpec incidentGrouping = connectionSpec.getIncidentGrouping();
+
+        return new ResponseEntity<>(Mono.justOrEmpty(incidentGrouping), HttpStatus.OK); // 200
     }
 
     /**
@@ -660,6 +692,44 @@ public class ConnectionsController {
         }
         else {
             existingConnectionSpec.setDefaultDataStreamMapping(null);
+        }
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Updates the configuration of incident grouping and incident notifications.
+     * @param connectionName   Connection name.
+     * @param incidentGroupingSpec New configuration of the incident grouping.
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/incidentgrouping")
+    @ApiOperation(value = "updateConnectionIncidentGrouping", notes = "Updates (replaces) configuration of incident grouping and notifications on a connection (data source) level.")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Connection's incident configuration successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
+            @ApiResponse(code = 404, message = "Connection not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateConnectionIncidentGrouping(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Incident grouping and notification configuration") @RequestBody Optional<IncidentGroupingSpec> incidentGroupingSpec) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+        }
+
+        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
+        if (incidentGroupingSpec.isPresent()) {
+            existingConnectionSpec.setIncidentGrouping(incidentGroupingSpec.get());
+        } else {
+            existingConnectionSpec.setIncidentGrouping(null);
         }
         userHomeContext.flush();
 
