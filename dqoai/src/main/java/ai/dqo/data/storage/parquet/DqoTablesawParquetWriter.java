@@ -70,21 +70,19 @@ public class DqoTablesawParquetWriter extends TablesawParquetWriter {
                     .withConf(this.configuration)
                     .withCompressionCodec(CompressionCodecName.fromConf(options.getCompressionCodec().name()))
                     .withWriteMode(options.isOverwrite() ? ParquetFileWriter.Mode.OVERWRITE : ParquetFileWriter.Mode.CREATE)
+                    .withPageWriteChecksumEnabled(false)
                     .build()) {
-                final long start = System.currentTimeMillis();
+
                 for (final Row row : table) {
                     writer.write(row);
                 }
-                final long end = System.currentTimeMillis();
-//            log.debug("Finished writing {} rows to {} in {} ms",
-//                    table.rowCount(), options.getOutputFile(), (end - start));
             }
 
             File nioCurrentFile = java.nio.file.Path.of(options.getOutputFile()).toFile();
             if (nioCurrentFile.exists()) {
                 nioCurrentFile.delete();
             }
-            inMemoryFileSystem.copyToLocalFile(false, inMemoryParquetPath, new Path(options.getOutputFile()), false);
+            inMemoryFileSystem.copyToLocalFile(false, inMemoryParquetPath, new Path(options.getOutputFile()), true);
         }
         catch (IOException e) {
             throw new RuntimeIOException(e);

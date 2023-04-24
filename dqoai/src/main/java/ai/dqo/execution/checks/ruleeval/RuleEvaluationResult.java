@@ -32,6 +32,7 @@ public class RuleEvaluationResult {
     private final DoubleColumn actualValueColumn;
     private final DoubleColumn expectedValueColumn;
     private final IntColumn severityColumn;
+    private final LongColumn incidentHashColumn;
     private final BooleanColumn includeInKpiColumn;
     private final BooleanColumn includeInSlaColumn;
 
@@ -51,6 +52,7 @@ public class RuleEvaluationResult {
         this.actualValueColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         this.expectedValueColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
 		this.severityColumn = TableColumnUtility.getOrAddIntColumn(ruleResultsTable, CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+        this.incidentHashColumn = TableColumnUtility.getOrAddLongColumn(ruleResultsTable, CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME);
         this.includeInKpiColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME);
         this.includeInSlaColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME);
 		this.fatalLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME);
@@ -87,6 +89,14 @@ public class RuleEvaluationResult {
      */
     public IntColumn getSeverityColumn() {
         return severityColumn;
+    }
+
+    /**
+     * Returns the table_hash long column that stores a matching incident hash for failed data quality checks.
+     * @return table_hash column.
+     */
+    public LongColumn getIncidentHashColumn() {
+        return incidentHashColumn;
     }
 
     /**

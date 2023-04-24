@@ -5,4 +5,4 @@
   \__,_|  \__, |  \___/  (_)  \__,_| |_|
              |_|
 
- :: DQO.AI Data Quality Observer ::    (v0.1.0)
+ :: DQO.AI Data Quality Observer ::    (v0.2.0-alpha0)

@@ -1,11 +1,11 @@
 /*
- * Copyright © 2023 DQO.ai (support@dqo.ai)
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ai.dqo.data.storage;
 
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -60,15 +59,13 @@ public class HivePartitionPathUtility {
         stringBuilder.append('/');
 
         PhysicalTableName tableName = partitionId.getTableName();
-        if (tableName == null) {
-            return stringBuilder.toString();
+        if (tableName != null) {
+            stringBuilder.append(ParquetPartitioningKeys.TARGET);
+            stringBuilder.append('=');
+            String encodedTable = URLEncoder.encode(tableName.toString(), StandardCharsets.UTF_8);
+            stringBuilder.append(encodedTable);
+            stringBuilder.append('/');
         }
-
-        stringBuilder.append(ParquetPartitioningKeys.TARGET);
-        stringBuilder.append('=');
-        String encodedTable = URLEncoder.encode(tableName.toString(), StandardCharsets.UTF_8);
-        stringBuilder.append(encodedTable);
-        stringBuilder.append('/');
 
         LocalDate month = partitionId.getMonth();
         if (month == null) {

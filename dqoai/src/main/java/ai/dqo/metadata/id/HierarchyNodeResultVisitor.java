@@ -23,6 +23,7 @@ import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
 import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.checks.table.recurring.TableRecurringSpec;
+import ai.dqo.metadata.incidents.IncidentGroupingSpec;
 import ai.dqo.metadata.comments.CommentSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.dashboards.*;
@@ -43,7 +44,7 @@ import ai.dqo.metadata.groupings.DataStreamLevelSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.notifications.NotificationSettingsSpec;
+import ai.dqo.metadata.incidents.IncidentWebhookNotificationsSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.metadata.settings.SettingsSpec;
@@ -464,14 +465,6 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(AbstractRootStatisticsCollectorsContainerSpec rootProfilerContainerSpec, P parameter);
 
     /**
-     * Accepts a notification settings object.
-     * @param notificationSettingsSpec Notification settings.
-     * @param parameter Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(NotificationSettingsSpec notificationSettingsSpec, P parameter);
-
-    /**
      * Accepts a dashboard configuration object.
      * @param dashboardSpec Dashboard configuration.
      * @param parameter Additional visitor's parameter.
@@ -558,4 +551,20 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(CheckDefinitionListImpl checkDefinitionWrappers, P parameter);
+
+    /**
+     * Accepts an incident grouping configuration.
+     * @param incidentGroupingSpec Incident grouping configuration.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(IncidentGroupingSpec incidentGroupingSpec, P parameter);
+
+    /**
+     * Accepts an incident notifications using webhooks configuration.
+     * @param incidentWebhookNotificationsSpec Webhooks for incident notifications.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(IncidentWebhookNotificationsSpec incidentWebhookNotificationsSpec, P parameter);
 }

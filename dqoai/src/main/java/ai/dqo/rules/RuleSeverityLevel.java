@@ -32,4 +32,25 @@ public enum RuleSeverityLevel {
     RuleSeverityLevel(int level) {
         this.level = level;
     }
+
+    /**
+     * Creates a rule severity level from a numeric severity level.
+     * @param severity Rule severity level.
+     * @return Severity level enum instance.
+     */
+    public static RuleSeverityLevel fromSeverityLevel(int severity) {
+        switch (severity) {
+            case 0:
+                return none;
+            case 1:
+                return warning;
+            case 2:
+                return error;
+            case 3:
+                return fatal;
+
+            default:
+                throw new IllegalArgumentException("Invalid severity level: " + severity);
+        }
+    }
 }

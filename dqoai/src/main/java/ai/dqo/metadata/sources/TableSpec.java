@@ -95,6 +95,10 @@ public class TableSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String stage;
 
+    @JsonPropertyDescription("Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer priority;
+
     @JsonPropertyDescription("SQL WHERE clause added to the sensor queries. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String filter;
@@ -189,6 +193,23 @@ public class TableSpec extends AbstractSpec {
     public void setStage(String stage) {
 		setDirtyIf(!Objects.equals(this.stage, stage));
         this.stage = stage;
+    }
+
+    /**
+     * Returns the table priority level for grouping of data quality issues by the importance of tables.
+     * @return Table priority.
+     */
+    public Integer getPriority() {
+        return priority;
+    }
+
+    /**
+     * Sets the table priority used for grouping data quality issues per table priority.
+     * @param priority New table priority.
+     */
+    public void setPriority(Integer priority) {
+        setDirtyIf(!Objects.equals(this.priority, priority));
+        this.priority = priority;
     }
 
     /**

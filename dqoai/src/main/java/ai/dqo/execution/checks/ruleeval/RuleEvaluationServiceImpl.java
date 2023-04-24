@@ -29,6 +29,7 @@ import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindService;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.incidents.IncidentGroupingSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.HistoricDataPointsGrouping;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
@@ -247,6 +248,24 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
 
                 if (highestSeverity == null) {
                     highestSeverity = 0; // no alert
+                }
+
+                IncidentGroupingSpec incidentGrouping = sensorRunParameters.getConnection().getIncidentGrouping();
+                if (incidentGrouping != null && !incidentGrouping.isDisabled() &&
+                        highestSeverity >= incidentGrouping.getMinimumSeverity().getSeverityLevel()) {
+                    String dataStreamName = !normalizedSensorResults.getDataStreamNameColumn().isMissing(allSensorResultsRowIndex) ?
+                            normalizedSensorResults.getDataStreamNameColumn().get(allSensorResultsRowIndex) : null;
+                    String qualityDimension = !normalizedSensorResults.getQualityDimensionColumn().isMissing(allSensorResultsRowIndex) ?
+                            normalizedSensorResults.getQualityDimensionColumn().get(allSensorResultsRowIndex) : null;
+                    String checkCategory = !normalizedSensorResults.getCheckCategoryColumn().isMissing(allSensorResultsRowIndex) ?
+                            normalizedSensorResults.getCheckCategoryColumn().get(allSensorResultsRowIndex) : null;
+                    String checkType = !normalizedSensorResults.getCheckTypeColumn().isMissing(allSensorResultsRowIndex) ?
+                            normalizedSensorResults.getCheckTypeColumn().get(allSensorResultsRowIndex) : null;
+                    String checkName = checkSpec.getCheckName();
+                    long incidentHash = incidentGrouping.calculateIncidentHash(sensorRunParameters.getConnection().getConnectionName(),
+                            sensorRunParameters.getTable().getPhysicalTableName(),
+                            dataStreamName, qualityDimension, checkCategory, checkType, checkName);
+                    result.getIncidentHashColumn().set(targetRowIndex, incidentHash);
                 }
 
                 result.getSeverityColumn().set(targetRowIndex, highestSeverity);
