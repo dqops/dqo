@@ -132,6 +132,12 @@ public class IncidentNotificationMessage {
     private int failedChecksCount;
 
     /**
+     * The link (url) to a ticket in an external system that is tracking this incident.
+     */
+    @JsonPropertyDescription("The link (url) to a ticket in an external system that is tracking this incident.")
+    public String issueUrl;
+
+    /**
      * Incident status.
      */
     @JsonPropertyDescription("Incident status.")
@@ -170,6 +176,9 @@ public class IncidentNotificationMessage {
         }
         if (!incidentRow.isMissing(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME)) {
             message.setCheckName(incidentRow.getString(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME));
+        }
+        if (!incidentRow.isMissing(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME)) {
+            message.setIssueUrl(incidentRow.getString(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME));
         }
         message.setHighestSeverity(incidentRow.getInt(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME));
         message.setFailedChecksCount(incidentRow.getInt(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME));

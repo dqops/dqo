@@ -16,6 +16,7 @@
 
 package ai.dqo.data.incidents.services;
 
+import ai.dqo.data.incidents.services.models.IncidentListFilterParameters;
 import ai.dqo.data.incidents.services.models.IncidentModel;
 
 import java.util.Collection;

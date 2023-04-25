@@ -17,11 +17,14 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.core.incidents.IncidentImportQueueService;
+import ai.dqo.core.incidents.IncidentIssueUrlChangeParameters;
 import ai.dqo.core.incidents.IncidentStatusChangeParameters;
 import ai.dqo.data.incidents.factory.IncidentStatus;
-import ai.dqo.data.incidents.services.IncidentListFilterParameters;
+import ai.dqo.data.incidents.services.models.IncidentListFilterParameters;
 import ai.dqo.data.incidents.services.IncidentsDataService;
 import ai.dqo.data.incidents.services.models.IncidentModel;
+import ai.dqo.data.incidents.services.models.IncidentSortDirection;
+import ai.dqo.data.incidents.services.models.IncidentSortOrder;
 import ai.dqo.rest.models.metadata.ConnectionModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import io.swagger.annotations.*;
@@ -92,7 +95,15 @@ public class IncidentsController {
      * Finds recent data quality incidents on a connection.
      * @param connectionName Connection name.
      * @param recentMonths Optional number of months to look back.
-     * @param includeClosed Include also muted and resolved incidents.
+     * @param open Return open incidents.
+     * @param acknowledged Return acknowledged incidents.
+     * @param resolved Return resolved incidents.
+     * @param muted Return muted incidents.
+     * @param filter Additional filter.
+     * @param limit Page size.
+     * @param page Page number.
+     * @param order Sort order.
+     * @param direction Sort direction.
      * @return List of incidents.
      */
     @GetMapping("/{connectionName}")
@@ -107,20 +118,45 @@ public class IncidentsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam(name = "Number of recent months to load, the default is 3 months", required = false)
                 @PathVariable(required = false) Optional<Integer> recentMonths,
-            @ApiParam(name = "Also includes closed (resolved or muted) incidents, by default only open and assigned incidents are returned", required = false)
-                @PathVariable(required = false) Optional<Boolean> includeClosed,
+            @ApiParam(name = "Returns open incidents, when the parameter is missing, the default value is true", required = false)
+                @PathVariable(required = false) Optional<Boolean> open,
+            @ApiParam(name = "Returns acknowledged incidents, when the parameter is missing, the default value is true", required = false)
+                @PathVariable(required = false) Optional<Boolean> acknowledged,
+            @ApiParam(name = "Returns resolved incidents, when the parameter is missing, the default value is false", required = false)
+                @PathVariable(required = false) Optional<Boolean> resolved,
+            @ApiParam(name = "Returns muted incidents, when the parameter is missing, the default value is false", required = false)
+                @PathVariable(required = false) Optional<Boolean> muted,
             @ApiParam(name = "Page number, the first page is 1", required = false)
                 @PathVariable(required = false) Optional<Integer> page,
             @ApiParam(name = "Page size, the default is 50 rows", required = false)
-                @PathVariable(required = false) Optional<Integer> limit) {
+                @PathVariable(required = false) Optional<Integer> limit,
+            @ApiParam(name = "Optional filter", required = false)
+                @PathVariable(required = false) Optional<String> filter,
+            @ApiParam(name = "Optional sort order, the default sort order is by the number of failed data quality checks", required = false)
+                @PathVariable(required = false) Optional<IncidentSortOrder> order,
+            @ApiParam(name = "Optional sort direction, the default sort direction is ascending", required = false)
+               @PathVariable(required = false) Optional<IncidentSortDirection> direction) {
         IncidentListFilterParameters filterParameters = new IncidentListFilterParameters();
         filterParameters.setRecentMonths(recentMonths.orElse(3));
-        filterParameters.setLoadResolvedAndMutedIncidents(includeClosed.orElse(Boolean.FALSE));
+        filterParameters.setOpen(open.orElse(Boolean.TRUE));
+        filterParameters.setAcknowledged(acknowledged.orElse(Boolean.TRUE));
+        filterParameters.setResolved(resolved.orElse(Boolean.FALSE));
+        filterParameters.setMuted(muted.orElse(Boolean.FALSE));
+
         if (page.isPresent()) {
             filterParameters.setPage(page.get());
         }
         if (limit.isPresent()) {
             filterParameters.setLimit(limit.get());
+        }
+        if (filter.isPresent()) {
+            filterParameters.setFilter(filter.get());
+        }
+        if (order.isPresent()) {
+            filterParameters.setOrder(order.get());
+        }
+        if (direction.isPresent()) {
+            filterParameters.setSortDirection(direction.get());
         }
 
         Collection<IncidentModel> incidentModels = this.incidentsDataService.loadRecentIncidentsOnConnection(connectionName, filterParameters);
@@ -140,8 +176,8 @@ public class IncidentsController {
      * @param status New incident status to set.
      * @return None.
      */
-    @PostMapping("/{connectionName}/{year}/{month}/{incidentId}")
-    @ApiOperation(value = "setIncidentStatus", notes = "Changes the incident status to a new status.")
+    @PostMapping("/{connectionName}/{year}/{month}/{incidentId}/status")
+    @ApiOperation(value = "setIncidentStatus", notes = "Changes the incident's status to a new status.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Data quality incident's status successfully updated"),
@@ -157,6 +193,36 @@ public class IncidentsController {
                 @PathVariable(required = true) IncidentStatus status) {
         IncidentStatusChangeParameters incidentStatusChangeParameters = new IncidentStatusChangeParameters(connectionName, year, month, incidentId, status);
         this.incidentImportQueueService.setIncidentStatus(incidentStatusChangeParameters); // operation performed in the background, no result is returned
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Updates the issueUrl of a single data quality incident.
+     * @param connectionName Connection name.
+     * @param year Year when the incident was first seen.
+     * @param month Month when the incident was first seen.
+     * @param incidentId Incident id.
+     * @param issueUrl New incident's issueUrl to set.
+     * @return None.
+     */
+    @PostMapping("/{connectionName}/{year}/{month}/{incidentId}/issueurl")
+    @ApiOperation(value = "setIncidentIssueUrl", notes = "Changes the incident's issueUrl to a new status.")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Data quality incident's issueUrl successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> setIncidentIssueUrl(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Year when the incident was first seen") @PathVariable int year,
+            @ApiParam("Month when the incident was first seen") @PathVariable int month,
+            @ApiParam("Incident id") @PathVariable String incidentId,
+            @ApiParam(name = "New incident's issueUrl", required = true)
+            @PathVariable(required = true) String issueUrl) {
+        IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters = new IncidentIssueUrlChangeParameters(connectionName, year, month, incidentId, issueUrl);
+        this.incidentImportQueueService.setIncidentIssueUrl(incidentIssueUrlChangeParameters); // operation performed in the background, no result is returned
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }

@@ -18,6 +18,7 @@ package ai.dqo.data.incidents.services.models;
 
 import ai.dqo.data.incidents.factory.IncidentStatus;
 import ai.dqo.data.incidents.factory.IncidentsColumnNames;
+import ai.dqo.metadata.search.StringPatternComparer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -27,6 +28,8 @@ import tech.tablesaw.api.Row;
 
 import java.time.Instant;
 import java.time.temporal.ChronoField;
+import java.util.Comparator;
+import java.util.NoSuchElementException;
 
 /**
  * Data quality incident model shown on an incident details screen.
@@ -144,6 +147,12 @@ public class IncidentModel {
     private int failedChecksCount;
 
     /**
+     * The link (url) to a ticket in an external system that is tracking this incident.
+     */
+    @JsonPropertyDescription("The link (url) to a ticket in an external system that is tracking this incident.")
+    public String issueUrl;
+
+    /**
      * Incident status.
      */
     @JsonPropertyDescription("Incident status.")
@@ -186,10 +195,60 @@ public class IncidentModel {
         if (!incidentRow.isMissing(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME)) {
             model.setCheckName(incidentRow.getString(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME));
         }
+        if (!incidentRow.isMissing(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME)) {
+            model.setIssueUrl(incidentRow.getString(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME));
+        }
         model.setHighestSeverity(incidentRow.getInt(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME));
         model.setFailedChecksCount(incidentRow.getInt(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME));
         model.setStatus(IncidentStatus.valueOf(incidentRow.getString(IncidentsColumnNames.STATUS_COLUMN_NAME)));
 
         return model;
+    }
+
+    /**
+     * Checks if any filtered field name matches a pattern.
+     * @param filter Filter pattern.
+     * @return True when the incident matches a pattern.
+     */
+    public boolean matchesFilter(String filter) {
+        return StringPatternComparer.matchSearchPattern(this.incidentId, filter) ||
+                StringPatternComparer.matchSearchPattern(this.schema, filter) ||
+                StringPatternComparer.matchSearchPattern(this.table, filter) ||
+                StringPatternComparer.matchSearchPattern(this.dataStreamName, filter) ||
+                StringPatternComparer.matchSearchPattern(this.qualityDimension, filter) ||
+                StringPatternComparer.matchSearchPattern(this.checkCategory, filter) ||
+                StringPatternComparer.matchSearchPattern(this.checkType, filter) ||
+                StringPatternComparer.matchSearchPattern(this.checkName, filter) ||
+                StringPatternComparer.matchSearchPattern(this.issueUrl, filter);
+    }
+
+    /**
+     * Creates a comparator for a chosen field.
+     * @param sortOrder Sort order.
+     * @return Comparator instance.
+     */
+    public static Comparator<IncidentModel> makeSortComparator(IncidentSortOrder sortOrder) {
+        switch (sortOrder) {
+            case table:
+                return Comparator.comparing(o -> o.table);
+            case tablePriority:
+                return Comparator.comparing(o -> o.tablePriority);
+            case firstSeen:
+                return Comparator.comparing(o -> o.firstSeen);
+            case lastSeen:
+                return Comparator.comparing(o -> o.lastSeen);
+            case dataStreamName:
+                return Comparator.comparing(o -> o.dataStreamName);
+            case qualityDimension:
+                return Comparator.comparing(o -> o.qualityDimension);
+            case checkName:
+                return Comparator.comparing(o -> o.checkName);
+            case highestSeverity:
+                return Comparator.comparing(o -> o.highestSeverity);
+            case failedChecksCount:
+                return Comparator.comparing(o -> o.failedChecksCount);
+            default:
+                throw new NoSuchElementException("Unsupported sort order on: " + sortOrder);
+        }
     }
 }

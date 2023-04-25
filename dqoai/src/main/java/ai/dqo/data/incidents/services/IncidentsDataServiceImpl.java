@@ -17,11 +17,14 @@ package ai.dqo.data.incidents.services;
 
 import ai.dqo.data.incidents.factory.IncidentStatus;
 import ai.dqo.data.incidents.factory.IncidentsColumnNames;
+import ai.dqo.data.incidents.services.models.IncidentListFilterParameters;
 import ai.dqo.data.incidents.services.models.IncidentModel;
+import ai.dqo.data.incidents.services.models.IncidentSortDirection;
 import ai.dqo.data.incidents.snapshot.IncidentsSnapshot;
 import ai.dqo.data.incidents.snapshot.IncidentsSnapshotFactory;
 import ai.dqo.data.storage.LoadedMonthlyPartition;
 import ai.dqo.data.storage.ParquetPartitionId;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
@@ -30,9 +33,7 @@ import tech.tablesaw.selection.Selection;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Data quality incident management service. Supports reading incidents from parquet tables.
@@ -66,10 +67,6 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
             return new ArrayList<>(); // no results
         }
 
-        int currentRowIndex = 0;
-        int startRowIndexInPage = (filterParameters.getPage() - 1) + filterParameters.getLimit();
-        int untilRowIndexInPage = filterParameters.getPage() + filterParameters.getLimit();
-
         ArrayList<IncidentModel> incidentModels = new ArrayList<>();
         Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = incidentsSnapshot.getLoadedMonthlyPartitions();
         for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> partitionEntry : loadedMonthlyPartitions.entrySet()) {
@@ -94,6 +91,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
             StringColumn checkNameColumn = partitionTable.stringColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME);
             IntColumn highestSeverityColumn = partitionTable.intColumn(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME);
             IntColumn failedChecksCountColumn = partitionTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME);
+            StringColumn issueUrlColumn = partitionTable.stringColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
             StringColumn statusColumn = partitionTable.stringColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
 
             int partitionYear = partitionEntry.getKey().getMonth().getYear();
@@ -104,18 +102,8 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 String status = statusColumn.get(rowIndex);
                 IncidentStatus incidentStatus = IncidentStatus.valueOf(status);
 
-                if (!filterParameters.isLoadResolvedAndMutedIncidents() &&
-                        (incidentStatus == IncidentStatus.resolved || incidentStatus == IncidentStatus.muted)) {
+                if (!filterParameters.isIncidentStatusEnabled(incidentStatus)) {
                     continue; // skipping
-                }
-
-                currentRowIndex++;
-                if (currentRowIndex < startRowIndexInPage) {
-                    continue;
-                }
-
-                if (currentRowIndex > untilRowIndexInPage) {
-                    break;
                 }
 
                 IncidentModel incidentModel = new IncidentModel();
@@ -148,18 +136,39 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 if (!checkNameColumn.isMissing(rowIndex)) {
                     incidentModel.setCheckName(checkNameColumn.get(rowIndex));
                 }
+                if (!issueUrlColumn.isMissing(rowIndex)) {
+                    incidentModel.setIssueUrl(issueUrlColumn.get(rowIndex));
+                }
                 incidentModel.setHighestSeverity(highestSeverityColumn.get(rowIndex));
                 incidentModel.setFailedChecksCount(failedChecksCountColumn.get(rowIndex));
                 incidentModel.setStatus(incidentStatus);
-                incidentModels.add(incidentModel);
-            }
 
-            if (currentRowIndex >= untilRowIndexInPage) {
-                break; // no need to scan another partition file
+                if (!Strings.isNullOrEmpty(filterParameters.getFilter()) &&
+                     !incidentModel.matchesFilter(filterParameters.getFilter())) {
+                    continue;
+                }
+
+                incidentModels.add(incidentModel);
             }
         }
 
-        return incidentModels;
+        Comparator<IncidentModel> sortComparator = IncidentModel.makeSortComparator(filterParameters.getOrder());
+        if (filterParameters.getSortDirection() == IncidentSortDirection.asc) {
+            incidentModels.sort(sortComparator);
+        }
+        else {
+            incidentModels.sort(sortComparator.reversed());
+        }
+
+        int startRowIndexInPage = (filterParameters.getPage() - 1) * filterParameters.getLimit();
+        int untilRowIndexInPage = filterParameters.getPage() * filterParameters.getLimit();
+
+        if (startRowIndexInPage >= incidentModels.size()) {
+            return new ArrayList<>(); // no results
+        }
+
+        List<IncidentModel> pageResults = incidentModels.subList(startRowIndexInPage, Math.min(untilRowIndexInPage, incidentModels.size()));
+        return pageResults;
     }
 
     /**

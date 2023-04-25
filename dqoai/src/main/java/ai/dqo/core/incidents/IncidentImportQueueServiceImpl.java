@@ -82,7 +82,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(connectionName);
             if (connectionIncidentTableUpdater == null) {
                 // create and start a new connection incident loader
-                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(connectionName, tableIncidentImportBatch, null);
+                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(connectionName, tableIncidentImportBatch, null, null);
                 connectionIncidentLoaders.put(connectionName, connectionIncidentTableUpdater);
                 connectionIncidentTableUpdater.start();
             }
@@ -106,7 +106,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(connectionName);
             if (connectionIncidentTableUpdater == null) {
                 // create and start a new connection incident loader
-                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(connectionName, null, incidentStatusChangeParameters);
+                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(connectionName, null, incidentStatusChangeParameters, null);
                 connectionIncidentLoaders.put(connectionName, connectionIncidentTableUpdater);
                 connectionIncidentTableUpdater.start();
             }
@@ -118,11 +118,36 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
     }
 
     /**
+     * Sets a new incident issueUrl on an incident.
+     *
+     * @param incidentIssueUrlChangeParameters Parameters of the incident whose issueUrl will be updated.
+     */
+    @Override
+    public void setIncidentIssueUrl(IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters) {
+        String connectionName = incidentIssueUrlChangeParameters.getConnectionName();
+
+        synchronized (this.connectionsLock) {
+            ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(connectionName);
+            if (connectionIncidentTableUpdater == null) {
+                // create and start a new connection incident loader
+                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(connectionName, null, null, incidentIssueUrlChangeParameters);
+                connectionIncidentLoaders.put(connectionName, connectionIncidentTableUpdater);
+                connectionIncidentTableUpdater.start();
+            }
+            else {
+                // append a new status update to the queue
+                connectionIncidentTableUpdater.queueIncidentIssueUrlChange(incidentIssueUrlChangeParameters);
+            }
+        }
+    }
+
+    /**
      * Class that manages a queue of loading incidents on a single connection level.
      */
     public class ConnectionIncidentTableUpdater {
         private final Queue<TableIncidentImportBatch> tableIncidentsQueue = new LinkedList<>();
         private final Queue<IncidentStatusChangeParameters> statusChangeQueue = new LinkedList<>();
+        private final Queue<IncidentIssueUrlChangeParameters> issueUrlChangeQueue = new LinkedList<>();
         private final Object loaderLock = new Object();
         private String connectionName;
         private IncidentsSnapshot incidentsSnapshot;
@@ -136,16 +161,21 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
          * @param connectionName Target connection name.
          * @param tableIncidentImportBatch Optional table incident import batch to be queued.
          * @param incidentStatusChangeParameters Optional incident status change parameter to be queued.
+         * @param incidentIssueUrlChangeParameters Optional incident issueUrl change parameter to be queued.
          */
         public ConnectionIncidentTableUpdater(String connectionName,
                                               TableIncidentImportBatch tableIncidentImportBatch,
-                                              IncidentStatusChangeParameters incidentStatusChangeParameters) {
+                                              IncidentStatusChangeParameters incidentStatusChangeParameters,
+                                              IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters) {
             this.connectionName = connectionName;
             if (tableIncidentImportBatch != null) {
                 this.tableIncidentsQueue.add(tableIncidentImportBatch);
             }
             if (incidentStatusChangeParameters != null) {
                 this.statusChangeQueue.add(incidentStatusChangeParameters);
+            }
+            if (incidentIssueUrlChangeParameters != null) {
+                this.issueUrlChangeQueue.add(incidentIssueUrlChangeParameters);
             }
         }
 
@@ -171,6 +201,16 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
         }
 
         /**
+         * Queues an incident issueUrl change operation.
+         * @param incidentIssueUrlChangeParameters Incident status change operation to be executed synchronously.
+         */
+        public void queueIncidentIssueUrlChange(IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters) {
+            synchronized (this.loaderLock) {
+                this.issueUrlChangeQueue.add(incidentIssueUrlChangeParameters);
+            }
+        }
+
+        /**
          * Starts a background incident loader on a connection level.
          */
         public void start() {
@@ -184,7 +224,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             try {
                 while (true) {
                     synchronized (connectionsLock) {
-                        if (this.tableIncidentsQueue.isEmpty() && this.statusChangeQueue.isEmpty()) {
+                        if (this.tableIncidentsQueue.isEmpty() && this.statusChangeQueue.isEmpty() && this.issueUrlChangeQueue.isEmpty()) {
                             connectionIncidentLoaders.remove(connectionName);
                             return;
                         }
@@ -193,13 +233,17 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     while (true) { // processing multiple tables as a bigger multi-table batch, before flushing
                         TableIncidentImportBatch nextTableImportBatch;
                         IncidentStatusChangeParameters incidentStatusChangeParameters = null;
+                        IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters = null;
 
                         synchronized (loaderLock) {
                             nextTableImportBatch = this.tableIncidentsQueue.poll();
                             if (nextTableImportBatch == null) {
                                 incidentStatusChangeParameters = this.statusChangeQueue.poll();
                                 if (incidentStatusChangeParameters == null) {
-                                    break; // flushing
+                                    incidentIssueUrlChangeParameters = this.issueUrlChangeQueue.poll();
+                                    if (incidentIssueUrlChangeParameters == null) {
+                                        break; // flushing
+                                    }
                                 }
                             }
                         }
@@ -221,6 +265,11 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                                 incidentNotificationService.sendNotifications(statusChangeNotificationMessages,
                                         nextTableImportBatch.getConnection().getIncidentGrouping());
                             }
+                        }
+
+                        if (incidentIssueUrlChangeParameters != null) {
+                            changeIncidentIssueUrl(incidentIssueUrlChangeParameters);
+                            // no notification
                         }
                     }
 
@@ -545,6 +594,63 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             }
 
             return null;
+        }
+
+        /**
+         * Updates an incident issueUrl.
+         * @param incidentIssueUrlChangeParameters Incident change parameters with a new incident issueUrl.
+         */
+        public void changeIncidentIssueUrl(IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters) {
+            if (this.incidentsSnapshot == null) {
+                this.incidentsSnapshot = incidentsSnapshotFactory.createSnapshot(this.connectionName); // load previous snapshots
+                this.allNewIncidentRows = this.incidentsSnapshot.getTableDataChanges().getNewOrChangedRows();
+            }
+
+            if (this.newIncidentByHashRowIndexes == null) {
+                this.newIncidentByHashRowIndexes = new LinkedHashMap<>();
+            }
+
+            LocalDate monthOfIncidentFirstSeen = LocalDate.of(incidentIssueUrlChangeParameters.getFirstSeenYear(),
+                    incidentIssueUrlChangeParameters.getFirstSeenMonth(), 1);
+            boolean newMonthsLoaded = this.incidentsSnapshot.ensureMonthsAreLoaded(monthOfIncidentFirstSeen, monthOfIncidentFirstSeen);;
+            if (newMonthsLoaded) {
+                this.allExistingIncidentRows = this.incidentsSnapshot.getAllData();
+                this.existingIncidentByHashRowIndexes = findIncidentRowIndexes(this.allExistingIncidentRows);
+            }
+
+            Selection newRowsIncidentIdSelection = this.allNewIncidentRows.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME)
+                    .isEqualTo(incidentIssueUrlChangeParameters.getIncidentId());
+            if (!newRowsIncidentIdSelection.isEmpty()) {
+                // the updated row has other updates awaiting
+                int newRowIndex = newRowsIncidentIdSelection.get(0);
+                StringColumn newRowIssueUrlColumn = this.allNewIncidentRows.stringColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
+                newRowIssueUrlColumn.set(newRowIndex, incidentIssueUrlChangeParameters.getNewIssueUrl());
+            } else if (this.allExistingIncidentRows != null) {
+                Selection existingRowsIncidentIdSelection = this.allExistingIncidentRows.stringColumn(IncidentsColumnNames.ID_COLUMN_NAME)
+                        .isEqualTo(incidentIssueUrlChangeParameters.getIncidentId());
+                if (existingRowsIncidentIdSelection.isEmpty()) {
+                    // incident not found, skipping because changing the status is a background async operation that is not returning the result
+                    return;
+                }
+
+                int[] existingIncidentRowIndexes = existingRowsIncidentIdSelection.toArray();
+                assert existingIncidentRowIndexes.length == 1;
+                int targetNewIncidentsRowIndex = this.allNewIncidentRows.rowCount();
+                this.allNewIncidentRows.addRow(existingIncidentRowIndexes[0], this.allExistingIncidentRows);
+                Long incidentHash = this.allNewIncidentRows.longColumn(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME)
+                        .get(targetNewIncidentsRowIndex);
+
+                IntArrayList newRowIndexes = this.newIncidentByHashRowIndexes.get(incidentHash);
+                if (newRowIndexes != null) {
+                    newRowIndexes.add(targetNewIncidentsRowIndex);
+                }
+                else {
+                    this.newIncidentByHashRowIndexes.put(incidentHash, new IntArrayList(new int[] { targetNewIncidentsRowIndex }));
+                }
+
+                StringColumn newRowIssueUrlColumn = this.allNewIncidentRows.stringColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
+                newRowIssueUrlColumn.set(targetNewIncidentsRowIndex, incidentIssueUrlChangeParameters.getNewIssueUrl());
+            }
         }
     }
 }

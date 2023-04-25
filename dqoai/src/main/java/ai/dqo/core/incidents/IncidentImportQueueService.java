@@ -35,4 +35,11 @@ public interface IncidentImportQueueService {
      * @param incidentStatusChangeParameters Parameters of the incident whose status will be updated.
      */
     void setIncidentStatus(IncidentStatusChangeParameters incidentStatusChangeParameters);
+
+    /**
+     * Sets a new incident issueUrl on an incident.
+     *
+     * @param incidentIssueUrlChangeParameters Parameters of the incident whose issueUrl will be updated.
+     */
+    void setIncidentIssueUrl(IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters);
 }
