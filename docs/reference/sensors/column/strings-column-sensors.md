@@ -506,7 +506,7 @@ ___
 column/strings/string_empty_count
 ```
 **Description**  
-Column level sensor that calculates the number of rows with an empty string column value.
+Column level sensor that calculates the number of rows with an empty string.
 
 
 
@@ -663,7 +663,7 @@ ___
 column/strings/string_empty_percent
 ```
 **Description**  
-Column level sensor that calculates the percentage of rows with an empty string column value.
+Column level sensor that calculates the percentage of rows with an empty string.
 
 
 
@@ -835,7 +835,7 @@ ___
 column/strings/string_in_set_count
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null column value.
+Column level sensor that calculates the number of strings from a set in a column does not exceed the minimum accepted count.
 
 **Parameters**  
   
@@ -1056,7 +1056,7 @@ ___
 column/strings/string_in_set_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null column value.
+Column level sensor that calculates the percent of strings from a set in a column does not exceed the minimum accepted percentage.
 
 **Parameters**  
   
@@ -2388,7 +2388,7 @@ ___
 column/strings/string_length_in_range_percent
 ```
 **Description**  
-Column level sensor that calculates the percent of non-negative values in a column.
+Column level sensor that calculates percentage of strings with a length below the indicated length in a column.
 
 **Parameters**  
   
@@ -3055,7 +3055,7 @@ ___
 column/strings/string_max_length
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null column value.
+Column level sensor that ensures that the length of string in a column does not exceed the maximum accepted length.
 
 
 
@@ -3187,7 +3187,7 @@ ___
 column/strings/string_mean_length
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null column value.
+Column level sensor that ensures that the length of string in a column does not exceed the mean accepted length.
 
 
 
@@ -3319,7 +3319,7 @@ ___
 column/strings/string_min_length
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null column value.
+Column level sensor that ensures that the length of string in a column does not exceed the minimum accepted length.
 
 
 
@@ -3451,7 +3451,7 @@ ___
 column/strings/string_most_popular_values
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null column value.
+Column level sensor that counts how many expected values are present in the top most popular values in the column.
 
 **Parameters**  
   
@@ -4392,7 +4392,7 @@ ___
 column/strings/string_null_placeholder_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null placeholder string column value.
+Column level sensor that calculates the percentage of rows with a null placeholder string column value.
 
 
 
@@ -4563,7 +4563,7 @@ ___
 column/strings/string_parsable_to_float_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with parsable to float string column value.
+Column level sensor that calculates the percentage of rows with parsable to float string column value.
 
 
 
@@ -4938,7 +4938,7 @@ ___
 column/strings/string_surrounded_by_whitespace_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with string surrounded by whitespace column value.
+Column level sensor that calculates the percentage of rows with string surrounded by whitespace column value.
 
 
 
@@ -5117,7 +5117,7 @@ ___
 column/strings/string_valid_country_code_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a valid country code string column value.
+Column level sensor that calculates the percentage of rows with a valid country code string column value.
 
 
 
@@ -5241,7 +5241,7 @@ ___
 column/strings/string_valid_currency_code_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a valid currency code string column value.
+Column level sensor that calculates the percentage of rows with a valid currency code string column value.
 
 
 
@@ -5408,7 +5408,7 @@ ___
 column/strings/string_valid_date_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null column value.
+Column level sensor that ensures that there is at least a minimum percentage of valid dates in a monitored column..
 
 
 
@@ -5864,7 +5864,7 @@ ___
 column/strings/string_whitespace_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a whitespace string column value.
+Column level sensor that calculates the percentage of rows with a whitespace string column value.
 
 
 

@@ -1277,7 +1277,7 @@ ___
 column/numeric/population_stddev
 ```
 **Description**  
-Column level sensor that counts population standard deviation of all values in a column.
+Column level sensor that calculates population standard deviation in a given column.
 
 
 
@@ -1356,7 +1356,7 @@ ___
 column/numeric/population_variance
 ```
 **Description**  
-Column level sensor that counts negative values in a column.
+Column level sensor that calculates population variance in a given column.
 
 
 
@@ -1435,7 +1435,7 @@ ___
 column/numeric/sample_stddev
 ```
 **Description**  
-Column level sensor that counts negative values in a column.
+Column level sensor that calculates sample standard deviation in a given column.
 
 
 
@@ -1514,7 +1514,7 @@ ___
 column/numeric/sample_variance
 ```
 **Description**  
-Column level sensor that counts negative values in a column.
+Column level sensor that calculates sample variance in a given column.
 
 
 
