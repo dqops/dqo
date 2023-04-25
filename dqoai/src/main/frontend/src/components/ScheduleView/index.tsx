@@ -125,7 +125,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
 
   const getLabel = () => {
     if (table && !column) {
-      return "Use scheduling configuration from the connection or table levels";
+      return "Use scheduling configuration from the connection levels";
     }
     if (table && column) {
       return "Use scheduling configuration from the connection or table levels";

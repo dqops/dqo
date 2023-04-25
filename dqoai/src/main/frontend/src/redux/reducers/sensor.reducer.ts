@@ -161,6 +161,11 @@ const sensorReducer = (state = initialState, action: any) => {
         ruleDetail: action.data
       });
     }
+    case SENSOR_ACTION.SET_UPDATED_SENSOR: {
+      return setActiveTabState(state, action,{
+        sensorDetail: action.data
+      });
+    }
     default:
       return state;
   }

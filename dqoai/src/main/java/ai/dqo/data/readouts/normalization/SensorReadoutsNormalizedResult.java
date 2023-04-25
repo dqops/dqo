@@ -42,6 +42,7 @@ public class SensorReadoutsNormalizedResult {
     private final StringColumn tableNameColumn;
     private final StringColumn tableNamePatternColumn;
     private final StringColumn tableStageColumn;
+    private final IntColumn tablePriorityColumn;
     private final LongColumn columnHashColumn;
     private final StringColumn columnNameColumn;
     private final StringColumn columnNamePatternColumn;
@@ -79,6 +80,7 @@ public class SensorReadoutsNormalizedResult {
         this.tableNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME);
         this.tableNamePatternColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME);
         this.tableStageColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TABLE_STAGE_COLUMN_NAME);
+        this.tablePriorityColumn = TableColumnUtility.getOrAddIntColumn(table, SensorReadoutsColumnNames.TABLE_PRIORITY_COLUMN_NAME);
         this.columnHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.COLUMN_HASH_COLUMN_NAME);
         this.columnNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
         this.columnNamePatternColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME);
@@ -229,6 +231,14 @@ public class SensorReadoutsNormalizedResult {
      */
     public StringColumn getTableStageColumn() {
         return tableStageColumn;
+    }
+
+    /**
+     * Returns the tablesaw column with the table priority.
+     * @return Table's priority column.
+     */
+    public IntColumn getTablePriorityColumn() {
+        return tablePriorityColumn;
     }
 
     /**

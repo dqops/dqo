@@ -88,6 +88,13 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
     private FolderSynchronizationStatus dataErrors = FolderSynchronizationStatus.unchanged;
 
     /**
+     * The synchronization status of the ".data/incidents" folder.
+     */
+    @JsonPropertyDescription("The synchronization status of the \".data/incidents\" folder.")
+    @Setter(AccessLevel.NONE)
+    private FolderSynchronizationStatus dataIncidents = FolderSynchronizationStatus.unchanged;
+
+    /**
      * Returns the folder status for a given folder.
      * @param folderRoot Folder name.
      * @return Folder status.
@@ -110,6 +117,8 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
                 return dataErrors;
             case data_statistics:
                 return dataStatistics;
+            case data_incidents:
+                return dataIncidents;
             case _indexes:
             case _settings:
                 return null;
@@ -148,6 +157,9 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
                 return;
             case data_statistics:
                 this.dataStatistics = newStatus;
+                return;
+            case data_incidents:
+                this.dataIncidents = newStatus;
                 return;
             case _indexes:
             case _settings:

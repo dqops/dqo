@@ -232,6 +232,7 @@ nav:
       - SensorDefinitionYaml: 'reference/yaml/SensorDefinitionYaml.md'
       - SettingsYaml: 'reference/yaml/SettingsYaml.md'
       - TableYaml: 'reference/yaml/TableYaml.md'
+      - IncidentNotificationMessage: 'reference/yaml/IncidentNotificationMessage.md'
 ########## END INCLUDE YAML REFERENCE
 
 # Visual settings

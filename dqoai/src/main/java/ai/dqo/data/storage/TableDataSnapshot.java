@@ -17,7 +17,10 @@ package ai.dqo.data.storage;
 
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.DateTimeColumn;
+import tech.tablesaw.api.InstantColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.selection.Selection;
@@ -25,6 +28,8 @@ import tech.tablesaw.selection.Selection;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -227,10 +232,12 @@ public class TableDataSnapshot {
      * Loads missing months to extend the time range of monthly partitions that are kept in a snapshot.
      * @param start The date of the start month. It could be any date within the month, because the whole month is always loaded.
      * @param end The date of the end month. It could be any date within the month, because the whole month is always loaded.
+     * @return true when additional months were loaded, false when all months in the requested range were already loaded
      */
-    public void ensureMonthsAreLoaded(@NotNull LocalDate start, @NotNull LocalDate end) {
+    public boolean ensureMonthsAreLoaded(@NotNull LocalDate start, @NotNull LocalDate end) {
         LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(start);
         LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(end);
+        boolean anyMonthLoaded = false;
 
         if (this.firstLoadedMonth == null) {
             // no data ever loaded
@@ -245,7 +252,7 @@ public class TableDataSnapshot {
                 }
                 updateSchemaForLoadedPartitions(loadedPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedPartitions);
-                return;
+                return true;
             }
         }
 
@@ -260,6 +267,7 @@ public class TableDataSnapshot {
             if (loadedEarlierPartitions != null) {
                 updateSchemaForLoadedPartitions(loadedEarlierPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
+                anyMonthLoaded = true;
             }
         }
 
@@ -274,8 +282,11 @@ public class TableDataSnapshot {
             if (loadedLaterPartitions != null) {
                 updateSchemaForLoadedPartitions(loadedLaterPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
+                anyMonthLoaded = true;
             }
         }
+
+        return anyMonthLoaded;
     }
 
     /**
@@ -477,8 +488,22 @@ public class TableDataSnapshot {
             }
         }
 
-        DateTimeColumn newResultsTimePeriodColumn = (DateTimeColumn) this.tableDataChanges.getNewOrChangedRows()
+        Column<?> datePartitioningColumnOriginal = this.tableDataChanges.getNewOrChangedRows()
                 .column(this.storageSettings.getTimePeriodColumnName());
+        DateTimeColumn newResultsTimePeriodColumn = null;
+        if (datePartitioningColumnOriginal instanceof DateTimeColumn) {
+            newResultsTimePeriodColumn = (DateTimeColumn) datePartitioningColumnOriginal;
+        }
+        else if (datePartitioningColumnOriginal instanceof InstantColumn) {
+            newResultsTimePeriodColumn = ((InstantColumn)datePartitioningColumnOriginal).asLocalDateTimeColumn(ZoneOffset.UTC);
+        }
+        else if (datePartitioningColumnOriginal instanceof DateColumn) {
+            newResultsTimePeriodColumn = ((DateColumn)datePartitioningColumnOriginal).atTime(LocalTime.MIDNIGHT);
+        }
+        else {
+            throw new DqoRuntimeException("Time partitioning column " + storageSettings.getTimePeriodColumnName() + " is not a date/datetime/instant column.");
+        }
+
         LocalDateTime minDateNewResults = newResultsTimePeriodColumn.min();
         LocalDate startMonth = minDateNewResults != null ?
                 LocalDateTimeTruncateUtility.truncateMonth(minDateNewResults.toLocalDate()) : this.firstLoadedMonth;

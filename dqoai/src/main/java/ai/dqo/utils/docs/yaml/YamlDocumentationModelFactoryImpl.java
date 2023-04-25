@@ -15,6 +15,7 @@
  */
 package ai.dqo.utils.docs.yaml;
 
+import ai.dqo.core.incidents.IncidentNotificationMessage;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.storage.localfiles.dashboards.DashboardYaml;
 import ai.dqo.metadata.storage.localfiles.ruledefinitions.RuleDefinitionYaml;
@@ -57,6 +58,7 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
         yamlClasses.add(SensorDefinitionYaml.class);
         yamlClasses.add(SettingsYaml.class);
         yamlClasses.add(TableYaml.class);
+        yamlClasses.add(IncidentNotificationMessage.class); // the incident notification message format
 
         for (Class<?> yamlClass : yamlClasses) {
             Map<Class<?>, YamlObjectDocumentationModel> yamlObjectDocumentationModels = new LinkedHashMap<>();

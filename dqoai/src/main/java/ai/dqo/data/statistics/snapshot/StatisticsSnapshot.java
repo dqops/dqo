@@ -21,8 +21,8 @@ import ai.dqo.data.statistics.factory.StatisticsColumnNames;
 import ai.dqo.data.storage.FileStorageSettings;
 import ai.dqo.data.storage.ParquetPartitionStorageService;
 import ai.dqo.data.storage.TableDataSnapshot;
+import ai.dqo.data.storage.TablePartitioningPattern;
 import ai.dqo.metadata.sources.PhysicalTableName;
-import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 import tech.tablesaw.api.Table;
 
 
@@ -73,6 +73,6 @@ public class StatisticsSnapshot extends TableDataSnapshot {
                 PARQUET_FILE_NAME,
                 StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME,
                 StatisticsColumnNames.ID_COLUMN_NAME,
-                TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED);
+                TablePartitioningPattern.CTM);
     }
 }
