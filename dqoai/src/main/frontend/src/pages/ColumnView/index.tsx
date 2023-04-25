@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import { getFirstLevelState } from "../../redux/selectors";
+import ColumnNavigation from "../../components/ColumnNavigation";
 
 const initTabs = [
   {
@@ -169,6 +170,7 @@ const ColumnView = () => {
             <div className="text-xl font-semibold truncate">{`${description}${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
           </div>
         </div>
+        <ColumnNavigation />
         {isRecurringOnly && (
           <RecurringView />
         )}

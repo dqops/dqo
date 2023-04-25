@@ -5,7 +5,7 @@ import Tabs from "../../components/Tabs";
 import { useHistory, useParams } from "react-router-dom";
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import { useTree } from "../../contexts/treeContext";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import TableDetails from "../../components/Connection/TableView/TableDetails";
 import ScheduleDetail from "../../components/Connection/TableView/ScheduleDetail";
 import ProfilingView from "../../components/Connection/TableView/ProfilingView";
@@ -15,9 +15,8 @@ import TableCommentView from "../../components/Connection/TableView/TableComment
 import TableLabelsView from "../../components/Connection/TableView/TableLabelsView";
 import TableDataStream from "../../components/Connection/TableView/TableDataStream";
 import TimestampsView from "../../components/Connection/TableView/TimestampsView";
-import clsx from "clsx";
 import { getFirstLevelState } from "../../redux/selectors";
-import { addFirstLevelTab } from "../../redux/actions/source.actions";
+import TableNavigation from "../../components/TableNavigation";
 
 const initTabs = [
   {
@@ -44,30 +43,6 @@ const initTabs = [
     label: 'Date and time columns',
     value: 'timestamps'
   }
-];
-
-type NavigationMenu = {
-  label: string;
-  value: CheckTypes;
-}
-
-const navigations: NavigationMenu[] = [
-  {
-    label: 'Table metadata',
-    value: CheckTypes.SOURCES
-  },
-  {
-    label: 'Advanced profiling',
-    value: CheckTypes.PROFILING
-  },
-  {
-    label: 'Recurring checks',
-    value: CheckTypes.RECURRING
-  },
-  {
-    label: 'Partition checks',
-    value: CheckTypes.PARTITIONED
-  },
 ];
 
 const TablePage = () => {
@@ -98,7 +73,6 @@ const TablePage = () => {
     () => !isRecurringOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
     [isRecurringOnly, isPartitionChecksOnly, isProfilingChecksOnly]
   );
-  const dispatch = useDispatch();
 
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connection, schema, table, tab));
@@ -220,20 +194,6 @@ const TablePage = () => {
     return ''
   }, [isProfilingChecksOnly, isRecurringOnly, isPartitionChecksOnly, activeTab]);
 
-  const activeIndex = useMemo(() => {
-    return navigations.findIndex((item) => item.value === checkTypes);
-  }, [checkTypes]);
-  const onChangeNavigation = async (item: NavigationMenu) => {
-    const tab = item.value === CheckTypes.RECURRING || item.value === CheckTypes.PARTITIONED ? 'daily' : 'detail';
-    dispatch(addFirstLevelTab(item.value, {
-      url: ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, tab),
-      value: ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table),
-      state: {},
-      label: table
-    }))
-    history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, tab));
-  };
-
   return (
     <ConnectionLayout>
       <div className="relative h-full flex flex-col">
@@ -243,19 +203,7 @@ const TablePage = () => {
             <div className="text-xl font-semibold truncate">{`${description}${connection}.${schema}.${table}`}</div>
           </div>
         </div>
-        <div className="flex space-x-3 px-4 pt-2 border-b border-gray-300 pb-4 mb-2">
-          {navigations.map((item, index) => (
-            <div
-              className={clsx("flex items-center cursor-pointer w-70", activeIndex === index ? "font-bold" : "")}
-              key={item.value}
-              onClick={() => onChangeNavigation(item)}
-            >
-              {activeIndex > index ? <SvgIcon name="chevron-left" className="w-3 mr-2" /> : ''}
-              <span>{item.label}</span>
-              {activeIndex < index ? <SvgIcon name="chevron-right" className="w-6 ml-2" /> : ''}
-            </div>
-          ))}
-        </div>
+        <TableNavigation />
         {isProfilingChecksOnly && (
           <ProfilingView />
         )}

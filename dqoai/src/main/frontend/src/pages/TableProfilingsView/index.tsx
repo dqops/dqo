@@ -15,6 +15,7 @@ import ConnectionLayout from "../../components/ConnectionLayout";
 import { useParams } from "react-router-dom";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckTypes } from "../../shared/routes";
+import TableNavigation from "../../components/TableNavigation";
 
 const TableProfilingsView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
@@ -82,6 +83,7 @@ const TableProfilingsView = () => {
           />
         </div>
       </div>
+      <TableNavigation />
       <div>
         <DataQualityChecks
           onUpdate={onUpdate}
