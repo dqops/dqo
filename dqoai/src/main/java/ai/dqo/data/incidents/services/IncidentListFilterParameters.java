@@ -36,8 +36,20 @@ public class IncidentListFilterParameters {
     private int recentMonths = 3;
 
     /**
+     * Page number. The first page is 1.
+     */
+    @JsonPropertyDescription("Page number. The first page is 1 which is the default value.")
+    private int page = 1;
+
+    /**
+     * Page size. The default page size is 50.
+     */
+    @JsonPropertyDescription("Page size. The default page size is 50.")
+    private int limit = 50;
+
+    /**
      * Load also resolved and muted incidents.
      */
     @JsonPropertyDescription("Load also resolved and muted incidents.")
-    private boolean loadResolvedAndMutedIncidents;
+    private boolean loadResolvedAndMutedIncidents = false;
 }

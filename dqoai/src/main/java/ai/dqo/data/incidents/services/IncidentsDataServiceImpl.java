@@ -66,6 +66,10 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
             return new ArrayList<>(); // no results
         }
 
+        int currentRowIndex = 0;
+        int startRowIndexInPage = (filterParameters.getPage() - 1) + filterParameters.getLimit();
+        int untilRowIndexInPage = filterParameters.getPage() + filterParameters.getLimit();
+
         ArrayList<IncidentModel> incidentModels = new ArrayList<>();
         Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = incidentsSnapshot.getLoadedMonthlyPartitions();
         for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> partitionEntry : loadedMonthlyPartitions.entrySet()) {
@@ -105,6 +109,15 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                     continue; // skipping
                 }
 
+                currentRowIndex++;
+                if (currentRowIndex < startRowIndexInPage) {
+                    continue;
+                }
+
+                if (currentRowIndex > untilRowIndexInPage) {
+                    break;
+                }
+
                 IncidentModel incidentModel = new IncidentModel();
                 incidentModel.setIncidentId(incidentIdColumn.get(rowIndex));
                 incidentModel.setYear(partitionYear);
@@ -139,6 +152,10 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 incidentModel.setFailedChecksCount(failedChecksCountColumn.get(rowIndex));
                 incidentModel.setStatus(incidentStatus);
                 incidentModels.add(incidentModel);
+            }
+
+            if (currentRowIndex >= untilRowIndexInPage) {
+                break; // no need to scan another partition file
             }
         }
 

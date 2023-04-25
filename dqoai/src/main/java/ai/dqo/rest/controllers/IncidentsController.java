@@ -108,10 +108,20 @@ public class IncidentsController {
             @ApiParam(name = "Number of recent months to load, the default is 3 months", required = false)
                 @PathVariable(required = false) Optional<Integer> recentMonths,
             @ApiParam(name = "Also includes closed (resolved or muted) incidents, by default only open and assigned incidents are returned", required = false)
-                @PathVariable(required = false) Optional<Boolean> includeClosed) {
+                @PathVariable(required = false) Optional<Boolean> includeClosed,
+            @ApiParam(name = "Page number, the first page is 1", required = false)
+                @PathVariable(required = false) Optional<Integer> page,
+            @ApiParam(name = "Page size, the default is 50 rows", required = false)
+                @PathVariable(required = false) Optional<Integer> limit) {
         IncidentListFilterParameters filterParameters = new IncidentListFilterParameters();
         filterParameters.setRecentMonths(recentMonths.orElse(3));
         filterParameters.setLoadResolvedAndMutedIncidents(includeClosed.orElse(Boolean.FALSE));
+        if (page.isPresent()) {
+            filterParameters.setPage(page.get());
+        }
+        if (limit.isPresent()) {
+            filterParameters.setLimit(limit.get());
+        }
 
         Collection<IncidentModel> incidentModels = this.incidentsDataService.loadRecentIncidentsOnConnection(connectionName, filterParameters);
         if (incidentModels == null) {
