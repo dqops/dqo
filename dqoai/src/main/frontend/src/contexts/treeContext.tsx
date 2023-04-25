@@ -70,6 +70,7 @@ function TreeProvider(props: any) {
   const [selectedTreeNode, setSelectedTreeNode] = useState<CustomTreeNode>();
   const history = useHistory();
   const dispatch = useDispatch();
+  const [loadingNodes, setLoadingNodes] = useState<Record<string, boolean>>({});
 
   const getConnections = async () => {
     const res: AxiosResponse<ConnectionBasicModel[]> =
@@ -614,8 +615,12 @@ function TreeProvider(props: any) {
 
   const refreshNode = async (node: CustomTreeNode) => {
     if (!node) return;
+    setLoadingNodes(prev => ({
+      ...prev,
+      [node.id]: true
+    }));
     if (node.level === TREE_LEVEL.DATABASE) {
-      return await refreshDatabaseNode(node);
+      await refreshDatabaseNode(node);
     } else if (node.level === TREE_LEVEL.SCHEMA) {
       await refreshSchemaNode(node);
     } else if (node.level === TREE_LEVEL.TABLE) {
@@ -645,6 +650,11 @@ function TreeProvider(props: any) {
     } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
       await refreshColumnPartitionedChecksNode(node, 'monthly');
     }
+
+    setLoadingNodes(prev => ({
+      ...prev,
+      [node.id]: false
+    }));
   };
 
   const runChecks = async (node: CustomTreeNode) => {
@@ -1155,6 +1165,7 @@ function TreeProvider(props: any) {
         deleteData,
         selectedTreeNode,
         setSelectedTreeNode,
+        loadingNodes,
       }}
       {...props}
     />
