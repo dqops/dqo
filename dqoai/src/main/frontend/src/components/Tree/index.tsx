@@ -13,7 +13,7 @@ import { CheckTypes } from "../../shared/routes";
 const Tree = () => {
   const { changeActiveTab, treeData, toggleOpenNode, activeTab, switchTab, sourceRoute } = useTree();
   const [isOpen, setIsOpen] = useState(false);
-  const { removeNode } = useTree();
+  const { removeNode, loadingNodes } = useTree();
   const [selectedNode, setSelectedNode] = useState<CustomTreeNode>();
 
   const handleNodeClick = (node: CustomTreeNode) => {
@@ -57,6 +57,14 @@ const Tree = () => {
   const renderIcon = (node: CustomTreeNode) => {
     if (node.level === TREE_LEVEL.CHECK || (node.level === TREE_LEVEL.COLUMN && sourceRoute === CheckTypes.SOURCES)) {
       return <div className="w-0 shrink-0" />;
+    }
+    if (loadingNodes[node.id]) {
+      return (
+        <SvgIcon
+          className="w-4 min-w-4 cursor-pointer shrink-0 animate-spin"
+          name="spinner"
+        />
+      )
     }
     return (
       <SvgIcon
