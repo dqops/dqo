@@ -15,16 +15,23 @@
  */
 package ai.dqo.data.incidents.services;
 
+import ai.dqo.core.configuration.DqoIncidentsConfigurationProperties;
 import ai.dqo.data.incidents.factory.IncidentStatus;
 import ai.dqo.data.incidents.factory.IncidentsColumnNames;
 import ai.dqo.data.incidents.services.models.IncidentListFilterParameters;
 import ai.dqo.data.incidents.services.models.IncidentModel;
 import ai.dqo.data.incidents.services.models.IncidentSortDirection;
+import ai.dqo.data.incidents.services.models.IncidentsPerConnectionModel;
 import ai.dqo.data.incidents.snapshot.IncidentsSnapshot;
 import ai.dqo.data.incidents.snapshot.IncidentsSnapshotFactory;
 import ai.dqo.data.storage.LoadedMonthlyPartition;
 import ai.dqo.data.storage.ParquetPartitionId;
+import ai.dqo.metadata.sources.ConnectionList;
+import ai.dqo.metadata.sources.ConnectionWrapper;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import org.apache.parquet.Strings;
+import org.apache.parquet.filter2.predicate.Operators;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
@@ -33,7 +40,9 @@ import tech.tablesaw.selection.Selection;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Data quality incident management service. Supports reading incidents from parquet tables.
@@ -41,14 +50,22 @@ import java.util.*;
 @Service
 public class IncidentsDataServiceImpl implements IncidentsDataService {
     private IncidentsSnapshotFactory incidentsSnapshotFactory;
+    private UserHomeContextFactory userHomeContextFactory;
+    private DqoIncidentsConfigurationProperties dqoIncidentsConfigurationProperties;
 
     /**
      * Creates a new incident data service, given all required dependencies.
      * @param incidentsSnapshotFactory Incident snapshot factory.
+     * @param userHomeContextFactory User home context factory, used to load a list of connections.
+     * @param dqoIncidentsConfigurationProperties DQO incidents configuration parameters.
      */
     @Autowired
-    public IncidentsDataServiceImpl(IncidentsSnapshotFactory incidentsSnapshotFactory) {
+    public IncidentsDataServiceImpl(IncidentsSnapshotFactory incidentsSnapshotFactory,
+                                    UserHomeContextFactory userHomeContextFactory,
+                                    DqoIncidentsConfigurationProperties dqoIncidentsConfigurationProperties) {
         this.incidentsSnapshotFactory = incidentsSnapshotFactory;
+        this.userHomeContextFactory = userHomeContextFactory;
+        this.dqoIncidentsConfigurationProperties = dqoIncidentsConfigurationProperties;
     }
 
     /**
@@ -62,7 +79,8 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
             String connectionName, IncidentListFilterParameters filterParameters) {
         IncidentsSnapshot incidentsSnapshot = this.incidentsSnapshotFactory.createSnapshot(connectionName);
         LocalDate endDate = Instant.now().atOffset(ZoneOffset.UTC).toLocalDate();
-        LocalDate startDate = endDate.minusMonths(filterParameters.getRecentMonths() - 1);
+        LocalDate startDate = filterParameters.getRecentMonths() > 1 ?
+                endDate.minusMonths(filterParameters.getRecentMonths() - 1) : endDate;
         if (!incidentsSnapshot.ensureMonthsAreLoaded(startDate, endDate)) {
             return new ArrayList<>(); // no results
         }
@@ -199,5 +217,66 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
         int rowIndex = incidentIdSelection.get(0);
         IncidentModel incidentModel = IncidentModel.fromIncidentRow(incidentMonthData.row(rowIndex), connectionName);
         return incidentModel;
+    }
+
+    /**
+     * Returns a list of all connections, also counting the number of recent open incidents.
+     *
+     * @return Collection of connection names, with a count of open incidents.
+     */
+    @Override
+    public Collection<IncidentsPerConnectionModel> findConnectionIncidentStats() {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        ConnectionList connectionList = userHomeContext.getUserHome().getConnections();
+        List<ConnectionWrapper> connectionWrappers = connectionList.toList();
+
+         List<IncidentsPerConnectionModel> resultList = connectionWrappers.stream()
+                .map(connectionWrapper -> connectionWrapper.getName())
+                .sorted()
+                .map(connectionName -> loadConnectionStats(connectionName))
+                .collect(Collectors.toList());
+
+        return resultList;
+    }
+
+    /**
+     * Creates a connection incident statistics model, counting the number of recent open incidents.
+     * @param connectionName Connection name.
+     * @return Connection incident stats model.
+     */
+    public IncidentsPerConnectionModel loadConnectionStats(String connectionName) {
+        IncidentsPerConnectionModel model = new IncidentsPerConnectionModel();
+        model.setConnection(connectionName);
+
+        IncidentsSnapshot incidentsSnapshot = this.incidentsSnapshotFactory.createSnapshot(connectionName);
+        Instant now = Instant.now();
+        Instant since = now.minus(this.dqoIncidentsConfigurationProperties.getCountOpenIncidentsDays(), ChronoUnit.DAYS);
+        LocalDate dateUntil = now.atOffset(ZoneOffset.UTC).toLocalDate();
+        LocalDate dateSince = since.atOffset(ZoneOffset.UTC).toLocalDate();
+        if (!incidentsSnapshot.ensureMonthsAreLoaded(dateSince, dateUntil)) {
+            return model; // no incident parquet files
+        }
+
+        int openIncidentsCount = 0;
+
+        Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = incidentsSnapshot.getLoadedMonthlyPartitions();
+        for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> partitionEntry : loadedMonthlyPartitions.entrySet()) {
+            Table partitionTable = partitionEntry.getValue().getData();
+            if (partitionTable == null) {
+                // empty partition
+                continue;
+            }
+
+            StringColumn statusColumn = partitionTable.stringColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
+            InstantColumn firstSeenColumn = partitionTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME);
+
+            int openIncidentsInPartition = statusColumn.isEqualTo(IncidentStatus.open.name())
+                    .and(firstSeenColumn.isAfter(since))
+                    .size();
+            openIncidentsCount += openIncidentsInPartition;
+        }
+
+        model.setOpenIncidents(openIncidentsCount);
+        return model;
     }
 }

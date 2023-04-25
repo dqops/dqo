@@ -18,6 +18,7 @@ package ai.dqo.data.incidents.services;
 
 import ai.dqo.data.incidents.services.models.IncidentListFilterParameters;
 import ai.dqo.data.incidents.services.models.IncidentModel;
+import ai.dqo.data.incidents.services.models.IncidentsPerConnectionModel;
 
 import java.util.Collection;
 
@@ -44,4 +45,10 @@ public interface IncidentsDataService {
      * @return Incident model when the incident was found or null when the incident is not found.
      */
     IncidentModel loadIncident(String connectionName, int year, int month, String incidentId);
+
+    /**
+     * Returns a list of all connections, also counting the number of recent open incidents.
+     * @return Collection of connection names, with a count of open incidents.
+     */
+    Collection<IncidentsPerConnectionModel> findConnectionIncidentStats();
 }

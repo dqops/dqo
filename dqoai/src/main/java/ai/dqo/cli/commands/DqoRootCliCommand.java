@@ -102,8 +102,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private String dqoCloudApiKey;
 
     @CommandLine.Option(names = {"--server.port"},
-            description = "Sets the web server port to host the DQO local web UI. " +
-                    "This parameter is effective only in CLI mode.", defaultValue = "8888")
+            description = "Sets the web server port to host the DQO local web UI.", defaultValue = "8888")
     private Integer serverPort;
 
     @CommandLine.Option(names = {"--dqo.user.initialize-user-home"},
@@ -120,7 +119,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"--dqo.logging.enable-user-home-logging"},
             description = "Enables file logging inside the DQO User Home's .logs folder.", defaultValue = "true")
-    private boolean enableUserHomeLogging;
+    private boolean dqoLoggingEnableUserHomeLogging;
 
     @CommandLine.Option(names = {"--dqo.logging.max-history"},
             description = "Sets the maximum number of log files that could be stored (archived) in the .logs folder.", defaultValue = "7")
@@ -128,25 +127,22 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"--dqo.logging.pattern"},
             description = "Log entry pattern for logback used for writing log entries.", defaultValue = DqoLoggingConfigurationProperties.DEFAULT_PATTERN)
-    private String pattern;
+    private String dqoLoggingPattern;
 
     @CommandLine.Option(names = {"--dqo.logging.total-size-cap"},
             description = "Total log file size cap.", defaultValue = DqoLoggingConfigurationProperties.DEFAULT_TOTAL_SIZE_CAP)
-    private String totalSizeCap;
+    private String dqoLoggingTotalSizeCap;
 
     @CommandLine.Option(names = {"--dqo.python.python-script-timeout-seconds"},
-            description = "Python script execution time limit in seconds for running jinja2 and rule evaluation scripts. " +
-                    "This parameter is effective only in CLI mode.", defaultValue = "120")
+            description = "Python script execution time limit in seconds for running jinja2 and rule evaluation scripts.", defaultValue = "120")
     private Integer dqoPythonPythonScriptTimeoutSeconds;
 
     @CommandLine.Option(names = {"--dqo.python.interpreter"},
-            description = "Python interpreter command line name, like 'python' or 'python3'. " +
-                    "This parameter is effective only in CLI mode.", defaultValue = "python3")
+            description = "Python interpreter command line name, like 'python' or 'python3'.", defaultValue = "python3")
     private String dqoPythonInterpreter;
 
     @CommandLine.Option(names = {"--dqo.user.home"},
-            description = "Overrides the path to the DQO user home. The default user home is created in the current folder (.). " +
-                    "This parameter is effective only in CLI mode.", defaultValue = ".")
+            description = "Overrides the path to the DQO user home. The default user home is created in the current folder (.).", defaultValue = ".")
     private String dqoUserHome;
 
     @CommandLine.Option(names = {"--dqo.home"},
@@ -156,34 +152,35 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"--dqo.default-time-zone"},
             description = "Default time zone name used to convert the server's local dates to a local time in a time zone that is relevant for the user. Use official IANA time zone names. " +
                     "When the parameter is not configured, DQO uses the local time zone of the host running the application. The time zone could be reconfigured at a user settings level.")
-    private String defaultTimeZone;
+    private String dqoDefaultTimeZone;
+
+    @CommandLine.Option(names = {"--dqo.incidents.count-open-incidents-days"},
+            description = "The number of days since today that are scanned for open incidents first seen in since this number of days. ", defaultValue = "15")
+    private Integer dqoIncidentsCountOpenIncidentsDays;
 
     @CommandLine.Option(names = {"--dqo.secrets.enable-gcp-secret-manager"},
-            description = "Enables GCP secret manager to resolve parameters like ${sm:secret-name} in the yaml files. " +
-                    "This parameter is effective only in CLI mode.", defaultValue = "true")
+            description = "Enables GCP secret manager to resolve parameters like ${sm:secret-name} in the yaml files.", defaultValue = "true")
     private Boolean dqoSecretsEnableGcpSecretManager;
 
     @CommandLine.Option(names = {"--dqo.secrets.gcp-project-id"},
-            description = "GCP project name with a GCP secret manager enabled to pull the secrets. " +
-                    "This parameter is effective only in CLI mode.", defaultValue = "true")
+            description = "GCP project name with a GCP secret manager enabled to pull the secrets.", defaultValue = "true")
     private Boolean dqoSecretsGcpProjectId;
 
     @CommandLine.Option(names = {"--dqo.core.print-stack-trace"},
-            description = "Prints a full stack trace for errors on the console. " +
-                    "This parameter is effective only in CLI mode.", defaultValue = "true")
+            description = "Prints a full stack trace for errors on the console.", defaultValue = "true")
     private Boolean dqoCorePrintStackTrace;
 
     @CommandLine.Option(names = {"--dqo.core.lock-wait-timeout-seconds"},
             description = "Sets the maximum wait timeout in seconds to obtain a lock to read or write files.", defaultValue = "900")
-    private Long dqoLockWaitTimeoutSeconds;
+    private Long dqoCoreLockWaitTimeoutSeconds;
 
     @CommandLine.Option(names = {"--dqo.cloud.parallel-file-uploads"},
             description = "The number of files that are uploaded to DQO Cloud in parallel using HTTP/2 multiplexing.", defaultValue = "500")
-    private Integer dqoClodParallelFileUploads;
+    private Integer dqoCloudParallelFileUploads;
 
     @CommandLine.Option(names = {"--dqo.cloud.parallel-file-downloads"},
             description = "The number of files that are downloaded from DQO Cloud in parallel using HTTP/2 multiplexing.", defaultValue = "500")
-    private Integer dqoClodParallelFileDownloads;
+    private Integer dqoCloudParallelFileDownloads;
 
     @CommandLine.Option(names = {"--dqo.queue.threads"},
             description = "Sets the number of threads that the job queue creates for processing jobs (running data quality checks, importing metadata, etc.). ", defaultValue = "10")
@@ -194,13 +191,11 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private Boolean dqoSchedulerStart;
 
     @CommandLine.Option(names = {"--dqo.scheduler.enable-cloud-sync"},
-            description = "Enable synchronization of metadata and results with DQO Cloud in the job scheduler. " +
-                    "This parameter is effective only in CLI mode.", defaultValue = "true")
+            description = "Enable synchronization of metadata and results with DQO Cloud in the job scheduler.", defaultValue = "true")
     private Boolean dqoSchedulerEnableCloudSync;
 
     @CommandLine.Option(names = {"--dqo.scheduler.scan-metadata-cron-schedule"},
-            description = "Unix cron expression to configure how often the scheduler will synchronize the local copy of the metadata with DQO Cloud and detect new schedules. " +
-                    "This parameter is effective only in CLI mode.", defaultValue = "*/10 * * * *")
+            description = "Unix cron expression to configure how often the scheduler will synchronize the local copy of the metadata with DQO Cloud and detect new schedules.", defaultValue = "*/10 * * * *")
     private String dqoSchedulerScanMetadataCronSchedule;
 
     @CommandLine.Option(names = {"--dqo.scheduler.synchronization-mode"},

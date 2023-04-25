@@ -20,11 +20,8 @@ import ai.dqo.core.incidents.IncidentImportQueueService;
 import ai.dqo.core.incidents.IncidentIssueUrlChangeParameters;
 import ai.dqo.core.incidents.IncidentStatusChangeParameters;
 import ai.dqo.data.incidents.factory.IncidentStatus;
-import ai.dqo.data.incidents.services.models.IncidentListFilterParameters;
+import ai.dqo.data.incidents.services.models.*;
 import ai.dqo.data.incidents.services.IncidentsDataService;
-import ai.dqo.data.incidents.services.models.IncidentModel;
-import ai.dqo.data.incidents.services.models.IncidentSortDirection;
-import ai.dqo.data.incidents.services.models.IncidentSortOrder;
 import ai.dqo.rest.models.metadata.ConnectionModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import io.swagger.annotations.*;
@@ -42,7 +39,7 @@ import java.util.Optional;
  * Data quality incidents REST API controller.
  */
 @RestController
-@RequestMapping("/api/incidents")
+@RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Incidents", description = "Data quality incidents controller that supports loading incidents and changing the status of an incident.")
 public class IncidentsController {
@@ -69,7 +66,7 @@ public class IncidentsController {
      * @param incidentId Incident id.
      * @return Incident model of the loaded incident.
      */
-    @GetMapping("/{connectionName}/{year}/{month}/{incidentId}")
+    @GetMapping("/incidents/{connectionName}/{year}/{month}/{incidentId}")
     @ApiOperation(value = "getIncident", notes = "Return a single data quality incident's details.", response = IncidentModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -106,7 +103,7 @@ public class IncidentsController {
      * @param direction Sort direction.
      * @return List of incidents.
      */
-    @GetMapping("/{connectionName}")
+    @GetMapping("/incidents/{connectionName}")
     @ApiOperation(value = "findRecentIncidentsOnConnection", notes = "Returns a list of recent data quality incidents.",
             response = IncidentModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -168,6 +165,23 @@ public class IncidentsController {
     }
 
     /**
+     * Lists connections with their recent open incidents stats.
+     * @return List of connections with their incidents counts.
+     */
+    @GetMapping("/incidentstat")
+    @ApiOperation(value = "findConnectionIncidentStats", notes = "Returns a list of connection names with incident statistics - the count of recent open incidents.",
+            response = IncidentsPerConnectionModel[].class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = IncidentsPerConnectionModel[].class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Flux<IncidentsPerConnectionModel>> findConnectionIncidentStats() {
+        Collection<IncidentsPerConnectionModel> connectionIncidentStats = this.incidentsDataService.findConnectionIncidentStats();
+        return new ResponseEntity<>(Flux.fromStream(connectionIncidentStats.stream()), HttpStatus.OK);
+    }
+
+    /**
      * Updates the status of a single data quality incident.
      * @param connectionName Connection name.
      * @param year Year when the incident was first seen.
@@ -176,7 +190,7 @@ public class IncidentsController {
      * @param status New incident status to set.
      * @return None.
      */
-    @PostMapping("/{connectionName}/{year}/{month}/{incidentId}/status")
+    @PostMapping("/incidents/{connectionName}/{year}/{month}/{incidentId}/status")
     @ApiOperation(value = "setIncidentStatus", notes = "Changes the incident's status to a new status.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -206,7 +220,7 @@ public class IncidentsController {
      * @param issueUrl New incident's issueUrl to set.
      * @return None.
      */
-    @PostMapping("/{connectionName}/{year}/{month}/{incidentId}/issueurl")
+    @PostMapping("/incidents/{connectionName}/{year}/{month}/{incidentId}/issueurl")
     @ApiOperation(value = "setIncidentIssueUrl", notes = "Changes the incident's issueUrl to a new status.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
