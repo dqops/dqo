@@ -10,11 +10,12 @@ import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { addFirstLevelTab } from "../../redux/actions/source.actions";
 import { IRootState } from "../../redux/reducers";
 import { COLUMN_LEVEL_TABS, CONNECTION_LEVEL_TABS, PageTab, TABLE_LEVEL_TABS } from "../../shared/constants";
+import { SynchronizeButton } from "./SynchronizeButton";
 
 const Header = () => {
   const history = useHistory();
   const location = useLocation();
-  const { checkTypes, connection, schema, table, column, tab, timePartitioned, category, checkName }: {
+  const { checkTypes, connection, schema, table, column, tab }: {
     checkTypes: CheckTypes,
     connection: string,
     schema: string,
@@ -123,8 +124,9 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div>
+      <div className="flex">
         <HelpMenu />
+        <SynchronizeButton />
         <NotificationMenu />
       </div>
     </div>
