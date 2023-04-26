@@ -11,7 +11,7 @@ const HomePage = () => {
       <Header />
       <div className="mt-16">
         <div className="bg-teal-500 text-white px-4 py-4 text-2xl font-bold mb-4">
-          Welcome do DQO
+          Welcome to DQO
         </div>
         <div className="px-8 py-4 w-full">
           <p className="font-bold text-xl mb-5">
@@ -123,7 +123,7 @@ const HomePage = () => {
                 <img src="/images/home/github.png" className="w-40" alt="" />
               </a>
               <p>
-                Back to home page
+                Visit DQO.ai website
               </p>
               <a href="https://dqo.ai/">
                 <img src="/logo.svg" className="w-40" alt="" />
