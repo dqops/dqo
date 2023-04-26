@@ -52,7 +52,7 @@ public class ColumnStringsStringDatatypeChangedSensorParametersSpec extends Abst
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_datatype_detect";
+        return "column/strings/string_datatype_changed";
     }
 }
 
