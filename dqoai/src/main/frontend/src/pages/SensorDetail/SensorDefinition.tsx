@@ -1,12 +1,12 @@
 import React from "react";
-import { RuleActionGroup } from "../../components/Sensors/RuleActionGroup";
-import { SensorModel } from "../../api";
+import { ParameterDefinitionSpec, SensorModel } from "../../api";
 import Checkbox from "../../components/Checkbox";
 import { setUpdatedSensor } from "../../redux/actions/sensor.actions";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
 import SectionWrapper from "../../components/Dashboard/SectionWrapper";
 import RuleFields from "../../components/Sensors/RuleFields";
 import RuleParameters from "../../components/Sensors/RuleParameters";
+import { SensorActionGroup } from "../../components/Sensors/SensorActionGroup";
 
 type SensorDefinitionProps = {
   sensor: SensorModel;
@@ -22,9 +22,22 @@ export const SensorDefinition = ({ sensor }: SensorDefinitionProps) => {
     }));
   }
 
+  const onAdd = (field: ParameterDefinitionSpec) => {
+    dispatch(setUpdatedSensor({
+      ...sensor || {},
+      sensor_definition_spec: {
+        ...sensor.sensor_definition_spec || {},
+        fields: [
+          ...sensor.sensor_definition_spec?.fields || [],
+          field
+        ]
+      }
+    }))
+  };
+
   return (
     <div className="p-4">
-      <RuleActionGroup />
+      <SensorActionGroup />
       {sensor && (
         <>
           <div className="mb-8">
@@ -63,10 +76,19 @@ export const SensorDefinition = ({ sensor }: SensorDefinitionProps) => {
                   fields
                 }
               })}
+              onAdd={onAdd}
             />
           </SectionWrapper>
           <SectionWrapper className="mt-8" title="Sensor Parameters">
-            <RuleParameters />
+            <RuleParameters
+              parameters={sensor.sensor_definition_spec?.parameters}
+              onChange={(parameters) => onChange({
+                sensor_definition_spec: {
+                  ...sensor.sensor_definition_spec,
+                  parameters
+                }
+              })}
+            />
           </SectionWrapper>
         </>
       )}

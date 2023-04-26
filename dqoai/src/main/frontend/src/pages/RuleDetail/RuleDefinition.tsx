@@ -2,7 +2,7 @@ import React from "react";
 import Select from "../../components/Select";
 import { RuleActionGroup } from "../../components/Sensors/RuleActionGroup";
 import Input from "../../components/Input";
-import { RuleModel, RuleModelModeEnum, RuleModelTypeEnum } from "../../api";
+import { ParameterDefinitionSpec, RuleModel, RuleModelModeEnum, RuleModelTypeEnum } from "../../api";
 import NumberInput from "../../components/NumberInput";
 import SectionWrapper from "../../components/Dashboard/SectionWrapper";
 import RuleFields from "../../components/Sensors/RuleFields";
@@ -24,6 +24,16 @@ export const RuleDefinition = ({ rule }: RuleDefinitionProps) => {
     dispatch(setUpdatedRule({
       ...rule,
       ...obj
+    }));
+  }
+
+  const onAdd = (field: ParameterDefinitionSpec) => {
+    dispatch(setUpdatedRule({
+      ...rule,
+      fields: [
+        ...rule.fields || [],
+        field
+      ]
     }));
   }
 
@@ -93,10 +103,14 @@ export const RuleDefinition = ({ rule }: RuleDefinitionProps) => {
             <RuleFields
               fields={rule.fields || []}
               onChange={(fields) => onChange({ fields })}
+              onAdd={onAdd}
             />
           </SectionWrapper>
           <SectionWrapper className="mt-8" title="Rule Parameters">
-            <RuleParameters />
+            <RuleParameters
+              parameters={rule.parameters}
+              onChange={(parameters) => onChange({ parameters })}
+            />
           </SectionWrapper>
         </>
       )}

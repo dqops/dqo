@@ -72,7 +72,12 @@ const ProvideSensor = ({
 
 
       <SectionWrapper className="mt-8 mb-4" title="Sensor Parameters">
-        <RuleParameters />
+        <RuleParameters
+          parameters={providerSensor?.providerSensorDefinitionSpec?.parameters}
+          onChange={(parameters) => handleChange({
+            parameters
+          })}
+        />
       </SectionWrapper>
 
 

@@ -15,6 +15,7 @@ import SvgIcon from "../SvgIcon";
 type RuleFieldRowProps = {
   field: ParameterDefinitionSpec;
   onChange: (obj: Partial<ParameterDefinitionSpec>) => void;
+  onDelete: () => void;
 }
 
 const dataTypeOptions = Object.values(ParameterDefinitionSpecDataTypeEnum).map((item) => ({
@@ -27,7 +28,7 @@ const displayHintOptions = Object.values(ParameterDefinitionSpecDisplayHintEnum)
   value: item,
 }));
 
-const RuleFieldRow = ({ field, onChange }: RuleFieldRowProps) => {
+const RuleFieldRow = ({ field, onChange, onDelete }: RuleFieldRowProps) => {
   return (
     <tr>
       <td className="pr-4 py-2  align-top w-40">
@@ -90,7 +91,7 @@ const RuleFieldRow = ({ field, onChange }: RuleFieldRowProps) => {
         <IconButton
           color="teal"
           size="sm"
-          onClick={() => {}}
+          onClick={onDelete}
           className="!shadow-none"
         >
           <SvgIcon name="delete" className="w-4" />

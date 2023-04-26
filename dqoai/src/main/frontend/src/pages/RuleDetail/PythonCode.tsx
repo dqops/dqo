@@ -24,7 +24,7 @@ const PythonCode = ({ rule }: PythonCodeProps) => {
       <RuleActionGroup />
 
       <CodeMirror
-        value={rule.rule_python_module_content}
+        value={rule?.rule_python_module_content}
         onChange={onChange}
       />
     </div>

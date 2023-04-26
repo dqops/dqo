@@ -7,11 +7,10 @@ import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { getSensor } from "../../redux/actions/sensor.actions";
 import Tabs from "../../components/Tabs";
 import SensorDefinition from "./SensorDefinition";
-import { ITab } from "../../shared/interfaces";
 import { ProviderSensorModel } from "../../api";
 import ProvideSensor from "./ProvideSensor";
 
-const initTabs = [
+const tabs = [
   {
     label: 'Sensor definition',
     value: 'definition'
@@ -39,14 +38,15 @@ const initTabs = [
 ];
 
 export const SensorDetail = () => {
-  const [tabs, setTabs] = useState<ITab[]>(initTabs);
   const { full_sensor_name, sensorDetail } = useSelector(getFirstLevelSensorState);
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
 
   useEffect(() => {
-    dispatch(getSensor(full_sensor_name))
-  }, [full_sensor_name]);
+    if (!sensorDetail) {
+      dispatch(getSensor(full_sensor_name))
+    }
+  }, [full_sensor_name, sensorDetail]);
 
   return (
     <DefinitionLayout>
@@ -62,7 +62,9 @@ export const SensorDetail = () => {
           <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         </div>
         {activeTab === 'definition' && (
-          <SensorDefinition sensor={sensorDetail} />
+          <SensorDefinition
+            sensor={sensorDetail}
+          />
         )}
         {tabs.slice(1).map((tab, index: number) => tab.value === activeTab && (
           <ProvideSensor
