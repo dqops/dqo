@@ -20,6 +20,7 @@
 
 import { SOURCE_ACTION } from '../types';
 import { CheckTypes } from "../../shared/routes";
+import { CheckResultsDetailedDataModel, ErrorsDetailedDataModel, SensorReadoutsDetailedDataModel } from "../../api";
 
 export const addFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   type: SOURCE_ACTION.ADD_FIRST_LEVEL_TAB,
@@ -38,3 +39,43 @@ export const closeFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   checkType,
   data,
 });
+
+export const setCheckResults = (checkType: CheckTypes, checkName: string, checkResults: CheckResultsDetailedDataModel[]) => ({
+  type: SOURCE_ACTION.SET_CHECK_RESULTS,
+  checkType,
+  data: {
+    checkName,
+    checkResults
+  }
+});
+
+export const setSensorReadouts = (checkType: CheckTypes, checkName: string, sensorReadouts: SensorReadoutsDetailedDataModel[]) => ({
+  type: SOURCE_ACTION.SET_SENSOR_READOUTS,
+  checkType,
+  data: {
+    checkName,
+    sensorReadouts
+  }
+});
+
+export const setSensorErrors = (checkType: CheckTypes, checkName: string, errors: ErrorsDetailedDataModel[]) => {
+  return ({
+    type: SOURCE_ACTION.SET_SENSOR_ERRORS,
+    checkType,
+    data: {
+      checkName,
+      sensorErrors: errors
+    }
+  });
+}
+
+export const setCheckFilters = (checkType: CheckTypes, checkName: string, filters: any) => {
+  return ({
+    type: SOURCE_ACTION.SET_CHECK_FILTERS,
+    checkType,
+    data: {
+      checkName,
+      filters,
+    }
+  });
+}
