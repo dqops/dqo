@@ -30,7 +30,7 @@ nav:
     - Working with CLI: 'dqo-concepts/working-with-cli/working-with-cli.md'
   - Examples:
     - "examples/index.md"
-    - bool-true-percent: "examples/bool-true-percent.md"
+    - Percentage of false values: "examples/bool-false-percent.md"
     - datetime-value-in-range-date-percent: 'examples/datetime-value-in-range-date-percent.md'
     - integrity-foreign-key-match-percent: 'examples/integrity-foreign-key-match-percent.md'
     - nulls-not-nulls-count: 'examples/nulls-not-nulls-count.md'
