@@ -90,6 +90,26 @@ spec:
                   ds0.p_check_type: 'all'
                   ds0.p_quality_dimension: Completeness
                   ds0.p_check_category: 'all'
+              - dashboard_name: KPIs uniqueness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1400
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: 'all'
+                  ds0.p_quality_dimension: Uniqueness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: KPIs timeliness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1400
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: 'all'
+                  ds0.p_quality_dimension: Timeliness
+                  ds0.p_check_category: 'all'
           - folder_name: Total DQ KPIs per category
             dashboards:
               - dashboard_name: DQ KPIs - uniqueness
@@ -228,6 +248,26 @@ spec:
                   ds0.p_check_type: profiling
                   ds0.p_quality_dimension: Completeness
                   ds0.p_check_category: 'all'
+              - dashboard_name: KPIs uniqueness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1400
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: profiling
+                  ds0.p_quality_dimension: Uniqueness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: KPIs timeliness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1400
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: profiling
+                  ds0.p_quality_dimension: Timeliness
+                  ds0.p_check_category: 'all'
           - folder_name: DQ KPIs profiling per category
             dashboards:
               - dashboard_name: DQ KPIs - uniqueness
@@ -365,6 +405,26 @@ spec:
                   ds0.p_check_type: recurring
                   ds0.p_quality_dimension: Completeness
                   ds0.p_check_category: 'all'
+              - dashboard_name: KPIs uniqueness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1400
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: recurring
+                  ds0.p_quality_dimension: Uniqueness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: KPIs timeliness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1400
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: recurring
+                  ds0.p_quality_dimension: Timeliness
+                  ds0.p_check_category: 'all'
           - folder_name: DQ KPIs recurring checks per category
             dashboards:
               - dashboard_name: DQ KPIs - uniqueness
@@ -501,6 +561,26 @@ spec:
                 parameters:
                   ds0.p_check_type: partitioned
                   ds0.p_quality_dimension: Completeness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: KPIs uniqueness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1400
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: partitioned
+                  ds0.p_quality_dimension: Uniqueness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: KPIs timeliness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1400
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: partitioned
+                  ds0.p_quality_dimension: Timeliness
                   ds0.p_check_category: 'all'
           - folder_name: DQ KPIs partitioned checks per category
             dashboards:
@@ -641,6 +721,26 @@ spec:
                   ds0.p_check_type: 'all'
                   ds0.p_quality_dimension: Completeness
                   ds0.p_check_category: 'all'
+              - dashboard_name: Affected tables uniqueness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
+                width: 1400
+                height: 1600
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: 'all'
+                  ds0.p_quality_dimension: Uniqueness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: Affected tables timeliness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
+                width: 1400
+                height: 1600
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: 'all'
+                  ds0.p_quality_dimension: Timeliness
+                  ds0.p_check_category: 'all'
           - folder_name: Total affected tables per category
             dashboards:
               - dashboard_name: Affected tables - uniqueness
@@ -777,6 +877,26 @@ spec:
                 parameters:
                   ds0.p_check_type: profiling
                   ds0.p_quality_dimension: Completeness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: Affected tables uniqueness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
+                width:
+                height:
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: profiling
+                  ds0.p_quality_dimension: Uniqueness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: Affected tables timeliness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
+                width:
+                height:
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: profiling
+                  ds0.p_quality_dimension: Timeliness
                   ds0.p_check_category: 'all'
           - folder_name: Affected tables profiling per category
             dashboards:
@@ -915,6 +1035,26 @@ spec:
                   ds0.p_check_type: recurring
                   ds0.p_quality_dimension: Completeness
                   ds0.p_check_category: 'all'
+              - dashboard_name: Affected tables uniqueness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
+                width: 1400
+                height: 1600
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: recurring
+                  ds0.p_quality_dimension: Uniqueness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: Affected tables timeliness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
+                width: 1400
+                height: 1600
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: recurring
+                  ds0.p_quality_dimension: Timeliness
+                  ds0.p_check_category: 'all'
           - folder_name: Total affected tables per category
             dashboards:
               - dashboard_name: Affected tables - uniqueness
@@ -1051,6 +1191,26 @@ spec:
                 parameters:
                   ds0.p_check_type: partitioned
                   ds0.p_quality_dimension: Completeness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: Affected tables uniqueness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
+                width: 1400
+                height: 1600
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: partitioned
+                  ds0.p_quality_dimension: Uniqueness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: Affected tables timeliness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
+                width: 1400
+                height: 1600
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: partitioned
+                  ds0.p_quality_dimension: Timeliness
                   ds0.p_check_category: 'all'
           - folder_name: Total affected tables per category
             dashboards:
@@ -1191,6 +1351,26 @@ spec:
                   ds0.p_check_type: 'all'
                   ds0.p_quality_dimension: Completeness
                   ds0.p_check_category: 'all'
+              - dashboard_name: Issue details uniqueness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+                width: 1400
+                height: 2100
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: 'all'
+                  ds0.p_quality_dimension: Uniqueness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: Issue details timeliness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+                width: 1400
+                height: 2100
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: 'all'
+                  ds0.p_quality_dimension: Timeliness
+                  ds0.p_check_category: 'all'
           - folder_name: Total Issue details per category
             dashboards:
               - dashboard_name: Issue details - uniqueness
@@ -1327,6 +1507,26 @@ spec:
                     parameters:
                       ds0.p_check_type: 'all'
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per check uniqueness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per check timeliness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
               - folder_name: Total issues per check per category
                 dashboards:
@@ -1465,6 +1665,26 @@ spec:
                       ds0.p_check_type: 'all'
                       ds0.p_quality_dimension: Completeness
                       ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per table uniqueness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per table timeliness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
+                      ds0.p_check_category: 'all'
               - folder_name: Total issues per table per category
                 dashboards:
                   - dashboard_name: Issues per table - uniqueness
@@ -1601,6 +1821,26 @@ spec:
                 parameters:
                   ds0.p_check_type: profiling
                   ds0.p_quality_dimension: Completeness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: Issue details uniqueness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+                width: 1400
+                height: 2100
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: profiling
+                  ds0.p_quality_dimension: Uniqueness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: Issue details timeliness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+                width: 1400
+                height: 2100
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: profiling
+                  ds0.p_quality_dimension: Timeliness
                   ds0.p_check_category: 'all'
           - folder_name: Total Issue details profiling per category
             dashboards:
@@ -1739,6 +1979,26 @@ spec:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
                       ds0.p_check_category: 'all'
+                  - dashboard_name: uniqueness
+                    url: >-
+
+                    width:
+                    height:
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: timeliness
+                    url: >-
+
+                    width:
+                    height:
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
+                      ds0.p_check_category: 'all'
               - folder_name: Issues history profiling per category
                 dashboards:
                   - dashboard_name: Issues history - uniqueness
@@ -1875,6 +2135,26 @@ spec:
                     parameters:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per check uniqueness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per check timeliness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
               - folder_name: Issues per check profiling per category
                 dashboards:
@@ -2013,6 +2293,26 @@ spec:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
                       ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per table uniqueness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per table timeliness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Timeliness
+                      ds0.p_check_category: 'all'
               - folder_name: Issues per table profiling per category
                 dashboards:
                   - dashboard_name: Issues per table - uniqueness
@@ -2149,6 +2449,26 @@ spec:
                 parameters:
                   ds0.p_check_type: recurring
                   ds0.p_quality_dimension: Completeness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: Issue details uniqueness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+                width: 1400
+                height: 2100
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: recurring
+                  ds0.p_quality_dimension: Uniqueness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: Issue details timeliness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+                width: 1400
+                height: 2100
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: recurring
+                  ds0.p_quality_dimension: Timeliness
                   ds0.p_check_category: 'all'
           - folder_name: Total Issue details recurring checks per category
             dashboards:
@@ -2287,6 +2607,26 @@ spec:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
                       ds0.p_check_category: 'all'
+                  - dashboard_name: Issues history uniqueness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+                    width: 1400
+                    height: 2500
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Issues history timeliness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+                    width: 1400
+                    height: 2500
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Timeliness
+                      ds0.p_check_category: 'all'
               - folder_name: Issues history recurring checks per category
                 dashboards:
                   - dashboard_name: Issues history - uniqueness
@@ -2423,6 +2763,26 @@ spec:
                     parameters:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per check uniqueness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per check timeliness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
               - folder_name: Issues per check recurring checks per category
                 dashboards:
@@ -2561,6 +2921,26 @@ spec:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
                       ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per table uniqueness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per table timeliness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Timeliness
+                      ds0.p_check_category: 'all'
               - folder_name: Issues per table recurring checks per category
                 dashboards:
                   - dashboard_name: Issues per table - uniqueness
@@ -2697,6 +3077,26 @@ spec:
                 parameters:
                   ds0.p_check_type: partitioned
                   ds0.p_quality_dimension: Completeness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: Issue details uniqueness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+                width: 1400
+                height: 2100
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: partitioned
+                  ds0.p_quality_dimension: Uniqueness
+                  ds0.p_check_category: 'all'
+              - dashboard_name: Issue details timeliness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+                width: 1400
+                height: 2100
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: partitioned
+                  ds0.p_quality_dimension: Timeliness
                   ds0.p_check_category: 'all'
           - folder_name: Total Issue details partitioned checks per category
             dashboards:
@@ -2835,6 +3235,26 @@ spec:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
                       ds0.p_check_category: 'all'
+                  - dashboard_name: Issues history uniqueness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+                    width: 1400
+                    height: 2500
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioneed
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Issues history timeliness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
+                    width: 1400
+                    height: 2500
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Timeliness
+                      ds0.p_check_category: 'all'
               - folder_name: Issues history partitioned checks per category
                 dashboards:
                   - dashboard_name: Issues history - uniqueness
@@ -2972,6 +3392,26 @@ spec:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
                       ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per check uniqueness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per check timeliness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Timeliness
+                      ds0.p_check_category: 'all'
               - folder_name: Issues per check partitioned checks per category
                 dashboards:
                   - dashboard_name: Issues per check - uniqueness
@@ -3108,6 +3548,26 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per table uniqueness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Issues per table timeliness
+                    url: >-
+                      https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
+                    width: 1400
+                    height: 1800
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
               - folder_name: Issues per table partitioned checks per category
                 dashboards:
@@ -3482,6 +3942,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - completeness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
@@ -3501,6 +3971,26 @@ spec:
                     parameters:
                       ds0.p_check_type: 'all'
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily tests per check
             folders:
@@ -3598,6 +4088,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
@@ -3617,6 +4117,26 @@ spec:
                     parameters:
                       ds0.p_check_type: 'all'
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily tests per data stream, table
             folders:
@@ -3714,6 +4234,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
@@ -3733,6 +4263,26 @@ spec:
                     parameters:
                       ds0.p_check_type: 'all'
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily tests per data stream, check
             folders:
@@ -3830,6 +4380,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+
+                    width:
+                    height:
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
@@ -3849,6 +4409,26 @@ spec:
                     parameters:
                       ds0.p_check_type: 'all'
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per table
             folders:
@@ -3946,6 +4526,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
@@ -3965,6 +4555,26 @@ spec:
                     parameters:
                       ds0.p_check_type: 'all'
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per check
             folders:
@@ -4062,6 +4672,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
@@ -4081,6 +4701,26 @@ spec:
                     parameters:
                       ds0.p_check_type: 'all'
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per data stream, table
             folders:
@@ -4178,6 +4818,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
@@ -4197,6 +4847,26 @@ spec:
                     parameters:
                       ds0.p_check_type: 'all'
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >- 
+                      https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per data stream, check
             folders:
@@ -4294,6 +4964,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
@@ -4313,6 +4993,26 @@ spec:
                     parameters:
                       ds0.p_check_type: 'all'
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per table
             folders:
@@ -4410,6 +5110,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: Daily KPI - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
@@ -4420,7 +5130,7 @@ spec:
                       ds0.p_check_type: 'all'
                       ds0.p_quality_dimension: Reasonableness
                       ds0.p_check_category: 'all'
-                  - dashboard_name: Daily - completeness
+                  - dashboard_name: Daily KPI - completeness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
                     width: 1400
@@ -4429,6 +5139,26 @@ spec:
                     parameters:
                       ds0.p_check_type: 'all'
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per check
             folders:
@@ -4526,6 +5256,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: Daily KPI - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
@@ -4545,6 +5285,26 @@ spec:
                     parameters:
                       ds0.p_check_type: 'all'
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per data stream, table
             folders:
@@ -4642,6 +5402,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: Daily KPI - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
@@ -4661,6 +5431,26 @@ spec:
                     parameters:
                       ds0.p_check_type: 'all'
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per data stream, check
             folders:
@@ -4758,6 +5548,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: Daily KPI - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/c5B8C
@@ -4777,6 +5577,26 @@ spec:
                     parameters:
                       ds0.p_check_type: 'all'
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
       - folder_name: Technical details for profiling
         dashboards:
@@ -5007,6 +5827,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - completeness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
@@ -5026,6 +5856,26 @@ spec:
                     parameters:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily tests per check
             folders:
@@ -5123,6 +5973,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
@@ -5142,6 +6002,26 @@ spec:
                     parameters:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily tests per data stream, table
             folders:
@@ -5239,6 +6119,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
@@ -5258,6 +6148,26 @@ spec:
                     parameters:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily tests per data stream, check
             folders:
@@ -5355,6 +6265,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
@@ -5374,6 +6294,26 @@ spec:
                     parameters:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per table
             folders:
@@ -5471,6 +6411,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
@@ -5490,6 +6440,26 @@ spec:
                     parameters:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per check
             folders:
@@ -5587,6 +6557,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
@@ -5606,6 +6586,26 @@ spec:
                     parameters:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per data stream, table
             folders:
@@ -5703,6 +6703,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
@@ -5722,6 +6732,26 @@ spec:
                     parameters:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per data stream, check
             folders:
@@ -5819,6 +6849,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
@@ -5838,6 +6878,26 @@ spec:
                     parameters:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per table
             folders:
@@ -5935,6 +6995,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: Daily KPI - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
@@ -5945,7 +7015,7 @@ spec:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Reasonableness
                       ds0.p_check_category: 'all'
-                  - dashboard_name: Daily - completeness
+                  - dashboard_name: Daily KPI - completeness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
                     width: 1400
@@ -5954,6 +7024,26 @@ spec:
                     parameters:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per check
             folders:
@@ -6051,6 +7141,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: uniqueness
+                    url: >-
+
+                    width:
+                    height:
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
@@ -6070,6 +7170,26 @@ spec:
                     parameters:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: uniqueness
+                    url: >-
+
+                    width:
+                    height:
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: timeliness
+                    url: >-
+
+                    width:
+                    height:
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: 'all'
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per data stream, table
             folders:
@@ -6167,6 +7287,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: Daily KPI - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
@@ -6186,6 +7316,26 @@ spec:
                     parameters:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per data stream, check
             folders:
@@ -6283,6 +7433,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: Daily KPI - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
@@ -6302,6 +7462,26 @@ spec:
                     parameters:
                       ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: profiling
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
       - folder_name: Technical details for recurring checks
         dashboards:
@@ -6522,6 +7702,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - completeness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
@@ -6541,6 +7731,26 @@ spec:
                     parameters:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                    width:
+                    height:
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                    width:
+                    height:
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily tests per check
             folders:
@@ -6638,6 +7848,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
@@ -6657,6 +7877,26 @@ spec:
                     parameters:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily tests per data stream, table
             folders:
@@ -6754,6 +7994,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
@@ -6773,6 +8023,26 @@ spec:
                     parameters:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily tests per data stream, check
             folders:
@@ -6870,6 +8140,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
@@ -6889,6 +8169,26 @@ spec:
                     parameters:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per table
             folders:
@@ -6986,6 +8286,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
@@ -7006,6 +8316,26 @@ spec:
                     parameters:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per check
             folders:
@@ -7103,6 +8433,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
@@ -7122,6 +8462,26 @@ spec:
                     parameters:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per data stream, table
             folders:
@@ -7219,6 +8579,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
@@ -7238,6 +8608,26 @@ spec:
                     parameters:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per data stream, check
             folders:
@@ -7335,6 +8725,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
@@ -7354,6 +8754,26 @@ spec:
                     parameters:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per table
             folders:
@@ -7451,6 +8871,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: Daily KPI - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
@@ -7461,7 +8891,7 @@ spec:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Reasonableness
                       ds0.p_check_category: 'all'
-                  - dashboard_name: Daily - completeness
+                  - dashboard_name: Daily KPI - completeness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
                     width: 1400
@@ -7470,6 +8900,26 @@ spec:
                     parameters:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: aily KPI - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: aily KPI - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per check
             folders:
@@ -7567,6 +9017,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: Daily KPI - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
@@ -7586,6 +9046,26 @@ spec:
                     parameters:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per data stream, table
             folders:
@@ -7683,6 +9163,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: Daily KPI - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
@@ -7702,6 +9192,26 @@ spec:
                     parameters:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per data stream, check
             folders:
@@ -7799,6 +9309,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: Daily KPI - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
@@ -7818,6 +9338,26 @@ spec:
                     parameters:
                       ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: recurring
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
       - folder_name: Technical details partitioned checks
         dashboards:
@@ -8038,6 +9578,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - completeness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
@@ -8057,6 +9607,26 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily tests per check
             folders:
@@ -8154,6 +9724,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
@@ -8173,6 +9753,26 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily tests per data stream, table
             folders:
@@ -8270,6 +9870,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
@@ -8289,6 +9899,26 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily tests per data stream, check
             folders:
@@ -8386,6 +10016,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
+                  - dashboard_name: Daily tests - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily tests - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
@@ -8405,6 +10045,26 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily tests - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per table
             folders:
@@ -8502,6 +10162,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
@@ -8521,6 +10191,26 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per check
             folders:
@@ -8618,6 +10308,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
@@ -8637,6 +10337,26 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per data stream, table
             folders:
@@ -8734,6 +10454,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
@@ -8753,6 +10483,26 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Scoreboard per data stream, check
             folders:
@@ -8850,6 +10600,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
+                  - dashboard_name: Scoreboard - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Scoreboard - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
@@ -8869,6 +10629,26 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Scoreboard - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per table
             folders:
@@ -8966,6 +10746,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: Daily KPI - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
@@ -8976,7 +10766,7 @@ spec:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Reasonableness
                       ds0.p_check_category: 'all'
-                  - dashboard_name: Daily - completeness
+                  - dashboard_name: Daily KPI - completeness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
                     width: 1400
@@ -8985,6 +10775,26 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per check
             folders:
@@ -9082,6 +10892,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: Daily KPI - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
@@ -9101,6 +10921,26 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per data stream, table
             folders:
@@ -9198,6 +11038,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: Daily KPI - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
@@ -9217,6 +11067,26 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
           - folder_name: Daily KPI per data stream, check
             folders:
@@ -9314,6 +11184,16 @@ spec:
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
+                  - dashboard_name: Daily KPI - validity
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Validity
+                      ds0.p_check_category: 'all'
                   - dashboard_name: Daily KPI - reasonableness
                     url: >-
                       https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
@@ -9333,6 +11213,26 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - uniqueness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Uniqueness
+                      ds0.p_check_category: 'all'
+                  - dashboard_name: Daily KPI - timeliness
+                    url: >-
+                      https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
+                    width: 1400
+                    height: 1100
+                    dqo_cloud_credentials: true
+                    parameters:
+                      ds0.p_check_type: partitioned
+                      ds0.p_quality_dimension: Timeliness
                       ds0.p_check_category: 'all'
       - folder_name: Checks no longer in use
         dashboards:
