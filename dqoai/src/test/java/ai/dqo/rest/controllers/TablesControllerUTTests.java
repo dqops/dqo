@@ -45,11 +45,14 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
+import ai.dqo.rules.comparison.MinCountRuleWarningParametersSpec;
+import ai.dqo.rest.models.dashboards.utils.UICheckContainerBasicModelUtility;
+import ai.dqo.services.check.mapping.models.UICheckContainerModel;
+import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
 import ai.dqo.rest.models.metadata.TableBasicModel;
 import ai.dqo.rest.models.metadata.TableModel;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MinCountRuleFatalParametersSpec;
-import ai.dqo.rules.comparison.MinCountRuleWarningParametersSpec;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -57,9 +60,6 @@ import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
 import ai.dqo.services.check.mapping.UIAllChecksModelFactoryImpl;
 import ai.dqo.services.check.mapping.UiToSpecCheckMappingServiceImpl;
-import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
-import ai.dqo.services.check.mapping.models.UICheckContainerModel;
-import ai.dqo.services.check.mapping.utils.UICheckContainerBasicModelUtility;
 import ai.dqo.services.metadata.TableService;
 import ai.dqo.services.metadata.TableServiceImpl;
 import ai.dqo.utils.BeanFactoryObjectMother;
@@ -170,7 +170,7 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableProfilingUI(
+        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableProfilingChecksUI(
                 this.sampleTable.getConnectionName(),
                 tableSpec.getPhysicalTableName().getSchemaName(),
                 tableSpec.getPhysicalTableName().getTableName());
@@ -245,7 +245,7 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableProfilingUI(
+        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableProfilingChecksUI(
                 this.sampleTable.getConnectionName(),
                 tableSpec.getPhysicalTableName().getSchemaName(),
                 tableSpec.getPhysicalTableName().getTableName());
@@ -292,7 +292,7 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTableProfilingUIBasic(
+        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTableProfilingChecksUIBasic(
                 this.sampleTable.getConnectionName(),
                 tableSpec.getPhysicalTableName().getSchemaName(),
                 tableSpec.getPhysicalTableName().getTableName());

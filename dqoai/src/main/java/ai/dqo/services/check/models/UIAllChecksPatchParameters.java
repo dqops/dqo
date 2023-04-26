@@ -24,6 +24,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -31,9 +32,12 @@ import java.util.Map;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "UIAllChecksPatchParameters", description = "Parameter object for creating pruned patch trees of all checks that fit the filters.")
 public class UIAllChecksPatchParameters {
-    @JsonPropertyDescription("Filters addressing basic tree search parameters.")
+    @JsonPropertyDescription("Filters addressing basic tree search parameters. These filters takes precedence over other selectors.")
     @NotNull
     CheckSearchFilters checkSearchFilters;
+
+    @JsonPropertyDescription("List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.")
+    Map<String, List<String>> selectedTablesToColumns;
 
     @JsonPropertyDescription("Override existing configurations if they're present. If false, apply updates only to the fields for which no configuration exists.")
     boolean overrideConflicts;

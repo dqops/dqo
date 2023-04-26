@@ -744,16 +744,16 @@ public class ConnectionsController {
      * @param updatePatchParameters Check search filters and rules configuration.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/checks/{checkName}/enable")
-    @ApiOperation(value = "enableConnectionChecks", notes = "Enables a named check on this connection in the locations specified by filter")
+    @PutMapping("/{connectionName}/checks/{checkName}/bulkenable")
+    @ApiOperation(value = "bulkEnableConnectionChecks", notes = "Enables a named check on this connection in the locations specified by filter")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Checks enabled"),
+            @ApiResponse(code = 204, message = "Checks enabled in bulk"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> enableConnectionChecks(
+    public ResponseEntity<Mono<?>> bulkEnableConnectionChecks(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check name") @PathVariable String checkName,
             @ApiParam("Check search filters and rules configuration")
