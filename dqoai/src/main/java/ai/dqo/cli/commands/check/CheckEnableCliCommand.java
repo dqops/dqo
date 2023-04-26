@@ -19,6 +19,8 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.cli.commands.check.impl.CheckCliService;
+import ai.dqo.cli.commands.check.impl.models.UIAllChecksCliPatchParameters;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.*;
 import ai.dqo.cli.output.OutputFormatService;
@@ -27,8 +29,6 @@ import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.services.check.CheckService;
-import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import ai.dqo.utils.serialization.JsonSerializer;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWritter;
-    private CheckService checkService;
+    private CheckCliService checkService;
     private JsonSerializer jsonSerializer;
     private OutputFormatService outputFormatService;
     private FileWritter fileWritter;
@@ -62,7 +62,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
     public CheckEnableCliCommand(TerminalReader terminalReader,
                                  TerminalWriter terminalWriter,
                                  TerminalTableWritter terminalTableWritter,
-                                 CheckService checkService,
+                                 CheckCliService checkService,
                                  JsonSerializer jsonSerializer,
                                  OutputFormatService outputFormatService,
                                  FileWritter fileWritter) {
@@ -347,7 +347,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
             this.fatalLevelOptions = new HashMap<>();
         }
 
-        UIAllChecksPatchParameters patchParameters = new UIAllChecksPatchParameters() {{
+        UIAllChecksCliPatchParameters patchParameters = new UIAllChecksCliPatchParameters() {{
             setCheckSearchFilters(filters);
             setSensorOptions(sensorParams);
             setOverrideConflicts(override);

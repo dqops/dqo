@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ai.dqo.rest.models.dashboards.utils;
+package ai.dqo.services.check.mapping.utils;
 
 import ai.dqo.services.check.mapping.basicmodels.UICheckBasicModel;
 import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;

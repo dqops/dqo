@@ -69,8 +69,7 @@ public class UIAllChecksModelFactoryImpl implements UIAllChecksModelFactory {
         ConnectionSearchFilters connectionSearchFilters = new ConnectionSearchFilters();
         connectionSearchFilters.setConnectionName(checkSearchFilters.getConnectionName());
 
-        Collection<ConnectionSpec> connectionSpecs = this.hierarchyNodeTreeSearcher
-                .findConnections(userHome, connectionSearchFilters);
+        Collection<ConnectionSpec> connectionSpecs = this.hierarchyNodeTreeSearcher.findConnections(userHome, connectionSearchFilters);
         if (connectionSpecs.isEmpty()) {
             // No connections matching the filter.
             return new ArrayList<>();

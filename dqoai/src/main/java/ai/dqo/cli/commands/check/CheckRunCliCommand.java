@@ -20,6 +20,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.cli.commands.check.impl.CheckCliService;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.*;
 import ai.dqo.cli.output.OutputFormatService;
@@ -52,7 +53,7 @@ import picocli.CommandLine;
 public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITableNameCommand {
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWritter;
-    private CheckService checkService;
+    private CheckCliService checkService;
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private JsonSerializer jsonSerializer;
     private OutputFormatService outputFormatService;
@@ -70,7 +71,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @Autowired
     public CheckRunCliCommand(TerminalWriter terminalWriter,
                               TerminalTableWritter terminalTableWritter,
-                              CheckService checkService,
+                              CheckCliService checkService,
                               CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
                               JsonSerializer jsonSerializer,
                               OutputFormatService outputFormatService,

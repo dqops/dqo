@@ -19,11 +19,11 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.cli.commands.check.impl.CheckCliService;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.*;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.services.check.CheckService;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -39,14 +39,14 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "disable", description = "Disable data quality checks matching specified filters")
 public class CheckDisableCliCommand extends BaseCommand implements ICommand, ITableNameCommand {
     private TerminalReader terminalReader;
-    private CheckService checkService;
+    private CheckCliService checkService;
 
     public CheckDisableCliCommand() {
     }
 
     @Autowired
     public CheckDisableCliCommand(TerminalReader terminalReader,
-                                  CheckService checkService) {
+                                  CheckCliService checkService) {
         this.terminalReader = terminalReader;
         this.checkService = checkService;
     }

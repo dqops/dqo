@@ -16,6 +16,7 @@
 package ai.dqo.services.check.models;
 
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.services.check.mapping.models.UICheckModel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -36,30 +37,12 @@ public class UIAllChecksPatchParameters {
     @NotNull
     CheckSearchFilters checkSearchFilters;
 
+    @JsonPropertyDescription("Sample configured check model which will pasted onto selected checks.")
+    UICheckModel uiCheckModelPatch;
+
     @JsonPropertyDescription("List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.")
     Map<String, List<String>> selectedTablesToColumns;
 
     @JsonPropertyDescription("Override existing configurations if they're present. If false, apply updates only to the fields for which no configuration exists.")
     boolean overrideConflicts;
-
-    @JsonPropertyDescription("Disable warning level rule.")
-    boolean disableWarningLevel;
-
-    @JsonPropertyDescription("Disable error level rule.")
-    boolean disableErrorLevel;
-
-    @JsonPropertyDescription("Disable fatal level rule.")
-    boolean disableFatalLevel;
-
-    @JsonPropertyDescription("Configurations for sensor parameters, example of an entry: \"expected_value\" -> 30, etc.")
-    Map<String, String> sensorOptions;
-
-    @JsonPropertyDescription("Options for warning level rules on checks, example of an entry: \"min_count\" -> 20, etc. If null, warning level will be ignored.")
-    Map<String, String> warningLevelOptions;
-
-    @JsonPropertyDescription("Options for error level rules on checks, example of an entry: \"min_count\" -> 10, etc. If null, error level will be ignored.")
-    Map<String, String> errorLevelOptions;
-
-    @JsonPropertyDescription("Options for fatal level rules on checks, example of an entry: \"min_count\" -> 5, etc. If null, fatal level will be ignored.")
-    Map<String, String> fatalLevelOptions;
 }
