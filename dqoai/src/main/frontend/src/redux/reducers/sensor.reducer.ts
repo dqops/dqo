@@ -18,7 +18,7 @@ import {
   SensorBasicFolderModel,
 } from '../../api';
 import { SENSOR_ACTION } from '../types';
-import { Action, INestTab, ISourceState } from "./source.reducer";
+import { Action, INestTab } from "./source.reducer";
 
 export interface ISensorState {
   sensorFolderTree?: SensorBasicFolderModel;
@@ -132,7 +132,8 @@ const sensorReducer = (state = initialState, action: any) => {
     case SENSOR_ACTION.GET_SENSOR_DETAIL_SUCCESS: {
       return setActiveTabState(state, action,{
         loading: false,
-        sensorDetail: action.data
+        sensorDetail: action.data,
+        isUpdatedSensorDetail: false,
       });
     }
     case SENSOR_ACTION.GET_SENSOR_DETAIL_FAILED: {
@@ -148,7 +149,8 @@ const sensorReducer = (state = initialState, action: any) => {
     case SENSOR_ACTION.GET_RULE_DETAIL_SUCCESS: {
       return setActiveTabState(state, action,{
         loading: false,
-        ruleDetail: action.data
+        ruleDetail: action.data,
+        isUpdatedRuleDetail: false,
       });
     }
     case SENSOR_ACTION.GET_RULE_DETAIL_FAILED: {
@@ -158,13 +160,47 @@ const sensorReducer = (state = initialState, action: any) => {
     }
     case SENSOR_ACTION.SET_UPDATED_RULE: {
       return setActiveTabState(state, action,{
-        ruleDetail: action.data
+        ruleDetail: action.data,
+        isUpdatedRuleDetail: true,
       });
     }
     case SENSOR_ACTION.SET_UPDATED_SENSOR: {
       return setActiveTabState(state, action,{
-        sensorDetail: action.data
+        sensorDetail: action.data,
+        isUpdatedSensorDetail: true,
       });
+    }
+    case SENSOR_ACTION.UPDATE_SENSOR_DETAIL: {
+      return setActiveTabState(state, action, {
+        isUpdating: true
+      })
+    }
+    case SENSOR_ACTION.UPDATE_SENSOR_DETAIL_SUCCESS: {
+      return setActiveTabState(state, action, {
+        isUpdating: false,
+        isUpdatedSensorDetail: false
+      })
+    }
+    case SENSOR_ACTION.UPDATE_SENSOR_DETAIL_FAILED: {
+      return setActiveTabState(state, action, {
+        isUpdating: false
+      })
+    }
+    case SENSOR_ACTION.UPDATE_RULE_DETAIL: {
+      return setActiveTabState(state, action, {
+        isUpdating: true
+      })
+    }
+    case SENSOR_ACTION.UPDATE_RULE_DETAIL_SUCCESS: {
+      return setActiveTabState(state, action, {
+        isUpdating: false,
+        isUpdatedRuleDetail: false
+      })
+    }
+    case SENSOR_ACTION.UPDATE_RULE_DETAIL_FAILED: {
+      return setActiveTabState(state, action, {
+        isUpdating: false
+      })
     }
     default:
       return state;

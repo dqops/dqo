@@ -121,7 +121,58 @@ export const setUpdatedRule = (rule: RuleModel) => ({
   data: rule
 });
 
-export const setUpdatedSensor = (rule: RuleModel) => ({
+export const setUpdatedSensor = (rule: SensorModel) => ({
   type: SENSOR_ACTION.SET_UPDATED_SENSOR,
   data: rule
 });
+
+export const updateSensorRequest = () => ({
+  type: SENSOR_ACTION.UPDATE_SENSOR_DETAIL
+});
+
+export const updateSensorSuccess = (data: SensorModel) => ({
+  type: SENSOR_ACTION.UPDATE_SENSOR_DETAIL_SUCCESS,
+  data
+});
+
+export const updateSensorFailed = (error: unknown) => ({
+  type: SENSOR_ACTION.UPDATE_SENSOR_DETAIL_FAILED,
+  error
+});
+
+export const updateSensor = (sensorName: string, body: SensorModel) => async (dispatch: Dispatch) => {
+  dispatch(updateSensorRequest());
+  try {
+    const res: AxiosResponse<SensorModel> =
+      await SensorsApi.updateSensor(sensorName, body);
+    dispatch(updateSensorSuccess(res.data));
+  } catch (err) {
+    dispatch(updateSensorFailed(err));
+  }
+};
+
+
+export const updateRuleRequest = () => ({
+  type: SENSOR_ACTION.UPDATE_RULE_DETAIL
+});
+
+export const updateRuleSuccess = (data: SensorModel) => ({
+  type: SENSOR_ACTION.UPDATE_RULE_DETAIL_SUCCESS,
+  data
+});
+
+export const updateRuleFailed = (error: unknown) => ({
+  type: SENSOR_ACTION.UPDATE_RULE_DETAIL_FAILED,
+  error
+});
+
+export const updateRule = (ruleName: string, body: RuleModel) => async (dispatch: Dispatch) => {
+  dispatch(updateRuleRequest());
+  try {
+    const res: AxiosResponse<SensorModel> =
+      await RulesApi.updateRule(ruleName, body);
+    dispatch(updateRuleSuccess(res.data));
+  } catch (err) {
+    dispatch(updateRuleFailed(err));
+  }
+};
