@@ -451,7 +451,7 @@ public class TableDataSnapshot {
                     }
 
                     toDelete = toDelete.and(
-                            monthlyPartitionTable.stringColumn(colName)
+                            monthlyPartitionTable.textColumn(colName)
                                     .isIn(colValues));
                 }
             }
@@ -460,7 +460,7 @@ public class TableDataSnapshot {
             }
 
             List<String> idsToDeleteInPartition = monthlyPartitionTable
-                    .stringColumn(this.storageSettings.getIdStringColumnName())
+                    .textColumn(this.storageSettings.getIdStringColumnName())
                     .where(toDelete).asList();
             idsToDelete.addAll(idsToDeleteInPartition);
         }

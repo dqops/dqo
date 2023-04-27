@@ -48,8 +48,8 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return Array of data stream level columns that were found.
      */
     @Override
-    public StringColumn[] extractAndNormalizeDataStreamLevelColumns(Table resultsTable, DataStreamMappingSpec dataStreamMappingSpec, int rowCount) {
-        StringColumn[] dataStreamLevelColumns = new StringColumn[9]; // we support 9 data stream levels, we store them at their respective indexes shifted 1 value down (0-based array)
+    public TextColumn[] extractAndNormalizeDataStreamLevelColumns(Table resultsTable, DataStreamMappingSpec dataStreamMappingSpec, int rowCount) {
+        TextColumn[] dataStreamLevelColumns = new TextColumn[9]; // we support 9 data stream levels, we store them at their respective indexes shifted 1 value down (0-based array)
 
         for (int levelIndex = 1; levelIndex <= 9; levelIndex++) {
             String dataStreamLevelColumnName = CommonColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + levelIndex;
@@ -61,20 +61,20 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
                 if (dataStreamMappingSpec != null && dataStreamMappingSpec.getLevel(levelIndex) != null) {
                     DataStreamLevelSpec dataStreamLevelSpec = dataStreamMappingSpec.getLevel(levelIndex);
                     if (dataStreamLevelSpec.getSource() == DataStreamLevelSource.tag && !Strings.isNullOrEmpty(dataStreamLevelSpec.getTag())) {
-                        StringColumn tagColumn = StringColumn.create(dataStreamLevelColumnName, rowCount);
+                        TextColumn tagColumn = TextColumn.create(dataStreamLevelColumnName, rowCount);
                         tagColumn.setMissingTo(dataStreamLevelSpec.getTag());
                         dataStreamLevelColumns[levelIndex - 1] = tagColumn;
                     }
                 }
             }
 
-            if (existingDataStreamLevelColumn instanceof StringColumn) {
-                StringColumn stringExistingStreamLevelCol = (StringColumn)existingDataStreamLevelColumn;
+            if (existingDataStreamLevelColumn instanceof TextColumn) {
+                TextColumn stringExistingStreamLevelCol = (TextColumn)existingDataStreamLevelColumn;
                 dataStreamLevelColumns[levelIndex - 1] = stringExistingStreamLevelCol.copy();
                 continue;
             }
 
-            StringColumn stringifiedColumn = existingDataStreamLevelColumn.asStringColumn();
+            TextColumn stringifiedColumn = TableColumnUtility.convertToTextColumn(existingDataStreamLevelColumn);
             dataStreamLevelColumns[levelIndex - 1] = stringifiedColumn;
         }
 
@@ -88,9 +88,9 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return Data stream hash.
      */
     @Override
-    public long calculateDataStreamHashForRow(StringColumn[] dataStreamLevelColumns, int rowIndex) {
+    public long calculateDataStreamHashForRow(TextColumn[] dataStreamLevelColumns, int rowIndex) {
         int notNullColumnCount = 0;
-        for (StringColumn dataStreamLevelColumn : dataStreamLevelColumns) {
+        for (TextColumn dataStreamLevelColumn : dataStreamLevelColumns) {
             if (dataStreamLevelColumn != null) {
                 notNullColumnCount++;
             }
@@ -123,7 +123,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return Data stream hash column.
      */
     @Override
-    public LongColumn createDataStreamHashColumn(StringColumn[] dataStreamLevelColumns, int rowCount) {
+    public LongColumn createDataStreamHashColumn(TextColumn[] dataStreamLevelColumns, int rowCount) {
         LongColumn dataStreamHashColumn = LongColumn.create(CommonColumnNames.DATA_STREAM_HASH_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
@@ -141,11 +141,11 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return Data stream name.
      */
     @Override
-    public String calculateDataStreamNameForRow(StringColumn[] dataStreamLevelColumns, int rowIndex) {
+    public String calculateDataStreamNameForRow(TextColumn[] dataStreamLevelColumns, int rowIndex) {
         int notNullColumnCount = 0;
         int lastNotNullColumn = -1;
         for (int i = 0; i < dataStreamLevelColumns.length ; i++) {
-            StringColumn dataStreamLevelColumn = dataStreamLevelColumns[i];
+            TextColumn dataStreamLevelColumn = dataStreamLevelColumns[i];
             if (dataStreamLevelColumn != null) {
                 notNullColumnCount++;
                 lastNotNullColumn = i;
@@ -163,7 +163,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
                 sb.append(" / ");
             }
 
-            StringColumn levelColumn = dataStreamLevelColumns[i];
+            TextColumn levelColumn = dataStreamLevelColumns[i];
             if (levelColumn == null) {
                 continue;
             }
@@ -185,8 +185,8 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return Data stream name column.
      */
     @Override
-    public StringColumn createDataStreamNameColumn(StringColumn[] dataStreamLevelColumns, int rowCount) {
-        StringColumn dataStreamNameColumn = StringColumn.create(CommonColumnNames.DATA_STREAM_NAME_COLUMN_NAME, rowCount);
+    public TextColumn createDataStreamNameColumn(TextColumn[] dataStreamLevelColumns, int rowCount) {
+        TextColumn dataStreamNameColumn = TextColumn.create(CommonColumnNames.DATA_STREAM_NAME_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
             String dataStreamName = calculateDataStreamNameForRow(dataStreamLevelColumns, i);
@@ -206,12 +206,12 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return Time series uuid column, filled with values.
      */
     @Override
-    public StringColumn createTimeSeriesUuidColumn(LongColumn sortedDataStreamHashColumn,
-                                                   long checkOrProfilerHash,
-                                                   long tableHash,
-                                                   long columnHash,
-                                                   int rowCount) {
-        StringColumn timeSeriesUuidColumn = StringColumn.create(CommonColumnNames.TIME_SERIES_ID_COLUMN_NAME, rowCount);
+    public TextColumn createTimeSeriesUuidColumn(LongColumn sortedDataStreamHashColumn,
+                                                 long checkOrProfilerHash,
+                                                 long tableHash,
+                                                 long columnHash,
+                                                 int rowCount) {
+        TextColumn timeSeriesUuidColumn = TextColumn.create(CommonColumnNames.TIME_SERIES_ID_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
             Long dataStreamHash = sortedDataStreamHashColumn.get(i);
@@ -234,13 +234,13 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return ID column, filled with values.
      */
     @Override
-    public StringColumn createRowIdColumn(LongColumn sortedDataStreamHashColumn,
-                                          DateTimeColumn sortedTimePeriodColumn,
-                                          long checkHash,
-                                          long tableHash,
-                                          long columnHash,
-                                          int rowCount) {
-        StringColumn idColumn = StringColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
+    public TextColumn createRowIdColumn(LongColumn sortedDataStreamHashColumn,
+                                        DateTimeColumn sortedTimePeriodColumn,
+                                        long checkHash,
+                                        long tableHash,
+                                        long columnHash,
+                                        int rowCount) {
+        TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
             Long dataStreamHash = sortedDataStreamHashColumn.get(i);
@@ -265,13 +265,13 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
      * @return ID column, filled with values.
      */
     @Override
-    public StringColumn createRowIdColumn(LongColumn sortedDataStreamHashColumn,
+    public TextColumn createRowIdColumn(LongColumn sortedDataStreamHashColumn,
                                           InstantColumn sortedTimePeriodColumn,
                                           long checkHash,
                                           long tableHash,
                                           long columnHash,
                                           int rowCount) {
-        StringColumn idColumn = StringColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
+        TextColumn idColumn = TextColumn.create(CommonColumnNames.ID_COLUMN_NAME, rowCount);
 
         for (int i = 0; i < rowCount ; i++) {
             Long dataStreamHash = sortedDataStreamHashColumn.get(i);

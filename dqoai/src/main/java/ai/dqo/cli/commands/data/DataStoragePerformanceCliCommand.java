@@ -92,7 +92,7 @@ public class DataStoragePerformanceCliCommand extends BaseCommand implements ICo
     }
 
     private void generateRows(LocalDate monthDate, Table targetTable) {
-        StringColumn idColumn = targetTable.stringColumn(CheckResultsColumnNames.ID_COLUMN_NAME);
+        TextColumn idColumn = targetTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME);
         DoubleColumn actualValueColumn = targetTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         DateTimeColumn timePeriodColumn = targetTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME);
 

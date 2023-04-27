@@ -328,7 +328,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             }
 
             if (tableDataChanges.getDeletedIds() != null && tableDataChanges.getDeletedIds().size() > 0 && dataToSave != null) {
-                Selection rowsToDeleteSelection = dataToSave.stringColumn(storageSettings.getIdStringColumnName())
+                Selection rowsToDeleteSelection = dataToSave.textColumn(storageSettings.getIdStringColumnName())
                         .isIn(tableDataChanges.getDeletedIds());
                 if (rowsToDeleteSelection.size() > 0) {
                     dataToSave = dataToSave.dropWhere(rowsToDeleteSelection);

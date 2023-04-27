@@ -19,17 +19,17 @@ import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.DateTimeColumn;
-import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.api.TextColumn;
 
 /**
  * Describes the dataset (dataframe) returned from a failed sensor. Identifies the time series column, data stream columns, etc.
  * The columns are normalized.
  */
 public class ErrorsNormalizedResult extends SensorReadoutsNormalizedResult {
-    private final StringColumn readoutIdColumn;
-    private final StringColumn errorMessageColumn;
-    private final StringColumn errorSourceColumn;
+    private final TextColumn readoutIdColumn;
+    private final TextColumn errorMessageColumn;
+    private final TextColumn errorSourceColumn;
     private final DateTimeColumn errorTimestampColumn;
 
     /**
@@ -40,9 +40,9 @@ public class ErrorsNormalizedResult extends SensorReadoutsNormalizedResult {
      */
     public ErrorsNormalizedResult(Table table) {
         super(table);
-        this.readoutIdColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorsColumnNames.READOUT_ID_COLUMN_NAME);
-        this.errorMessageColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME);
-        this.errorSourceColumn = TableColumnUtility.getOrAddStringColumn(table, ErrorsColumnNames.ERROR_SOURCE_COLUMN_NAME);
+        this.readoutIdColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorsColumnNames.READOUT_ID_COLUMN_NAME);
+        this.errorMessageColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME);
+        this.errorSourceColumn = TableColumnUtility.getOrAddTextColumn(table, ErrorsColumnNames.ERROR_SOURCE_COLUMN_NAME);
         this.errorTimestampColumn = TableColumnUtility.getOrAddDateTimeColumn(table, ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME);
     }
 
@@ -50,7 +50,7 @@ public class ErrorsNormalizedResult extends SensorReadoutsNormalizedResult {
      * Returns the error with a unique ID of the sensor readout. There could be multiple rows with the same readout_id, especially for checkpoints and partitioned checks.
      * @return Column with the readout ID that is the same ID that would be used as the "ID" column in sensor_readouts or rule_results.
      */
-    public StringColumn getReadoutIdColumn() {
+    public TextColumn getReadoutIdColumn() {
         return readoutIdColumn;
     }
 
@@ -58,7 +58,7 @@ public class ErrorsNormalizedResult extends SensorReadoutsNormalizedResult {
      * Returns the column that contains the error message.
      * @return Error message column.
      */
-    public StringColumn getErrorMessageColumn() {
+    public TextColumn getErrorMessageColumn() {
         return errorMessageColumn;
     }
 
@@ -66,7 +66,7 @@ public class ErrorsNormalizedResult extends SensorReadoutsNormalizedResult {
      * Returns the column that returns the error source, values are in {@link ai.dqo.data.errors.factory.ErrorSource} - sensor or rule.
      * @return Error source column.
      */
-    public StringColumn getErrorSourceColumn() {
+    public TextColumn getErrorSourceColumn() {
         return errorSourceColumn;
     }
 

@@ -86,7 +86,7 @@ public class FileStorageSettings {
     }
 
     /**
-     * Returns the name of a String column  {@link tech.tablesaw.api.StringColumn} that stores the primary key of each row.
+     * Returns the name of a String column  {@link tech.tablesaw.api.TextColumn} that stores the primary key of each row.
      * Used to find rows to be deleted.
      * @return ID column name.
      */
