@@ -28,7 +28,7 @@ nav:
     - Data storage: 'dqo-concepts/data-storage/data-storage.md'
     - Working with YAML files: 'dqo-concepts/working-with-yaml-files/working-with-yaml-files.md'
     - Working with CLI: 'dqo-concepts/working-with-cli/working-with-cli.md'
-  - Examples:
+  - Usecases:
     - "examples/index.md"
     - Percentage of false values: "examples/bool-false-percent.md"
     - datetime-value-in-range-date-percent: 'examples/datetime-value-in-range-date-percent.md'

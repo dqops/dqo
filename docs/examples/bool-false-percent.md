@@ -1,5 +1,7 @@
 # Percentage of false values
 
+This example shows how to detect that the percentage of false values remains above a set threshold.
+
 **PROBLEM**
 
 [The Federal Communication Commission (FCC) political ads public inspection files dataset](https://console.cloud.google.com/marketplace/product/federal-communications-commission/fcc-political-ads)
