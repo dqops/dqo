@@ -85,6 +85,11 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
             return new ArrayList<>(); // no results
         }
 
+        String filter = filterParameters.getFilter();
+        if (!Strings.isNullOrEmpty(filter) && filter.indexOf('*') < 0) {
+            filter = "*" + filter + "*";
+        }
+
         ArrayList<IncidentModel> incidentModels = new ArrayList<>();
         Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = incidentsSnapshot.getLoadedMonthlyPartitions();
         for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> partitionEntry : loadedMonthlyPartitions.entrySet()) {
@@ -161,8 +166,8 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 incidentModel.setFailedChecksCount(failedChecksCountColumn.get(rowIndex));
                 incidentModel.setStatus(incidentStatus);
 
-                if (!Strings.isNullOrEmpty(filterParameters.getFilter()) &&
-                     !incidentModel.matchesFilter(filterParameters.getFilter())) {
+                if (!Strings.isNullOrEmpty(filter) &&
+                     !incidentModel.matchesFilter(filter)) {
                     continue;
                 }
 
