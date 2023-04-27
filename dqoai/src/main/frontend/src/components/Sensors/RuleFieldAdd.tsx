@@ -62,7 +62,6 @@ const RuleFieldAdd = ({ onAdd }: RuleFieldAddProps) => {
           onChange={(e) => onChange({
             field_name: e.target.value
           })}
-          error={!field.field_name}
         />
       </td>
       <td className="px-4 py-2  align-top w-40">
@@ -71,7 +70,6 @@ const RuleFieldAdd = ({ onAdd }: RuleFieldAddProps) => {
           onChange={(e) => onChange({
             display_name: e.target.value
           })}
-          error={!field.display_name}
         />
       </td>
       <td className="px-4 py-2  align-top">
