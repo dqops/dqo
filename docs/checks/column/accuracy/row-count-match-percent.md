@@ -94,8 +94,12 @@ spec:
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
-    {%- endmacro -%}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
+    {%- endmacro %}
     
     SELECT
         (SELECT
@@ -109,10 +113,13 @@ spec:
 === "Rendered SQL for BigQuery"
       
     ```
+    
+    
     SELECT
         (SELECT
             COUNT(referenced_table.`customer_id`)
-        FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+        FROM 
+       `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
         ) AS expected_value,
         COUNT(analyzed_table.`target_column`) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -124,7 +131,11 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -144,7 +155,8 @@ spec:
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
-        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+        FROM 
+       "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
         COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -156,7 +168,11 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.postgresql.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -176,7 +192,8 @@ spec:
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
-        FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+        FROM 
+       "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
         COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -188,7 +205,11 @@ spec:
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -208,7 +229,8 @@ spec:
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
-        FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+        FROM 
+       "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
         COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -271,8 +293,12 @@ spec:
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
-            {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
-        {%- endmacro -%}
+        {% if referenced_table.find(".") < 0 %}
+           {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif %}
+        {%- endmacro %}
         
         SELECT
             (SELECT
@@ -285,10 +311,13 @@ spec:
         ```
     === "Rendered SQL for BigQuery"
         ```
+        
+        
         SELECT
             (SELECT
                 COUNT(referenced_table.`customer_id`)
-            FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+            FROM 
+           `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
             ) AS expected_value,
             COUNT(analyzed_table.`target_column`) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -300,7 +329,11 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
-            {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+        {% if referenced_table.find(".") < 0 %}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif %}
         {%- endmacro %}
         
         SELECT
@@ -319,7 +352,8 @@ spec:
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
-            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            FROM 
+           "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
             COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -331,7 +365,11 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
-            {{ lib.quote_identifier(connection.postgresql.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+        {% if referenced_table.find(".") < 0 %}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif %}
         {%- endmacro %}
         
         SELECT
@@ -350,7 +388,8 @@ spec:
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
-            FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+            FROM 
+           "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
             COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -362,7 +401,11 @@ spec:
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
-            {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+        {% if referenced_table.find(".") < 0 %}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif %}
         {%- endmacro %}
         
         SELECT
@@ -381,7 +424,8 @@ spec:
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
-            FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+            FROM 
+           "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
             COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -485,8 +529,12 @@ spec:
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
-    {%- endmacro -%}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
+    {%- endmacro %}
     
     SELECT
         (SELECT
@@ -500,10 +548,13 @@ spec:
 === "Rendered SQL for BigQuery"
       
     ```
+    
+    
     SELECT
         (SELECT
             COUNT(referenced_table.`customer_id`)
-        FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+        FROM 
+       `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
         ) AS expected_value,
         COUNT(analyzed_table.`target_column`) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -515,7 +566,11 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -535,7 +590,8 @@ spec:
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
-        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+        FROM 
+       "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
         COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -547,7 +603,11 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.postgresql.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -567,7 +627,8 @@ spec:
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
-        FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+        FROM 
+       "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
         COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -579,7 +640,11 @@ spec:
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -599,7 +664,8 @@ spec:
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
-        FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+        FROM 
+       "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
         COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -663,8 +729,12 @@ spec:
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
-            {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
-        {%- endmacro -%}
+        {% if referenced_table.find(".") < 0 %}
+           {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif %}
+        {%- endmacro %}
         
         SELECT
             (SELECT
@@ -677,10 +747,13 @@ spec:
         ```
     === "Rendered SQL for BigQuery"
         ```
+        
+        
         SELECT
             (SELECT
                 COUNT(referenced_table.`customer_id`)
-            FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+            FROM 
+           `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
             ) AS expected_value,
             COUNT(analyzed_table.`target_column`) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -692,7 +765,11 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
-            {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+        {% if referenced_table.find(".") < 0 %}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif %}
         {%- endmacro %}
         
         SELECT
@@ -711,7 +788,8 @@ spec:
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
-            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            FROM 
+           "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
             COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -723,7 +801,11 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
-            {{ lib.quote_identifier(connection.postgresql.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+        {% if referenced_table.find(".") < 0 %}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif %}
         {%- endmacro %}
         
         SELECT
@@ -742,7 +824,8 @@ spec:
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
-            FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+            FROM 
+           "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
             COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -754,7 +837,11 @@ spec:
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
-            {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+        {% if referenced_table.find(".") < 0 %}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif %}
         {%- endmacro %}
         
         SELECT
@@ -773,7 +860,8 @@ spec:
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
-            FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+            FROM 
+           "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
             COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -877,8 +965,12 @@ spec:
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
-    {%- endmacro -%}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
+    {%- endmacro %}
     
     SELECT
         (SELECT
@@ -892,10 +984,13 @@ spec:
 === "Rendered SQL for BigQuery"
       
     ```
+    
+    
     SELECT
         (SELECT
             COUNT(referenced_table.`customer_id`)
-        FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+        FROM 
+       `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
         ) AS expected_value,
         COUNT(analyzed_table.`target_column`) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -907,7 +1002,11 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -927,7 +1026,8 @@ spec:
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
-        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+        FROM 
+       "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
         COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -939,7 +1039,11 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.postgresql.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -959,7 +1063,8 @@ spec:
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
-        FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+        FROM 
+       "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
         COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -971,7 +1076,11 @@ spec:
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -991,7 +1100,8 @@ spec:
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
-        FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+        FROM 
+       "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
         COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1055,8 +1165,12 @@ spec:
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
-            {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
-        {%- endmacro -%}
+        {% if referenced_table.find(".") < 0 %}
+           {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif %}
+        {%- endmacro %}
         
         SELECT
             (SELECT
@@ -1069,10 +1183,13 @@ spec:
         ```
     === "Rendered SQL for BigQuery"
         ```
+        
+        
         SELECT
             (SELECT
                 COUNT(referenced_table.`customer_id`)
-            FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+            FROM 
+           `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
             ) AS expected_value,
             COUNT(analyzed_table.`target_column`) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -1084,7 +1201,11 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
-            {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+        {% if referenced_table.find(".") < 0 %}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif %}
         {%- endmacro %}
         
         SELECT
@@ -1103,7 +1224,8 @@ spec:
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
-            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            FROM 
+           "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
             COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1115,7 +1237,11 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
-            {{ lib.quote_identifier(connection.postgresql.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+        {% if referenced_table.find(".") < 0 %}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif %}
         {%- endmacro %}
         
         SELECT
@@ -1134,7 +1260,8 @@ spec:
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
-            FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+            FROM 
+           "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
             COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1146,7 +1273,11 @@ spec:
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
-            {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+        {% if referenced_table.find(".") < 0 %}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif %}
         {%- endmacro %}
         
         SELECT
@@ -1165,7 +1296,8 @@ spec:
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
-            FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+            FROM 
+           "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
             COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
