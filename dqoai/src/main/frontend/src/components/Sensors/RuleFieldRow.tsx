@@ -18,15 +18,26 @@ type RuleFieldRowProps = {
   onDelete: () => void;
 }
 
-const dataTypeOptions = Object.values(ParameterDefinitionSpecDataTypeEnum).map((item) => ({
-  label: item,
-  value: item
-}));
+const emptyOption = {
+  label: 'None',
+  value: undefined,
+};
 
-const displayHintOptions = Object.values(ParameterDefinitionSpecDisplayHintEnum).map((item) => ({
-  label: item,
-  value: item,
-}));
+const dataTypeOptions = [
+  emptyOption,
+  ...Object.values(ParameterDefinitionSpecDataTypeEnum).map((item) => ({
+    label: item,
+    value: item
+  }))
+];
+
+const displayHintOptions = [
+  emptyOption,
+  ...Object.values(ParameterDefinitionSpecDisplayHintEnum).map((item) => ({
+    label: item,
+    value: item,
+  }))
+];
 
 const RuleFieldRow = ({ field, onChange, onDelete }: RuleFieldRowProps) => {
   return (
