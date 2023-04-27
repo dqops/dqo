@@ -16,6 +16,7 @@
 package ai.dqo.data.statistics.services;
 
 import ai.dqo.core.configuration.DqoStatisticsCollectorConfigurationProperties;
+import ai.dqo.data.statistics.factory.StatisticsCollectorTarget;
 import ai.dqo.data.statistics.factory.StatisticsColumnNames;
 import ai.dqo.data.statistics.factory.StatisticsResultDataType;
 import ai.dqo.data.statistics.services.models.StatisticsMetricModel;
@@ -60,18 +61,25 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
      * @param connectionName Connection name.
      * @param physicalTableName Full table name (schema and table).
      * @param dataStreamName Data stream name.
+     * @param includeColumnLevelStatistics True when column level statistics should be also included.
      * @return Statistics results for the given table.
      */
     @Override
     public StatisticsResultsForTableModel getMostRecentStatisticsForTable(String connectionName,
                                                                           PhysicalTableName physicalTableName,
-                                                                          String dataStreamName) {
+                                                                          String dataStreamName,
+                                                                          boolean includeColumnLevelStatistics) {
         StatisticsResultsForTableModel tableStatisticsResults = new StatisticsResultsForTableModel();
         Table allData = loadStatisticsResultsForTable(connectionName, physicalTableName);
         if (allData == null) {
             return tableStatisticsResults; // no statistics data
         }
         Table selectedDataStreamData = allData.where(allData.stringColumn(StatisticsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).isEqualTo(dataStreamName));
+        if (!includeColumnLevelStatistics) {
+            selectedDataStreamData = selectedDataStreamData.where(
+                    allData.stringColumn(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME).isEqualTo(StatisticsCollectorTarget.table.name()));
+        }
+
         Table sortedResults = selectedDataStreamData.sortDescendingOn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME);
 
         StringColumn categoryColumn = sortedResults.stringColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME);

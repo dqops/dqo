@@ -177,7 +177,7 @@ public class ColumnsController {
 
         StatisticsResultsForTableModel mostRecentStatisticsMetricsForTable =
                 this.statisticsDataService.getMostRecentStatisticsForTable(connectionName, physicalTableName,
-                        CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME);
+                        CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME, true);
 
         Stream<ColumnStatisticsModel> columnModels = tableWrapper.getSpec().getColumns()
                 .entrySet()

@@ -61,7 +61,7 @@ public class ColumnStatisticsModel {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ColumnTypeSnapshotSpec typeSnapshot;
 
-    @JsonPropertyDescription("List of collected column statistics")
+    @JsonPropertyDescription("List of collected column statistics.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Collection<StatisticsMetricModel> statistics;
 

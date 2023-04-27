@@ -246,7 +246,7 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         normalizedResults.addColumns(collectorNameColumn);
 
         StringColumn collectorTargetColumn = StringColumn.create(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME, resultRowCount);
-        String collectorTargetType = sensorRunParameters.getColumn() != null ? StatisticsCollectorTarget.column.toString() : StatisticsCollectorTarget.table.toString();
+        String collectorTargetType = sensorRunParameters.getColumn() != null ? StatisticsCollectorTarget.column.name() : StatisticsCollectorTarget.table.name();
         collectorTargetColumn.setMissingTo(collectorTargetType);
         normalizedResults.addColumns(collectorTargetColumn);
 
