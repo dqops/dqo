@@ -186,7 +186,7 @@ nav:
         - string match date regex percent: 'checks/column/strings/string-match-date-regex-percent.md'
         - string match name regex percent: 'checks/column/strings/string-match-name-regex-percent.md'
         - string most popular values: 'checks/column/strings/string-most-popular-values.md'
-        - string datatype detect: 'checks/column/strings/string-datatype-detect.md'
+        - string datatype changed: 'checks/column/strings/string-datatype-changed.md'
       - uniqueness:
         - unique count: 'checks/column/uniqueness/unique-count.md'
         - unique percent: 'checks/column/uniqueness/unique-percent.md'
