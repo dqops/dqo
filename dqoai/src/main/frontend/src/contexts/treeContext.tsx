@@ -199,7 +199,7 @@ function TreeProvider(props: any) {
       collect_statistics_job_template: table.collect_statistics_job_template,
       data_clean_job_template: table.data_clean_job_template,
       open: false,
-      configured: table.has_any_configured_checks || table.has_any_configured_partition_checks || table.has_any_configured_profiling_checks || table.has_any_configured_recurring_checks
+      configured: table.partitioning_configuration_missing
     }));
     resetTreeData(node, items);
   };

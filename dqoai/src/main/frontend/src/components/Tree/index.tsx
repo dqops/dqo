@@ -84,7 +84,7 @@ const Tree = () => {
           className={clsx(
             'px-2 cursor-pointer flex space-x-1 hover:bg-gray-100 mb-0.5',
             activeTab === node.id ? 'bg-gray-100' : '',
-            (node.level === TREE_LEVEL.COLUMN || node.level === TREE_LEVEL.TABLE) && !node.configured ? 'text-red-900' : '',
+            (node.level === TREE_LEVEL.TABLE && sourceRoute === CheckTypes.PARTITIONED) && node.configured ? 'text-red-900' : '',
           )}
         >
           {renderIcon(node)}
