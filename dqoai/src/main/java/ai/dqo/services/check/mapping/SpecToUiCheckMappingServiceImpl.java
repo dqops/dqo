@@ -113,6 +113,8 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                                                ProviderType providerType) {
         UICheckContainerModel uiCheckContainerModel = new UICheckContainerModel();
         uiCheckContainerModel.setRunChecksJobTemplate(runChecksTemplate.clone());
+        uiCheckContainerModel.setPartitionByColumn(tableSpec.getTimestampColumns() != null ?
+                tableSpec.getTimestampColumns().getPartitionByColumn() : null);
         uiCheckContainerModel.setDataCleanJobTemplate(
                 DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
                         uiCheckContainerModel.getRunChecksJobTemplate()));

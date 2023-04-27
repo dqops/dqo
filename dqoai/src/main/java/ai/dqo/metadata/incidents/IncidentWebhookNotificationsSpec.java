@@ -47,83 +47,83 @@ public class IncidentWebhookNotificationsSpec  extends AbstractSpec implements C
     };
 
     @JsonPropertyDescription("Webhook URL where the notification messages describing new incidents are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.")
-    private String openIncidentWebhookUrl;
+    private String incidentOpenedWebhookUrl;
 
     @JsonPropertyDescription("Webhook URL where the notification messages describing acknowledged messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.")
-    private String acknowledgedIncidentWebhookUrl;
+    private String incidentAcknowledgedWebhookUrl;
 
     @JsonPropertyDescription("Webhook URL where the notification messages describing resolved messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.")
-    private String resolvedIncidentWebhookUrl;
+    private String incidentResolvedWebhookUrl;
 
     @JsonPropertyDescription("Webhook URL where the notification messages describing muted messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.")
-    private String mutedIncidentWebhookUrl;
+    private String incidentMutedWebhookUrl;
 
     /**
      * Returns the URL where notifications of new incidents are pushed using a HTTP POST request.
      * @return Webhook url.
      */
-    public String getOpenIncidentWebhookUrl() {
-        return openIncidentWebhookUrl;
+    public String getIncidentOpenedWebhookUrl() {
+        return incidentOpenedWebhookUrl;
     }
 
     /**
      * Sets an url to a HTTP webhook where notifications of new incidents are posted.
-     * @param openIncidentWebhookUrl Webhook url.
+     * @param incidentOpenedWebhookUrl Webhook url.
      */
-    public void setOpenIncidentWebhookUrl(String openIncidentWebhookUrl) {
-        this.setDirtyIf(!Objects.equals(this.openIncidentWebhookUrl, openIncidentWebhookUrl));
-        this.openIncidentWebhookUrl = openIncidentWebhookUrl;
+    public void setIncidentOpenedWebhookUrl(String incidentOpenedWebhookUrl) {
+        this.setDirtyIf(!Objects.equals(this.incidentOpenedWebhookUrl, incidentOpenedWebhookUrl));
+        this.incidentOpenedWebhookUrl = incidentOpenedWebhookUrl;
     }
 
     /**
      * Returns the URL where notifications of acknowledged incidents are pushed using a HTTP POST request.
      * @return Webhook url.
      */
-    public String getAcknowledgedIncidentWebhookUrl() {
-        return acknowledgedIncidentWebhookUrl;
+    public String getIncidentAcknowledgedWebhookUrl() {
+        return incidentAcknowledgedWebhookUrl;
     }
 
     /**
      * Sets an url to a HTTP webhook where notifications of acknowledged incidents are posted.
-     * @param acknowledgedIncidentWebhookUrl Webhook url.
+     * @param incidentAcknowledgedWebhookUrl Webhook url.
      */
-    public void setAcknowledgedIncidentWebhookUrl(String acknowledgedIncidentWebhookUrl) {
-        this.setDirtyIf(!Objects.equals(this.acknowledgedIncidentWebhookUrl, acknowledgedIncidentWebhookUrl));
-        this.acknowledgedIncidentWebhookUrl = acknowledgedIncidentWebhookUrl;
+    public void setIncidentAcknowledgedWebhookUrl(String incidentAcknowledgedWebhookUrl) {
+        this.setDirtyIf(!Objects.equals(this.incidentAcknowledgedWebhookUrl, incidentAcknowledgedWebhookUrl));
+        this.incidentAcknowledgedWebhookUrl = incidentAcknowledgedWebhookUrl;
     }
 
     /**
      * Returns the URL where notifications of resolved incidents are pushed using a HTTP POST request.
      * @return Webhook url.
      */
-    public String getResolvedIncidentWebhookUrl() {
-        return resolvedIncidentWebhookUrl;
+    public String getIncidentResolvedWebhookUrl() {
+        return incidentResolvedWebhookUrl;
     }
 
     /**
      * Sets an url to a HTTP webhook where notifications of resolved incidents are posted.
-     * @param resolvedIncidentWebhookUrl Webhook url.
+     * @param incidentResolvedWebhookUrl Webhook url.
      */
-    public void setResolvedIncidentWebhookUrl(String resolvedIncidentWebhookUrl) {
-        this.setDirtyIf(!Objects.equals(this.resolvedIncidentWebhookUrl, resolvedIncidentWebhookUrl));
-        this.resolvedIncidentWebhookUrl = resolvedIncidentWebhookUrl;
+    public void setIncidentResolvedWebhookUrl(String incidentResolvedWebhookUrl) {
+        this.setDirtyIf(!Objects.equals(this.incidentResolvedWebhookUrl, incidentResolvedWebhookUrl));
+        this.incidentResolvedWebhookUrl = incidentResolvedWebhookUrl;
     }
 
     /**
      * Returns the URL where notifications of muted incidents are pushed using a HTTP POST request.
      * @return Webhook url.
      */
-    public String getMutedIncidentWebhookUrl() {
-        return mutedIncidentWebhookUrl;
+    public String getIncidentMutedWebhookUrl() {
+        return incidentMutedWebhookUrl;
     }
 
     /**
      * Sets an url to a HTTP webhook where notifications of muted incidents are posted.
-     * @param mutedIncidentWebhookUrl Webhook url.
+     * @param incidentMutedWebhookUrl Webhook url.
      */
-    public void setMutedIncidentWebhookUrl(String mutedIncidentWebhookUrl) {
-        this.setDirtyIf(!Objects.equals(this.mutedIncidentWebhookUrl, mutedIncidentWebhookUrl));
-        this.mutedIncidentWebhookUrl = mutedIncidentWebhookUrl;
+    public void setIncidentMutedWebhookUrl(String incidentMutedWebhookUrl) {
+        this.setDirtyIf(!Objects.equals(this.incidentMutedWebhookUrl, incidentMutedWebhookUrl));
+        this.incidentMutedWebhookUrl = incidentMutedWebhookUrl;
     }
 
     /**
@@ -134,16 +134,16 @@ public class IncidentWebhookNotificationsSpec  extends AbstractSpec implements C
     public String getWebhookUrlForStatus(IncidentStatus incidentStatus) {
         switch (incidentStatus) {
             case open:
-                return this.openIncidentWebhookUrl;
+                return this.incidentOpenedWebhookUrl;
 
             case acknowledged:
-                return this.acknowledgedIncidentWebhookUrl;
+                return this.incidentAcknowledgedWebhookUrl;
 
             case resolved:
-                return this.resolvedIncidentWebhookUrl;
+                return this.incidentResolvedWebhookUrl;
 
             case muted:
-                return this.mutedIncidentWebhookUrl;
+                return this.incidentMutedWebhookUrl;
 
             default:
                 throw new NoSuchElementException("Unsupported incident status: " + incidentStatus);
@@ -187,10 +187,10 @@ public class IncidentWebhookNotificationsSpec  extends AbstractSpec implements C
      */
     public IncidentWebhookNotificationsSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         IncidentWebhookNotificationsSpec cloned = this.deepClone();
-        cloned.openIncidentWebhookUrl = secretValueProvider.expandValue(cloned.openIncidentWebhookUrl);
-        cloned.acknowledgedIncidentWebhookUrl = secretValueProvider.expandValue(cloned.acknowledgedIncidentWebhookUrl);
-        cloned.resolvedIncidentWebhookUrl = secretValueProvider.expandValue(cloned.resolvedIncidentWebhookUrl);
-        cloned.mutedIncidentWebhookUrl = secretValueProvider.expandValue(cloned.mutedIncidentWebhookUrl);
+        cloned.incidentOpenedWebhookUrl = secretValueProvider.expandValue(cloned.incidentOpenedWebhookUrl);
+        cloned.incidentAcknowledgedWebhookUrl = secretValueProvider.expandValue(cloned.incidentAcknowledgedWebhookUrl);
+        cloned.incidentResolvedWebhookUrl = secretValueProvider.expandValue(cloned.incidentResolvedWebhookUrl);
+        cloned.incidentMutedWebhookUrl = secretValueProvider.expandValue(cloned.incidentMutedWebhookUrl);
         return cloned;
     }
 }

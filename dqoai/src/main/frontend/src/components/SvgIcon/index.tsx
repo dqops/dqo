@@ -65,6 +65,7 @@ import { ReactComponent as HelpCircleSvg } from './svg/help-circle.svg';
 import { ReactComponent as SqlServerSvg } from './svg/sql-server.svg';
 import { ReactComponent as MSSqlServerSvg } from './svg/mssql-server.svg';
 import { ReactComponent as SpinnerSvg } from './svg/spinner.svg';
+import { ReactComponent as SyncSvg } from './svg/sync.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -132,6 +133,7 @@ const iconsMap: any = {
   sqlserver: SqlServerSvg,
   msserver: MSSqlServerSvg,
   spinner: SpinnerSvg,
+  sync: SyncSvg,
 };
 
 interface SvgIconProps {

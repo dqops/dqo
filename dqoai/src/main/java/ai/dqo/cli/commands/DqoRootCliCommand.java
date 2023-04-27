@@ -155,8 +155,16 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private String dqoDefaultTimeZone;
 
     @CommandLine.Option(names = {"--dqo.incidents.count-open-incidents-days"},
-            description = "The number of days since today that are scanned for open incidents first seen in since this number of days. ", defaultValue = "15")
+            description = "The number of days since today that are scanned for open incidents first seen in since this number of days.", defaultValue = "15")
     private Integer dqoIncidentsCountOpenIncidentsDays;
+
+    @CommandLine.Option(names = {"--dqo.jdbc.max-connection-in-pool"},
+            description = "Sets the maximum number of connections in the JDBC connection pool, shared across all data sources using JDBC drivers.", defaultValue = "1000")
+    private Integer dqoJdbcMaxConnectionInPool;
+
+    @CommandLine.Option(names = {"--dqo.jdbc.expire-after-access-seconds"},
+            description = "Sets the number of seconds when a connection in a JDBC pool is expired after the last access.", defaultValue = "1800")
+    private Integer dqoJdbcExpireAfterAccessSeconds;
 
     @CommandLine.Option(names = {"--dqo.secrets.enable-gcp-secret-manager"},
             description = "Enables GCP secret manager to resolve parameters like ${sm:secret-name} in the yaml files.", defaultValue = "true")

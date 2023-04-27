@@ -16,15 +16,26 @@ type RuleFieldAddProps = {
   onAdd: (field: ParameterDefinitionSpec) => void;
 }
 
-const dataTypeOptions = Object.values(ParameterDefinitionSpecDataTypeEnum).map((item) => ({
-  label: item,
-  value: item
-}));
+const emptyOption = {
+  label: 'None',
+  value: undefined,
+};
 
-const displayHintOptions = Object.values(ParameterDefinitionSpecDisplayHintEnum).map((item) => ({
-  label: item,
-  value: item,
-}));
+const dataTypeOptions = [
+  emptyOption,
+  ...Object.values(ParameterDefinitionSpecDataTypeEnum).map((item) => ({
+    label: item,
+    value: item
+  }))
+];
+
+const displayHintOptions = [
+  emptyOption,
+  ...Object.values(ParameterDefinitionSpecDisplayHintEnum).map((item) => ({
+    label: item,
+    value: item,
+  }))
+];
 
 const RuleFieldAdd = ({ onAdd }: RuleFieldAddProps) => {
   const [field, setField] = useState<ParameterDefinitionSpec>({
@@ -37,6 +48,11 @@ const RuleFieldAdd = ({ onAdd }: RuleFieldAddProps) => {
       ...obj
     });
   };
+
+  const handleAdd = () => {
+    onAdd(field);
+    setField({});
+  }
 
   return (
     <tr>
@@ -61,7 +77,7 @@ const RuleFieldAdd = ({ onAdd }: RuleFieldAddProps) => {
       <td className="px-4 py-2  align-top">
         <TextArea
           className="h-9 !py-1.5"
-          value={field.help_text}
+          value={field.help_text ?? ""}
           onChange={(e) => onChange({
             help_text: e.target.value
           })}
@@ -72,7 +88,6 @@ const RuleFieldAdd = ({ onAdd }: RuleFieldAddProps) => {
           value={field.data_type}
           onChange={(data_type) => onChange({ data_type })}
           options={dataTypeOptions}
-          error={!field.data_type}
         />
       </td>
       <td className="px-4 py-2  align-top w-40">
@@ -100,7 +115,7 @@ const RuleFieldAdd = ({ onAdd }: RuleFieldAddProps) => {
         <IconButton
           color="teal"
           size="sm"
-          onClick={() => {}}
+          onClick={handleAdd}
           className="!shadow-none"
         >
           <SvgIcon name="add" className="w-4" />

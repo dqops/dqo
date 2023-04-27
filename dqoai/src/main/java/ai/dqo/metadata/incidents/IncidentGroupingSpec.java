@@ -53,11 +53,11 @@ public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
         }
     };
 
-    @JsonPropertyDescription("Minimum severity level of data quality issues that are grouped into incidents. The default minimum severity level is 'warning'. Other supported severity levels are 'error' and 'fatal'.")
-    private MinimumGroupingSeverityLevel minimumSeverity = MinimumGroupingSeverityLevel.warning;
-
     @JsonPropertyDescription("Grouping level of failed data quality checks for creating higher level data quality incidents. The default grouping level is by a table, a data quality dimension and a check category (i.e. a consistency data quality incident detected on a table X in the numeric checks category).")
     private IncidentGroupingLevel groupingLevel = IncidentGroupingLevel.table_dimension_category;
+
+    @JsonPropertyDescription("Minimum severity level of data quality issues that are grouped into incidents. The default minimum severity level is 'warning'. Other supported severity levels are 'error' and 'fatal'.")
+    private MinimumGroupingSeverityLevel minimumSeverity = MinimumGroupingSeverityLevel.warning;
 
     @JsonPropertyDescription("Create separate data quality incidents for each data stream, creating different incidents for different data streams. By default, data streams are ignored for grouping data quality issues into data quality incidents.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -79,23 +79,6 @@ public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
     private IncidentWebhookNotificationsSpec webhooks;
 
     /**
-     * Returns the minimum severity level of failed data quality checks that a grouped into incidents.
-     * @return Minimum severity level for grouping.
-     */
-    public MinimumGroupingSeverityLevel getMinimumSeverity() {
-        return minimumSeverity;
-    }
-
-    /**
-     * Sets the minimum severity level of failed data quality checks that are grouped into incidents.
-     * @param minimumSeverity Minimum severity level.
-     */
-    public void setMinimumSeverity(MinimumGroupingSeverityLevel minimumSeverity) {
-        this.setDirtyIf(!Objects.equals(this.minimumSeverity, minimumSeverity));
-        this.minimumSeverity = minimumSeverity;
-    }
-
-    /**
      * Returns the data quality issue grouping level used to group similar issues into incidents.
      * @return Data quality issue grouping level.
      */
@@ -110,6 +93,23 @@ public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
     public void setGroupingLevel(IncidentGroupingLevel groupingLevel) {
         this.setDirtyIf(!Objects.equals(this.groupingLevel, groupingLevel));
         this.groupingLevel = groupingLevel;
+    }
+
+    /**
+     * Returns the minimum severity level of failed data quality checks that a grouped into incidents.
+     * @return Minimum severity level for grouping.
+     */
+    public MinimumGroupingSeverityLevel getMinimumSeverity() {
+        return minimumSeverity;
+    }
+
+    /**
+     * Sets the minimum severity level of failed data quality checks that are grouped into incidents.
+     * @param minimumSeverity Minimum severity level.
+     */
+    public void setMinimumSeverity(MinimumGroupingSeverityLevel minimumSeverity) {
+        this.setDirtyIf(!Objects.equals(this.minimumSeverity, minimumSeverity));
+        this.minimumSeverity = minimumSeverity;
     }
 
     /**

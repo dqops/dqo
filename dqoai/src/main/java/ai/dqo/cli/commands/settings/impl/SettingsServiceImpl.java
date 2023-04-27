@@ -301,6 +301,9 @@ public class SettingsServiceImpl implements SettingsService {
 				case CONNECTIONS_LIMIT:
 					limitEntryName = "Maximum number of synchronized connections";
 					break;
+				case USERS_LIMIT:
+					limitEntryName = "Maximum number of DQO Cloud users";
+					break;
 				case TABLES_LIMIT:
 					limitEntryName = "Maximum number of synchronized tables";
 					break;
@@ -309,6 +312,9 @@ public class SettingsServiceImpl implements SettingsService {
 					break;
 				case MONTHS_LIMIT:
 					limitEntryName = "Maximum number of synchronized months with data quality results, including the current month";
+					break;
+				case JOBS_LIMIT:
+					limitEntryName = "Maximum number of parallel data quality jobs";
 					break;
 				default:
 					limitEntryName = limitEntry.getKey().toString();

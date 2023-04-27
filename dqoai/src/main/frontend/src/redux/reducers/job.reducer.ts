@@ -16,6 +16,7 @@
 
 import { JOB_ACTION } from '../types';
 import {
+  CloudSynchronizationFoldersStatusModel,
   DqoJobChangeModel,
   DqoJobHistoryEntryModel,
   DqoJobQueueInitialSnapshotModel
@@ -27,6 +28,7 @@ export interface IJobsState {
   error: any;
   lastSequenceNumber?: number;
   isOpen: boolean;
+  folderSynchronizationStatus?: CloudSynchronizationFoldersStatusModel;
 }
 
 const initialState: IJobsState = {
@@ -94,6 +96,7 @@ const schemaReducer = (state = initialState, action: any) => {
           ...state.jobs,
           jobs: newJobs
         },
+        folderSynchronizationStatus: action.data.folderSynchronizationStatus,
         error: null
       };
     }

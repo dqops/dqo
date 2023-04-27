@@ -6,14 +6,19 @@ import RuleFieldAdd from "./RuleFieldAdd";
 type RuleFieldsProps = {
   fields: Array<ParameterDefinitionSpec>;
   onChange: (values: Array<ParameterDefinitionSpec>) => void;
+  onAdd: (value: ParameterDefinitionSpec) => void;
 }
 
-const RuleFields = ({ fields, onChange }: RuleFieldsProps) => {
+const RuleFields = ({ fields, onChange, onAdd }: RuleFieldsProps) => {
   const handleChange = (idx: number, values: Partial<ParameterDefinitionSpec>) => {
     onChange(fields.map((field, index) => index === idx ? ({
       ...field,
       ...values
     }) : field));
+  };
+
+  const handleDelete = (idx: number) => {
+    onChange(fields.filter((field, index) => index !== idx));
   };
 
   return (
@@ -53,9 +58,10 @@ const RuleFields = ({ fields, onChange }: RuleFieldsProps) => {
               key={index}
               field={field}
               onChange={(values) => handleChange(index, values)}
+              onDelete={() => handleDelete(index)}
             />
           ))}
-          <RuleFieldAdd onAdd={(field) => {}} />
+          <RuleFieldAdd onAdd={onAdd} />
         </tbody>
       </table>
     </div>
