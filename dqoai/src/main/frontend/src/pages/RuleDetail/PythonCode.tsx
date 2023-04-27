@@ -4,6 +4,8 @@ import { RuleModel } from "../../api";
 import { setUpdatedRule } from "../../redux/actions/sensor.actions";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { RuleActionGroup } from "../../components/Sensors/RuleActionGroup";
+import { StreamLanguage } from '@codemirror/language';
+import { python } from '@codemirror/legacy-modes/mode/python';
 
 type PythonCodeProps = {
   rule: RuleModel;
@@ -26,6 +28,7 @@ const PythonCode = ({ rule }: PythonCodeProps) => {
       <CodeMirror
         value={rule?.rule_python_module_content}
         onChange={onChange}
+        extensions={[StreamLanguage.define(python)]}
       />
     </div>
   );

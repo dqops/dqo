@@ -29,8 +29,8 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringDatatypeDetectSensorParametersSpec extends AbstractSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringDatatypeDetectSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
+public class ColumnStringsStringDatatypeChangedSensorParametersSpec extends AbstractSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringDatatypeChangedSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -52,7 +52,7 @@ public class ColumnStringsStringDatatypeDetectSensorParametersSpec extends Abstr
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_datatype_detect";
+        return "column/strings/string_datatype_changed";
     }
 }
 

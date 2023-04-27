@@ -69,7 +69,7 @@ export const SensorDetail = () => {
         {tabs.slice(1).map((tab, index: number) => tab.value === activeTab && (
           <ProvideSensor
             key={index}
-            providerSensor={sensorDetail.provider_sensor_list?.find((item: ProviderSensorModel) => item.providerType === tab.value)}
+            providerSensor={sensorDetail?.provider_sensor_list?.find((item: ProviderSensorModel) => item.providerType === tab.value)}
             onChange={() => {}}
           />
         ))}
