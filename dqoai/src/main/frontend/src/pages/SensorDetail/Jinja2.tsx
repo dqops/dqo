@@ -1,23 +1,24 @@
 import React from "react";
 import CodeMirror from '@uiw/react-codemirror';
 import { ProviderSensorModel } from "../../api";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { RuleActionGroup } from "../../components/Sensors/RuleActionGroup";
+import { StreamLanguage } from '@codemirror/language';
+import { jinja2 } from '@codemirror/legacy-modes/mode/jinja2';
 
 type Jinja2Props = {
   providerSensor?: ProviderSensorModel;
+  onChange: (value: Partial<ProviderSensorModel>) => void;
 }
 
-const Jinja2Code = ({ providerSensor }: Jinja2Props) => {
-  const dispatch = useActionDispatch();
-
+const Jinja2Code = ({ providerSensor, onChange }: Jinja2Props) => {
   return (
     <div className="flex-1 overflow-auto max-h-100 min-h-100">
       <RuleActionGroup />
 
       <CodeMirror
         value={providerSensor?.sqlTemplate}
-        onChange={() => {}}
+        onChange={(value) => onChange({ sqlTemplate: value })}
+        extensions={[StreamLanguage.define(jinja2)]}
       />
     </div>
   );
