@@ -1,7 +1,7 @@
 **string max length** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a maximum number of nulls in a monitored column.
+Column level check that ensures that the length of string in a column does not exceed the maximum accepted length.
 
 ___
 

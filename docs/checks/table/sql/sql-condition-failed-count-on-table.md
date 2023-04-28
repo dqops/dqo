@@ -528,7 +528,7 @@ ___
 ## **daily sql condition failed count on table**  
   
 **Check description**  
-Verifies that a set number of rows failed a custom SQL condition (expression).  
+Verifies that a set number of rows failed a custom SQL condition (expression). Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1051,7 +1051,7 @@ ___
 ## **monthly sql condition failed count on table**  
   
 **Check description**  
-Verifies that a set number of rows failed a custom SQL condition (expression).  
+Verifies that a set number of rows failed a custom SQL condition (expression). Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1574,7 +1574,7 @@ ___
 ## **daily partition sql condition failed count on table**  
   
 **Check description**  
-Verifies that a set number of rows failed a custom SQL condition (expression).  
+Verifies that a set number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2098,7 +2098,7 @@ ___
 ## **monthly partition sql condition failed count on table**  
   
 **Check description**  
-Verifies that a set number of rows failed a custom SQL condition (expression).  
+Verifies that a set number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

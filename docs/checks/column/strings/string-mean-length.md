@@ -1,7 +1,7 @@
 **string mean length** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a maximum number of nulls in a monitored column.
+Column level check that ensures that the length of string in a column does not exceed the mean accepted length.
 
 ___
 
@@ -1589,7 +1589,7 @@ ___
 ## **daily partition string mean length**  
   
 **Check description**  
-Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each daily partition.  
+Verifies that the length of string in a column does not exceed the mean accepted length. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

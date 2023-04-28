@@ -425,7 +425,7 @@ ___
 column/pii/contains_usa_zipcode_percent
 ```
 **Description**  
-Column level sensor that calculates the percent of values that contain a USA zip code number in a column.
+Column level sensor that calculates the percent of values that contain a USA ZIP code number in a column.
 
 
 

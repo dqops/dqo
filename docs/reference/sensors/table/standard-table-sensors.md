@@ -5,7 +5,7 @@
 table/standard/row_count
 ```
 **Description**  
-Tabular sensor that executes a row count query on a table.
+Table sensor that executes a row count query.
 
 
 

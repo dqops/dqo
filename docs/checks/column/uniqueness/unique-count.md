@@ -1,7 +1,7 @@
 **unique count** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a maximum number of nulls in a monitored column.
+Column level check that ensures that the number of unique values in a column does not exceed the minimum accepted count.
 
 ___
 

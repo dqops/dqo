@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Tabular sensor that runs a query calculating the time difference in days between the current date and most recent data loading timestamp (staleness).
+ * Table sensor that runs a query calculating the time difference in days between the current date and most recent data loading timestamp (staleness).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
