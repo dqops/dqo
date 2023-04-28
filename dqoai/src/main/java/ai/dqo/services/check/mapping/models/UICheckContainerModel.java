@@ -40,8 +40,12 @@ public class UICheckContainerModel {
 
     @JsonPropertyDescription("Model of configured schedule enabled on the check container.")
     private UIEffectiveScheduleModel effectiveSchedule;
+
     @JsonPropertyDescription("State of the effective scheduling on the check container.")
     private UIScheduleEnabledStatus effectiveScheduleEnabledStatus;
+
+    @JsonPropertyDescription("The name of the column that partitioned checks will use for the time period partitioning. Important only for partitioned checks.")
+    private String partitionByColumn;
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;

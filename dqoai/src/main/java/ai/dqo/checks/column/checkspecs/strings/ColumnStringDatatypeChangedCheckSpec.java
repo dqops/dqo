@@ -20,7 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.ValueChangedParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringDatatypeDetectSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringDatatypeChangedSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -37,8 +37,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringDatatypeDetectCheckSpec extends AbstractCheckSpec<ColumnStringsStringDatatypeDetectSensorParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringDatatypeDetectCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnStringDatatypeChangedCheckSpec extends AbstractCheckSpec<ColumnStringsStringDatatypeChangedSensorParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringDatatypeChangedCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -46,7 +46,7 @@ public class ColumnStringDatatypeDetectCheckSpec extends AbstractCheckSpec<Colum
     @JsonPropertyDescription("Row count sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringDatatypeDetectSensorParametersSpec parameters = new ColumnStringsStringDatatypeDetectSensorParametersSpec();
+    private ColumnStringsStringDatatypeChangedSensorParametersSpec parameters = new ColumnStringsStringDatatypeChangedSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -68,7 +68,7 @@ public class ColumnStringDatatypeDetectCheckSpec extends AbstractCheckSpec<Colum
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringDatatypeDetectSensorParametersSpec getParameters() {
+    public ColumnStringsStringDatatypeChangedSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -76,7 +76,7 @@ public class ColumnStringDatatypeDetectCheckSpec extends AbstractCheckSpec<Colum
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringDatatypeDetectSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringDatatypeChangedSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

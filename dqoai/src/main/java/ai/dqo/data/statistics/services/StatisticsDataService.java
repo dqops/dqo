@@ -28,11 +28,13 @@ public interface StatisticsDataService {
      * @param connectionName Connection name.
      * @param physicalTableName Full table name (schema and table).
      * @param dataStreamName Data stream name.
+     * @param includeColumnLevelStatistics True when column level statistics should be also included.
      * @return Statistics results for the given table.
      */
     StatisticsResultsForTableModel getMostRecentStatisticsForTable(String connectionName,
                                                                    PhysicalTableName physicalTableName,
-                                                                   String dataStreamName);
+                                                                   String dataStreamName,
+                                                                   boolean includeColumnLevelStatistics);
 
     /**
      * Retrieves the most recent table statistics results for a given column.

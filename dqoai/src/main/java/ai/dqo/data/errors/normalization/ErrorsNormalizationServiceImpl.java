@@ -26,10 +26,7 @@ import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tech.tablesaw.api.DateTimeColumn;
-import tech.tablesaw.api.LongColumn;
-import tech.tablesaw.api.StringColumn;
-import tech.tablesaw.api.Table;
+import tech.tablesaw.api.*;
 
 import java.time.LocalDateTime;
 
@@ -118,11 +115,11 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
         Table table = normalizedSensorReadout.getTable();
 
         // adding remaining columns
-        StringColumn errorMessageColumn = StringColumn.create(ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME, table.rowCount());
+        TextColumn errorMessageColumn = TextColumn.create(ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME, table.rowCount());
         errorMessageColumn.setMissingTo(makeErrorMessage(exception));
         table.addColumns(errorMessageColumn);
 
-        StringColumn errorSourceColumn = StringColumn.create(ErrorsColumnNames.ERROR_SOURCE_COLUMN_NAME, table.rowCount());
+        TextColumn errorSourceColumn = TextColumn.create(ErrorsColumnNames.ERROR_SOURCE_COLUMN_NAME, table.rowCount());
         errorSourceColumn.setMissingTo(errorSource.name());
         table.addColumns(errorSourceColumn);
 
@@ -137,7 +134,7 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
         long columnHash = sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().getHierarchyId().hashCode64() : 0L;
 
         LongColumn dataStreamHashColumn = normalizedSensorReadout.getDataStreamHashColumn();
-        StringColumn rowIdColumn = this.commonNormalizationService.createRowIdColumn(dataStreamHashColumn, errorTimestampColumn,
+        TextColumn rowIdColumn = this.commonNormalizationService.createRowIdColumn(dataStreamHashColumn, errorTimestampColumn,
                 checkHash, tableHash, columnHash, table.rowCount());
         table.addColumns(rowIdColumn);
 

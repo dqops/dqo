@@ -41,7 +41,7 @@ public class IncidentsTableFactoryImplTests extends BaseTest {
     @Test
     void createEmptySensorReadoutsTable_whenCalled_thenCreatesTableWithSchema() {
         Table table = this.sut.createEmptyIncidentsTable("empty");
-        Assertions.assertEquals(20, table.columnCount());
+        Assertions.assertEquals(19, table.columnCount());
 
         int columnIndex = 0;
         Assertions.assertEquals(IncidentsColumnNames.ID_COLUMN_NAME, table.column(columnIndex++).name());

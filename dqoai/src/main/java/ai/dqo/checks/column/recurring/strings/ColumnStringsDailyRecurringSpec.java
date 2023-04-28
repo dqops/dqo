@@ -79,7 +79,7 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
 
             put("daily_string_most_popular_values", o -> o.dailyStringMostPopularValues);
 
-            put("daily_string_datatype_detect", o -> o.dailyStringDatatypeDetect);
+            put("daily_string_datatype_changed", o -> o.dailyStringDatatypeChanged);
         }
     };
 
@@ -189,7 +189,7 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
     private ColumnStringMostPopularValuesCheckSpec dailyStringMostPopularValues;
 
     @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringDatatypeDetectCheckSpec dailyStringDatatypeDetect;
+    private ColumnStringDatatypeChangedCheckSpec dailyStringDatatypeChanged;
 
     /**
      * Returns a maximum string length below check.
@@ -822,21 +822,21 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Returns a count of expected values in datatype detect check.
-     * @return Datatype detect check.
+     * Returns a count of expected values in datatype changed check.
+     * @return Datatype changed check.
      */
-    public ColumnStringDatatypeDetectCheckSpec getDailyStringDatatypeDetect() {
-        return dailyStringDatatypeDetect;
+    public ColumnStringDatatypeChangedCheckSpec getDailyStringDatatypeChanged() {
+        return dailyStringDatatypeChanged;
     }
 
     /**
-     * Sets a new definition of a datatype detect check.
-     * @param dailyStringDatatypeDetect Datatype detect check.
+     * Sets a new definition of a datatype changed check.
+     * @param dailyStringDatatypeChanged Datatype changed check.
      */
-    public void setDailyStringDatatypeDetect(ColumnStringDatatypeDetectCheckSpec dailyStringDatatypeDetect) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringDatatypeDetect, dailyStringDatatypeDetect));
-        this.dailyStringDatatypeDetect = dailyStringDatatypeDetect;
-        propagateHierarchyIdToField(dailyStringDatatypeDetect, "daily_string_datatype_detect");
+    public void setDailyStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec dailyStringDatatypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.dailyStringDatatypeChanged, dailyStringDatatypeChanged));
+        this.dailyStringDatatypeChanged = dailyStringDatatypeChanged;
+        propagateHierarchyIdToField(dailyStringDatatypeChanged, "daily_string_datatype_changed");
     }
 
     /**

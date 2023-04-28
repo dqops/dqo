@@ -177,8 +177,6 @@ public class BigQuerySqlRunner {
                     columns.add(tech.tablesaw.api.DoubleColumn.create(field.getName()));
                     break;
                 case STRING:
-                    columns.add(tech.tablesaw.api.StringColumn.create(field.getName()));
-                    break;
                 case BYTES:
                 case STRUCT:
                 case ARRAY:

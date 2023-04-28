@@ -28,6 +28,9 @@ import ai.dqo.checks.table.recurring.TableRecurringSpec;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
+import ai.dqo.data.normalization.CommonTableNormalizationService;
+import ai.dqo.data.statistics.services.StatisticsDataService;
+import ai.dqo.data.statistics.services.models.StatisticsResultsForTableModel;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
@@ -35,20 +38,20 @@ import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.rest.models.metadata.TableBasicModel;
-import ai.dqo.rest.models.metadata.TableModel;
-import ai.dqo.rest.models.metadata.TablePartitioningModel;
+import ai.dqo.rest.models.metadata.*;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
 import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
 import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
 import ai.dqo.services.check.mapping.models.UICheckContainerModel;
 import ai.dqo.services.metadata.TableService;
+import ai.dqo.statistics.StatisticsCollectorTarget;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +83,7 @@ public class TablesController {
     private DqoHomeContextFactory dqoHomeContextFactory;
     private SpecToUiCheckMappingService specToUiCheckMappingService;
     private UiToSpecCheckMappingService uiToSpecCheckMappingService;
+    private StatisticsDataService statisticsDataService;
 
     /**
      * Creates an instance of a controller by injecting dependencies.
@@ -88,18 +92,21 @@ public class TablesController {
      * @param dqoHomeContextFactory            DQO home context factory, used to retrieve the definition of built-in sensors.
      * @param specToUiCheckMappingService      Check mapper to convert the check specification to a UI model.
      * @param uiToSpecCheckMappingService      Check mapper to convert the check UI model to a check specification.
+     * @param statisticsDataService            Statistics data service, provides access to the statistics (basic profiling).
      */
     @Autowired
     public TablesController(TableService tableService,
                             UserHomeContextFactory userHomeContextFactory,
                             DqoHomeContextFactory dqoHomeContextFactory,
                             SpecToUiCheckMappingService specToUiCheckMappingService,
-                            UiToSpecCheckMappingService uiToSpecCheckMappingService) {
+                            UiToSpecCheckMappingService uiToSpecCheckMappingService,
+                            StatisticsDataService statisticsDataService) {
         this.tableService = tableService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.specToUiCheckMappingService = specToUiCheckMappingService;
         this.uiToSpecCheckMappingService = uiToSpecCheckMappingService;
+        this.statisticsDataService = statisticsDataService;
     }
 
     /**
@@ -1172,6 +1179,70 @@ public class TablesController {
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
                 connectionWrapper.getSpec().getProviderType());
         return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Returns a list of table level statistics for a table.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name
+     * @return List of table level statistics.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/statistics")
+    @ApiOperation(value = "getTableStatistics",
+            notes = "Returns a list of the profiler (statistics) metrics on a chosen table captured during the most recent statistics collection.",
+            response = TableStatisticsModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = TableStatisticsModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<TableStatisticsModel>> getTableStatistics(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+
+        PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                physicalTableName, true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
+        }
+
+        StatisticsResultsForTableModel mostRecentStatisticsMetricsForTable =
+                this.statisticsDataService.getMostRecentStatisticsForTable(connectionName, physicalTableName,
+                        CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME, false);
+
+        TableStatisticsModel resultModel = new TableStatisticsModel();
+        resultModel.setConnectionName(connectionName);
+        resultModel.setTable(physicalTableName);
+        resultModel.setStatistics(mostRecentStatisticsMetricsForTable.getMetrics());
+
+        resultModel.setCollectTableStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
+        {{
+            setConnectionName(connectionName);
+            setSchemaTableName(physicalTableName.toTableSearchFilter());
+            setTarget(StatisticsCollectorTarget.table);
+            setEnabled(true);
+        }});
+
+        resultModel.setCollectTableAndColumnStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
+        {{
+            setConnectionName(connectionName);
+            setSchemaTableName(physicalTableName.toTableSearchFilter());
+            setEnabled(true);
+        }});
+
+        return new ResponseEntity<>(Mono.just(resultModel), HttpStatus.OK);
     }
 
     /**

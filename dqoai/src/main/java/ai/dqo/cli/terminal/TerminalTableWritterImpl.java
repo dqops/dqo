@@ -23,8 +23,8 @@ import org.springframework.shell.table.TableBuilder;
 import org.springframework.shell.table.TableModel;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Row;
-import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.api.TextColumn;
 
 
 /**
@@ -240,12 +240,12 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 		}
 	}
 
-	private StringColumn[] retrieveHeaders(TableModel tableModel) {
+	private TextColumn[] retrieveHeaders(TableModel tableModel) {
 		int columnCount = tableModel.getColumnCount();
-		StringColumn[] result = new StringColumn[columnCount];
+		TextColumn[] result = new TextColumn[columnCount];
 
 		for (int i = 0; i < columnCount; i++) {
-			result[i] = StringColumn.create(tableModel.getValue(0, i).toString());
+			result[i] = TextColumn.create(tableModel.getValue(0, i).toString());
 		}
 
 		return result;
@@ -258,7 +258,7 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeTable(TableModel tableModel, boolean addBorder) {
-		StringColumn[] headers = retrieveHeaders(tableModel);
+		TextColumn[] headers = retrieveHeaders(tableModel);
 		Table resultTable = Table.create().addColumns(headers);
 
 		for(int y = 1; y < tableModel.getRowCount(); y++) {

@@ -16,15 +16,26 @@ type RuleFieldAddProps = {
   onAdd: (field: ParameterDefinitionSpec) => void;
 }
 
-const dataTypeOptions = Object.values(ParameterDefinitionSpecDataTypeEnum).map((item) => ({
-  label: item,
-  value: item
-}));
+const emptyOption = {
+  label: 'None',
+  value: undefined,
+};
 
-const displayHintOptions = Object.values(ParameterDefinitionSpecDisplayHintEnum).map((item) => ({
-  label: item,
-  value: item,
-}));
+const dataTypeOptions = [
+  emptyOption,
+  ...Object.values(ParameterDefinitionSpecDataTypeEnum).map((item) => ({
+    label: item,
+    value: item
+  }))
+];
+
+const displayHintOptions = [
+  emptyOption,
+  ...Object.values(ParameterDefinitionSpecDisplayHintEnum).map((item) => ({
+    label: item,
+    value: item,
+  }))
+];
 
 const RuleFieldAdd = ({ onAdd }: RuleFieldAddProps) => {
   const [field, setField] = useState<ParameterDefinitionSpec>({
@@ -51,7 +62,6 @@ const RuleFieldAdd = ({ onAdd }: RuleFieldAddProps) => {
           onChange={(e) => onChange({
             field_name: e.target.value
           })}
-          error={!field.field_name}
         />
       </td>
       <td className="px-4 py-2  align-top w-40">
@@ -60,7 +70,6 @@ const RuleFieldAdd = ({ onAdd }: RuleFieldAddProps) => {
           onChange={(e) => onChange({
             display_name: e.target.value
           })}
-          error={!field.display_name}
         />
       </td>
       <td className="px-4 py-2  align-top">
@@ -77,7 +86,6 @@ const RuleFieldAdd = ({ onAdd }: RuleFieldAddProps) => {
           value={field.data_type}
           onChange={(data_type) => onChange({ data_type })}
           options={dataTypeOptions}
-          error={!field.data_type}
         />
       </td>
       <td className="px-4 py-2  align-top w-40">

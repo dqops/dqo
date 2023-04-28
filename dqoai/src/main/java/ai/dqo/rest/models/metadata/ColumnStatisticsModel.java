@@ -17,6 +17,7 @@ package ai.dqo.rest.models.metadata;
 
 import ai.dqo.data.statistics.services.models.StatisticsMetricModel;
 import ai.dqo.data.statistics.services.models.StatisticsResultsForColumnModel;
+import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ColumnTypeSnapshotSpec;
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -61,9 +62,15 @@ public class ColumnStatisticsModel {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ColumnTypeSnapshotSpec typeSnapshot;
 
-    @JsonPropertyDescription("List of collected column statistics")
+    @JsonPropertyDescription("List of collected column statistics.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Collection<StatisticsMetricModel> statistics;
+
+    /**
+     * Configured parameters for the "collect statistics" job that should be pushed to the job queue in order to run all statistics collectors for this column.
+     */
+    @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collectors for this column")
+    private StatisticsCollectorSearchFilters collectColumnStatisticsJobTemplate;
 
     /**
      * Creates a column profile model from a column specification for a requested profile.
@@ -88,6 +95,13 @@ public class ColumnStatisticsModel {
             setTypeSnapshot(columnSpec.getTypeSnapshot());
             setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
             setStatistics(statisticsResultsForColumn != null ? statisticsResultsForColumn.getMetrics() : null);
+            setCollectColumnStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setColumnName(columnName);
+                setEnabled(true);
+            }});
         }};
     }
 }

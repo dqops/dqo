@@ -17,19 +17,24 @@ package ai.dqo.core.incidents;
 
 import ai.dqo.metadata.incidents.IncidentGroupingSpec;
 import ai.dqo.metadata.incidents.IncidentWebhookNotificationsSpec;
+import ai.dqo.utils.http.SharedHttpClientProvider;
+import ai.dqo.utils.serialization.JsonSerializer;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
+import io.netty.buffer.Unpooled;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+import reactor.netty.ByteBufFlux;
+import reactor.netty.http.client.HttpClient;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -38,8 +43,19 @@ import java.util.List;
 @Component
 @Slf4j
 public class IncidentNotificationServiceImpl implements IncidentNotificationService {
+    private SharedHttpClientProvider sharedHttpClientProvider;
+    private JsonSerializer jsonSerializer;
+
+    /**
+     * Creates an incident notification service.
+     * @param sharedHttpClientProvider Shared http client provider that manages the HTTP connection pooling.
+     * @param jsonSerializer Json serializer.
+     */
     @Autowired
-    public IncidentNotificationServiceImpl() {
+    public IncidentNotificationServiceImpl(SharedHttpClientProvider sharedHttpClientProvider,
+                                           JsonSerializer jsonSerializer) {
+        this.sharedHttpClientProvider = sharedHttpClientProvider;
+        this.jsonSerializer = jsonSerializer;
     }
 
     /**
@@ -82,21 +98,26 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
 
     /**
      * Sets a single notification with one incident.
-     * @param newIncidentNotificationMessage New incident notification payload.
+     * @param incidentNotificationMessage Incident notification payload.
      * @param webhookUrl Target webhook url.
      * @return Mono that returns the target webhook url.
      */
-    protected Mono<String> sendNotification(IncidentNotificationMessage newIncidentNotificationMessage, String webhookUrl) {
-        WebClient webClient = WebClient.builder()
-                .baseUrl(webhookUrl)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build();
+    protected Mono<String> sendNotification(IncidentNotificationMessage incidentNotificationMessage, String webhookUrl) {
+        HttpClient httpClient = this.sharedHttpClientProvider.getHttp11SharedClient();
+        String serializedJsonMessage = this.jsonSerializer.serialize(incidentNotificationMessage);
+        byte[] messageBytes = serializedJsonMessage.getBytes(StandardCharsets.UTF_8);
 
-        WebClient.ResponseSpec responseSpec = webClient.method(HttpMethod.POST)
-                .body(Mono.just(newIncidentNotificationMessage), IncidentNotificationMessage.class)
-                .retrieve();
+        Mono<Void> responseSent = httpClient
+                .headers(httpHeaders -> {
+                    httpHeaders.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE + "; charset=utf-8");
+                    httpHeaders.add(HttpHeaders.CONTENT_LENGTH, messageBytes.length);
+                })
+                .post()
+                .uri(webhookUrl)
+                .send(Mono.fromCallable(() -> Unpooled.wrappedBuffer(messageBytes)))
+                .response()
+                .then();
 
-        Mono<ResponseEntity<Void>> responseEntityMono = responseSpec.toBodilessEntity();
-        return responseEntityMono.retry(3).thenReturn(webhookUrl);
+        return responseSent.retry(3).thenReturn(webhookUrl);
     }
 }

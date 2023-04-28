@@ -78,7 +78,7 @@ public class ColumnStringsMonthlyRecurringSpec extends AbstractCheckCategorySpec
 
             put("monthly_string_most_popular_values", o -> o.monthlyStringMostPopularValues);
 
-            put("monthly_string_datatype_detect", o -> o.monthlyStringDatatypeDetect);
+            put("monthly_string_datatype_changed", o -> o.monthlyStringDatatypeChanged);
         }
     };
 
@@ -188,7 +188,7 @@ public class ColumnStringsMonthlyRecurringSpec extends AbstractCheckCategorySpec
     private ColumnStringMostPopularValuesCheckSpec monthlyStringMostPopularValues;
 
     @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringDatatypeDetectCheckSpec monthlyStringDatatypeDetect;
+    private ColumnStringDatatypeChangedCheckSpec monthlyStringDatatypeChanged;
 
     /**
      * Returns a maximum string length below check.
@@ -821,21 +821,21 @@ public class ColumnStringsMonthlyRecurringSpec extends AbstractCheckCategorySpec
     }
 
     /**
-     * Returns a count of expected values in datatype detect check.
-     * @return Datatype detect check.
+     * Returns a count of expected values in datatype changed check.
+     * @return Datatype changed check.
      */
-    public ColumnStringDatatypeDetectCheckSpec getMonthlyStringDatatypeDetect() {
-        return monthlyStringDatatypeDetect;
+    public ColumnStringDatatypeChangedCheckSpec getMonthlyStringDatatypeChanged() {
+        return monthlyStringDatatypeChanged;
     }
 
     /**
-     * Sets a new definition of a datatype detect check.
-     * @param monthlyStringDatatypeDetect Datatype detect check.
+     * Sets a new definition of a datatype changed check.
+     * @param monthlyStringDatatypeChanged Datatype changed check.
      */
-    public void setMonthlyStringDatatypeDetect(ColumnStringDatatypeDetectCheckSpec monthlyStringDatatypeDetect) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringDatatypeDetect, monthlyStringDatatypeDetect));
-        this.monthlyStringDatatypeDetect = monthlyStringDatatypeDetect;
-        propagateHierarchyIdToField(monthlyStringDatatypeDetect, "monthly_string_datatype_detect");
+    public void setMonthlyStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec monthlyStringDatatypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.monthlyStringDatatypeChanged, monthlyStringDatatypeChanged));
+        this.monthlyStringDatatypeChanged = monthlyStringDatatypeChanged;
+        propagateHierarchyIdToField(monthlyStringDatatypeChanged, "monthly_string_datatype_changed");
     }
 
     /**

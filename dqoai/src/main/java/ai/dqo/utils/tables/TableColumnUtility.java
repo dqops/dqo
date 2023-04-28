@@ -44,17 +44,49 @@ public final class TableColumnUtility {
     }
 
     /**
-     * Retrieves or adds and returns a string column from a table.
+     * Creates (or casts) a given column to a {@link TextColumn}.
+     * @param sourceColumn Source column.
+     * @return TextColumn. It is a copy of the original column (with casting to a string) or the original column object instance if it is a TextColumn.
+     */
+    public static TextColumn convertToTextColumn(Column<?> sourceColumn) {
+        if (sourceColumn instanceof TextColumn) {
+            return (TextColumn) sourceColumn;
+        }
+
+        int size = sourceColumn.size();
+        TextColumn targetColumn = TextColumn.create(sourceColumn.name(), size);
+
+        if (sourceColumn instanceof StringColumn) {
+            StringColumn stringColumn = (StringColumn) sourceColumn;
+            for (int i = 0; i < size; i++) {
+                if (!stringColumn.isMissing(i)) {
+                    targetColumn.set(i, stringColumn.get(i));
+                }
+            }
+        }
+        else {
+            for (int i = 0; i < size; i++) {
+                if (!sourceColumn.isMissing(i)) {
+                    targetColumn.set(i, sourceColumn.get(i).toString());
+                }
+            }
+        }
+
+        return targetColumn;
+    }
+
+    /**
+     * Retrieves or adds and returns a text column from a table.
      * @param table Table.
      * @param columnName Column name.
      * @return Existing column or just added column.
      */
-    public static StringColumn getOrAddStringColumn(Table table, String columnName) {
+    public static TextColumn getOrAddTextColumn(Table table, String columnName) {
         if (table.containsColumn(columnName)) {
-            return (StringColumn) table.column(columnName);
+            return (TextColumn) table.column(columnName);
         }
 
-        StringColumn newColumn = StringColumn.create(columnName);
+        TextColumn newColumn = TextColumn.create(columnName);
         table.addColumns(newColumn);
         return newColumn;
     }
