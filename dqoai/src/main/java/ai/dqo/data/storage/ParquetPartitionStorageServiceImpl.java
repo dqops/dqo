@@ -33,15 +33,20 @@ import ai.dqo.data.storage.parquet.HadoopConfigurationProvider;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.tables.TableMergeUtility;
 import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
+import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.ChecksumException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.DateTimeColumn;
+import tech.tablesaw.api.InstantColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 import tech.tablesaw.io.RuntimeIOException;
 import tech.tablesaw.selection.Selection;
 
@@ -49,6 +54,9 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -265,8 +273,22 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
             if (tableDataChanges.getNewOrChangedRows() != null) {
                 // new or updated rows are given
-                DateTimeColumn timePeriodColumn = (DateTimeColumn) tableDataChanges.getNewOrChangedRows()
+                Column<?> datePartitioningColumnOriginal = tableDataChanges.getNewOrChangedRows()
                         .column(storageSettings.getTimePeriodColumnName());
+                DateTimeColumn timePeriodColumn = null;
+                if (datePartitioningColumnOriginal instanceof DateTimeColumn) {
+                    timePeriodColumn = (DateTimeColumn) datePartitioningColumnOriginal;
+                }
+                else if (datePartitioningColumnOriginal instanceof InstantColumn) {
+                    timePeriodColumn = ((InstantColumn)datePartitioningColumnOriginal).asLocalDateTimeColumn(ZoneOffset.UTC);
+                }
+                else if (datePartitioningColumnOriginal instanceof DateColumn) {
+                    timePeriodColumn = ((DateColumn)datePartitioningColumnOriginal).atTime(LocalTime.MIDNIGHT);
+                }
+                else {
+                    throw new DqoRuntimeException("Time partitioning column " + storageSettings.getTimePeriodColumnName() + " is not a date/datetime/instant column.");
+                }
+
                 LocalDate startOfNextMonth = loadedPartition.getPartitionId().getMonth().plus(1L, ChronoUnit.MONTHS);
                 Selection selectionOfRowsInPartitionMonth = timePeriodColumn.isOnOrAfter(loadedPartition.getPartitionId().getMonth())
                         .and(timePeriodColumn.isBefore(startOfNextMonth));
@@ -306,7 +328,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             }
 
             if (tableDataChanges.getDeletedIds() != null && tableDataChanges.getDeletedIds().size() > 0 && dataToSave != null) {
-                Selection rowsToDeleteSelection = dataToSave.stringColumn(storageSettings.getIdStringColumnName())
+                Selection rowsToDeleteSelection = dataToSave.textColumn(storageSettings.getIdStringColumnName())
                         .isIn(tableDataChanges.getDeletedIds());
                 if (rowsToDeleteSelection.size() > 0) {
                     dataToSave = dataToSave.dropWhere(rowsToDeleteSelection);
@@ -334,7 +356,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             DqoTablesawParquetWriteOptions writeOptions = DqoTablesawParquetWriteOptions
                     .dqoBuilder(targetParquetFile)
                     .withOverwrite(true)
-                    .withCompressionCode(storageSettings.getCompressionCodec())
+                    .withCompressionCode(TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED)
                     .build();
 
             Configuration hadoopConfiguration = this.hadoopConfigurationProvider.getHadoopConfiguration();

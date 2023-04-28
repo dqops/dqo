@@ -40,6 +40,17 @@ const ProvideSensor = ({
     })
   };
 
+  const handleChangeTemplate = (obj: Partial<ProviderSensorModel>) => {
+    if (!onChange) {
+      return;
+    }
+
+    onChange({
+      ...providerSensor || {},
+      ...obj,
+    })
+  }
+
   return (
     <div className="p-4">
       <div className="flex gap-4 text-sm items-center mb-4">
@@ -72,11 +83,19 @@ const ProvideSensor = ({
 
 
       <SectionWrapper className="mt-8 mb-4" title="Sensor Parameters">
-        <RuleParameters />
+        <RuleParameters
+          parameters={providerSensor?.providerSensorDefinitionSpec?.parameters}
+          onChange={(parameters) => handleChange({
+            parameters
+          })}
+        />
       </SectionWrapper>
 
 
-      <Jinja2Code providerSensor={providerSensor} />
+      <Jinja2Code
+        providerSensor={providerSensor}
+        onChange={handleChangeTemplate}
+      />
     </div>
   );
 };

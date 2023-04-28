@@ -101,17 +101,17 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         Table sensorReadoutsTable = this.sensorReadoutsTableFactory.createEmptySensorReadoutsTable(tableName);
 
         Row row1 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row1.getRowNumber(), 1);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row1.getRowNumber(), startDate);
 
         Row row2 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row2.getRowNumber(), 10);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
 
         Row row3 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row3.getRowNumber(), 100);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
 
@@ -154,9 +154,9 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
                 partitionId1, this.sensorReadoutsStorageSettings, null);
 
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 
@@ -254,9 +254,9 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
@@ -315,9 +315,9 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId2, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNotNull(partition2AfterDelete.getData());
-        Assertions.assertFalse(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
-        Assertions.assertTrue(partition2AfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
+        Assertions.assertFalse(partition2AfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
@@ -326,55 +326,55 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         Table sensorReadoutsTable = this.sensorReadoutsTableFactory.createEmptySensorReadoutsTable(tableName);
 
         Row row1 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row1.getRowNumber(), 1);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row1.getRowNumber(), startDate);
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row1.getRowNumber(), "cat1");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME).set(row1.getRowNumber(), "check1");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row1.getRowNumber(), "type1");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row1.getRowNumber(), "col1");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row1.getRowNumber(), "ds1");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row1.getRowNumber(), "s1");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row1.getRowNumber(), "qd1");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row1.getRowNumber(), "tg1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row1.getRowNumber(), "cat1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME).set(row1.getRowNumber(), "check1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row1.getRowNumber(), "type1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row1.getRowNumber(), "col1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row1.getRowNumber(), "ds1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row1.getRowNumber(), "s1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row1.getRowNumber(), "qd1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row1.getRowNumber(), "tg1");
 
         Row row2 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row2.getRowNumber(), 10);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row2.getRowNumber(), "cat2");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row2.getRowNumber(), "type1");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row2.getRowNumber(), "col2");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row2.getRowNumber(), "ds1");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row2.getRowNumber(), "s2");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row2.getRowNumber(), "tg1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row2.getRowNumber(), "cat2");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row2.getRowNumber(), "type1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row2.getRowNumber(), "col2");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row2.getRowNumber(), "ds1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row2.getRowNumber(), "s2");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row2.getRowNumber(), "tg1");
 
         Row row3 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row3.getRowNumber(), 100);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row3.getRowNumber(), "type2");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row3.getRowNumber(), "col1");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row3.getRowNumber(), "ds2");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row3.getRowNumber(), "qd2");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row3.getRowNumber(), "type2");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row3.getRowNumber(), "col1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row3.getRowNumber(), "ds2");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row3.getRowNumber(), "qd2");
 
         Row row4 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row4.getRowNumber(), id_prefix + "id4");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row4.getRowNumber(), id_prefix + "id4");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row4.getRowNumber(), 1000);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row4.getRowNumber(), startDate.plusDays(3));
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME).set(row4.getRowNumber(), "check2");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row4.getRowNumber(), "s1");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row4.getRowNumber(), "qd2");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row4.getRowNumber(), "tg1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME).set(row4.getRowNumber(), "check2");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row4.getRowNumber(), "s1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row4.getRowNumber(), "qd2");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row4.getRowNumber(), "tg1");
 
         Row row5 = sensorReadoutsTable.appendRow();
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row5.getRowNumber(), id_prefix + "id5");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).set(row5.getRowNumber(), id_prefix + "id5");
         sensorReadoutsTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row5.getRowNumber(), 10000);
         sensorReadoutsTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row5.getRowNumber(), startDate.plusDays(4));
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row5.getRowNumber(), "cat1");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME).set(row5.getRowNumber(), "check1");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row5.getRowNumber(), "ds2");
-        sensorReadoutsTable.stringColumn(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row5.getRowNumber(), "s1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row5.getRowNumber(), "cat1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME).set(row5.getRowNumber(), "check1");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row5.getRowNumber(), "ds2");
+        sensorReadoutsTable.textColumn(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row5.getRowNumber(), "s1");
 
         return sensorReadoutsTable;
     }
@@ -414,11 +414,11 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id4"));
-        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 
@@ -458,11 +458,11 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id4"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 
@@ -503,11 +503,11 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id4"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 
@@ -547,11 +547,11 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
-        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id4"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 
@@ -590,11 +590,11 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
                 partitionId, this.sensorReadoutsStorageSettings, null);
         Assertions.assertNotNull(partitionAfterDelete.getData());
-        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
-        Assertions.assertFalse(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id4"));
-        Assertions.assertTrue(partitionAfterDelete.getData().stringColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 }

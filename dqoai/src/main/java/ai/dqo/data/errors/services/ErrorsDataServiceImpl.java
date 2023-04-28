@@ -1,11 +1,11 @@
 /*
- * Copyright © 2023 DQO.ai (support@dqo.ai)
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ai.dqo.data.errors.services;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
@@ -32,8 +31,8 @@ import ai.dqo.utils.tables.TableRowUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Row;
-import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.api.TextColumn;
 import tech.tablesaw.selection.Selection;
 
 import java.time.Instant;
@@ -78,7 +77,7 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
             return new ErrorsDetailedDataModel[0]; // empty array
         }
 
-        StringColumn dataStreamColumn = filteredTable.stringColumn(ErrorsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
+        TextColumn dataStreamColumn = filteredTable.textColumn(ErrorsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
         List<String> dataStreams = dataStreamColumn.unique().asList().stream().sorted().collect(Collectors.toList());
 
         if (dataStreams.size() > 1 && dataStreams.contains(CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME)) {
@@ -185,15 +184,15 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
         String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
         CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
 
-        Selection rowSelection = sourceTable.stringColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
+        Selection rowSelection = sourceTable.textColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
 
         if (timeScale != null) {
-            StringColumn timeGradientColumn = sourceTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            TextColumn timeGradientColumn = sourceTable.textColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
             TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
             rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
         }
 
-        StringColumn columnNameColumn = sourceTable.stringColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        TextColumn columnNameColumn = sourceTable.textColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
 
         Table filteredTable = sourceTable.where(rowSelection);

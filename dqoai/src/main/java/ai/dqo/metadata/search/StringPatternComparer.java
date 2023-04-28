@@ -15,8 +15,6 @@
  */
 package ai.dqo.metadata.search;
 
-import org.springframework.util.StringUtils;
-
 /**
  * String comparison functions that accept patterns like: *text, text*text2, text*
  */
@@ -37,14 +35,20 @@ public class StringPatternComparer {
             return true;
         }
 
-        int occurencesNumber = StringUtils.countOccurrencesOf(pattern, "*");
+        int starOccurrences = 0;
+        for (int i = 0; i < pattern.length(); i++) {
+            if (pattern.charAt(i) == '*') {
+                starOccurrences++;
+            }
+        }
+
         int indexOfStar = pattern.indexOf('*');
         if (indexOfStar < 0) {
             // wildcard '*' not used, names must match exactly
             return text.equalsIgnoreCase(pattern);
         }
 
-        if (occurencesNumber == 2) {
+        if (starOccurrences == 2) {
             if (text.length() < pattern.length() - 2) {
                 return false;
             }
@@ -55,7 +59,7 @@ public class StringPatternComparer {
             }
         }
 
-        if (occurencesNumber == 2 && indexOfStar == 0 && pattern.lastIndexOf('*') == pattern.length() - 1) {
+        if (starOccurrences == 2 && indexOfStar == 0 && pattern.lastIndexOf('*') == pattern.length() - 1) {
             if (pattern.length() == 2) {
                 return true; // only "**"
             }

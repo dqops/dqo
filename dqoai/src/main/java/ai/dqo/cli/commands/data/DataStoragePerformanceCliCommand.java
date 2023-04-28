@@ -1,11 +1,11 @@
 /*
- * Copyright © 2023 DQO.ai (support@dqo.ai)
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -92,7 +92,7 @@ public class DataStoragePerformanceCliCommand extends BaseCommand implements ICo
     }
 
     private void generateRows(LocalDate monthDate, Table targetTable) {
-        StringColumn idColumn = targetTable.stringColumn(CheckResultsColumnNames.ID_COLUMN_NAME);
+        TextColumn idColumn = targetTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME);
         DoubleColumn actualValueColumn = targetTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         DateTimeColumn timePeriodColumn = targetTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME);
 

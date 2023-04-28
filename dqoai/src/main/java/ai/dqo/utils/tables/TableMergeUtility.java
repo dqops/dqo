@@ -20,6 +20,7 @@ import org.jetbrains.annotations.NotNull;
 import tech.tablesaw.api.LongColumn;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.api.TextColumn;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.selection.Selection;
 
@@ -66,9 +67,9 @@ public class TableMergeUtility {
         Table resultTable = null;
 
         Column<?> currentIdColumn = currentResults.column(idColumName);
-        if (currentIdColumn instanceof StringColumn) {
-            StringColumn currentIdColumnString = (StringColumn) currentIdColumn;
-            List<String> idsInNewResultsStrings = ((StringColumn)newResultIdColumn).asList();
+        if (currentIdColumn instanceof TextColumn) {
+            TextColumn currentIdColumnString = (TextColumn) currentIdColumn;
+            List<String> idsInNewResultsStrings = ((TextColumn)newResultIdColumn).asList();
             Selection notInSelection = currentIdColumnString.isNotIn(idsInNewResultsStrings);
 
             if (notInSelection.size() < currentIdColumnString.size()) {
@@ -84,6 +85,17 @@ public class TableMergeUtility {
             Selection notInSelection = currentIdColumnLong.isNotIn(idsInNewResultsLong);
 
             if (notInSelection.size() < currentIdColumnLong.size()) {
+                resultTable = currentResults.where(notInSelection);
+            }
+            else {
+                resultTable = currentResults.copy();
+            }
+        } else if (currentIdColumn instanceof StringColumn) {
+            StringColumn currentIdColumnString = (StringColumn) currentIdColumn;
+            List<String> idsInNewResultsStrings = ((StringColumn)newResultIdColumn).asList();
+            Selection notInSelection = currentIdColumnString.isNotIn(idsInNewResultsStrings);
+
+            if (notInSelection.size() < currentIdColumnString.size()) {
                 resultTable = currentResults.where(notInSelection);
             }
             else {

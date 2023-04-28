@@ -91,19 +91,19 @@ public class ColumnStringsMonthlyRecurringSpec extends AbstractCheckCategorySpec
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringMeanLengthCheckSpec monthlyStringMeanLength;
 
-    @JsonPropertyDescription("The check counts those strings with length below those provided by the user in the column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts those strings with length below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringLengthBelowMinLengthCountCheckSpec monthlyStringLengthBelowMinLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage those strings with length below those provided by the user in the column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts percentage of those strings with length below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringLengthBelowMinLengthPercentCheckSpec monthlyStringLengthBelowMinLengthPercent;
 
-    @JsonPropertyDescription("The check counts those strings with length above those provided by the user in the column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts those strings with length above the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringLengthAboveMaxLengthCountCheckSpec monthlyStringLengthAboveMaxLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length above those provided by the user in the column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec monthlyStringLengthAboveMaxLengthPercent;
 
-    @JsonPropertyDescription("The check counts the percentage of those strings with length in the range provided by the user in the column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts percentage of those strings with length in the range provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringLengthInRangePercentCheckSpec monthlyStringLengthInRangePercent;
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
@@ -184,11 +184,11 @@ public class ColumnStringsMonthlyRecurringSpec extends AbstractCheckCategorySpec
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name regex in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringMatchNameRegexPercentCheckSpec monthlyStringMatchNameRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
     private ColumnStringMostPopularValuesCheckSpec monthlyStringMostPopularValues;
 
-    @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnStringDatatypeDetectCheckSpec monthlyStringDatatypeDetect;
+    @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringDatatypeChangedCheckSpec monthlyStringDatatypeChanged;
 
     /**
      * Returns a maximum string length below check.

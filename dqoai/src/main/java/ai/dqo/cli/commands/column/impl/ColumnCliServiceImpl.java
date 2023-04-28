@@ -98,10 +98,10 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 
 		Table resultTable = Table.create().addColumns(
 				LongColumn.create("Id"),
-				StringColumn.create("Connection name"),
-				StringColumn.create("Table name"),
-				StringColumn.create("Column name"),
-				StringColumn.create("Column type"),
+				TextColumn.create("Connection name"),
+				TextColumn.create("Table name"),
+				TextColumn.create("Column name"),
+				TextColumn.create("Column type"),
 				BooleanColumn.create("Disabled"));
 
 		for (ColumnSpec columnSpec: columnSpecs) {

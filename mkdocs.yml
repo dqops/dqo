@@ -28,6 +28,17 @@ nav:
     - Data storage: 'dqo-concepts/data-storage/data-storage.md'
     - Working with YAML files: 'dqo-concepts/working-with-yaml-files/working-with-yaml-files.md'
     - Working with CLI: 'dqo-concepts/working-with-cli/working-with-cli.md'
+  - Use cases:
+    - "examples/index.md"
+    - Percentage of false values: "examples/bool-false-percent.md"
+    - Integrity check between columns in different tables: 'examples/integrity-foreign-key-match-percent.md'
+    - nulls-not-nulls-count: 'examples/nulls-not-nulls-count.md'
+    - numeric-valid-latitude-percent: 'examples/numeric-valid-latitude-percent.md'
+    - numeric-values-in-range-integers-percent: 'examples/numeric-values-in-range-integers-percent.md'
+    - pii-valid-usa-zipcode-percent: 'examples/pii-valid-usa-zipcode-percent.md'
+    - string-match-date-regex-percent: 'examples/string-match-date-regex-percent.md'
+    - string-max-length: 'examples/string-max-length.md'
+    - uniqueness-duplicate-percent: 'examples/uniqueness-duplicate-percent.md'
   - Working with DQO:
     - Installation:
       - Install DQO from Git: 'working-with-dqo/install-dqo-from-git/install-dqo-from-git.md'
@@ -175,7 +186,7 @@ nav:
         - string match date regex percent: 'checks/column/strings/string-match-date-regex-percent.md'
         - string match name regex percent: 'checks/column/strings/string-match-name-regex-percent.md'
         - string most popular values: 'checks/column/strings/string-most-popular-values.md'
-        - string datatype detect: 'checks/column/strings/string-datatype-detect.md'
+        - string datatype changed: 'checks/column/strings/string-datatype-changed.md'
       - uniqueness:
         - unique count: 'checks/column/uniqueness/unique-count.md'
         - unique percent: 'checks/column/uniqueness/unique-percent.md'
@@ -220,6 +231,7 @@ nav:
       - SensorDefinitionYaml: 'reference/yaml/SensorDefinitionYaml.md'
       - SettingsYaml: 'reference/yaml/SettingsYaml.md'
       - TableYaml: 'reference/yaml/TableYaml.md'
+      - IncidentNotificationMessage: 'reference/yaml/IncidentNotificationMessage.md'
 ########## END INCLUDE YAML REFERENCE
 
 # Visual settings

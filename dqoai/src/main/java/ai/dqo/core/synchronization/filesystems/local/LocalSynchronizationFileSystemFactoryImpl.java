@@ -76,6 +76,9 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
             case data_statistics:
                 return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.STATISTICS);
 
+            case data_incidents:
+                return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.INCIDENTS);
+
             case sources:
                 return localUserHomePath.resolve(BuiltInFolderNames.SOURCES);
 

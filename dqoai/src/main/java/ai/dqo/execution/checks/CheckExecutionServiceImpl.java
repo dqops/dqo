@@ -22,7 +22,8 @@ import ai.dqo.checks.custom.CustomCheckSpec;
 import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.ProviderDialectSettings;
-import ai.dqo.core.notifications.NotificationService;
+import ai.dqo.core.incidents.IncidentImportQueueService;
+import ai.dqo.core.incidents.TableIncidentImportBatch;
 import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
 import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import ai.dqo.data.errors.normalization.ErrorsNormalizationService;
@@ -93,7 +94,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
     private ErrorsSnapshotFactory errorsSnapshotFactory;
     private final ScheduledTargetChecksFindService scheduledTargetChecksFindService;
     private final RuleDefinitionFindService ruleDefinitionFindService;
-    private final NotificationService notificationService;
+    private IncidentImportQueueService incidentImportQueueService;
 
     /**
      * Creates a data quality check execution service.
@@ -109,7 +110,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param errorsSnapshotFactory Error snapshot factory, provides read and write support for errors stored in tabular format.
      * @param scheduledTargetChecksFindService Service that finds matching checks that are assigned to a given schedule.
      * @param ruleDefinitionFindService Rule definition find service - used to find the rule definitions and get their configured time windows.
-     * @param notificationService Notification service - sends notifications about new issues.
+     * @param incidentImportQueueService New incident import queue service. Identifies new incidents and sends notifications.
      */
     @Autowired
     public CheckExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
@@ -124,7 +125,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                      ErrorsSnapshotFactory errorsSnapshotFactory,
                                      ScheduledTargetChecksFindService scheduledTargetChecksFindService,
                                      RuleDefinitionFindService ruleDefinitionFindService,
-                                     NotificationService notificationService) {
+                                     IncidentImportQueueService incidentImportQueueService) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
@@ -137,7 +138,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         this.errorsSnapshotFactory = errorsSnapshotFactory;
         this.scheduledTargetChecksFindService = scheduledTargetChecksFindService;
         this.ruleDefinitionFindService = ruleDefinitionFindService;
-        this.notificationService = notificationService;
+        this.incidentImportQueueService = incidentImportQueueService;
     }
 
     /**
@@ -380,9 +381,12 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         checkExecutionSummary.reportTableStats(connectionWrapper, tableSpec, checksCount, sensorResultsCount,
                 passedRules, warningIssuesCount, errorIssuesCount, fatalIssuesCount, erroredSensors + erroredRules);
 
-        if (this.notificationService != null && (warningIssuesCount > 0 || errorIssuesCount > 0 || fatalIssuesCount > 0)) {
-            Mono<Void> notificationMono = this.notificationService.detectNewIssuesAndSendNotification(connectionWrapper.getSpec(), tableSpec, checkResultsSnapshot);
-            notificationMono.block(); // TODO: fire and forget
+        if (this.incidentImportQueueService != null && (warningIssuesCount > 0 || errorIssuesCount > 0 || fatalIssuesCount > 0)) {
+            TableIncidentImportBatch tableIncidentImportBatch = new TableIncidentImportBatch(
+                    checkResultsSnapshot.getTableDataChanges().getNewOrChangedRows(),
+                    connectionWrapper.getSpec(),
+                    tableSpec);
+            this.incidentImportQueueService.importTableIncidents(tableIncidentImportBatch);
         }
     }
 

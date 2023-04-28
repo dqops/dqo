@@ -18,10 +18,7 @@ package ai.dqo.data.checkresults.factory;
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tech.tablesaw.api.BooleanColumn;
-import tech.tablesaw.api.DoubleColumn;
-import tech.tablesaw.api.IntColumn;
-import tech.tablesaw.api.Table;
+import tech.tablesaw.api.*;
 
 /**
  * Factory that creates an empty tablesaw table for storing the check evaluation results. The table schema is configured.
@@ -50,6 +47,7 @@ public class CheckResultsTableFactoryImpl implements CheckResultsTableFactory {
         Table table = this.sensorReadoutsTableFactory.createEmptySensorReadoutsTable(tableName);
         table.addColumns(
                 IntColumn.create(CheckResultsColumnNames.SEVERITY_COLUMN_NAME),
+                LongColumn.create(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME),
                 BooleanColumn.create(CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME),
                 BooleanColumn.create(CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME),
                 DoubleColumn.create(CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME),

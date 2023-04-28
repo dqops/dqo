@@ -17,17 +17,14 @@ package ai.dqo.execution.statistics;
 
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.sources.TableSpec;
-import tech.tablesaw.api.IntColumn;
-import tech.tablesaw.api.Row;
-import tech.tablesaw.api.StringColumn;
-import tech.tablesaw.api.Table;
+import tech.tablesaw.api.*;
 
 /**
  * Tabular object returned from {@link StatisticsCollectorsExecutionService} with a summary of statistics collector that were executed.
  */
 public class StatisticsCollectionExecutionSummary {
-    private final StringColumn connectionColumn;
-    private final StringColumn tableColumn;
+    private final TextColumn connectionColumn;
+    private final TextColumn tableColumn;
     private final IntColumn collectorsExecutedColumn;
     private final IntColumn collectorsColumnsColumn;
     private final IntColumn collectorsColumnsSuccessfullyColumn;
@@ -41,10 +38,10 @@ public class StatisticsCollectionExecutionSummary {
     public StatisticsCollectionExecutionSummary() {
 		this.summaryTable = Table.create("Statistics collection execution summary");
 
-        this.connectionColumn = StringColumn.create("Connection");
+        this.connectionColumn = TextColumn.create("Connection");
 		this.summaryTable.addColumns(connectionColumn);
 
-        this.tableColumn = StringColumn.create("Table");
+        this.tableColumn = TextColumn.create("Table");
 		this.summaryTable.addColumns(tableColumn);
 
 		this.collectorsExecutedColumn = IntColumn.create("Collectors executed");
@@ -75,7 +72,7 @@ public class StatisticsCollectionExecutionSummary {
      * Connection name column.
      * @return Column.
      */
-    public StringColumn getConnectionColumn() {
+    public TextColumn getConnectionColumn() {
         return connectionColumn;
     }
 
@@ -83,7 +80,7 @@ public class StatisticsCollectionExecutionSummary {
      * Full table name column.
      * @return Table name column.
      */
-    public StringColumn getTableColumn() {
+    public TextColumn getTableColumn() {
         return tableColumn;
     }
 

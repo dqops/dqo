@@ -47,6 +47,11 @@ public enum DqoRoot {
     data_errors,
 
     /**
+     * Parquet files with the incidents.
+     */
+    data_incidents,
+
+    /**
      * Source metadata files (connections, tables).
      */
     sources,
@@ -125,6 +130,9 @@ public enum DqoRoot {
             else if (Objects.equals(folder2, BuiltInFolderNames.ERRORS)) {
                 return data_errors;
             }
+            else if (Objects.equals(folder2, BuiltInFolderNames.INCIDENTS)) {
+                return data_incidents;
+            }
         }
 
         return null; // unknown folder, not
@@ -138,7 +146,8 @@ public enum DqoRoot {
         if (this == data_sensor_readouts ||
             this == data_check_results ||
             this == data_errors ||
-            this == data_statistics) {
+            this == data_statistics ||
+            this == data_incidents) {
             return true;
         }
 

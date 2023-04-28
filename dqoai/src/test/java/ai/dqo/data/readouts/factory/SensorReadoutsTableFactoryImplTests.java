@@ -41,7 +41,7 @@ public class SensorReadoutsTableFactoryImplTests extends BaseTest {
     @Test
     void createEmptySensorReadoutsTable_whenCalled_thenCreatesTableWithSchema() {
         Table table = this.sut.createEmptySensorReadoutsTable("empty");
-        Assertions.assertEquals(38, table.columnCount());
+        Assertions.assertEquals(39, table.columnCount());
 
         int columnIndex = 0;
         Assertions.assertEquals(SensorReadoutsColumnNames.ID_COLUMN_NAME, table.column(columnIndex++).name());
@@ -69,6 +69,7 @@ public class SensorReadoutsTableFactoryImplTests extends BaseTest {
         Assertions.assertEquals(SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.TABLE_STAGE_COLUMN_NAME, table.column(columnIndex++).name());
+        Assertions.assertEquals(SensorReadoutsColumnNames.TABLE_PRIORITY_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.COLUMN_HASH_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME, table.column(columnIndex++).name());

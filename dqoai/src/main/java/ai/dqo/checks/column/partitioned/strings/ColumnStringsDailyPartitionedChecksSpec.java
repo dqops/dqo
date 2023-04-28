@@ -78,7 +78,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
             put("daily_partition_string_most_popular_values", o -> o.dailyPartitionStringMostPopularValues);
 
-            put("daily_partition_string_datatype_detect", o -> o.dailyPartitionStringDatatypeDetect);
+            put("daily_partition_string_datatype_changed", o -> o.dailyPartitionStringDatatypeChanged);
 
         }
     };
@@ -189,7 +189,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     private ColumnStringMostPopularValuesCheckSpec dailyPartitionStringMostPopularValues;
 
     @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnStringDatatypeDetectCheckSpec dailyPartitionStringDatatypeDetect;
+    private ColumnStringDatatypeChangedCheckSpec dailyPartitionStringDatatypeChanged;
 
     /**
      * Returns a maximum string length below  check.
@@ -823,21 +823,21 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     }
 
     /**
-     * Returns a count of expected values in datatype detect check.
-     * @return Datatype detect check.
+     * Returns a count of expected values in datatype changed check.
+     * @return Datatype changed check.
      */
-    public ColumnStringDatatypeDetectCheckSpec getDailyPartitionStringDatatypeDetect() {
-        return dailyPartitionStringDatatypeDetect;
+    public ColumnStringDatatypeChangedCheckSpec getDailyPartitionStringDatatypeChanged() {
+        return dailyPartitionStringDatatypeChanged;
     }
 
     /**
-     * Sets a new definition of a datatype detect check.
-     * @param dailyPartitionStringDatatypeDetect Datatype detect check.
+     * Sets a new definition of a datatype changed check.
+     * @param dailyPartitionStringDatatypeChanged Datatype changed check.
      */
-    public void setDailyPartitionStringDatatypeDetect(ColumnStringDatatypeDetectCheckSpec dailyPartitionStringDatatypeDetect) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringDatatypeDetect, dailyPartitionStringDatatypeDetect));
-        this.dailyPartitionStringDatatypeDetect = dailyPartitionStringDatatypeDetect;
-        propagateHierarchyIdToField(dailyPartitionStringDatatypeDetect, "daily_partition_string_datatype_detect");
+    public void setDailyPartitionStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec dailyPartitionStringDatatypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringDatatypeChanged, dailyPartitionStringDatatypeChanged));
+        this.dailyPartitionStringDatatypeChanged = dailyPartitionStringDatatypeChanged;
+        propagateHierarchyIdToField(dailyPartitionStringDatatypeChanged, "daily_partition_string_datatype_changed");
     }
 
     /**

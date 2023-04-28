@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import org.apache.parquet.Strings;
 
 /**
  * Table basic model returned by the rest api that is limited only to the basic fields, excluding nested nodes.
@@ -38,63 +39,124 @@ import lombok.Data;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "TableBasicModel", description = "Basic table model with a subset of parameters, excluding all nested objects.")
 public class TableBasicModel {
+    /**
+     * Connection name.
+     */
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
+    /**
+     * Table hash that identifies the table using a unique hash code.
+     */
     @JsonPropertyDescription("Table hash that identifies the table using a unique hash code.")
     private Long tableHash;
 
-    @JsonPropertyDescription("Physical table details (a physical schema name and a physical table name)")
+    /**
+     * Physical table details (a physical schema name and a physical table name).
+     */
+    @JsonPropertyDescription("Physical table details (a physical schema name and a physical table name).")
     private PhysicalTableName target;
 
-    @JsonPropertyDescription("Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).")
-    @Deprecated
-    private TimestampColumnsSpec timestampColumns;
-
+    /**
+     * Disables all data quality checks on the table. Data quality checks will not be executed.
+     */
     @JsonPropertyDescription("Disables all data quality checks on the table. Data quality checks will not be executed.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
+    /**
+     * Stage name.
+     */
     @JsonPropertyDescription("Stage name.")
     private String stage;
 
+    /**
+     * SQL WHERE clause added to the sensor queries.
+     */
     @JsonPropertyDescription("SQL WHERE clause added to the sensor queries.")
     private String filter;
 
+    /**
+     * Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.
+     */
+    @JsonPropertyDescription("Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer priority;
+
+    /**
+     * Table owner information like the data steward name or the business application name."
+     */
     @JsonPropertyDescription("Table owner information like the data steward name or the business application name.")
     private TableOwnerSpec owner;
 
+    /**
+     * True when the table has any checks configured.
+     */
     @JsonPropertyDescription("True when the table has any checks configured.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean hasAnyConfiguredChecks;
 
+    /**
+     * True when the table has any profiling checks configured.
+     */
     @JsonPropertyDescription("True when the table has any profiling checks configured.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean hasAnyConfiguredProfilingChecks;
 
+    /**
+     * True when the table has any recurring checks configured.
+     */
     @JsonPropertyDescription("True when the table has any recurring checks configured.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean hasAnyConfiguredRecurringChecks;
 
+    /**
+     * True when the table has any partition checks configured.
+     */
     @JsonPropertyDescription("True when the table has any partition checks configured.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean hasAnyConfiguredPartitionChecks;
 
+    /**
+     * True when the table has any partition checks configured, but the partitionByColumn is not set, so the partition checks will fail when started.
+     */
+    @JsonPropertyDescription("True when the table has missing configuration of the \"partition_by_column\" column, making any partition checks fail when executed.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean partitioningConfigurationMissing;
+
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this table.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this table.")
     private CheckSearchFilters runChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run profiling checks within this table.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run profiling checks within this table.")
     private CheckSearchFilters runProfilingChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run recurring checks within this table.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run recurring checks within this table.")
     private CheckSearchFilters runRecurringChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run partition partitioned checks within this table.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run partition partitioned checks within this table.")
     private CheckSearchFilters runPartitionChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "collect statistics" job that should be pushed to the job queue in order to run all statistics collectors within this table.
+     */
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collectors within this table.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
 
+    /**
+     * Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this table.
+     */
     @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this table.")
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
@@ -111,6 +173,8 @@ public class TableBasicModel {
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setTarget(tableSpec.getPhysicalTableName());
             setDisabled(tableSpec.isDisabled());
+            setPartitioningConfigurationMissing(tableSpec.getTimestampColumns() == null ||
+                    Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn()));
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.PROFILING));
             setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.RECURRING));
@@ -162,11 +226,13 @@ public class TableBasicModel {
             setConnectionName(connectionName);
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setTarget(tableSpec.getPhysicalTableName());
-            setTimestampColumns(tableSpec.getTimestampColumns());
             setDisabled(tableSpec.isDisabled());
             setStage(tableSpec.getStage());
             setFilter(tableSpec.getFilter());
+            setPriority(tableSpec.getPriority());
             setOwner(tableSpec.getOwner());
+            setPartitioningConfigurationMissing(tableSpec.getTimestampColumns() == null ||
+                    Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn()));
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.PROFILING));
             setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.RECURRING));
@@ -222,13 +288,7 @@ public class TableBasicModel {
         targetTableSpec.setDisabled(this.isDisabled());
         targetTableSpec.setStage(this.getStage());
         targetTableSpec.setFilter(this.getFilter());
+        targetTableSpec.setPriority(this.getPriority());
         targetTableSpec.setOwner(this.getOwner());
-
-        if (this.getTimestampColumns() != null) {
-            targetTableSpec.setTimestampColumns(this.getTimestampColumns());
-        }
-        else {
-            targetTableSpec.setTimestampColumns(new TimestampColumnsSpec()); // default configuration because the object is not null
-        }
     }
 }

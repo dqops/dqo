@@ -70,6 +70,7 @@ function TreeProvider(props: any) {
   const [selectedTreeNode, setSelectedTreeNode] = useState<CustomTreeNode>();
   const history = useHistory();
   const dispatch = useDispatch();
+  const [loadingNodes, setLoadingNodes] = useState<Record<string, boolean>>({});
 
   const getConnections = async () => {
     const res: AxiosResponse<ConnectionBasicModel[]> =
@@ -197,7 +198,8 @@ function TreeProvider(props: any) {
       run_checks_job_template: table[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof TableBasicModel] as CheckSearchFilters,
       collect_statistics_job_template: table.collect_statistics_job_template,
       data_clean_job_template: table.data_clean_job_template,
-      open: false
+      open: false,
+      configured: table.partitioning_configuration_missing
     }));
     resetTreeData(node, items);
   };
@@ -361,7 +363,8 @@ function TreeProvider(props: any) {
       run_checks_job_template: column[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof ColumnBasicModel] as CheckSearchFilters,
       collect_statistics_job_template: column.collect_statistics_job_template,
       data_clean_job_template: column.data_clean_job_template,
-      open: false
+      open: false,
+      configured: column.has_any_configured_checks || column.has_any_configured_partition_checks || column.has_any_configured_profiling_checks || column.has_any_configured_recurring_checks
     }));
     resetTreeData(node, items);
   };
@@ -614,8 +617,12 @@ function TreeProvider(props: any) {
 
   const refreshNode = async (node: CustomTreeNode) => {
     if (!node) return;
+    setLoadingNodes(prev => ({
+      ...prev,
+      [node.id]: true
+    }));
     if (node.level === TREE_LEVEL.DATABASE) {
-      return await refreshDatabaseNode(node);
+      await refreshDatabaseNode(node);
     } else if (node.level === TREE_LEVEL.SCHEMA) {
       await refreshSchemaNode(node);
     } else if (node.level === TREE_LEVEL.TABLE) {
@@ -645,6 +652,11 @@ function TreeProvider(props: any) {
     } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
       await refreshColumnPartitionedChecksNode(node, 'monthly');
     }
+
+    setLoadingNodes(prev => ({
+      ...prev,
+      [node.id]: false
+    }));
   };
 
   const runChecks = async (node: CustomTreeNode) => {
@@ -1155,6 +1167,7 @@ function TreeProvider(props: any) {
         deleteData,
         selectedTreeNode,
         setSelectedTreeNode,
+        loadingNodes,
       }}
       {...props}
     />

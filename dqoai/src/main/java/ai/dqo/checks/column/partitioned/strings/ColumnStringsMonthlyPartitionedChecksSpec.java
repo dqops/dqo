@@ -78,7 +78,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
             put("monthly_partition_string_most_popular_values", o -> o.monthlyPartitionStringMostPopularValues);
 
-            put("monthly_partition_string_datatype_detect", o -> o.monthlyPartitionStringDatatypeDetect);
+            put("monthly_partition_string_datatype_changed", o -> o.monthlyPartitionStringDatatypeChanged);
 
         }
     };
@@ -189,7 +189,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     private ColumnStringMostPopularValuesCheckSpec monthlyPartitionStringMostPopularValues;
 
     @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringDatatypeDetectCheckSpec monthlyPartitionStringDatatypeDetect;
+    private ColumnStringDatatypeChangedCheckSpec monthlyPartitionStringDatatypeChanged;
     
     /**
      * Returns a maximum string length below check.
@@ -827,21 +827,21 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a count of expected values in datatype detect check.
-     * @return Datatype detect check.
+     * Returns a count of expected values in datatype changed check.
+     * @return Datatype changed check.
      */
-    public ColumnStringDatatypeDetectCheckSpec getMonthlyPartitionStringDatatypeDetect() {
-        return monthlyPartitionStringDatatypeDetect;
+    public ColumnStringDatatypeChangedCheckSpec getMonthlyPartitionStringDatatypeChanged() {
+        return monthlyPartitionStringDatatypeChanged;
     }
 
     /**
-     * Sets a new definition of a datatype detect check.
-     * @param monthlyPartitionStringDatatypeDetect Datatype detect check.
+     * Sets a new definition of a datatype changed check.
+     * @param monthlyPartitionStringDatatypeChanged Datatype changed check.
      */
-    public void setMonthlyPartitionStringDatatypeDetect(ColumnStringDatatypeDetectCheckSpec monthlyPartitionStringDatatypeDetect) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringDatatypeDetect, monthlyPartitionStringDatatypeDetect));
-        this.monthlyPartitionStringDatatypeDetect = monthlyPartitionStringDatatypeDetect;
-        propagateHierarchyIdToField(monthlyPartitionStringDatatypeDetect, "monthly_partition_string_datatype_detect");
+    public void setMonthlyPartitionStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec monthlyPartitionStringDatatypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringDatatypeChanged, monthlyPartitionStringDatatypeChanged));
+        this.monthlyPartitionStringDatatypeChanged = monthlyPartitionStringDatatypeChanged;
+        propagateHierarchyIdToField(monthlyPartitionStringDatatypeChanged, "monthly_partition_string_datatype_changed");
     }
 
     /**

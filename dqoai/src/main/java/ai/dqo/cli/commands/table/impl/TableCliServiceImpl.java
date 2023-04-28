@@ -110,7 +110,7 @@ public class TableCliServiceImpl implements TableCliService {
             List<SourceSchemaModel> schemas = sourceConnection.listSchemas().stream()
                     .filter(schema -> (schemaFilter == null || StringPatternComparer.matchSearchPattern(schema.getSchemaName(), schemaFilter)))
                     .collect(Collectors.toList());
-            Table resultTable = Table.create().addColumns(StringColumn.create("Schema name"));
+            Table resultTable = Table.create().addColumns(TextColumn.create("Schema name"));
             for (SourceSchemaModel schemaModel : schemas) {
                 Row row = resultTable.appendRow();
                 row.setString(0, schemaModel.getSchemaName());
@@ -194,9 +194,9 @@ public class TableCliServiceImpl implements TableCliService {
     public Table createTablesTableFromTableSpecList(Collection<TableWrapper> sourceTableWrappers, UserHome userHome) {
         Table resultTable = Table.create().addColumns(
                 LongColumn.create("Id"),
-                StringColumn.create("Connection name"),
-                StringColumn.create("Schema name"),
-                StringColumn.create("Table name"),
+                TextColumn.create("Connection name"),
+                TextColumn.create("Schema name"),
+                TextColumn.create("Table name"),
                 IntColumn.create("Column count"));
 
         for( TableWrapper sourceTableWrapper : sourceTableWrappers) {

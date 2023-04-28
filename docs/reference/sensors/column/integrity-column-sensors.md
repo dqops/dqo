@@ -24,7 +24,11 @@ Column level sensor that calculates the percentage of values that match values i
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -49,8 +53,11 @@ Column level sensor that calculates the percentage of values that match values i
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(connection.postgresql.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -75,8 +82,11 @@ Column level sensor that calculates the percentage of values that match values i
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -101,8 +111,11 @@ Column level sensor that calculates the percentage of values that match values i
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -148,10 +161,12 @@ Column level sensor that calculates the count of values that does not match valu
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
-    
     
     SELECT
         SUM(
@@ -179,8 +194,11 @@ Column level sensor that calculates the count of values that does not match valu
         {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
     {%- endmacro %}
     
-    {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -209,8 +227,11 @@ Column level sensor that calculates the count of values that does not match valu
         {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
     {%- endmacro %}
     
-    {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -235,8 +256,11 @@ Column level sensor that calculates the count of values that does not match valu
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
