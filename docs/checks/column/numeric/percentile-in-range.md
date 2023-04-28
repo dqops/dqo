@@ -4882,7 +4882,7 @@ ___
 ## **daily percentile 10 in range**  
   
 **Check description**  
-Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
+Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -5495,7 +5495,7 @@ ___
 ## **daily percentile 25 in range**  
   
 **Check description**  
-Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
+Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -6108,7 +6108,7 @@ ___
 ## **daily percentile 75 in range**  
   
 **Check description**  
-Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
+Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -6721,7 +6721,7 @@ ___
 ## **daily percentile 90 in range**  
   
 **Check description**  
-Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
+Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

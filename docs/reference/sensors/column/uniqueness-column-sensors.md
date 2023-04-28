@@ -5,7 +5,7 @@
 column/uniqueness/duplicate_count
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null column value.
+Column level sensor that calculates the number of duplicate values in a given column.
 
 
 

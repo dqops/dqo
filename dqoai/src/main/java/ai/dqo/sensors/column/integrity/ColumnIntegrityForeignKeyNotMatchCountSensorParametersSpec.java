@@ -29,7 +29,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level sensor that calculates the count of values that does not matche values in column of another table.
+ * Column level sensor that calculates the count of values that does not match values in column of another table.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

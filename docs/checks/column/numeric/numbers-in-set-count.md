@@ -750,7 +750,7 @@ ___
 ## **daily numbers in set count**  
   
 **Check description**  
-Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the number of numbers from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1495,7 +1495,7 @@ ___
 ## **monthly numbers in set count**  
   
 **Check description**  
-Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
+Verifies that the number of numbers from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2240,7 +2240,7 @@ ___
 ## **daily partition numbers in set count**  
   
 **Check description**  
-Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.  
+Verifies that the number of numbers from set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2986,7 +2986,7 @@ ___
 ## **monthly partition numbers in set count**  
   
 **Check description**  
-Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.  
+Verifies that the number of numbers from set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

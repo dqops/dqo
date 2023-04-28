@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Column level sensor that calculates the number of rows with a null column value.
+ * Column level sensor that calculates the percent of strings from a set in a column does not exceed the minimum accepted percentage.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

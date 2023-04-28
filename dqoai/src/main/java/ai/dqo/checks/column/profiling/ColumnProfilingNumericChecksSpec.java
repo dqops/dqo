@@ -97,13 +97,13 @@ public class ColumnProfilingNumericChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("The check counts those values with value below the one provided by the user in a column.")
     private ColumnValueBelowMinValueCountCheckSpec valueBelowMinValueCount;
 
-    @JsonPropertyDescription("The check percentage of those values with value below the one provided by the user in a column.")
+    @JsonPropertyDescription("The check percentage values below those provided by the user in the column.")
     private ColumnValueBelowMinValuePercentCheckSpec valueBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts those values with value above the one provided by the user in a column.")
+    @JsonPropertyDescription("The check counts values above those provided by the user in the column.")
     private ColumnValueAboveMaxValueCountCheckSpec valueAboveMaxValueCount;
 
-    @JsonPropertyDescription("The check percentage of those values with value above the one provided by the user in a column.")
+    @JsonPropertyDescription("The check percentage values above those provided by the user in the column.")
     private ColumnValueAboveMaxValuePercentCheckSpec valueAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range.")

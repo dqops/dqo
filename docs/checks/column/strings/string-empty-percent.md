@@ -1,7 +1,7 @@
 **string empty percent** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a maximum number of empty strings in a monitored column.
+Column level check that ensures that there are no more than a maximum percent of empty strings in a monitored column.
 
 ___
 
@@ -2042,7 +2042,7 @@ ___
 ## **daily partition string empty percent**  
   
 **Check description**  
-Verifies that the percentage of string in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.  
+Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2722,7 +2722,7 @@ ___
 ## **monthly partition string empty percent**  
   
 **Check description**  
-Verifies that the percentage of string in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.  
+Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
