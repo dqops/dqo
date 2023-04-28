@@ -90,16 +90,16 @@ public class SensorsController {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
         SensorDefinitionList userHomeSensorDefinitionList = userHome.getSensors();
-        Optional<SensorDefinitionWrapper> userHomeSensorDefinitionWrapperOptional = Optional.ofNullable(userHomeSensorDefinitionList.getByObjectName(fullSensorName, true));
+        Optional<SensorDefinitionWrapper> userHomeSensorDefinitionWrapperOptional =
+                Optional.ofNullable(userHomeSensorDefinitionList.getByObjectName(fullSensorName, true));
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
         SensorDefinitionList dqoHomeSensorDefinitionList = dqoHome.getSensors();
-        Optional<SensorDefinitionWrapper> dqoHomeSensorDefinitionWrapperOptional = Optional.ofNullable(dqoHomeSensorDefinitionList.getByObjectName(fullSensorName, true));
+        Optional<SensorDefinitionWrapper> dqoHomeSensorDefinitionWrapperOptional =
+                Optional.ofNullable(dqoHomeSensorDefinitionList.getByObjectName(fullSensorName, true));
 
-        Optional<SensorDefinitionWrapper> sensorDefinitionWrapperOptional = userHomeSensorDefinitionWrapperOptional.or(() -> dqoHomeSensorDefinitionWrapperOptional);
-
-        if (sensorDefinitionWrapperOptional.isEmpty()) {
+        if (userHomeSensorDefinitionWrapperOptional.isEmpty() && dqoHomeSensorDefinitionWrapperOptional.isEmpty()) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
         }
 
@@ -108,21 +108,31 @@ public class SensorsController {
         dqoHomeSensorDefinitionWrapperOptional.ifPresent(sensorDefinitionWrapper -> {
             sensorModel.setFullSensorName(sensorDefinitionWrapper.getName());
             sensorModel.setSensorDefinitionSpec(sensorDefinitionWrapper.getSpec());
-            sensorModel.setCustom(false);
+            sensorModel.setBuiltIn(true);
             List<ProviderSensorModel> providerSensorBasicModelList = sensorDefinitionWrapper.getProviderSensors()
                     .toList().stream()
-                    .map(providerSensorWrapper -> new ProviderSensorModel(providerSensorWrapper.getProvider(), providerSensorWrapper.getSpec(), providerSensorWrapper.getSqlTemplate(), false))
+                    .map(providerSensorWrapper -> new ProviderSensorModel(
+                            providerSensorWrapper.getProvider(),
+                            providerSensorWrapper.getSpec(),
+                            providerSensorWrapper.getSqlTemplate(),
+                            userHomeSensorDefinitionWrapperOptional.isPresent(),
+                            dqoHomeSensorDefinitionWrapperOptional.isPresent()))
                     .collect(Collectors.toList());
             sensorModel.addProviderSensorModel(providerSensorBasicModelList);
         });
 
-        sensorDefinitionWrapperOptional.ifPresent(sensorDefinitionWrapper -> {
+        userHomeSensorDefinitionWrapperOptional.ifPresent(sensorDefinitionWrapper -> {
             sensorModel.setFullSensorName(sensorDefinitionWrapper.getName());
             sensorModel.setSensorDefinitionSpec(sensorDefinitionWrapper.getSpec());
             sensorModel.setCustom(true);
             List<ProviderSensorModel> providerSensorBasicModelList = sensorDefinitionWrapper.getProviderSensors()
                     .toList().stream()
-                    .map(providerSensorWrapper -> new ProviderSensorModel(providerSensorWrapper.getProvider(), providerSensorWrapper.getSpec(), providerSensorWrapper.getSqlTemplate(), userHomeSensorDefinitionWrapperOptional.isPresent()))
+                    .map(providerSensorWrapper -> new ProviderSensorModel(
+                            providerSensorWrapper.getProvider(),
+                            providerSensorWrapper.getSpec(),
+                            providerSensorWrapper.getSqlTemplate(),
+                            userHomeSensorDefinitionWrapperOptional.isPresent(),
+                            dqoHomeSensorDefinitionWrapperOptional.isPresent()))
                     .collect(Collectors.toList());
             sensorModel.addProviderSensorModel(providerSensorBasicModelList);
         });
@@ -155,7 +165,7 @@ public class SensorsController {
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
-        SensorDefinitionList userHomeSensorDefinitionList= userHome.getSensors();
+        SensorDefinitionList userHomeSensorDefinitionList = userHome.getSensors();
 
         SensorDefinitionWrapper userHomeSensorDefinitionWrapper = userHomeSensorDefinitionList.getByObjectName(fullSensorName, true);
 
@@ -222,26 +232,31 @@ public class SensorsController {
             if(!sensorModel.equalsSensorDqo(dqoHomeSensorDefinitionWrapper)){
                 SensorDefinitionWrapper sensorDefinitionWrapper = userHomeSensorDefinitionList.createAndAddNew(fullSensorName);
                 sensorDefinitionWrapper.setSpec(sensorModel.getSensorDefinitionSpec());
-                userHomeContext.flush();
+
                 ProviderSensorDefinitionList providerSensorDefinitionList = sensorDefinitionWrapper.getProviderSensors();
                 for (ProviderSensorModel providerSensorModel: providerSensorModels){
-                    ProviderSensorDefinitionWrapper providerSensorDefinition = dqoHomeSensorDefinitionWrapperProviderSensors.getByObjectName(providerSensorModel.getProviderType(), true);
+                    ProviderSensorDefinitionWrapper providerSensorDefinition =
+                            dqoHomeSensorDefinitionWrapperProviderSensors.getByObjectName(providerSensorModel.getProviderType(), true);
                     if(!providerSensorModel.equalsProviderSensorDqo(providerSensorDefinition)){
-                        ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper = providerSensorDefinitionList.createAndAddNew(providerSensorModel.getProviderType());
+                        ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper =
+                                providerSensorDefinitionList.createAndAddNew(providerSensorModel.getProviderType());
                         userHomeProviderSensorDefinitionWrapper.setSpec(providerSensorModel.getProviderSensorDefinitionSpec());
                         userHomeProviderSensorDefinitionWrapper.setSqlTemplate(providerSensorModel.getSqlTemplate());
-                        userHomeContext.flush();
                     }
                 }
             }
+
+            userHomeContext.flush();
+
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
         }
 
         ProviderSensorDefinitionList providerSensorDefinitionList = userHomeSensorDefinitionWrapper.getProviderSensors();
 
-        if(sensorModel.equalsSensorDqo(dqoHomeSensorDefinitionWrapper)){
+        if (sensorModel.equalsSensorDqo(dqoHomeSensorDefinitionWrapper)){
             for (ProviderSensorModel providerSensorModel: providerSensorModels){
-                ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper = providerSensorDefinitionList.getByObjectName(providerSensorModel.getProviderType(), true);
+                ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper =
+                        providerSensorDefinitionList.getByObjectName(providerSensorModel.getProviderType(), true);
                 if(userHomeProviderSensorDefinitionWrapper != null){
                     userHomeProviderSensorDefinitionWrapper.markForDeletion();
                     userHomeContext.flush();
@@ -250,10 +265,13 @@ public class SensorsController {
             userHomeSensorDefinitionWrapper.markForDeletion();
             userHomeContext.flush();
         } else {
-            for (ProviderSensorModel providerSensorModel: providerSensorModels){
-                ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper = providerSensorDefinitionList.getByObjectName(providerSensorModel.getProviderType(), true);
-                ProviderSensorDefinitionWrapper dqoHomeProviderSensorDefinitionWrapper = dqoHomeSensorDefinitionWrapperProviderSensors.getByObjectName(providerSensorModel.getProviderType(), true);
-                if(!providerSensorModel.equalsProviderSensorDqo(dqoHomeProviderSensorDefinitionWrapper) && userHomeProviderSensorDefinitionWrapper == null){
+            for (ProviderSensorModel providerSensorModel: providerSensorModels) {
+                ProviderSensorDefinitionWrapper userHomeProviderSensorDefinitionWrapper =
+                        providerSensorDefinitionList.getByObjectName(providerSensorModel.getProviderType(), true);
+                ProviderSensorDefinitionWrapper dqoHomeProviderSensorDefinitionWrapper =
+                        dqoHomeSensorDefinitionWrapperProviderSensors.getByObjectName(providerSensorModel.getProviderType(), true);
+
+                if(!providerSensorModel.equalsProviderSensorDqo(dqoHomeProviderSensorDefinitionWrapper) && userHomeProviderSensorDefinitionWrapper == null) {
                     userHomeProviderSensorDefinitionWrapper = providerSensorDefinitionList.createAndAddNew(providerSensorModel.getProviderType());
                     userHomeProviderSensorDefinitionWrapper.setSpec(providerSensorModel.getProviderSensorDefinitionSpec());
                     userHomeProviderSensorDefinitionWrapper.setSqlTemplate(providerSensorModel.getSqlTemplate());
@@ -263,6 +281,7 @@ public class SensorsController {
                 } else if (userHomeProviderSensorDefinitionWrapper != null){
                     userHomeProviderSensorDefinitionWrapper.markForDeletion();
                 }
+
                 userHomeContext.flush();
             }
         }
@@ -331,10 +350,13 @@ public class SensorsController {
 
 
         dqoHome.getSensors().forEach(sensorDefinitionWrapper -> {
-            SensorDefinitionWrapper dqoHomeSensorDefinitionWrapper = dqoHomeSensorDefinitionList.getByObjectName(sensorDefinitionWrapper.getName(), true);
+            SensorDefinitionWrapper dqoHomeSensorDefinitionWrapper =
+                    dqoHomeSensorDefinitionList.getByObjectName(sensorDefinitionWrapper.getName(), true);
+
             List<ProviderSensorBasicModel> providerSensorBasicModelList = new ArrayList<>();
             for (ProviderType providerType : ProviderType.values()) {
-                ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper = dqoHomeSensorDefinitionWrapper.getProviderSensors().getByObjectName(providerType, true);
+                ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper =
+                        dqoHomeSensorDefinitionWrapper.getProviderSensors().getByObjectName(providerType, true);
                 if (providerSensorDefinitionWrapper != null) {
                     ProviderSensorBasicModel providerSensorBasicModel = new ProviderSensorBasicModel();
                     providerSensorBasicModel.setProviderType(providerType);

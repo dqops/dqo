@@ -24,6 +24,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.util.Objects;
+
 /**
  * Provider sensor model returned from REST API.
  */
@@ -44,15 +46,23 @@ public class ProviderSensorModel {
     private String sqlTemplate;
 
     @JsonPropertyDescription("Whether the provider sensor is a User Home provider sensor")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private boolean custom;
+
+    @JsonPropertyDescription("This is a DQO built-in provider sensor, whose parameters cannot be changed.")
+    public boolean builtIn;
+
     public ProviderSensorModel(){}
 
-    public ProviderSensorModel(ProviderType providerType, ProviderSensorDefinitionSpec providerSensorDefinitionSpec, String sqlTemplate, boolean custom) {
+    public ProviderSensorModel(ProviderType providerType,
+                               ProviderSensorDefinitionSpec providerSensorDefinitionSpec,
+                               String sqlTemplate,
+                               boolean custom,
+                               boolean builtIn) {
         this.providerType = providerType;
         this.providerSensorDefinitionSpec = providerSensorDefinitionSpec;
         this.sqlTemplate = sqlTemplate;
         this.custom = custom;
+        this.builtIn = builtIn;
     }
 
     /**
@@ -66,13 +76,14 @@ public class ProviderSensorModel {
             return false;
         }
 
-        if (!providerSensorDefinitionWrapper.getSqlTemplate().equals(sqlTemplate)) {
+        if (!Objects.equals(providerSensorDefinitionWrapper.getSqlTemplate(), sqlTemplate)) {
             return false;
         }
 
-        if (!providerSensorDefinitionWrapper.getSpec().equals(providerSensorDefinitionSpec)) {
+        if (!Objects.equals(providerSensorDefinitionWrapper.getSpec(), providerSensorDefinitionSpec)) {
             return false;
         }
+
         return true;
     }
 }
