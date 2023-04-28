@@ -80,6 +80,7 @@ export const RuleDefinition = ({ rule }: RuleDefinitionProps) => {
                       prediction_time_window,
                     }
                   })}
+                  step={1}
                 />
               </div>
             </div>
@@ -94,6 +95,7 @@ export const RuleDefinition = ({ rule }: RuleDefinitionProps) => {
                       min_periods_with_readouts,
                     }
                   })}
+                  step={1}
                 />
               </div>
             </div>
