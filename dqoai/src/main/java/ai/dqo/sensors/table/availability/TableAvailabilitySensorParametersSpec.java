@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Tabular sensor that executes a row count query on a table.
+ * Table availability sensor that executes a row count query.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

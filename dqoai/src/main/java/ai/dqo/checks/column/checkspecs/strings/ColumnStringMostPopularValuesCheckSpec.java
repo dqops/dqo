@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum number of empty strings in a monitored column.
+ * Column level check that ensures that the number of top values from a set in a column does not exceed the minimum accepted count.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

@@ -367,7 +367,7 @@ ___
 ## **daily sql aggregate expr column**  
   
 **Check description**  
-Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.  
+Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -729,7 +729,7 @@ ___
 ## **monthly sql aggregate expr column**  
   
 **Check description**  
-Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.  
+Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1091,7 +1091,7 @@ ___
 ## **daily partition sql aggregate expr column**  
   
 **Check description**  
-Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.  
+Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1453,7 +1453,7 @@ ___
 ## **monthly partition sql aggregate expr column**  
   
 **Check description**  
-Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.  
+Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

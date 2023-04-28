@@ -1,14 +1,14 @@
 **value below min value percent** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a maximum number of values with a value below the indicated by the user value in a monitored column.
+Column level check that ensures that there are no more than a maximum percent of values with a value below the indicated by the user value in a monitored column.
 
 ___
 
 ## **value below min value percent**  
   
 **Check description**  
-The check percentage of those values with value below the one provided by the user in a column.  
+The check percentage values below those provided by the user in the column.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -506,7 +506,7 @@ ___
 ## **daily value below min value percent**  
   
 **Check description**  
-The check percentage of those values with value below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.  
+The check percentage values below those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1007,7 +1007,7 @@ ___
 ## **monthly value below min value percent**  
   
 **Check description**  
-The check percentage of those values with value below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.  
+The check percentage values below those provided by the user in the column. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1508,7 +1508,7 @@ ___
 ## **daily partition value below min value percent**  
   
 **Check description**  
-The check percentage of those values with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.  
+The check percentage values below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2010,7 +2010,7 @@ ___
 ## **monthly partition value below min value percent**  
   
 **Check description**  
-The check percentage of those values with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.  
+The check percentage values below those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

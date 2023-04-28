@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Column level sensor that calculates the number of rows with a null column value.
+ * Column level sensor that counts how many expected values are present in the top most popular values in the column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

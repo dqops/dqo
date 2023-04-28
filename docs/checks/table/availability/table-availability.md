@@ -8,7 +8,7 @@ ___
 ## **table availability**  
   
 **Check description**  
-Verifies that the number of rows in a table does not exceed the minimum accepted count.  
+Verifies availability on table in database using simple row count.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -498,7 +498,7 @@ ___
 ## **daily table availability**  
   
 **Check description**  
-Verifies availability on table in database using simple row count  
+Verifies availability on table in database using simple row count. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -991,7 +991,7 @@ ___
 ## **monthly table availability**  
   
 **Check description**  
-Verifies availability on table in database using simple row count  
+Verifies availability on table in database using simple row count. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

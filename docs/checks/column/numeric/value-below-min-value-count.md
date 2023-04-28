@@ -1007,7 +1007,7 @@ ___
 ## **monthly value below min value count**  
   
 **Check description**  
-The check counts those values with value below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.  
+The check counts values below those provided by the user in the column. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1508,7 +1508,7 @@ ___
 ## **daily partition value below min value count**  
   
 **Check description**  
-The check counts those values with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.  
+The check counts values below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2010,7 +2010,7 @@ ___
 ## **monthly partition value below min value count**  
   
 **Check description**  
-The check counts those values with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.  
+The check counts values below those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

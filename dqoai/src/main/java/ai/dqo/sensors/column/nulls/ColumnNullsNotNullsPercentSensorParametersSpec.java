@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Column level sensor that calculates the count of not null values in a column.
+ * Column level sensor that calculates the percentage of not null values in a column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

@@ -821,16 +821,16 @@ public class ColumnStringsMonthlyRecurringSpec extends AbstractCheckCategorySpec
     }
 
     /**
-     * Returns a count of expected values in datatype changed check.
-     * @return Datatype changed check.
+     * Returns a count of expected values in datatype detect check.
+     * @return Datatype detect check.
      */
     public ColumnStringDatatypeChangedCheckSpec getMonthlyStringDatatypeChanged() {
         return monthlyStringDatatypeChanged;
     }
 
     /**
-     * Sets a new definition of a datatype changed check.
-     * @param monthlyStringDatatypeChanged Datatype changed check.
+     * Sets a new definition of a datatype detect check.
+     * @param monthlyStringDatatypeChanged Datatype detect check.
      */
     public void setMonthlyStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec monthlyStringDatatypeChanged) {
         this.setDirtyIf(!Objects.equals(this.monthlyStringDatatypeChanged, monthlyStringDatatypeChanged));

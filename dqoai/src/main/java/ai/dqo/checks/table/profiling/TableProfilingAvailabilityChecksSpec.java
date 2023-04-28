@@ -40,7 +40,7 @@ public class TableProfilingAvailabilityChecksSpec extends AbstractCheckCategoryS
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of rows in a table does not exceed the minimum accepted count.")
+    @JsonPropertyDescription("Verifies availability on table in database using simple row count.")
     private TableAvailabilityCheckSpec tableAvailability;
 
     /**

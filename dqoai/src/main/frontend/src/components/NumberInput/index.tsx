@@ -1,4 +1,4 @@
-import React, { FocusEvent, useCallback } from 'react';
+import React, { FocusEvent, useCallback, KeyboardEvent, ChangeEvent } from 'react';
 
 import clsx from 'clsx';
 
@@ -19,6 +19,7 @@ interface INumberInputProps {
   tooltipText?: string;
   disabled?: boolean;
   error?: boolean;
+  step?: number;
 }
 
 const NumberInput = ({
@@ -34,11 +35,12 @@ const NumberInput = ({
   max,
   tooltipText,
   disabled,
-  error
+  error,
+  step
 }: INumberInputProps) => {
-  const handleChange = (e: any) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value === '') {
-      onChange(e.target.value);
+      onChange(+e.target.value);
       return;
     }
     if (onChange) {
@@ -63,6 +65,12 @@ const NumberInput = ({
       onChange(Number(value) - 1);
     }
   }, [onChange, value]);
+
+  const onKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (!/[0-9]/.test(event.key)) {
+      event.preventDefault();
+    }
+  };
 
   return (
     <div>
@@ -111,6 +119,8 @@ const NumberInput = ({
           min={min}
           max={max}
           disabled={disabled}
+          step={step}
+          onKeyPress={onKeyPress}
         />
         <div className="flex flex-col absolute top-1/2 transform -translate-y-1/2 right-2">
           <SvgIcon

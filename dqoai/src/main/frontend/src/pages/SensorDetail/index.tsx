@@ -4,7 +4,7 @@ import SvgIcon from "../../components/SvgIcon";
 import { useSelector } from "react-redux";
 import { getFirstLevelSensorState } from "../../redux/selectors";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { getSensor } from "../../redux/actions/sensor.actions";
+import { getSensor, setUpdatedSensor } from "../../redux/actions/sensor.actions";
 import Tabs from "../../components/Tabs";
 import SensorDefinition from "./SensorDefinition";
 import { ProviderSensorModel } from "../../api";
@@ -48,6 +48,21 @@ export const SensorDetail = () => {
     }
   }, [full_sensor_name, sensorDetail]);
 
+  const handleChangeProvideSensor = (tab: string, providerSensor: ProviderSensorModel) => {
+    const exist = sensorDetail?.provider_sensor_list?.find((item: ProviderSensorModel) => item.providerType === tab);
+
+    const newProviderSensorList = exist
+      ? sensorDetail?.provider_sensor_list.map((item: ProviderSensorModel) => item.providerType === tab ? providerSensor : item)
+      : [...sensorDetail?.provider_sensor_list || [], providerSensor];
+
+    dispatch(setUpdatedSensor({
+      ...sensorDetail,
+      ...{
+        provider_sensor_list: newProviderSensorList
+      }
+    }));
+  };
+
   return (
     <DefinitionLayout>
       <div className="relative">
@@ -70,7 +85,7 @@ export const SensorDetail = () => {
           <ProvideSensor
             key={index}
             providerSensor={sensorDetail?.provider_sensor_list?.find((item: ProviderSensorModel) => item.providerType === tab.value)}
-            onChange={() => {}}
+            onChange={(value) => handleChangeProvideSensor(tab.value, value)}
           />
         ))}
       </div>

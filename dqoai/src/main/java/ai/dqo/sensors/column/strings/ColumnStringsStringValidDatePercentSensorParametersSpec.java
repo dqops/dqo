@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Column level sensor that calculates the number of rows with a null column value.
+ * Column level sensor that ensures that there is at least a minimum percentage of valid dates in a monitored column..
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
