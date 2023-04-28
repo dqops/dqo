@@ -21,7 +21,7 @@ const navigations: NavigationMenu[] = [
     value: CheckTypes.SOURCES
   },
   {
-    label: 'Advanced profiling',
+    label: 'Profiling',
     value: CheckTypes.PROFILING
   },
   {
