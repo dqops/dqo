@@ -10,6 +10,7 @@ import Checkbox from "../../components/Checkbox";
 import SectionWrapper from "../../components/Dashboard/SectionWrapper";
 import RuleParameters from "../../components/Sensors/RuleParameters";
 import Jinja2Code from "./Jinja2";
+import { SensorActionGroup } from "../../components/Sensors/SensorActionGroup";
 
 type ProvideSensorProps = {
   providerSensor?: ProviderSensorModel;
@@ -53,6 +54,7 @@ const ProvideSensor = ({
 
   return (
     <div className="p-4">
+      <SensorActionGroup />
       <div className="flex gap-4 text-sm items-center mb-4">
         <p className="w-60">Sensor runner type:</p>
         <Select
