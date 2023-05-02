@@ -34,7 +34,7 @@ const ConnectionDataStream = () => {
     if (!updatedDataStreamsMapping || (connectionBasic && connectionBasic?.connection_name !== connection)) {
       dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection));
     }
-  }, [connection, connectionBasic]);
+  }, [connection, connectionBasic, checkTypes, firstLevelActiveTab]);
 
   const onUpdate = async () => {
     if (!updatedDataStreamsMapping) {
@@ -48,7 +48,7 @@ const ConnectionDataStream = () => {
         updatedDataStreamsMapping
       )
     );
-    await dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection));
+    await dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection, false));
     dispatch(setIsUpdatedDataStreamsMapping(checkTypes, firstLevelActiveTab,false));
   };
 

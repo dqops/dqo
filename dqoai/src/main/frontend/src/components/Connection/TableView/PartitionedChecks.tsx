@@ -86,7 +86,7 @@ const TablePartitionedChecksView = () => {
         )
       );
       await dispatch(
-        getTableDailyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+        getTableDailyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
       );
     } else {
       if (!monthlyPartitionedChecks) return;
@@ -102,7 +102,7 @@ const TablePartitionedChecksView = () => {
         )
       );
       await dispatch(
-        getTableMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+        getTableMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
       );
     }
   };

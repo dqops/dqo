@@ -10,8 +10,6 @@ import {
 } from '../../../api';
 import { ConnectionApiClient, SourceConnectionApi } from '../../../services/apiClient';
 import { useTree } from '../../../contexts/treeContext';
-import { useHistory } from 'react-router-dom';
-import { CheckTypes, ROUTES } from "../../../shared/routes";
 import Loader from "../../Loader";
 import ErrorModal from "./ErrorModal";
 import ConfirmErrorModal from "./ConfirmErrorModal";
@@ -35,7 +33,6 @@ const DatabaseConnection = ({
   onChange
 }: IDatabaseConnectionProps) => {
   const { addConnection } = useTree();
-  const history = useHistory();
   const [isTesting, setIsTesting] = useState(false);
   const [testResult, setTestResult] = useState<ConnectionRemoteModel>();
   const [showError, setShowError] = useState(false);
@@ -58,13 +55,12 @@ const DatabaseConnection = ({
       database.connection_name
     );
     addConnection(res.data);
-    history.push(`${ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, database.connection_name, 'schemas')}?import_schema=true&create_success=true`);
     setIsSaving(false);
     setShowConfirm(false);
   };
 
   useEffect(() => {
-    if (!/^([A-Za-z0-9])*$/.test(database.connection_name as string)) {
+    if (!/^([A-Za-z0-9-_])*$/.test(database.connection_name as string)) {
       setNameError('Database name should be alphanumeric characters');
     }  else if (database.connection_name?.length && database.connection_name.length > 36) {
           setNameError('Database name cannot be longer than 36 characters');

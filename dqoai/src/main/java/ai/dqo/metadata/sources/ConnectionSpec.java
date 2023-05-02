@@ -28,7 +28,7 @@ import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.*;
-import ai.dqo.metadata.notifications.NotificationSettingsSpec;
+import ai.dqo.metadata.incidents.IncidentGroupingSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -45,7 +45,7 @@ import picocli.CommandLine;
 import java.util.Objects;
 
 /**
- * Connection specification.
+ * Data source (connection) specification.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -64,7 +64,7 @@ public class ConnectionSpec extends AbstractSpec {
             put("mysql", o -> o.mysql);
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
-            put("notifications", o -> o.notifications);
+            put("incident_grouping", o -> o.incidentGrouping);
         }
     };
 
@@ -110,11 +110,11 @@ public class ConnectionSpec extends AbstractSpec {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private RecurringSchedulesSpec schedules;
 
-    @JsonPropertyDescription("Configuration of the notifications settings. Notifications are published when new data quality issues are detected.")
+    @JsonPropertyDescription("Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.")
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private NotificationSettingsSpec notifications;
+    private IncidentGroupingSpec incidentGrouping = new IncidentGroupingSpec();
 
     @JsonPropertyDescription("Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).")
     @ToString.Exclude
@@ -301,21 +301,21 @@ public class ConnectionSpec extends AbstractSpec {
     }
 
     /**
-     * Returns the notification settings.
-     * @return Notification settings.
+     * Returns the configuration of grouping failed data quality checks into data quality incidents.
+     * @return Grouping of failed data quality checks into incidents.
      */
-    public NotificationSettingsSpec getNotifications() {
-        return notifications;
+    public IncidentGroupingSpec getIncidentGrouping() {
+        return incidentGrouping;
     }
 
     /**
-     * Sets a new configuration of notifications.
-     * @param notifications New notification settings.
+     * Sets the configuration of data quality issued into incidents.
+     * @param incidentGrouping New configuration of data quality issue grouping into incidents.
      */
-    public void setNotifications(NotificationSettingsSpec notifications) {
-        setDirtyIf(!Objects.equals(this.notifications, notifications));
-        this.notifications = notifications;
-        propagateHierarchyIdToField(notifications, "notifications");
+    public void setIncidentGrouping(IncidentGroupingSpec incidentGrouping) {
+        setDirtyIf(!Objects.equals(this.incidentGrouping, incidentGrouping));
+        this.incidentGrouping = incidentGrouping;
+        propagateHierarchyIdToField(incidentGrouping, "incident_grouping");
     }
 
     /**
@@ -432,6 +432,8 @@ public class ConnectionSpec extends AbstractSpec {
             }
             if (cloned.notifications != null) {
                 cloned.notifications = cloned.notifications.expandAndTrim(secretValueProvider);
+            if (cloned.incidentGrouping != null) {
+                cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider);
             }
             cloned.comments = null;
             cloned.schedules = null;
@@ -453,7 +455,7 @@ public class ConnectionSpec extends AbstractSpec {
             cloned.defaultDataStreamMapping = null;
             cloned.comments = null;
             cloned.schedules = null;
-            cloned.notifications = null;
+            cloned.incidentGrouping = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

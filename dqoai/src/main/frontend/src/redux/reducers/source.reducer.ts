@@ -72,11 +72,14 @@ export type Action = BasicAction & {
 };
 
 const setActiveTabState = (state: ISourceState, action: Action, data: Record<string, unknown>) => {
+  const newState = structuredClone(state);
+  const activeTab = action.activeTab || newState[action.checkType].activeTab;
+
   return {
-    ...state,
+    ...newState,
     [action.checkType]: {
-      ...state[action.checkType],
-      tabs: state[action.checkType].tabs.map((item) => item.url === action.activeTab ? ({
+      ...newState[action.checkType],
+      tabs: newState[action.checkType].tabs.map((item) => item.url === activeTab ? ({
         ...item,
         state: {
           ...item.state,
@@ -98,6 +101,10 @@ const connectionReducer = (state = initialState, action: Action) => {
           [action.checkType]: {
             ...state[action.checkType],
             activeTab: action.data.url,
+            tabs: state[action.checkType].tabs.map((item) => item.value === action.data.value ? ({
+              ...item,
+              ...action.data,
+            }) : item)
           }
         };
       }
@@ -425,7 +432,7 @@ const connectionReducer = (state = initialState, action: Action) => {
     case SOURCE_ACTION.GET_TABLE_COMMENTS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        comments: action.data,
+        updatedComments: action.data,
         isUpdatedComments: false,
         error: null
       });
@@ -834,7 +841,7 @@ const connectionReducer = (state = initialState, action: Action) => {
     case SOURCE_ACTION.GET_COLUMN_COMMENTS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        comments: action.data,
+        updatedComments: action.data,
         isUpdatedComments: false,
         error: null
       });
@@ -1096,6 +1103,48 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: false,
         error: action.error
       });
+    case SOURCE_ACTION.SET_CHECK_RESULTS: {
+      const firstState = state[action.checkType].tabs.find((item) => item.url === action.activeTab)?.state || {};
+
+      return setActiveTabState(state, action, {
+        checkResults: {
+          ...firstState.checkResults || {},
+          [action.data.checkName]: action.data.checkResults
+        }
+      });
+    }
+    case SOURCE_ACTION.SET_SENSOR_READOUTS: {
+      const firstState = state[action.checkType].tabs.find((item) => item.url === action.activeTab)?.state || {};
+
+      return setActiveTabState(state, action, {
+        sensorReadouts: {
+          ...firstState.sensorReadouts || {},
+          [action.data.checkName]: action.data.sensorReadouts
+        }
+      });
+    }
+    case SOURCE_ACTION.SET_SENSOR_ERRORS: {
+      const firstState = state[action.checkType].tabs.find((item) => item.url === action.activeTab)?.state || {};
+
+      const newSensors = {
+        ...firstState.sensorErrors || {},
+        [action.data.checkName]: action.data.sensorErrors
+      };
+      return setActiveTabState(state, action, {
+        sensorErrors: newSensors
+      });
+    }
+    case SOURCE_ACTION.SET_CHECK_FILTERS: {
+      const firstState = state[action.checkType].tabs.find((item) => item.url === action.activeTab)?.state || {};
+
+      const newCheckFilters = {
+        ...firstState.checkFilters || {},
+        [action.data.checkName]: action.data.filters
+      };
+      return setActiveTabState(state, action, {
+        checkFilters: newCheckFilters
+      });
+    }
     default:
       return state;
   }

@@ -17,17 +17,14 @@ package ai.dqo.execution.checks;
 
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.sources.TableSpec;
-import tech.tablesaw.api.IntColumn;
-import tech.tablesaw.api.Row;
-import tech.tablesaw.api.StringColumn;
-import tech.tablesaw.api.Table;
+import tech.tablesaw.api.*;
 
 /**
  * Tabular object returned from {@link CheckExecutionService} with a summary of sensors that were executed.
  */
 public class CheckExecutionSummary {
-    private final StringColumn connectionColumn;
-    private final StringColumn tableColumn;
+    private final TextColumn connectionColumn;
+    private final TextColumn tableColumn;
     private final IntColumn checksExecutedColumn;
     private final IntColumn validResultsColumn;
     private final IntColumn warningsCountColumn;
@@ -42,9 +39,9 @@ public class CheckExecutionSummary {
      */
     public CheckExecutionSummary() {
 		this.summaryTable = Table.create("Check execution summary");
-		connectionColumn = StringColumn.create("Connection");
+		connectionColumn = TextColumn.create("Connection");
 		this.summaryTable.addColumns(connectionColumn);
-		tableColumn = StringColumn.create("Table");
+		tableColumn = TextColumn.create("Table");
 		this.summaryTable.addColumns(tableColumn);
 		checksExecutedColumn = IntColumn.create("Checks");
 		this.summaryTable.addColumns(checksExecutedColumn);
@@ -74,7 +71,7 @@ public class CheckExecutionSummary {
      * Connection name column.
      * @return Column.
      */
-    public StringColumn getConnectionColumn() {
+    public TextColumn getConnectionColumn() {
         return connectionColumn;
     }
 
@@ -82,7 +79,7 @@ public class CheckExecutionSummary {
      * Full table name column.
      * @return Table name column.
      */
-    public StringColumn getTableColumn() {
+    public TextColumn getTableColumn() {
         return tableColumn;
     }
 

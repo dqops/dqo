@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.data.checkresults.services;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
@@ -14,7 +29,7 @@ import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactory;
 import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
@@ -82,10 +97,10 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         InstantColumn timePeriodUtcColumn = sortedTable.instantColumn(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
         InstantColumn executedAtColumn = sortedTable.instantColumn(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
         IntColumn severityColumn = sortedTable.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
-        StringColumn dataStreamColumn = sortedTable.stringColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
+        TextColumn dataStreamColumn = sortedTable.textColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
         LongColumn checkHashColumn = sortedTable.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-        StringColumn checkCategoryColumn = sortedTable.stringColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
-        StringColumn checkNameColumn = sortedTable.stringColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
+        TextColumn checkCategoryColumn = sortedTable.textColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+        TextColumn checkNameColumn = sortedTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
         DoubleColumn actualValueColumn = sortedTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         for (int i = 0; i < rowCount ; i++) {
             LocalDateTime timePeriod = timePeriodColumn.get(i);
@@ -145,7 +160,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             return new CheckResultsDetailedDataModel[0]; // empty array
         }
 
-        StringColumn dataStreamColumn = filteredTable.stringColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
+        TextColumn dataStreamColumn = filteredTable.textColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
         List<String> dataStreams = dataStreamColumn.unique().asList().stream().sorted().collect(Collectors.toList());
 
         if (dataStreams.size() > 1 && dataStreams.contains(CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME)) {
@@ -262,15 +277,15 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         String checkType = rootChecksContainerSpec.getCheckType().getDisplayName();
         CheckTimeScale timeScale = rootChecksContainerSpec.getCheckTimeScale();
 
-        Selection rowSelection = sourceTable.stringColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
+        Selection rowSelection = sourceTable.textColumn(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType);
 
         if (timeScale != null) {
-            StringColumn timeGradientColumn = sourceTable.stringColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
-            TimeSeriesGradient timeSeriesGradient = timeScale.toTimeSeriesGradient();
-            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timeSeriesGradient.name()));
+            TextColumn timeGradientColumn = sourceTable.textColumn(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+            TimePeriodGradient timePeriodGradient = timeScale.toTimeSeriesGradient();
+            rowSelection = rowSelection.and(timeGradientColumn.isEqualTo(timePeriodGradient.name()));
         }
 
-        StringColumn columnNameColumn = sourceTable.stringColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        TextColumn columnNameColumn = sourceTable.textColumn(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
         rowSelection = rowSelection.and((columnName != null) ? columnNameColumn.isEqualTo(columnName) : columnNameColumn.isMissing());
 
         Table filteredTable = sourceTable.where(rowSelection);

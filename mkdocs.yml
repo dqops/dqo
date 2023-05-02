@@ -10,12 +10,10 @@ nav:
     - 'getting-started/index.md'
     - Installation: 'getting-started/installation/installation.md'
     - Connect to a data source: 'getting-started/adding-data-source-connection/adding-data-source-connection.md'
-    - Run initial profiling: 'getting-started/run-initial-profiling/run-initial-profiling.md'
     - Run data quality checks: 'getting-started/run-data-quality-checks/run-data-quality-checks.md'
-    - Inspect results: 'getting-started/inspect-results/inspect-results.md'
+    - Review results on the dashboards: 'getting-started/review-results-on-dashboards/review-results-on-dashboards.md'
   - DQO concepts:
     - 'dqo-concepts/index.md'
-    - Architecture: 'dqo-concepts/architecture/architecture.md'
     - Checks:
       - 'dqo-concepts/checks/index.md'
       - Advanced profiling: 'dqo-concepts/checks/advanced-profiling/advanced-profiling.md'
@@ -24,17 +22,26 @@ nav:
     - Sensors: 'dqo-concepts/sensors/sensors.md'
     - Rules: 'dqo-concepts/rules/rules.md'
     - Data quality KPIs: 'dqo-concepts/data-quality-kpis/data-quality-kpis.md'
-    - Dashboards: 'dqo-concepts/dashboards/dashboards.md'
+    - Dashboards: 'dqo-concepts/data-quality-dashboards/data-quality-dashboards.md'
     - Data quality dimensions: 'dqo-concepts/data-quality-dimensions/data-quality-dimensions.md'
     - Data stream segmentation: 'dqo-concepts/data-stream-segmentation/data-stream-segmentation.md'
-    - Data storage: 'dqo-concepts\data-storage\data-storage.md'
+    - Data storage: 'dqo-concepts/data-storage/data-storage.md'
     - Working with YAML files: 'dqo-concepts/working-with-yaml-files/working-with-yaml-files.md'
     - Working with CLI: 'dqo-concepts/working-with-cli/working-with-cli.md'
+  - Use cases:
+    - "examples/index.md"
+    - Percentage of false values: "examples/bool-false-percent.md"
+    - Integrity check between columns in different tables: 'examples/integrity-foreign-key-match-percent.md'
+    - nulls-not-nulls-count: 'examples/nulls-not-nulls-count.md'
+    - numeric-valid-latitude-percent: 'examples/numeric-valid-latitude-percent.md'
+    - numeric-values-in-range-integers-percent: 'examples/numeric-values-in-range-integers-percent.md'
+    - pii-valid-usa-zipcode-percent: 'examples/pii-valid-usa-zipcode-percent.md'
+    - string-match-date-regex-percent: 'examples/string-match-date-regex-percent.md'
+    - string-max-length: 'examples/string-max-length.md'
+    - uniqueness-duplicate-percent: 'examples/uniqueness-duplicate-percent.md'
   - Working with DQO:
-    - 'working-with-dqo/index.md'
     - Installation:
       - Install DQO from Git: 'working-with-dqo/install-dqo-from-git/install-dqo-from-git.md'
-      - Log in to DQO Cloud: 'working-with-dqo/login-to-dqo-cloud/log-in-to-dqo-cloud.md'
     - Adding connections:
       - 'working-with-dqo/adding-data-source-connection/index.md'
       - BigQuery: 'working-with-dqo/adding-data-source-connection/bigquery.md'
@@ -42,21 +49,11 @@ nav:
       - Redshift: 'working-with-dqo/adding-data-source-connection/redshift.md'
       - PostgreSQL: 'working-with-dqo/adding-data-source-connection/postgresql.md'
       - SQL Server: 'working-with-dqo/adding-data-source-connection/sql-server.md'
-    - DQO Shell:
-      - 'working-with-dqo/dqo-shell/index.md'
-      - Run modes: 'working-with-dqo/dqo-shell/run-modes.md'
-      - Push data to the cloud: 'working-with-dqo/dqo-shell/push-data-to-the-cloud.md'
-    - Scheduler:
-      - 'working-with-dqo/scheduler/index.md'
-      - Cron formatting: 'working-with-dqo/scheduler/cron_formatting.md'
-      - Enabling and disabling schedules: 'working-with-dqo/scheduler/enabling_and_disabling_schedules.md'
-      - Timezone configuration: 'working-with-dqo/scheduler/timezone_configuration.md'
-    - Notifications: 'working-with-dqo/notifications/notifications.md'
-    - Initial profiling: 'working-with-dqo/initial-profiling/initial-profiling.md'
-    - Adding new data quality check: 'working-with-dqo/adding-data-quality-checks/adding-data-quality-checks.md'
-    - Removing data quality results: 'working-with-dqo/removing-data-quality-results/removing-data-quality-results.md'
-    - Setting up data streams: 'working-with-dqo/setting-up-data-stream/index.md'
-  - Examples: 'examples/examples.md'
+    - Schedules:
+      - 'working-with-dqo/schedules/index.md'
+      - Configuring the schedules by modifying the YAML files: 'working-with-dqo/schedules/configuring_schedules_by_modifying_yaml_file.md'
+      - Time zone configuration: 'working-with-dqo/schedules/timezone_configuration.md'
+      - Cron formatting: 'working-with-dqo/schedules/cron_formatting.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
     - dqo: 'command-line-interface/dqo.md'
@@ -189,7 +186,7 @@ nav:
         - string match date regex percent: 'checks/column/strings/string-match-date-regex-percent.md'
         - string match name regex percent: 'checks/column/strings/string-match-name-regex-percent.md'
         - string most popular values: 'checks/column/strings/string-most-popular-values.md'
-        - string datatype detect: 'checks/column/strings/string-datatype-detect.md'
+        - string datatype changed: 'checks/column/strings/string-datatype-changed.md'
       - uniqueness:
         - unique count: 'checks/column/uniqueness/unique-count.md'
         - unique percent: 'checks/column/uniqueness/unique-percent.md'
@@ -234,6 +231,7 @@ nav:
       - SensorDefinitionYaml: 'reference/yaml/SensorDefinitionYaml.md'
       - SettingsYaml: 'reference/yaml/SettingsYaml.md'
       - TableYaml: 'reference/yaml/TableYaml.md'
+      - IncidentNotificationMessage: 'reference/yaml/IncidentNotificationMessage.md'
 ########## END INCLUDE YAML REFERENCE
 
 # Visual settings

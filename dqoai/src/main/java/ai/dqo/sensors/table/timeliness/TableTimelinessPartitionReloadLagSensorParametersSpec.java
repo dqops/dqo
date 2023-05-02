@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Tabular sensor that runs a query calculating maximum difference in days between ingestion timestamp and event timestamp rows.
+ * Table sensor that runs a query calculating maximum difference in days between ingestion timestamp and event timestamp rows.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

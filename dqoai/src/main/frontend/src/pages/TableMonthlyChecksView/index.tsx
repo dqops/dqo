@@ -14,6 +14,7 @@ import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckTypes } from "../../shared/routes";
+import TableNavigation from "../../components/TableNavigation";
 
 const TableMonthlyChecksView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
@@ -54,7 +55,7 @@ const TableMonthlyChecksView = () => {
     setIsUpdated(false);
 
     await dispatch(
-      getTableMonthlyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+      getTableMonthlyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
     );
   };
 
@@ -79,6 +80,7 @@ const TableMonthlyChecksView = () => {
           loading={isUpdating}
         />
       </div>
+      <TableNavigation defaultTab="monthly" />
       <div>
         <DataQualityChecks
           className="max-h-checks-1"

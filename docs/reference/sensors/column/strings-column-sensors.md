@@ -123,10 +123,10 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     ```
 ___
 
-## **string datatype detect**
+## **string datatype changed**
 **Full sensor name**
 ```
-column/strings/string_datatype_detect
+column/strings/string_datatype_changed
 ```
 **Description**  
 Column level sensor that returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype.
@@ -150,31 +150,31 @@ Column level sensor that returns the datatype of a column: 1 - integers, 2 - flo
                             WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
                                 THEN 1
                             ELSE 0)
-                        END
+                        THEN 1
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 2
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 2
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 3
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 3
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN(REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                THEN 4
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 4
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 5
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 5
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
@@ -193,10 +193,13 @@ Column level sensor that returns the datatype of a column: 1 - integers, 2 - flo
                                 THEN 0
                             END
                             WHEN ({{ lib.render_target_column('analyzed_table') }} AS STRING) IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING) <> ''))
-                                THEN 6
+                                THEN 1
                             END
-                    ELSE 7)
-                END
+                            ELSE 0)
+                        THEN 6
+                    ELSE
+                        ELSE 7
+                    END
             )
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -225,9 +228,9 @@ Column level sensor that returns the datatype of a column: 1 - integers, 2 - flo
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 2
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 2
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
@@ -238,9 +241,9 @@ Column level sensor that returns the datatype of a column: 1 - integers, 2 - flo
                                 ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
                                 ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
                                 $') IS NOT NULL
-                                THEN 3
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 3
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
@@ -251,15 +254,15 @@ Column level sensor that returns the datatype of a column: 1 - integers, 2 - flo
                                 ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
                                 ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
                                 $') IS NOT NULL
-                                THEN 4
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 4
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 5
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 5
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
@@ -292,11 +295,13 @@ Column level sensor that returns the datatype of a column: 1 - integers, 2 - flo
                                 THEN 0
                             END
                             WHEN {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR) <> ''))
-                                THEN 6
+                                THEN 1
                             END
-                        END
-                    ELSE 7)
-                END
+                            ELSE 0)
+                        THEN 6
+                    ELSE
+                        ELSE 7
+                    END
             )
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -325,9 +330,9 @@ Column level sensor that returns the datatype of a column: 1 - integers, 2 - flo
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN {{lib.render_target_column('analyzed_table')}} ~ '^[+-]?([0-9]*[.])[0-9]+$'
-                                THEN 2
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 2
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN {{lib.render_target_column('analyzed_table')}} ~ '^
@@ -337,9 +342,9 @@ Column level sensor that returns the datatype of a column: 1 - integers, 2 - flo
                                 ^(([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
                                 ^(([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
                                 ^(([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$'
-                                THEN 3
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 3
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN {{lib.render_target_column('analyzed_table')}} ~ '^
@@ -349,15 +354,15 @@ Column level sensor that returns the datatype of a column: 1 - integers, 2 - flo
                                 ^(([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
                                 ^(([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
                                 ^(([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$'
-                                THEN 4
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 4
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN {{lib.render_target_column('analyzed_table')}} ~ '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$'
-                                THEN 5
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 5
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN {{lib.render_target_column('analyzed_table')}} ~ '^[-+]?[0-9]+$'
@@ -388,11 +393,13 @@ Column level sensor that returns the datatype of a column: 1 - integers, 2 - flo
                                 THEN 0
                             END
                             WHEN {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING) <> ''))
-                                THEN 6
+                                THEN 1
                             END
-                        END
-                    ELSE 7)
-                END
+                            ELSE 0)
+                        THEN 6
+                    ELSE
+                        ELSE 7
+                    END
             )
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -421,9 +428,9 @@ Column level sensor that returns the datatype of a column: 1 - integers, 2 - flo
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?([0-9]*[.])[0-9]+$')
-                                THEN 2
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 2
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^
@@ -433,9 +440,9 @@ Column level sensor that returns the datatype of a column: 1 - integers, 2 - flo
                                 ^(([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
                                 ^(([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
                                 ^(([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                THEN 3
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 3
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^
@@ -445,15 +452,15 @@ Column level sensor that returns the datatype of a column: 1 - integers, 2 - flo
                                 ^(([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
                                 ^(([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
                                 ^(([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                THEN 4
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 4
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$')
-                                THEN 5
+                                THEN 1
                             ELSE 0)
-                        END
+                        THEN 5
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[-+]?[0-9]+$')
@@ -484,11 +491,13 @@ Column level sensor that returns the datatype of a column: 1 - integers, 2 - flo
                                 THEN 0
                             END
                             WHEN {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING) <> ''))
-                                THEN 6
+                                THEN 1
                             END
-                        END
-                    ELSE 7)
-                END
+                            ELSE 0)
+                        THEN 6
+                    ELSE
+                        ELSE 7
+                    END
             )
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -506,7 +515,7 @@ ___
 column/strings/string_empty_count
 ```
 **Description**  
-Column level sensor that calculates the number of rows with an empty string column value.
+Column level sensor that calculates the number of rows with an empty string.
 
 
 
@@ -663,7 +672,7 @@ ___
 column/strings/string_empty_percent
 ```
 **Description**  
-Column level sensor that calculates the percentage of rows with an empty string column value.
+Column level sensor that calculates the percentage of rows with an empty string.
 
 
 
@@ -835,7 +844,7 @@ ___
 column/strings/string_in_set_count
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null column value.
+Column level sensor that calculates the number of strings from a set in a column does not exceed the minimum accepted count.
 
 **Parameters**  
   
@@ -1056,7 +1065,7 @@ ___
 column/strings/string_in_set_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null column value.
+Column level sensor that calculates the percent of strings from a set in a column does not exceed the minimum accepted percentage.
 
 **Parameters**  
   
@@ -2388,7 +2397,7 @@ ___
 column/strings/string_length_in_range_percent
 ```
 **Description**  
-Column level sensor that calculates the percent of non-negative values in a column.
+Column level sensor that calculates percentage of strings with a length below the indicated length in a column.
 
 **Parameters**  
   
@@ -2860,7 +2869,8 @@ Column level sensor that calculates the percentage of values that does fit a giv
             WHEN COUNT_BIG(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'                    THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT_BIG(*)
@@ -3054,7 +3064,7 @@ ___
 column/strings/string_max_length
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null column value.
+Column level sensor that ensures that the length of string in a column does not exceed the maximum accepted length.
 
 
 
@@ -3186,7 +3196,7 @@ ___
 column/strings/string_mean_length
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null column value.
+Column level sensor that ensures that the length of string in a column does not exceed the mean accepted length.
 
 
 
@@ -3318,7 +3328,7 @@ ___
 column/strings/string_min_length
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null column value.
+Column level sensor that ensures that the length of string in a column does not exceed the minimum accepted length.
 
 
 
@@ -3450,7 +3460,7 @@ ___
 column/strings/string_most_popular_values
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null column value.
+Column level sensor that counts how many expected values are present in the top most popular values in the column.
 
 **Parameters**  
   
@@ -4391,7 +4401,7 @@ ___
 column/strings/string_null_placeholder_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null placeholder string column value.
+Column level sensor that calculates the percentage of rows with a null placeholder string column value.
 
 
 
@@ -4562,7 +4572,7 @@ ___
 column/strings/string_parsable_to_float_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with parsable to float string column value.
+Column level sensor that calculates the percentage of rows with parsable to float string column value.
 
 
 
@@ -4937,7 +4947,7 @@ ___
 column/strings/string_surrounded_by_whitespace_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with string surrounded by whitespace column value.
+Column level sensor that calculates the percentage of rows with string surrounded by whitespace column value.
 
 
 
@@ -5116,7 +5126,7 @@ ___
 column/strings/string_valid_country_code_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a valid country code string column value.
+Column level sensor that calculates the percentage of rows with a valid country code string column value.
 
 
 
@@ -5240,7 +5250,7 @@ ___
 column/strings/string_valid_currency_code_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a valid currency code string column value.
+Column level sensor that calculates the percentage of rows with a valid currency code string column value.
 
 
 
@@ -5407,7 +5417,7 @@ ___
 column/strings/string_valid_date_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a null column value.
+Column level sensor that ensures that there is at least a minimum percentage of valid dates in a monitored column..
 
 
 
@@ -5863,7 +5873,7 @@ ___
 column/strings/string_whitespace_percent
 ```
 **Description**  
-Column level sensor that calculates the number of rows with a whitespace string column value.
+Column level sensor that calculates the percentage of rows with a whitespace string column value.
 
 
 

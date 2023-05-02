@@ -5,7 +5,7 @@
 
     <groupId>ai.dqo</groupId>
     <artifactId>dqo-data-quality-observer</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0-alpha0</version>
     <packaging>pom</packaging>
 
     <modules>

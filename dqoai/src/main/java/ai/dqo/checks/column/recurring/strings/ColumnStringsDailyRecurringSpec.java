@@ -79,7 +79,7 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
 
             put("daily_string_most_popular_values", o -> o.dailyStringMostPopularValues);
 
-            put("daily_string_datatype_detect", o -> o.dailyStringDatatypeDetect);
+            put("daily_string_datatype_changed", o -> o.dailyStringDatatypeChanged);
         }
     };
 
@@ -92,19 +92,19 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringMeanLengthCheckSpec dailyStringMeanLength;
 
-    @JsonPropertyDescription("The check counts those strings with length below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts those strings with length below those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringLengthBelowMinLengthCountCheckSpec dailyStringLengthBelowMinLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts percentage those strings with length below those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringLengthBelowMinLengthPercentCheckSpec dailyStringLengthBelowMinLengthPercent;
 
-    @JsonPropertyDescription("The check counts those strings with length above the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts those strings with length above those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringLengthAboveMaxLengthCountCheckSpec dailyStringLengthAboveMaxLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts percentage of those strings with length above those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec dailyStringLengthAboveMaxLengthPercent;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length in the range provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the percentage of those strings with length in the range provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringLengthInRangePercentCheckSpec dailyStringLengthInRangePercent;
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
@@ -116,7 +116,7 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringWhitespaceCountCheckSpec dailyStringWhitespaceCount;
 
-    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringWhitespacePercentCheckSpec dailyStringWhitespacePercent;
 
     @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
@@ -185,11 +185,11 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name format regex in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringMatchNameRegexPercentCheckSpec dailyStringMatchNameRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
+    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringMostPopularValuesCheckSpec dailyStringMostPopularValues;
 
     @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringDatatypeDetectCheckSpec dailyStringDatatypeDetect;
+    private ColumnStringDatatypeChangedCheckSpec dailyStringDatatypeChanged;
 
     /**
      * Returns a maximum string length below check.
@@ -822,21 +822,21 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Returns a count of expected values in datatype detect check.
-     * @return Datatype detect check.
+     * Returns a count of expected values in datatype changed check.
+     * @return Datatype changed check.
      */
-    public ColumnStringDatatypeDetectCheckSpec getDailyStringDatatypeDetect() {
-        return dailyStringDatatypeDetect;
+    public ColumnStringDatatypeChangedCheckSpec getDailyStringDatatypeChanged() {
+        return dailyStringDatatypeChanged;
     }
 
     /**
-     * Sets a new definition of a datatype detect check.
-     * @param dailyStringDatatypeDetect Datatype detect check.
+     * Sets a new definition of a datatype changed check.
+     * @param dailyStringDatatypeChanged Datatype changed check.
      */
-    public void setDailyStringDatatypeDetect(ColumnStringDatatypeDetectCheckSpec dailyStringDatatypeDetect) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringDatatypeDetect, dailyStringDatatypeDetect));
-        this.dailyStringDatatypeDetect = dailyStringDatatypeDetect;
-        propagateHierarchyIdToField(dailyStringDatatypeDetect, "daily_string_datatype_detect");
+    public void setDailyStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec dailyStringDatatypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.dailyStringDatatypeChanged, dailyStringDatatypeChanged));
+        this.dailyStringDatatypeChanged = dailyStringDatatypeChanged;
+        propagateHierarchyIdToField(dailyStringDatatypeChanged, "daily_string_datatype_changed");
     }
 
     /**

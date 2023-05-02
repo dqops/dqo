@@ -1,4 +1,4 @@
-import React, { useState, KeyboardEvent } from 'react';
+import React, { KeyboardEvent } from 'react';
 import LabelItem from './LabelItem';
 import Input from "../../Input";
 
@@ -8,8 +8,6 @@ interface ILabelsViewProps {
 }
 
 const LabelsView = ({ labels = [], onChange }: ILabelsViewProps) => {
-  const [text, setText] = useState('');
-
   const onChangeLabel = (key: number, value: string) => {
     onChange(labels.map((label, index) => (key === index ? value : label)));
   };
@@ -20,8 +18,15 @@ const LabelsView = ({ labels = [], onChange }: ILabelsViewProps) => {
 
   const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      onChange([...labels, text]);
-      setText('');
+      onChange([...labels, '']);
+    }
+  }
+
+  const onChangeText = (value: string) => {
+    if (!labels.length) {
+      onChange([value]);
+    } else {
+      onChange(labels.map((label, index) => index < labels.length - 1 ? label : value));
     }
   }
 
@@ -33,7 +38,7 @@ const LabelsView = ({ labels = [], onChange }: ILabelsViewProps) => {
           <th className="px-8 min-w-34 max-w-34 py-2">Action</th>
         </thead>
         <tbody>
-          {labels.map((label, index) => (
+          {labels.slice(0, labels.length - 1).map((label, index) => (
             <LabelItem
               label={label}
               key={index}
@@ -46,8 +51,8 @@ const LabelsView = ({ labels = [], onChange }: ILabelsViewProps) => {
             <td className="pr-4 min-w-40 py-2">
               <Input
                 className="focus:!ring-0 focus:!border"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
+                value={labels.length ? labels[labels.length - 1] : ""}
+                onChange={(e) => onChangeText(e.target.value)}
                 onKeyDown={onKeyDown}
               />
             </td>

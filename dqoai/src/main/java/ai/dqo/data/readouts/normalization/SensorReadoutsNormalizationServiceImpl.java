@@ -19,7 +19,7 @@ import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import ai.dqo.utils.tables.TableColumnUtility;
@@ -55,12 +55,12 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      * Analyzes a given dataset, fixes wrong column types, calculates a data stream hash, sorts the data,
      * prepares the data for using in a sensor. Returns a new table with fixed column types.
      * @param sensorExecutionResult Sensor execution result with the table that contains returned data.
-     * @param timeSeriesGradient Time series gradient.
+     * @param timePeriodGradient Time series gradient.
      * @param sensorRunParameters Sensor run parameters.
      * @return Metadata object that describes the sensor result table. Contains also a normalized results table.
      */
     public SensorReadoutsNormalizedResult normalizeResults(SensorExecutionResult sensorExecutionResult,
-                                                           TimeSeriesGradient timeSeriesGradient,
+                                                           TimePeriodGradient timePeriodGradient,
                                                            SensorExecutionRunParameters sensorRunParameters) {
         Table resultsTable = sensorExecutionResult.getResultTable();
         int resultsRowCount = resultsTable.rowCount();
@@ -84,7 +84,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
             normalizedResults.addColumns(DoubleColumn.create(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME, resultsRowCount));
         }
 
-        DateTimeColumn timePeriodColumn = makeNormalizedTimePeriodColumn(resultsTable, defaultTimeZone, timeSeriesGradient);
+        DateTimeColumn timePeriodColumn = makeNormalizedTimePeriodColumn(resultsTable, defaultTimeZone, timePeriodGradient);
         normalizedResults.addColumns(timePeriodColumn);
 
         InstantColumn normalizedTimePeriodUtcColumn = makeNormalizedTimePeriodUtcColumn(resultsTable, timePeriodColumn,
@@ -92,7 +92,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         normalizedResults.addColumns(normalizedTimePeriodUtcColumn);
 
         // now detect data stream level columns...
-        StringColumn[] dataStreamLevelColumns = this.commonNormalizationService.extractAndNormalizeDataStreamLevelColumns(
+        TextColumn[] dataStreamLevelColumns = this.commonNormalizationService.extractAndNormalizeDataStreamLevelColumns(
                 resultsTable, sensorRunParameters.getDataStreams(), resultsRowCount);
 
         for (int streamLevelId = 0; streamLevelId < dataStreamLevelColumns.length; streamLevelId++) {
@@ -100,14 +100,14 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
                 normalizedResults.addColumns(dataStreamLevelColumns[streamLevelId]);
             } else {
                 String dataStreamLevelColumnName = SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + (streamLevelId + 1);
-                normalizedResults.addColumns(StringColumn.create(dataStreamLevelColumnName, resultsRowCount));
+                normalizedResults.addColumns(TextColumn.create(dataStreamLevelColumnName, resultsRowCount));
             }
         }
 
         LongColumn dataStreamHashColumn = this.commonNormalizationService.createDataStreamHashColumn(dataStreamLevelColumns, resultsRowCount);
         normalizedResults.addColumns(dataStreamHashColumn);
 
-        StringColumn dataStreamNameColumn = this.commonNormalizationService.createDataStreamNameColumn(dataStreamLevelColumns, resultsRowCount);
+        TextColumn dataStreamNameColumn = this.commonNormalizationService.createDataStreamNameColumn(dataStreamLevelColumns, resultsRowCount);
         normalizedResults.addColumns(dataStreamNameColumn);
 
         // sort the columns to make any continuous time series value extraction faster
@@ -120,9 +120,9 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
 
         // TODO: add a data stream name to the sorted normalized table (generate it)
 
-        StringColumn timeGradientColumn = StringColumn.create(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME, resultsRowCount);
-        if (timeSeriesGradient != null) {
-            timeGradientColumn.setMissingTo(timeSeriesGradient.name());
+        TextColumn timeGradientColumn = TextColumn.create(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME, resultsRowCount);
+        if (timePeriodGradient != null) {
+            timeGradientColumn.setMissingTo(timePeriodGradient.name());
         }
         sortedNormalizedTable.insertColumn(4, timeGradientColumn);
 
@@ -130,11 +130,11 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         connectionHashColumn.setMissingTo(sensorRunParameters.getConnection().getHierarchyId().hashCode64());
         sortedNormalizedTable.addColumns(connectionHashColumn);
 
-        StringColumn connectionNameColumn = StringColumn.create(SensorReadoutsColumnNames.CONNECTION_NAME_COLUMN_NAME, resultsRowCount);
+        TextColumn connectionNameColumn = TextColumn.create(SensorReadoutsColumnNames.CONNECTION_NAME_COLUMN_NAME, resultsRowCount);
         connectionNameColumn.setMissingTo(sensorRunParameters.getConnection().getConnectionName());
         sortedNormalizedTable.addColumns(connectionNameColumn);
 
-        StringColumn providerColumn = StringColumn.create(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME, resultsRowCount);
+        TextColumn providerColumn = TextColumn.create(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME, resultsRowCount);
         providerColumn.setMissingTo(sensorRunParameters.getConnection().getProviderType().name());
         sortedNormalizedTable.addColumns(providerColumn);
 
@@ -143,23 +143,29 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         tableHashColumn.setMissingTo(tableHash);
         sortedNormalizedTable.addColumns(tableHashColumn);
 
-        StringColumn schemaNameColumn = StringColumn.create(SensorReadoutsColumnNames.SCHEMA_NAME_COLUMN_NAME, resultsRowCount);
+        TextColumn schemaNameColumn = TextColumn.create(SensorReadoutsColumnNames.SCHEMA_NAME_COLUMN_NAME, resultsRowCount);
         schemaNameColumn.setMissingTo(sensorRunParameters.getTable().getPhysicalTableName().getSchemaName());
         sortedNormalizedTable.addColumns(schemaNameColumn);
 
-        StringColumn tableNameColumn = StringColumn.create(SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME, resultsRowCount);
+        TextColumn tableNameColumn = TextColumn.create(SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME, resultsRowCount);
         tableNameColumn.setMissingTo(sensorRunParameters.getTable().getPhysicalTableName().getTableName());
         sortedNormalizedTable.addColumns(tableNameColumn);
 
-        StringColumn tableNamePatternColumn = StringColumn.create(SensorReadoutsColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME, resultsRowCount);
+        TextColumn tableNamePatternColumn = TextColumn.create(SensorReadoutsColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME, resultsRowCount);
         tableNamePatternColumn.setMissingTo(sensorRunParameters.getTable().getPhysicalTableName().getTableName());
         sortedNormalizedTable.addColumns(tableNamePatternColumn);
 
-        StringColumn tableStageColumn = StringColumn.create(SensorReadoutsColumnNames.TABLE_STAGE_COLUMN_NAME, resultsRowCount);
+        TextColumn tableStageColumn = TextColumn.create(SensorReadoutsColumnNames.TABLE_STAGE_COLUMN_NAME, resultsRowCount);
         if (sensorRunParameters.getTable().getStage() != null) {
             tableStageColumn.setMissingTo(sensorRunParameters.getTable().getStage());
         }
         sortedNormalizedTable.addColumns(tableStageColumn);
+
+        IntColumn tablePriorityColumn = IntColumn.create(SensorReadoutsColumnNames.TABLE_PRIORITY_COLUMN_NAME, resultsRowCount);
+        if (sensorRunParameters.getTable().getPriority() != null) {
+            tablePriorityColumn.setMissingTo(sensorRunParameters.getTable().getPriority());
+        }
+        sortedNormalizedTable.addColumns(tablePriorityColumn);
 
         LongColumn columnHashColumn = LongColumn.create(SensorReadoutsColumnNames.COLUMN_HASH_COLUMN_NAME, resultsRowCount);
         Long columnHash = null;
@@ -169,13 +175,13 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         }
         sortedNormalizedTable.addColumns(columnHashColumn);
 
-        StringColumn columnNameColumn = StringColumn.create(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME, resultsRowCount);
+        TextColumn columnNameColumn = TextColumn.create(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME, resultsRowCount);
         if (sensorRunParameters.getColumn() != null) {
             columnNameColumn.setMissingTo(sensorRunParameters.getColumn().getColumnName());
         }
         sortedNormalizedTable.addColumns(columnNameColumn);
 
-        StringColumn columnNamePatternColumn = StringColumn.create(SensorReadoutsColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME, resultsRowCount);
+        TextColumn columnNamePatternColumn = TextColumn.create(SensorReadoutsColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME, resultsRowCount);
         if (sensorRunParameters.getColumn() != null) {
             columnNamePatternColumn.setMissingTo(sensorRunParameters.getColumn().getColumnName());
         }
@@ -186,38 +192,38 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         checkHashColumn.setMissingTo(checkHash);
         sortedNormalizedTable.addColumns(checkHashColumn);
 
-        StringColumn checkNameColumn = StringColumn.create(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME, resultsRowCount);
+        TextColumn checkNameColumn = TextColumn.create(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME, resultsRowCount);
         String checkName = sensorRunParameters.getCheck().getCheckName();
         checkNameColumn.setMissingTo(checkName);
         sortedNormalizedTable.addColumns(checkNameColumn);
 
-        StringColumn checkDisplayNameColumn = StringColumn.create(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME, resultsRowCount);
+        TextColumn checkDisplayNameColumn = TextColumn.create(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME, resultsRowCount);
         String checkDisplayName = sensorRunParameters.getCheck().getDisplayName();
         checkDisplayNameColumn.setMissingTo(checkDisplayName != null ? checkDisplayName : checkName); // we store the check name if there is no display name (a fallback value)
         sortedNormalizedTable.addColumns(checkDisplayNameColumn);
 
-        StringColumn checkTypeColumn = StringColumn.create(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME, resultsRowCount);
+        TextColumn checkTypeColumn = TextColumn.create(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME, resultsRowCount);
         String checkType = sensorRunParameters.getCheckType().getDisplayName();
         checkTypeColumn.setMissingTo(checkType);
         sortedNormalizedTable.addColumns(checkTypeColumn);
 
-        StringColumn checkCategoryColumn = StringColumn.create(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME, resultsRowCount);
+        TextColumn checkCategoryColumn = TextColumn.create(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME, resultsRowCount);
         String categoryName = sensorRunParameters.getCheck().getCategoryName();
         checkCategoryColumn.setMissingTo(categoryName);
         sortedNormalizedTable.addColumns(checkCategoryColumn);
 
-        StringColumn qualityDimensionColumn = StringColumn.create(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, resultsRowCount);
+        TextColumn qualityDimensionColumn = TextColumn.create(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, resultsRowCount);
         String effectiveDataQualityDimension = sensorRunParameters.getCheck().getEffectiveDataQualityDimension();
         qualityDimensionColumn.setMissingTo(effectiveDataQualityDimension);
         sortedNormalizedTable.addColumns(qualityDimensionColumn);
 
-        StringColumn sensorNameColumn = StringColumn.create(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME, resultsRowCount);
+        TextColumn sensorNameColumn = TextColumn.create(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME, resultsRowCount);
         String sensorDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
         sensorNameColumn.setMissingTo(sensorDefinitionName);
         sortedNormalizedTable.addColumns(sensorNameColumn);
 
         LongColumn sortedDataStreamHashColumn = (LongColumn) sortedNormalizedTable.column(SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME);
-        StringColumn timeSeriesUuidColumn = this.commonNormalizationService.createTimeSeriesUuidColumn(sortedDataStreamHashColumn, checkHash, tableHash,
+        TextColumn timeSeriesUuidColumn = this.commonNormalizationService.createTimeSeriesUuidColumn(sortedDataStreamHashColumn, checkHash, tableHash,
                 columnHash != null ? columnHash.longValue() : 0L, resultsRowCount);
         sortedNormalizedTable.addColumns(timeSeriesUuidColumn);
 
@@ -230,7 +236,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         sortedNormalizedTable.addColumns(durationMsColumn);
 
         DateTimeColumn sortedTimePeriodColumn = (DateTimeColumn) sortedNormalizedTable.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
-        StringColumn idColumn = this.commonNormalizationService.createRowIdColumn(sortedDataStreamHashColumn, sortedTimePeriodColumn, checkHash, tableHash,
+        TextColumn idColumn = this.commonNormalizationService.createRowIdColumn(sortedDataStreamHashColumn, sortedTimePeriodColumn, checkHash, tableHash,
                 columnHash != null ? columnHash.longValue() : 0L, resultsRowCount);
         sortedNormalizedTable.insertColumn(0, idColumn);
 
@@ -334,14 +340,14 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      * Any values that are not aligned at the beginning of the time series gradient (week, day, month, etc.) are truncated to the beginning of the period.
      * @param resultsTable Result table to extract the time_period column.
      * @param defaultTimeZone Default DQO time zone, used to create a time period value if the time period was not received from a sensor result.
-     * @param timeSeriesGradient Time series gradient (for truncation).
+     * @param timePeriodGradient Time series gradient (for truncation).
      * @return A copy of a time_period column that is truncated, normalized to a datetime without the time zone.
      */
-    public DateTimeColumn makeNormalizedTimePeriodColumn(Table resultsTable, ZoneId defaultTimeZone, TimeSeriesGradient timeSeriesGradient) {
+    public DateTimeColumn makeNormalizedTimePeriodColumn(Table resultsTable, ZoneId defaultTimeZone, TimePeriodGradient timePeriodGradient) {
         DateTimeColumn newTimestampColumn = DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, resultsTable.rowCount());
         LocalDateTime timeNow = LocalDateTime.now();
-        LocalDateTime truncatedNow = timeSeriesGradient != null ?
-                LocalDateTimeTruncateUtility.truncateTimePeriod(timeNow, timeSeriesGradient) : timeNow;
+        LocalDateTime truncatedNow = timePeriodGradient != null ?
+                LocalDateTimeTruncateUtility.truncateTimePeriod(timeNow, timePeriodGradient) : timeNow;
 
         Column<?> currentColumn = TableColumnUtility.findColumn(resultsTable, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
         if (currentColumn == null) {
@@ -361,8 +367,8 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
                 }
                 else {
                     LocalDateTime localDateTime = LocalDateTime.of(localDate, LocalTime.MIDNIGHT);
-                    LocalDateTime truncatedDate =  timeSeriesGradient != null ?
-                            LocalDateTimeTruncateUtility.truncateTimePeriod(localDateTime, timeSeriesGradient) : localDateTime;
+                    LocalDateTime truncatedDate =  timePeriodGradient != null ?
+                            LocalDateTimeTruncateUtility.truncateTimePeriod(localDateTime, timePeriodGradient) : localDateTime;
                     newTimestampColumn.set(i, truncatedDate);
                 }
             }
@@ -379,8 +385,8 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
                     newTimestampColumn.set(i, truncatedNow);
                 }
                 else {
-                    LocalDateTime truncatedDate = timeSeriesGradient != null ?
-                            LocalDateTimeTruncateUtility.truncateTimePeriod(localDateTime, timeSeriesGradient) : localDateTime;
+                    LocalDateTime truncatedDate = timePeriodGradient != null ?
+                            LocalDateTimeTruncateUtility.truncateTimePeriod(localDateTime, timePeriodGradient) : localDateTime;
                     newTimestampColumn.set(i, truncatedDate);
                 }
             }
@@ -398,8 +404,8 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
                 }
                 else {
                     LocalDateTime localDateTimeFromInstant = LocalDateTime.ofInstant(instant, defaultTimeZone);
-                    LocalDateTime truncatedInstant = timeSeriesGradient != null ?
-                            LocalDateTimeTruncateUtility.truncateTimePeriod(localDateTimeFromInstant, timeSeriesGradient) : localDateTimeFromInstant;
+                    LocalDateTime truncatedInstant = timePeriodGradient != null ?
+                            LocalDateTimeTruncateUtility.truncateTimePeriod(localDateTimeFromInstant, timePeriodGradient) : localDateTimeFromInstant;
                     newTimestampColumn.set(i, truncatedInstant);
                 }
             }

@@ -1,13 +1,12 @@
-# Working with YAML files
+# Working with the YAML files
 
-In DQO, the configuration of [data quality checks](../checks/index.md) is defined in YAML files. YAML is a human-readable
+In DQO, the configuration of [data quality checks](../checks/index.md) is defined in the YAML files. YAML is a human-readable
 data serialization language that is often used for writing configuration files. 
 
-Defining data quality checks in YAML files
-allows checks definitions to be stored in a source code repository and versioned along with any other pipeline code or 
-machine learning code.
+Defining data quality checks in the YAML files allows checks definitions to be stored in a source code repository and 
+versioned along with any other pipeline code or machine learning code.
 
-Below is an example of YAML file showing sample configuration of an advanced profiling column data quality check nulls_percent.
+Below is an example of the YAML file showing sample configuration of an advanced profiling column data quality check nulls_percent.
 
 ``` yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
@@ -21,9 +20,12 @@ spec:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
     partitioned_checks_timestamp_source: event_timestamp
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      checks:
+      profiling_checks:
         nulls:
           nulls_percent:
             warning:
@@ -33,7 +35,7 @@ spec:
             fatal:
               max_percent: 30.0
       labels:
-      - This is the column that is analyzed for data quality issues
+        - This is the column that is analyzed for data quality issues
     col_event_timestamp:
       labels:
       - optional column that stores the timestamp when the event/transaction happened
@@ -50,11 +52,9 @@ The `columns` section lists the columns in the table which has configured checks
 values in `target_column`. If the percentage exceeds a certain threshold, an error, warning, or fatal message will
 be raised.
 
-## Editing YAML files
+## Editing the YAML files
 
-YAMl configuration files are located in the `userhome/sources` folder. The complete DQO YAML schema can e found 
+YAMl configuration files are located in the `./sources` folder. The complete DQO YAML schema can e found 
 [here](https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json). 
 
-YAML files in DQO support code completion in code editors, such as Visual Studio Code.
-
-**Add Screen**
+The YAML files in DQO support code completion in code editors, such as Visual Studio Code.

@@ -23,6 +23,7 @@ import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
 import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.checks.table.recurring.TableRecurringSpec;
+import ai.dqo.metadata.incidents.IncidentGroupingSpec;
 import ai.dqo.metadata.comments.CommentSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.dashboards.*;
@@ -44,7 +45,7 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.notifications.NotificationSettingsSpec;
+import ai.dqo.metadata.incidents.IncidentWebhookNotificationsSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.metadata.settings.SettingsSpec;
@@ -662,18 +663,6 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     }
 
     /**
-     * Accepts a notification settings object.
-     *
-     * @param notificationSettingsSpec Notification settings.
-     * @param parameter                Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(NotificationSettingsSpec notificationSettingsSpec, T parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
      * Accepts a dashboard configuration object.
      *
      * @param dashboardSpec Dashboard configuration.
@@ -802,6 +791,30 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(CheckDefinitionListImpl checkDefinitionWrappers, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts an incident grouping configuration.
+     *
+     * @param incidentGroupingSpec Incident grouping configuration.
+     * @param parameter            Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(IncidentGroupingSpec incidentGroupingSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts an incident notifications using webhooks configuration.
+     *
+     * @param incidentWebhookNotificationsSpec Webhooks for incident notifications.
+     * @param parameter                        Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(IncidentWebhookNotificationsSpec incidentWebhookNotificationsSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

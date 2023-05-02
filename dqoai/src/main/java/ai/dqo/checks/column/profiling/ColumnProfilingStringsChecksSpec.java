@@ -78,7 +78,7 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
 
             put("string_most_popular_values", o -> o.stringMostPopularValues);
 
-            put("string_datatype_detect", o -> o.stringDatatypeDetect);
+            put("string_datatype_changed", o -> o.stringDatatypeChanged);
         }
     };
 
@@ -91,19 +91,19 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length.")
     private ColumnStringMeanLengthCheckSpec stringMeanLength;
 
-    @JsonPropertyDescription("The check counts those strings with length below the one provided by the user in a column.")
+    @JsonPropertyDescription("The check counts those strings with length below those provided by the user in the column.")
     private ColumnStringLengthBelowMinLengthCountCheckSpec stringLengthBelowMinLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length below the one provided by the user in a column.")
+    @JsonPropertyDescription("The check counts percentage those strings with length below those provided by the user in the column.")
     private ColumnStringLengthBelowMinLengthPercentCheckSpec stringLengthBelowMinLengthPercent;
 
-    @JsonPropertyDescription("The check counts those strings with length above the one provided by the user in a column. ")
+    @JsonPropertyDescription("The check counts those strings with length above those provided by the user in the column. ")
     private ColumnStringLengthAboveMaxLengthCountCheckSpec stringLengthAboveMaxLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. ")
+    @JsonPropertyDescription("The check counts percentage of those strings with length above those provided by the user in the column. ")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec stringLengthAboveMaxLengthPercent;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length in the range provided by the user in a column. ")
+    @JsonPropertyDescription("The check counts the percentage of those strings with length in the range provided by the user in the column. ")
     private ColumnStringLengthInRangePercentCheckSpec stringLengthInRangePercent;
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted count.")
@@ -188,7 +188,7 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
     private ColumnStringMostPopularValuesCheckSpec stringMostPopularValues;
 
     @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype.")
-    private ColumnStringDatatypeDetectCheckSpec stringDatatypeDetect;
+    private ColumnStringDatatypeChangedCheckSpec stringDatatypeChanged;
 
     /**
      * Returns a maximum string length below check.
@@ -821,21 +821,21 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
     }
 
     /**
-     * Returns a count of expected values in datatype detect check.
-     * @return Datatype detect check.
+     * Returns a count of expected values in datatype changed check.
+     * @return Datatype changed check.
      */
-    public ColumnStringDatatypeDetectCheckSpec getStringDatatypeDetect() {
-        return stringDatatypeDetect;
+    public ColumnStringDatatypeChangedCheckSpec getStringDatatypeChanged() {
+        return stringDatatypeChanged;
     }
 
     /**
-     * Sets a new definition of a datatype detect check.
-     * @param stringDatatypeDetect Datatype detect check.
+     * Sets a new definition of a datatype changed check.
+     * @param stringDatatypeChanged Datatype changed check.
      */
-    public void setStringDatatypeDetect(ColumnStringDatatypeDetectCheckSpec stringDatatypeDetect) {
-        this.setDirtyIf(!Objects.equals(this.stringDatatypeDetect, stringDatatypeDetect));
-        this.stringDatatypeDetect = stringDatatypeDetect;
-        propagateHierarchyIdToField(stringDatatypeDetect, "string_datatype_detect");
+    public void setStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec stringDatatypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.stringDatatypeChanged, stringDatatypeChanged));
+        this.stringDatatypeChanged = stringDatatypeChanged;
+        propagateHierarchyIdToField(stringDatatypeChanged, "string_datatype_changed");
     }
 
     /**

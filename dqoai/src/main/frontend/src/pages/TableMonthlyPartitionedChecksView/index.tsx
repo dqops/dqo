@@ -14,6 +14,7 @@ import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckTypes } from "../../shared/routes";
+import TableNavigation from "../../components/TableNavigation";
 
 const TableMonthlyPartitionedChecksView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, checkTypes }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
@@ -53,7 +54,7 @@ const TableMonthlyPartitionedChecksView = () => {
       )
     );
     await dispatch(
-      getTableMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+      getTableMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
     );
     setIsUpdated(false);
   };
@@ -79,6 +80,7 @@ const TableMonthlyPartitionedChecksView = () => {
           loading={isUpdating}
         />
       </div>
+      <TableNavigation defaultTab="monthly" />
       <div>
         <DataQualityChecks
           onUpdate={onUpdate}

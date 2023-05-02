@@ -5,7 +5,7 @@
 table/timeliness/data_ingestion_delay
 ```
 **Description**  
-Tabular sensor that runs a query calculating the time difference in days between the most recent transaction timestamp and the most recent data loading timestamp.
+Table sensor that runs a query calculating the time difference in days between the most recent transaction timestamp and the most recent data loading timestamp.
 
 
 
@@ -223,7 +223,7 @@ ___
 table/timeliness/days_since_most_recent_event
 ```
 **Description**  
-Tabular sensor that runs a query calculating maximum days since the most recent event.
+Table sensor that runs a query calculating maximum days since the most recent event.
 
 
 
@@ -426,7 +426,7 @@ ___
 table/timeliness/days_since_most_recent_ingestion
 ```
 **Description**  
-Tabular sensor that runs a query calculating the time difference in days between the current date and most recent data loading timestamp (staleness).
+Table sensor that runs a query calculating the time difference in days between the current date and most recent data loading timestamp (staleness).
 
 
 
@@ -630,7 +630,7 @@ ___
 table/timeliness/partition_reload_lag
 ```
 **Description**  
-Tabular sensor that runs a query calculating maximum difference in days between ingestion timestamp and event timestamp rows.
+Table sensor that runs a query calculating maximum difference in days between ingestion timestamp and event timestamp rows.
 
 
 

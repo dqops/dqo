@@ -15,6 +15,7 @@ import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import { CheckTypes } from "../../shared/routes";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import ColumnNavigation from "../../components/ColumnNavigation";
 
 const ColumnProfilingsView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
@@ -56,7 +57,7 @@ const ColumnProfilingsView = () => {
       )
     );
     await dispatch(
-      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, false)
     );
   };
 
@@ -81,6 +82,7 @@ const ColumnProfilingsView = () => {
           loading={isUpdating}
         />
       </div>
+      <ColumnNavigation />
       <div>
         <DataQualityChecks
           onUpdate={onUpdate}

@@ -2,7 +2,7 @@ import React from 'react';
 
 import SectionWrapper from '../../SectionWrapper';
 import { SqlServerParametersSpec } from "../../../../api";
-import SnowflakePropertiesView from "../SnowflakeProperties";
+import JdbcPropertiesView from "../JdbcProperties";
 import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
 import Checkbox from "../../../Checkbox";
 
@@ -64,7 +64,7 @@ const SqlServerConnection = ({
         label="Disable SSL"
         labelPosition="left"
       />
-      <SnowflakePropertiesView
+      <JdbcPropertiesView
         properties={sqlserver?.properties}
         onChange={(properties) => handleChange({ properties })}
       />

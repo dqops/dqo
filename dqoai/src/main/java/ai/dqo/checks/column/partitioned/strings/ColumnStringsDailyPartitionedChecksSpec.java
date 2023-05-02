@@ -78,7 +78,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
             put("daily_partition_string_most_popular_values", o -> o.dailyPartitionStringMostPopularValues);
 
-            put("daily_partition_string_datatype_detect", o -> o.dailyPartitionStringDatatypeDetect);
+            put("daily_partition_string_datatype_changed", o -> o.dailyPartitionStringDatatypeChanged);
 
         }
     };
@@ -89,34 +89,34 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMinLengthCheckSpec dailyPartitionStringMinLength;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMeanLengthCheckSpec dailyPartitionStringMeanLength;
 
-    @JsonPropertyDescription("The check counts those strings with length below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts those strings with length below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthBelowMinLengthCountCheckSpec dailyPartitionStringLengthBelowMinLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts percentage those strings with length below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthBelowMinLengthPercentCheckSpec dailyPartitionStringLengthBelowMinLengthPercent;
 
-    @JsonPropertyDescription("The check counts those strings with length above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts those strings with length above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthAboveMaxLengthCountCheckSpec dailyPartitionStringLengthAboveMaxLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts percentage of those strings with length above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec dailyPartitionStringLengthAboveMaxLengthPercent;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length in the range provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthInRangePercentCheckSpec dailyPartitionStringLengthInRangePercent;
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringEmptyCountCheckSpec dailyPartitionStringEmptyCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of string in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringEmptyPercentCheckSpec dailyPartitionStringEmptyPercent;
 
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringWhitespaceCountCheckSpec dailyPartitionStringWhitespaceCount;
 
-    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringWhitespacePercentCheckSpec dailyPartitionStringWhitespacePercent;
 
     @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
@@ -185,11 +185,11 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name format regex in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMatchNameRegexPercentCheckSpec dailyPartitionStringMatchNameRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
+    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMostPopularValuesCheckSpec dailyPartitionStringMostPopularValues;
 
     @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnStringDatatypeDetectCheckSpec dailyPartitionStringDatatypeDetect;
+    private ColumnStringDatatypeChangedCheckSpec dailyPartitionStringDatatypeChanged;
 
     /**
      * Returns a maximum string length below  check.
@@ -823,21 +823,21 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     }
 
     /**
-     * Returns a count of expected values in datatype detect check.
-     * @return Datatype detect check.
+     * Returns a count of expected values in datatype changed check.
+     * @return Datatype changed check.
      */
-    public ColumnStringDatatypeDetectCheckSpec getDailyPartitionStringDatatypeDetect() {
-        return dailyPartitionStringDatatypeDetect;
+    public ColumnStringDatatypeChangedCheckSpec getDailyPartitionStringDatatypeChanged() {
+        return dailyPartitionStringDatatypeChanged;
     }
 
     /**
-     * Sets a new definition of a datatype detect check.
-     * @param dailyPartitionStringDatatypeDetect Datatype detect check.
+     * Sets a new definition of a datatype changed check.
+     * @param dailyPartitionStringDatatypeChanged Datatype changed check.
      */
-    public void setDailyPartitionStringDatatypeDetect(ColumnStringDatatypeDetectCheckSpec dailyPartitionStringDatatypeDetect) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringDatatypeDetect, dailyPartitionStringDatatypeDetect));
-        this.dailyPartitionStringDatatypeDetect = dailyPartitionStringDatatypeDetect;
-        propagateHierarchyIdToField(dailyPartitionStringDatatypeDetect, "daily_partition_string_datatype_detect");
+    public void setDailyPartitionStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec dailyPartitionStringDatatypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringDatatypeChanged, dailyPartitionStringDatatypeChanged));
+        this.dailyPartitionStringDatatypeChanged = dailyPartitionStringDatatypeChanged;
+        propagateHierarchyIdToField(dailyPartitionStringDatatypeChanged, "daily_partition_string_datatype_changed");
     }
 
     /**

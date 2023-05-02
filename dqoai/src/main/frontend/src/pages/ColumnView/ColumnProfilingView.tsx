@@ -9,10 +9,23 @@ import {
   setUpdatedChecksUi,
   updateColumnCheckUI
 } from '../../redux/actions/column.actions';
-import { CheckResultOverviewApi } from "../../services/apiClient";
+import { CheckResultOverviewApi, JobApiClient } from "../../services/apiClient";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckTypes } from "../../shared/routes";
 import { useParams } from "react-router-dom";
+import Tabs from "../../components/Tabs";
+import ColumnStatisticsView from "./ColumnStatisticsView";
+
+const tabs = [
+  {
+    label: 'Statistics',
+    value: 'statistics'
+  },
+  {
+    label: 'Advanced Profiling',
+    value: 'advanced'
+  },
+];
 
 interface IProfilingViewProps {
   connectionName: string;
@@ -32,6 +45,8 @@ const ProfilingView = ({
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const [activeTab, setActiveTab] = useState("statistics");
+  const [loadingJob, setLoadingJob] = useState(false);
 
   const getCheckOverview = () => {
     CheckResultOverviewApi.getColumnProfilingChecksOverview(connectionName, schemaName, tableName, columnName).then((res) => {
@@ -69,12 +84,21 @@ const ProfilingView = ({
       )
     );
     await dispatch(
-      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, false)
     );
   };
 
   const handleChange = (value: UICheckContainerModel) => {
     dispatch(setUpdatedChecksUi(checkTypes, firstLevelActiveTab, value));
+  };
+
+  const onCollectStatistics = async () => {
+    try {
+      setLoadingJob(true);
+      await JobApiClient.collectStatisticsOnTable(columnBasic?.collect_statistics_job_template);
+    } finally {
+      setLoadingJob(false);
+    }
   };
 
   return (
@@ -84,15 +108,24 @@ const ProfilingView = ({
         onUpdate={onUpdate}
         isUpdated={isUpdatedChecksUi}
         isUpdating={isUpdating}
+        isStatistics={activeTab === "statistics"}
+        onCollectStatistics={onCollectStatistics}
+        runningStatistics={loadingJob}
       />
-      <DataQualityChecks
-        onUpdate={onUpdate}
-        checksUI={checksUI}
-        onChange={handleChange}
-        checkResultsOverview={checkResultsOverview}
-        getCheckOverview={getCheckOverview}
-        loading={loading}
-      />
+      <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+      {activeTab === "statistics" && (
+        <ColumnStatisticsView />
+      )}
+      {activeTab === "advanced" && (
+        <DataQualityChecks
+          onUpdate={onUpdate}
+          checksUI={checksUI}
+          onChange={handleChange}
+          checkResultsOverview={checkResultsOverview}
+          getCheckOverview={getCheckOverview}
+          loading={loading}
+        />
+      )}
     </div>
   );
 };

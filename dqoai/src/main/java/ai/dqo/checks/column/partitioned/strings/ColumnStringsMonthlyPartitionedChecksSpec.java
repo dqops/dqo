@@ -78,7 +78,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
             put("monthly_partition_string_most_popular_values", o -> o.monthlyPartitionStringMostPopularValues);
 
-            put("monthly_partition_string_datatype_detect", o -> o.monthlyPartitionStringDatatypeDetect);
+            put("monthly_partition_string_datatype_changed", o -> o.monthlyPartitionStringDatatypeChanged);
 
         }
     };
@@ -92,25 +92,25 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringMeanLengthCheckSpec monthlyPartitionStringMeanLength;
 
-    @JsonPropertyDescription("The check counts those strings with length below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("The check counts those strings with length below those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringLengthBelowMinLengthCountCheckSpec monthlyPartitionStringLengthBelowMinLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("The check counts percentage those strings with length below those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringLengthBelowMinLengthPercentCheckSpec monthlyPartitionStringLengthBelowMinLengthPercent;
 
-    @JsonPropertyDescription("The check counts those strings with length above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("The check counts those strings with length above those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringLengthAboveMaxLengthCountCheckSpec monthlyPartitionStringLengthAboveMaxLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("The check counts percentage of those strings with length above those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec monthlyPartitionStringLengthAboveMaxLengthPercent;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length in the range provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringLengthInRangePercentCheckSpec monthlyPartitionStringLengthInRangePercent;
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringEmptyCountCheckSpec monthlyPartitionStringEmptyCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of string in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringEmptyPercentCheckSpec monthlyPartitionStringEmptyPercent;
 
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
@@ -185,11 +185,11 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name format regex in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringMatchNameRegexPercentCheckSpec monthlyPartitionStringMatchNameRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
+    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringMostPopularValuesCheckSpec monthlyPartitionStringMostPopularValues;
 
     @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringDatatypeDetectCheckSpec monthlyPartitionStringDatatypeDetect;
+    private ColumnStringDatatypeChangedCheckSpec monthlyPartitionStringDatatypeChanged;
     
     /**
      * Returns a maximum string length below check.
@@ -827,21 +827,21 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a count of expected values in datatype detect check.
-     * @return Datatype detect check.
+     * Returns a count of expected values in datatype changed check.
+     * @return Datatype changed check.
      */
-    public ColumnStringDatatypeDetectCheckSpec getMonthlyPartitionStringDatatypeDetect() {
-        return monthlyPartitionStringDatatypeDetect;
+    public ColumnStringDatatypeChangedCheckSpec getMonthlyPartitionStringDatatypeChanged() {
+        return monthlyPartitionStringDatatypeChanged;
     }
 
     /**
-     * Sets a new definition of a datatype detect check.
-     * @param monthlyPartitionStringDatatypeDetect Datatype detect check.
+     * Sets a new definition of a datatype changed check.
+     * @param monthlyPartitionStringDatatypeChanged Datatype changed check.
      */
-    public void setMonthlyPartitionStringDatatypeDetect(ColumnStringDatatypeDetectCheckSpec monthlyPartitionStringDatatypeDetect) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringDatatypeDetect, monthlyPartitionStringDatatypeDetect));
-        this.monthlyPartitionStringDatatypeDetect = monthlyPartitionStringDatatypeDetect;
-        propagateHierarchyIdToField(monthlyPartitionStringDatatypeDetect, "monthly_partition_string_datatype_detect");
+    public void setMonthlyPartitionStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec monthlyPartitionStringDatatypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringDatatypeChanged, monthlyPartitionStringDatatypeChanged));
+        this.monthlyPartitionStringDatatypeChanged = monthlyPartitionStringDatatypeChanged;
+        propagateHierarchyIdToField(monthlyPartitionStringDatatypeChanged, "monthly_partition_string_datatype_changed");
     }
 
     /**

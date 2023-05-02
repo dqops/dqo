@@ -24,8 +24,12 @@ Column level sensor that calculates percentage of the difference in average of a
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
-    {%- endmacro -%}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
+    {%- endmacro %}
     
     SELECT
         (SELECT
@@ -42,7 +46,11 @@ Column level sensor that calculates percentage of the difference in average of a
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.postgresql.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -60,8 +68,13 @@ Column level sensor that calculates percentage of the difference in average of a
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
+    
     
     SELECT
         (SELECT
@@ -78,8 +91,13 @@ Column level sensor that calculates percentage of the difference in average of a
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
+    
     
     SELECT
         (SELECT
@@ -117,8 +135,12 @@ Column level sensor that calculates percentage of the difference in max of a col
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
-    {%- endmacro -%}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
+    {%- endmacro %}
     
     SELECT
         (SELECT
@@ -135,7 +157,11 @@ Column level sensor that calculates percentage of the difference in max of a col
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.postgresql.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -153,7 +179,11 @@ Column level sensor that calculates percentage of the difference in max of a col
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -171,7 +201,11 @@ Column level sensor that calculates percentage of the difference in max of a col
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -210,8 +244,12 @@ Column level sensor that calculates percentage of the difference in min of a col
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
-    {%- endmacro -%}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
+    {%- endmacro %}
     
     SELECT
         (SELECT
@@ -228,7 +266,11 @@ Column level sensor that calculates percentage of the difference in min of a col
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.postgresql.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -246,7 +288,11 @@ Column level sensor that calculates percentage of the difference in min of a col
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -264,7 +310,11 @@ Column level sensor that calculates percentage of the difference in min of a col
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -303,8 +353,12 @@ Column level sensor that calculates percentage of the difference in row count of
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
-    {%- endmacro -%}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
+    {%- endmacro %}
     
     SELECT
         (SELECT
@@ -321,7 +375,11 @@ Column level sensor that calculates percentage of the difference in row count of
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.postgresql.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -339,7 +397,11 @@ Column level sensor that calculates percentage of the difference in row count of
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -357,7 +419,11 @@ Column level sensor that calculates percentage of the difference in row count of
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -396,8 +462,12 @@ Column level sensor that calculates percentage of the difference in sum of a col
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
-    {%- endmacro -%}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
+    {%- endmacro %}
     
     SELECT
         (SELECT
@@ -414,7 +484,11 @@ Column level sensor that calculates percentage of the difference in sum of a col
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.postgresql.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -432,7 +506,11 @@ Column level sensor that calculates percentage of the difference in sum of a col
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -450,7 +528,11 @@ Column level sensor that calculates percentage of the difference in sum of a col
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
-        {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {% if referenced_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT

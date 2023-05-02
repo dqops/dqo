@@ -1,11 +1,11 @@
 /*
- * Copyright © 2022 DQO.ai (support@dqo.ai)
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -128,7 +128,7 @@ public class ColumnPiiValidUsaZipcodePercentSensorParametersSpecBigQueryTests ex
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
-            setTimeGradient(TimeSeriesGradient.day);
+            setTimeGradient(TimePeriodGradient.day);
             setTimestampColumn("date");
         }});
 
@@ -366,7 +366,7 @@ public class ColumnPiiValidUsaZipcodePercentSensorParametersSpecBigQueryTests ex
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
-            setTimeGradient(TimeSeriesGradient.day);
+            setTimeGradient(TimePeriodGradient.day);
             setTimestampColumn("date");
         }});
         runParameters.setDataStreams(

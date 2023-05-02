@@ -16,14 +16,14 @@ import { CheckTypes } from "../../../shared/routes";
 
 const TableCommentView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
-  const { tableBasic, comments, isUpdating, isUpdatedComments } = useSelector(getFirstLevelState(checkTypes));
+  const { tableBasic, updatedComments, isUpdating, isUpdatedComments } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [text, setText] = useState('');
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
     if (
-      !comments ||
+      !updatedComments ||
       tableBasic?.connection_name !== connectionName ||
       tableBasic?.target?.schema_name !== schemaName ||
       tableBasic?.target?.table_name !== tableName
@@ -34,18 +34,20 @@ const TableCommentView = () => {
 
   const onUpdate = async () => {
     await dispatch(
-      updateTableComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, [...comments, ...text ? [{
+      updateTableComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, [...updatedComments, ...text ? [{
         comment: text,
         comment_by: 'user',
         date: new Date().toISOString()
       }] : []])
     );
     setText('');
-    await dispatch(getTableComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
+    await dispatch(getTableComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false));
+    dispatch(setIsUpdatedComments(checkTypes, firstLevelActiveTab, false));
   };
 
   const handleChange = (value: CommentSpec[]) => {
     dispatch(setUpdatedComments(checkTypes, firstLevelActiveTab, value));
+    dispatch(setIsUpdatedComments(checkTypes, firstLevelActiveTab, true));
   };
 
   return (
@@ -60,7 +62,7 @@ const TableCommentView = () => {
         setText={setText}
         isUpdated={isUpdatedComments}
         setIsUpdated={(value) => dispatch(setIsUpdatedComments(checkTypes, firstLevelActiveTab, value))}
-        comments={comments}
+        comments={updatedComments}
         onChange={handleChange}
       />
     </div>

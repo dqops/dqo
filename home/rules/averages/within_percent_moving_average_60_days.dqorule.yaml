@@ -8,6 +8,7 @@ spec:
   time_window:
     prediction_time_window: 60
     min_periods_with_readouts: 20
+    historic_data_point_grouping: day
   fields:
   - field_name: max_percent_within
     display_name: max_percent_within

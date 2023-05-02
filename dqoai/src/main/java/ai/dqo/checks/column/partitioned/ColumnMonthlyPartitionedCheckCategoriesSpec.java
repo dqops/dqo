@@ -32,7 +32,7 @@ import ai.dqo.checks.column.partitioned.strings.ColumnStringsMonthlyPartitionedC
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessMonthlyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.metadata.groupings.TimeSeriesMode;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -348,7 +348,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.timestamp_column);
-            setTimeGradient(TimeSeriesGradient.month);
+            setTimeGradient(TimePeriodGradient.month);
             setTimestampColumn(tableSpec.getTimestampColumns().getEffectivePartitioningColumn());
         }};
     }

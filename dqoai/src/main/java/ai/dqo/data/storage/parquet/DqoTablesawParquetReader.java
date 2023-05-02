@@ -35,6 +35,7 @@ package ai.dqo.data.storage.parquet;
  * #L%
  */
 
+import ai.dqo.utils.tables.TableColumnUtility;
 import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
 import net.tlabs.tablesaw.parquet.TablesawReadSupport;
@@ -47,7 +48,9 @@ import org.apache.hadoop.fs.Path;
 import org.apache.parquet.hadoop.ParquetReader;
 import org.apache.parquet.hadoop.util.HadoopInputFile;
 import tech.tablesaw.api.Row;
+import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 import tech.tablesaw.io.RuntimeIOException;
 import tech.tablesaw.io.Source;
 
@@ -55,6 +58,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.List;
 
 /**
  * Customized parquet reader that can use an in-memory file system to read parquet files, avoiding
@@ -85,7 +89,22 @@ public class DqoTablesawParquetReader extends TablesawParquetReader {
     public Table read(final TablesawParquetReadOptions options) {
         final TablesawReadSupport readSupport = new TablesawReadSupport(options);
         try (final ParquetReader<Row> reader = makeReader(options.getInputURI(), readSupport)) {
-            return readInternal(reader, readSupport, options.getSanitizedinputPath());
+            Table loadedTable = readInternal(reader, readSupport, options.getSanitizedinputPath());
+
+            Column<?>[] columns = loadedTable.columnArray();
+            boolean stringColumnConvertedToText = false;
+            for (int i = 0; i < columns.length; i++) {
+                if (columns[i] instanceof StringColumn) {
+                    columns[i] = TableColumnUtility.convertToTextColumn(columns[i]);
+                    stringColumnConvertedToText = true;
+                }
+            }
+
+            if (stringColumnConvertedToText) {
+                return Table.create(columns);
+            }
+
+            return loadedTable;
         } catch (IOException e) {
             throw new RuntimeIOException(e);
         }

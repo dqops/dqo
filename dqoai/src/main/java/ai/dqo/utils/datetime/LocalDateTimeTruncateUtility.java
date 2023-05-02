@@ -16,7 +16,7 @@
 package ai.dqo.utils.datetime;
 
 import ai.dqo.data.readouts.normalization.SensorResultNormalizeException;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,11 +32,11 @@ public class LocalDateTimeTruncateUtility {
     /**
      * Truncates a value of a time period to the beginning of the requested time series gradient.
      * @param dateTime Date time to truncate.
-     * @param timeSeriesGradient Time series gradient.
+     * @param timePeriodGradient Time series gradient.
      * @return Truncated date time, at the beginning of the requested period.
      */
-    public static LocalDateTime truncateTimePeriod(LocalDateTime dateTime, TimeSeriesGradient timeSeriesGradient) {
-        switch (timeSeriesGradient) {
+    public static LocalDateTime truncateTimePeriod(LocalDateTime dateTime, TimePeriodGradient timePeriodGradient) {
+        switch (timePeriodGradient) {
             case year:
                 return LocalDateTime.of(LocalDate.of(dateTime.getYear(), 1, 1), LocalTime.MIDNIGHT);
             case quarter:
@@ -53,7 +53,7 @@ public class LocalDateTimeTruncateUtility {
             case millisecond:
                 return dateTime; // no truncation
             default:
-                throw new SensorResultNormalizeException(null, "Unsupported time series gradient: " + timeSeriesGradient);
+                throw new SensorResultNormalizeException(null, "Unsupported time series gradient: " + timePeriodGradient);
         }
     }
 

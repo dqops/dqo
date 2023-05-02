@@ -5,7 +5,7 @@
 column/integrity/foreign_key_match_percent
 ```
 **Description**  
-Column level sensor that calculates the percentage of values that matches values in column of another table.
+Column level sensor that calculates the percentage of values that match values in column of another table.
 
 **Parameters**  
   
@@ -24,7 +24,11 @@ Column level sensor that calculates the percentage of values that matches values
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -49,8 +53,11 @@ Column level sensor that calculates the percentage of values that matches values
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(connection.postgresql.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -75,8 +82,11 @@ Column level sensor that calculates the percentage of values that matches values
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -101,8 +111,11 @@ Column level sensor that calculates the percentage of values that matches values
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -130,7 +143,7 @@ ___
 column/integrity/foreign_key_not_match_count
 ```
 **Description**  
-Column level sensor that calculates the count of values that does not matche values in column of another table.
+Column level sensor that calculates the count of values that does not match values in column of another table.
 
 **Parameters**  
   
@@ -148,10 +161,12 @@ Column level sensor that calculates the count of values that does not matche val
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
-    
     
     SELECT
         SUM(
@@ -179,8 +194,11 @@ Column level sensor that calculates the count of values that does not matche val
         {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
     {%- endmacro %}
     
-    {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -209,8 +227,11 @@ Column level sensor that calculates the count of values that does not matche val
         {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
     {%- endmacro %}
     
-    {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT
@@ -235,8 +256,11 @@ Column level sensor that calculates the count of values that does not matche val
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {%- macro render_foreign_table(foreign_table) -%}
-        {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {% if foreign_table.find(".") < 0 %}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+    {%- else -%}
+       {{ foreign_table }}
+    {%- endif %}
     {%- endmacro %}
     
     SELECT

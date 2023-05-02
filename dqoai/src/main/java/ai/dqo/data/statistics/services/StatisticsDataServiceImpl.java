@@ -1,11 +1,11 @@
 /*
- * Copyright © 2023 DQO.ai (support@dqo.ai)
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package ai.dqo.data.statistics.services;
 
 import ai.dqo.core.configuration.DqoStatisticsCollectorConfigurationProperties;
+import ai.dqo.data.statistics.factory.StatisticsCollectorTarget;
 import ai.dqo.data.statistics.factory.StatisticsColumnNames;
 import ai.dqo.data.statistics.factory.StatisticsResultDataType;
 import ai.dqo.data.statistics.services.models.StatisticsMetricModel;
@@ -30,8 +30,8 @@ import com.google.common.base.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Row;
-import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.api.TextColumn;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -61,23 +61,30 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
      * @param connectionName Connection name.
      * @param physicalTableName Full table name (schema and table).
      * @param dataStreamName Data stream name.
+     * @param includeColumnLevelStatistics True when column level statistics should be also included.
      * @return Statistics results for the given table.
      */
     @Override
     public StatisticsResultsForTableModel getMostRecentStatisticsForTable(String connectionName,
                                                                           PhysicalTableName physicalTableName,
-                                                                          String dataStreamName) {
+                                                                          String dataStreamName,
+                                                                          boolean includeColumnLevelStatistics) {
         StatisticsResultsForTableModel tableStatisticsResults = new StatisticsResultsForTableModel();
         Table allData = loadStatisticsResultsForTable(connectionName, physicalTableName);
         if (allData == null) {
             return tableStatisticsResults; // no statistics data
         }
-        Table selectedDataStreamData = allData.where(allData.stringColumn(StatisticsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).isEqualTo(dataStreamName));
+        Table selectedDataStreamData = allData.where(allData.textColumn(StatisticsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).isEqualTo(dataStreamName));
+        if (!includeColumnLevelStatistics) {
+            selectedDataStreamData = selectedDataStreamData.where(
+                    allData.textColumn(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME).isEqualTo(StatisticsCollectorTarget.table.name()));
+        }
+
         Table sortedResults = selectedDataStreamData.sortDescendingOn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME);
 
-        StringColumn categoryColumn = sortedResults.stringColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME);
-        StringColumn collectorNameColumn = sortedResults.stringColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME);
-        StringColumn columnNameColumn = sortedResults.stringColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        TextColumn categoryColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME);
+        TextColumn collectorNameColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME);
+        TextColumn columnNameColumn = sortedResults.textColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME);
 
         int rowCount = sortedResults.rowCount();
         for (int i = 0; i < rowCount ; i++) {
@@ -143,12 +150,12 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
         if (allData == null) {
             return columnStatisticsResults; // no profiling data
         }
-        Table selectedDataStreamData = allData.where(allData.stringColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).isEqualTo(columName)
-                .and(allData.stringColumn(StatisticsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).isEqualTo(dataStreamName)));
+        Table selectedDataStreamData = allData.where(allData.textColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).isEqualTo(columName)
+                .and(allData.textColumn(StatisticsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).isEqualTo(dataStreamName)));
         Table sortedResults = selectedDataStreamData.sortDescendingOn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME);
 
-        StringColumn categoryColumn = sortedResults.stringColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME);
-        StringColumn collectorNameColumn = sortedResults.stringColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME);
+        TextColumn categoryColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME);
+        TextColumn collectorNameColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME);
 
         int rowCount = sortedResults.rowCount();
         for (int i = 0; i < rowCount ; i++) {

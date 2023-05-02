@@ -16,6 +16,7 @@
 package ai.dqo.data.readouts.normalization;
 
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.*;
 
@@ -25,33 +26,34 @@ import tech.tablesaw.api.*;
  */
 public class SensorReadoutsNormalizedResult {
     private final Table table;
-    private final StringColumn idColumn;
+    private final TextColumn idColumn;
     private final DoubleColumn actualValueColumn;
     private final DoubleColumn expectedValueColumn;
     private final DateTimeColumn timePeriodColumn;
     private final InstantColumn timePeriodUtcColumn;
-    private final StringColumn timeGradientColumn;
+    private final TextColumn timeGradientColumn;
     private final LongColumn dataStreamHashColumn;
-    private final StringColumn dataStreamNameColumn;
+    private final TextColumn dataStreamNameColumn;
     private final LongColumn connectionHashColumn;
-    private final StringColumn connectionNameColumn;
-    private final StringColumn providerColumn;
+    private final TextColumn connectionNameColumn;
+    private final TextColumn providerColumn;
     private final LongColumn tableHashColumn;
-    private final StringColumn schemaNameColumn;
-    private final StringColumn tableNameColumn;
-    private final StringColumn tableNamePatternColumn;
-    private final StringColumn tableStageColumn;
+    private final TextColumn schemaNameColumn;
+    private final TextColumn tableNameColumn;
+    private final TextColumn tableNamePatternColumn;
+    private final TextColumn tableStageColumn;
+    private final IntColumn tablePriorityColumn;
     private final LongColumn columnHashColumn;
-    private final StringColumn columnNameColumn;
-    private final StringColumn columnNamePatternColumn;
+    private final TextColumn columnNameColumn;
+    private final TextColumn columnNamePatternColumn;
     private final LongColumn checkHashColumn;
-    private final StringColumn checkNameColumn;
-    private final StringColumn checkDisplayNameColumn;
-    private final StringColumn checkTypeColumn;
-    private final StringColumn checkCategoryColumn;
-    private final StringColumn qualityDimensionColumn;
-    private final StringColumn sensorNameColumn;
-    private final StringColumn timeSeriesIdColumn;
+    private final TextColumn checkNameColumn;
+    private final TextColumn checkDisplayNameColumn;
+    private final TextColumn checkTypeColumn;
+    private final TextColumn checkCategoryColumn;
+    private final TextColumn qualityDimensionColumn;
+    private final TextColumn sensorNameColumn;
+    private final TextColumn timeSeriesIdColumn;
     private final InstantColumn executedAtColumn;
     private final IntColumn durationMsColumn;
 
@@ -62,33 +64,34 @@ public class SensorReadoutsNormalizedResult {
      */
     public SensorReadoutsNormalizedResult(Table table) {
         this.table = table;
-        this.idColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.ID_COLUMN_NAME);
+        this.idColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.ID_COLUMN_NAME);
         this.actualValueColumn = TableColumnUtility.getOrAddDoubleColumn (table, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         this.expectedValueColumn = TableColumnUtility.getOrAddDoubleColumn(table, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
         this.timePeriodColumn = TableColumnUtility.getOrAddDateTimeColumn(table, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
         this.timePeriodUtcColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
-        this.timeGradientColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+        this.timeGradientColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
         this.dataStreamHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME);
-        this.dataStreamNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
+        this.dataStreamNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
         this.connectionHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME);
-        this.connectionNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CONNECTION_NAME_COLUMN_NAME);
-        this.providerColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME);
+        this.connectionNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CONNECTION_NAME_COLUMN_NAME);
+        this.providerColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME);
         this.tableHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME);
-        this.schemaNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.SCHEMA_NAME_COLUMN_NAME);
-        this.tableNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME);
-        this.tableNamePatternColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME);
-        this.tableStageColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TABLE_STAGE_COLUMN_NAME);
+        this.schemaNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.SCHEMA_NAME_COLUMN_NAME);
+        this.tableNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME);
+        this.tableNamePatternColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME);
+        this.tableStageColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.TABLE_STAGE_COLUMN_NAME);
+        this.tablePriorityColumn = TableColumnUtility.getOrAddIntColumn(table, SensorReadoutsColumnNames.TABLE_PRIORITY_COLUMN_NAME);
         this.columnHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.COLUMN_HASH_COLUMN_NAME);
-        this.columnNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
-        this.columnNamePatternColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME);
+        this.columnNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        this.columnNamePatternColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME);
         this.checkHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-        this.checkNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
-        this.checkDisplayNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
-        this.checkTypeColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
-        this.checkCategoryColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
-        this.qualityDimensionColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
-        this.sensorNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME);
-        this.timeSeriesIdColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
+        this.checkNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
+        this.checkDisplayNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
+        this.checkTypeColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
+        this.checkCategoryColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+        this.qualityDimensionColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
+        this.sensorNameColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME);
+        this.timeSeriesIdColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
         this.executedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
         this.durationMsColumn = TableColumnUtility.getOrAddIntColumn(table, SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
     }
@@ -105,7 +108,7 @@ public class SensorReadoutsNormalizedResult {
      * id column that is a primary for both the sensor_readouts and rule_results tables.
      * @return Check result id (primary key) column.
      */
-    public StringColumn getIdColumn() {
+    public TextColumn getIdColumn() {
         return idColumn;
     }
 
@@ -143,10 +146,10 @@ public class SensorReadoutsNormalizedResult {
 
     /**
      * Time gradient column that returns the time gradient that was used by the sensor. It is a lower case name of
-     * a time gradient from {@link ai.dqo.metadata.groupings.TimeSeriesGradient} enumeration.
+     * a time gradient from {@link TimePeriodGradient} enumeration.
      * @return Time gradient name, e.q. "day", "week", "month".
      */
-    public StringColumn getTimeGradientColumn() {
+    public TextColumn getTimeGradientColumn() {
         return timeGradientColumn;
     }
 
@@ -162,7 +165,7 @@ public class SensorReadoutsNormalizedResult {
      * Data stream name column. The data stream name is concatenated from data stream levels and is a user friendly value.
      * @return Data stream name column.
      */
-    public StringColumn getDataStreamNameColumn() {
+    public TextColumn getDataStreamNameColumn() {
         return dataStreamNameColumn;
     }
 
@@ -178,7 +181,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a connection name column. The column contains the source connection name.
      * @return Connection name column.
      */
-    public StringColumn getConnectionNameColumn() {
+    public TextColumn getConnectionNameColumn() {
         return connectionNameColumn;
     }
 
@@ -186,7 +189,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a provider name column. The column contains the provider name.
      * @return Provider name column.
      */
-    public StringColumn getProviderColumn() {
+    public TextColumn getProviderColumn() {
         return providerColumn;
     }
 
@@ -202,7 +205,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column with the schema name of a table.
      * @return Schema name column.
      */
-    public StringColumn getSchemaNameColumn() {
+    public TextColumn getSchemaNameColumn() {
         return schemaNameColumn;
     }
 
@@ -210,7 +213,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column with the table name.
      * @return Column with the table name.
      */
-    public StringColumn getTableNameColumn() {
+    public TextColumn getTableNameColumn() {
         return tableNameColumn;
     }
 
@@ -218,7 +221,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column with the table name pattern.
      * @return Column with the table name pattern.
      */
-    public StringColumn getTableNamePatternColumn() {
+    public TextColumn getTableNamePatternColumn() {
         return tableNamePatternColumn;
     }
 
@@ -226,8 +229,16 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column with the table's stage.
      * @return Table's stage column.
      */
-    public StringColumn getTableStageColumn() {
+    public TextColumn getTableStageColumn() {
         return tableStageColumn;
+    }
+
+    /**
+     * Returns the tablesaw column with the table priority.
+     * @return Table's priority column.
+     */
+    public IntColumn getTablePriorityColumn() {
+        return tablePriorityColumn;
     }
 
     /**
@@ -242,7 +253,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column that stores the column name. The column with "column names" may contain nulls when checks are defined on a whole table level.
      * @return Column name tablesaw column.
      */
-    public StringColumn getColumnNameColumn() {
+    public TextColumn getColumnNameColumn() {
         return columnNameColumn;
     }
 
@@ -250,7 +261,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column that stores the column name pattern. The column with "column names" may contain nulls when checks are defined on a whole table level.
      * @return Column name pattern tablesaw column.
      */
-    public StringColumn getColumnNamePatternColumn() {
+    public TextColumn getColumnNamePatternColumn() {
         return columnNamePatternColumn;
     }
 
@@ -266,7 +277,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column with the check name.
      * @return Check name column.
      */
-    public StringColumn getCheckNameColumn() {
+    public TextColumn getCheckNameColumn() {
         return checkNameColumn;
     }
 
@@ -274,7 +285,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column with the check display name.
      * @return Check display name column.
      */
-    public StringColumn getCheckDisplayNameColumn() {
+    public TextColumn getCheckDisplayNameColumn() {
         return checkDisplayNameColumn;
     }
 
@@ -282,7 +293,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a column that stores the check type (adhoc, checkpoint, partitioned).
      * @return Check type column.
      */
-    public StringColumn getCheckTypeColumn() {
+    public TextColumn getCheckTypeColumn() {
         return checkTypeColumn;
     }
 
@@ -290,7 +301,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns the column that stores the check category (the node in YAML that is a parent of the group of checks).
      * @return Quality check category name column.
      */
-    public StringColumn getCheckCategoryColumn() {
+    public TextColumn getCheckCategoryColumn() {
         return checkCategoryColumn;
     }
 
@@ -298,7 +309,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a tablesaw column with the parent quality dimension of a check.
      * @return Quality dimension of a check.
      */
-    public StringColumn getQualityDimensionColumn() {
+    public TextColumn getQualityDimensionColumn() {
         return qualityDimensionColumn;
     }
 
@@ -306,7 +317,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a column with the sensor name.
      * @return Sensor name column.
      */
-    public StringColumn getSensorNameColumn() {
+    public TextColumn getSensorNameColumn() {
         return sensorNameColumn;
     }
 
@@ -314,7 +325,7 @@ public class SensorReadoutsNormalizedResult {
      * Returns a time series id column.
      * @return Column that stores a time series id.
      */
-    public StringColumn getTimeSeriesIdColumn() {
+    public TextColumn getTimeSeriesIdColumn() {
         return timeSeriesIdColumn;
     }
 

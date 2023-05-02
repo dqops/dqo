@@ -116,7 +116,8 @@ const ColumnPartitionedChecksView = () => {
           connection,
           schema,
           table,
-          column
+          column,
+          false
         )
       );
     } else {
@@ -140,7 +141,8 @@ const ColumnPartitionedChecksView = () => {
           connection,
           schema,
           table,
-          column
+          column,
+          false
         )
       );
     }

@@ -2,7 +2,7 @@ import React from 'react';
 
 import SectionWrapper from '../../SectionWrapper';
 import { SnowflakeParametersSpec } from "../../../../api";
-import SnowflakePropertiesView from "../SnowflakeProperties";
+import JdbcPropertiesView from "../JdbcProperties";
 import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
 
 
@@ -64,7 +64,7 @@ const SnowflakeConnection = ({
         onChange={(value) => handleChange({ role: value })}
       />
 
-      <SnowflakePropertiesView
+      <JdbcPropertiesView
         properties={snowflake?.properties}
         onChange={(properties) => handleChange({ properties })}
       />

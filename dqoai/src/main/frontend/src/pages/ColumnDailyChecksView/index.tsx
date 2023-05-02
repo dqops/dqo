@@ -14,6 +14,7 @@ import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckTypes } from "../../shared/routes";
+import ColumnNavigation from "../../components/ColumnNavigation";
 
 const ColumnDailyChecksView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
@@ -69,7 +70,8 @@ const ColumnDailyChecksView = () => {
         connectionName,
         schemaName,
         tableName,
-        columnName
+        columnName,
+        false
       )
     );
     setIsUpdated(false);
@@ -96,6 +98,7 @@ const ColumnDailyChecksView = () => {
           loading={isUpdating}
         />
       </div>
+      <ColumnNavigation defaultTab="daily" />
       <div>
         <DataQualityChecks
           onUpdate={onUpdate}

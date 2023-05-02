@@ -16,7 +16,6 @@
 package ai.dqo.data.storage;
 
 import ai.dqo.core.synchronization.contract.DqoRoot;
-import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 
 /**
  * Configuration for the parquet file storage for each type of supported table (sensor readouts, rule results, etc.)
@@ -27,7 +26,7 @@ public class FileStorageSettings {
     private String parquetFileName;
     private String timePeriodColumnName;
     private String idStringColumnName;
-    private TablesawParquetWriteOptions.CompressionCodec compressionCodec;
+    private TablePartitioningPattern partitioningPattern;
 
     /**
      * Creates a file storage configuration for a single type of table that is stored as parquet files.
@@ -37,20 +36,20 @@ public class FileStorageSettings {
      * @param timePeriodColumnName {@link tech.tablesaw.api.DateTimeColumn} that stores the exact time that is used for monthly partitioning
      *                             (but it is not the column that stores date of the first day of the month).
      * @param idStringColumnName Column name (of String type) that stores the primary key for each row, that is used to find rows to be deleted.
-     * @param compressionCodec Compression codec to apply on the parquet files.
+     * @param partitioningPattern Table partitioning format.
      */
     public FileStorageSettings(DqoRoot tableType,
                                String dataSubfolderName,
                                String parquetFileName,
                                String timePeriodColumnName,
                                String idStringColumnName,
-                               TablesawParquetWriteOptions.CompressionCodec compressionCodec) {
+                               TablePartitioningPattern partitioningPattern) {
         this.tableType = tableType;
         this.dataSubfolderName = dataSubfolderName;
         this.parquetFileName = parquetFileName;
         this.timePeriodColumnName = timePeriodColumnName;
         this.idStringColumnName = idStringColumnName;
-        this.compressionCodec = compressionCodec;
+        this.partitioningPattern = partitioningPattern;
     }
 
     /**
@@ -87,7 +86,7 @@ public class FileStorageSettings {
     }
 
     /**
-     * Returns the name of a String column  {@link tech.tablesaw.api.StringColumn} that stores the primary key of each row.
+     * Returns the name of a String column  {@link tech.tablesaw.api.TextColumn} that stores the primary key of each row.
      * Used to find rows to be deleted.
      * @return ID column name.
      */
@@ -96,10 +95,10 @@ public class FileStorageSettings {
     }
 
     /**
-     * Compression codec to apply on the parquet files.
-     * @return Compression codec.
+     * Returns the table partitioning mode. Supported modes are CTM (connection/table/month) and CM (connection/month).
+     * @return Table partitioning mode.
      */
-    public TablesawParquetWriteOptions.CompressionCodec getCompressionCodec() {
-        return compressionCodec;
+    public TablePartitioningPattern getPartitioningPattern() {
+        return partitioningPattern;
     }
 }

@@ -14,6 +14,7 @@ import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import { CheckTypes } from "../../shared/routes";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import TableNavigation from "../../components/TableNavigation";
 
 const TableDailyChecksView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
@@ -52,7 +53,7 @@ const TableDailyChecksView = () => {
       )
     );
     await dispatch(
-      getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+      getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
     );
     setIsUpdated(false);
   };
@@ -78,6 +79,7 @@ const TableDailyChecksView = () => {
           loading={isUpdating}
         />
       </div>
+      <TableNavigation defaultTab="daily" />
       <div>
         <DataQualityChecks
           onUpdate={onUpdate}

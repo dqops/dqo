@@ -48,7 +48,7 @@ public class TimeSeriesConfigurationSpec extends AbstractSpec {
     private TimeSeriesMode mode = TimeSeriesMode.current_time;
 
     @JsonPropertyDescription("Time gradient (year, quarter, month, week, day, hour). The current time (for the current_time mode) or the value of the timestamp_column is truncated to the beginning of the time gradient period (day, etc). When the time gradient is not provided, the data quality check readouts are not rounded to the time window.")
-    private TimeSeriesGradient timeGradient;
+    private TimePeriodGradient timeGradient;
 
     @JsonPropertyDescription("The name of the timestamp column when the mode is 'timestamp_column'. It must be a column name that stores a date or datetime. It could be a name of the date column for date partitioned data or a modification or insert timestamp column (modified_at, inserted_at, etc.). Completeness sensors need the timestamp column to detect missing time periods.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -70,7 +70,7 @@ public class TimeSeriesConfigurationSpec extends AbstractSpec {
     public static TimeSeriesConfigurationSpec createCurrentTimeMilliseconds() {
         return new TimeSeriesConfigurationSpec() {{
 			setMode(TimeSeriesMode.current_time);
-            setTimeGradient(TimeSeriesGradient.millisecond);
+            setTimeGradient(TimePeriodGradient.millisecond);
         }};
     }
 
@@ -95,7 +95,7 @@ public class TimeSeriesConfigurationSpec extends AbstractSpec {
      * Returns the time gradient.
      * @return Time gradient.
      */
-    public TimeSeriesGradient getTimeGradient() {
+    public TimePeriodGradient getTimeGradient() {
         return timeGradient;
     }
 
@@ -103,7 +103,7 @@ public class TimeSeriesConfigurationSpec extends AbstractSpec {
      * Sets the time gradient.
      * @param timeGradient Time gradient.
      */
-    public void setTimeGradient(TimeSeriesGradient timeGradient) {
+    public void setTimeGradient(TimePeriodGradient timeGradient) {
 		setDirtyIf(!Objects.equals(this.timeGradient, timeGradient));
         this.timeGradient = timeGradient;
     }

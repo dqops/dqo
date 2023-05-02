@@ -27,7 +27,7 @@ const ConnectionLabelsView = () => {
 
   const onUpdate = async () => {
     await dispatch(updateConnectionLabels(checkTypes, firstLevelActiveTab, connection, labels || []));
-    await dispatch(getConnectionLabels(checkTypes, firstLevelActiveTab, connection));
+    await dispatch(getConnectionLabels(checkTypes, firstLevelActiveTab, connection, false));
   };
 
   const handleChange = (value: string[]) => {

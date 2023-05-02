@@ -13,36 +13,77 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ai.dqo.rest.models.metadata;
 
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
+import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.util.Objects;
+
 /**
- * Provider sensor model that is returned by the REST API.
+ * Provider sensor model returned from REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "ProviderSensorModel", description = "Provider sensor model")
 public class ProviderSensorModel {
 
-    @JsonPropertyDescription("Sensor name")
-    private String sensorName;
-
-    @JsonPropertyDescription("Provider type")
+    @JsonPropertyDescription("Provider type.")
     private ProviderType providerType;
 
     @JsonPropertyDescription("Provider Sensor definition spec")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private ProviderSensorDefinitionSpec providerSensorDefinitionSpec;
 
     @JsonPropertyDescription("Provider Sql template")
-    private String SqlTemplate;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String sqlTemplate;
 
+    @JsonPropertyDescription("Whether the provider sensor is a User Home provider sensor")
+    private boolean custom;
+
+    @JsonPropertyDescription("This is a DQO built-in provider sensor, whose parameters cannot be changed.")
+    public boolean builtIn;
+
+    public ProviderSensorModel(){}
+
+    public ProviderSensorModel(ProviderType providerType,
+                               ProviderSensorDefinitionSpec providerSensorDefinitionSpec,
+                               String sqlTemplate,
+                               boolean custom,
+                               boolean builtIn) {
+        this.providerType = providerType;
+        this.providerSensorDefinitionSpec = providerSensorDefinitionSpec;
+        this.sqlTemplate = sqlTemplate;
+        this.custom = custom;
+        this.builtIn = builtIn;
+    }
+
+    /**
+     * Checks whether this ProviderSensorDefinitionWrapper object is equal to the provided
+     * ProviderSensorDefinitionWrapper object based on their SQL templates and specifications.
+     * @param providerSensorDefinitionWrapper The ProviderSensorDefinitionWrapper object to compare with.
+     * @return True if the objects are equal, false otherwise.
+     */
+    public boolean equalsProviderSensorDqo(ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper) {
+        if (providerSensorDefinitionWrapper == null) {
+            return false;
+        }
+
+        if (!Objects.equals(providerSensorDefinitionWrapper.getSqlTemplate(), sqlTemplate)) {
+            return false;
+        }
+
+        if (!Objects.equals(providerSensorDefinitionWrapper.getSpec(), providerSensorDefinitionSpec)) {
+            return false;
+        }
+
+        return true;
+    }
 }

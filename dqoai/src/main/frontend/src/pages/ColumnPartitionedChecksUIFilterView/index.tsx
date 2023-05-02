@@ -49,7 +49,7 @@ const ColumnPartitionedChecksUIFilterView = () => {
     );
 
     await dispatch(
-      getColumnPartitionedChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName)
+      getColumnPartitionedChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName, false)
     );
     setIsUpdating(false);
   };

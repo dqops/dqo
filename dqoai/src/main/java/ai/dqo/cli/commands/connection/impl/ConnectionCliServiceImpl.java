@@ -39,10 +39,7 @@ import ai.dqo.services.metadata.ConnectionService;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tech.tablesaw.api.IntColumn;
-import tech.tablesaw.api.Row;
-import tech.tablesaw.api.StringColumn;
-import tech.tablesaw.api.Table;
+import tech.tablesaw.api.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -135,10 +132,10 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
             ColumnSpecMap columnSpecMap = tableSpec.getColumns();
 
             Table resultTable = Table.create().addColumns(
-                    StringColumn.create("Source column name"),
-                    StringColumn.create("Source column type"),
-                    StringColumn.create("Imported column name"),
-                    StringColumn.create("Imported column type"));
+                    TextColumn.create("Source column name"),
+                    TextColumn.create("Source column type"),
+                    TextColumn.create("Imported column name"),
+                    TextColumn.create("Imported column type"));
 
             for (Map.Entry<String, ColumnSpec> entry : columnSpecMap.entrySet()) {
                 String columnName = entry.getKey();
@@ -220,8 +217,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
             Collection<TableWrapper> tableWrappers = hierarchyNodeTreeSearcher.findTables(userHome, tableSearchFilters);
 
             Table resultTable = Table.create().addColumns(
-                    StringColumn.create("Source table name"),
-                    StringColumn.create("Is imported"),
+                    TextColumn.create("Source table name"),
+                    TextColumn.create("Is imported"),
                     IntColumn.create("Imported columns count"),
                     IntColumn.create("Table hash"));
 
@@ -305,8 +302,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
             Collection<TableWrapper> tableWrappers = hierarchyNodeTreeSearcher.findTables(userHome, tableSearchFilters);
 
             Table resultTable = Table.create().addColumns(
-                    StringColumn.create("Source schema name"),
-                    StringColumn.create("Is imported"),
+                    TextColumn.create("Source schema name"),
+                    TextColumn.create("Is imported"),
                     IntColumn.create("Imported tables count"));
 
             for( SourceSchemaModel sourceSchemaModel : schemaModels) {
@@ -446,30 +443,30 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
             return cliOperationStatus;
         }
 
-        List<ConnectionWrapper> connectionWrappers = connectionSpecs.stream()
-                .map(spec -> connections.getByObjectName(spec.getConnectionName(), true))
+        List<String> connectionNames = connectionSpecs.stream()
+                .map(ConnectionSpec::getConnectionName)
                 .collect(Collectors.toList());
 
         List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.connectionService.deleteConnections(
-                connectionWrappers, userHomeContext);
+                connectionNames);
 
         try {
             for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
                 job.getFuture().get();
             }
         } catch (InterruptedException e) {
-            cliOperationStatus.setSuccessMessage(String.format("Removed %d connections.", connectionWrappers.size())
+            cliOperationStatus.setSuccessMessage(String.format("Removed %d connections.", connectionNames.size())
                     + " Deleting results for these connections has been cancelled."
             );
             return cliOperationStatus;
         } catch (ExecutionException e) {
-            cliOperationStatus.setSuccessMessage(String.format("Removed %d connections.", connectionWrappers.size())
+            cliOperationStatus.setSuccessMessage(String.format("Removed %d connections.", connectionNames.size())
                     + " An exception occurred while deleting results for these connections."
             );
             return cliOperationStatus;
         }
 
-        cliOperationStatus.setSuccessMessage(String.format("Successfully removed %d connections", connectionSpecs.size()));
+        cliOperationStatus.setSuccessMessage(String.format("Successfully removed %d connections", connectionNames.size()));
         return cliOperationStatus;
     }
 

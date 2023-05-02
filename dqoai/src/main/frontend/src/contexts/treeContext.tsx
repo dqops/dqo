@@ -6,7 +6,8 @@ import {
   ColumnBasicModel,
   ConnectionBasicModel,
   SchemaModel,
-  TableBasicModel, UICheckBasicModel
+  TableBasicModel,
+  UICheckBasicModel
 } from '../api';
 import {
   ColumnApiClient,
@@ -20,7 +21,7 @@ import { CustomTreeNode, ITab } from '../shared/interfaces';
 import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
 import { findTreeNode } from '../utils/tree';
 import { CheckTypes, ROUTES } from "../shared/routes";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addFirstLevelTab } from "../redux/actions/source.actions";
 
@@ -69,6 +70,7 @@ function TreeProvider(props: any) {
   const [selectedTreeNode, setSelectedTreeNode] = useState<CustomTreeNode>();
   const history = useHistory();
   const dispatch = useDispatch();
+  const [loadingNodes, setLoadingNodes] = useState<Record<string, boolean>>({});
 
   const getConnections = async () => {
     const res: AxiosResponse<ConnectionBasicModel[]> =
@@ -122,6 +124,14 @@ function TreeProvider(props: any) {
     }), {});
 
     setTreeDataMaps(newTreeDataMaps);
+
+    dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
+      url: `${ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection.connection_name ?? '', 'schemas')}?import_schema=true&create_success=true`,
+      value: ROUTES.CONNECTION_LEVEL_VALUE(sourceRoute, connection.connection_name ?? ''),
+      state: {},
+      label: connection.connection_name ?? ''
+    }));
+    pushHistory(`${ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection.connection_name ?? '', 'schemas')}?import_schema=true&create_success=true`);
   };
 
   useEffect(() => {
@@ -188,7 +198,8 @@ function TreeProvider(props: any) {
       run_checks_job_template: table[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof TableBasicModel] as CheckSearchFilters,
       collect_statistics_job_template: table.collect_statistics_job_template,
       data_clean_job_template: table.data_clean_job_template,
-      open: false
+      open: false,
+      configured: table.partitioning_configuration_missing
     }));
     resetTreeData(node, items);
   };
@@ -352,7 +363,8 @@ function TreeProvider(props: any) {
       run_checks_job_template: column[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof ColumnBasicModel] as CheckSearchFilters,
       collect_statistics_job_template: column.collect_statistics_job_template,
       data_clean_job_template: column.data_clean_job_template,
-      open: false
+      open: false,
+      configured: column.has_any_configured_checks || column.has_any_configured_partition_checks || column.has_any_configured_profiling_checks || column.has_any_configured_recurring_checks
     }));
     resetTreeData(node, items);
   };
@@ -605,8 +617,12 @@ function TreeProvider(props: any) {
 
   const refreshNode = async (node: CustomTreeNode) => {
     if (!node) return;
+    setLoadingNodes(prev => ({
+      ...prev,
+      [node.id]: true
+    }));
     if (node.level === TREE_LEVEL.DATABASE) {
-      return await refreshDatabaseNode(node);
+      await refreshDatabaseNode(node);
     } else if (node.level === TREE_LEVEL.SCHEMA) {
       await refreshSchemaNode(node);
     } else if (node.level === TREE_LEVEL.TABLE) {
@@ -636,6 +652,11 @@ function TreeProvider(props: any) {
     } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
       await refreshColumnPartitionedChecksNode(node, 'monthly');
     }
+
+    setLoadingNodes(prev => ({
+      ...prev,
+      [node.id]: false
+    }));
   };
 
   const runChecks = async (node: CustomTreeNode) => {
@@ -853,12 +874,12 @@ function TreeProvider(props: any) {
     const defaultConnectionTab = sourceRoute === CheckTypes.SOURCES ? 'detail' : 'schedule';
     if (node.level === TREE_LEVEL.DATABASE) {
       dispatch(addFirstLevelTab(sourceRoute, {
-        url: ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, subTabMap[node.label] || defaultConnectionTab),
+        url: ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, defaultConnectionTab),
         value: ROUTES.CONNECTION_LEVEL_VALUE(sourceRoute, node.label),
         state: {},
         label: node.label
       }));
-      pushHistory(ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, subTabMap[node.label] || defaultConnectionTab));
+      pushHistory(ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, defaultConnectionTab));
     } else if (node.level === TREE_LEVEL.SCHEMA) {
       const connectionNode = findTreeNode(treeData, node.parentId ?? '');
 
@@ -1092,14 +1113,25 @@ function TreeProvider(props: any) {
       newTabMaps[sourceRoute] = [newTab];
     }
 
+    const newTreeDataMaps = [
+      CheckTypes.RECURRING,
+      CheckTypes.SOURCES,
+      CheckTypes.PROFILING,
+      CheckTypes.PARTITIONED,
+    ].reduce((acc, cur) => ({
+      ...acc,
+      [cur]: treeDataMaps[cur].filter((item) => item.id !== identify)
+    }), {});
+
+    setTreeDataMaps(newTreeDataMaps);
+
+
     setActiveTabMaps(prev => ({
       ...prev,
       [sourceRoute]: newTabMaps[sourceRoute][0].value
     }));
 
     setTabMaps(newTabMaps);
-
-    setTreeData(treeData.filter((item) => item.id.toString().indexOf(identify) === -1));
   };
 
   return (
@@ -1135,6 +1167,7 @@ function TreeProvider(props: any) {
         deleteData,
         selectedTreeNode,
         setSelectedTreeNode,
+        loadingNodes,
       }}
       {...props}
     />

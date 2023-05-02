@@ -8,7 +8,7 @@ ___
 ## **string length in range percent**  
   
 **Check description**  
-The check counts percentage of those strings with length in the range provided by the user in a column.   
+The check counts the percentage of those strings with length in the range provided by the user in the column.   
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -294,8 +294,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -317,7 +317,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -597,9 +597,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
@@ -620,7 +620,7 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             CASE
@@ -657,7 +657,7 @@ ___
 ## **daily string length in range percent**  
   
 **Check description**  
-The check counts percentage of those strings with length in the range provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.  
+The check counts the percentage of those strings with length in the range provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -945,8 +945,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -968,7 +968,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -1249,9 +1249,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
@@ -1272,7 +1272,7 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             CASE
@@ -1309,7 +1309,7 @@ ___
 ## **monthly string length in range percent**  
   
 **Check description**  
-The check counts percentage of those strings with length in the range provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.  
+The check counts the percentage of those strings with length in the range provided by the user in the column. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1597,8 +1597,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -1620,7 +1620,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -1901,9 +1901,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
@@ -1924,7 +1924,7 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             CASE
@@ -1961,7 +1961,7 @@ ___
 ## **daily partition string length in range percent**  
   
 **Check description**  
-The check counts percentage of those strings with length in the range provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.  
+The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2249,8 +2249,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -2272,7 +2272,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -2557,9 +2557,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
@@ -2580,7 +2580,7 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             CASE
@@ -2614,7 +2614,7 @@ ___
 ## **monthly partition string length in range percent**  
   
 **Check description**  
-The check counts percentage of those strings with length in the range provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.  
+The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2902,8 +2902,8 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### ****
-=== "Sensor template for "
+### **SQL Server**
+=== "Sensor template for SQL Server"
       
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
@@ -2925,7 +2925,7 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "Rendered SQL for "
+=== "Rendered SQL for SQL Server"
       
     ```
     SELECT
@@ -3210,9 +3210,9 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
-    ****  
+    **SQL Server**  
       
-    === "Sensor template for "
+    === "Sensor template for SQL Server"
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
@@ -3233,7 +3233,7 @@ spec:
         {{- lib.render_group_by() -}}
         {{- lib.render_order_by() -}}
         ```
-    === "Rendered SQL for "
+    === "Rendered SQL for SQL Server"
         ```
         SELECT
             CASE

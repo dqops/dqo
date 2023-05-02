@@ -52,7 +52,7 @@ public class ConnectionEditCliCommand extends BaseCommand implements ICommand {
 		this.connectionCliService = connectionCliService;
 	}
 
-	@CommandLine.Option(names = {"-n", "--connection"}, description = "Connection Name", completionCandidates = ConnectionNameCompleter.class)
+	@CommandLine.Option(names = {"-c", "--connection"}, description = "Connection Name", completionCandidates = ConnectionNameCompleter.class)
 	private String connection;
 
 	/**

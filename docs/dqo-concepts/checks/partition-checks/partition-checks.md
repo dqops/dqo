@@ -14,10 +14,10 @@ In order to enable time partition check, set a column that contains date, dateti
 3. Go to the **Date and Time Columns** tag
 4. In the dropdown menu under D**ATE or DATETIME column name for partition checks** select a column that contains date, datetime or timestamp.
 
-## Checks configuration in YAML file
+## Checks configuration in the YAML file
 Partition data quality checks, like other data quality checks in DQO, are defined as YAML files.
 
-Below is an example of YAML file showing sample configuration of a daily and monthly partition column data quality check
+Below is an example of the YAML file showing sample configuration of a daily and monthly partition column data quality check
 nulls_percent.
 
 === "Daily partition check"
@@ -94,4 +94,8 @@ nulls_percent.
 
 ## What's next
 
-- [Explore how to add partition checks](../../../working-with-dqo/adding-data-quality-checks/adding-data-quality-checks.md)
+- [Learn more about advanced profiling checks](../advanced-profiling/advanced-profiling.md)
+- [Learn more about recurring checks](../recurring-checks/recurring-checks.md)
+
+
+

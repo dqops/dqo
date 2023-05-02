@@ -47,8 +47,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -111,7 +110,7 @@ public class TableCliServiceImpl implements TableCliService {
             List<SourceSchemaModel> schemas = sourceConnection.listSchemas().stream()
                     .filter(schema -> (schemaFilter == null || StringPatternComparer.matchSearchPattern(schema.getSchemaName(), schemaFilter)))
                     .collect(Collectors.toList());
-            Table resultTable = Table.create().addColumns(StringColumn.create("Schema name"));
+            Table resultTable = Table.create().addColumns(TextColumn.create("Schema name"));
             for (SourceSchemaModel schemaModel : schemas) {
                 Row row = resultTable.appendRow();
                 row.setString(0, schemaModel.getSchemaName());
@@ -195,9 +194,9 @@ public class TableCliServiceImpl implements TableCliService {
     public Table createTablesTableFromTableSpecList(Collection<TableWrapper> sourceTableWrappers, UserHome userHome) {
         Table resultTable = Table.create().addColumns(
                 LongColumn.create("Id"),
-                StringColumn.create("Connection name"),
-                StringColumn.create("Schema name"),
-                StringColumn.create("Table name"),
+                TextColumn.create("Connection name"),
+                TextColumn.create("Schema name"),
+                TextColumn.create("Table name"),
                 IntColumn.create("Column count"));
 
         for( TableWrapper sourceTableWrapper : sourceTableWrappers) {
@@ -329,7 +328,12 @@ public class TableCliServiceImpl implements TableCliService {
             return cliOperationStatus;
         }
 
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.tableService.deleteTables(tableWrappers);
+        Map<String, Iterable<PhysicalTableName>> connToTablesMap = new HashMap<>();
+        List<PhysicalTableName> tableNames = tableWrappers.stream()
+                .map(TableWrapper::getPhysicalTableName)
+                .collect(Collectors.toList());
+        connToTablesMap.put(connectionName, tableNames);
+        List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs =this.tableService.deleteTables(connToTablesMap);
 
         try {
             for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {

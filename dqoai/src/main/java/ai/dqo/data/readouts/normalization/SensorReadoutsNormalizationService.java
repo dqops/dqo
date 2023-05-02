@@ -17,7 +17,7 @@ package ai.dqo.data.readouts.normalization;
 
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 
 /**
  * Service that parses datasets with results returned by a sensor query.
@@ -29,11 +29,11 @@ public interface SensorReadoutsNormalizationService {
      * prepares the data for using in a sensor. Returns a new table with fixed column types.
      *
      * @param sensorExecutionResult Sensor execution result with the table that contains returned data.
-     * @param timeSeriesGradient    Time series gradient.
+     * @param timePeriodGradient    Time series gradient.
      * @param sensorRunParameters   Sensor run parameters.
      * @return Metadata object that describes the sensor result table. Contains also a normalized results table.
      */
     SensorReadoutsNormalizedResult normalizeResults(SensorExecutionResult sensorExecutionResult,
-                                                    TimeSeriesGradient timeSeriesGradient,
+                                                    TimePeriodGradient timePeriodGradient,
                                                     SensorExecutionRunParameters sensorRunParameters);
 }

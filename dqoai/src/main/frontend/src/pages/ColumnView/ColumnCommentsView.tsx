@@ -28,14 +28,14 @@ const ColumnCommentsView = ({
   columnName
 }: IColumnCommentsViewProps) => {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
-  const { columnBasic, comments, isUpdating, isUpdatedComments } = useSelector(getFirstLevelState(checkTypes));
+  const { columnBasic, updatedComments, isUpdating, isUpdatedComments } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [text, setText] = useState('');
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
     if (
-      !comments?.length ||
+      !updatedComments?.length ||
       columnBasic?.connection_name !== connectionName ||
       columnBasic?.table?.schema_name !== schemaName ||
       columnBasic?.table?.table_name !== tableName ||
@@ -56,7 +56,7 @@ const ColumnCommentsView = ({
         schemaName,
         tableName,
         columnName,
-        [...comments, ...text ? [{
+        [...updatedComments, ...text ? [{
           comment: text,
           comment_by: 'user',
           date: new Date().toISOString()
@@ -64,12 +64,14 @@ const ColumnCommentsView = ({
       )
     );
     await dispatch(
-      getColumnComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+      getColumnComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, false)
     );
+    dispatch(setIsUpdatedComments(checkTypes, firstLevelActiveTab, false));
   };
 
   const handleChange = (value: CommentSpec[]) => {
     dispatch(setUpdatedComments(checkTypes, firstLevelActiveTab, value));
+    dispatch(setIsUpdatedComments(checkTypes, firstLevelActiveTab, true));
   };
 
   return (
@@ -84,7 +86,7 @@ const ColumnCommentsView = ({
         setText={setText}
         isUpdated={isUpdatedComments}
         setIsUpdated={(value) => dispatch(setIsUpdatedComments(checkTypes, firstLevelActiveTab, value))}
-        comments={comments}
+        comments={updatedComments}
         onChange={handleChange}
       />
     </div>

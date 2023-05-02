@@ -86,7 +86,7 @@ ___
 column/nulls/not_null_percent
 ```
 **Description**  
-Column level sensor that calculates the count of not null values in a column.
+Column level sensor that calculates the percentage of not null values in a column.
 
 
 

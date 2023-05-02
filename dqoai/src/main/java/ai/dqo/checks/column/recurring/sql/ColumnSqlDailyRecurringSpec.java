@@ -45,13 +45,13 @@ public class ColumnSqlDailyRecurringSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression).")
+    @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnSqlConditionPassedPercentCheckSpec dailySqlConditionPassedPercentOnColumn;
 
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression).")
+    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression). Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnSqlConditionFailedCountCheckSpec dailySqlConditionFailedCountOnColumn;
 
-    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
+    @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnSqlAggregateExprCheckSpec dailySqlAggregateExprColumn;
 
     /**

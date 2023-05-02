@@ -1,3 +1,18 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package ai.dqo.data.normalization;
 
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
@@ -23,7 +38,7 @@ public interface CommonTableNormalizationService {
      * @param rowCount Number of rows in the result table or 1 when the table is null.
      * @return Array of data stream level columns that were found.
      */
-    StringColumn[] extractAndNormalizeDataStreamLevelColumns(Table resultsTable, DataStreamMappingSpec dataStreamMappingSpec, int rowCount);
+    TextColumn[] extractAndNormalizeDataStreamLevelColumns(Table resultsTable, DataStreamMappingSpec dataStreamMappingSpec, int rowCount);
 
     /**
      * Calculates a data_stream_hash hash from all the data stream level columns. Returns 0 when there are no stream levels.
@@ -32,7 +47,7 @@ public interface CommonTableNormalizationService {
      * @param rowIndex               Row index to calculate.
      * @return Data stream hash.
      */
-    long calculateDataStreamHashForRow(StringColumn[] dataStreamLevelColumns, int rowIndex);
+    long calculateDataStreamHashForRow(TextColumn[] dataStreamLevelColumns, int rowIndex);
 
     /**
      * Creates and calculates a data_stream_hash column from all stream_level_X columns (stream_level_1, stream_level_2, ..., stream_level_9).
@@ -41,7 +56,7 @@ public interface CommonTableNormalizationService {
      * @param rowCount               Count of rows to process.
      * @return Data stream hash column.
      */
-    LongColumn createDataStreamHashColumn(StringColumn[] dataStreamLevelColumns, int rowCount);
+    LongColumn createDataStreamHashColumn(TextColumn[] dataStreamLevelColumns, int rowCount);
 
     /**
      * Calculates a data_stream_name name from all the data stream level columns. Returns 0 when there are no stream levels.
@@ -50,7 +65,7 @@ public interface CommonTableNormalizationService {
      * @param rowIndex               Row index to calculate.
      * @return Data stream name.
      */
-    String calculateDataStreamNameForRow(StringColumn[] dataStreamLevelColumns, int rowIndex);
+    String calculateDataStreamNameForRow(TextColumn[] dataStreamLevelColumns, int rowIndex);
 
     /**
      * Creates and calculates a data_stream_name column from all stream_level_X columns (stream_level_1, stream_level_2, ..., stream_level_9).
@@ -60,7 +75,7 @@ public interface CommonTableNormalizationService {
      * @param rowCount               Count of rows to process.
      * @return Data stream name column.
      */
-    StringColumn createDataStreamNameColumn(StringColumn[] dataStreamLevelColumns, int rowCount);
+    TextColumn createDataStreamNameColumn(TextColumn[] dataStreamLevelColumns, int rowCount);
 
     /**
      * Creates and populates a time_series_uuid column that is a hash of the check hash (or profiler hash) and the data_stream_hash and uniquely identifies a time series.
@@ -72,11 +87,11 @@ public interface CommonTableNormalizationService {
      * @param rowCount                   Row count.
      * @return Time series uuid column, filled with values.
      */
-    StringColumn createTimeSeriesUuidColumn(LongColumn sortedDataStreamHashColumn,
-                                            long checkOrProfilerHash,
-                                            long tableHash,
-                                            long columnHash,
-                                            int rowCount);
+    TextColumn createTimeSeriesUuidColumn(LongColumn sortedDataStreamHashColumn,
+                                          long checkOrProfilerHash,
+                                          long tableHash,
+                                          long columnHash,
+                                          int rowCount);
 
     /**
      * Creates and fills the "id" column by combining hashes.
@@ -89,12 +104,12 @@ public interface CommonTableNormalizationService {
      * @param rowCount                   Row count.
      * @return ID column, filled with values.
      */
-    StringColumn createRowIdColumn(LongColumn sortedDataStreamHashColumn,
-                                   DateTimeColumn sortedTimePeriodColumn,
-                                   long checkHash,
-                                   long tableHash,
-                                   long columnHash,
-                                   int rowCount);
+    TextColumn createRowIdColumn(LongColumn sortedDataStreamHashColumn,
+                                 DateTimeColumn sortedTimePeriodColumn,
+                                 long checkHash,
+                                 long tableHash,
+                                 long columnHash,
+                                 int rowCount);
 
     /**
      * Creates and fills the "id" column by combining hashes.
@@ -107,10 +122,10 @@ public interface CommonTableNormalizationService {
      * @param rowCount                   Row count.
      * @return ID column, filled with values.
      */
-    StringColumn createRowIdColumn(LongColumn sortedDataStreamHashColumn,
-                                   InstantColumn sortedTimePeriodColumn,
-                                   long checkHash,
-                                   long tableHash,
-                                   long columnHash,
-                                   int rowCount);
+    TextColumn createRowIdColumn(LongColumn sortedDataStreamHashColumn,
+                                 InstantColumn sortedTimePeriodColumn,
+                                 long checkHash,
+                                 long tableHash,
+                                 long columnHash,
+                                 int rowCount);
 }

@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.sensors;
 
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -147,7 +147,7 @@ public class TimeWindowFilterParameters implements Cloneable {
      * @return New object with user filters applied.
      */
     public TimeWindowFilterParameters withUserFilters(TimeWindowFilterParameters userFilterParameters,
-                                                      TimeSeriesGradient partitionedChecksTimeScale) {
+                                                      TimePeriodGradient partitionedChecksTimeScale) {
         if (userFilterParameters == null) {
             return this;
         }
@@ -170,7 +170,7 @@ public class TimeWindowFilterParameters implements Cloneable {
             cloned.monthlyPartitioningIncludeCurrentMonth = null;
         }
 
-        if (partitionedChecksTimeScale == TimeSeriesGradient.day) {
+        if (partitionedChecksTimeScale == TimePeriodGradient.day) {
             if (userFilterParameters.dailyPartitioningRecentDays != null) {
                 cloned.dailyPartitioningRecentDays = userFilterParameters.dailyPartitioningRecentDays;
             }
@@ -179,7 +179,7 @@ public class TimeWindowFilterParameters implements Cloneable {
             }
         }
 
-        if (partitionedChecksTimeScale == TimeSeriesGradient.month) {
+        if (partitionedChecksTimeScale == TimePeriodGradient.month) {
             if (userFilterParameters.monthlyPartitioningRecentMonths != null) {
                 cloned.monthlyPartitioningRecentMonths = userFilterParameters.monthlyPartitioningRecentMonths;
             }

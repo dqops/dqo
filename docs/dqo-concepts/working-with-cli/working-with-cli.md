@@ -37,5 +37,5 @@ dqo.ai> check run --help
 
 ## List of commands
 
-[You can find the complete list of commands and parameters in Command-line interface section](../../command-line-interface/index.md).
+You can find the complete list of commands and parameters in Command-line interface section
 

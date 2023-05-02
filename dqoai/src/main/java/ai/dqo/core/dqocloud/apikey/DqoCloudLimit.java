@@ -28,6 +28,12 @@ public enum DqoCloudLimit {
     CONNECTIONS_LIMIT,
 
     /**
+     * Users limit.
+     */
+    @JsonProperty("ul")
+    USERS_LIMIT,
+
+    /**
      * Months limit - limit of the number of past months that are stored.
      */
     @JsonProperty("ml")
@@ -43,5 +49,11 @@ public enum DqoCloudLimit {
      * Total tables limit.
      */
     @JsonProperty("tl")
-    TABLES_LIMIT
+    TABLES_LIMIT,
+
+    /**
+     * Parallel jobs limit.
+     */
+    @JsonProperty("jl")
+    JOBS_LIMIT
 }
