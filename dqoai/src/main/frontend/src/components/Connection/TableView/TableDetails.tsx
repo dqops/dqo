@@ -20,15 +20,8 @@ const TableDetails = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
-    if (
-      !tableBasic ||
-      tableBasic?.connection_name !== connection ||
-      tableBasic?.target?.schema_name !== schema ||
-      tableBasic?.target?.table_name !== table
-    ) {
-      dispatch(getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table));
-    }
-  }, [connection, schema, table, tableBasic]);
+    dispatch(getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table));
+  }, [checkTypes, firstLevelActiveTab, connection, schema, table]);
 
   const handleChange = (obj: any) => {
     dispatch(
