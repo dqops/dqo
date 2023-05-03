@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import SvgIcon from '../SvgIcon';
 import { Dialog, Tooltip } from '@material-tailwind/react';
@@ -19,16 +19,24 @@ const StringListField = ({
   value,
   tooltipText,
   onChange,
-  onSave,
 }: IStringListFieldProps) => {
   const [open, setOpen] = useState(false);
+  const [labels, setLabels] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (open) {
+      setLabels(value);
+    }
+  }, [value, open]);
 
   const handleSave = () => {
-    if (onSave) {
-      onSave();
-    }
+    onChange(labels);
     setOpen(false);
   };
+
+  const handleChange = useCallback((values: string[]) => {
+    setLabels(values);
+  }, [])
 
   return (
     <div>
@@ -62,7 +70,7 @@ const StringListField = ({
       </div>
       <Dialog open={open} handler={() => setOpen(false)}>
         <div className="p-4">
-          <LabelsView labels={value} onChange={onChange} />
+          <LabelsView labels={labels} onChange={handleChange} hasAdd />
           <div className="flex space-x-4 p-4 justify-end">
             <Button
               color="primary"
