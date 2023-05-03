@@ -39,7 +39,6 @@ const RecurringView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const {
-    tableBasic,
     dailyRecurring,
     monthlyRecurring,
     isUpdatedDailyRecurring,
@@ -49,25 +48,11 @@ const RecurringView = () => {
   } = useSelector(getFirstLevelState(checkTypes));
 
   useEffect(() => {
-    if (
-      !dailyRecurring ||
-      tableBasic?.connection_name !== connectionName ||
-      tableBasic?.target?.schema_name !== schemaName ||
-      tableBasic?.target?.table_name !== tableName
-    ) {
-      dispatch(getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
-    }
-    if (
-      !monthlyRecurring ||
-      tableBasic?.connection_name !== connectionName ||
-      tableBasic?.target?.schema_name !== schemaName ||
-      tableBasic?.target?.table_name !== tableName
-    ) {
-      dispatch(
-        getTableMonthlyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
-      );
-    }
-  }, [connectionName, schemaName, tableName, tableBasic]);
+    dispatch(getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
+    dispatch(
+      getTableMonthlyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+    );
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     if (tab === 'daily') {
