@@ -151,6 +151,31 @@ export const updateSensor = (sensorName: string, body: SensorModel) => async (di
   }
 };
 
+export const createSensorRequest = () => ({
+  type: SENSOR_ACTION.CREATE_SENSOR_DETAIL
+});
+
+export const createSensorSuccess = (data: SensorModel) => ({
+  type: SENSOR_ACTION.CREATE_SENSOR_DETAIL_SUCCESS,
+  data
+});
+
+export const createSensorFailed = (error: unknown) => ({
+  type: SENSOR_ACTION.CREATE_SENSOR_DETAIL_FAILED,
+  error
+});
+
+export const createSensor = (sensorName: string, body: SensorModel) => async (dispatch: any) => {
+  dispatch(createSensorRequest());
+  try {
+    const res: AxiosResponse<SensorModel> =
+    await SensorsApi.createSensor(sensorName, body);
+    dispatch(createSensorSuccess(res.data));
+    dispatch(getSensorFolderTree());
+  } catch (err) {
+    dispatch(createSensorFailed(err));
+  }
+};
 
 export const updateRuleRequest = () => ({
   type: SENSOR_ACTION.UPDATE_RULE_DETAIL
