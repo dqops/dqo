@@ -46,6 +46,11 @@ export const getSensorFolderTree = () => async (dispatch: Dispatch) => {
   }
 };
 
+export const updateSensorFolderTree = (data: SensorBasicFolderModel) => ({
+  type: SENSOR_ACTION.UPDATE_SENSOR_FOLDER_TREE,
+  data
+});
+
 export const toggleSensorFolderTree = (key: string) => ({
   type: SENSOR_ACTION.TOGGLE_SENSOR_FOLDER,
   key,

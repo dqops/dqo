@@ -63,6 +63,11 @@ const sensorReducer = (state = initialState, action: any) => {
         sensorFolderTree: action.data,
         error: null
       };
+    case SENSOR_ACTION.UPDATE_SENSOR_FOLDER_TREE:
+      return {
+        ...state,
+        sensorFolderTree: action.data,
+      };
     case SENSOR_ACTION.GET_SENSOR_FOLDER_TREE_ERROR:
       return {
         ...state,

@@ -65,7 +65,10 @@ export const DefinitionTree = () => {
               >
                 <SvgIcon name={sensorState[key] ? "folder" : "closed-folder"} className="w-4 h-4 min-w-4" />
                 <div className="text-[13px] leading-1.5 truncate">{key}</div>
-                <SensorContextMenu sensor={folder?.folders?.[key]} path={[...path || [], key]} />
+                <SensorContextMenu
+                  folder={folder?.folders?.[key]}
+                  path={[...path || [], key]}
+                />
               </div>
               {sensorState[key] && (
                 <div className="ml-2">

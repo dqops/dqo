@@ -10,15 +10,17 @@ import { SensorBasicFolderModel } from "../../api";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { addFirstLevelTab } from "../../redux/actions/sensor.actions";
 import { ROUTES } from "../../shared/routes";
+import AddFolderDialog from "./AddFolderDialog";
 
 interface SensorContextMenuProps {
-  sensor?: SensorBasicFolderModel;
+  folder?: SensorBasicFolderModel;
   path?: string[];
 }
 
-const SensorContextMenu = ({ sensor, path }: SensorContextMenuProps) => {
+const SensorContextMenu = ({ folder, path }: SensorContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const dispatch = useActionDispatch();
+  const [isOpen, setIsOpen] = useState(false);
 
   const openPopover = (e: MouseEvent) => {
     setOpen(!open);
@@ -26,7 +28,6 @@ const SensorContextMenu = ({ sensor, path }: SensorContextMenuProps) => {
   };
 
   const openAddNewSensor = () => {
-    console.log('path', path);
     dispatch(addFirstLevelTab({
       url: ROUTES.SENSOR_DETAIL([...path || [], "new_sensor"].join("-")),
       value: ROUTES.SENSOR_DETAIL_VALUE([...path || [], "new_sensor"].join("-")),
@@ -36,6 +37,15 @@ const SensorContextMenu = ({ sensor, path }: SensorContextMenuProps) => {
       },
       label: "New sensor"
     }));
+  };
+
+  const openAddNewFolder = () => {
+    setIsOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsOpen(false);
+    setOpen(false);
   };
 
   return (
@@ -57,9 +67,16 @@ const SensorContextMenu = ({ sensor, path }: SensorContextMenuProps) => {
         <div onClick={(e) => e.stopPropagation()}>
           <div
             className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+            onClick={openAddNewFolder}
           >
             Add new folder
           </div>
+          <AddFolderDialog
+            open={isOpen}
+            onClose={closeModal}
+            path={path}
+            folder={folder}
+          />
         </div>
       </PopoverContent>
     </Popover>
