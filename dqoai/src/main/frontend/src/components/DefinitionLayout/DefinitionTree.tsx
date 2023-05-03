@@ -9,6 +9,7 @@ import SvgIcon from "../SvgIcon";
 import { getRuleFolderTree, toggleRuleFolderTree } from "../../redux/actions/rule.actions";
 import clsx from "clsx";
 import { ROUTES } from "../../shared/routes";
+import SensorContextMenu from "./SensorContextMenu";
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
@@ -50,7 +51,7 @@ export const DefinitionTree = () => {
     }))
   };
 
-  const renderSensorFolderTree = (folder?: SensorBasicFolderModel) => {
+  const renderSensorFolderTree = (folder?: SensorBasicFolderModel, path?: string[]) => {
     if (!folder) return null;
 
     return (
@@ -64,10 +65,11 @@ export const DefinitionTree = () => {
               >
                 <SvgIcon name={sensorState[key] ? "folder" : "closed-folder"} className="w-4 h-4 min-w-4" />
                 <div className="text-[13px] leading-1.5 truncate">{key}</div>
+                <SensorContextMenu sensor={folder?.folders?.[key]} path={[...path || [], key]} />
               </div>
               {sensorState[key] && (
                 <div className="ml-2">
-                  {folder?.folders && renderSensorFolderTree(folder?.folders[key])}
+                  {folder?.folders && renderSensorFolderTree(folder?.folders[key], [...path || [], key])}
                 </div>
               )}
             </div>
@@ -138,7 +140,7 @@ export const DefinitionTree = () => {
     <div className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-6 bg-white">
       <div className="mb-4">
         <div className="text-sm text-gray-700 font-semibold mb-2">Sensors:</div>
-        {renderSensorFolderTree(sensorFolderTree)}
+        {renderSensorFolderTree(sensorFolderTree, [])}
       </div>
 
       <div>
