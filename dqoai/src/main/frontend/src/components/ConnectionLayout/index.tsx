@@ -24,6 +24,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   };
 
   const closeTab = (value: string) => {
+    console.log('closeTab', value);
     dispatch(closeFirstLevelTab(sourceRoute, value))
   };
 
@@ -41,6 +42,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   }, [activeTab])
 
 
+  console.log('activeTab', activeTab, pageTabs);
   return (
     <MainLayout>
       <div className="flex-1 h-full flex flex-col">
@@ -55,11 +57,11 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
           className="flex-1 bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
           style={{ maxHeight: "calc(100vh - 80px)" }}
         >
-          {!!activeTab && (
+          {!!activeTab && pageTabs.length ? (
             <div>
               {children}
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </MainLayout>
