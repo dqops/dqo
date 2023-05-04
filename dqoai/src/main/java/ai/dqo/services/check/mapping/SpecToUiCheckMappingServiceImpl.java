@@ -426,6 +426,10 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
             SensorDefinitionFindResult providerSensorDefinition = this.sensorDefinitionFindService.findProviderSensorDefinition(
                     executionContext, sensorDefinitionName, providerType);
 
+            if (providerSensorDefinition == null) {
+                return null; // skip this check
+            }
+
             ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorDefinition.getProviderSensorDefinitionSpec();
             if (providerSensorDefinitionSpec == null) {
                 return null; // skip this check
