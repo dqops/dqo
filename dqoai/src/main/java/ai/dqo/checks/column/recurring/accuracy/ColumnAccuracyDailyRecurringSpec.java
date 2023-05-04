@@ -44,7 +44,7 @@ public class ColumnAccuracyDailyRecurringSpec extends AbstractCheckCategorySpec 
             put("daily_min_match_percent", o -> o.dailyMinMatchPercent);
             put("daily_max_match_percent", o -> o.dailyMaxMatchPercent);
             put("daily_average_match_percent", o -> o.dailyAverageMatchPercent);
-            put("daily_row_count_match_percent", o -> o.dailyRowCountMatchPercent);
+            put("daily_not_null_count_match_percent", o -> o.dailyNotNullCountMatchPercent);
 
         }
     };
@@ -62,7 +62,7 @@ public class ColumnAccuracyDailyRecurringSpec extends AbstractCheckCategorySpec 
     private ColumnAccuracyAverageMatchPercentCheckSpec dailyAverageMatchPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnAccuracyNotNullCountMatchPercentCheckSpec dailyRowCountMatchPercent;
+    private ColumnAccuracyNotNullCountMatchPercentCheckSpec dailyNotNullCountMatchPercent;
 
     /**
      * Returns an accuracy total sum match percent check specification.
@@ -141,18 +141,18 @@ public class ColumnAccuracyDailyRecurringSpec extends AbstractCheckCategorySpec 
      * Returns an accuracy row count percent check specification.
      * @return Accuracy row count percent check specification.
      */
-    public ColumnAccuracyNotNullCountMatchPercentCheckSpec getDailyRowCountMatchPercent() {
-        return dailyRowCountMatchPercent;
+    public ColumnAccuracyNotNullCountMatchPercentCheckSpec getDailyNotNullCountMatchPercent() {
+        return dailyNotNullCountMatchPercent;
     }
 
     /**
      * Sets a new definition of an accuracy row count percent check.
-     * @param dailyRowCountMatchPercent Accuracy row count percent check specification.
+     * @param dailyNotNullCountMatchPercent Accuracy row count percent check specification.
      */
-    public void setDailyRowCountMatchPercent(ColumnAccuracyNotNullCountMatchPercentCheckSpec dailyRowCountMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyRowCountMatchPercent, dailyRowCountMatchPercent));
-        this.dailyRowCountMatchPercent = dailyRowCountMatchPercent;
-        propagateHierarchyIdToField(dailyRowCountMatchPercent, "daily_row_count_match_percent");
+    public void setDailyNotNullCountMatchPercent(ColumnAccuracyNotNullCountMatchPercentCheckSpec dailyNotNullCountMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyNotNullCountMatchPercent, dailyNotNullCountMatchPercent));
+        this.dailyNotNullCountMatchPercent = dailyNotNullCountMatchPercent;
+        propagateHierarchyIdToField(dailyNotNullCountMatchPercent, "daily_not_null_count_match_percent");
     }
 
     /**

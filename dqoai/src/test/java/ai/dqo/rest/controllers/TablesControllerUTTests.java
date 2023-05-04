@@ -163,7 +163,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(4, result.getCategories().size());
+        Assertions.assertEquals(5, result.getCategories().size());
     }
 
     @Test
@@ -238,7 +238,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(4, result.getCategories().size());
+        Assertions.assertEquals(5, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -254,7 +254,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(4, result.getCategories().size());
+        Assertions.assertEquals(5, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -285,7 +285,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(4, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(5, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -301,7 +301,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(4, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(5, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest

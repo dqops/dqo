@@ -100,7 +100,7 @@ public class ColumnAccuracyNotNullCountMatchPercentSensorParametersSpecBigQueryT
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/accuracy/row_count_match_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/accuracy/not_null_count_match_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

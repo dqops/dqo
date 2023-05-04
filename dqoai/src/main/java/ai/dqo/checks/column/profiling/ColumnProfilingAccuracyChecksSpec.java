@@ -40,7 +40,7 @@ public class ColumnProfilingAccuracyChecksSpec extends AbstractCheckCategorySpec
             put("min_match_percent", o -> o.minMatchPercent);
             put("max_match_percent", o -> o.maxMatchPercent);
             put("average_match_percent", o -> o.averageMatchPercent);
-            put("row_count_match_percent", o -> o.rowCountMatchPercent);
+            put("not_null_count_match_percent", o -> o.notNullCountMatchPercent);
         }
     };
 
@@ -57,7 +57,7 @@ public class ColumnProfilingAccuracyChecksSpec extends AbstractCheckCategorySpec
     private ColumnAccuracyAverageMatchPercentCheckSpec averageMatchPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnAccuracyNotNullCountMatchPercentCheckSpec rowCountMatchPercent;
+    private ColumnAccuracyNotNullCountMatchPercentCheckSpec notNullCountMatchPercent;
 
     /**
      * Returns an accuracy total sum match percent check specification.
@@ -135,18 +135,18 @@ public class ColumnProfilingAccuracyChecksSpec extends AbstractCheckCategorySpec
      * Returns an accuracy row count percent check specification.
      * @return Accuracy row count percent check specification.
      */
-    public ColumnAccuracyNotNullCountMatchPercentCheckSpec getRowCountMatchPercent() {
-        return rowCountMatchPercent;
+    public ColumnAccuracyNotNullCountMatchPercentCheckSpec getNotNullCountMatchPercent() {
+        return notNullCountMatchPercent;
     }
 
     /**
      * Sets a new definition of an accuracy row count percent check.
-     * @param rowCountMatchPercent Accuracy row count percent check specification.
+     * @param notNullCountMatchPercent Accuracy row count percent check specification.
      */
-    public void setRowCountMatchPercent(ColumnAccuracyNotNullCountMatchPercentCheckSpec rowCountMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.rowCountMatchPercent, rowCountMatchPercent));
-        this.rowCountMatchPercent = rowCountMatchPercent;
-        propagateHierarchyIdToField(rowCountMatchPercent, "row_count_match_percent");
+    public void setNotNullCountMatchPercent(ColumnAccuracyNotNullCountMatchPercentCheckSpec notNullCountMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.notNullCountMatchPercent, notNullCountMatchPercent));
+        this.notNullCountMatchPercent = notNullCountMatchPercent;
+        propagateHierarchyIdToField(notNullCountMatchPercent, "not_null_count_match_percent");
     }
 
     /**
