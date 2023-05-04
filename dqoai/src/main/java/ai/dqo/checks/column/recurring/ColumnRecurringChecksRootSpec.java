@@ -34,8 +34,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnRecurringSpec extends AbstractSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnRecurringSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class ColumnRecurringChecksRootSpec extends AbstractSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnRecurringChecksRootSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("daily", o -> o.daily);
             put("monthly", o -> o.monthly);

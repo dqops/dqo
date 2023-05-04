@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
-import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.incidents.IncidentGroupingSpec;
@@ -581,12 +581,12 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     /**
      * Accepts a container of column level recurring checks (daily, monthly, etc.)
      *
-     * @param columnRecurringSpec Column level recurring checks container.
+     * @param columnRecurringChecksRootSpec Column level recurring checks container.
      * @param parameter             Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnRecurringSpec columnRecurringSpec, T parameter) {
+    public TreeNodeTraversalResult accept(ColumnRecurringChecksRootSpec columnRecurringChecksRootSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 

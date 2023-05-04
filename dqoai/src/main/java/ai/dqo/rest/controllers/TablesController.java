@@ -32,6 +32,7 @@ import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.statistics.services.StatisticsDataService;
 import ai.dqo.data.statistics.services.models.StatisticsResultsForTableModel;
 import ai.dqo.execution.ExecutionContext;
+import ai.dqo.metadata.basespecs.ElementWrapper;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
@@ -140,7 +141,7 @@ public class TablesController {
                 .stream()
                 .filter(tw -> Objects.equals(tw.getPhysicalTableName().getSchemaName(), schemaName))
                 .sorted(Comparator.comparing(tw -> tw.getPhysicalTableName().getTableName()))
-                .map(tw -> tw.getSpec())
+                .map(TableWrapper::getSpec)
                 .collect(Collectors.toList());
 
         Stream<TableBasicModel> modelStream = tableSpecs.stream()
@@ -1884,7 +1885,7 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling")
-    @ApiOperation(value = "updateTableProfiling", notes = "Updates the list of table level data quality profiling checks on an existing table.")
+    @ApiOperation(value = "updateTableProfilingChecks", notes = "Updates the list of table level data quality profiling checks on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table level data quality profiling checks successfully updated"),

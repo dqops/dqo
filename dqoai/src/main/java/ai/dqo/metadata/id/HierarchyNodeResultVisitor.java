@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
-import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.incidents.IncidentGroupingSpec;
@@ -410,11 +410,11 @@ public interface HierarchyNodeResultVisitor<P, R> {
 
     /**
      * Accepts a container of column level recurring checks (daily, monthly, etc.)
-     * @param columnRecurringSpec Column level recurring checks container.
+     * @param columnRecurringChecksRootSpec Column level recurring checks container.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(ColumnRecurringSpec columnRecurringSpec, P parameter);
+    R accept(ColumnRecurringChecksRootSpec columnRecurringChecksRootSpec, P parameter);
 
     /**
      * Accepts a container of column level partitioned checks (daily, monthly, etc.)

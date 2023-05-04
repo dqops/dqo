@@ -19,7 +19,7 @@ import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingNullsChecksSpec;
-import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
 import ai.dqo.checks.column.recurring.nulls.ColumnNullsDailyRecurringSpec;
 import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
@@ -287,7 +287,7 @@ public class ColumnsControllerUTTests extends BaseTest {
     }
 
     @Test
-    void updateColumnRecurringDaily_whenColumnAndRecurringRequested_updatesRecurring() {
+    void updateColumnRecurringChecksDaily_whenColumnAndRecurringRequested_updatesRecurring() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
@@ -307,10 +307,10 @@ public class ColumnsControllerUTTests extends BaseTest {
         nullDailyRecurring.setDailyNullsCount(nullsChecksSpec);
         ColumnDailyRecurringCheckCategoriesSpec dailyRecurring = new ColumnDailyRecurringCheckCategoriesSpec();
         dailyRecurring.setNulls(nullDailyRecurring);
-        ColumnRecurringSpec sampleRecurring = new ColumnRecurringSpec();
+        ColumnRecurringChecksRootSpec sampleRecurring = new ColumnRecurringChecksRootSpec();
         sampleRecurring.setDaily(dailyRecurring);
         
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnRecurringDaily(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnRecurringChecksDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),

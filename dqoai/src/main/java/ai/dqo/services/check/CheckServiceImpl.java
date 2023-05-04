@@ -35,6 +35,7 @@ import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
 import ai.dqo.services.check.mapping.UIAllChecksPatchApplier;
 import ai.dqo.services.check.mapping.models.*;
+import ai.dqo.services.check.mapping.utils.UIAllChecksModelUtility;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -133,6 +134,16 @@ public class CheckServiceImpl implements CheckService {
         }
 
         List<UIAllChecksModel> patches = this.uiAllChecksModelFactory.fromCheckSearchFilters(parameters.getCheckSearchFilters());
+        if (parameters.getSelectedTablesToColumns() != null) {
+            for (UIAllChecksModel patch: patches) {
+                UIAllChecksModelUtility.pruneToConcreteTargets(parameters.getSelectedTablesToColumns(), patch);
+            }
+
+            // Discard empty models after pruning.
+            patches = patches.stream()
+                    .filter(patch -> patch.getTableChecksModel() != null || patch.getColumnChecksModel() != null)
+                    .collect(Collectors.toList());
+        }
 
         Stream<UICheckContainerModel> columnCheckContainers = patches.stream()
                 .map(UIAllChecksModel::getColumnChecksModel)

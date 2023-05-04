@@ -42,26 +42,18 @@ import java.util.stream.Stream;
  */
 @Service
 public class CheckCliServiceImpl implements CheckCliService {
-    private CheckService checkService;
-    private UIAllChecksModelFactory uiAllChecksModelFactory;
-    private UIAllChecksPatchApplier uiAllChecksPatchApplier;
-    private UserHomeContextFactory userHomeContextFactory;
+    private final CheckService checkService;
+    private final UIAllChecksModelFactory uiAllChecksModelFactory;
 
     /**
      * Default injection constructor.
      * @param uiAllChecksModelFactory UI all checks patch factory for creating patches to be updated.
-     * @param uiAllChecksPatchApplier UI all checks patch applier for affecting the hierarchy tree with changes from the patch.
-     * @param userHomeContextFactory User home context factory.
      */
     @Autowired
     public CheckCliServiceImpl(CheckService checkService,
-            UIAllChecksModelFactory uiAllChecksModelFactory,
-                               UIAllChecksPatchApplier uiAllChecksPatchApplier,
-                               UserHomeContextFactory userHomeContextFactory) {
+                               UIAllChecksModelFactory uiAllChecksModelFactory) {
         this.checkService = checkService;
         this.uiAllChecksModelFactory = uiAllChecksModelFactory;
-        this.uiAllChecksPatchApplier = uiAllChecksPatchApplier;
-        this.userHomeContextFactory = userHomeContextFactory;
     }
 
     /**

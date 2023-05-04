@@ -21,7 +21,7 @@ import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
 import ai.dqo.checks.column.recurring.ColumnMonthlyRecurringCheckCategoriesSpec;
-import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
@@ -112,7 +112,7 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
                         checkSearchFilters, null, tableSpec,null, null),
                 profilingChecks.getCheckTarget(), profilingChecks.getCheckType(), profilingChecks.getCheckTimeScale());
 
-        ColumnRecurringSpec recurring = Objects.requireNonNullElseGet(columnSpec.getRecurringChecks(), ColumnRecurringSpec::new);
+        ColumnRecurringChecksRootSpec recurring = Objects.requireNonNullElseGet(columnSpec.getRecurringChecks(), ColumnRecurringChecksRootSpec::new);
         ColumnDailyRecurringCheckCategoriesSpec dailyRecurring = Objects.requireNonNullElseGet(recurring.getDaily(), ColumnDailyRecurringCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyRecurring,
                         checkSearchFilters, null, tableSpec,null, null),

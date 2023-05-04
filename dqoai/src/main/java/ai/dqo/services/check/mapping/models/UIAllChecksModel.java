@@ -44,7 +44,7 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "UIAllChecksModel", description = "UI model that returns the model of selected information related to all checks on a connection level.")
-public class UIAllChecksModel implements Cloneable {
+public class UIAllChecksModel {
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
@@ -59,15 +59,4 @@ public class UIAllChecksModel implements Cloneable {
 
     @JsonPropertyDescription("Complete model of column-level checks on this connection.")
     private UIAllColumnChecksModel columnChecksModel;
-
-    @Override
-    public UIAllChecksModel clone() {
-        try {
-            UIAllChecksModel cloned = (UIAllChecksModel) super.clone();
-            if (runChecksJobTemplate)
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new UnsupportedOperationException("Cannot clone the object ", ex);
-        }
-    }
 }
