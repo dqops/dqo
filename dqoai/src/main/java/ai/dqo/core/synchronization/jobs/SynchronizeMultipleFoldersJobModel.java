@@ -87,4 +87,11 @@ public class SynchronizeMultipleFoldersJobModel {
      */
     @JsonPropertyDescription("Synchronize the \".data/errors\" folder.")
     private boolean dataErrors;
+
+
+    /**
+     * Synchronize the ".data/incidents" folder.
+     */
+    @JsonPropertyDescription("Synchronize the \".data/incidents\" folder.")
+    private boolean dataIncidents;
 }

@@ -38,6 +38,7 @@ public class DqoCloudWarehouseServiceImpl implements DqoCloudWarehouseService {
         put(DqoRoot.data_check_results, RefreshTableRequest.TableEnum.CHECK_RESULTS);
         put(DqoRoot.data_errors, RefreshTableRequest.TableEnum.ERRORS);
         put(DqoRoot.data_statistics, RefreshTableRequest.TableEnum.STATISTICS);
+        put(DqoRoot.data_incidents, RefreshTableRequest.TableEnum.INCIDENTS);
     }};
 
     private DqoCloudApiClientFactory dqoCloudApiClientFactory;
