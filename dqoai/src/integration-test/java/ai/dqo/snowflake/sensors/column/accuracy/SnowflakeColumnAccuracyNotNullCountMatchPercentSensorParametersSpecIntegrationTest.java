@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.postgresql.sensors.column.accuracy;
+package ai.dqo.snowflake.sensors.column.accuracy;
 
-import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyRowCountMatchPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyNotNullCountMatchPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -25,11 +24,12 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.accuracy.ColumnAccuracyRowCountMatchPercentSensorParametersSpec;
+import ai.dqo.sensors.column.accuracy.ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,22 +38,22 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class PostgresqlColumnAccuracyRowCountMatchPercentSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
-    private ColumnAccuracyRowCountMatchPercentSensorParametersSpec sut;
+public class SnowflakeColumnAccuracyNotNullCountMatchPercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+    private ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnAccuracyRowCountMatchPercentCheckSpec checkSpec;
+    private ColumnAccuracyNotNullCountMatchPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
     private SampleTableMetadata sampleTableMetadataReferenced;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip4_test, ProviderType.postgresql);
-        this.sampleTableMetadataReferenced = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip6_test, ProviderType.postgresql);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip4_test, ProviderType.snowflake);
+        this.sampleTableMetadataReferenced = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip6_test, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadata);
         IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadataReferenced);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnAccuracyRowCountMatchPercentSensorParametersSpec();
-        this.checkSpec = new ColumnAccuracyRowCountMatchPercentCheckSpec();
+        this.sut = new ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec();
+        this.checkSpec = new ColumnAccuracyNotNullCountMatchPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

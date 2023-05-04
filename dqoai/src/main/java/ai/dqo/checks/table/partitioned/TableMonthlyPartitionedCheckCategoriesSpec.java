@@ -53,6 +53,8 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
             put("standard", o -> o.standard);
             put("timeliness", o -> o.timeliness);
             put("sql", o -> o.sql);
+
+            // accuracy checks are not supported on partitioned checks yet
         }
     };
 

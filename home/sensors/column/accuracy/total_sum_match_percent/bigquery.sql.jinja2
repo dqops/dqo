@@ -1,12 +1,12 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 
 {%- macro render_referenced_table(referenced_table) -%}
-{% if referenced_table.find(".") < 0 %}
+{%- if referenced_table.find(".") < 0 -%}
    {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
 {%- else -%}
    {{ referenced_table }}
-{%- endif %}
-{%- endmacro %}
+{%- endif -%}
+{%- endmacro -%}
 
 SELECT
     (SELECT

@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.table.recurring.accuracy.TableAccuracyDailyRecurringSpec;
 import ai.dqo.checks.table.recurring.availability.TableAvailabilityDailyRecurringSpec;
 import ai.dqo.checks.table.recurring.sql.TableSqlDailyRecurringSpec;
 import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringSpec;
@@ -51,24 +52,30 @@ import java.util.Objects;
 public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<TableDailyRecurringCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-           put("standard", o -> o.standard);
-           put("timeliness", o -> o.timeliness);
-           put("sql", o -> o.sql);
-           put("availability", o -> o.availability);
+            put("standard", o -> o.standard);
+            put("timeliness", o -> o.timeliness);
+            put("accuracy", o -> o.accuracy);
+            put("sql", o -> o.sql);
+            put("availability", o -> o.availability);
         }
     };
 
-    @JsonPropertyDescription("Daily recurring of standard data quality checks")
+    @JsonPropertyDescription("Daily recurring standard data quality checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableStandardDailyRecurringSpec standard;
 
-    @JsonPropertyDescription("Daily recurring of timeliness checks")
+    @JsonPropertyDescription("Daily recurring timeliness checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableTimelinessDailyRecurringSpec timeliness;
 
-    @JsonPropertyDescription("Daily recurring of custom SQL checks")
+    @JsonPropertyDescription("Daily recurring accuracy checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableAccuracyDailyRecurringSpec accuracy;
+
+    @JsonPropertyDescription("Daily recurring custom SQL checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlDailyRecurringSpec sql;
@@ -112,6 +119,24 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
         this.setDirtyIf(!Objects.equals(this.timeliness, timeliness));
         this.timeliness = timeliness;
         this.propagateHierarchyIdToField(timeliness, "timeliness");
+    }
+
+    /**
+     * Returns a container of table level accuracy recurring checks.
+     * @return Table level accuracy checks.
+     */
+    public TableAccuracyDailyRecurringSpec getAccuracy() {
+        return accuracy;
+    }
+
+    /**
+     * Sets a new container of daily recurring accuracy checks.
+     * @param accuracy New daily recurring accuracy checks.
+     */
+    public void setAccuracy(TableAccuracyDailyRecurringSpec accuracy) {
+        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
+        this.accuracy = accuracy;
+        this.propagateHierarchyIdToField(accuracy, "accuracy");
     }
 
     /**

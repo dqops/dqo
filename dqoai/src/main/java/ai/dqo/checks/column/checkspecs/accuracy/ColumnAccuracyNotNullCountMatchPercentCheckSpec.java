@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxDiffPercentRule1ParametersSpec;
 import ai.dqo.rules.comparison.MaxDiffPercentRule2ParametersSpec;
 import ai.dqo.rules.comparison.MaxDiffPercentRule5ParametersSpec;
-import ai.dqo.sensors.column.accuracy.ColumnAccuracyRowCountMatchPercentSensorParametersSpec;
+import ai.dqo.sensors.column.accuracy.ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum percentage of difference of row count of a table column and of an row count of another table column.
+ * Column level check that ensures that there are no more than a maximum percentage of difference of the row count of a tested table's column (counting the not null values) and of an row count of another (reference) table, also counting all rows with not null values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAccuracyRowCountMatchPercentCheckSpec
-        extends AbstractCheckSpec<ColumnAccuracyRowCountMatchPercentSensorParametersSpec, MaxDiffPercentRule1ParametersSpec, MaxDiffPercentRule2ParametersSpec, MaxDiffPercentRule5ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyRowCountMatchPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnAccuracyNotNullCountMatchPercentCheckSpec
+        extends AbstractCheckSpec<ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec, MaxDiffPercentRule1ParametersSpec, MaxDiffPercentRule2ParametersSpec, MaxDiffPercentRule5ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyNotNullCountMatchPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,7 +49,7 @@ public class ColumnAccuracyRowCountMatchPercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAccuracyRowCountMatchPercentSensorParametersSpec parameters = new ColumnAccuracyRowCountMatchPercentSensorParametersSpec();
+    private ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec parameters = new ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -71,7 +71,7 @@ public class ColumnAccuracyRowCountMatchPercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnAccuracyRowCountMatchPercentSensorParametersSpec getParameters() {
+    public ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +79,7 @@ public class ColumnAccuracyRowCountMatchPercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnAccuracyRowCountMatchPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

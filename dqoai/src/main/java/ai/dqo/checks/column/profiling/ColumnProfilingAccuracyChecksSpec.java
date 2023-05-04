@@ -57,7 +57,7 @@ public class ColumnProfilingAccuracyChecksSpec extends AbstractCheckCategorySpec
     private ColumnAccuracyAverageMatchPercentCheckSpec averageMatchPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnAccuracyRowCountMatchPercentCheckSpec rowCountMatchPercent;
+    private ColumnAccuracyNotNullCountMatchPercentCheckSpec rowCountMatchPercent;
 
     /**
      * Returns an accuracy total sum match percent check specification.
@@ -135,7 +135,7 @@ public class ColumnProfilingAccuracyChecksSpec extends AbstractCheckCategorySpec
      * Returns an accuracy row count percent check specification.
      * @return Accuracy row count percent check specification.
      */
-    public ColumnAccuracyRowCountMatchPercentCheckSpec getRowCountMatchPercent() {
+    public ColumnAccuracyNotNullCountMatchPercentCheckSpec getRowCountMatchPercent() {
         return rowCountMatchPercent;
     }
 
@@ -143,7 +143,7 @@ public class ColumnProfilingAccuracyChecksSpec extends AbstractCheckCategorySpec
      * Sets a new definition of an accuracy row count percent check.
      * @param rowCountMatchPercent Accuracy row count percent check specification.
      */
-    public void setRowCountMatchPercent(ColumnAccuracyRowCountMatchPercentCheckSpec rowCountMatchPercent) {
+    public void setRowCountMatchPercent(ColumnAccuracyNotNullCountMatchPercentCheckSpec rowCountMatchPercent) {
         this.setDirtyIf(!Objects.equals(this.rowCountMatchPercent, rowCountMatchPercent));
         this.rowCountMatchPercent = rowCountMatchPercent;
         propagateHierarchyIdToField(rowCountMatchPercent, "row_count_match_percent");

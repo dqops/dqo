@@ -99,4 +99,22 @@ Table availability sensor that executes a row count query.
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+    FROM
+        (
+            SELECT
+                *
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    ```
 ___

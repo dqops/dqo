@@ -309,7 +309,7 @@ spec:
             ) AS actual_value,
         SYSDATETIMEOFFSET() AS time_period,
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -593,7 +593,7 @@ spec:
                 ) AS actual_value,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -917,7 +917,7 @@ spec:
             ) AS actual_value,
         SYSDATETIMEOFFSET() AS time_period,
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -1203,7 +1203,7 @@ spec:
                 ) AS actual_value,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -1527,7 +1527,7 @@ spec:
             ) AS actual_value,
         SYSDATETIMEOFFSET() AS time_period,
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -1813,7 +1813,7 @@ spec:
                 ) AS actual_value,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -2137,7 +2137,7 @@ spec:
             ) AS actual_value,
         SYSDATETIMEOFFSET() AS time_period,
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -2423,7 +2423,7 @@ spec:
                 ) AS actual_value,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -2747,7 +2747,7 @@ spec:
             ) AS actual_value,
         SYSDATETIMEOFFSET() AS time_period,
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -3033,7 +3033,7 @@ spec:
                 ) AS actual_value,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -3357,7 +3357,7 @@ spec:
             ) AS actual_value,
         SYSDATETIMEOFFSET() AS time_period,
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -3643,7 +3643,7 @@ spec:
                 ) AS actual_value,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -3965,7 +3965,7 @@ spec:
             ) AS actual_value,
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -4250,7 +4250,7 @@ spec:
                 ) AS actual_value,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -4576,7 +4576,7 @@ spec:
             ) AS actual_value,
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -4863,7 +4863,7 @@ spec:
                 ) AS actual_value,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -5189,7 +5189,7 @@ spec:
             ) AS actual_value,
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -5476,7 +5476,7 @@ spec:
                 ) AS actual_value,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -5802,7 +5802,7 @@ spec:
             ) AS actual_value,
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -6089,7 +6089,7 @@ spec:
                 ) AS actual_value,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -6415,7 +6415,7 @@ spec:
             ) AS actual_value,
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -6702,7 +6702,7 @@ spec:
                 ) AS actual_value,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -7028,7 +7028,7 @@ spec:
             ) AS actual_value,
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -7315,7 +7315,7 @@ spec:
                 ) AS actual_value,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -7637,7 +7637,7 @@ spec:
             ) AS actual_value,
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -7922,7 +7922,7 @@ spec:
                 ) AS actual_value,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -8248,7 +8248,7 @@ spec:
             ) AS actual_value,
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -8535,7 +8535,7 @@ spec:
                 ) AS actual_value,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -8861,7 +8861,7 @@ spec:
             ) AS actual_value,
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -9148,7 +9148,7 @@ spec:
                 ) AS actual_value,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -9474,7 +9474,7 @@ spec:
             ) AS actual_value,
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -9761,7 +9761,7 @@ spec:
                 ) AS actual_value,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -10087,7 +10087,7 @@ spec:
             ) AS actual_value,
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -10374,7 +10374,7 @@ spec:
                 ) AS actual_value,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -10700,7 +10700,7 @@ spec:
             ) AS actual_value,
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -10987,7 +10987,7 @@ spec:
                 ) AS actual_value,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -11309,7 +11309,7 @@ spec:
             ) AS actual_value,
         CAST([col_event_timestamp] AS date) AS time_period,
         CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -11594,7 +11594,7 @@ spec:
                 ) AS actual_value,
             CAST([col_event_timestamp] AS date) AS time_period,
             CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -11920,7 +11920,7 @@ spec:
             ) AS actual_value,
         CAST([col_event_timestamp] AS date) AS time_period,
         CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -12207,7 +12207,7 @@ spec:
                 ) AS actual_value,
             CAST([col_event_timestamp] AS date) AS time_period,
             CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -12533,7 +12533,7 @@ spec:
             ) AS actual_value,
         CAST([col_event_timestamp] AS date) AS time_period,
         CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -12820,7 +12820,7 @@ spec:
                 ) AS actual_value,
             CAST([col_event_timestamp] AS date) AS time_period,
             CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -13146,7 +13146,7 @@ spec:
             ) AS actual_value,
         CAST([col_event_timestamp] AS date) AS time_period,
         CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -13433,7 +13433,7 @@ spec:
                 ) AS actual_value,
             CAST([col_event_timestamp] AS date) AS time_period,
             CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -13759,7 +13759,7 @@ spec:
             ) AS actual_value,
         CAST([col_event_timestamp] AS date) AS time_period,
         CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -14046,7 +14046,7 @@ spec:
                 ) AS actual_value,
             CAST([col_event_timestamp] AS date) AS time_period,
             CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -14372,7 +14372,7 @@ spec:
             ) AS actual_value,
         CAST([col_event_timestamp] AS date) AS time_period,
         CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -14659,7 +14659,7 @@ spec:
                 ) AS actual_value,
             CAST([col_event_timestamp] AS date) AS time_period,
             CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -14981,7 +14981,7 @@ spec:
             ) AS actual_value,
         DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
         CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -15266,7 +15266,7 @@ spec:
                 ) AS actual_value,
             DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -15592,7 +15592,7 @@ spec:
             ) AS actual_value,
         DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
         CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -15879,7 +15879,7 @@ spec:
                 ) AS actual_value,
             DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -16205,7 +16205,7 @@ spec:
             ) AS actual_value,
         DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
         CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -16492,7 +16492,7 @@ spec:
                 ) AS actual_value,
             DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -16818,7 +16818,7 @@ spec:
             ) AS actual_value,
         DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
         CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -17105,7 +17105,7 @@ spec:
                 ) AS actual_value,
             DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -17431,7 +17431,7 @@ spec:
             ) AS actual_value,
         DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
         CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -17718,7 +17718,7 @@ spec:
                 ) AS actual_value,
             DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2
@@ -18044,7 +18044,7 @@ spec:
             ) AS actual_value,
         DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
         CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
     GROUP BY nested_table.[time_period], nested_table.[time_period_utc]
     ORDER BY nested_table.[time_period], nested_table.[time_period_utc]
     ```
@@ -18331,7 +18331,7 @@ spec:
                 ) AS actual_value,
             DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table) AS nested_table
         GROUP BY nested_table.[time_period], nested_table.[time_period_utc],
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2

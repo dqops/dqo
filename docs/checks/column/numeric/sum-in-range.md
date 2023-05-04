@@ -208,7 +208,7 @@ spec:
         SUM(analyzed_table.[target_column]) AS actual_value,
         SYSDATETIMEOFFSET() AS time_period,
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-    FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -387,7 +387,7 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
                 , 
             
         ORDER BY level_1, level_2
@@ -609,7 +609,7 @@ spec:
         SUM(analyzed_table.[target_column]) AS actual_value,
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-    FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -789,7 +789,7 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
                 , 
             
         ORDER BY level_1, level_2
@@ -1011,7 +1011,7 @@ spec:
         SUM(analyzed_table.[target_column]) AS actual_value,
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-    FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -1191,7 +1191,7 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
                 , 
             
         ORDER BY level_1, level_2
@@ -1413,7 +1413,7 @@ spec:
         SUM(analyzed_table.[target_column]) AS actual_value,
         CAST([col_event_timestamp] AS date) AS time_period,
         CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-    FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     GROUP BY CAST([col_event_timestamp] AS date), CAST([col_event_timestamp] AS date)
     ORDER BY CAST([col_event_timestamp] AS date)
     
@@ -1597,7 +1597,7 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST([col_event_timestamp] AS date) AS time_period,
             CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
         GROUP BY CAST([col_event_timestamp] AS date), CAST([col_event_timestamp] AS date)
         ORDER BY level_1, level_2CAST([col_event_timestamp] AS date)
         
@@ -1816,7 +1816,7 @@ spec:
         SUM(analyzed_table.[target_column]) AS actual_value,
         DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
         CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-    FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     GROUP BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, [col_event_timestamp]), 0)
     ORDER BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)
     
@@ -2000,7 +2000,7 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
         GROUP BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, [col_event_timestamp]), 0)
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)
         

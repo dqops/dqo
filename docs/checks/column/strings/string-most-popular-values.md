@@ -636,7 +636,7 @@ spec:
             COUNT(*) AS total_values,
         SYSDATETIMEOFFSET() AS time_period,
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     , top_values
     , total_values
         ) top_col_values
@@ -1246,7 +1246,7 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-                FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
                 , 
             
         , top_valuesORDER BY level_1, level_2
@@ -1907,7 +1907,7 @@ spec:
             COUNT(*) AS total_values,
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     , top_values
     , total_values
         ) top_col_values
@@ -2518,7 +2518,7 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-                FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
                 , 
             
         , top_valuesORDER BY level_1, level_2
@@ -2549,7 +2549,7 @@ ___
 ## **monthly string most popular values**  
   
 **Check description**  
-Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
+Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -3179,7 +3179,7 @@ spec:
             COUNT(*) AS total_values,
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     , top_values
     , total_values
         ) top_col_values
@@ -3790,7 +3790,7 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-                FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
                 , 
             
         , top_valuesORDER BY level_1, level_2
@@ -4451,7 +4451,7 @@ spec:
             COUNT(*) AS total_values,
         CAST([col_event_timestamp] AS date) AS time_period,
         CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     GROUP BY CAST([col_event_timestamp] AS date), CAST([col_event_timestamp] AS date)
     , top_valuesORDER BY CAST([col_event_timestamp] AS date)
     
@@ -5069,7 +5069,7 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST([col_event_timestamp] AS date) AS time_period,
             CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-                FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
         GROUP BY CAST([col_event_timestamp] AS date), CAST([col_event_timestamp] AS date)
         , top_valuesORDER BY level_1, level_2CAST([col_event_timestamp] AS date)
         
@@ -5724,7 +5724,7 @@ spec:
             COUNT(*) AS total_values,
         DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
         CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     GROUP BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, [col_event_timestamp]), 0)
     , top_valuesORDER BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)
     
@@ -6342,7 +6342,7 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-                FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
         GROUP BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, [col_event_timestamp]), 0)
         , top_valuesORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)
         

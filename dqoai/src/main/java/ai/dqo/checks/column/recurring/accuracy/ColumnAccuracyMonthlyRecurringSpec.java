@@ -58,7 +58,7 @@ public class ColumnAccuracyMonthlyRecurringSpec extends AbstractCheckCategorySpe
     private ColumnAccuracyAverageMatchPercentCheckSpec monthlyAverageMatchPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnAccuracyRowCountMatchPercentCheckSpec monthlyRowCountMatchPercent;
+    private ColumnAccuracyNotNullCountMatchPercentCheckSpec monthlyRowCountMatchPercent;
 
     /**
      * Returns an accuracy total sum match percent check specification.
@@ -136,7 +136,7 @@ public class ColumnAccuracyMonthlyRecurringSpec extends AbstractCheckCategorySpe
      * Returns an accuracy row count percent check specification.
      * @return Accuracy row count percent check specification.
      */
-    public ColumnAccuracyRowCountMatchPercentCheckSpec getMonthlyRowCountMatchPercent() {
+    public ColumnAccuracyNotNullCountMatchPercentCheckSpec getMonthlyRowCountMatchPercent() {
         return monthlyRowCountMatchPercent;
     }
 
@@ -144,7 +144,7 @@ public class ColumnAccuracyMonthlyRecurringSpec extends AbstractCheckCategorySpe
      * Sets a new definition of an accuracy row count percent check.
      * @param monthlyRowCountMatchPercent Accuracy row count percent check specification.
      */
-    public void setMonthlyRowCountMatchPercent(ColumnAccuracyRowCountMatchPercentCheckSpec monthlyRowCountMatchPercent) {
+    public void setMonthlyRowCountMatchPercent(ColumnAccuracyNotNullCountMatchPercentCheckSpec monthlyRowCountMatchPercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyRowCountMatchPercent, monthlyRowCountMatchPercent));
         this.monthlyRowCountMatchPercent = monthlyRowCountMatchPercent;
         propagateHierarchyIdToField(monthlyRowCountMatchPercent, "monthly_row_count_match_percent");

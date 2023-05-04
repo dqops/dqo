@@ -29,6 +29,7 @@ import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionProvider;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.connectors.sqlserver.SqlServerConnectionProvider;
+import ai.dqo.connectors.sqlserver.SqlServerParametersSpec;
 import ai.dqo.execution.checks.EffectiveSensorRuleNames;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
@@ -74,10 +75,11 @@ import java.util.*;
 @Component
 public class CheckDocumentationModelFactoryImpl implements CheckDocumentationModelFactory {
     private static final Map<String, String> TABLE_CATEGORY_HELP = new LinkedHashMap<>() {{
-       put("standard", "Evaluates the overall quality of the table by verifying the number of rows.");
-       put("timeliness", "Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.");
-       put("sql", "Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
-       put("availability", "Checks whether the table is accessible and available for use.");
+        put("standard", "Evaluates the overall quality of the table by verifying the number of rows.");
+        put("timeliness", "Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.");
+        put("accuracy", "Compares the tested table with another (reference) table.");
+        put("sql", "Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
+        put("availability", "Checks whether the table is accessible and available for use.");
     }};
 
     private static final Map<String, String> COLUMN_CATEGORY_HELP = new LinkedHashMap<>() {{
@@ -477,6 +479,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 connectionSpec.setRedshift(new RedshiftParametersSpec() {{
                     setDatabase("your_redshift_database");
                 }});
+                connectionSpec.setSqlserver(new SqlServerParametersSpec() {{
+                    setDatabase("your_sql_server_database");
+                }});
                 connectionSpec.setProviderType(providerType);
 
                 TimeSeriesConfigurationProvider timeSeriesConfigurationProvider = (TimeSeriesConfigurationProvider)checkRootContainer;
@@ -507,7 +512,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                     providerDocModel.setListOfRenderedTemplate(splitStringByEndOfLine(renderedTemplate));
                 }
                 catch (Exception ex) {
-                    System.err.println("Failed to render a sample SQL for check " + checkSpec.getCheckName());
+                    System.err.println("Failed to render a sample SQL for check " + checkSpec.getCheckName() + ", error: " + ex.getMessage());
                 }
             }
             results.add(providerDocModel);
