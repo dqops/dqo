@@ -46,10 +46,10 @@ export const SensorDetail = () => {
   const [sensorName, setSensorName] = useState("");
 
   useEffect(() => {
-    if (!sensorDetail && full_sensor_name) {
+    if (!sensorDetail && type !== 'create') {
       dispatch(getSensor(full_sensor_name))
     }
-  }, [full_sensor_name, sensorDetail]);
+  }, [full_sensor_name, sensorDetail, type]);
 
   const handleChangeProvideSensor = (tab: string, providerSensor: ProviderSensorModel) => {
     const exist = sensorDetail?.provider_sensor_list?.find((item: ProviderSensorModel) => item.providerType === tab);
@@ -75,7 +75,7 @@ export const SensorDetail = () => {
 
   const onChangeSensorName = (e: ChangeEvent<HTMLInputElement>) => {
     setSensorName(e.target.value);
-    const fullName = [...path || [], sensorName].join('/')
+    const fullName = [...path || [], e.target.value].join('/')
 
     dispatch(setUpdatedSensor({
       ...sensorDetail,

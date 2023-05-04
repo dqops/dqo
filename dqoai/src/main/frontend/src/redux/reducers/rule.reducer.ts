@@ -60,6 +60,11 @@ const ruleReducer = (state = initialState, action: any) => {
           [action.key]: !state.ruleState[action.key]
         }
       };
+    case RULE_ACTION.UPDATE_RULE_FOLDER_TREE:
+      return {
+        ...state,
+        ruleFolderTree: action.data,
+      }
     default:
       return state;
   }

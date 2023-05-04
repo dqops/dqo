@@ -14,11 +14,12 @@ export const SensorActionGroup = ({ onSave }: SensorActionGroupProps) => {
   const dispatch = useActionDispatch();
 
   const handleSave = () => {
+    if (onSave) {
+      onSave();
+      return;
+    }
     if (full_sensor_name) {
       dispatch(updateSensor(full_sensor_name, sensorDetail));
-    }
-    if (onSave) {
-      onSave()
     }
   };
 

@@ -10,6 +10,7 @@ import { getRuleFolderTree, toggleRuleFolderTree } from "../../redux/actions/rul
 import clsx from "clsx";
 import { ROUTES } from "../../shared/routes";
 import SensorContextMenu from "./SensorContextMenu";
+import RuleContextMenu from "./RuleContextMenu";
 
 export const DefinitionTree = () => {
   const dispatch = useActionDispatch();
@@ -66,7 +67,7 @@ export const DefinitionTree = () => {
                 <SvgIcon name={sensorState[key] ? "folder" : "closed-folder"} className="w-4 h-4 min-w-4" />
                 <div className="text-[13px] leading-1.5 truncate">{key}</div>
                 <SensorContextMenu
-                  folder={folder?.folders?.[key]}
+                  folder={folder?.folders?.[key] || {}}
                   path={[...path || [], key]}
                 />
               </div>
@@ -97,7 +98,7 @@ export const DefinitionTree = () => {
     )
   };
 
-  const renderRuleFolderTree = (folder?: RuleBasicFolderModel) => {
+  const renderRuleFolderTree = (folder?: RuleBasicFolderModel, path?: string[]) => {
     if (!folder) return null;
 
     return (
@@ -111,10 +112,14 @@ export const DefinitionTree = () => {
               >
                 <SvgIcon name={ruleState[key] ? "folder" : "closed-folder"} className="w-4 h-4 min-w-4" />
                 <div className="text-[13px] leading-1.5 truncate">{key}</div>
+                <RuleContextMenu
+                  folder={folder?.folders?.[key] || {}}
+                  path={[...path || [], key]}
+                />
               </div>
               {ruleState[key] && (
                 <div className="ml-2">
-                  {folder?.folders && renderRuleFolderTree(folder?.folders[key])}
+                  {folder?.folders && renderRuleFolderTree(folder?.folders[key], [...path || [], key])}
                 </div>
               )}
             </div>
@@ -148,7 +153,7 @@ export const DefinitionTree = () => {
 
       <div>
         <div className="text-sm text-gray-700 font-semibold mb-2">Rules:</div>
-        {renderRuleFolderTree(ruleFolderTree)}
+        {renderRuleFolderTree(ruleFolderTree, [])}
       </div>
     </div>
   );
