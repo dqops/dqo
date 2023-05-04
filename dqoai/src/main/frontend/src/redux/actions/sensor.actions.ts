@@ -206,3 +206,29 @@ export const updateRule = (ruleName: string, body: RuleModel) => async (dispatch
     dispatch(updateRuleFailed(err));
   }
 };
+
+
+export const createRuleRequest = () => ({
+  type: SENSOR_ACTION.CREATE_RULE_DETAIL
+});
+
+export const createRuleSuccess = (data: SensorModel) => ({
+  type: SENSOR_ACTION.CREATE_RULE_DETAIL_SUCCESS,
+  data
+});
+
+export const createRuleFailed = (error: unknown) => ({
+  type: SENSOR_ACTION.CREATE_RULE_DETAIL_FAILED,
+  error
+});
+
+export const createRule = (ruleName: string, body: RuleModel) => async (dispatch: Dispatch) => {
+  dispatch(createRuleRequest());
+  try {
+    const res: AxiosResponse<SensorModel> =
+      await RulesApi.createRule(ruleName, body);
+    dispatch(createRuleSuccess(res.data));
+  } catch (err) {
+    dispatch(createRuleFailed(err));
+  }
+};

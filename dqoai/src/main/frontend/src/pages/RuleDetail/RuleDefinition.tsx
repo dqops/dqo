@@ -1,6 +1,5 @@
 import React from "react";
 import Select from "../../components/Select";
-import { RuleActionGroup } from "../../components/Sensors/RuleActionGroup";
 import Input from "../../components/Input";
 import { ParameterDefinitionSpec, RuleModel, RuleModelModeEnum, RuleModelTypeEnum } from "../../api";
 import NumberInput from "../../components/NumberInput";
@@ -39,8 +38,6 @@ export const RuleDefinition = ({ rule }: RuleDefinitionProps) => {
 
   return (
     <div className="p-4">
-      <RuleActionGroup />
-
       {rule && (
         <>
           <div className="mb-8">

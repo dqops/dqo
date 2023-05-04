@@ -2,28 +2,32 @@ import React, { ChangeEvent, useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
 import Button from '../Button';
 import Input from "../Input";
-import { SensorBasicFolderModel } from "../../api";
+import { RuleBasicFolderModel, SensorBasicFolderModel } from "../../api";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
 import { updateSensorFolderTree } from "../../redux/actions/sensor.actions";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
+import { updateRuleFolderTree } from "../../redux/actions/rule.actions";
 
 interface AddFolderDialogProps {
   open: boolean;
   onClose: () => void;
   path?: string[];
   folder?: SensorBasicFolderModel;
+  type?: 'sensor' | 'rule'
 }
 
 const AddFolderDialog = ({
   open,
   onClose,
   path,
-  folder
+  folder,
+  type = 'sensor'
 }: AddFolderDialogProps) => {
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const { sensorFolderTree } = useSelector((state: IRootState) => state.sensor);
+  const { ruleFolderTree } = useSelector((state: IRootState) => state.rule);
   const dispatch = useActionDispatch();
 
   const handleSubmit = async () => {
@@ -41,23 +45,44 @@ const AddFolderDialog = ({
       return;
     }
 
-    if (!sensorFolderTree) {
-      return;
+    if (type === 'sensor') {
+      if (!sensorFolderTree) {
+        return;
+      }
+
+      const newSensorFolderTree: SensorBasicFolderModel = structuredClone(sensorFolderTree);
+      let data = newSensorFolderTree;
+
+      for(const key of path || []) {
+        data = data.folders?.[key] as SensorBasicFolderModel;
+      }
+
+      data.folders = {
+        ...data.folders || {},
+        [name]: {}
+      }
+
+      dispatch(updateSensorFolderTree(newSensorFolderTree));
+    } else {
+      if (!ruleFolderTree) {
+        return;
+      }
+
+      const newRuleFolderTree: RuleBasicFolderModel = structuredClone(ruleFolderTree);
+      let data = newRuleFolderTree;
+
+      for(const key of path || []) {
+        data = data.folders?.[key] as RuleBasicFolderModel;
+      }
+
+      data.folders = {
+        ...data.folders || {},
+        [name]: {}
+      }
+
+      dispatch(updateRuleFolderTree(newRuleFolderTree));
     }
 
-    const newSensorFolderTree: SensorBasicFolderModel = structuredClone(sensorFolderTree);
-    let data = newSensorFolderTree;
-
-    for(const key of path || []) {
-      data = data.folders?.[key] as SensorBasicFolderModel;
-    }
-
-    data.folders = {
-      ...data.folders,
-      [name]: {}
-    }
-
-    dispatch(updateSensorFolderTree(newSensorFolderTree));
     setName('');
     onClose();
   };

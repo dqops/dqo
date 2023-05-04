@@ -5,12 +5,22 @@ import { getFirstLevelSensorState } from "../../redux/selectors";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { updateRule } from "../../redux/actions/sensor.actions";
 
-export const RuleActionGroup = () => {
+type RuleActionGroupProps = {
+  onSave: () => void;
+}
+
+export const RuleActionGroup = ({ onSave }: RuleActionGroupProps) => {
   const { full_rule_name, ruleDetail, isUpdating, isUpdatedRuleDetail } = useSelector(getFirstLevelSensorState);
   const dispatch = useActionDispatch();
 
-  const onSave = () => {
-    dispatch(updateRule(full_rule_name, ruleDetail))
+  const handleSave = () => {
+    if (onSave) {
+      onSave();
+      return;
+    }
+    if(full_rule_name) {
+      dispatch(updateRule(full_rule_name, ruleDetail))
+    }
   };
 
   return (
@@ -29,7 +39,7 @@ export const RuleActionGroup = () => {
         label="Save"
         className="w-40 !h-10"
         disabled={!isUpdatedRuleDetail}
-        onClick={onSave}
+        onClick={handleSave}
         loading={isUpdating}
       />
     </div>
