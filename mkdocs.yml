@@ -94,7 +94,7 @@ nav:
         - min match percent: 'checks/column/accuracy/min-match-percent.md'
         - max match percent: 'checks/column/accuracy/max-match-percent.md'
         - average match percent: 'checks/column/accuracy/average-match-percent.md'
-        - row count match percent: 'checks/column/accuracy/row-count-match-percent.md'
+        - not null count match percent: 'checks/column/accuracy/not-null-count-match-percent.md'
       - bool:
         - true percent: 'checks/column/bool/true-percent.md'
         - false percent: 'checks/column/bool/false-percent.md'
