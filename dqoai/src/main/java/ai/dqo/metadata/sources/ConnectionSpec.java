@@ -427,11 +427,6 @@ public class ConnectionSpec extends AbstractSpec {
             if (cloned.sqlserver != null) {
                 cloned.sqlserver = cloned.sqlserver.expandAndTrim(secretValueProvider);
             }
-            if (cloned.mysql != null) {
-                cloned.mysql = cloned.mysql.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.notifications != null) {
-                cloned.notifications = cloned.notifications.expandAndTrim(secretValueProvider);
             if (cloned.incidentGrouping != null) {
                 cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider);
             }

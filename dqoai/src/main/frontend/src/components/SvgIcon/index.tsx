@@ -133,8 +133,7 @@ const iconsMap: any = {
   'help-circle': HelpCircleSvg,
   sqlserver: SqlServerSvg,
   msserver: MSSqlServerSvg,
-  mysql: MySqlSvg
-  msserver: MSSqlServerSvg,
+  mysql: MySqlSvg,
   spinner: SpinnerSvg,
   sync: SyncSvg,
 };

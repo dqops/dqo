@@ -24,8 +24,9 @@ import org.testcontainers.containers.MySQLContainer;
 public class MysqlConnectionSpecObjectMother {
     private static MySQLContainer <?> sharedContainer;
     private static final int PORT = 3306;
+
     /**
-     * Creates a shared MSSQL Server container using Testcontainers. The container will be stopped when the unit/integration session will finish.
+     * Creates a shared MySQL Server container using Testcontainers. The container will be stopped when the unit/integration session will finish.
      * @return Shared container with a started postgresql instance.
      */
     public static MySQLContainer<?> getSharedContainer() {
@@ -72,7 +73,7 @@ public class MysqlConnectionSpecObjectMother {
     }
 
     /**
-     * Returns the default schema used for a testable sql server database. Tables are created in this schema.
+     * Returns the default schema used for a testable MySQL database. Tables are created in this schema.
      * @return Schema name.
      */
     public static String getSchemaName() {

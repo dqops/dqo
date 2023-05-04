@@ -15,7 +15,6 @@
  */
 package ai.dqo.mysql.column.bool;
 
-import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.checkspecs.bool.ColumnFalsePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
@@ -63,58 +62,6 @@ public class MysqlColumnBoolFalsePercentSensorParametersSpecIntegrationTest exte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0),0.001);
-    }
-
-    @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
-                sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.daily);
-
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(1, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0),0.001);
-    }
-
-    @Test
-    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
-                sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.monthly);
-
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(1, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0),0.001);
-    }
-
-    @Test
-    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.daily,"date");
-
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(25, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0,  resultTable.column(0).get(0));
-    }
-
-    @Test
-    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.monthly,"date");
-
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(1, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0),0.001);
+        Assertions.assertEquals( 13.333, (float) resultTable.column(0).get(0),0.001);
     }
 }

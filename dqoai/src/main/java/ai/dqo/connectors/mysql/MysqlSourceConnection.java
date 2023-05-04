@@ -15,18 +15,30 @@
  */
 package ai.dqo.connectors.mysql;
 
+import ai.dqo.connectors.ConnectionProviderSpecificParameters;
 import ai.dqo.connectors.ConnectorOperationFailedException;
+import ai.dqo.connectors.SourceSchemaModel;
+import ai.dqo.connectors.SourceTableModel;
 import ai.dqo.connectors.jdbc.AbstractJdbcSourceConnection;
 import ai.dqo.connectors.jdbc.JdbcConnectionPool;
+import ai.dqo.connectors.jdbc.JdbcQueryFailedException;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.metadata.sources.PhysicalTableName;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -45,6 +57,62 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
                                  SecretValueProvider secretValueProvider,
                                  MysqlConnectionProvider mysqlConnectionProvider) {
         super(jdbcConnectionPool, secretValueProvider, mysqlConnectionProvider);
+    }
+
+    /**
+     * Lists tables inside a schema. Views are also returned.
+     *
+     * @param schemaName Schema name.
+     * @return List of tables in the given schema.
+     */
+    @Override
+    public List<SourceTableModel> listTables(String schemaName) {
+        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
+
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("SELECT TABLE_CATALOG AS table_catalog, TABLE_SCHEMA AS table_schema, TABLE_NAME AS table_name FROM ");
+        sqlBuilder.append(getInformationSchemaName());
+        sqlBuilder.append(".TABLES\n");
+        sqlBuilder.append("WHERE TABLE_SCHEMA='");
+        sqlBuilder.append(schemaName.replace("'", "''"));
+        sqlBuilder.append("'");
+
+        String listTablesSql = sqlBuilder.toString();
+        Table tablesRows = this.executeQuery(listTablesSql);
+
+        List<SourceTableModel> results = new ArrayList<>();
+        for (int rowIndex = 0; rowIndex < tablesRows.rowCount() ; rowIndex++) {
+            String tableName = tablesRows.getString(rowIndex, "table_name");
+            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+            SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
+            results.add(schemaModel);
+        }
+
+        return results;
+    }
+
+    /**
+     * Returns a list of schemas from the source.
+     *
+     * @return List of schemas.
+     */
+    @Override
+    public List<SourceSchemaModel> listSchemas() {
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("SELECT CATALOG_NAME AS catalog_name, SCHEMA_NAME as schema_name FROM ");
+        sqlBuilder.append(getInformationSchemaName());
+        sqlBuilder.append(".SCHEMATA WHERE TABLE_SCHEMA <> 'information_schema' and TABLE_SCHEMA <> 'performance_schema'");
+        String listSchemataSql = sqlBuilder.toString();
+        Table schemaRows = this.executeQuery(listSchemataSql);
+
+        List<SourceSchemaModel> results = new ArrayList<>();
+        for (int rowIndex = 0; rowIndex < schemaRows.rowCount() ; rowIndex++) {
+            String schemaName = schemaRows.getString(rowIndex, "schema_name");
+            SourceSchemaModel schemaModel = new SourceSchemaModel(schemaName);
+            results.add(schemaModel);
+        }
+
+        return results;
     }
 
     /**
@@ -101,5 +169,35 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
+    }
+
+    /**
+     * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
+     * @param sqlQueryStatement SQL statement that returns a row set.
+     * @return Tabular result captured from the query.
+     */
+    @Override
+    public Table executeQuery(String sqlQueryStatement) {
+        try {
+            try (Statement statement = this.getJdbcConnection().createStatement()) {
+                try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
+                    try (MysqlResultSet mysqlResultSet = new MysqlResultSet(results)) {
+                        Table resultTable = Table.read().db(mysqlResultSet, "query_result");
+                        for (Column<?> column : resultTable.columns()) {
+                            if (column.name() != null) {
+                                column.setName(column.name().toLowerCase(Locale.ROOT));
+                            }
+                        }
+                        return resultTable;
+                    }
+                }
+            }
+        }
+        catch (Exception ex) {
+            String connectionName = this.getConnectionSpec().getConnectionName();
+            throw new JdbcQueryFailedException(
+                    String.format("SQL query failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlQueryStatement),
+                    ex, sqlQueryStatement, connectionName);
+        }
     }
 }
