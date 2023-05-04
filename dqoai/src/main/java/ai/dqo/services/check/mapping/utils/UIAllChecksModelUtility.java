@@ -42,10 +42,15 @@ public class UIAllChecksModelUtility {
     public static void pruneToConcreteTargets(Map<String, List<String>> tablesToColumnsMapping,
                                               UIAllChecksModel sourceModel) {
         CheckTarget checkTargetFromTable = sourceModel.getTableChecksModel() != null
-                ? sourceModel.getTableChecksModel().getCheckTarget()
+                && sourceModel.getTableChecksModel().getUiSchemaTableChecksModels() != null
+                && !sourceModel.getTableChecksModel().getUiSchemaTableChecksModels().isEmpty()
+                    ? sourceModel.getTableChecksModel().getCheckTarget()
                 : null;
+
         CheckTarget checkTargetFromColumns = sourceModel.getColumnChecksModel() != null
-                ? sourceModel.getColumnChecksModel().getCheckTarget()
+                && sourceModel.getColumnChecksModel().getUiTableColumnChecksModels() != null
+                && !sourceModel.getColumnChecksModel().getUiTableColumnChecksModels().isEmpty()
+                    ? sourceModel.getColumnChecksModel().getCheckTarget()
                 : null;
         CheckTarget checkTarget = checkTargetFromTable != null ? checkTargetFromTable : checkTargetFromColumns;
 

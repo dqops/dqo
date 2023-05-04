@@ -51,7 +51,6 @@ import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rules.comparison.*;
 import ai.dqo.services.check.mapping.*;
 import ai.dqo.services.check.mapping.models.*;
-import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;
@@ -65,10 +64,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @SpringBootTest
@@ -346,5 +342,68 @@ public class CheckServiceImplTests extends BaseTest {
             Assertions.assertNull(check.getError());
             Assertions.assertNotNull(check.getFatal());
         }
+    }
+
+    @Test
+    void updateAllChecksPatch_whenSpecificColumnsGiven_enablesOnlyRequestedChecks() {
+        ExecutionContext executionContext = createHierarchyTree();
+
+        UIAllChecksPatchParameters uiAllChecksPatchParameters = new UIAllChecksPatchParameters();
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
+            setConnectionName("conn");
+            setCheckName("nulls_count");
+        }};
+        uiAllChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
+
+        List<UIAllChecksModel> uiAllChecksModel = this.uiAllChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
+        UICheckModel uiCheckModel = uiAllChecksModel.stream()
+                .map(UIAllChecksModel::getColumnChecksModel)
+                .flatMap(uiAllColumnChecksModel -> uiAllColumnChecksModel.getUiTableColumnChecksModels().stream())
+                .flatMap(uiTableColumnChecksModel -> uiTableColumnChecksModel.getUiColumnChecksModels().stream())
+                .flatMap(uiColumnChecksModel -> uiColumnChecksModel.getCheckContainers().entrySet().stream())
+                .filter(containerTypeToCheckContainer -> containerTypeToCheckContainer.getKey().getCheckType() == CheckType.PROFILING)
+                .map(Map.Entry::getValue)
+                .flatMap(uiCheckContainerModel -> uiCheckContainerModel.getCategories().stream())
+                .flatMap(uiQualityCategoryModel -> uiQualityCategoryModel.getChecks().stream())
+                .findAny().get();
+
+        MaxCountRule15ParametersSpec maxCountRule = new MaxCountRule15ParametersSpec(50L);
+        ColumnNullsCountCheckSpec checkSpec = new ColumnNullsCountCheckSpec();
+        checkSpec.setFatal(maxCountRule);
+
+        UICheckModel checkModelTemplate = patchCheckModelTemplate(checkSpec, uiCheckModel);
+        uiAllChecksPatchParameters.setUiCheckModelPatch(checkModelTemplate);
+
+        Map<String, List<String>> selectedTablesToColumns = new HashMap<>();
+        List<String> selectedColumns1 = new ArrayList<>();
+        selectedColumns1.add("col1");
+        List<String> selectedColumns2 = new ArrayList<>();
+        selectedColumns2.add("col1");
+        selectedColumns2.add("col3");
+        selectedTablesToColumns.put("tab1", selectedColumns1);
+        selectedTablesToColumns.put("tab2", selectedColumns2);
+        uiAllChecksPatchParameters.setSelectedTablesToColumns(selectedTablesToColumns);
+
+        this.sut.updateAllChecksPatch(uiAllChecksPatchParameters);
+
+        UserHome userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
+        Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
+        Assertions.assertNotNull(checks);
+        Assertions.assertEquals(3, checks.size());
+        for (AbstractCheckSpec<?,?,?,?> check: checks) {
+            Assertions.assertFalse(check.isDisabled());
+            Assertions.assertNull(check.getWarning());
+            Assertions.assertNull(check.getError());
+            Assertions.assertNotNull(check.getFatal());
+        }
+
+        // The column that was left out isn't configured
+        CheckSearchFilters remainingColumnChecksSearch = checkSearchFilters.clone();
+        remainingColumnChecksSearch.setSchemaTableName("sch.tab2");
+        remainingColumnChecksSearch.setColumnName("col2");
+
+        Collection<AbstractCheckSpec<?, ?, ?, ?>> remainingCheck = hierarchyNodeTreeSearcher.findChecks(userHome, remainingColumnChecksSearch);
+        Assertions.assertNotNull(remainingCheck);
+        Assertions.assertTrue(remainingCheck.isEmpty());
     }
 }

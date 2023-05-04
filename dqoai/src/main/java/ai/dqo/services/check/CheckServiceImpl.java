@@ -35,6 +35,9 @@ import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
 import ai.dqo.services.check.mapping.UIAllChecksPatchApplier;
 import ai.dqo.services.check.mapping.models.*;
+import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
+import ai.dqo.services.check.mapping.models.column.UIColumnChecksModel;
+import ai.dqo.services.check.mapping.models.table.UIAllTableChecksModel;
 import ai.dqo.services.check.mapping.utils.UIAllChecksModelUtility;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import org.apache.parquet.Strings;
@@ -145,18 +148,35 @@ public class CheckServiceImpl implements CheckService {
                     .collect(Collectors.toList());
         }
 
-        Stream<UICheckContainerModel> columnCheckContainers = patches.stream()
-                .map(UIAllChecksModel::getColumnChecksModel)
-                .flatMap(model -> model.getUiTableColumnChecksModels().stream())
-                .flatMap(model -> model.getUiColumnChecksModels().stream())
-                .flatMap(model -> model.getCheckContainers().values().stream());
-        Stream<UICheckContainerModel> tableCheckContainers = patches.stream()
-                .map(UIAllChecksModel::getTableChecksModel)
-                .flatMap(model -> model.getUiSchemaTableChecksModels().stream())
-                .flatMap(model -> model.getUiTableChecksModels().stream())
-                .flatMap(model -> model.getCheckContainers().values().stream());
+        Stream<UICheckContainerModel> collectedCheckContainers = Stream.empty();
 
-        Iterable<UICheckModel> checks = Stream.concat(columnCheckContainers, tableCheckContainers)
+        List<UIAllColumnChecksModel> allColumnChecksModels = patches.stream()
+                .map(UIAllChecksModel::getColumnChecksModel)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        if (!allColumnChecksModels.isEmpty()) {
+            Stream<UICheckContainerModel> columnCheckContainers = allColumnChecksModels.stream()
+                    .flatMap(model -> model.getUiTableColumnChecksModels().stream())
+                    .flatMap(model -> model.getUiColumnChecksModels().stream())
+                    .flatMap(model -> model.getCheckContainers().values().stream());
+            collectedCheckContainers = Stream.concat(collectedCheckContainers, columnCheckContainers);
+        }
+
+        List<UIAllTableChecksModel> allTableChecksModels = patches.stream()
+                .map(UIAllChecksModel::getTableChecksModel)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        if (!allTableChecksModels.isEmpty()) {
+            Stream<UICheckContainerModel> tableCheckContainers = allTableChecksModels.stream()
+                    .flatMap(model -> model.getUiSchemaTableChecksModels().stream())
+                    .flatMap(model -> model.getUiTableChecksModels().stream())
+                    .flatMap(model -> model.getCheckContainers().values().stream());
+            collectedCheckContainers = Stream.concat(collectedCheckContainers, tableCheckContainers);
+        }
+
+        Iterable<UICheckModel> checks = collectedCheckContainers
                 .flatMap(model -> model.getCategories().stream())
                 .flatMap(model -> model.getChecks().stream())
                 .collect(Collectors.toList());
