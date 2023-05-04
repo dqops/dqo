@@ -5,5 +5,5 @@ spec:
   sensor_name: column/uniqueness/unique_percent
   rule_name: comparison/max_percent
   help_text: Verifies that the percentage of unique values in a column does not exceed
-    the minimum accepted count. Stores the most recent row count for each day when
+    the minimum accepted percent. Stores the most recent row count for each day when
     the data quality check was evaluated.

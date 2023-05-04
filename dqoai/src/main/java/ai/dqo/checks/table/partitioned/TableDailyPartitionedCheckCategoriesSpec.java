@@ -149,7 +149,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
         {{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimePeriodGradient.day);
-            setTimestampColumn(tableSpec.getTimestampColumns().getEffectivePartitioningColumn());
+            setTimestampColumn(tableSpec.getTimestampColumns().getPartitionByColumn());
         }};
     }
 

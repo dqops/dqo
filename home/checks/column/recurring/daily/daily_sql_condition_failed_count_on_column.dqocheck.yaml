@@ -5,4 +5,5 @@ spec:
   sensor_name: column/sql/sql_condition_failed_count
   rule_name: comparison/max_count
   help_text: Verifies that a maximum number of rows failed a custom SQL condition
-    (expression).
+    (expression). Stores the most recent row count for each day when the data quality
+    check was evaluated.

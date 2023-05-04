@@ -4,5 +4,4 @@ kind: check
 spec:
   sensor_name: table/availability/table_availability
   rule_name: comparison/max_failures
-  help_text: Verifies that the number of rows in a table does not exceed the minimum
-    accepted count.
+  help_text: Verifies availability on table in database using simple row count.
