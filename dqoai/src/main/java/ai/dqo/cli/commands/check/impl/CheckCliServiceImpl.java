@@ -23,19 +23,16 @@ import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.services.check.CheckService;
 import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
-import ai.dqo.services.check.mapping.UIAllChecksPatchApplier;
 import ai.dqo.services.check.mapping.models.*;
+import ai.dqo.services.check.models.BulkCheckDisableParameters;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import ai.dqo.utils.conversion.StringTypeCaster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Service called to run checks or operate on checks from CLI.
@@ -79,7 +76,9 @@ public class CheckCliServiceImpl implements CheckCliService {
      */
     @Override
     public void disableChecks(CheckSearchFilters filters) {
-        this.checkService.disableChecks(filters);
+        BulkCheckDisableParameters parameters = new BulkCheckDisableParameters();
+        parameters.setCheckSearchFilters(filters);
+        this.checkService.disableChecks(parameters);
     }
 
     /**

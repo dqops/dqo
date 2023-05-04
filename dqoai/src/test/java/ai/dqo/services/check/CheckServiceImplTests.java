@@ -52,6 +52,7 @@ import ai.dqo.rules.comparison.*;
 import ai.dqo.services.check.mapping.*;
 import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
+import ai.dqo.services.check.models.BulkCheckDisableParameters;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;
 import ai.dqo.utils.reflection.ClassInfo;
@@ -147,6 +148,19 @@ public class CheckServiceImplTests extends BaseTest {
         t1standardChecksSpec.setRowCount(t1rowCountSpec);
         t1categoriesSpec.setStandard(t1standardChecksSpec);
         table1.getSpec().setProfilingChecks(t1categoriesSpec);
+
+        TableProfilingCheckCategoriesSpec t2categoriesSpec = new TableProfilingCheckCategoriesSpec();
+        TableProfilingStandardChecksSpec t2standardChecksSpec = new TableProfilingStandardChecksSpec();
+        TableRowCountCheckSpec t2rowCountSpec = new TableRowCountCheckSpec();
+        MinCountRule0ParametersSpec t2rowCountErrorSpec = new MinCountRule0ParametersSpec();
+        MinCountRuleFatalParametersSpec t2rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
+        t2rowCountErrorSpec.setMinCount(100L);
+        t2rowCountFatalSpec.setMinCount(10L);
+        t2rowCountSpec.setError(t2rowCountErrorSpec);
+        t2rowCountSpec.setFatal(t2rowCountFatalSpec);
+        t2standardChecksSpec.setRowCount(t2rowCountSpec);
+        t2categoriesSpec.setStandard(t2standardChecksSpec);
+        table2.getSpec().setProfilingChecks(t2categoriesSpec);
 
         ColumnProfilingCheckCategoriesSpec col21categoriesSpec = new ColumnProfilingCheckCategoriesSpec();
         ColumnProfilingStringsChecksSpec col21stringChecksSpec = new ColumnProfilingStringsChecksSpec();
@@ -271,11 +285,69 @@ public class CheckServiceImplTests extends BaseTest {
         Assertions.assertEquals(20L, tableRowCountCheckSpec.getFatal().getMinCount());
         Assertions.assertFalse(tableRowCountCheckSpec.isDisabled());
 
-        this.sut.disableChecks(checkSearchFilters);
+        BulkCheckDisableParameters bulkCheckDisableParameters = new BulkCheckDisableParameters();
+        bulkCheckDisableParameters.setCheckSearchFilters(checkSearchFilters);
+        this.sut.disableChecks(bulkCheckDisableParameters);
 
         userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?,?,?,?>> checksEnabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertTrue(checksEnabled.isEmpty());
+
+        CheckSearchFilters checkSearchFiltersDisabled = checkSearchFilters.clone();
+        checkSearchFiltersDisabled.setEnabled(false);
+        Collection<AbstractCheckSpec<?,?,?,?>> checksDisabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFiltersDisabled);
+
+        Assertions.assertNotNull(checksDisabled);
+        Assertions.assertEquals(2, checksDisabled.size());
+        for (AbstractCheckSpec<?,?,?,?> check: checksDisabled) {
+            Assertions.assertTrue(check.isDisabled());
+        }
+
+        tableRowCountCheckSpec = userHome
+                .getConnections().getByObjectName("conn", true)
+                .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
+                .getProfilingChecks().getStandard().getRowCount();
+        Assertions.assertNull(tableRowCountCheckSpec.getWarning());
+        Assertions.assertNotNull(tableRowCountCheckSpec.getError());
+        Assertions.assertNotNull(tableRowCountCheckSpec.getFatal());
+        // Configs are preserved
+        Assertions.assertEquals(50L, tableRowCountCheckSpec.getError().getMinCount());
+        Assertions.assertEquals(20L, tableRowCountCheckSpec.getFatal().getMinCount());
+        Assertions.assertTrue(tableRowCountCheckSpec.isDisabled());
+    }
+
+    @Test
+    void disableChecks_whenSpecificTablesGiven_disablesOnlyRequestedChecks() {
+        ExecutionContext executionContext = createHierarchyTree();
+        UserHome userHome = executionContext.getUserHomeContext().getUserHome();
+
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
+            setConnectionName("conn");
+            setCheckName("row_count");
+        }};
+
+        TableRowCountCheckSpec tableRowCountCheckSpec = userHome
+                .getConnections().getByObjectName("conn", true)
+                .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
+                .getProfilingChecks().getStandard().getRowCount();
+
+        Assertions.assertNull(tableRowCountCheckSpec.getWarning());
+        Assertions.assertNotNull(tableRowCountCheckSpec.getError());
+        Assertions.assertNotNull(tableRowCountCheckSpec.getFatal());
+        Assertions.assertEquals(50L, tableRowCountCheckSpec.getError().getMinCount());
+        Assertions.assertEquals(20L, tableRowCountCheckSpec.getFatal().getMinCount());
+        Assertions.assertFalse(tableRowCountCheckSpec.isDisabled());
+
+        BulkCheckDisableParameters bulkCheckDisableParameters = new BulkCheckDisableParameters();
+        bulkCheckDisableParameters.setCheckSearchFilters(checkSearchFilters);
+        Map<String, List<String>> selectedTables = new HashMap<>();
+        selectedTables.put("tab1", null);
+        bulkCheckDisableParameters.setSelectedTablesToColumns(selectedTables);
+        this.sut.disableChecks(bulkCheckDisableParameters);
+
+        userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
+        Collection<AbstractCheckSpec<?,?,?,?>> checksEnabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
+        Assertions.assertEquals(1, checksEnabled.size());
 
         CheckSearchFilters checkSearchFiltersDisabled = checkSearchFilters.clone();
         checkSearchFiltersDisabled.setEnabled(false);
@@ -294,7 +366,7 @@ public class CheckServiceImplTests extends BaseTest {
         Assertions.assertNull(tableRowCountCheckSpec.getWarning());
         Assertions.assertNotNull(tableRowCountCheckSpec.getError());
         Assertions.assertNotNull(tableRowCountCheckSpec.getFatal());
-        // Configs are preserved
+        // Configs of the disabled check are preserved
         Assertions.assertEquals(50L, tableRowCountCheckSpec.getError().getMinCount());
         Assertions.assertEquals(20L, tableRowCountCheckSpec.getFatal().getMinCount());
         Assertions.assertTrue(tableRowCountCheckSpec.isDisabled());

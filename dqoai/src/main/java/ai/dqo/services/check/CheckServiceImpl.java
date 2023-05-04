@@ -26,6 +26,7 @@ import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcherImpl;
+import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -36,10 +37,10 @@ import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
 import ai.dqo.services.check.mapping.UIAllChecksPatchApplier;
 import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
-import ai.dqo.services.check.mapping.models.column.UIColumnChecksModel;
 import ai.dqo.services.check.mapping.models.table.UIAllTableChecksModel;
 import ai.dqo.services.check.mapping.utils.UIAllChecksModelUtility;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
+import ai.dqo.services.check.models.BulkCheckDisableParameters;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -105,19 +106,56 @@ public class CheckServiceImpl implements CheckService {
     /**
      * Disable existing checks matching the provided filters.
      *
-     * @param filters Check search filters to find checks to disable.
+     * @param parameters Bulk check disable parameters.
      */
     @Override
-    public void disableChecks(CheckSearchFilters filters) {
+    public void disableChecks(BulkCheckDisableParameters parameters) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
         HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
-        Collection<AbstractCheckSpec<?,?,?,?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, filters);
+        Collection<AbstractCheckSpec<?,?,?,?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, parameters.getCheckSearchFilters());
+
+        if (parameters.getSelectedTablesToColumns() != null) {
+            Map<String, Set<String>> searchableTablesToColumns = getSearchableTableToColumnsMapping(parameters.getSelectedTablesToColumns());
+
+            checks = checks.stream()
+                    .filter(check -> {
+                        String tableName = userHome.findTableFor(check.getHierarchyId()).getPhysicalTableName().getTableName();
+
+                        // Column is null for table-level checks.
+                        ColumnSpec columnNullable = userHome.findColumnFor(check.getHierarchyId());
+                        String columnName = columnNullable != null
+                                ? columnNullable.getColumnName()
+                                : null;
+
+                        if (!searchableTablesToColumns.containsKey(tableName)) {
+                            return false;
+                        }
+
+                        Set<String> selectedColumns = searchableTablesToColumns.get(tableName);
+                        if (columnName != null && !selectedColumns.contains(columnName)) {
+                            return false;
+                        }
+
+                        return true;
+                    }).collect(Collectors.toList());
+        }
 
         for (AbstractCheckSpec<?,?,?,?> check: checks) {
             check.setDisabled(true);
         }
         userHomeContext.flush();
+    }
+
+    protected Map<String, Set<String>> getSearchableTableToColumnsMapping(Map<String, List<String>> tableToColumnsMapping) {
+        Map<String, Set<String>> searchableMap = new HashMap<>();
+        for (Map.Entry<String, List<String>> tableToColumns: tableToColumnsMapping.entrySet()) {
+            Set<String> columnsSet = tableToColumns.getValue() != null
+                    ? new HashSet<>(tableToColumns.getValue())
+                    : new HashSet<>();
+            searchableMap.put(tableToColumns.getKey(), columnsSet);
+        }
+        return searchableMap;
     }
 
     /**
