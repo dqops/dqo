@@ -5,4 +5,5 @@ spec:
   sensor_name: table/sql/sql_condition_passed_percent
   rule_name: comparison/min_percent
   help_text: Verifies that a set percentage of rows passed a custom SQL condition
-    (expression).
+    (expression). Creates a separate data quality check (and an alert) for each daily
+    partition.

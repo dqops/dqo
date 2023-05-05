@@ -262,6 +262,42 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+    FROM
+        (
+            SELECT
+                *
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+    FROM
+        (
+            SELECT
+                *
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            
+            LIMIT 1
+        ) AS tab_scan
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -486,6 +522,41 @@ spec:
             ) AS tab_scan
         GROUP BY time_period
         ORDER BY time_period
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+               WHEN COUNT(*) > 0 THEN COUNT(*)
+               ELSE 1.0
+            END AS actual_value
+        FROM
+            (
+                SELECT
+                    *
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            CASE
+               WHEN COUNT(*) > 0 THEN COUNT(*)
+               ELSE 1.0
+            END AS actual_value
+        FROM
+            (
+                SELECT
+                    *
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
         ```
     
 
@@ -754,6 +825,42 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+    FROM
+        (
+            SELECT
+                *
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+    FROM
+        (
+            SELECT
+                *
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            
+            LIMIT 1
+        ) AS tab_scan
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -979,6 +1086,41 @@ spec:
             ) AS tab_scan
         GROUP BY time_period
         ORDER BY time_period
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+               WHEN COUNT(*) > 0 THEN COUNT(*)
+               ELSE 1.0
+            END AS actual_value
+        FROM
+            (
+                SELECT
+                    *
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            CASE
+               WHEN COUNT(*) > 0 THEN COUNT(*)
+               ELSE 1.0
+            END AS actual_value
+        FROM
+            (
+                SELECT
+                    *
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
         ```
     
 
@@ -1247,6 +1389,42 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+    FROM
+        (
+            SELECT
+                *
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+    FROM
+        (
+            SELECT
+                *
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+            
+            LIMIT 1
+        ) AS tab_scan
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -1472,6 +1650,41 @@ spec:
             ) AS tab_scan
         GROUP BY time_period
         ORDER BY time_period
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+               WHEN COUNT(*) > 0 THEN COUNT(*)
+               ELSE 1.0
+            END AS actual_value
+        FROM
+            (
+                SELECT
+                    *
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            CASE
+               WHEN COUNT(*) > 0 THEN COUNT(*)
+               ELSE 1.0
+            END AS actual_value
+        FROM
+            (
+                SELECT
+                    *
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
         ```
     
 

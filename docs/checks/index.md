@@ -5,14 +5,27 @@
 ## **Table checks**
 
 
+###accuracy  
+Compares the tested table with another (reference) table.
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[row_count_match_percent](./table/accuracy/row-count-match-percent/#row-count-match-percent)|profiling|Verifies that the total row count of the tested table matches the total row count of another (reference) table.|
+|[daily_row_count_match_percent](./table/accuracy/row-count-match-percent/#daily-row-count-match-percent)|recurring|Verifies the row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_row_count_match_percent](./table/accuracy/row-count-match-percent/#monthly-row-count-match-percent)|recurring|Verifies the row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each month when the data quality check was evaluated.|
+
+
+
+
+
 ###availability  
 Checks whether the table is accessible and available for use.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[table_availability](./table/availability/table-availability/#table-availability)|profiling|Verifies that the number of rows in a table does not exceed the minimum accepted count.|
-|[daily_table_availability](./table/availability/table-availability/#daily-table-availability)|recurring|Verifies availability on table in database using simple row count|
-|[monthly_table_availability](./table/availability/table-availability/#monthly-table-availability)|recurring|Verifies availability on table in database using simple row count|
+|[table_availability](./table/availability/table-availability/#table-availability)|profiling|Verifies availability on table in database using simple row count.|
+|[daily_table_availability](./table/availability/table-availability/#daily-table-availability)|recurring|Verifies availability on table in database using simple row count. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_table_availability](./table/availability/table-availability/#monthly-table-availability)|recurring|Verifies availability on table in database using simple row count. Stores the most recent row count for each month when the data quality check was evaluated.|
 
 
 
@@ -24,28 +37,28 @@ Validate data against user-defined SQL queries at the table level. Checks in thi
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[sql_condition_passed_percent_on_table](./table/sql/sql-condition-passed-percent-on-table/#sql-condition-passed-percent-on-table)|profiling|Verifies that a set percentage of rows passed a custom SQL condition (expression).|
-|[daily_sql_condition_passed_percent_on_table](./table/sql/sql-condition-passed-percent-on-table/#daily-sql-condition-passed-percent-on-table)|recurring|Verifies that a set percentage of rows passed a custom SQL condition (expression).|
-|[monthly_sql_condition_passed_percent_on_table](./table/sql/sql-condition-passed-percent-on-table/#monthly-sql-condition-passed-percent-on-table)|recurring|Verifies that a set percentage of rows passed a custom SQL condition (expression).|
-|[daily_partition_sql_condition_passed_percent_on_table](./table/sql/sql-condition-passed-percent-on-table/#daily-partition-sql-condition-passed-percent-on-table)|partitioned|Verifies that a set percentage of rows passed a custom SQL condition (expression).|
-|[monthly_partition_sql_condition_passed_percent_on_table](./table/sql/sql-condition-passed-percent-on-table/#monthly-partition-sql-condition-passed-percent-on-table)|partitioned|Verifies that a set percentage of rows passed a custom SQL condition (expression).|
+|[daily_sql_condition_passed_percent_on_table](./table/sql/sql-condition-passed-percent-on-table/#daily-sql-condition-passed-percent-on-table)|recurring|Verifies that a set percentage of rows passed a custom SQL condition (expression). Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_sql_condition_passed_percent_on_table](./table/sql/sql-condition-passed-percent-on-table/#monthly-sql-condition-passed-percent-on-table)|recurring|Verifies that a set percentage of rows passed a custom SQL condition (expression). Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_sql_condition_passed_percent_on_table](./table/sql/sql-condition-passed-percent-on-table/#daily-partition-sql-condition-passed-percent-on-table)|partitioned|Verifies that a set percentage of rows passed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_sql_condition_passed_percent_on_table](./table/sql/sql-condition-passed-percent-on-table/#monthly-partition-sql-condition-passed-percent-on-table)|partitioned|Verifies that a set percentage of rows passed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[sql_condition_failed_count_on_table](./table/sql/sql-condition-failed-count-on-table/#sql-condition-failed-count-on-table)|profiling|Verifies that a set number of rows failed a custom SQL condition (expression).|
-|[daily_sql_condition_failed_count_on_table](./table/sql/sql-condition-failed-count-on-table/#daily-sql-condition-failed-count-on-table)|recurring|Verifies that a set number of rows failed a custom SQL condition (expression).|
-|[monthly_sql_condition_failed_count_on_table](./table/sql/sql-condition-failed-count-on-table/#monthly-sql-condition-failed-count-on-table)|recurring|Verifies that a set number of rows failed a custom SQL condition (expression).|
-|[daily_partition_sql_condition_failed_count_on_table](./table/sql/sql-condition-failed-count-on-table/#daily-partition-sql-condition-failed-count-on-table)|partitioned|Verifies that a set number of rows failed a custom SQL condition (expression).|
-|[monthly_partition_sql_condition_failed_count_on_table](./table/sql/sql-condition-failed-count-on-table/#monthly-partition-sql-condition-failed-count-on-table)|partitioned|Verifies that a set number of rows failed a custom SQL condition (expression).|
+|[daily_sql_condition_failed_count_on_table](./table/sql/sql-condition-failed-count-on-table/#daily-sql-condition-failed-count-on-table)|recurring|Verifies that a set number of rows failed a custom SQL condition (expression). Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_sql_condition_failed_count_on_table](./table/sql/sql-condition-failed-count-on-table/#monthly-sql-condition-failed-count-on-table)|recurring|Verifies that a set number of rows failed a custom SQL condition (expression). Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_sql_condition_failed_count_on_table](./table/sql/sql-condition-failed-count-on-table/#daily-partition-sql-condition-failed-count-on-table)|partitioned|Verifies that a set number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_sql_condition_failed_count_on_table](./table/sql/sql-condition-failed-count-on-table/#monthly-partition-sql-condition-failed-count-on-table)|partitioned|Verifies that a set number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[sql_aggregate_expr_table](./table/sql/sql-aggregate-expr-table/#sql-aggregate-expr-table)|profiling|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.|
-|[daily_sql_aggregate_expr_table](./table/sql/sql-aggregate-expr-table/#daily-sql-aggregate-expr-table)|recurring|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.|
-|[monthly_sql_aggregate_expr_table](./table/sql/sql-aggregate-expr-table/#monthly-sql-aggregate-expr-table)|recurring|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.|
-|[daily_partition_sql_aggregate_expr_table](./table/sql/sql-aggregate-expr-table/#daily-partition-sql-aggregate-expr-table)|partitioned|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.|
-|[monthly_partition_sql_aggregate_expr_table](./table/sql/sql-aggregate-expr-table/#monthly-partition-sql-aggregate-expr-table)|partitioned|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.|
+|[daily_sql_aggregate_expr_table](./table/sql/sql-aggregate-expr-table/#daily-sql-aggregate-expr-table)|recurring|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_sql_aggregate_expr_table](./table/sql/sql-aggregate-expr-table/#monthly-sql-aggregate-expr-table)|recurring|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_sql_aggregate_expr_table](./table/sql/sql-aggregate-expr-table/#daily-partition-sql-aggregate-expr-table)|partitioned|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_sql_aggregate_expr_table](./table/sql/sql-aggregate-expr-table/#monthly-partition-sql-aggregate-expr-table)|partitioned|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 
@@ -153,6 +166,9 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 
 
 
+
+
+
 ###accuracy  
 
 
@@ -186,9 +202,9 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[row_count_match_percent](./column/accuracy/row-count-match-percent/#row-count-match-percent)|profiling|Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[daily_row_count_match_percent](./column/accuracy/row-count-match-percent/#daily-row-count-match-percent)|recurring|Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_row_count_match_percent](./column/accuracy/row-count-match-percent/#monthly-row-count-match-percent)|recurring|Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[not_null_count_match_percent](./column/accuracy/not-null-count-match-percent/#not-null-count-match-percent)|profiling|Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[daily_not_null_count_match_percent](./column/accuracy/not-null-count-match-percent/#daily-not-null-count-match-percent)|recurring|Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_not_null_count_match_percent](./column/accuracy/not-null-count-match-percent/#monthly-not-null-count-match-percent)|recurring|Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|
 
 
 
@@ -264,7 +280,7 @@ Checks the referential integrity of a column against a column in another table.
 |------------|------------|-------------|
 |[foreign_key_not_match_count](./column/integrity/foreign-key-not-match-count/#foreign-key-not-match-count)|profiling|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count.|
 |[daily_foreign_key_not_match_count](./column/integrity/foreign-key-not-match-count/#daily-foreign-key-not-match-count)|recurring|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_foreign_key_not_match_count](./column/integrity/foreign-key-not-match-count/#monthly-foreign-key-not-match-count)|recurring|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_foreign_key_not_match_count](./column/integrity/foreign-key-not-match-count/#monthly-foreign-key-not-match-count)|recurring|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.|
 |[daily_partition_foreign_key_not_match_count](./column/integrity/foreign-key-not-match-count/#daily-partition-foreign-key-not-match-count)|partitioned|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|
 |[monthly_partition_foreign_key_not_match_count](./column/integrity/foreign-key-not-match-count/#monthly-partition-foreign-key-not-match-count)|partitioned|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.|
 
@@ -273,7 +289,7 @@ Checks the referential integrity of a column against a column in another table.
 |------------|------------|-------------|
 |[foreign_key_match_percent](./column/integrity/foreign-key-match-percent/#foreign-key-match-percent)|profiling|Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count.|
 |[daily_foreign_key_match_percent](./column/integrity/foreign-key-match-percent/#daily-foreign-key-match-percent)|recurring|Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_foreign_key_match_percent](./column/integrity/foreign-key-match-percent/#monthly-foreign-key-match-percent)|recurring|Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_foreign_key_match_percent](./column/integrity/foreign-key-match-percent/#monthly-foreign-key-match-percent)|recurring|Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.|
 |[daily_partition_foreign_key_match_percent](./column/integrity/foreign-key-match-percent/#daily-partition-foreign-key-match-percent)|partitioned|Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|
 |[monthly_partition_foreign_key_match_percent](./column/integrity/foreign-key-match-percent/#monthly-partition-foreign-key-match-percent)|partitioned|Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.|
 
@@ -365,19 +381,19 @@ Validates that the data in a numeric column is in the expected format or within 
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[numbers_in_set_count](./column/numeric/numbers-in-set-count/#numbers-in-set-count)|profiling|Verifies that the number of numbers from set in a column does not exceed the minimum accepted count.|
-|[daily_numbers_in_set_count](./column/numeric/numbers-in-set-count/#daily-numbers-in-set-count)|recurring|Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_numbers_in_set_count](./column/numeric/numbers-in-set-count/#monthly-numbers-in-set-count)|recurring|Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_numbers_in_set_count](./column/numeric/numbers-in-set-count/#daily-partition-numbers-in-set-count)|partitioned|Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_numbers_in_set_count](./column/numeric/numbers-in-set-count/#monthly-partition-numbers-in-set-count)|partitioned|Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[daily_numbers_in_set_count](./column/numeric/numbers-in-set-count/#daily-numbers-in-set-count)|recurring|Verifies that the number of numbers from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_numbers_in_set_count](./column/numeric/numbers-in-set-count/#monthly-numbers-in-set-count)|recurring|Verifies that the number of numbers from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_numbers_in_set_count](./column/numeric/numbers-in-set-count/#daily-partition-numbers-in-set-count)|partitioned|Verifies that the number of numbers from set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_numbers_in_set_count](./column/numeric/numbers-in-set-count/#monthly-partition-numbers-in-set-count)|partitioned|Verifies that the number of numbers from set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[numbers_in_set_percent](./column/numeric/numbers-in-set-percent/#numbers-in-set-percent)|profiling|Verifies that the percentage of numbers from set in a column does not exceed the minimum accepted percentage.|
-|[daily_numbers_in_set_percent](./column/numeric/numbers-in-set-percent/#daily-numbers-in-set-percent)|recurring|Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_numbers_in_set_percent](./column/numeric/numbers-in-set-percent/#monthly-numbers-in-set-percent)|recurring|Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_numbers_in_set_percent](./column/numeric/numbers-in-set-percent/#daily-partition-numbers-in-set-percent)|partitioned|Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_numbers_in_set_percent](./column/numeric/numbers-in-set-percent/#monthly-partition-numbers-in-set-percent)|partitioned|Verifies that the percentage of Numbers from set in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[daily_numbers_in_set_percent](./column/numeric/numbers-in-set-percent/#daily-numbers-in-set-percent)|recurring|Verifies that the percentage of numbers from set in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_numbers_in_set_percent](./column/numeric/numbers-in-set-percent/#monthly-numbers-in-set-percent)|recurring|Verifies that the percentage of numbers from set in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_numbers_in_set_percent](./column/numeric/numbers-in-set-percent/#daily-partition-numbers-in-set-percent)|partitioned|Verifies that the percentage of numbers from set in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_numbers_in_set_percent](./column/numeric/numbers-in-set-percent/#monthly-partition-numbers-in-set-percent)|partitioned|Verifies that the percentage of numbers from set in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
@@ -402,36 +418,36 @@ Validates that the data in a numeric column is in the expected format or within 
 |------------|------------|-------------|
 |[value_below_min_value_count](./column/numeric/value-below-min-value-count/#value-below-min-value-count)|profiling|The check counts those values with value below the one provided by the user in a column.|
 |[daily_value_below_min_value_count](./column/numeric/value-below-min-value-count/#daily-value-below-min-value-count)|recurring|The check counts those values with value below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_value_below_min_value_count](./column/numeric/value-below-min-value-count/#monthly-value-below-min-value-count)|recurring|The check counts those values with value below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_value_below_min_value_count](./column/numeric/value-below-min-value-count/#daily-partition-value-below-min-value-count)|partitioned|The check counts those values with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_value_below_min_value_count](./column/numeric/value-below-min-value-count/#monthly-partition-value-below-min-value-count)|partitioned|The check counts those values with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[monthly_value_below_min_value_count](./column/numeric/value-below-min-value-count/#monthly-value-below-min-value-count)|recurring|The check counts values below those provided by the user in the column. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_value_below_min_value_count](./column/numeric/value-below-min-value-count/#daily-partition-value-below-min-value-count)|partitioned|The check counts values below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_value_below_min_value_count](./column/numeric/value-below-min-value-count/#monthly-partition-value-below-min-value-count)|partitioned|The check counts values below those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[value_below_min_value_percent](./column/numeric/value-below-min-value-percent/#value-below-min-value-percent)|profiling|The check percentage of those values with value below the one provided by the user in a column.|
-|[daily_value_below_min_value_percent](./column/numeric/value-below-min-value-percent/#daily-value-below-min-value-percent)|recurring|The check percentage of those values with value below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_value_below_min_value_percent](./column/numeric/value-below-min-value-percent/#monthly-value-below-min-value-percent)|recurring|The check percentage of those values with value below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_value_below_min_value_percent](./column/numeric/value-below-min-value-percent/#daily-partition-value-below-min-value-percent)|partitioned|The check percentage of those values with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_value_below_min_value_percent](./column/numeric/value-below-min-value-percent/#monthly-partition-value-below-min-value-percent)|partitioned|The check percentage of those values with value below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[value_below_min_value_percent](./column/numeric/value-below-min-value-percent/#value-below-min-value-percent)|profiling|The check percentage values below those provided by the user in the column.|
+|[daily_value_below_min_value_percent](./column/numeric/value-below-min-value-percent/#daily-value-below-min-value-percent)|recurring|The check percentage values below those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_value_below_min_value_percent](./column/numeric/value-below-min-value-percent/#monthly-value-below-min-value-percent)|recurring|The check percentage values below those provided by the user in the column. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_value_below_min_value_percent](./column/numeric/value-below-min-value-percent/#daily-partition-value-below-min-value-percent)|partitioned|The check percentage values below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_value_below_min_value_percent](./column/numeric/value-below-min-value-percent/#monthly-partition-value-below-min-value-percent)|partitioned|The check percentage values below those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[value_above_max_value_count](./column/numeric/value-above-max-value-count/#value-above-max-value-count)|profiling|The check counts those values with value above the one provided by the user in a column.|
-|[daily_value_above_max_value_count](./column/numeric/value-above-max-value-count/#daily-value-above-max-value-count)|recurring|The check counts those values with value above the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_value_above_max_value_count](./column/numeric/value-above-max-value-count/#monthly-value-above-max-value-count)|recurring|The check counts those values with value above the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_value_above_max_value_count](./column/numeric/value-above-max-value-count/#daily-partition-value-above-max-value-count)|partitioned|The check counts those values with value above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_value_above_max_value_count](./column/numeric/value-above-max-value-count/#monthly-partition-value-above-max-value-count)|partitioned|The check counts those values with value above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[value_above_max_value_count](./column/numeric/value-above-max-value-count/#value-above-max-value-count)|profiling|The check counts values above those provided by the user in the column.|
+|[daily_value_above_max_value_count](./column/numeric/value-above-max-value-count/#daily-value-above-max-value-count)|recurring|The check counts values below those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_value_above_max_value_count](./column/numeric/value-above-max-value-count/#monthly-value-above-max-value-count)|recurring|The check counts values above those provided by the user in the column.. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_value_above_max_value_count](./column/numeric/value-above-max-value-count/#daily-partition-value-above-max-value-count)|partitioned|The check counts values above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_value_above_max_value_count](./column/numeric/value-above-max-value-count/#monthly-partition-value-above-max-value-count)|partitioned|The check counts values above those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[value_above_max_value_percent](./column/numeric/value-above-max-value-percent/#value-above-max-value-percent)|profiling|The check percentage of those values with value above the one provided by the user in a column.|
-|[daily_value_above_max_value_percent](./column/numeric/value-above-max-value-percent/#daily-value-above-max-value-percent)|recurring|The check percentage of those values with value below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_value_above_max_value_percent](./column/numeric/value-above-max-value-percent/#monthly-value-above-max-value-percent)|recurring|The check percentage of those values with value below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_value_above_max_value_percent](./column/numeric/value-above-max-value-percent/#daily-partition-value-above-max-value-percent)|partitioned|The check percentage of those values with value above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_value_above_max_value_percent](./column/numeric/value-above-max-value-percent/#monthly-partition-value-above-max-value-percent)|partitioned|The check percentage of those values with value above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[value_above_max_value_percent](./column/numeric/value-above-max-value-percent/#value-above-max-value-percent)|profiling|The check percentage values above those provided by the user in the column.|
+|[daily_value_above_max_value_percent](./column/numeric/value-above-max-value-percent/#daily-value-above-max-value-percent)|recurring|The check percentage values above those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_value_above_max_value_percent](./column/numeric/value-above-max-value-percent/#monthly-value-above-max-value-percent)|recurring|The check percentage values above those provided by the user in the column. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_value_above_max_value_percent](./column/numeric/value-above-max-value-percent/#daily-partition-value-above-max-value-percent)|partitioned|The check percentage values above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_value_above_max_value_percent](./column/numeric/value-above-max-value-percent/#monthly-partition-value-above-max-value-percent)|partitioned|The check percentage values above those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
@@ -471,10 +487,10 @@ Validates that the data in a numeric column is in the expected format or within 
 |[percentile_90_in_range](./column/numeric/percentile-in-range/#percentile-90-in-range)|profiling|Verifies that the percentile 90 of all values in a column is not outside the set range.|
 |[daily_percentile_in_range](./column/numeric/percentile-in-range/#daily-percentile-in-range)|recurring|Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[daily_median_in_range](./column/numeric/percentile-in-range/#daily-median-in-range)|recurring|Verifies that the median of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_percentile_10_in_range](./column/numeric/percentile-in-range/#daily-percentile-10-in-range)|recurring|Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_percentile_25_in_range](./column/numeric/percentile-in-range/#daily-percentile-25-in-range)|recurring|Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_percentile_75_in_range](./column/numeric/percentile-in-range/#daily-percentile-75-in-range)|recurring|Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_percentile_90_in_range](./column/numeric/percentile-in-range/#daily-percentile-90-in-range)|recurring|Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_percentile_10_in_range](./column/numeric/percentile-in-range/#daily-percentile-10-in-range)|recurring|Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[daily_percentile_25_in_range](./column/numeric/percentile-in-range/#daily-percentile-25-in-range)|recurring|Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[daily_percentile_75_in_range](./column/numeric/percentile-in-range/#daily-percentile-75-in-range)|recurring|Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[daily_percentile_90_in_range](./column/numeric/percentile-in-range/#daily-percentile-90-in-range)|recurring|Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[monthly_percentile_in_range](./column/numeric/percentile-in-range/#monthly-percentile-in-range)|recurring|Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
 |[monthly_median_in_range](./column/numeric/percentile-in-range/#monthly-median-in-range)|recurring|Verifies that the median of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
 |[monthly_percentile_10_in_range](./column/numeric/percentile-in-range/#monthly-percentile-10-in-range)|recurring|Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
@@ -518,7 +534,7 @@ Validates that the data in a numeric column is in the expected format or within 
 |[sample_variance_in_range](./column/numeric/sample-variance-in-range/#sample-variance-in-range)|profiling|Verifies that the sample variance of all values in a column is not outside the set range.|
 |[daily_sample_variance_in_range](./column/numeric/sample-variance-in-range/#daily-sample-variance-in-range)|recurring|Verifies that the sample variance of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[monthly_sample_variance_in_range](./column/numeric/sample-variance-in-range/#monthly-sample-variance-in-range)|recurring|Verifies that the sample variance of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_sample_variance_in_range](./column/numeric/sample-variance-in-range/#daily-partition-sample-variance-in-range)|partitioned|Verifies that the sample Variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
+|[daily_partition_sample_variance_in_range](./column/numeric/sample-variance-in-range/#daily-partition-sample-variance-in-range)|partitioned|Verifies that the sample variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
 |[monthly_partition_sample_variance_in_range](./column/numeric/sample-variance-in-range/#monthly-partition-sample-variance-in-range)|partitioned|Verifies that the sample variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
@@ -527,7 +543,7 @@ Validates that the data in a numeric column is in the expected format or within 
 |[population_variance_in_range](./column/numeric/population-variance-in-range/#population-variance-in-range)|profiling|Verifies that the population variance of all values in a column is not outside the set range.|
 |[daily_population_variance_in_range](./column/numeric/population-variance-in-range/#daily-population-variance-in-range)|recurring|Verifies that the population variance of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[monthly_population_variance_in_range](./column/numeric/population-variance-in-range/#monthly-population-variance-in-range)|recurring|Verifies that the population variance of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_population_variance_in_range](./column/numeric/population-variance-in-range/#daily-partition-population-variance-in-range)|partitioned|Verifies that the population Variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
+|[daily_partition_population_variance_in_range](./column/numeric/population-variance-in-range/#daily-partition-population-variance-in-range)|partitioned|Verifies that the population variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
 |[monthly_partition_population_variance_in_range](./column/numeric/population-variance-in-range/#monthly-partition-population-variance-in-range)|partitioned|Verifies that the population variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
@@ -681,28 +697,28 @@ Validate data against user-defined SQL queries at the column level. Checks in th
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[sql_condition_passed_percent_on_column](./column/sql/sql-condition-passed-percent-on-column/#sql-condition-passed-percent-on-column)|profiling|Verifies that a minimum percentage of rows passed a custom SQL condition (expression).|
-|[daily_sql_condition_passed_percent_on_column](./column/sql/sql-condition-passed-percent-on-column/#daily-sql-condition-passed-percent-on-column)|recurring|Verifies that a minimum percentage of rows passed a custom SQL condition (expression).|
-|[monthly_sql_condition_passed_percent_on_column](./column/sql/sql-condition-passed-percent-on-column/#monthly-sql-condition-passed-percent-on-column)|recurring|Verifies that a minimum percentage of rows passed a custom SQL condition (expression).|
-|[daily_partition_sql_condition_passed_percent_on_column](./column/sql/sql-condition-passed-percent-on-column/#daily-partition-sql-condition-passed-percent-on-column)|partitioned|Verifies that a minimum percentage of rows passed a custom SQL condition (expression).|
-|[monthly_partition_sql_condition_passed_percent_on_column](./column/sql/sql-condition-passed-percent-on-column/#monthly-partition-sql-condition-passed-percent-on-column)|partitioned|Verifies that a minimum percentage of rows passed a custom SQL condition (expression).|
+|[daily_sql_condition_passed_percent_on_column](./column/sql/sql-condition-passed-percent-on-column/#daily-sql-condition-passed-percent-on-column)|recurring|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_sql_condition_passed_percent_on_column](./column/sql/sql-condition-passed-percent-on-column/#monthly-sql-condition-passed-percent-on-column)|recurring|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_sql_condition_passed_percent_on_column](./column/sql/sql-condition-passed-percent-on-column/#daily-partition-sql-condition-passed-percent-on-column)|partitioned|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_sql_condition_passed_percent_on_column](./column/sql/sql-condition-passed-percent-on-column/#monthly-partition-sql-condition-passed-percent-on-column)|partitioned|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[sql_condition_failed_count_on_column](./column/sql/sql-condition-failed-count-on-column/#sql-condition-failed-count-on-column)|profiling|Verifies that a maximum number of rows failed a custom SQL condition (expression).|
-|[daily_sql_condition_failed_count_on_column](./column/sql/sql-condition-failed-count-on-column/#daily-sql-condition-failed-count-on-column)|recurring|Verifies that a maximum number of rows failed a custom SQL condition (expression).|
-|[monthly_sql_condition_failed_count_on_column](./column/sql/sql-condition-failed-count-on-column/#monthly-sql-condition-failed-count-on-column)|recurring|Verifies that a maximum number of rows failed a custom SQL condition (expression).|
-|[daily_partition_sql_condition_failed_count_on_column](./column/sql/sql-condition-failed-count-on-column/#daily-partition-sql-condition-failed-count-on-column)|partitioned|Verifies that a maximum number of rows failed a custom SQL condition (expression).|
-|[monthly_partition_sql_condition_failed_count_on_column](./column/sql/sql-condition-failed-count-on-column/#monthly-partition-sql-condition-failed-count-on-column)|partitioned|Verifies that a maximum number of rows failed a custom SQL condition (expression).|
+|[daily_sql_condition_failed_count_on_column](./column/sql/sql-condition-failed-count-on-column/#daily-sql-condition-failed-count-on-column)|recurring|Verifies that a maximum number of rows failed a custom SQL condition (expression). Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_sql_condition_failed_count_on_column](./column/sql/sql-condition-failed-count-on-column/#monthly-sql-condition-failed-count-on-column)|recurring|Verifies that a maximum number of rows failed a custom SQL condition (expression). Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_sql_condition_failed_count_on_column](./column/sql/sql-condition-failed-count-on-column/#daily-partition-sql-condition-failed-count-on-column)|partitioned|Verifies that a maximum number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_sql_condition_failed_count_on_column](./column/sql/sql-condition-failed-count-on-column/#monthly-partition-sql-condition-failed-count-on-column)|partitioned|Verifies that a maximum number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[sql_aggregate_expr_column](./column/sql/sql-aggregate-expr-column/#sql-aggregate-expr-column)|profiling|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.|
-|[daily_sql_aggregate_expr_column](./column/sql/sql-aggregate-expr-column/#daily-sql-aggregate-expr-column)|recurring|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.|
-|[monthly_sql_aggregate_expr_column](./column/sql/sql-aggregate-expr-column/#monthly-sql-aggregate-expr-column)|recurring|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.|
-|[daily_partition_sql_aggregate_expr_column](./column/sql/sql-aggregate-expr-column/#daily-partition-sql-aggregate-expr-column)|partitioned|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.|
-|[monthly_partition_sql_aggregate_expr_column](./column/sql/sql-aggregate-expr-column/#monthly-partition-sql-aggregate-expr-column)|partitioned|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.|
+|[daily_sql_aggregate_expr_column](./column/sql/sql-aggregate-expr-column/#daily-sql-aggregate-expr-column)|recurring|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_sql_aggregate_expr_column](./column/sql/sql-aggregate-expr-column/#monthly-sql-aggregate-expr-column)|recurring|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_sql_aggregate_expr_column](./column/sql/sql-aggregate-expr-column/#daily-partition-sql-aggregate-expr-column)|partitioned|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_sql_aggregate_expr_column](./column/sql/sql-aggregate-expr-column/#monthly-partition-sql-aggregate-expr-column)|partitioned|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 
@@ -734,53 +750,53 @@ Validates that the data in a string column match the expected format or pattern.
 |[string_mean_length](./column/strings/string-mean-length/#string-mean-length)|profiling|Verifies that the length of string in a column does not exceed the mean accepted length.|
 |[daily_string_mean_length](./column/strings/string-mean-length/#daily-string-mean-length)|recurring|Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[monthly_string_mean_length](./column/strings/string-mean-length/#monthly-string-mean-length)|recurring|Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_string_mean_length](./column/strings/string-mean-length/#daily-partition-string-mean-length)|partitioned|Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each daily partition.|
+|[daily_partition_string_mean_length](./column/strings/string-mean-length/#daily-partition-string-mean-length)|partitioned|Verifies that the length of string in a column does not exceed the mean accepted length. Creates a separate data quality check (and an alert) for each daily partition.|
 |[monthly_partition_string_mean_length](./column/strings/string-mean-length/#monthly-partition-string-mean-length)|partitioned|Verifies that the length of string in a column does not exceed the mean accepted length. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[string_length_below_min_length_count](./column/strings/string-length-below-min-length-count/#string-length-below-min-length-count)|profiling|The check counts those strings with length below the one provided by the user in a column.|
-|[daily_string_length_below_min_length_count](./column/strings/string-length-below-min-length-count/#daily-string-length-below-min-length-count)|recurring|The check counts those strings with length below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[string_length_below_min_length_count](./column/strings/string-length-below-min-length-count/#string-length-below-min-length-count)|profiling|The check counts those strings with length below those provided by the user in the column.|
+|[daily_string_length_below_min_length_count](./column/strings/string-length-below-min-length-count/#daily-string-length-below-min-length-count)|recurring|The check counts those strings with length below those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[monthly_string_length_below_min_length_count](./column/strings/string-length-below-min-length-count/#monthly-string-length-below-min-length-count)|recurring|The check counts those strings with length below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_string_length_below_min_length_count](./column/strings/string-length-below-min-length-count/#daily-partition-string-length-below-min-length-count)|partitioned|The check counts those strings with length below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_string_length_below_min_length_count](./column/strings/string-length-below-min-length-count/#monthly-partition-string-length-below-min-length-count)|partitioned|The check counts those strings with length below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[daily_partition_string_length_below_min_length_count](./column/strings/string-length-below-min-length-count/#daily-partition-string-length-below-min-length-count)|partitioned|The check counts those strings with length below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_string_length_below_min_length_count](./column/strings/string-length-below-min-length-count/#monthly-partition-string-length-below-min-length-count)|partitioned|The check counts those strings with length below those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[string_length_below_min_length_percent](./column/strings/string-length-below-min-length-percent/#string-length-below-min-length-percent)|profiling|The check counts percentage of those strings with length below the one provided by the user in a column.|
-|[daily_string_length_below_min_length_percent](./column/strings/string-length-below-min-length-percent/#daily-string-length-below-min-length-percent)|recurring|The check counts percentage of those strings with length below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[string_length_below_min_length_percent](./column/strings/string-length-below-min-length-percent/#string-length-below-min-length-percent)|profiling|The check counts percentage those strings with length below those provided by the user in the column.|
+|[daily_string_length_below_min_length_percent](./column/strings/string-length-below-min-length-percent/#daily-string-length-below-min-length-percent)|recurring|The check counts percentage those strings with length below those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[monthly_string_length_below_min_length_percent](./column/strings/string-length-below-min-length-percent/#monthly-string-length-below-min-length-percent)|recurring|The check counts percentage of those strings with length below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_string_length_below_min_length_percent](./column/strings/string-length-below-min-length-percent/#daily-partition-string-length-below-min-length-percent)|partitioned|The check counts percentage of those strings with length below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_string_length_below_min_length_percent](./column/strings/string-length-below-min-length-percent/#monthly-partition-string-length-below-min-length-percent)|partitioned|The check counts percentage of those strings with length below the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[daily_partition_string_length_below_min_length_percent](./column/strings/string-length-below-min-length-percent/#daily-partition-string-length-below-min-length-percent)|partitioned|The check counts percentage those strings with length below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_string_length_below_min_length_percent](./column/strings/string-length-below-min-length-percent/#monthly-partition-string-length-below-min-length-percent)|partitioned|The check counts percentage those strings with length below those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[string_length_above_max_length_count](./column/strings/string-length-above-max-length-count/#string-length-above-max-length-count)|profiling|The check counts those strings with length above the one provided by the user in a column. |
-|[daily_string_length_above_max_length_count](./column/strings/string-length-above-max-length-count/#daily-string-length-above-max-length-count)|recurring|The check counts those strings with length above the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[string_length_above_max_length_count](./column/strings/string-length-above-max-length-count/#string-length-above-max-length-count)|profiling|The check counts those strings with length above those provided by the user in the column. |
+|[daily_string_length_above_max_length_count](./column/strings/string-length-above-max-length-count/#daily-string-length-above-max-length-count)|recurring|The check counts those strings with length above those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[monthly_string_length_above_max_length_count](./column/strings/string-length-above-max-length-count/#monthly-string-length-above-max-length-count)|recurring|The check counts those strings with length above the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_string_length_above_max_length_count](./column/strings/string-length-above-max-length-count/#daily-partition-string-length-above-max-length-count)|partitioned|The check counts those strings with length above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_string_length_above_max_length_count](./column/strings/string-length-above-max-length-count/#monthly-partition-string-length-above-max-length-count)|partitioned|The check counts those strings with length above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[daily_partition_string_length_above_max_length_count](./column/strings/string-length-above-max-length-count/#daily-partition-string-length-above-max-length-count)|partitioned|The check counts those strings with length above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_string_length_above_max_length_count](./column/strings/string-length-above-max-length-count/#monthly-partition-string-length-above-max-length-count)|partitioned|The check counts those strings with length above those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[string_length_above_max_length_percent](./column/strings/string-length-above-max-length-percent/#string-length-above-max-length-percent)|profiling|The check counts percentage of those strings with length above the one provided by the user in a column. |
-|[daily_string_length_above_max_length_percent](./column/strings/string-length-above-max-length-percent/#daily-string-length-above-max-length-percent)|recurring|The check counts percentage of those strings with length above the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[string_length_above_max_length_percent](./column/strings/string-length-above-max-length-percent/#string-length-above-max-length-percent)|profiling|The check counts percentage of those strings with length above those provided by the user in the column. |
+|[daily_string_length_above_max_length_percent](./column/strings/string-length-above-max-length-percent/#daily-string-length-above-max-length-percent)|recurring|The check counts percentage of those strings with length above those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[monthly_string_length_above_max_length_percent](./column/strings/string-length-above-max-length-percent/#monthly-string-length-above-max-length-percent)|recurring|The check counts percentage of those strings with length above the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_string_length_above_max_length_percent](./column/strings/string-length-above-max-length-percent/#daily-partition-string-length-above-max-length-percent)|partitioned|The check counts percentage of those strings with length above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_string_length_above_max_length_percent](./column/strings/string-length-above-max-length-percent/#monthly-partition-string-length-above-max-length-percent)|partitioned|The check counts percentage of those strings with length above the one provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[daily_partition_string_length_above_max_length_percent](./column/strings/string-length-above-max-length-percent/#daily-partition-string-length-above-max-length-percent)|partitioned|The check counts percentage of those strings with length above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_string_length_above_max_length_percent](./column/strings/string-length-above-max-length-percent/#monthly-partition-string-length-above-max-length-percent)|partitioned|The check counts percentage of those strings with length above those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[string_length_in_range_percent](./column/strings/string-length-in-range-percent/#string-length-in-range-percent)|profiling|The check counts percentage of those strings with length in the range provided by the user in a column. |
-|[daily_string_length_in_range_percent](./column/strings/string-length-in-range-percent/#daily-string-length-in-range-percent)|recurring|The check counts percentage of those strings with length in the range provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[string_length_in_range_percent](./column/strings/string-length-in-range-percent/#string-length-in-range-percent)|profiling|The check counts the percentage of those strings with length in the range provided by the user in the column. |
+|[daily_string_length_in_range_percent](./column/strings/string-length-in-range-percent/#daily-string-length-in-range-percent)|recurring|The check counts the percentage of those strings with length in the range provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[monthly_string_length_in_range_percent](./column/strings/string-length-in-range-percent/#monthly-string-length-in-range-percent)|recurring|The check counts percentage of those strings with length in the range provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_string_length_in_range_percent](./column/strings/string-length-in-range-percent/#daily-partition-string-length-in-range-percent)|partitioned|The check counts percentage of those strings with length in the range provided by the user in a column. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_string_length_in_range_percent](./column/strings/string-length-in-range-percent/#monthly-partition-string-length-in-range-percent)|partitioned|The check counts percentage of those strings with length in the range provided by the user in a column. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[daily_partition_string_length_in_range_percent](./column/strings/string-length-in-range-percent/#daily-partition-string-length-in-range-percent)|partitioned|The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_string_length_in_range_percent](./column/strings/string-length-in-range-percent/#monthly-partition-string-length-in-range-percent)|partitioned|The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
@@ -797,8 +813,8 @@ Validates that the data in a string column match the expected format or pattern.
 |[string_empty_percent](./column/strings/string-empty-percent/#string-empty-percent)|profiling|Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.|
 |[daily_string_empty_percent](./column/strings/string-empty-percent/#daily-string-empty-percent)|recurring|Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[monthly_string_empty_percent](./column/strings/string-empty-percent/#monthly-string-empty-percent)|recurring|Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_string_empty_percent](./column/strings/string-empty-percent/#daily-partition-string-empty-percent)|partitioned|Verifies that the percentage of string in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_string_empty_percent](./column/strings/string-empty-percent/#monthly-partition-string-empty-percent)|partitioned|Verifies that the percentage of string in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[daily_partition_string_empty_percent](./column/strings/string-empty-percent/#daily-partition-string-empty-percent)|partitioned|Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_string_empty_percent](./column/strings/string-empty-percent/#monthly-partition-string-empty-percent)|partitioned|Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
@@ -813,9 +829,9 @@ Validates that the data in a string column match the expected format or pattern.
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[string_whitespace_percent](./column/strings/string-whitespace-percent/#string-whitespace-percent)|profiling|Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.|
-|[daily_string_whitespace_percent](./column/strings/string-whitespace-percent/#daily-string-whitespace-percent)|recurring|Verifies that the number of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[daily_string_whitespace_percent](./column/strings/string-whitespace-percent/#daily-string-whitespace-percent)|recurring|Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[monthly_string_whitespace_percent](./column/strings/string-whitespace-percent/#monthly-string-whitespace-percent)|recurring|Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_string_whitespace_percent](./column/strings/string-whitespace-percent/#daily-partition-string-whitespace-percent)|partitioned|Verifies that the number of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|
+|[daily_partition_string_whitespace_percent](./column/strings/string-whitespace-percent/#daily-partition-string-whitespace-percent)|partitioned|Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|
 |[monthly_partition_string_whitespace_percent](./column/strings/string-whitespace-percent/#monthly-partition-string-whitespace-percent)|partitioned|Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
@@ -1020,19 +1036,19 @@ Validates that the data in a string column match the expected format or pattern.
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[string_most_popular_values](./column/strings/string-most-popular-values/#string-most-popular-values)|profiling|Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.|
-|[daily_string_most_popular_values](./column/strings/string-most-popular-values/#daily-string-most-popular-values)|recurring|Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.|
+|[daily_string_most_popular_values](./column/strings/string-most-popular-values/#daily-string-most-popular-values)|recurring|Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[monthly_string_most_popular_values](./column/strings/string-most-popular-values/#monthly-string-most-popular-values)|recurring|Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.|
-|[daily_partition_string_most_popular_values](./column/strings/string-most-popular-values/#daily-partition-string-most-popular-values)|partitioned|Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.|
-|[monthly_partition_string_most_popular_values](./column/strings/string-most-popular-values/#monthly-partition-string-most-popular-values)|partitioned|Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.|
+|[daily_partition_string_most_popular_values](./column/strings/string-most-popular-values/#daily-partition-string-most-popular-values)|partitioned|Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_string_most_popular_values](./column/strings/string-most-popular-values/#monthly-partition-string-most-popular-values)|partitioned|Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[string_datatype_detect](./column/strings/string-datatype-detect/#string-datatype-detect)|profiling|Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype.|
-|[daily_string_datatype_detect](./column/strings/string-datatype-detect/#daily-string-datatype-detect)|recurring|Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_string_datatype_detect](./column/strings/string-datatype-detect/#monthly-string-datatype-detect)|recurring|Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[daily_partition_string_datatype_detect](./column/strings/string-datatype-detect/#daily-partition-string-datatype-detect)|partitioned|Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_string_datatype_detect](./column/strings/string-datatype-detect/#monthly-partition-string-datatype-detect)|partitioned|Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[string_datatype_changed](./column/strings/string-datatype-changed/#string-datatype-changed)|profiling|Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype.|
+|[daily_string_datatype_changed](./column/strings/string-datatype-changed/#daily-string-datatype-changed)|recurring|Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_string_datatype_changed](./column/strings/string-datatype-changed/#monthly-string-datatype-changed)|recurring|Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[daily_partition_string_datatype_changed](./column/strings/string-datatype-changed/#daily-partition-string-datatype-changed)|partitioned|Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_string_datatype_changed](./column/strings/string-datatype-changed/#monthly-partition-string-datatype-changed)|partitioned|Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 
@@ -1052,11 +1068,11 @@ Counts the number or percent of duplicate or unique values in a column.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[unique_percent](./column/uniqueness/unique-percent/#unique-percent)|profiling|Verifies that the percentage of unique values in a column does not exceed the minimum accepted count.|
-|[daily_unique_percent](./column/uniqueness/unique-percent/#daily-unique-percent)|recurring|Verifies that the percentage of unique values in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[unique_percent](./column/uniqueness/unique-percent/#unique-percent)|profiling|Verifies that the percentage of unique values in a column does not exceed the minimum accepted percent.|
+|[daily_unique_percent](./column/uniqueness/unique-percent/#daily-unique-percent)|recurring|Verifies that the percentage of unique values in a column does not exceed the minimum accepted percent. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[monthly_unique_percent](./column/uniqueness/unique-percent/#monthly-unique-percent)|recurring|Verifies that the percentage of unique values in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_unique_percent](./column/uniqueness/unique-percent/#daily-partition-unique-percent)|partitioned|Verifies that the percentage of unique values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_unique_percent](./column/uniqueness/unique-percent/#monthly-partition-unique-percent)|partitioned|Verifies that the percentage of unique values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[daily_partition_unique_percent](./column/uniqueness/unique-percent/#daily-partition-unique-percent)|partitioned|Verifies that the percentage of unique values in a column does not exceed the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_unique_percent](./column/uniqueness/unique-percent/#monthly-partition-unique-percent)|partitioned|Verifies that the percentage of unique values in a column does not exceed the minimum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |

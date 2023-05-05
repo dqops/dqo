@@ -349,7 +349,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         {{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimePeriodGradient.month);
-            setTimestampColumn(tableSpec.getTimestampColumns().getEffectivePartitioningColumn());
+            setTimestampColumn(tableSpec.getTimestampColumns().getPartitionByColumn());
         }};
     }
 

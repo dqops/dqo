@@ -22,6 +22,7 @@ export const SynchronizeButton = () => {
         dataCheckResults: true,
         dataStatistics: true,
         dataErrors: true,
+        dataIncidents: true
       });
     } finally {
       setLoading(false);

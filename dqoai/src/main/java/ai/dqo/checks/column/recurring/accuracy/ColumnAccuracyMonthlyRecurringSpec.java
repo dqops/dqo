@@ -40,7 +40,7 @@ public class ColumnAccuracyMonthlyRecurringSpec extends AbstractCheckCategorySpe
             put("monthly_min_match_percent", o -> o.monthlyMinMatchPercent);
             put("monthly_max_match_percent", o -> o.monthlyMaxMatchPercent);
             put("monthly_average_match_percent", o -> o.monthlyAverageMatchPercent);
-            put("monthly_row_count_match_percent", o -> o.monthlyRowCountMatchPercent);
+            put("monthly_not_null_count_match_percent", o -> o.monthlyNotNullCountMatchPercent);
 
         }
     };
@@ -58,7 +58,7 @@ public class ColumnAccuracyMonthlyRecurringSpec extends AbstractCheckCategorySpe
     private ColumnAccuracyAverageMatchPercentCheckSpec monthlyAverageMatchPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnAccuracyRowCountMatchPercentCheckSpec monthlyRowCountMatchPercent;
+    private ColumnAccuracyNotNullCountMatchPercentCheckSpec monthlyNotNullCountMatchPercent;
 
     /**
      * Returns an accuracy total sum match percent check specification.
@@ -136,18 +136,18 @@ public class ColumnAccuracyMonthlyRecurringSpec extends AbstractCheckCategorySpe
      * Returns an accuracy row count percent check specification.
      * @return Accuracy row count percent check specification.
      */
-    public ColumnAccuracyRowCountMatchPercentCheckSpec getMonthlyRowCountMatchPercent() {
-        return monthlyRowCountMatchPercent;
+    public ColumnAccuracyNotNullCountMatchPercentCheckSpec getMonthlyNotNullCountMatchPercent() {
+        return monthlyNotNullCountMatchPercent;
     }
 
     /**
      * Sets a new definition of an accuracy row count percent check.
-     * @param monthlyRowCountMatchPercent Accuracy row count percent check specification.
+     * @param monthlyNotNullCountMatchPercent Accuracy row count percent check specification.
      */
-    public void setMonthlyRowCountMatchPercent(ColumnAccuracyRowCountMatchPercentCheckSpec monthlyRowCountMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyRowCountMatchPercent, monthlyRowCountMatchPercent));
-        this.monthlyRowCountMatchPercent = monthlyRowCountMatchPercent;
-        propagateHierarchyIdToField(monthlyRowCountMatchPercent, "monthly_row_count_match_percent");
+    public void setMonthlyNotNullCountMatchPercent(ColumnAccuracyNotNullCountMatchPercentCheckSpec monthlyNotNullCountMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyNotNullCountMatchPercent, monthlyNotNullCountMatchPercent));
+        this.monthlyNotNullCountMatchPercent = monthlyNotNullCountMatchPercent;
+        propagateHierarchyIdToField(monthlyNotNullCountMatchPercent, "monthly_not_null_count_match_percent");
     }
 
     /**

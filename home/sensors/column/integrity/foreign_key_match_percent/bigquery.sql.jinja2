@@ -1,12 +1,12 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 
 {%- macro render_foreign_table(foreign_table) -%}
-{% if foreign_table.find(".") < 0 %}
+{%- if foreign_table.find(".") < 0 -%}
    {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
 {%- else -%}
    {{ foreign_table }}
-{%- endif %}
-{%- endmacro %}
+{%- endif -%}
+{%- endmacro -%}
 
 SELECT
     100.0 * SUM(

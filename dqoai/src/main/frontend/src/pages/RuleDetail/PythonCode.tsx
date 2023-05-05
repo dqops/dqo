@@ -3,7 +3,6 @@ import CodeMirror from '@uiw/react-codemirror';
 import { RuleModel } from "../../api";
 import { setUpdatedRule } from "../../redux/actions/sensor.actions";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { RuleActionGroup } from "../../components/Sensors/RuleActionGroup";
 import { StreamLanguage } from '@codemirror/language';
 import { python } from '@codemirror/legacy-modes/mode/python';
 
@@ -23,8 +22,6 @@ const PythonCode = ({ rule }: PythonCodeProps) => {
 
   return (
     <div className="flex-1 overflow-auto" style={{ maxHeight: `calc(100vh - 255px)` }}>
-      <RuleActionGroup />
-
       <CodeMirror
         value={rule?.rule_python_module_content}
         onChange={onChange}

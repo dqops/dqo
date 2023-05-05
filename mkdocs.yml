@@ -73,6 +73,8 @@ nav:
 ########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY
   - Checks:
     - table:
+      - accuracy:
+        - row count match percent: 'checks/table/accuracy/row-count-match-percent.md'
       - availability:
         - table availability: 'checks/table/availability/table-availability.md'
       - sql:
@@ -92,7 +94,7 @@ nav:
         - min match percent: 'checks/column/accuracy/min-match-percent.md'
         - max match percent: 'checks/column/accuracy/max-match-percent.md'
         - average match percent: 'checks/column/accuracy/average-match-percent.md'
-        - row count match percent: 'checks/column/accuracy/row-count-match-percent.md'
+        - not null count match percent: 'checks/column/accuracy/not-null-count-match-percent.md'
       - bool:
         - true percent: 'checks/column/bool/true-percent.md'
         - false percent: 'checks/column/bool/false-percent.md'
@@ -198,6 +200,7 @@ nav:
 ########## INCLUDE SENSOR REFERENCE - DO NOT MODIFY MANUALLY
     - Sensors:
       - table:
+        - accuracy table sensors: 'reference/sensors/table/accuracy-table-sensors.md'
         - availability table sensors: 'reference/sensors/table/availability-table-sensors.md'
         - sql table sensors: 'reference/sensors/table/sql-table-sensors.md'
         - standard table sensors: 'reference/sensors/table/standard-table-sensors.md'

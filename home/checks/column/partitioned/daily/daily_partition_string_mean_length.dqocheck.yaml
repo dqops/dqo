@@ -4,6 +4,6 @@ kind: check
 spec:
   sensor_name: column/strings/string_mean_length
   rule_name: comparison/between_floats
-  help_text: Verifies that the length of string in a column does not exceed the maximum
+  help_text: Verifies that the length of string in a column does not exceed the mean
     accepted length. Creates a separate data quality check (and an alert) for each
     daily partition.

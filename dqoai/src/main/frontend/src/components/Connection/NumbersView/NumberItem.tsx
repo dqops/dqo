@@ -38,7 +38,7 @@ const NumberItem = ({
       </td>
       <td className="px-8 min-w-20 py-2">
         {isLast ? (
-          <IconButton size="sm">
+          <IconButton size="sm" className="bg-teal-500">
             <SvgIcon name="add" className="w-4" />
           </IconButton>
         ) : (

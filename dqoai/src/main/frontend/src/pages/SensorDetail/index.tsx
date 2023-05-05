@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import DefinitionLayout from "../../components/DefinitionLayout";
 import SvgIcon from "../../components/SvgIcon";
 import { useSelector } from "react-redux";
 import { getFirstLevelSensorState } from "../../redux/selectors";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { getSensor, setUpdatedSensor } from "../../redux/actions/sensor.actions";
+import { createSensor, getSensor, setUpdatedSensor } from "../../redux/actions/sensor.actions";
 import Tabs from "../../components/Tabs";
 import SensorDefinition from "./SensorDefinition";
 import { ProviderSensorModel } from "../../api";
 import ProvideSensor from "./ProvideSensor";
+import Input from "../../components/Input";
+import { SensorActionGroup } from "../../components/Sensors/SensorActionGroup";
 
 const tabs = [
   {
@@ -38,15 +40,16 @@ const tabs = [
 ];
 
 export const SensorDetail = () => {
-  const { full_sensor_name, sensorDetail } = useSelector(getFirstLevelSensorState);
+  const { full_sensor_name, sensorDetail, path, type } = useSelector(getFirstLevelSensorState);
   const dispatch = useActionDispatch();
   const [activeTab, setActiveTab] = useState('definition');
+  const [sensorName, setSensorName] = useState("");
 
   useEffect(() => {
-    if (!sensorDetail) {
+    if (!sensorDetail && type !== 'create') {
       dispatch(getSensor(full_sensor_name))
     }
-  }, [full_sensor_name, sensorDetail]);
+  }, [full_sensor_name, sensorDetail, type]);
 
   const handleChangeProvideSensor = (tab: string, providerSensor: ProviderSensorModel) => {
     const exist = sensorDetail?.provider_sensor_list?.find((item: ProviderSensorModel) => item.providerType === tab);
@@ -63,15 +66,48 @@ export const SensorDetail = () => {
     }));
   };
 
+  const onCreateSensor = async () => {
+    if (!sensorName) return;
+    const fullName = [...path || [], sensorName].join('/')
+
+    await dispatch(createSensor(fullName, sensorDetail));
+  };
+
+  const onChangeSensorName = (e: ChangeEvent<HTMLInputElement>) => {
+    setSensorName(e.target.value);
+    const fullName = [...path || [], e.target.value].join('/')
+
+    dispatch(setUpdatedSensor({
+      ...sensorDetail,
+      full_sensor_name: fullName
+    }));
+  }
+
   return (
     <DefinitionLayout>
       <div className="relative">
-        <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
-          <div className="flex items-center space-x-2 max-w-full">
-            <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
-            <div className="text-xl font-semibold truncate">Sensor: {full_sensor_name}</div>
+        <SensorActionGroup onSave={onCreateSensor} />
+        {type !== "create" ? (
+          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
+            <div className="flex items-center space-x-2 max-w-full">
+              <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
+              <div className="text-xl font-semibold truncate">Sensor: {full_sensor_name}</div>
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
+            <div className="flex items-center space-x-2 max-w-full">
+              <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
+              <div className="text-xl font-semibold truncate">Sensor: {[...path || [], ""].join('/')}</div>
+
+              <Input
+                value={sensorName}
+                onChange={onChangeSensorName}
+                error={!sensorName}
+              />
+            </div>
+          </div>
+        )}
 
         <div className="border-b border-gray-300 relative">
           <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />

@@ -338,6 +338,11 @@ public class JobsController {
                     synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
         }
 
+        if (synchronizeFolderParameters.isDataIncidents()) {
+            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_incidents,
+                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
+        }
+
         Flux<DqoQueueJobId> dqoQueueJobIdFlux = Flux.fromIterable(jobParametersList)
                 .flatMap(synchronizeFolderParameter -> {
                     SynchronizeRootFolderDqoQueueJob synchronizeFolderJob = this.dqoQueueJobFactory.createSynchronizeRootFolderJob();

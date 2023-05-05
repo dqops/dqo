@@ -22,15 +22,8 @@ const ProfilingView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
-    if (
-      !checksUI ||
-      tableBasic?.connection_name !== connectionName ||
-      tableBasic?.target?.schema_name !== schemaName ||
-      tableBasic?.target?.table_name !== tableName
-    ) {
-      dispatch(getTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
-    }
-  }, [connectionName, schemaName, tableName, tableBasic]);
+    dispatch(getTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, tableBasic]);
 
   const onUpdate = async () => {
     if (!checksUI) {

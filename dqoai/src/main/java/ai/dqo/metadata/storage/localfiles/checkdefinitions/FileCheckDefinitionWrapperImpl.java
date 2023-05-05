@@ -90,7 +90,7 @@ public class FileCheckDefinitionWrapperImpl extends CheckDefinitionWrapperImpl {
                 if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
                     throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
                 }
-                if (deserialized.getKind() != SpecificationKind.RULE) {
+                if (deserialized.getKind() != SpecificationKind.CHECK) {
                     throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                 }
 				this.setSpec(deserializedSpec);

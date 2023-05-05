@@ -53,6 +53,8 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
             put("standard", o -> o.standard);
             put("timeliness", o -> o.timeliness);
             put("sql", o -> o.sql);
+
+            // accuracy checks are not supported on partitioned checks yet
         }
     };
 
@@ -147,7 +149,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
         {{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimePeriodGradient.day);
-            setTimestampColumn(tableSpec.getTimestampColumns().getEffectivePartitioningColumn());
+            setTimestampColumn(tableSpec.getTimestampColumns().getPartitionByColumn());
         }};
     }
 

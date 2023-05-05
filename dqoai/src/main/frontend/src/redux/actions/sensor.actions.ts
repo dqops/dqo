@@ -46,6 +46,11 @@ export const getSensorFolderTree = () => async (dispatch: Dispatch) => {
   }
 };
 
+export const updateSensorFolderTree = (data: SensorBasicFolderModel) => ({
+  type: SENSOR_ACTION.UPDATE_SENSOR_FOLDER_TREE,
+  data
+});
+
 export const toggleSensorFolderTree = (key: string) => ({
   type: SENSOR_ACTION.TOGGLE_SENSOR_FOLDER,
   key,
@@ -151,6 +156,31 @@ export const updateSensor = (sensorName: string, body: SensorModel) => async (di
   }
 };
 
+export const createSensorRequest = () => ({
+  type: SENSOR_ACTION.CREATE_SENSOR_DETAIL
+});
+
+export const createSensorSuccess = (data: SensorModel) => ({
+  type: SENSOR_ACTION.CREATE_SENSOR_DETAIL_SUCCESS,
+  data
+});
+
+export const createSensorFailed = (error: unknown) => ({
+  type: SENSOR_ACTION.CREATE_SENSOR_DETAIL_FAILED,
+  error
+});
+
+export const createSensor = (sensorName: string, body: SensorModel) => async (dispatch: any) => {
+  dispatch(createSensorRequest());
+  try {
+    const res: AxiosResponse<SensorModel> =
+    await SensorsApi.createSensor(sensorName, body);
+    dispatch(createSensorSuccess(res.data));
+    dispatch(getSensorFolderTree());
+  } catch (err) {
+    dispatch(createSensorFailed(err));
+  }
+};
 
 export const updateRuleRequest = () => ({
   type: SENSOR_ACTION.UPDATE_RULE_DETAIL
@@ -174,5 +204,31 @@ export const updateRule = (ruleName: string, body: RuleModel) => async (dispatch
     dispatch(updateRuleSuccess(res.data));
   } catch (err) {
     dispatch(updateRuleFailed(err));
+  }
+};
+
+
+export const createRuleRequest = () => ({
+  type: SENSOR_ACTION.CREATE_RULE_DETAIL
+});
+
+export const createRuleSuccess = (data: SensorModel) => ({
+  type: SENSOR_ACTION.CREATE_RULE_DETAIL_SUCCESS,
+  data
+});
+
+export const createRuleFailed = (error: unknown) => ({
+  type: SENSOR_ACTION.CREATE_RULE_DETAIL_FAILED,
+  error
+});
+
+export const createRule = (ruleName: string, body: RuleModel) => async (dispatch: Dispatch) => {
+  dispatch(createRuleRequest());
+  try {
+    const res: AxiosResponse<SensorModel> =
+      await RulesApi.createRule(ruleName, body);
+    dispatch(createRuleSuccess(res.data));
+  } catch (err) {
+    dispatch(createRuleFailed(err));
   }
 };

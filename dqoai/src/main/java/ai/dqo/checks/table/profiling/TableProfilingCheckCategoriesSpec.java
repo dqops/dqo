@@ -49,6 +49,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
         {
             put("standard", o -> o.standard);
             put("timeliness", o -> o.timeliness);
+            put("accuracy", o -> o.accuracy);
             put("sql", o -> o.sql);
             put("availability", o -> o.availability);
 //          put("consistency", o -> o.consistency);
@@ -65,6 +66,11 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableProfilingTimelinessChecksSpec timeliness;
+
+    @JsonPropertyDescription("Configuration of accuracy checks on a table level. Accuracy checks compare the tested table with another reference table.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableProfilingAccuracyChecksSpec accuracy;
 
     @JsonPropertyDescription("Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -111,6 +117,24 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
         this.setDirtyIf(!Objects.equals(this.timeliness, timeliness));
         this.timeliness = timeliness;
         this.propagateHierarchyIdToField(timeliness, "timeliness");
+    }
+
+    /**
+     * Returns the configuration of accuracy checks.
+     * @return Accuracy checks.
+     */
+    public TableProfilingAccuracyChecksSpec getAccuracy() {
+        return accuracy;
+    }
+
+    /**
+     * Sets the configuration of accuracy checks.
+     * @param accuracy Accuracy checks.
+     */
+    public void setAccuracy(TableProfilingAccuracyChecksSpec accuracy) {
+        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
+        this.accuracy = accuracy;
+        this.propagateHierarchyIdToField(accuracy, "accuracy");
     }
 
     /**

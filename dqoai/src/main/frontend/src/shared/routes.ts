@@ -40,6 +40,7 @@ export const ROUTES = {
   COLUMN_PARTITIONED_UI_FILTER: (checkTypes: string, connection: string, schema: string, table: string, column: string, timePartitioned: string, category: string, checkName: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}/partitioned/${timePartitioned}/${category}/${checkName}`,
   SENSOR_DETAIL: (sensor: string) => `/definitions/sensors/${sensor}`,
   RULE_DETAIL: (rule: string) => `/definitions/rules/${rule}`,
+  INCIDENT_DETAIL: (name: string) => `/incidents/${name}`,
 
   CONNECTION_LEVEL_VALUE: (checkTypes: string, connection: string) => `/${checkTypes}/connection/${connection}`,
   SCHEMA_LEVEL_VALUE: (checkTypes: string, connection: string, schema: string) => `/${checkTypes}/connection/${connection}/schema/${schema}`,
@@ -54,6 +55,7 @@ export const ROUTES = {
   COLUMN_LEVEL_VALUE: (checkTypes: string, connection: string, schema: string, table: string, column: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}`,
   SENSOR_DETAIL_VALUE: (sensor: string) => `/definitions/sensors/${sensor}`,
   RULE_DETAIL_VALUE: (rule: string) => `/definitions/rules/${rule}`,
+  INCIDENT_DETAIL_VALUE: (name: string) => `/incidents/${name}`,
 
   PATTERNS: {
     INDEX: '/',
@@ -83,7 +85,9 @@ export const ROUTES = {
     DASHBOARDS: '/dashboards',
     CREATE: '/create',
     DEFINITIONS: '/definitions',
+    INCIDENTS: '/incidents',
     SENSOR_DETAIL: '/definitions/sensors/:sensor',
     RULE_DETAIL: '/definitions/rules/:rule',
+    INCIDENT_DETAIL: '/incidents/:connection',
   }
 };

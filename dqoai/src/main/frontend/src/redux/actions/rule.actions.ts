@@ -50,3 +50,8 @@ export const toggleRuleFolderTree = (key: string) => ({
   type: RULE_ACTION.TOGGLE_RULE_FOLDER,
   key,
 });
+
+export const updateRuleFolderTree = (data: RuleBasicFolderModel) => ({
+  type: RULE_ACTION.UPDATE_RULE_FOLDER_TREE,
+  data
+});

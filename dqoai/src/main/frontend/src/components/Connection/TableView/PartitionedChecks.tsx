@@ -39,7 +39,6 @@ const TablePartitionedChecksView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const {
-    tableBasic,
     dailyPartitionedChecks,
     monthlyPartitionedChecks,
     isUpdatedDailyPartitionedChecks,
@@ -49,27 +48,13 @@ const TablePartitionedChecksView = () => {
   } = useSelector(getFirstLevelState(checkTypes));
 
   useEffect(() => {
-    if (
-      !dailyPartitionedChecks ||
-      tableBasic?.connection_name !== connectionName ||
-      tableBasic?.target?.schema_name !== schemaName ||
-      tableBasic?.target?.table_name !== tableName
-    ) {
-      dispatch(
-        getTableDailyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
-      );
-    }
-    if (
-      !monthlyPartitionedChecks ||
-      tableBasic?.connection_name !== connectionName ||
-      tableBasic?.target?.schema_name !== schemaName ||
-      tableBasic?.target?.table_name !== tableName
-    ) {
-      dispatch(
-        getTableMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
-      );
-    }
-  }, [connectionName, schemaName, tableName, tableName, tableBasic]);
+    dispatch(
+      getTableDailyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+    );
+    dispatch(
+      getTableMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
+    );
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     if (tab === 'daily') {
