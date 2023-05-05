@@ -13,7 +13,8 @@ import SourceSchemasView from "../../components/Connection/ConnectionView/Source
 import SchemasView from "../../components/Connection/ConnectionView/SchemasView";
 import ConnectionDataStream from "../../components/Connection/ConnectionView/ConnectionDataStream";
 import qs from 'query-string';
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import { getFirstLevelState } from "../../redux/selectors";
+import { IncidentsNotificationsView } from "../../components/Connection/ConnectionView/IncidentsNotificationsView";
 
 const initSourceTabs = [
   {
@@ -39,6 +40,10 @@ const initSourceTabs = [
   {
     label: 'Default data stream template',
     value: 'data-streams'
+  },
+  {
+    label: 'Incidents and Notifications',
+    value: 'incidents'
   }
 ];
 const initCheckTabs = [
@@ -157,8 +162,13 @@ const ConnectionPage = () => {
           </div>
         </div>
         {create_success !== 'true' && (
-          <div className="border-b border-gray-300">
-            <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
+          <div className="border-b border-gray-300 px-8">
+            <Tabs
+              className="justify-between"
+              tabs={tabs}
+              activeTab={activeTab}
+              onChange={onChangeTab}
+            />
           </div>
         )}
         {activeTab === 'detail' && <ConnectionDetail />}
@@ -169,6 +179,7 @@ const ConnectionPage = () => {
           import_schema === 'true' ? <SourceSchemasView /> : <SchemasView />
         )}
         {activeTab === 'data-streams' && <ConnectionDataStream />}
+        {activeTab === 'incidents' && <IncidentsNotificationsView />}
       </div>
     </ConnectionLayout>
   )

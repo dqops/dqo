@@ -28,13 +28,13 @@ const ConnectionDataStream = () => {
       dispatch(getConnectionBasic(checkTypes, firstLevelActiveTab, connection));
       dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection));
     }
-  }, [connection]);
+  }, [connection, checkTypes, firstLevelActiveTab, connectionBasic]);
 
   useEffect(() => {
-    if (!updatedDataStreamsMapping || (connectionBasic && connectionBasic?.connection_name !== connection)) {
+    if (!updatedDataStreamsMapping) {
       dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection));
     }
-  }, [connection, connectionBasic, checkTypes, firstLevelActiveTab]);
+  }, [connection, checkTypes, firstLevelActiveTab]);
 
   const onUpdate = async () => {
     if (!updatedDataStreamsMapping) {
