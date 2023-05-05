@@ -1,6 +1,6 @@
 # String max length
 
-The check counts percentage of those strings with length above the one provided by the user in a column.
+The check counts number of those strings with length above the one provided by the user in a column.
 
 **PROBLEM**
 
