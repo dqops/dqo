@@ -64,6 +64,7 @@ import { ReactComponent as RectangleListSvg } from './svg/rectangle-list.svg';
 import { ReactComponent as HelpCircleSvg } from './svg/help-circle.svg';
 import { ReactComponent as SqlServerSvg } from './svg/sql-server.svg';
 import { ReactComponent as MSSqlServerSvg } from './svg/mssql-server.svg';
+import { ReactComponent as MySqlSvg } from './svg/mysql.svg';
 import { ReactComponent as SpinnerSvg } from './svg/spinner.svg';
 import { ReactComponent as SyncSvg } from './svg/sync.svg';
 
@@ -132,6 +133,7 @@ const iconsMap: any = {
   'help-circle': HelpCircleSvg,
   sqlserver: SqlServerSvg,
   msserver: MSSqlServerSvg,
+  mysql: MySqlSvg,
   spinner: SpinnerSvg,
   sync: SyncSvg,
 };

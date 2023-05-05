@@ -18,6 +18,7 @@ package ai.dqo.rest.models.metadata;
 import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
+import ai.dqo.connectors.mysql.MysqlParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
@@ -65,6 +66,9 @@ public class ConnectionBasicModel {
     @JsonPropertyDescription("SqlServer connection parameters.")
     private SqlServerParametersSpec sqlserver;
 
+    @JsonPropertyDescription("MySQL connection parameters.")
+    private MysqlParametersSpec mysql;
+
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.")
     private CheckSearchFilters runChecksJobTemplate;
 
@@ -99,6 +103,7 @@ public class ConnectionBasicModel {
             setPostgresql(connectionSpec.getPostgresql());
             setRedshift(connectionSpec.getRedshift());
             setSqlserver(connectionSpec.getSqlserver());
+            setMysql(connectionSpec.getMysql());
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -153,5 +158,6 @@ public class ConnectionBasicModel {
         targetConnectionSpec.setPostgresql(this.getPostgresql());
         targetConnectionSpec.setRedshift(this.getRedshift());
         targetConnectionSpec.setSqlserver(this.getSqlserver());
+        targetConnectionSpec.setMysql(this.getMysql());
     }
 }
