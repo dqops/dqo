@@ -22,6 +22,8 @@ import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryConnectionProvider;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
+import ai.dqo.connectors.mysql.MysqlConnectionProvider;
+import ai.dqo.connectors.mysql.MysqlParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlConnectionProvider;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.redshift.RedshiftConnectionProvider;
@@ -482,6 +484,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 connectionSpec.setSqlserver(new SqlServerParametersSpec() {{
                     setDatabase("your_sql_server_database");
                 }});
+                connectionSpec.setMysql(new MysqlParametersSpec() {{
+                    setDatabase("your_my_sql_database");
+                }});
                 connectionSpec.setProviderType(providerType);
 
                 TimeSeriesConfigurationProvider timeSeriesConfigurationProvider = (TimeSeriesConfigurationProvider)checkRootContainer;
@@ -539,6 +544,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return RedshiftConnectionProvider.DIALECT_SETTINGS;
             case sqlserver:
                 return SqlServerConnectionProvider.DIALECT_SETTINGS;
+            case mysql:
+                return MysqlConnectionProvider.DIALECT_SETTINGS;
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }
