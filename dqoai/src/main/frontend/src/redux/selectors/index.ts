@@ -34,3 +34,9 @@ export const getFirstLevelSensorState = (state: IRootState) => {
 
   return tabs.find((item) => item.url === activeTab)?.state || {} as any;
 };
+
+export const getFirstLevelIncidentsState = (state: IRootState) => {
+  const { tabs, activeTab = ''} = state.incidents;
+
+  return tabs.find((item) => item.url === activeTab)?.state || {} as any;
+};

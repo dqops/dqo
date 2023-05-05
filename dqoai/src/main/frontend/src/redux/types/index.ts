@@ -23,3 +23,4 @@ export * from './dashboard.types';
 export * from './source.types';
 export * from './sensor.types';
 export * from './rule.types';
+export * from './incidents.types';
