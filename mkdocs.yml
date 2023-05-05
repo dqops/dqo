@@ -39,6 +39,7 @@ nav:
     - string-match-date-regex-percent: 'examples/string-match-date-regex-percent.md'
     - string-max-length: 'examples/string-max-length.md'
     - uniqueness-duplicate-percent: 'examples/uniqueness-duplicate-percent.md'
+    - Running checks with a scheduler: '/examples/running-checks-with-a-scheduler.md'
   - Working with DQO:
     - Installation:
       - Install DQO from Git: 'working-with-dqo/install-dqo-from-git/install-dqo-from-git.md'
