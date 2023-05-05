@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import Button from '../Button';
 import SvgIcon from '../SvgIcon';
 import { useTree } from '../../contexts/treeContext';
-import Tree from '../Tree';
+import Tree from '../MainLayout/Tree';
 
 const Sidebar = () => {
   const history = useHistory();
