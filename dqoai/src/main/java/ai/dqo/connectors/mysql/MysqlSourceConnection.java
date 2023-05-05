@@ -72,7 +72,7 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT TABLE_CATALOG AS table_catalog, TABLE_SCHEMA AS table_schema, TABLE_NAME AS table_name FROM ");
         sqlBuilder.append(getInformationSchemaName());
-        sqlBuilder.append(".TABLES\n");
+        sqlBuilder.append(".TABLES ");
         sqlBuilder.append("WHERE TABLE_SCHEMA='");
         sqlBuilder.append(schemaName.replace("'", "''"));
         sqlBuilder.append("'");
@@ -101,7 +101,7 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT CATALOG_NAME AS catalog_name, SCHEMA_NAME as schema_name FROM ");
         sqlBuilder.append(getInformationSchemaName());
-        sqlBuilder.append(".SCHEMATA WHERE TABLE_SCHEMA <> 'information_schema' and TABLE_SCHEMA <> 'performance_schema'");
+        sqlBuilder.append(".SCHEMATA WHERE SCHEMA_NAME <> 'information_schema' and SCHEMA_NAME <> 'performance_schema'");
         String listSchemataSql = sqlBuilder.toString();
         Table schemaRows = this.executeQuery(listSchemataSql);
 
