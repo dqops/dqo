@@ -25,7 +25,7 @@ import dashboardReducer, { IDashboardState } from "./dashboard.reducer";
 import sourceReducer, { ISourceState } from "./source.reducer";
 import sensorReducer, { ISensorState } from "./sensor.reducer";
 import ruleReducer, { IRuleState } from "./rule.reducer";
-
+import incidentsReducer , { IIncidentsState } from "./incidents.reducer";
 export interface IRootState {
   connection: IConnectionState;
   schema: ISchemaState;
@@ -36,6 +36,8 @@ export interface IRootState {
   source: ISourceState;
   sensor: ISensorState;
   rule: IRuleState;
+
+  incidents: IIncidentsState;
 }
 
 const rootReducer = combineReducers<IRootState>({
@@ -48,6 +50,7 @@ const rootReducer = combineReducers<IRootState>({
   source: sourceReducer,
   sensor: sensorReducer,
   rule: ruleReducer,
+  incidents: incidentsReducer,
 });
 
 export default rootReducer;

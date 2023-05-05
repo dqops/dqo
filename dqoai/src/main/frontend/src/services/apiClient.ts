@@ -34,7 +34,7 @@ import {
   SensorReadoutsApiFactory,
   ErrorsApiFactory,
   SensorsApiFactory,
-  RulesApiFactory
+  RulesApiFactory, IncidentsApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -129,4 +129,10 @@ export const RulesApi = RulesApiFactory(
   new Configuration(),
   '',
   axios
+);
+
+export const IncidentsApi = IncidentsApiFactory(
+  new Configuration(),
+  '',
+  axios,
 );
