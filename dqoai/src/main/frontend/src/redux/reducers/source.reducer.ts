@@ -1145,6 +1145,45 @@ const connectionReducer = (state = initialState, action: Action) => {
         checkFilters: newCheckFilters
       });
     }
+
+    case SOURCE_ACTION.GET_CONNECTION_INCIDENT_GROUPING: {
+      return setActiveTabState(state, action, {
+        loading: true,
+      })
+    }
+    case SOURCE_ACTION.GET_CONNECTION_INCIDENT_GROUPING_SUCCESS: {
+      return setActiveTabState(state, action, {
+        incidentGrouping: action.data,
+        loading: false,
+        isUpdatedIncidentGroup: false,
+      })
+    }
+    case SOURCE_ACTION.GET_CONNECTION_INCIDENT_GROUPING_ERROR: {
+      return setActiveTabState(state, action, {
+        loading: false,
+      })
+    }
+    case SOURCE_ACTION.SET_CONNECTION_INCIDENT_GROUPING: {
+      return setActiveTabState(state, action, {
+        incidentGrouping: action.data,
+        isUpdatedIncidentGroup: true,
+      })
+    }
+    case SOURCE_ACTION.UPDATE_CONNECTION_INCIDENT_GROUPING: {
+      return setActiveTabState(state, action, {
+        isUpdating: true,
+      })
+    }
+    case SOURCE_ACTION.UPDATE_CONNECTION_INCIDENT_GROUPING_SUCCESS: {
+      return setActiveTabState(state, action, {
+        isUpdating: false,
+      })
+    }
+    case SOURCE_ACTION.UPDATE_CONNECTION_INCIDENT_GROUPING_ERROR: {
+      return setActiveTabState(state, action, {
+        isUpdating: false,
+      })
+    }
     default:
       return state;
   }

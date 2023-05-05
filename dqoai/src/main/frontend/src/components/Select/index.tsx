@@ -31,6 +31,7 @@ interface SelectProps {
   menuClassName?: string;
   onAdd?: () => void;
   addLabel?: string;
+  prefix?: string;
 }
 
 const Select = ({
@@ -46,7 +47,8 @@ const Select = ({
   error,
   menuClassName,
   onAdd,
-  addLabel
+  addLabel,
+  prefix,
 }: SelectProps) => {
   const [menuWidth, setMenuWidth] = useState(0);
   const ref = useRef<HTMLButtonElement>(null);
@@ -101,7 +103,7 @@ const Select = ({
               error ? 'border-red-500' : 'border-gray-300'
             )}
           >
-            {selectedOption ? selectedOption.label : placeholder}
+            {selectedOption ? (prefix ? prefix + ' ' : '') + selectedOption.label : placeholder}
             <SvgIcon
               name="chevron-down"
               className="absolute transform top-1/2 -translate-y-2/4 right-2 w-4"
