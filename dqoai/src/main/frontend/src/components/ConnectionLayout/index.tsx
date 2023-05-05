@@ -18,13 +18,11 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const { tabs: pageTabs, activeTab } = useSelector((state: IRootState) => state.source[sourceRoute as CheckTypes || CheckTypes.SOURCES]);
   const dispatch= useDispatch();
   const history = useHistory();
-
   const handleChange = (value: string) => {
     dispatch(setActiveFirstLevelTab(sourceRoute, value));
   };
 
   const closeTab = (value: string) => {
-    console.log('closeTab', value);
     dispatch(closeFirstLevelTab(sourceRoute, value))
   };
 
@@ -35,14 +33,6 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
     }))
   }, [pageTabs]);
 
-  useEffect(() => {
-    if (activeTab) {
-      history.push(activeTab);
-    }
-  }, [activeTab])
-
-
-  console.log('activeTab', activeTab, pageTabs);
   return (
     <MainLayout>
       <div className="flex-1 h-full flex flex-col">
