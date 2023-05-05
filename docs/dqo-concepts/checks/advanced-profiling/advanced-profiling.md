@@ -7,6 +7,25 @@ Advanced profiling is a type of check that should be used to profile data and ru
 of [recurring checks](../recurring-checks/recurring-checks.md) or [partition checks](../partition-checks/partition-checks.md)
 are the most appropriate for monitoring the quality of data.
 
+When the advanced profiling data quality check is run, all sensor readouts are saved. As an illustration, if the check 
+is run three times, the table with the results could look like this:
+
+| actual_value |              time_period |
+|-------------:|-------------------------:|
+|       95.51% | 2023-04-05T09:07:03.578Z |
+|       94.52% | 2023-04-06T09:08:50.635Z |
+|       96.06% | 2023-04-07T09:10:44.386Z |
+
+If there was a change in the data, and we run the check again, the table will be updated and the newest result will be added at the bottom.
+
+| actual_value |                  time_period |
+|-------------:|-----------------------------:|
+|       95.51% |     2023-04-05T09:07:03.578Z |
+|       94.52% |     2023-04-06T09:08:50.635Z |
+|       96.06% |     2023-04-07T09:10:44.386Z |
+|   **95.79%** | **2023-04-07T11:47:20.843Z** |
+
+
 ## Checks configuration in the YAML file
 Advance profiling data quality checks, like other data quality checks in DQO checks are defined as YAML files.
 

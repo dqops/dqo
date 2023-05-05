@@ -5,8 +5,37 @@
 To use DQO you need:
 
   - Python version 3.6 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
+
+    To confirm that you have Python installed run the following command
+    ```
+    python --version
+    ```
+    To view the Python 3 version, run `Python3 --version` instead.
+
+
+
   - Ability to install Python packages with pip.
-  - Installed JDK software (version 17) and set JAVA_HOME environment variable.
+    
+    To confirm that you have pip installed run the following command
+    ```
+    pip --version
+    ```
+    Current version of pip should be displayed.
+
+
+  - Installed JDK software (version 17) and set the JAVA_HOME environment variable.
+
+    To confirm that Java is installed on your system, please run this command:
+    ```
+    java --version
+    ```
+    A Java version should be displayed. If the above command shows 'java' is not recognized, it means Java is not 
+    installed or the path is not properly set.
+
+    To ensure that the JAVA_HOME environmental variables are properly set, please run the following command:
+    ```
+    echo %JAVA_HOME%
+    ```
 
 ## Install DQO with pip manager
 

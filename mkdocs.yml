@@ -29,7 +29,7 @@ nav:
     - Working with YAML files: 'dqo-concepts/working-with-yaml-files/working-with-yaml-files.md'
     - Working with CLI: 'dqo-concepts/working-with-cli/working-with-cli.md'
   - Use cases:
-    - "examples/index.md"
+    - 'examples/index.md'
     - Percentage of false values: 'examples/bool-false-percent.md'
     - Integrity check between columns in different tables: 'examples/integrity-foreign-key-match-percent.md'
     - Not nulls count: 'examples/nulls-not-nulls-count.md'
@@ -40,6 +40,7 @@ nav:
     - String max length: 'examples/string-max-length.md'
     - Duplicate percent: 'examples/uniqueness-duplicate-percent.md'
     - Valid email percent: 'examples/valid-email-percent.md'
+    - Running checks with a scheduler: '/examples/running-checks-with-a-scheduler.md'
   - Working with DQO:
     - Installation:
       - Install DQO from Git: 'working-with-dqo/install-dqo-from-git/install-dqo-from-git.md'

@@ -159,7 +159,7 @@ check run
 ```
 
 You should see the results as the one below.
-The check shows a valid results what means that the the percentage of false values in the `invalidOcr` column exceeds 99%.
+The check shows a valid results what means that the percentage of false values in the `invalidOcr` column exceeds 99%.
 
 ```
 Check evaluation summary per table:
