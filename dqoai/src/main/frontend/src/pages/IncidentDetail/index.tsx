@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import IncidentsLayout from "../../components/IncidentsLayout";
 import SvgIcon from "../../components/SvgIcon";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import StatusSelect from "./StatusSelect";
@@ -10,6 +10,7 @@ import { getFirstLevelIncidentsState } from "../../redux/selectors";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { getIncidentsByConnection, setIncidentsFilter } from "../../redux/actions/incidents.actions";
 import { Table } from "../../components/Table";
+import { CheckTypes, ROUTES } from "../../shared/routes";
 
 const options = [
   {
@@ -81,6 +82,7 @@ export const IncidentDetail = () => {
   const { connection }: { connection: string } = useParams();
   const { incidents, filters = {} } = useSelector(getFirstLevelIncidentsState);
   const dispatch = useActionDispatch();
+  const history = useHistory();
 
   useEffect(() => {
     dispatch(getIncidentsByConnection({
@@ -96,6 +98,10 @@ export const IncidentDetail = () => {
     }));
   };
 
+  const goToConfigure = () => {
+    history.push(ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'incidents'));
+  };
+
   return (
     <IncidentsLayout>
       <div className="relative">
@@ -105,6 +111,12 @@ export const IncidentDetail = () => {
             <div className="text-xl font-semibold truncate">Data quality incidents on {connection || ''}</div>
           </div>
           <StatusSelect />
+
+          <Button
+            onClick={goToConfigure}
+            color="primary"
+            label="Configure"
+          />
         </div>
 
         <div className="flex items-center p-4 gap-6 mb-4">
