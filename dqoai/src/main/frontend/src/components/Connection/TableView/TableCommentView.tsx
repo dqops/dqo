@@ -16,21 +16,14 @@ import { CheckTypes } from "../../../shared/routes";
 
 const TableCommentView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
-  const { tableBasic, updatedComments, isUpdating, isUpdatedComments } = useSelector(getFirstLevelState(checkTypes));
+  const { updatedComments, isUpdating, isUpdatedComments } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [text, setText] = useState('');
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
-    if (
-      !updatedComments ||
-      tableBasic?.connection_name !== connectionName ||
-      tableBasic?.target?.schema_name !== schemaName ||
-      tableBasic?.target?.table_name !== tableName
-    ) {
-      dispatch(getTableComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
-    }
-  }, [connectionName, schemaName, tableName, tableBasic]);
+    dispatch(getTableComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     await dispatch(

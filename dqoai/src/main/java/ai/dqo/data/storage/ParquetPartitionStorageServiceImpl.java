@@ -401,16 +401,6 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 return false;
             }
 
-            if (!this.localUserHomeFileStorageService.deleteFile(
-                    new HomeFilePath(
-                            new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new)),
-                            String.format(".%s.crc", homeRelativePath.getFileName().toString())
-                    )
-            )) {
-                // Deleting .crc file failed.
-                return false;
-            }
-
             while (homeRelativeFoldersList.size() > 1) {
                 // Delete all remaining folders, if empty, to the extent allowed by the lock.
                 HomeFolderPath homeFolderPath = new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new));

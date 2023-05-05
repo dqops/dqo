@@ -86,6 +86,22 @@ paths:
             $ref: "#/definitions/TenantAccessTokenModel"
       security:
       - api_key: []
+  /api/v1/accesstokenissue/rw/incidents:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketIncidentsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with incidents"
+      operationId: "issueBucketIncidentsRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
   /api/v1/accesstokenissue/rw/rules:
     get:
       tags:
@@ -315,6 +331,7 @@ definitions:
         - "check_results"
         - "errors"
         - "statistics"
+        - "incidents"
         - "sources"
         - "sensors"
         - "rules"
@@ -381,6 +398,8 @@ definitions:
       errorsTableName:
         type: "string"
       statisticsTableName:
+        type: "string"
+      incidentsTableName:
         type: "string"
     description: "Model that returns an AccessToken used by Looker Studio to query\
       \ the data warehouse."

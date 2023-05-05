@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ai.dqo.sensors.column.accuracy;
+package ai.dqo.sensors.table.accuracy;
 
 import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -29,13 +29,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level sensor that calculates percentage of the difference in row count of a column in a table and row count of a column of another table.
+ * Table level sensor that calculates percentage of the difference of the total row count of all rows in the tested table and the total row count of the other (reference) table.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAccuracyRowCountMatchPercentSensorParametersSpec extends AbstractSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyRowCountMatchPercentSensorParametersSpec> FIELDS =
+public class TableAccuracyRowCountMatchPercentSensorParametersSpec extends AbstractSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableAccuracyRowCountMatchPercentSensorParametersSpec> FIELDS =
             new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
                 {
                 }
@@ -44,10 +44,6 @@ public class ColumnAccuracyRowCountMatchPercentSensorParametersSpec extends Abst
     @JsonPropertyDescription("This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.")
     @SampleValues(values = { "dim_customer" })
     private String referencedTable;
-
-    @JsonPropertyDescription("This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.")
-    @SampleValues(values = { "customer_id" })
-    private String referencedColumn;
 
     /**
      * Returns the table name.
@@ -67,23 +63,6 @@ public class ColumnAccuracyRowCountMatchPercentSensorParametersSpec extends Abst
     }
 
     /**
-     * Returns the column name.
-     * @return referencedColumn.
-     */
-    public String getReferencedColumn() {
-        return referencedColumn;
-    }
-
-    /**
-     * Sets the column name.
-     * @param referencedColumn column name.
-     */
-    public void setReferencedColumn(String referencedColumn) {
-        this.setDirtyIf(!Objects.equals(this.referencedColumn, referencedColumn));
-        this.referencedColumn = referencedColumn;
-    }
-
-    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -100,7 +79,6 @@ public class ColumnAccuracyRowCountMatchPercentSensorParametersSpec extends Abst
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/accuracy/row_count_match_percent";
+        return "table/accuracy/row_count_match_percent";
     }
-
 }

@@ -1,0 +1,1413 @@
+**row count match percent** checks  
+
+**Description**  
+Table level check that ensures that there are no more than a maximum percentage of difference of row count of a tested table and of an row count of another (reference) table.
+
+___
+
+## **row count match percent**  
+  
+**Check description**  
+Verifies that the total row count of the tested table matches the total row count of another (reference) table.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|row_count_match_percent|profiling| |[row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#row-count-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
+  
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=row_count_match_percent
+```
+**Run check (Shell)**  
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+```
+dqo.ai> check run -ch=row_count_match_percent
+```
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=row_count_match_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=row_count_match_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=row_count_match_percent
+```
+**Check structure (Yaml)**
+```yaml
+  profiling_checks:
+    accuracy:
+      row_count_match_percent:
+        parameters:
+          referenced_table: dim_customer
+        warning:
+          max_diff_percent: 1.0
+        error:
+          max_diff_percent: 2.0
+        fatal:
+          max_diff_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="11-21"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  profiling_checks:
+    accuracy:
+      row_count_match_percent:
+        parameters:
+          referenced_table: dim_customer
+        warning:
+          max_diff_percent: 1.0
+        error:
+          max_diff_percent: 2.0
+        fatal:
+          max_diff_percent: 5.0
+  columns:
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+### **BigQuery**
+=== "Sensor template for BigQuery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for BigQuery"
+      
+    ```
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
+### **PostgreSQL**
+=== "Sensor template for PostgreSQL"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for PostgreSQL"
+      
+    ```
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
+### **Redshift**
+=== "Sensor template for Redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for Redshift"
+      
+    ```
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **Configuration with a data stream segmentation**  
+??? info "Click to see more"  
+    **Sample configuration (Yaml)**  
+    ```yaml hl_lines="11-18 37-42"
+    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    apiVersion: dqo/v1
+    kind: table
+    spec:
+      timestamp_columns:
+        event_timestamp_column: col_event_timestamp
+        ingestion_timestamp_column: col_inserted_at
+      incremental_time_window:
+        daily_partitioning_recent_days: 7
+        monthly_partitioning_recent_months: 1
+      data_streams:
+        default:
+          level_1:
+            source: column_value
+            column: country
+          level_2:
+            source: column_value
+            column: state
+      profiling_checks:
+        accuracy:
+          row_count_match_percent:
+            parameters:
+              referenced_table: dim_customer
+            warning:
+              max_diff_percent: 1.0
+            error:
+              max_diff_percent: 2.0
+            fatal:
+              max_diff_percent: 5.0
+      columns:
+        col_event_timestamp:
+          labels:
+          - optional column that stores the timestamp when the event/transaction happened
+        col_inserted_at:
+          labels:
+          - optional column that stores the timestamp when row was ingested
+        country:
+          labels:
+          - column used as the first grouping key
+        state:
+          labels:
+          - column used as the second grouping key
+    ```  
+    **BigQuery**  
+      
+    === "Sensor template for BigQuery"
+        ```
+        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for BigQuery"
+        ```
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+    **PostgreSQL**  
+      
+    === "Sensor template for PostgreSQL"
+        ```
+        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for PostgreSQL"
+        ```
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+    **Redshift**  
+      
+    === "Sensor template for Redshift"
+        ```
+        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Redshift"
+        ```
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        ```
+    
+
+
+
+
+
+___
+
+## **daily row count match percent**  
+  
+**Check description**  
+Verifies the row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each day when the data quality check was evaluated.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|daily_row_count_match_percent|recurring|daily|[row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#row-count-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
+  
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_row_count_match_percent
+```
+**Run check (Shell)**  
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+```
+dqo.ai> check run -ch=daily_row_count_match_percent
+```
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_row_count_match_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_row_count_match_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_count_match_percent
+```
+**Check structure (Yaml)**
+```yaml
+  recurring_checks:
+    daily:
+      accuracy:
+        daily_row_count_match_percent:
+          parameters:
+            referenced_table: dim_customer
+          warning:
+            max_diff_percent: 1.0
+          error:
+            max_diff_percent: 2.0
+          fatal:
+            max_diff_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="11-22"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  recurring_checks:
+    daily:
+      accuracy:
+        daily_row_count_match_percent:
+          parameters:
+            referenced_table: dim_customer
+          warning:
+            max_diff_percent: 1.0
+          error:
+            max_diff_percent: 2.0
+          fatal:
+            max_diff_percent: 5.0
+  columns:
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+### **BigQuery**
+=== "Sensor template for BigQuery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for BigQuery"
+      
+    ```
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
+### **PostgreSQL**
+=== "Sensor template for PostgreSQL"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for PostgreSQL"
+      
+    ```
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
+### **Redshift**
+=== "Sensor template for Redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for Redshift"
+      
+    ```
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **Configuration with a data stream segmentation**  
+??? info "Click to see more"  
+    **Sample configuration (Yaml)**  
+    ```yaml hl_lines="11-18 38-43"
+    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    apiVersion: dqo/v1
+    kind: table
+    spec:
+      timestamp_columns:
+        event_timestamp_column: col_event_timestamp
+        ingestion_timestamp_column: col_inserted_at
+      incremental_time_window:
+        daily_partitioning_recent_days: 7
+        monthly_partitioning_recent_months: 1
+      data_streams:
+        default:
+          level_1:
+            source: column_value
+            column: country
+          level_2:
+            source: column_value
+            column: state
+      recurring_checks:
+        daily:
+          accuracy:
+            daily_row_count_match_percent:
+              parameters:
+                referenced_table: dim_customer
+              warning:
+                max_diff_percent: 1.0
+              error:
+                max_diff_percent: 2.0
+              fatal:
+                max_diff_percent: 5.0
+      columns:
+        col_event_timestamp:
+          labels:
+          - optional column that stores the timestamp when the event/transaction happened
+        col_inserted_at:
+          labels:
+          - optional column that stores the timestamp when row was ingested
+        country:
+          labels:
+          - column used as the first grouping key
+        state:
+          labels:
+          - column used as the second grouping key
+    ```  
+    **BigQuery**  
+      
+    === "Sensor template for BigQuery"
+        ```
+        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for BigQuery"
+        ```
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+    **PostgreSQL**  
+      
+    === "Sensor template for PostgreSQL"
+        ```
+        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for PostgreSQL"
+        ```
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+    **Redshift**  
+      
+    === "Sensor template for Redshift"
+        ```
+        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Redshift"
+        ```
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        ```
+    
+
+
+
+
+
+___
+
+## **monthly row count match percent**  
+  
+**Check description**  
+Verifies the row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each month when the data quality check was evaluated.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|monthly_row_count_match_percent|recurring|monthly|[row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#row-count-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
+  
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_row_count_match_percent
+```
+**Run check (Shell)**  
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+```
+dqo.ai> check run -ch=monthly_row_count_match_percent
+```
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_row_count_match_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_row_count_match_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_row_count_match_percent
+```
+**Check structure (Yaml)**
+```yaml
+  recurring_checks:
+    monthly:
+      accuracy:
+        monthly_row_count_match_percent:
+          parameters:
+            referenced_table: dim_customer
+          warning:
+            max_diff_percent: 1.0
+          error:
+            max_diff_percent: 2.0
+          fatal:
+            max_diff_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="11-22"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  recurring_checks:
+    monthly:
+      accuracy:
+        monthly_row_count_match_percent:
+          parameters:
+            referenced_table: dim_customer
+          warning:
+            max_diff_percent: 1.0
+          error:
+            max_diff_percent: 2.0
+          fatal:
+            max_diff_percent: 5.0
+  columns:
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+### **BigQuery**
+=== "Sensor template for BigQuery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for BigQuery"
+      
+    ```
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+    ```
+### **Snowflake**
+=== "Sensor template for Snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for Snowflake"
+      
+    ```
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
+### **PostgreSQL**
+=== "Sensor template for PostgreSQL"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for PostgreSQL"
+      
+    ```
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
+### **Redshift**
+=== "Sensor template for Redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for Redshift"
+      
+    ```
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        (SELECT
+            COUNT(*)
+        FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+        ) AS expected_value,
+        COUNT(*) AS actual_value
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **Configuration with a data stream segmentation**  
+??? info "Click to see more"  
+    **Sample configuration (Yaml)**  
+    ```yaml hl_lines="11-18 38-43"
+    # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+    apiVersion: dqo/v1
+    kind: table
+    spec:
+      timestamp_columns:
+        event_timestamp_column: col_event_timestamp
+        ingestion_timestamp_column: col_inserted_at
+      incremental_time_window:
+        daily_partitioning_recent_days: 7
+        monthly_partitioning_recent_months: 1
+      data_streams:
+        default:
+          level_1:
+            source: column_value
+            column: country
+          level_2:
+            source: column_value
+            column: state
+      recurring_checks:
+        monthly:
+          accuracy:
+            monthly_row_count_match_percent:
+              parameters:
+                referenced_table: dim_customer
+              warning:
+                max_diff_percent: 1.0
+              error:
+                max_diff_percent: 2.0
+              fatal:
+                max_diff_percent: 5.0
+      columns:
+        col_event_timestamp:
+          labels:
+          - optional column that stores the timestamp when the event/transaction happened
+        col_inserted_at:
+          labels:
+          - optional column that stores the timestamp when row was ingested
+        country:
+          labels:
+          - column used as the first grouping key
+        state:
+          labels:
+          - column used as the second grouping key
+    ```  
+    **BigQuery**  
+      
+    === "Sensor template for BigQuery"
+        ```
+        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_project_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for BigQuery"
+        ```
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        ```
+    **Snowflake**  
+      
+    === "Sensor template for Snowflake"
+        ```
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Snowflake"
+        ```
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+    **PostgreSQL**  
+      
+    === "Sensor template for PostgreSQL"
+        ```
+        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for PostgreSQL"
+        ```
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+    **Redshift**  
+      
+    === "Sensor template for Redshift"
+        ```
+        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Redshift"
+        ```
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        ```
+    
+
+
+
+
+
+___

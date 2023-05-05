@@ -4,5 +4,5 @@ kind: check
 spec:
   sensor_name: column/strings/string_length_below_min_length_count
   rule_name: comparison/max_count
-  help_text: The check counts those strings with length below the one provided by
-    the user in a column.
+  help_text: The check counts those strings with length below those provided by the
+    user in the column.

@@ -636,7 +636,7 @@ spec:
             COUNT(*) AS total_values,
         SYSDATETIMEOFFSET() AS time_period,
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     , top_values
     , total_values
         ) top_col_values
@@ -1246,7 +1246,7 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-                FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
                 , 
             
         , top_valuesORDER BY level_1, level_2
@@ -1907,7 +1907,7 @@ spec:
             COUNT(*) AS total_values,
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     , top_values
     , total_values
         ) top_col_values
@@ -2518,7 +2518,7 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-                FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
                 , 
             
         , top_valuesORDER BY level_1, level_2
@@ -2549,7 +2549,7 @@ ___
 ## **monthly string most popular values**  
   
 **Check description**  
-Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
+Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -3179,7 +3179,7 @@ spec:
             COUNT(*) AS total_values,
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     , top_values
     , total_values
         ) top_col_values
@@ -3790,7 +3790,7 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-                FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
                 , 
             
         , top_valuesORDER BY level_1, level_2
@@ -4006,8 +4006,8 @@ spec:
             SELECT
             analyzed_table.`target_column` AS top_values,
             COUNT(*) AS total_values,
-        CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
-        TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
+        CAST(analyzed_table.`` AS DATE) AS time_period,
+        TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -4117,8 +4117,8 @@ spec:
             SELECT
             analyzed_table."target_column" AS top_values,
             COUNT(*) AS total_values,
-        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        CAST(analyzed_table."" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -4228,8 +4228,8 @@ spec:
             SELECT
             analyzed_table."target_column" AS top_values,
             COUNT(*) AS total_values,
-        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        CAST(analyzed_table."" AS date) AS time_period,
+        CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -4339,8 +4339,8 @@ spec:
                SELECT
                 analyzed_table."target_column" AS top_values,
                 COUNT(*) AS total_values,
-        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        CAST(analyzed_table."" AS date) AS time_period,
+        CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -4449,19 +4449,19 @@ spec:
             SELECT
             analyzed_table.[target_column] AS top_values,
             COUNT(*) AS total_values,
-        CAST([col_event_timestamp] AS date) AS time_period,
-        CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY CAST([col_event_timestamp] AS date), CAST([col_event_timestamp] AS date)
-    , top_valuesORDER BY CAST([col_event_timestamp] AS date)
+        CAST([] AS date) AS time_period,
+        CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    GROUP BY CAST([] AS date), CAST([] AS date)
+    , top_valuesORDER BY CAST([] AS date)
     
         
     , total_values
         ) top_col_values
     )
     WHERE top_values_rank <= 
-    GROUP BY CAST([col_event_timestamp] AS date), CAST([col_event_timestamp] AS date)
-    ORDER BY CAST([col_event_timestamp] AS date)
+    GROUP BY CAST([] AS date), CAST([] AS date)
+    ORDER BY CAST([] AS date)
     
         
     ```
@@ -4620,8 +4620,8 @@ spec:
                 COUNT(*) AS total_values,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
-            CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
-            TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
+            CAST(analyzed_table.`` AS DATE) AS time_period,
+            TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -4732,8 +4732,8 @@ spec:
                 COUNT(*) AS total_values,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
-            CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-            TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+            CAST(analyzed_table."" AS date) AS time_period,
+            TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
                 FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -4844,8 +4844,8 @@ spec:
                 COUNT(*) AS total_values,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
-            CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-            CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            CAST(analyzed_table."" AS date) AS time_period,
+            CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -4956,8 +4956,8 @@ spec:
                     COUNT(*) AS total_values,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
-            CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-            CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            CAST(analyzed_table."" AS date) AS time_period,
+            CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                    FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -5067,19 +5067,19 @@ spec:
                 COUNT(*) AS total_values,
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2,
-            CAST([col_event_timestamp] AS date) AS time_period,
-            CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
-                FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY CAST([col_event_timestamp] AS date), CAST([col_event_timestamp] AS date)
-        , top_valuesORDER BY level_1, level_2CAST([col_event_timestamp] AS date)
+            CAST([] AS date) AS time_period,
+            CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+        GROUP BY CAST([] AS date), CAST([] AS date)
+        , top_valuesORDER BY level_1, level_2CAST([] AS date)
         
             
         , total_values
             ) top_col_values
         )
         WHERE top_values_rank <= , 
-        GROUP BY CAST([col_event_timestamp] AS date), CAST([col_event_timestamp] AS date)
-        ORDER BY level_1, level_2CAST([col_event_timestamp] AS date)
+        GROUP BY CAST([] AS date), CAST([] AS date)
+        ORDER BY level_1, level_2CAST([] AS date)
         
             
         ```
@@ -5279,8 +5279,8 @@ spec:
             SELECT
             analyzed_table.`target_column` AS top_values,
             COUNT(*) AS total_values,
-        DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
-        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
+        DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -5390,8 +5390,8 @@ spec:
             SELECT
             analyzed_table."target_column" AS top_values,
             COUNT(*) AS total_values,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -5501,8 +5501,8 @@ spec:
             SELECT
             analyzed_table."target_column" AS top_values,
             COUNT(*) AS total_values,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -5612,8 +5612,8 @@ spec:
                SELECT
                 analyzed_table."target_column" AS top_values,
                 COUNT(*) AS total_values,
-        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -5722,19 +5722,19 @@ spec:
             SELECT
             analyzed_table.[target_column] AS top_values,
             COUNT(*) AS total_values,
-        DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
-        CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-            FROM [].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, [col_event_timestamp]), 0)
-    , top_valuesORDER BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)
+        DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
+        CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
+            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+    , top_valuesORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
     
         
     , total_values
         ) top_col_values
     )
     WHERE top_values_rank <= 
-    GROUP BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, [col_event_timestamp]), 0)
-    ORDER BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)
+    GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+    ORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
     
         
     ```
@@ -5893,8 +5893,8 @@ spec:
                 COUNT(*) AS total_values,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
-            DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
-            TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
+            DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
+            TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
                 FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -6005,8 +6005,8 @@ spec:
                 COUNT(*) AS total_values,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
                 FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -6117,8 +6117,8 @@ spec:
                 COUNT(*) AS total_values,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -6229,8 +6229,8 @@ spec:
                     COUNT(*) AS total_values,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
-            DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                    FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -6340,19 +6340,19 @@ spec:
                 COUNT(*) AS total_values,
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2,
-            DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
-            CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
-                FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, [col_event_timestamp]), 0)
-        , top_valuesORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)
+            DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
+            CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        , top_valuesORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             
         , total_values
             ) top_col_values
         )
         WHERE top_values_rank <= , 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, [col_event_timestamp]), 0)
-        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)
+        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             
         ```

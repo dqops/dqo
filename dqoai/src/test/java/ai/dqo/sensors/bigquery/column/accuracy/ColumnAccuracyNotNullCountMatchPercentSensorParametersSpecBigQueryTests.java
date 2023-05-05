@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.accuracy;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyRowCountMatchPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyNotNullCountMatchPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -29,30 +29,30 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.accuracy.ColumnAccuracyRowCountMatchPercentSensorParametersSpec;
+import ai.dqo.sensors.column.accuracy.ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ColumnAccuracyRowCountMatchPercentSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnAccuracyRowCountMatchPercentSensorParametersSpec sut;
+public class ColumnAccuracyNotNullCountMatchPercentSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnAccuracyRowCountMatchPercentCheckSpec checkSpec;
+    private ColumnAccuracyNotNullCountMatchPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     private SampleTableMetadata sampleTableMetadataReferenced;
 
     @BeforeEach
     void setUp() {
-        this.sut = new ColumnAccuracyRowCountMatchPercentSensorParametersSpec();
+        this.sut = new ColumnAccuracyNotNullCountMatchPercentSensorParametersSpec();
         this.sut.setFilter("{alias}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip4_test, ProviderType.bigquery);
         this.sampleTableMetadataReferenced = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip6_test, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnAccuracyRowCountMatchPercentCheckSpec();
+        this.checkSpec = new ColumnAccuracyNotNullCountMatchPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -100,7 +100,7 @@ public class ColumnAccuracyRowCountMatchPercentSensorParametersSpecBigQueryTests
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/accuracy/row_count_match_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/accuracy/not_null_count_match_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

@@ -4,6 +4,5 @@ kind: check
 spec:
   sensor_name: column/numeric/value_above_max_value_count
   rule_name: comparison/max_count
-  help_text: The check counts those values with value above the one provided by the
-    user in a column. Creates a separate data quality check (and an alert) for each
-    daily partition.
+  help_text: The check counts values above those provided by the user in the column.
+    Creates a separate data quality check (and an alert) for each daily partition.

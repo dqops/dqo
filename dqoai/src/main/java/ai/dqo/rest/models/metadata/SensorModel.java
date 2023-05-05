@@ -27,6 +27,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Sensor model returned from REST API.
@@ -37,39 +38,42 @@ import java.util.List;
 @ApiModel(value = "SensorModel", description = "Sensor model.")
 public class SensorModel {
 
-    @JsonPropertyDescription("Full sensor name")
+    @JsonPropertyDescription("Full sensor name.")
     private String fullSensorName;
 
-    @JsonPropertyDescription("Sensor definition spec")
+    @JsonPropertyDescription("Sensor definition specification.")
     private SensorDefinitionSpec sensorDefinitionSpec;
 
-    @JsonPropertyDescription("Provider sensors list")
-    private List<ProviderSensorModel> providerSensorList;
+    @JsonPropertyDescription("Provider sensors list with provider specific sensor definitions.")
+    private List<ProviderSensorModel> providerSensorList = new ArrayList<>();
 
     @JsonPropertyDescription("Whether the sensor is a User Home sensor")
     private boolean custom;
 
+    @JsonPropertyDescription("This is a DQO built-in sensor, whose parameters cannot be changed.")
+    public boolean builtIn;
+
     public SensorModel() {
-        this.providerSensorList = new ArrayList<>();
     }
 
-
     /**
-     * Adds provider sensor models to the provider sensor list.
+     * Adds provider sensor models to the provider sensor list. Replaces an already added model.
      * @param providerSensorBasicModels the provider sensor models to add
      */
     public void addProviderSensorModel(List<ProviderSensorModel> providerSensorBasicModels) {
-        for (ProviderSensorModel newModel : providerSensorBasicModels) {
+        for (ProviderSensorModel newSensorProviderModel : providerSensorBasicModels) {
             boolean modelExists = false;
-            for (ProviderSensorModel model : this.providerSensorList) {
-                if (model.getProviderType() == newModel.getProviderType()) {
-                    model.setCustom(newModel.isCustom());
+            for (int i = 0; i < this.providerSensorList.size(); i++) {
+                ProviderSensorModel alreadyAddedProvider = this.providerSensorList.get(i);
+                if (Objects.equals(newSensorProviderModel.getProviderType(), alreadyAddedProvider.getProviderType())) {
+                    this.providerSensorList.set(i, newSensorProviderModel);
                     modelExists = true;
                     break;
                 }
             }
+
             if (!modelExists) {
-                this.providerSensorList.add(newModel);
+                this.providerSensorList.add(newSensorProviderModel);
             }
         }
     }
@@ -84,11 +88,11 @@ public class SensorModel {
             return false;
         }
 
-        if (!sensorDefinitionWrapper.getName().equals(fullSensorName)) {
+        if (!Objects.equals(sensorDefinitionWrapper.getName(), fullSensorName)) {
             return false;
         }
 
-        if (!sensorDefinitionWrapper.getSpec().equals(sensorDefinitionSpec)) {
+        if (!Objects.equals(sensorDefinitionWrapper.getSpec(), sensorDefinitionSpec)) {
             return false;
         }
 
@@ -110,7 +114,7 @@ public class SensorModel {
                 .stream()
                 .allMatch(sensor -> {
                     ProviderSensorModel providerSensorModel = providerSensorList.stream()
-                            .filter(dto -> dto.getProviderType().equals(sensor.getProvider()))
+                            .filter(dto -> Objects.equals(dto.getProviderType(), sensor.getProvider()))
                             .findFirst()
                             .orElse(null);
                     return providerSensorModel != null && providerSensorModel.equalsProviderSensorDqo(sensor);

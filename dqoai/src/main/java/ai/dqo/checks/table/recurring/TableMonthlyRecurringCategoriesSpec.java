@@ -19,6 +19,8 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.table.recurring.accuracy.TableAccuracyDailyRecurringSpec;
+import ai.dqo.checks.table.recurring.accuracy.TableAccuracyMonthlyRecurringSpec;
 import ai.dqo.checks.table.recurring.availability.TableAvailabilityMonthlyRecurringSpec;
 import ai.dqo.checks.table.recurring.sql.TableSqlMonthlyRecurringSpec;
 import ai.dqo.checks.table.recurring.standard.TableStandardMonthlyRecurringSpec;
@@ -53,6 +55,7 @@ public class TableMonthlyRecurringCategoriesSpec extends AbstractRootChecksConta
         {
             put("standard", o -> o.standard);
             put("timeliness", o -> o.timeliness);
+            put("accuracy", o -> o.accuracy);
             put("sql", o -> o.sql);
             put("availability", o -> o.availability);
         }
@@ -67,6 +70,11 @@ public class TableMonthlyRecurringCategoriesSpec extends AbstractRootChecksConta
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableTimelinessMonthlyRecurringSpec timeliness;
+
+    @JsonPropertyDescription("Monthly recurring accuracy checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableAccuracyMonthlyRecurringSpec accuracy;
 
     @JsonPropertyDescription("Monthly recurring of custom SQL checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -112,6 +120,24 @@ public class TableMonthlyRecurringCategoriesSpec extends AbstractRootChecksConta
         this.setDirtyIf(!Objects.equals(this.timeliness, timeliness));
         this.timeliness = timeliness;
         this.propagateHierarchyIdToField(timeliness, "timeliness");
+    }
+
+    /**
+     * Returns a container of table level accuracy recurring checks.
+     * @return Table level accuracy checks.
+     */
+    public TableAccuracyMonthlyRecurringSpec getAccuracy() {
+        return accuracy;
+    }
+
+    /**
+     * Sets a new container of monthly recurring accuracy checks.
+     * @param accuracy New daily recurring accuracy checks.
+     */
+    public void setAccuracy(TableAccuracyMonthlyRecurringSpec accuracy) {
+        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
+        this.accuracy = accuracy;
+        this.propagateHierarchyIdToField(accuracy, "accuracy");
     }
 
     /**
