@@ -98,7 +98,11 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
         this.runningJobs = ConcurrentHashMap.newKeySet();
         this.jobEntriesByJobId = new ConcurrentHashMap<DqoQueueJobId, DqoJobQueueEntry>();
 
-        startNewThreadWhenRequired(); // start the first processing thread
+        for (int i = 0; i < this.parallelJobLimitProvider.getMaxDegreeOfParallelism(); i++) {
+            this.startedThreadsCount.incrementAndGet();
+            Future<?> jobProcessingThreadFuture = this.executorService.submit(this::jobProcessingThreadLoop);
+            this.runnerThreadsFutures.add(jobProcessingThreadFuture);
+        }
 
         this.started = true;
     }
