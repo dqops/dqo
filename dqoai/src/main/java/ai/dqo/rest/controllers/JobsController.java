@@ -35,8 +35,8 @@ import ai.dqo.execution.checks.jobs.RunChecksQueueJobParameters;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
-import ai.dqo.execution.statistics.CollectStatisticsCollectionQueueJob;
-import ai.dqo.execution.statistics.RunStatisticsCollectionQueueJobParameters;
+import ai.dqo.execution.statistics.jobs.CollectStatisticsQueueJob;
+import ai.dqo.execution.statistics.jobs.CollectStatisticsQueueJobParameters;
 import ai.dqo.execution.statistics.StatisticsCollectionExecutionSummary;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListenerProvider;
@@ -142,17 +142,17 @@ public class JobsController {
     })
     public ResponseEntity<Mono<DqoQueueJobId>> collectStatisticsOnTable(
             @ApiParam("Data statistics collectors filter") @RequestBody StatisticsCollectorSearchFilters statisticsCollectorSearchFilters) {
-        CollectStatisticsCollectionQueueJob runProfilersJob = this.dqoQueueJobFactory.createRunProfilersJob();
+        CollectStatisticsQueueJob runProfilersJob = this.dqoQueueJobFactory.createCollectStatisticsJob();
         StatisticsCollectorExecutionProgressListener progressListener = this.statisticsCollectorExecutionProgressListenerProvider.getProgressListener(
                 StatisticsCollectorExecutionReportingMode.silent, false);
-        RunStatisticsCollectionQueueJobParameters runStatisticsCollectionQueueJobParameters = new RunStatisticsCollectionQueueJobParameters(
+        CollectStatisticsQueueJobParameters collectStatisticsQueueJobParameters = new CollectStatisticsQueueJobParameters(
                 statisticsCollectorSearchFilters,
                 progressListener,
                 StatisticsDataScope.table,
                 false);
-        runProfilersJob.setParameters(runStatisticsCollectionQueueJobParameters);
+        runProfilersJob.setParameters(collectStatisticsQueueJobParameters);
 
-        PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.dqoJobQueue.pushJob(runProfilersJob);
+        PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runProfilersJob);
         return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
     }
 
@@ -171,17 +171,17 @@ public class JobsController {
     })
     public ResponseEntity<Mono<DqoQueueJobId>> collectStatisticsOnDataStreams(
             @ApiParam("Data statistics collectors filter") @RequestBody StatisticsCollectorSearchFilters statisticsCollectorSearchFilters) {
-        CollectStatisticsCollectionQueueJob runProfilersJob = this.dqoQueueJobFactory.createRunProfilersJob();
+        CollectStatisticsQueueJob runProfilersJob = this.dqoQueueJobFactory.createCollectStatisticsJob();
         StatisticsCollectorExecutionProgressListener progressListener = this.statisticsCollectorExecutionProgressListenerProvider.getProgressListener(
                 StatisticsCollectorExecutionReportingMode.silent, false);
-        RunStatisticsCollectionQueueJobParameters runStatisticsCollectionQueueJobParameters = new RunStatisticsCollectionQueueJobParameters(
+        CollectStatisticsQueueJobParameters collectStatisticsQueueJobParameters = new CollectStatisticsQueueJobParameters(
                 statisticsCollectorSearchFilters,
                 progressListener,
                 StatisticsDataScope.data_stream,
                 false);
-        runProfilersJob.setParameters(runStatisticsCollectionQueueJobParameters);
+        runProfilersJob.setParameters(collectStatisticsQueueJobParameters);
 
-        PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.dqoJobQueue.pushJob(runProfilersJob);
+        PushJobResult<StatisticsCollectionExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runProfilersJob);
         return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
     }
 

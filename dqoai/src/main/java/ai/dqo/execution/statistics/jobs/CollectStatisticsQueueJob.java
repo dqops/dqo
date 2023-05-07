@@ -13,52 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.execution.checks.jobs;
+package ai.dqo.execution.statistics.jobs;
 
 import ai.dqo.core.jobqueue.DqoJobExecutionContext;
 import ai.dqo.core.jobqueue.DqoJobType;
-import ai.dqo.core.jobqueue.DqoQueueJob;
-import ai.dqo.core.jobqueue.concurrency.ConcurrentJobType;
+import ai.dqo.core.jobqueue.ParentDqoQueueJob;
 import ai.dqo.core.jobqueue.concurrency.JobConcurrencyConstraint;
-import ai.dqo.core.jobqueue.concurrency.JobConcurrencyTarget;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.ExecutionContextFactory;
-import ai.dqo.execution.checks.CheckExecutionService;
-import ai.dqo.execution.checks.CheckExecutionSummary;
+import ai.dqo.execution.statistics.StatisticsCollectionExecutionSummary;
+import ai.dqo.execution.statistics.StatisticsCollectorsExecutionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Run checks on a single table queue job.
+ * Run statistics collection queue job.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary> {
+public class CollectStatisticsQueueJob extends ParentDqoQueueJob<StatisticsCollectionExecutionSummary> {
     private ExecutionContextFactory executionContextFactory;
-    private CheckExecutionService checkExecutionService;
-    private RunChecksOnTableQueueJobParameters parameters;
+    private StatisticsCollectorsExecutionService statisticsCollectorsExecutionService;
+    private CollectStatisticsQueueJobParameters parameters;
 
-    /**
-     * Creates a job instance.
-     * @param executionContextFactory Execution context factory to get the correct context.
-     * @param checkExecutionService Check execution service.
-     */
     @Autowired
-    public RunChecksOnTableQueueJob(
+    public CollectStatisticsQueueJob(
             ExecutionContextFactory executionContextFactory,
-            CheckExecutionService checkExecutionService) {
+            StatisticsCollectorsExecutionService statisticsCollectorsExecutionService) {
         this.executionContextFactory = executionContextFactory;
-        this.checkExecutionService = checkExecutionService;
+        this.statisticsCollectorsExecutionService = statisticsCollectorsExecutionService;
     }
 
     /**
      * Returns the job parameters.
      * @return Job parameters.
      */
-    public RunChecksOnTableQueueJobParameters getParameters() {
+    public CollectStatisticsQueueJobParameters getParameters() {
         return parameters;
     }
 
@@ -66,7 +59,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
      * Sets the job parameters.
      * @param parameters Job parameters.
      */
-    public void setParameters(RunChecksOnTableQueueJobParameters parameters) {
+    public void setParameters(CollectStatisticsQueueJobParameters parameters) {
         this.parameters = parameters;
     }
 
@@ -77,18 +70,17 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
      * @return Optional result value that could be returned by the job.
      */
     @Override
-    public CheckExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
+    public StatisticsCollectionExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
         ExecutionContext executionContext = this.executionContextFactory.create();
-        CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeSelectedChecksOnTable(
+        StatisticsCollectionExecutionSummary statisticsCollectionExecutionSummary = this.statisticsCollectorsExecutionService.executeStatisticsCollectors(
                 executionContext,
-                this.parameters.getConnection(),
-                this.parameters.getTable(),
-                this.parameters.getCheckSearchFilters(),
-                this.parameters.getTimeWindowFilter(),
+                this.parameters.getStatisticsCollectorSearchFilters(),
                 this.parameters.getProgressListener(),
-                this.parameters.isDummyExecution(),
+                this.parameters.getDataScope(),
+                this.parameters.isDummySensorExecution(),
+                true,
                 jobExecutionContext.getCancellationToken());
-        return checkExecutionSummary;
+        return statisticsCollectionExecutionSummary;
     }
 
     /**
@@ -98,7 +90,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.RUN_CHECKS_ON_TABLE;
+        return DqoJobType.COLLECT_STATISTICS;
     }
 
     /**
@@ -109,17 +101,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
      */
     @Override
     public JobConcurrencyConstraint[] getConcurrencyConstraints() {
-        Integer maxJobsPerConnection = this.parameters.getMaxJobsPerConnection();
-
-        if (maxJobsPerConnection == null) {
-            return null; // no limits
-        }
-
-        return new JobConcurrencyConstraint[] {
-                new JobConcurrencyConstraint(
-                        new JobConcurrencyTarget(ConcurrentJobType.RUN_SENSORS_ON_CONNECTION, this.parameters.getConnection()),
-                        maxJobsPerConnection)
-        };
+        return null; // user can start any number of "collect statistics" operations, the concurrency will be applied later on a table level
     }
 
     /**
@@ -131,7 +113,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
     @Override
     public DqoJobEntryParametersModel createParametersModel() {
         return new DqoJobEntryParametersModel() {{
-            setRunChecksOnTableParameters(parameters);
+            setCollectStatisticsParameters(parameters);
         }};
     }
 }

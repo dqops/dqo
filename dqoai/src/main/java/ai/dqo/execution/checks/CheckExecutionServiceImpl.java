@@ -173,6 +173,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         Collection<TableWrapper> targetTables = listTargetTables(userHome, checkSearchFilters);
         CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
+        jobCancellationToken.throwIfCancelled();
 
         if (startChildJobsPerTable) {
             List<DqoQueueJob<CheckExecutionSummary>> childTableJobs = new ArrayList<>();

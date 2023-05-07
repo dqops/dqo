@@ -19,8 +19,7 @@ import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.connectors.ProviderDialectSettings;
-import ai.dqo.core.jobqueue.DummyJobCancellationToken;
-import ai.dqo.core.jobqueue.JobCancellationToken;
+import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.data.statistics.normalization.StatisticsResultsNormalizationService;
@@ -28,12 +27,17 @@ import ai.dqo.data.statistics.normalization.StatisticsResultsNormalizedResult;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshot;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshotFactory;
 import ai.dqo.execution.ExecutionContext;
+import ai.dqo.execution.checks.CheckExecutionSummary;
+import ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJob;
+import ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJobParameters;
 import ai.dqo.execution.sensors.DataQualitySensorRunner;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersFactory;
 import ai.dqo.execution.sensors.progress.ExecutingSensorEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutedEvent;
+import ai.dqo.execution.statistics.jobs.CollectStatisticsOnTableQueueJob;
+import ai.dqo.execution.statistics.jobs.CollectStatisticsOnTableQueueJobParameters;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionFinishedEvent;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
 import ai.dqo.metadata.id.HierarchyId;
@@ -49,9 +53,7 @@ import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Table;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Statistics collectors execution service. Executes statistics collectors on tables and columns.
@@ -62,6 +64,8 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
     private HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher;
     private SensorExecutionRunParametersFactory sensorExecutionRunParametersFactory;
     private DataQualitySensorRunner dataQualitySensorRunner;
+    private DqoQueueJobFactory dqoQueueJobFactory;
+    private DqoJobQueue dqoJobQueue;
     private ConnectionProviderRegistry connectionProviderRegistry;
     private StatisticsResultsNormalizationService statisticsResultsNormalizationService;
     private StatisticsSnapshotFactory statisticsSnapshotFactory;
@@ -71,6 +75,8 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
      * @param hierarchyNodeTreeSearcher Target node search service.
      * @param sensorExecutionRunParametersFactory Sensor run parameters factory.
      * @param dataQualitySensorRunner Sensor runner.
+     * @param dqoQueueJobFactory DQO job factory to create a child job.
+     * @param dqoJobQueue DQO job queue where the child job is started.
      * @param connectionProviderRegistry Connection provider.
      * @param statisticsResultsNormalizationService Normalization service that creates profiling results.
      * @param statisticsSnapshotFactory Statistics results snapshot factory. Snapshots support storage of profiler results.
@@ -79,12 +85,16 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
     public StatisticsCollectorsExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
                                                     SensorExecutionRunParametersFactory sensorExecutionRunParametersFactory,
                                                     DataQualitySensorRunner dataQualitySensorRunner,
+                                                    DqoQueueJobFactory dqoQueueJobFactory,
+                                                    DqoJobQueue dqoJobQueue,
                                                     ConnectionProviderRegistry connectionProviderRegistry,
                                                     StatisticsResultsNormalizationService statisticsResultsNormalizationService,
                                                     StatisticsSnapshotFactory statisticsSnapshotFactory) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
+        this.dqoQueueJobFactory = dqoQueueJobFactory;
+        this.dqoJobQueue = dqoJobQueue;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.statisticsResultsNormalizationService = statisticsResultsNormalizationService;
         this.statisticsSnapshotFactory = statisticsSnapshotFactory;
@@ -97,6 +107,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
      * @param progressListener Progress listener that receives progress calls.
      * @param statisticsDataScope Collector data scope to analyze - the whole table or each data stream separately.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all collectors without starting additional jobs.
      * @param jobCancellationToken Job cancellation token, used to detect if the job should be cancelled.
      * @return Statistics collector summary table with the count of executed and successful collectors executions for each table.
      */
@@ -106,6 +117,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
                                                                             StatisticsCollectorExecutionProgressListener progressListener,
                                                                             StatisticsDataScope statisticsDataScope,
                                                                             boolean dummySensorExecution,
+                                                                            boolean startChildJobsPerTable,
                                                                             JobCancellationToken jobCancellationToken) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         Collection<TableWrapper> targetTables = listTargetTables(userHome, statisticsCollectorSearchFilters);
@@ -113,15 +125,83 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
         LocalDateTime profilingSessionStartAt = LocalDateTime.now();
         jobCancellationToken.throwIfCancelled();
 
-        for (TableWrapper targetTable :  targetTables) {
-            ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
-            executeCollectorsOnTable(executionContext, userHome, connectionWrapper, targetTable, statisticsCollectorSearchFilters, progressListener,
-                    dummySensorExecution, statisticsCollectorExecutionSummary, profilingSessionStartAt, statisticsDataScope, jobCancellationToken);
+        if (startChildJobsPerTable) {
+            List<DqoQueueJob<StatisticsCollectionExecutionSummary>> childTableJobs = new ArrayList<>();
+
+            for (TableWrapper targetTable : targetTables) {
+                ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
+
+                CollectStatisticsOnTableQueueJobParameters runChecksOnTableQueueJobParameters = new CollectStatisticsOnTableQueueJobParameters() {{
+                    setConnection(connectionWrapper.getName());
+                    setMaxJobsPerConnection(connectionWrapper.getSpec().getParallelRunsLimit());
+                    setTable(targetTable.getPhysicalTableName());
+                    setStatisticsCollectorSearchFilters(statisticsCollectorSearchFilters);
+                    setDataScope(statisticsDataScope);
+                    setProgressListener(progressListener);
+                    setDummySensorExecution(dummySensorExecution);
+                }};
+                CollectStatisticsOnTableQueueJob collectStatisticsOnTableQueueJob = this.dqoQueueJobFactory.creteCollectStatisticsOnTableJob();
+                collectStatisticsOnTableQueueJob.setParameters(runChecksOnTableQueueJobParameters);
+                childTableJobs.add(collectStatisticsOnTableQueueJob);
+            }
+
+            ChildDqoQueueJobsContainer<StatisticsCollectionExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs);
+            List<StatisticsCollectionExecutionSummary> collectorExecutionSummaries = childTableJobsContainer.waitForChildResults(jobCancellationToken);
+            collectorExecutionSummaries.forEach(tableSummary -> statisticsCollectorExecutionSummary.append(tableSummary));
+        }
+        else {
+            for (TableWrapper targetTable : targetTables) {
+                ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
+                executeCollectorsOnTable(executionContext, userHome, connectionWrapper, targetTable, statisticsCollectorSearchFilters, progressListener,
+                        dummySensorExecution, statisticsCollectorExecutionSummary, profilingSessionStartAt, statisticsDataScope, jobCancellationToken);
+            }
         }
 
         progressListener.onCollectorsExecutionFinished(new StatisticsCollectorExecutionFinishedEvent(statisticsCollectorExecutionSummary));
 
         return statisticsCollectorExecutionSummary;
+    }
+
+    /**
+     * Executes data statistics collectors on a single table (as a child job). Reports progress and saves the results.
+     *
+     * @param executionContext                 Check/collector execution context with access to the user home and dqo home.
+     * @param connectionName                   Connection name on which the checks are executed.
+     * @param targetTable                      Full name of the target table.
+     * @param statisticsCollectorSearchFilters Collector search filters to find the right checks.
+     * @param progressListener                 Progress listener that receives progress calls.
+     * @param statisticsDataScope              Collector data scope to analyze - the whole table or each data stream separately.
+     * @param dummySensorExecution             When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken             Job cancellation token, used to detect if the job should be cancelled.
+     * @return Collector summary table with the count of executed and successful profile executions for the selected table. The result should have 0 or 1 rows.
+     */
+    @Override
+    public StatisticsCollectionExecutionSummary executeStatisticsCollectorsOnTable(ExecutionContext executionContext,
+                                                                                   String connectionName,
+                                                                                   PhysicalTableName targetTable,
+                                                                                   StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
+                                                                                   StatisticsCollectorExecutionProgressListener progressListener,
+                                                                                   StatisticsDataScope statisticsDataScope,
+                                                                                   boolean dummySensorExecution,
+                                                                                   JobCancellationToken jobCancellationToken) {
+        UserHome userHome = executionContext.getUserHomeContext().getUserHome();
+        StatisticsCollectionExecutionSummary statisticsCollectionExecutionSummary = new StatisticsCollectionExecutionSummary();
+
+        ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return statisticsCollectionExecutionSummary; // the connection was probably deleted in the meantime
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(targetTable, true);
+        if (tableWrapper == null) {
+            return statisticsCollectionExecutionSummary; // the table was probably deleted in the meantime
+        }
+
+        LocalDateTime profilingSessionStartAt = LocalDateTime.now();
+        executeCollectorsOnTable(executionContext, userHome, connectionWrapper, tableWrapper, statisticsCollectorSearchFilters, progressListener,
+                dummySensorExecution, statisticsCollectionExecutionSummary, profilingSessionStartAt,statisticsDataScope, jobCancellationToken);
+
+        return statisticsCollectionExecutionSummary;
     }
 
     /**

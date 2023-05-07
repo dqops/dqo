@@ -13,26 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.execution.statistics;
+package ai.dqo.execution.statistics.jobs;
 
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * Parameters object for the run the statistics collection job.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RunStatisticsCollectionQueueJobParameters {
+public class CollectStatisticsQueueJobParameters {
+    /**
+     * Statistics collectors search filters that identify the type of statistics collector to run.
+     */
+    @JsonPropertyDescription("Statistics collectors search filters that identify the type of statistics collector to run.")
     private StatisticsCollectorSearchFilters statisticsCollectorSearchFilters;
+
+    /**
+     * The target scope of collecting statistics. Statistics could be collected on a whole table or for each data stream separately.
+     */
+    @JsonPropertyDescription("The target scope of collecting statistics. Statistics could be collected on a whole table or for each data stream separately.")
     private StatisticsDataScope dataScope = StatisticsDataScope.table;
+
+    /**
+     * Progress listener that will receive events during the statistics collection.
+     */
     @JsonIgnore
     private StatisticsCollectorExecutionProgressListener progressListener;
+
+    /**
+     * Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).
+     */
+    @JsonPropertyDescription("Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).")
     private boolean dummySensorExecution;
 
-    public RunStatisticsCollectionQueueJobParameters() {
+    public CollectStatisticsQueueJobParameters() {
     }
 
     /**
@@ -42,10 +61,10 @@ public class RunStatisticsCollectionQueueJobParameters {
      * @param dataScope Statistics data scope to analyze - the whole table or each data stream separately.
      * @param dummySensorExecution True when it is a dummy run, only for showing rendered sensor queries.
      */
-    public RunStatisticsCollectionQueueJobParameters(StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
-                                                     StatisticsCollectorExecutionProgressListener progressListener,
-                                                     StatisticsDataScope dataScope,
-                                                     boolean dummySensorExecution) {
+    public CollectStatisticsQueueJobParameters(StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
+                                               StatisticsCollectorExecutionProgressListener progressListener,
+                                               StatisticsDataScope dataScope,
+                                               boolean dummySensorExecution) {
         this.statisticsCollectorSearchFilters = statisticsCollectorSearchFilters;
         this.progressListener = progressListener;
         this.dataScope = dataScope;

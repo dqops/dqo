@@ -151,4 +151,12 @@ public class StatisticsCollectionExecutionSummary {
 		this.collectorsFailedColumn.set(row.getRowNumber(), collectorsFailed);
         this.collectorsResultsColumn.set(row.getRowNumber(), collectorsResults);
     }
+
+    /**
+     * Appends results from another summary. Used to append results from child jobs.
+     * @param otherExecutionSummary Other summary, from a child job (a table level job that collected statistics from a single table).
+     */
+    public void append(StatisticsCollectionExecutionSummary otherExecutionSummary) {
+        this.summaryTable.append(otherExecutionSummary.getSummaryTable());
+    }
 }

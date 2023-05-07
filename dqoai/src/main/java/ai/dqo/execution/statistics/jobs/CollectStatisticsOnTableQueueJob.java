@@ -13,32 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.execution.statistics;
+package ai.dqo.execution.statistics.jobs;
 
 import ai.dqo.core.jobqueue.DqoJobExecutionContext;
 import ai.dqo.core.jobqueue.DqoJobType;
 import ai.dqo.core.jobqueue.DqoQueueJob;
+import ai.dqo.core.jobqueue.concurrency.ConcurrentJobType;
 import ai.dqo.core.jobqueue.concurrency.JobConcurrencyConstraint;
+import ai.dqo.core.jobqueue.concurrency.JobConcurrencyTarget;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.ExecutionContextFactory;
+import ai.dqo.execution.statistics.StatisticsCollectionExecutionSummary;
+import ai.dqo.execution.statistics.StatisticsCollectorsExecutionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Run statistics collection queue job.
+ * Run statistics collection queue job that is a child job and collects statistics on a single table.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class CollectStatisticsCollectionQueueJob extends DqoQueueJob<StatisticsCollectionExecutionSummary> {
+public class CollectStatisticsOnTableQueueJob extends DqoQueueJob<StatisticsCollectionExecutionSummary> {
     private ExecutionContextFactory executionContextFactory;
     private StatisticsCollectorsExecutionService statisticsCollectorsExecutionService;
-    private RunStatisticsCollectionQueueJobParameters parameters;
+    private CollectStatisticsOnTableQueueJobParameters parameters;
 
     @Autowired
-    public CollectStatisticsCollectionQueueJob(
+    public CollectStatisticsOnTableQueueJob(
             ExecutionContextFactory executionContextFactory,
             StatisticsCollectorsExecutionService statisticsCollectorsExecutionService) {
         this.executionContextFactory = executionContextFactory;
@@ -49,7 +53,7 @@ public class CollectStatisticsCollectionQueueJob extends DqoQueueJob<StatisticsC
      * Returns the job parameters.
      * @return Job parameters.
      */
-    public RunStatisticsCollectionQueueJobParameters getParameters() {
+    public CollectStatisticsOnTableQueueJobParameters getParameters() {
         return parameters;
     }
 
@@ -57,7 +61,7 @@ public class CollectStatisticsCollectionQueueJob extends DqoQueueJob<StatisticsC
      * Sets the job parameters.
      * @param parameters Job parameters.
      */
-    public void setParameters(RunStatisticsCollectionQueueJobParameters parameters) {
+    public void setParameters(CollectStatisticsOnTableQueueJobParameters parameters) {
         this.parameters = parameters;
     }
 
@@ -70,8 +74,10 @@ public class CollectStatisticsCollectionQueueJob extends DqoQueueJob<StatisticsC
     @Override
     public StatisticsCollectionExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
         ExecutionContext executionContext = this.executionContextFactory.create();
-        StatisticsCollectionExecutionSummary statisticsCollectionExecutionSummary = this.statisticsCollectorsExecutionService.executeStatisticsCollectors(
+        StatisticsCollectionExecutionSummary statisticsCollectionExecutionSummary = this.statisticsCollectorsExecutionService.executeStatisticsCollectorsOnTable(
                 executionContext,
+                this.parameters.getConnection(),
+                this.parameters.getTable(),
                 this.parameters.getStatisticsCollectorSearchFilters(),
                 this.parameters.getProgressListener(),
                 this.parameters.getDataScope(),
@@ -87,7 +93,7 @@ public class CollectStatisticsCollectionQueueJob extends DqoQueueJob<StatisticsC
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.COLLECT_STATISTICS;
+        return DqoJobType.COLLECT_STATISTICS_ON_TABLE;
     }
 
     /**
@@ -98,7 +104,17 @@ public class CollectStatisticsCollectionQueueJob extends DqoQueueJob<StatisticsC
      */
     @Override
     public JobConcurrencyConstraint[] getConcurrencyConstraints() {
-        return null; // user can start any number of "collect statistics" operations, the concurrency will be applied later on a table level
+        Integer maxJobsPerConnection = this.parameters.getMaxJobsPerConnection();
+
+        if (maxJobsPerConnection == null) {
+            return null; // no limits
+        }
+
+        return new JobConcurrencyConstraint[] {
+                new JobConcurrencyConstraint(
+                        new JobConcurrencyTarget(ConcurrentJobType.RUN_SENSORS_ON_CONNECTION, this.parameters.getConnection()),
+                        maxJobsPerConnection)
+        };
     }
 
     /**
@@ -110,7 +126,7 @@ public class CollectStatisticsCollectionQueueJob extends DqoQueueJob<StatisticsC
     @Override
     public DqoJobEntryParametersModel createParametersModel() {
         return new DqoJobEntryParametersModel() {{
-            setCollectStatisticsParameters(parameters);
+            setCollectStatisticsOnTableParameters(parameters);
         }};
     }
 }

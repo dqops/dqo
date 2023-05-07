@@ -65,7 +65,7 @@ public interface CheckExecutionService {
      * @param executionContext Execution context that provides access to the user home.
      * @param connectionName Connection name on which the checks are executed.
      * @param targetTable Full name of the target table.
-     * @param @param checkSearchFilters Check search filters, may not specify the connection and the table name.
+     * @param checkSearchFilters Check search filters, may not specify the connection and the table name.
      * @param userTimeWindowFilters Optional user provided time window filters to restrict the range of dates that are analyzed.
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.

@@ -32,7 +32,7 @@ public enum ConcurrentJobType {
     /**
      * Limits the number of parallel run checks operations that are executed on a single connection. Each job executes on one table.
      */
-    RUN_CHECKS_ON_TABLE,
+    RUN_SENSORS_ON_CONNECTION,
 
     /**
      * Cloud sync operation that synchronizes multiple folders.

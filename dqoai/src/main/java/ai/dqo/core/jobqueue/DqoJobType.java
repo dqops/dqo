@@ -30,6 +30,9 @@ public enum DqoJobType {
     @JsonProperty("collect statistics")
     COLLECT_STATISTICS,
 
+    @JsonProperty("collect statistics on table")
+    COLLECT_STATISTICS_ON_TABLE,
+
     @JsonProperty("queue thread shutdown")
     QUEUE_THREAD_SHUTDOWN,
 

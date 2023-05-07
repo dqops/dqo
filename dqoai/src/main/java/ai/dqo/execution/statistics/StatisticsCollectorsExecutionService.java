@@ -20,6 +20,7 @@ import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
+import ai.dqo.metadata.sources.PhysicalTableName;
 
 /**
  * Statistics collector execution service. Executes statistics collectors on tables and columns.
@@ -33,6 +34,7 @@ public interface StatisticsCollectorsExecutionService {
      * @param progressListener      Progress listener that receives progress calls.
      * @param statisticsDataScope Collector data scope to analyze - the whole table or each data stream separately.
      * @param dummySensorExecution  When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all collectors without starting additional jobs.
      * @param jobCancellationToken Job cancellation token, used to detect if the job should be cancelled.
      * @return Collector summary table with the count of executed and successful profile executions for each table.
      */
@@ -41,5 +43,28 @@ public interface StatisticsCollectorsExecutionService {
                                                                      StatisticsCollectorExecutionProgressListener progressListener,
                                                                      StatisticsDataScope statisticsDataScope,
                                                                      boolean dummySensorExecution,
+                                                                     boolean startChildJobsPerTable,
                                                                      JobCancellationToken jobCancellationToken);
+
+    /**
+     * Executes data statistics collectors on a single table (as a child job). Reports progress and saves the results.
+     *
+     * @param executionContext      Check/collector execution context with access to the user home and dqo home.
+     * @param connectionName Connection name on which the checks are executed.
+     * @param targetTable Full name of the target table.
+     * @param statisticsCollectorSearchFilters Collector search filters to find the right checks.
+     * @param progressListener      Progress listener that receives progress calls.
+     * @param statisticsDataScope Collector data scope to analyze - the whole table or each data stream separately.
+     * @param dummySensorExecution  When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken Job cancellation token, used to detect if the job should be cancelled.
+     * @return Collector summary table with the count of executed and successful profile executions for the selected table. The result should have 0 or 1 rows.
+     */
+    StatisticsCollectionExecutionSummary executeStatisticsCollectorsOnTable(ExecutionContext executionContext,
+                                                                            String connectionName,
+                                                                            PhysicalTableName targetTable,
+                                                                            StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
+                                                                            StatisticsCollectorExecutionProgressListener progressListener,
+                                                                            StatisticsDataScope statisticsDataScope,
+                                                                            boolean dummySensorExecution,
+                                                                            JobCancellationToken jobCancellationToken);
 }

@@ -24,7 +24,8 @@ import ai.dqo.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob;
 import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
 import ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJob;
 import ai.dqo.execution.checks.jobs.RunChecksQueueJob;
-import ai.dqo.execution.statistics.CollectStatisticsCollectionQueueJob;
+import ai.dqo.execution.statistics.jobs.CollectStatisticsOnTableQueueJob;
+import ai.dqo.execution.statistics.jobs.CollectStatisticsQueueJob;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -66,13 +67,23 @@ public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
     }
 
     /**
-     * Creates a job that runs profilers.
+     * Creates a job that collects statistics.
      *
-     * @return New run profilers job.
+     * @return New colect statistics job.
      */
     @Override
-    public CollectStatisticsCollectionQueueJob createRunProfilersJob() {
-        return this.beanFactory.getBean(CollectStatisticsCollectionQueueJob.class);
+    public CollectStatisticsQueueJob createCollectStatisticsJob() {
+        return this.beanFactory.getBean(CollectStatisticsQueueJob.class);
+    }
+
+    /**
+     * Creates a child job that runs profilers (collects statistics) on a single table.
+     *
+     * @return New collect statistics on table child job.
+     */
+    @Override
+    public CollectStatisticsOnTableQueueJob creteCollectStatisticsOnTableJob() {
+        return this.beanFactory.getBean(CollectStatisticsOnTableQueueJob.class);
     }
 
     /**

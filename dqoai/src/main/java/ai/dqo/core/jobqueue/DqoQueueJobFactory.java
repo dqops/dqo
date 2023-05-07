@@ -24,7 +24,8 @@ import ai.dqo.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob;
 import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
 import ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJob;
 import ai.dqo.execution.checks.jobs.RunChecksQueueJob;
-import ai.dqo.execution.statistics.CollectStatisticsCollectionQueueJob;
+import ai.dqo.execution.statistics.jobs.CollectStatisticsOnTableQueueJob;
+import ai.dqo.execution.statistics.jobs.CollectStatisticsQueueJob;
 
 /**
  * DQO job instance factory. Creates new instances of jobs that could be configured before they are submitted to the queue.
@@ -44,10 +45,16 @@ public interface DqoQueueJobFactory {
     RunChecksOnTableQueueJob createRunChecksOnTableJob();
 
     /**
-     * Creates a job that runs profilers.
-     * @return New run profilers job.
+     * Creates a job that runs profilers (collects statistics).
+     * @return New collect statistics parent job.
      */
-    CollectStatisticsCollectionQueueJob createRunProfilersJob();
+    CollectStatisticsQueueJob createCollectStatisticsJob();
+
+    /**
+     * Creates a child job that runs profilers (collects statistics) on a single table.
+     * @return New collect statistics on table child job.
+     */
+    CollectStatisticsOnTableQueueJob creteCollectStatisticsOnTableJob();
 
     /**
      * Creates a DQO Cloud synchronization job that will synchronize one folder in the user home.
