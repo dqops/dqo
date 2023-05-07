@@ -99,7 +99,6 @@ dqo:
     max-connection-in-pool: 1000
     expire-after-access-seconds: 1800
   queue:
-    threads: 10
     keep-finished-jobs-history-seconds: 3600
     keep-jobs-changes-history-seconds: 1200
     get-job-changes-since-wait-seconds: 30

@@ -26,27 +26,10 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "dqo.queue")
 @EqualsAndHashCode(callSuper = false)
 public class DqoQueueConfigurationProperties implements Cloneable {
-    private int threads = 10;
     private Integer maxNonBlockingCapacity;  // the default is null, which is unlimited
     private int keepFinishedJobsHistorySeconds = 3600;
     private int keepJobsChangesHistorySeconds = 300;
     private int getJobChangesSinceWaitSeconds = 30;
-
-    /**
-     * Returns the number of threads that the job queue uses for processing jobs.
-     * @return Number of threads for the job queue.
-     */
-    public int getThreads() {
-        return threads;
-    }
-
-    /**
-     * Sets the number of threads that will be used by the job queue.
-     * @param threads Number of threads.
-     */
-    public void setThreads(int threads) {
-        this.threads = threads;
-    }
 
     /**
      * Maximum queue capacity before pushing new jobs will become a blocing operation.

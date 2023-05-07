@@ -15,13 +15,26 @@
  */
 package ai.dqo.core.jobqueue;
 
-import ai.dqo.utils.exceptions.DqoRuntimeException;
-
 /**
- * Exception thrown when the job queue cannot accept a job.
+ * DQO job queue - manages a pool of threads that are executing operations.
+ * This is a second job queue that has it's own limits and is meant to accept only parent jobs that will create child jobs on the main job queue.
  */
-public class JobQueuePushFailedException extends DqoRuntimeException {
-    public JobQueuePushFailedException(String message, Throwable cause) {
-        super(message, cause);
-    }
+public interface DqoParentJobQueue {
+    /**
+     * Starts the job queue, creates a thread pool.
+     */
+    void start();
+
+    /**
+     * Stops the job queue.
+     */
+    void stop();
+
+    /**
+     * Pushes a job to the job queue without waiting.
+     *
+     * @param job Job to be pushed.
+     * @return Started job summary and a future to await for finish.
+     */
+    <T> PushJobResult<T> pushJob(DqoQueueJob<T> job);
 }

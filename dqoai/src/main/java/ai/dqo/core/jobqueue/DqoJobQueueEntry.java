@@ -15,6 +15,7 @@
  */
 package ai.dqo.core.jobqueue;
 
+import ai.dqo.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -23,18 +24,18 @@ import org.jetbrains.annotations.NotNull;
 public class DqoJobQueueEntry implements Comparable<DqoJobQueueEntry> {
     private DqoQueueJob<?> job;
     private DqoQueueJobId jobId;
-    private JobConcurrencyConstraint jobConcurrencyConstraint;
+    private JobConcurrencyConstraint[] jobConcurrencyConstraints;
 
     /**
      * Creates a dqo job queue entry.
      * @param job Job.
      * @param jobId Job id.
-     * @param jobConcurrencyConstraint Optional job concurrency constraint retrieved from the job. It is cached for the whole time when the job is awaiting on the queue.
+     * @param jobConcurrencyConstraints Optional array of job concurrency constraints retrieved from the job. It is cached for the whole time when the job is awaiting on the queue.
      */
-    public DqoJobQueueEntry(DqoQueueJob<?> job, DqoQueueJobId jobId, JobConcurrencyConstraint jobConcurrencyConstraint) {
+    public DqoJobQueueEntry(DqoQueueJob<?> job, DqoQueueJobId jobId, JobConcurrencyConstraint[] jobConcurrencyConstraints) {
         this.job = job;
         this.jobId = jobId;
-        this.jobConcurrencyConstraint = jobConcurrencyConstraint;
+        this.jobConcurrencyConstraints = jobConcurrencyConstraints;
     }
 
     /**
@@ -43,7 +44,7 @@ public class DqoJobQueueEntry implements Comparable<DqoJobQueueEntry> {
      * @param jobId Job id.
      */
     public DqoJobQueueEntry(DqoQueueJob<?> job, DqoQueueJobId jobId) {
-        this(job, jobId, job.getConcurrencyConstraint());
+        this(job, jobId, job.getConcurrencyConstraints());
     }
 
     /**
@@ -63,11 +64,11 @@ public class DqoJobQueueEntry implements Comparable<DqoJobQueueEntry> {
     }
 
     /**
-     * Returns an optional job concurrency constraint that identifies the concurrency target and the DOP.
-     * @return Job concurrency constraint or null, when the job has no concurrency limits.
+     * Returns an optional array of job concurrency constraints that identifies the concurrency target and the DOP.
+     * @return Array of job concurrency constraints or null, when the job has no concurrency limits.
      */
-    public JobConcurrencyConstraint getJobConcurrencyConstraint() {
-        return jobConcurrencyConstraint;
+    public JobConcurrencyConstraint[] getJobConcurrencyConstraints() {
+        return jobConcurrencyConstraints;
     }
 
     @Override

@@ -19,10 +19,9 @@ import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.core.jobqueue.DqoJobExecutionContext;
 import ai.dqo.core.jobqueue.DqoJobType;
 import ai.dqo.core.jobqueue.DqoQueueJob;
-import ai.dqo.core.jobqueue.JobConcurrencyConstraint;
+import ai.dqo.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.core.scheduler.JobSchedulerService;
-import ai.dqo.core.scheduler.synchronization.SchedulerFileSynchronizationService;
 import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.ExecutionContextFactory;
@@ -47,7 +46,6 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
     private CheckExecutionService checkExecutionService;
     private ExecutionContextFactory executionContextFactory;
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
-    private SchedulerFileSynchronizationService schedulerFileSynchronizationService;
     private TerminalTableWritter terminalTableWritter;
     private RecurringScheduleSpec cronSchedule;
 
@@ -57,7 +55,6 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
      * @param checkExecutionService Check execution service that runs the data quality checks.
      * @param executionContextFactory Check execution context that will create a context - opening the local user home.
      * @param checkExecutionProgressListenerProvider Check execution progress listener used to get the correct logger.
-     * @param schedulerFileSynchronizationService Scheduler file synchronization service.
      * @param terminalTableWriter Terminal table writer - used to write the summary information about the progress to the console.
      */
     @Autowired
@@ -65,13 +62,11 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
                                     CheckExecutionService checkExecutionService,
                                     ExecutionContextFactory executionContextFactory,
                                     CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
-                                    SchedulerFileSynchronizationService schedulerFileSynchronizationService,
                                     TerminalTableWritter terminalTableWriter) {
         this.jobSchedulerService = jobSchedulerService;
         this.checkExecutionService = checkExecutionService;
         this.executionContextFactory = executionContextFactory;
         this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
-        this.schedulerFileSynchronizationService = schedulerFileSynchronizationService;
         this.terminalTableWritter = terminalTableWriter;
     }
 
@@ -102,16 +97,12 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
         FileSystemSynchronizationReportingMode synchronizationMode = this.jobSchedulerService.getSynchronizationMode();
         CheckRunReportingMode checkRunReportingMode = this.jobSchedulerService.getCheckRunReportingMode();
 
-        this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode, false); // synchronize the data before running the checks, just in case that the files were removed remotely
-
         ExecutionContext executionContext = this.executionContextFactory.create();
 
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
                 checkRunReportingMode, true);
         CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecksForSchedule(
-                executionContext, this.cronSchedule, progressListener);
-
-        this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode, false); // push the updated data files (parquet) back to the cloud
+                executionContext, this.cronSchedule, progressListener, jobExecutionContext.getCancellationToken());
 
         return null;
     }
@@ -133,7 +124,7 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
      * @return Optional concurrency constraint that limits the number of parallel jobs or null, when no limits are required.
      */
     @Override
-    public JobConcurrencyConstraint getConcurrencyConstraint() {
+    public JobConcurrencyConstraint[] getConcurrencyConstraints() {
         return null; // user can start any number of "run check" operations, the concurrency will be applied later on a table level
     }
 

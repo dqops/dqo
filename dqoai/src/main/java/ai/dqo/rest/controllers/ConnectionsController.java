@@ -823,7 +823,7 @@ public class ConnectionsController {
      */
     @DeleteMapping("/{connectionName}")
     @ApiOperation(value = "deleteConnection", notes = "Deletes a connection")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Connection successfully deleted", response = DqoQueueJobId.class),
             @ApiResponse(code = 404, message = "Connection not found"),

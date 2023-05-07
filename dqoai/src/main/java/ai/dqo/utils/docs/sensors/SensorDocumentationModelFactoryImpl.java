@@ -15,6 +15,7 @@
  */
 package ai.dqo.utils.docs.sensors;
 
+import ai.dqo.connectors.ProviderType;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionList;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
@@ -101,7 +102,12 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
     private Map<String, List<String>> createSqlTemplates(SensorDefinitionWrapper sensorDefinition) {
         Map<String, List<String>> sqlTemplates = new HashMap<>();
         for (ProviderSensorDefinitionWrapper providerSensor : sensorDefinition.getProviderSensors()) {
-            sqlTemplates.put(providerSensor.getProvider().toString(), List.of(providerSensor.getSqlTemplate().split("\\r?\\n|\\r")));
+            ProviderType provider = providerSensor.getProvider();
+            String sqlTemplate = providerSensor.getSqlTemplate();
+            if (sqlTemplate == null) {
+                throw new RuntimeException("Sensor " + sensorDefinition.getName() + " for provider " + provider.toString() + " has no SQL template");
+            }
+            sqlTemplates.put(provider.toString(), List.of(sqlTemplate.split("\\r?\\n|\\r")));
         }
 
         Comparator<String> comparator = String::compareTo;

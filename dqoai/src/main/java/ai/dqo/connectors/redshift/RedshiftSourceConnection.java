@@ -19,6 +19,7 @@ import ai.dqo.connectors.ConnectorOperationFailedException;
 import ai.dqo.connectors.SourceSchemaModel;
 import ai.dqo.connectors.jdbc.AbstractJdbcSourceConnection;
 import ai.dqo.connectors.jdbc.JdbcConnectionPool;
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import com.zaxxer.hikari.HikariConfig;
@@ -63,7 +64,7 @@ public class RedshiftSourceConnection extends AbstractJdbcSourceConnection {
         sqlBuilder.append("SVV_ALL_SCHEMAS\n");
         sqlBuilder.append("WHERE SCHEMA_NAME <> 'information_schema' AND SCHEMA_NAME <> 'pg_catalog'");
         String listSchemataSql = sqlBuilder.toString();
-        Table schemaRows = this.executeQuery(listSchemataSql);
+        Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken());
 
         List<SourceSchemaModel> results = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < schemaRows.rowCount() ; rowIndex++) {

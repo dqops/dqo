@@ -18,7 +18,7 @@ package ai.dqo.execution.statistics;
 import ai.dqo.core.jobqueue.DqoJobExecutionContext;
 import ai.dqo.core.jobqueue.DqoJobType;
 import ai.dqo.core.jobqueue.DqoQueueJob;
-import ai.dqo.core.jobqueue.JobConcurrencyConstraint;
+import ai.dqo.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.ExecutionContextFactory;
@@ -75,7 +75,8 @@ public class CollectStatisticsCollectionQueueJob extends DqoQueueJob<StatisticsC
                 this.parameters.getStatisticsCollectorSearchFilters(),
                 this.parameters.getProgressListener(),
                 this.parameters.getDataScope(),
-                this.parameters.isDummySensorExecution());
+                this.parameters.isDummySensorExecution(),
+                jobExecutionContext.getCancellationToken());
         return statisticsCollectionExecutionSummary;
     }
 
@@ -96,8 +97,8 @@ public class CollectStatisticsCollectionQueueJob extends DqoQueueJob<StatisticsC
      * @return Optional concurrency constraint that limits the number of parallel jobs or null, when no limits are required.
      */
     @Override
-    public JobConcurrencyConstraint getConcurrencyConstraint() {
-        return null; // user can start any number of "run check" operations, the concurrency will be applied later on a table level
+    public JobConcurrencyConstraint[] getConcurrencyConstraints() {
+        return null; // user can start any number of "collect statistics" operations, the concurrency will be applied later on a table level
     }
 
     /**

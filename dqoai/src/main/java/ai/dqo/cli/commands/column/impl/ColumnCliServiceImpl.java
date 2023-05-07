@@ -218,7 +218,7 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 
 		try {
 			for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
-				job.getFuture().get();
+				job.getFinishedFuture().get();
 			}
 		} catch (InterruptedException e) {
 			cliOperationStatus.setSuccessMessage(String.format("Removed %d columns.", columnSpecs.size())

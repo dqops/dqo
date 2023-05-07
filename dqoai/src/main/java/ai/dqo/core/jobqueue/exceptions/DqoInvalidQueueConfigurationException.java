@@ -13,23 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.utils.jobs;
+package ai.dqo.core.jobqueue.exceptions;
 
-import ai.dqo.core.jobqueue.DqoJobQueue;
-import ai.dqo.utils.BeanFactoryObjectMother;
-import org.springframework.beans.factory.BeanFactory;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 
 /**
- * Object mother for {@link DqoJobQueue}.
+ * Exception thrown when the configuration of the job queue is invalid.
  */
-public class DqoJobQueueObjectMother {
-
-    /**
-     * Retrieves the default dqo job queue.
-     * @return Default dqo job queue.
-     */
-    public static DqoJobQueue getDefault() {
-        BeanFactory beanFactory = BeanFactoryObjectMother.getBeanFactory();
-        return beanFactory.getBean(DqoJobQueue.class);
+public class DqoInvalidQueueConfigurationException extends DqoRuntimeException {
+    public DqoInvalidQueueConfigurationException(String message) {
+        super(message);
     }
 }

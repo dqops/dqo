@@ -19,8 +19,11 @@ import ai.dqo.connectors.ConnectorOperationFailedException;
 import ai.dqo.connectors.jdbc.AbstractJdbcSourceConnection;
 import ai.dqo.connectors.jdbc.JdbcConnectionPool;
 import ai.dqo.connectors.jdbc.JdbcQueryFailedException;
+import ai.dqo.core.jobqueue.JobCancellationListenerHandle;
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,22 +122,30 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
      * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
      *
      * @param sqlQueryStatement SQL statement that returns a row set.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
      * @return Tabular result captured from the query.
      */
     @Override
-    public Table executeQuery(String sqlQueryStatement) {
+    public Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken) {
         try {
             try (Statement statement = this.getJdbcConnection().createStatement()) {
-                try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
-                    try (SqlServerResultSet sqlServerResultSet = new SqlServerResultSet(results)) {
-                        Table resultTable = Table.read().db(sqlServerResultSet, "query_result");
-                        for (Column<?> column : resultTable.columns()) {
-                            if (column.name() != null) {
-                                column.setName(column.name().toLowerCase(Locale.ROOT));
+                try (JobCancellationListenerHandle cancellationListenerHandle =
+                             jobCancellationToken.registerCancellationListener(
+                                     cancellationToken -> RunSilently.run(statement::cancel))) {
+                    try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
+                        try (SqlServerResultSet sqlServerResultSet = new SqlServerResultSet(results)) {
+                            Table resultTable = Table.read().db(sqlServerResultSet, "query_result");
+                            for (Column<?> column : resultTable.columns()) {
+                                if (column.name() != null) {
+                                    column.setName(column.name().toLowerCase(Locale.ROOT));
+                                }
                             }
+                            return resultTable;
                         }
-                        return resultTable;
                     }
+                }
+                finally {
+                    jobCancellationToken.throwIfCancelled();
                 }
             }
         }

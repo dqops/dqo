@@ -15,6 +15,7 @@
  */
 package ai.dqo.execution.sensors;
 
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 
@@ -28,10 +29,12 @@ public interface DataQualitySensorRunner {
      * @param sensorRunParameters Sensor run parameters (connection, table, column, sensor parameters).
      * @param progressListener Progress lister that receives information about the progress of a sensor execution.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken Job cancellation token, used to cancel a running sensor query.
      * @return Sensor execution result with the query result from the sensor.
      */
     SensorExecutionResult executeSensor(ExecutionContext executionContext,
                                         SensorExecutionRunParameters sensorRunParameters,
                                         SensorExecutionProgressListener progressListener,
-                                        boolean dummySensorExecution);
+                                        boolean dummySensorExecution,
+                                        JobCancellationToken jobCancellationToken);
 }

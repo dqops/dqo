@@ -20,9 +20,10 @@ import ai.dqo.core.jobqueue.jobs.data.RepairStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJob;
 import ai.dqo.core.scheduler.runcheck.RunScheduledChecksDqoJob;
-import ai.dqo.core.scheduler.scan.RunPeriodicMetadataSynchronizationDqoJob;
+import ai.dqo.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob;
 import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
-import ai.dqo.execution.checks.RunChecksQueueJob;
+import ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJob;
+import ai.dqo.execution.checks.jobs.RunChecksQueueJob;
 import ai.dqo.execution.statistics.CollectStatisticsCollectionQueueJob;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,16 @@ public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
     }
 
     /**
+     * Creates a run checks on table job (that runs checks on a single table, within the parallel operations per table limits).
+     *
+     * @return New run checks on table job.
+     */
+    @Override
+    public RunChecksOnTableQueueJob createRunChecksOnTableJob() {
+        return this.beanFactory.getBean(RunChecksOnTableQueueJob.class);
+    }
+
+    /**
      * Creates a job that runs profilers.
      *
      * @return New run profilers job.
@@ -75,13 +86,13 @@ public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
     }
 
     /**
-     * Creates a DQO job that runs a scheduled (every 10 minutes by default) metadata synchronization and detection of new cron schedules.
+     * Creates a DQO Cloud synchronization parent job that will start multiple child jobs to synchronize multiple DQO User home folders in parallel.
      *
-     * @return Periodic metadata synchronization job.
+     * @return Cloud synchronization job for multiple folders.
      */
     @Override
-    public RunPeriodicMetadataSynchronizationDqoJob createRunPeriodicMetadataSynchronizationJob() {
-        return this.beanFactory.getBean(RunPeriodicMetadataSynchronizationDqoJob.class);
+    public SynchronizeMultipleFoldersDqoQueueJob createSynchronizeMultipleFoldersJob() {
+        return this.beanFactory.getBean(SynchronizeMultipleFoldersDqoQueueJob.class);
     }
 
     /**

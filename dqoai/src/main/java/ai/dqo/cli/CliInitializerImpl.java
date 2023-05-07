@@ -21,7 +21,11 @@ import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import ai.dqo.core.jobqueue.DqoJobQueue;
+import ai.dqo.core.jobqueue.ParentDqoJobQueue;
+import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
 import ai.dqo.core.scheduler.JobSchedulerService;
+import ai.dqo.core.synchronization.status.FileSynchronizationChangeDetectionService;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreator;
 import ai.dqo.rest.server.LocalUrlAddresses;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
@@ -43,6 +47,10 @@ public class CliInitializerImpl implements CliInitializer {
     private CloudLoginService cloudLoginService;
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
     private JobSchedulerService jobSchedulerService;
+    private DqoJobQueueMonitoringService jobQueueMonitoringService;
+    private DqoJobQueue dqoJobQueue;
+    private ParentDqoJobQueue parentDqoJobQueue;
+    private FileSynchronizationChangeDetectionService fileSynchronizationChangeDetectionService;
     private DefaultTimeZoneProvider defaultTimeZoneProvider;
     private TerminalWriter terminalWriter;
     private LocalUrlAddresses localUrlAddresses;
@@ -55,6 +63,10 @@ public class CliInitializerImpl implements CliInitializer {
      * @param cloudLoginService Cloud login service - used to log the user to dqo cloud.
      * @param dqoSchedulerConfigurationProperties Scheduler configuration parameters, decide if the scheduler should be started instantly.
      * @param jobSchedulerService Job scheduler service, may be started when the dqo.scheduler.start property is true.
+     * @param jobQueueMonitoringService DQO job queue monitoring service that tracks the statuses of jobs.
+     * @param dqoJobQueue Job queue service, used to start the job queue when the application starts.
+     * @param parentDqoJobQueue Job queue service that queues and executes only parent jobs, must be started when the application starts.
+     * @param fileSynchronizationChangeDetectionService File synchronization changes detection service, compares the dates, sizes and existence of all files that could be synchronized to DQO Cloud with the index of previously synchronized files.
      * @param defaultTimeZoneProvider Default time zone provider, used to configure the default time zone.
      * @param terminalWriter Terminal writer - used for displaying additional handy information during the init process.
      * @param localUrlAddresses Local URL addresses - used to store centralized information regarding URLs.
@@ -66,6 +78,10 @@ public class CliInitializerImpl implements CliInitializer {
                               CloudLoginService cloudLoginService,
                               DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties,
                               JobSchedulerService jobSchedulerService,
+                              DqoJobQueueMonitoringService jobQueueMonitoringService,
+                              DqoJobQueue dqoJobQueue,
+                              ParentDqoJobQueue parentDqoJobQueue,
+                              FileSynchronizationChangeDetectionService fileSynchronizationChangeDetectionService,
                               DefaultTimeZoneProvider defaultTimeZoneProvider,
                               TerminalWriter terminalWriter,
                               LocalUrlAddresses localUrlAddresses) {
@@ -75,6 +91,10 @@ public class CliInitializerImpl implements CliInitializer {
         this.cloudLoginService = cloudLoginService;
         this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
         this.jobSchedulerService = jobSchedulerService;
+        this.jobQueueMonitoringService = jobQueueMonitoringService;
+        this.dqoJobQueue = dqoJobQueue;
+        this.parentDqoJobQueue = parentDqoJobQueue;
+        this.fileSynchronizationChangeDetectionService = fileSynchronizationChangeDetectionService;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
         this.terminalWriter = terminalWriter;
         this.localUrlAddresses = localUrlAddresses;
@@ -128,6 +148,11 @@ public class CliInitializerImpl implements CliInitializer {
             this.tryLoginToDqoCloud(isHeadless);
         }
         finally {
+            this.jobQueueMonitoringService.start();
+            this.fileSynchronizationChangeDetectionService.detectUnsynchronizedChangesInBackground();
+            this.dqoJobQueue.start();
+            this.parentDqoJobQueue.start();
+
             if (this.dqoSchedulerConfigurationProperties.getStart() != null &&
                     this.dqoSchedulerConfigurationProperties.getStart()) {
                 this.jobSchedulerService.start(

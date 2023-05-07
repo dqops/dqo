@@ -68,7 +68,7 @@ public class RunScheduledChecksSchedulerJob implements Job {
             runScheduledChecksJob.setCronSchedule(runChecksCronSchedule);
             this.dqoJobQueue.pushJob(runScheduledChecksJob);
 
-            runScheduledChecksJob.waitForFinish(); // waits for the result, hanging the current thread... but we can release the thread...
+            runScheduledChecksJob.waitForStarted();  // the job scheduler starts the jobs one by one, but they are pushed to the job queue and parallelized there
         }
         catch (Exception ex) {
             log.error("Failed to execute a job that runs the data quality checks on a job scheduler, error: " + ex.getMessage(), ex);

@@ -20,9 +20,10 @@ import ai.dqo.core.jobqueue.jobs.data.RepairStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJob;
 import ai.dqo.core.scheduler.runcheck.RunScheduledChecksDqoJob;
-import ai.dqo.core.scheduler.scan.RunPeriodicMetadataSynchronizationDqoJob;
+import ai.dqo.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob;
 import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
-import ai.dqo.execution.checks.RunChecksQueueJob;
+import ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJob;
+import ai.dqo.execution.checks.jobs.RunChecksQueueJob;
 import ai.dqo.execution.statistics.CollectStatisticsCollectionQueueJob;
 
 /**
@@ -37,6 +38,12 @@ public interface DqoQueueJobFactory {
     RunChecksQueueJob createRunChecksJob();
 
     /**
+     * Creates a run checks on table job (that runs checks on a single table, within the parallel operations per table limits).
+     * @return New run checks on table job.
+     */
+    RunChecksOnTableQueueJob createRunChecksOnTableJob();
+
+    /**
      * Creates a job that runs profilers.
      * @return New run profilers job.
      */
@@ -49,10 +56,11 @@ public interface DqoQueueJobFactory {
     SynchronizeRootFolderDqoQueueJob createSynchronizeRootFolderJob();
 
     /**
-     * Creates a DQO job that runs a scheduled (every 10 minutes by default) metadata synchronization and detection of new cron schedules.
-     * @return Periodic metadata synchronization job.
+     * Creates a DQO Cloud synchronization parent job that will start multiple child jobs to synchronize multiple DQO User home folders in parallel.
+     *
+     * @return Cloud synchronization job for multiple folders.
      */
-    RunPeriodicMetadataSynchronizationDqoJob createRunPeriodicMetadataSynchronizationJob();
+    SynchronizeMultipleFoldersDqoQueueJob createSynchronizeMultipleFoldersJob();
 
     /**
      * Creates a job that executes all checks scheduled for one cron expression.

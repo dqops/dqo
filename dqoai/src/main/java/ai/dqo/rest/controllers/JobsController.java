@@ -16,10 +16,7 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
-import ai.dqo.core.jobqueue.DqoJobQueue;
-import ai.dqo.core.jobqueue.DqoQueueJobFactory;
-import ai.dqo.core.jobqueue.DqoQueueJobId;
-import ai.dqo.core.jobqueue.PushJobResult;
+import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
@@ -29,17 +26,12 @@ import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobResult;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueIncrementalSnapshotModel;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueInitialSnapshotModel;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
-import ai.dqo.core.synchronization.contract.DqoRoot;
-import ai.dqo.core.synchronization.jobs.SynchronizeMultipleFoldersJobModel;
-import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
-import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJobParameters;
-import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderParameters;
-import ai.dqo.core.synchronization.listeners.SilentFileSystemSynchronizationListener;
+import ai.dqo.core.synchronization.jobs.*;
 import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.execution.checks.CheckExecutionSummary;
-import ai.dqo.execution.checks.RunChecksQueueJob;
-import ai.dqo.execution.checks.RunChecksQueueJobParameters;
+import ai.dqo.execution.checks.jobs.RunChecksQueueJob;
+import ai.dqo.execution.checks.jobs.RunChecksQueueJobParameters;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
@@ -56,11 +48,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -73,6 +63,7 @@ import java.util.concurrent.TimeUnit;
 public class JobsController {
     private DqoQueueJobFactory dqoQueueJobFactory;
     private DqoJobQueue dqoJobQueue;
+    private ParentDqoJobQueue parentDqoJobQueue;
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider;
     private final DqoJobQueueMonitoringService jobQueueMonitoringService;
@@ -83,6 +74,7 @@ public class JobsController {
      * Creates a new controller, injecting dependencies.
      * @param dqoQueueJobFactory DQO queue job factory used to create new instances of jobs.
      * @param dqoJobQueue Job queue used to publish or review running jobs.
+     * @param parentDqoJobQueue Job queue for managing parent jobs (jobs that will start other child jobs).
      * @param checkExecutionProgressListenerProvider Check execution progress listener provider used to create a valid progress listener when starting a "runchecks" job.
      * @param statisticsCollectorExecutionProgressListenerProvider Profiler execution progress listener provider used to create a valid progress listener when starting a "runprofilers" job.
      * @param jobQueueMonitoringService Job queue monitoring service.
@@ -92,6 +84,7 @@ public class JobsController {
     @Autowired
     public JobsController(DqoQueueJobFactory dqoQueueJobFactory,
                           DqoJobQueue dqoJobQueue,
+                          ParentDqoJobQueue parentDqoJobQueue,
                           CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
                           StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider,
                           DqoJobQueueMonitoringService jobQueueMonitoringService,
@@ -99,6 +92,7 @@ public class JobsController {
                           SynchronizationStatusTracker synchronizationStatusTracker) {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
+        this.parentDqoJobQueue = parentDqoJobQueue;
         this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
         this.statisticsCollectorExecutionProgressListenerProvider = statisticsCollectorExecutionProgressListenerProvider;
         this.jobQueueMonitoringService = jobQueueMonitoringService;
@@ -129,7 +123,7 @@ public class JobsController {
 
         runChecksJob.setParameters(runChecksParameters);
 
-        PushJobResult<CheckExecutionSummary> pushJobResult = this.dqoJobQueue.pushJob(runChecksJob);
+        PushJobResult<CheckExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runChecksJob);
         return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
     }
 
@@ -207,6 +201,27 @@ public class JobsController {
     public ResponseEntity<Mono<DqoJobQueueInitialSnapshotModel>> getAllJobs() {
         Mono<DqoJobQueueInitialSnapshotModel> initialJobList = this.jobQueueMonitoringService.getInitialJobList();
         return new ResponseEntity<>(initialJobList, HttpStatus.OK); // 200
+    }
+
+    /**
+     * Cancels a running job.
+     * @param jobId Job id of a job to cancel.
+     * @return Empty response.
+     */
+    @DeleteMapping("/jobs/{jobId}")
+    @ApiOperation(value = "cancelJob", notes = "Cancels a running job")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Job was cancelled"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> cancelJob(
+            @ApiParam("Job id") @PathVariable long jobId) {
+        DqoQueueJobId dqoQueueJobId = new DqoQueueJobId(jobId);
+        this.dqoJobQueue.cancelJob(dqoQueueJobId);
+        this.parentDqoJobQueue.cancelJob(dqoQueueJobId);  // we don't know on which queue the job is running, but it cannot run on both and it is safe to cancel a missing job, so we cancel on both the queues
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
     /**
@@ -288,71 +303,19 @@ public class JobsController {
      */
     @PostMapping("/synchronize")
     @ApiOperation(value = "synchronizeFolders", notes = "Starts multiple file synchronization jobs that will synchronize files from selected DQO User home folders to the DQO Cloud. " +
-            "The the default synchronization mode is a full synchronization (upload local files, download new files from the cloud).", response = DqoQueueJobId[].class)
+            "The the default synchronization mode is a full synchronization (upload local files, download new files from the cloud).", response = DqoQueueJobId.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New jobs that will synchronize folders were added to the queue", response = DqoQueueJobId[].class),
+            @ApiResponse(code = 201, message = "New jobs that will synchronize folders were added to the queue", response = DqoQueueJobId.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<DqoQueueJobId>> synchronizeFolders(
+    public ResponseEntity<Mono<DqoQueueJobId>> synchronizeFolders(
             @ApiParam("Selection of folders that should be synchronized to the DQO Cloud")
-            @RequestBody SynchronizeMultipleFoldersJobModel synchronizeFolderParameters) {
-        List<SynchronizeRootFolderParameters> jobParametersList = new ArrayList<>();
-        if (synchronizeFolderParameters.isSources()) {
-            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.sources,
-                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
-        }
+            @RequestBody SynchronizeMultipleFoldersDqoQueueJobParameters synchronizeFolderParameters) {
+        SynchronizeMultipleFoldersDqoQueueJob synchronizeMultipleFoldersJob = this.dqoQueueJobFactory.createSynchronizeMultipleFoldersJob();
+        synchronizeMultipleFoldersJob.setParameters(synchronizeFolderParameters);
+        PushJobResult<Void> jobPushResult = this.parentDqoJobQueue.pushJob(synchronizeMultipleFoldersJob);
 
-        if (synchronizeFolderParameters.isSensors()) {
-            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.sensors,
-                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
-        }
-
-        if (synchronizeFolderParameters.isRules()) {
-            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.rules,
-                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
-        }
-
-        if (synchronizeFolderParameters.isChecks()) {
-            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.checks,
-                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
-        }
-
-        if (synchronizeFolderParameters.isDataSensorReadouts()) {
-            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_sensor_readouts,
-                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
-        }
-
-        if (synchronizeFolderParameters.isDataCheckResults()) {
-            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_check_results,
-                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
-        }
-
-        if (synchronizeFolderParameters.isDataStatistics()) {
-            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_statistics,
-                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
-        }
-
-        if (synchronizeFolderParameters.isDataErrors()) {
-            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_errors,
-                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
-        }
-
-        if (synchronizeFolderParameters.isDataIncidents()) {
-            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_incidents,
-                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
-        }
-
-        Flux<DqoQueueJobId> dqoQueueJobIdFlux = Flux.fromIterable(jobParametersList)
-                .flatMap(synchronizeFolderParameter -> {
-                    SynchronizeRootFolderDqoQueueJob synchronizeFolderJob = this.dqoQueueJobFactory.createSynchronizeRootFolderJob();
-                    SynchronizeRootFolderDqoQueueJobParameters jobParameters = new SynchronizeRootFolderDqoQueueJobParameters(synchronizeFolderParameter,
-                            new SilentFileSystemSynchronizationListener());
-                    synchronizeFolderJob.setParameters(jobParameters);
-                    PushJobResult<Void> pushJobResult = this.dqoJobQueue.pushJob(synchronizeFolderJob);
-                    return Mono.just(pushJobResult.getJobId());
-                });
-
-        return new ResponseEntity<>(dqoQueueJobIdFlux, HttpStatus.CREATED); // 201
+        return new ResponseEntity<>(Mono.just(jobPushResult.getJobId()), HttpStatus.CREATED); // 201
     }
 }

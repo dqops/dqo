@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.core.jobqueue;
+package ai.dqo.core.jobqueue.concurrency;
+
+import ai.dqo.core.jobqueue.DqoJobQueueEntry;
 
 /**
  * DQO job queue concurrency limiter. Maintains a count of concurrent jobs running in parallel in order to enforce
@@ -50,4 +52,9 @@ public interface DqoJobConcurrencyLimiter {
      * @param dqoJobQueueEntry Job entry that was just finished.
      */
     void notifyJobFinished(DqoJobQueueEntry dqoJobQueueEntry);
+
+    /**
+     * Clears (removes) all jobs and limits.
+     */
+    void clear();
 }

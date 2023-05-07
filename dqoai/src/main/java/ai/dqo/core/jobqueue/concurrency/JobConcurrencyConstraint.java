@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.core.jobqueue;
+package ai.dqo.core.jobqueue.concurrency;
 
 /**
  * Configuration of the concurrency limit (degree of parallelism) for each job, configured at a level that has a concurrency limit.
@@ -28,6 +28,10 @@ public class JobConcurrencyConstraint {
      * @param concurrentJobsLimit Number of concurrent jobs that could be executed on that node.
      */
     public JobConcurrencyConstraint(JobConcurrencyTarget concurrencyTarget, Integer concurrentJobsLimit) {
+        if (concurrentJobsLimit == null || concurrentJobsLimit < 1) {
+            throw new IllegalArgumentException("concurrencyJobsLimit cannot be null or below 1.");
+        }
+
         this.concurrencyTarget = concurrencyTarget;
         this.concurrentJobsLimit = concurrentJobsLimit;
     }

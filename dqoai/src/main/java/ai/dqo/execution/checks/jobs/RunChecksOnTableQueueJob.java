@@ -13,32 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.execution.checks;
+package ai.dqo.execution.checks.jobs;
 
 import ai.dqo.core.jobqueue.DqoJobExecutionContext;
 import ai.dqo.core.jobqueue.DqoJobType;
 import ai.dqo.core.jobqueue.DqoQueueJob;
-import ai.dqo.core.jobqueue.JobConcurrencyConstraint;
+import ai.dqo.core.jobqueue.concurrency.ConcurrentJobType;
+import ai.dqo.core.jobqueue.concurrency.JobConcurrencyConstraint;
+import ai.dqo.core.jobqueue.concurrency.JobConcurrencyTarget;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.ExecutionContextFactory;
+import ai.dqo.execution.checks.CheckExecutionService;
+import ai.dqo.execution.checks.CheckExecutionSummary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
- * Run checks queue job.
+ * Run checks on a single table queue job.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RunChecksQueueJob extends DqoQueueJob<CheckExecutionSummary> {
+public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary> {
     private ExecutionContextFactory executionContextFactory;
     private CheckExecutionService checkExecutionService;
-    private RunChecksQueueJobParameters parameters;
+    private RunChecksOnTableQueueJobParameters parameters;
 
+    /**
+     * Creates a job instance.
+     * @param executionContextFactory Execution context factory to get the correct context.
+     * @param checkExecutionService Check execution service.
+     */
     @Autowired
-    public RunChecksQueueJob(
+    public RunChecksOnTableQueueJob(
             ExecutionContextFactory executionContextFactory,
             CheckExecutionService checkExecutionService) {
         this.executionContextFactory = executionContextFactory;
@@ -49,7 +58,7 @@ public class RunChecksQueueJob extends DqoQueueJob<CheckExecutionSummary> {
      * Returns the job parameters.
      * @return Job parameters.
      */
-    public RunChecksQueueJobParameters getParameters() {
+    public RunChecksOnTableQueueJobParameters getParameters() {
         return parameters;
     }
 
@@ -57,7 +66,7 @@ public class RunChecksQueueJob extends DqoQueueJob<CheckExecutionSummary> {
      * Sets the job parameters.
      * @param parameters Job parameters.
      */
-    public void setParameters(RunChecksQueueJobParameters parameters) {
+    public void setParameters(RunChecksOnTableQueueJobParameters parameters) {
         this.parameters = parameters;
     }
 
@@ -70,12 +79,15 @@ public class RunChecksQueueJob extends DqoQueueJob<CheckExecutionSummary> {
     @Override
     public CheckExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
         ExecutionContext executionContext = this.executionContextFactory.create();
-        CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecks(
+        CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeSelectedChecksOnTable(
                 executionContext,
+                this.parameters.getConnection(),
+                this.parameters.getTable(),
                 this.parameters.getCheckSearchFilters(),
                 this.parameters.getTimeWindowFilter(),
                 this.parameters.getProgressListener(),
-                this.parameters.isDummyExecution());
+                this.parameters.isDummyExecution(),
+                jobExecutionContext.getCancellationToken());
         return checkExecutionSummary;
     }
 
@@ -86,7 +98,7 @@ public class RunChecksQueueJob extends DqoQueueJob<CheckExecutionSummary> {
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.RUN_CHECKS;
+        return DqoJobType.RUN_CHECKS_ON_TABLE;
     }
 
     /**
@@ -96,8 +108,18 @@ public class RunChecksQueueJob extends DqoQueueJob<CheckExecutionSummary> {
      * @return Optional concurrency constraint that limits the number of parallel jobs or null, when no limits are required.
      */
     @Override
-    public JobConcurrencyConstraint getConcurrencyConstraint() {
-        return null; // user can start any number of "run check" operations, the concurrency will be applied later on a table level
+    public JobConcurrencyConstraint[] getConcurrencyConstraints() {
+        Integer maxJobsPerConnection = this.parameters.getMaxJobsPerConnection();
+
+        if (maxJobsPerConnection == null) {
+            return null; // no limits
+        }
+
+        return new JobConcurrencyConstraint[] {
+                new JobConcurrencyConstraint(
+                        new JobConcurrencyTarget(ConcurrentJobType.RUN_CHECKS_ON_TABLE, this.parameters.getConnection()),
+                        maxJobsPerConnection)
+        };
     }
 
     /**
@@ -109,7 +131,7 @@ public class RunChecksQueueJob extends DqoQueueJob<CheckExecutionSummary> {
     @Override
     public DqoJobEntryParametersModel createParametersModel() {
         return new DqoJobEntryParametersModel() {{
-            setRunChecksParameters(parameters);
+            setRunChecksOnTableParameters(parameters);
         }};
     }
 }

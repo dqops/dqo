@@ -173,7 +173,7 @@ public class TableCliServiceImpl implements TableCliService {
         PushJobResult<ImportSchemaQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(importSchemaJob);
 
         try {
-            ImportSchemaQueueJobResult importSchemaQueueJobResult = pushJobResult.getFuture().get(); // TODO: add import timeout to stop blocking the CLI and run the import in the background after a while
+            ImportSchemaQueueJobResult importSchemaQueueJobResult = pushJobResult.getFinishedFuture().get(); // TODO: add import timeout to stop blocking the CLI and run the import in the background after a while
 
             CliOperationStatus importSuccessStatus = new CliOperationStatus();
             importSuccessStatus.setTable(importSchemaQueueJobResult.getImportedTables());
@@ -337,7 +337,7 @@ public class TableCliServiceImpl implements TableCliService {
 
         try {
             for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
-                job.getFuture().get();
+                job.getFinishedFuture().get();
             }
         } catch (InterruptedException e) {
             cliOperationStatus.setSuccessMessage(String.format("Removed %d tables.", tableWrappers.size())

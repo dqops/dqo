@@ -114,7 +114,7 @@ public class DataRepairCliCommand extends BaseCommand implements ICommand {
         RepairStoredDataQueueJob repairStoredDataJob = this.dqoQueueJobFactory.createRepairStoredDataJob();
         repairStoredDataJob.setRepairParameters(repairParameters);
         PushJobResult<RepairStoredDataQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(repairStoredDataJob);
-        RepairStoredDataQueueJobResult jobResult = pushJobResult.getFuture().get();
+        RepairStoredDataQueueJobResult jobResult = pushJobResult.getFinishedFuture().get();
         return 0;
     }
 }

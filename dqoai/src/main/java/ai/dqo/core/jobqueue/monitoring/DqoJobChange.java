@@ -53,7 +53,7 @@ public class DqoJobChange {
      * @param errorMessage Error message.
      */
     public DqoJobChange(DqoQueueJobId jobId, String errorMessage) {
-        this.status = DqoJobStatus.FAILED;
+        this.status = DqoJobStatus.failed;
         this.jobId = jobId;
         this.errorMessage = errorMessage;
     }

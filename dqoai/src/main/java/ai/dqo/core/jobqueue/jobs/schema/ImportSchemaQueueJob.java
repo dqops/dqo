@@ -17,6 +17,9 @@ package ai.dqo.core.jobqueue.jobs.schema;
 
 import ai.dqo.connectors.*;
 import ai.dqo.core.jobqueue.*;
+import ai.dqo.core.jobqueue.concurrency.ConcurrentJobType;
+import ai.dqo.core.jobqueue.concurrency.JobConcurrencyConstraint;
+import ai.dqo.core.jobqueue.concurrency.JobConcurrencyTarget;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.search.StringPatternComparer;
@@ -211,10 +214,11 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
      * @return Optional concurrency constraint that limits the number of parallel jobs or null, when no limits are required.
      */
     @Override
-    public JobConcurrencyConstraint getConcurrencyConstraint() {
+    public JobConcurrencyConstraint[] getConcurrencyConstraints() {
         ImportSchemaQueueJobConcurrencyTarget target = new ImportSchemaQueueJobConcurrencyTarget(
                 this.importParameters.getConnectionName(), this.importParameters.getSchemaName());
         JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.IMPORT_SCHEMA, target);
-        return new JobConcurrencyConstraint(concurrencyTarget, 1);
+        JobConcurrencyConstraint schemaImportLimit = new JobConcurrencyConstraint(concurrencyTarget, 1);
+        return new JobConcurrencyConstraint[] { schemaImportLimit };
     }
 }

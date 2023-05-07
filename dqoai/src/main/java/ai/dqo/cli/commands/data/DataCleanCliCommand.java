@@ -206,7 +206,7 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
         DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
         deleteStoredDataJob.setDeletionParameters(deletionParameters);
         PushJobResult<DeleteStoredDataQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob);
-        DeleteStoredDataQueueJobResult jobResult = pushJobResult.getFuture().get();
+        DeleteStoredDataQueueJobResult jobResult = pushJobResult.getFinishedFuture().get();
         return 0;
     }
 }

@@ -16,11 +16,11 @@
 package ai.dqo.services.check;
 
 import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
+import ai.dqo.core.jobqueue.ParentDqoJobQueue;
 import ai.dqo.execution.checks.CheckExecutionSummary;
-import ai.dqo.execution.checks.RunChecksQueueJob;
-import ai.dqo.execution.checks.RunChecksQueueJobParameters;
+import ai.dqo.execution.checks.jobs.RunChecksQueueJob;
+import ai.dqo.execution.checks.jobs.RunChecksQueueJobParameters;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.fields.ParameterDataType;
@@ -39,8 +39,6 @@ import ai.dqo.services.check.mapping.UIAllChecksPatchFactory;
 import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import ai.dqo.utils.conversion.StringTypeCaster;
-import org.apache.arrow.flatbuf.Bool;
-import org.apache.hadoop.hdfs.protocol.datatransfer.Op;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,7 +55,7 @@ public class CheckServiceImpl implements CheckService {
     private UIAllChecksPatchFactory uiAllChecksPatchFactory;
     private UIAllChecksPatchApplier uiAllChecksPatchApplier;
     private DqoQueueJobFactory dqoQueueJobFactory;
-    private DqoJobQueue dqoJobQueue;
+    private ParentDqoJobQueue parentDqoJobQueue;
     private UserHomeContextFactory userHomeContextFactory;
 
     /**
@@ -65,19 +63,19 @@ public class CheckServiceImpl implements CheckService {
      * @param uiAllChecksPatchFactory UI all checks patch factory for creating patches to be updated.
      * @param uiAllChecksPatchApplier UI all checks patch applier for affecting the hierarchy tree with changes from the patch.
      * @param dqoQueueJobFactory Job factory used to create a new instance of a job.
-     * @param dqoJobQueue DQO job queue to execute the operation.
+     * @param parentDqoJobQueue DQO job queue to execute the operation.
      * @param userHomeContextFactory User home context factory.
      */
     @Autowired
     public CheckServiceImpl(UIAllChecksPatchFactory uiAllChecksPatchFactory,
                             UIAllChecksPatchApplier uiAllChecksPatchApplier,
                             DqoQueueJobFactory dqoQueueJobFactory,
-                            DqoJobQueue dqoJobQueue,
+                            ParentDqoJobQueue parentDqoJobQueue,
                             UserHomeContextFactory userHomeContextFactory) {
         this.uiAllChecksPatchFactory = uiAllChecksPatchFactory;
         this.uiAllChecksPatchApplier = uiAllChecksPatchApplier;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
-        this.dqoJobQueue = dqoJobQueue;
+        this.parentDqoJobQueue = parentDqoJobQueue;
         this.userHomeContextFactory = userHomeContextFactory;
     }
 
@@ -99,7 +97,7 @@ public class CheckServiceImpl implements CheckService {
                 checkExecutionProgressListener, dummyRun);
         runChecksJob.setParameters(parameters);
 
-        this.dqoJobQueue.pushJob(runChecksJob);
+        this.parentDqoJobQueue.pushJob(runChecksJob);
         return runChecksJob.getResult();
     }
 

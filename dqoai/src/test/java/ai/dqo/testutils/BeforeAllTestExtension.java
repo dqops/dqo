@@ -15,6 +15,7 @@
  */
 package ai.dqo.testutils;
 
+import ai.dqo.core.jobqueue.DqoJobQueueObjectMother;
 import ai.dqo.data.storage.TablesawParquetSupportFix;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreatorObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;
@@ -38,6 +39,7 @@ public class BeforeAllTestExtension implements BeforeAllCallback, ExtensionConte
         BeanFactoryObjectMother.setBeanFactory(beanFactory); // let object mothers use the bean factory without propagating too many object instances
         TablesawParquetSupportFix.ensureInitialized();
         LocalUserHomeCreatorObjectMother.initializeDefaultDqoUserHomeSilentlyOnce();
+        DqoJobQueueObjectMother.ensureJobQueueIsStarted();
         // to be extended in the future when the need appears
     }
 

@@ -51,19 +51,19 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
         this.jobId = jobId;
         this.jobType = jobType;
         this.parameters = parameters;
-        this.status = DqoJobStatus.QUEUED;
+        this.status = DqoJobStatus.queued;
         this.statusChangedAt = Instant.now();
     }
 
     /**
-     * Creates a job entry model from a job entry in the queue. The status of the job is {@link DqoJobStatus#QUEUED}.
+     * Creates a job entry model from a job entry in the queue. The status of the job is {@link DqoJobStatus#queued}.
      * @param jobQueueEntry Job entry from the queue.
      */
     public DqoJobHistoryEntryModel(DqoJobQueueEntry jobQueueEntry) {
         this.jobId = jobQueueEntry.getJobId();
         this.jobType = jobQueueEntry.getJob().getJobType();
         this.parameters = jobQueueEntry.getJob().createParametersModel();
-        this.status = DqoJobStatus.QUEUED;
+        this.status = DqoJobStatus.queued;
         this.statusChangedAt = jobQueueEntry.getJobId().getCreatedAt();
     }
 
@@ -85,7 +85,7 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
 
     /**
      * Returns a job parameters model.
-     * @return
+     * @return Parameter model with properties for each type of a job.
      */
     public DqoJobEntryParametersModel getParameters() {
         return parameters;
@@ -121,7 +121,7 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
      */
     public void setErrorMessage(String errorMessage) {
         if (errorMessage != null) {
-            this.status = DqoJobStatus.FAILED;
+            this.status = DqoJobStatus.failed;
         }
         this.errorMessage = errorMessage;
     }

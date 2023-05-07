@@ -29,6 +29,9 @@ import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpe
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.connectors.ConnectionProviderRegistryObjectMother;
 import ai.dqo.connectors.ProviderType;
+import ai.dqo.core.jobqueue.DqoJobQueueObjectMother;
+import ai.dqo.core.jobqueue.DqoQueueJobFactoryImpl;
+import ai.dqo.core.jobqueue.JobCancellationTokenObjectMother;
 import ai.dqo.data.errors.normalization.ErrorsNormalizationService;
 import ai.dqo.data.errors.normalization.ErrorsNormalizationServiceImpl;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactoryObjectMother;
@@ -62,6 +65,7 @@ import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
+import ai.dqo.utils.BeanFactoryObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -135,11 +139,15 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         ScheduledTargetChecksFindService scheduledTargetChecksFindService = new ScheduledTargetChecksFindServiceImpl(
                 hierarchyNodeTreeSearcher);
 
+        DqoQueueJobFactoryImpl dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
+
         this.sut = new CheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,
                 SensorExecutionRunParametersObjectMother.getFactory(),
                 DataQualitySensorRunnerObjectMother.getDefault(),
                 ConnectionProviderRegistryObjectMother.getInstance(),
+                dqoQueueJobFactory,
+                DqoJobQueueObjectMother.getDefaultJobQueue(),
                 sensorReadoutsNormalizationService,
                 ruleEvaluationService,
                 SensorReadoutsSnapshotFactoryObjectMother.createDummySensorReadoutStorageService(),
@@ -167,14 +175,18 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         partitionedFilters.setCheckType(CheckType.PARTITIONED);
 
         CheckExecutionSummary profilingSummary = this.sut.executeChecks(
-                this.executionContext, profilingFilters, null, this.progressListener, true);
+                this.executionContext, profilingFilters, null, this.progressListener, true,
+                false, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
         CheckExecutionSummary recurringSummary = this.sut.executeChecks(
-                this.executionContext, recurringFilters, null, this.progressListener, true);
+                this.executionContext, recurringFilters, null, this.progressListener, true,
+                false, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
         CheckExecutionSummary partitionedSummary = this.sut.executeChecks(
-                this.executionContext, partitionedFilters, null, this.progressListener, true);
+                this.executionContext, partitionedFilters, null, this.progressListener, true,
+                false, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
 
         CheckExecutionSummary allSummary = this.sut.executeChecks(
-                this.executionContext, allFilters, null, this.progressListener, true);
+                this.executionContext, allFilters, null, this.progressListener, true,
+                false, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
 
         Assertions.assertEquals(0, partitionedSummary.getTotalChecksExecutedCount());
         Assertions.assertEquals(2, profilingSummary.getTotalChecksExecutedCount());

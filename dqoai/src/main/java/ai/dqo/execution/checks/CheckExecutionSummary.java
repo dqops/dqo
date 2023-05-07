@@ -204,4 +204,13 @@ public class CheckExecutionSummary {
     public int getTotalExecutionErrorsCount() {
         return (int)this.executionErrorsCountColumn.sum();
     }
+
+    /**
+     * Appends results from another check execution result.
+     * Usable when multiple parallel jobs were executed to run checks in parallel.
+     * @param otherCheckExecutionSummary Other checks execution summary.
+     */
+    public void append(CheckExecutionSummary otherCheckExecutionSummary) {
+        this.summaryTable.append(otherCheckExecutionSummary.getSummaryTable());
+    }
 }

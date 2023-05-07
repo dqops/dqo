@@ -15,6 +15,7 @@
  */
 package ai.dqo.core.jobqueue;
 
+import ai.dqo.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -56,7 +57,7 @@ public final class PoisonDqoJobQueueJob extends DqoQueueJob<Void> {
      * @return Optional concurrency constraint that limits the number of parallel jobs or null, when no limits are required.
      */
     @Override
-    public JobConcurrencyConstraint getConcurrencyConstraint() {
+    public JobConcurrencyConstraint[] getConcurrencyConstraints() {
         return null;
     }
 

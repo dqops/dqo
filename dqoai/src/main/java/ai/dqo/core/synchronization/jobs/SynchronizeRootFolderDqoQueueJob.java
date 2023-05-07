@@ -16,6 +16,9 @@
 package ai.dqo.core.synchronization.jobs;
 
 import ai.dqo.core.jobqueue.*;
+import ai.dqo.core.jobqueue.concurrency.ConcurrentJobType;
+import ai.dqo.core.jobqueue.concurrency.JobConcurrencyConstraint;
+import ai.dqo.core.jobqueue.concurrency.JobConcurrencyTarget;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.core.synchronization.service.DqoCloudSynchronizationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,10 +94,11 @@ public class SynchronizeRootFolderDqoQueueJob extends DqoQueueJob<Void> {
      * @return Optional concurrency constraint that limits the number of parallel jobs or null, when no limits are required.
      */
     @Override
-    public JobConcurrencyConstraint getConcurrencyConstraint() {
+    public JobConcurrencyConstraint[] getConcurrencyConstraints() {
         JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.SYNCHRONIZE_FOLDER,
                 this.parameters.getSynchronizationParameter().getFolder());
-        return new JobConcurrencyConstraint(concurrencyTarget, 1);
+        JobConcurrencyConstraint synchronizationLimit = new JobConcurrencyConstraint(concurrencyTarget, 1);
+        return new JobConcurrencyConstraint[] { synchronizationLimit };
     }
 
     /**

@@ -16,6 +16,7 @@
 package ai.dqo.connectors.bigquery;
 
 import ai.dqo.connectors.*;
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ColumnTypeSnapshotSpec;
@@ -93,10 +94,11 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
      * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
      *
      * @param sqlQueryStatement SQL statement that returns a row set.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
      * @return Tabular result captured from the query.
      */
     @Override
-    public tech.tablesaw.api.Table executeQuery(String sqlQueryStatement) {
+    public tech.tablesaw.api.Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken) {
         return this.bigQuerySqlRunner.executeQuery(this, sqlQueryStatement);
     }
 
@@ -104,9 +106,10 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
      * Executes a provider specific SQL that runs a command DML/DDL command.
      *
      * @param sqlStatement SQL DDL or DML statement.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
      */
     @Override
-    public long executeCommand(String sqlStatement) {
+    public long executeCommand(String sqlStatement, JobCancellationToken jobCancellationToken) {
         return this.bigQuerySqlRunner.executeStatement(this, sqlStatement);
     }
 

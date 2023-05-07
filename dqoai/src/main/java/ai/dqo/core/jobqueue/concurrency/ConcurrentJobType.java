@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.core.jobqueue;
+package ai.dqo.core.jobqueue.concurrency;
 
 /**
  * The type of concurrent job on which concurrency limits are applied.
@@ -30,9 +30,14 @@ public enum ConcurrentJobType {
     SYNCHRONIZE_FOLDER,
 
     /**
-     * Synchronizes the metadata that the scheduler knows. Detects new or disabled schedules (cron expressions).
+     * Limits the number of parallel run checks operations that are executed on a single connection. Each job executes on one table.
      */
-    SYNCHRONIZE_SCHEDULER_METADATA,
+    RUN_CHECKS_ON_TABLE,
+
+    /**
+     * Cloud sync operation that synchronizes multiple folders.
+     */
+    SYNCHRONIZE_MULTIPLE_FOLDERS,
 
     /**
      * Import tables from one schema on a source connection.
@@ -43,11 +48,6 @@ public enum ConcurrentJobType {
      * Import tables from a source connection, given a list of table names.
      */
     IMPORT_TABLES,
-
-//    /**
-//     * Import a table from a source connection.
-//     */
-//    IMPORT_TABLE,
 
     /**
      * Delete data from user's ".data" folders, given some specifying parameters.

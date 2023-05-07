@@ -28,6 +28,7 @@ import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.checks.table.partitioned.standard.TableStandardDailyPartitionedChecksSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.core.jobqueue.DqoJobQueue;
+import ai.dqo.core.jobqueue.DqoJobQueueObjectMother;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.DqoQueueJobFactoryImpl;
 import ai.dqo.data.statistics.services.StatisticsDataServiceImpl;
@@ -56,7 +57,6 @@ import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.services.metadata.TableService;
 import ai.dqo.services.metadata.TableServiceImpl;
 import ai.dqo.utils.BeanFactoryObjectMother;
-import ai.dqo.utils.jobs.DqoJobQueueObjectMother;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -82,7 +82,7 @@ public class TablesControllerUTTests extends BaseTest {
     void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
-        DqoJobQueue dqoJobQueue = DqoJobQueueObjectMother.getDefault();
+        DqoJobQueue dqoJobQueue = DqoJobQueueObjectMother.getDefaultJobQueue();
         TableService tableService = new TableServiceImpl(this.userHomeContextFactory, dqoQueueJobFactory, dqoJobQueue);
 
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();

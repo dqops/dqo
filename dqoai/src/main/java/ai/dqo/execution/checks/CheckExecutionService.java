@@ -15,11 +15,13 @@
  */
 package ai.dqo.execution.checks;
 
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.sources.PhysicalTableName;
 
 /**
  * Service that executes data quality checks.
@@ -32,22 +34,50 @@ public interface CheckExecutionService {
      * @param userTimeWindowFilters Optional user provided time window filters to restrict the range of dates that are analyzed.
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all checks without starting additional jobs.
+     * @param jobCancellationToken Job cancellation token.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     CheckExecutionSummary executeChecks(ExecutionContext executionContext,
                                         CheckSearchFilters checkSearchFilters,
                                         TimeWindowFilterParameters userTimeWindowFilters,
                                         CheckExecutionProgressListener progressListener,
-                                        boolean dummySensorExecution);
+                                        boolean dummySensorExecution,
+                                        boolean startChildJobsPerTable,
+                                        JobCancellationToken jobCancellationToken);
 
     /**
      * Executes scheduled data quality checks. A list of checks divided by tables must be provided.
      * @param executionContext Check execution context with access to the user home and dqo home.
      * @param targetSchedule Target schedule to match, when finding checks that should be executed.
      * @param progressListener Progress listener that receives progress calls.
+     * @param jobCancellationToken Job cancellation token.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     CheckExecutionSummary executeChecksForSchedule(ExecutionContext executionContext,
                                                    RecurringScheduleSpec targetSchedule,
-                                                   CheckExecutionProgressListener progressListener);
+                                                   CheckExecutionProgressListener progressListener,
+                                                   JobCancellationToken jobCancellationToken);
+
+    /**
+     * Executes selected checks on a table. This method is called from {@link ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJob}
+     * that is a child job which runs checks for each table in parallel.
+     * @param executionContext Execution context that provides access to the user home.
+     * @param connectionName Connection name on which the checks are executed.
+     * @param targetTable Full name of the target table.
+     * @param @param checkSearchFilters Check search filters, may not specify the connection and the table name.
+     * @param userTimeWindowFilters Optional user provided time window filters to restrict the range of dates that are analyzed.
+     * @param progressListener Progress listener that receives progress calls.
+     * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken Job cancellation token.
+     * @return Check summary table with the count of alerts, checks and rules for each table, but having only one row for the target table. The result could be empty if the table was not found.
+     */
+    CheckExecutionSummary executeSelectedChecksOnTable(ExecutionContext executionContext,
+                                                       String connectionName,
+                                                       PhysicalTableName targetTable,
+                                                       CheckSearchFilters checkSearchFilters,
+                                                       TimeWindowFilterParameters userTimeWindowFilters,
+                                                       CheckExecutionProgressListener progressListener,
+                                                       boolean dummySensorExecution,
+                                                       JobCancellationToken jobCancellationToken);
 }

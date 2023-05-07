@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
-public class SynchronizeMultipleFoldersJobModel {
+public class SynchronizeMultipleFoldersDqoQueueJobParameters {
     /**
      * File synchronization direction.
      */

@@ -18,7 +18,7 @@ package ai.dqo.core.jobqueue.monitoring;
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
 import ai.dqo.core.jobqueue.DqoJobIdGenerator;
 import ai.dqo.core.jobqueue.DqoJobQueueEntry;
-import ai.dqo.core.jobqueue.DqoQueueJobExecutionException;
+import ai.dqo.core.jobqueue.exceptions.DqoQueueJobExecutionException;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
 import lombok.extern.slf4j.Slf4j;
@@ -149,7 +149,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     @Override
     public void publishJobRunningEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
-            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.RUNNING, jobQueueEntry.getJobId());
+            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.running, jobQueueEntry.getJobId());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
@@ -165,7 +165,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     @Override
     public void publishJobParkedEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
-            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.WAITING, jobQueueEntry.getJobId());
+            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.waiting, jobQueueEntry.getJobId());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
@@ -181,7 +181,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     @Override
     public void publishJobSucceededEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
-            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.SUCCEEDED, jobQueueEntry.getJobId());
+            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.succeeded, jobQueueEntry.getJobId());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
@@ -204,6 +204,40 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         }
         catch (Exception ex) {
             log.error("publishJobFailedEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * Publishes a notification that a request to cancel a job was received.
+     *
+     * @param jobQueueEntry Job queue entry.
+     */
+    @Override
+    public void publishJobCancellationRequestedEvent(DqoJobQueueEntry jobQueueEntry) {
+        try {
+            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.cancel_requested, jobQueueEntry.getJobId());
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
+        }
+        catch (Exception ex) {
+            log.error("publishJobCancellationRequestedEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * Publishes a notification that a job has been fully cancelled and removed from the queue.
+     *
+     * @param jobQueueEntry Job queue entry.
+     */
+    @Override
+    public void publishJobFullyCancelledEvent(DqoJobQueueEntry jobQueueEntry) {
+        try {
+            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.cancelled, jobQueueEntry.getJobId());
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
+        }
+        catch (Exception ex) {
+            log.error("publishJobFullyCancelledEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
         }
     }
 
@@ -318,7 +352,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                 DqoJobChange jobChange = changeNotificationEntry.getJobChange();
 
                 if (jobChange != null) { // the job change is null when we are just publishing a change to the file synchronization status
-                    if (jobChange.getStatus() == DqoJobStatus.QUEUED) {
+                    if (jobChange.getStatus() == DqoJobStatus.queued) {
                         // new job
                         this.allJobs.put(jobChange.getJobId(), jobChange.getUpdatedModel());
                         DqoJobChangeModel dqoNewJobChangeModel = new DqoJobChangeModel(jobChange, changeSequence);
@@ -377,7 +411,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         List<DqoQueueJobId> oldJobIdsToDelete = this.allJobs.entrySet()
                 .stream()
                 .takeWhile(e -> e.getValue().getStatusChangedAt().compareTo(oldJobsHistoryThresholdTimestamp) < 1)
-                .filter(e -> e.getValue().getStatus() == DqoJobStatus.SUCCEEDED || e.getValue().getStatus() == DqoJobStatus.FAILED)
+                .filter(e -> e.getValue().getStatus() == DqoJobStatus.succeeded || e.getValue().getStatus() == DqoJobStatus.failed)
                 .map(e -> e.getKey())
                 .collect(Collectors.toList());
 

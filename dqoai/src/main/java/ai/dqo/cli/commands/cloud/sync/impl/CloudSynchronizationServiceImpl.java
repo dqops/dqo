@@ -117,7 +117,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
         if (runOnBackgroundQueue) {
             SynchronizeRootFolderDqoQueueJob synchronizeRootFolderJob = this.dqoQueueJobFactory.createSynchronizeRootFolderJob();
             SynchronizeRootFolderParameters synchronizationParameter = new SynchronizeRootFolderParameters(
-                    rootType, FileSynchronizationDirection.full, forceRefreshNativeTable);
+                    rootType, synchronizationDirection, forceRefreshNativeTable);
             SynchronizeRootFolderDqoQueueJobParameters jobParameters = new SynchronizeRootFolderDqoQueueJobParameters(
                     synchronizationParameter, synchronizationListener);
             synchronizeRootFolderJob.setParameters(jobParameters);

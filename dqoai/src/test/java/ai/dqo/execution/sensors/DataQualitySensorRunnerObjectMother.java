@@ -16,6 +16,7 @@
 package ai.dqo.execution.sensors;
 
 import ai.dqo.connectors.ConnectionQueryException;
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerStub;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
@@ -45,7 +46,8 @@ public class DataQualitySensorRunnerObjectMother {
     public static SensorExecutionResult executeSensor(ExecutionContext executionContext, SensorExecutionRunParameters sensorRunParameters) {
         DataQualitySensorRunnerImpl sensorRunner = getDefault();
         CheckExecutionProgressListenerStub progressListener = new CheckExecutionProgressListenerStub();
-        SensorExecutionResult sensorExecutionResult = sensorRunner.executeSensor(executionContext, sensorRunParameters, progressListener, false);
+        SensorExecutionResult sensorExecutionResult = sensorRunner.executeSensor(executionContext, sensorRunParameters, progressListener, false,
+                JobCancellationToken.createDummyJobCancellationToken());
         if (!sensorExecutionResult.isSuccess()) {
             throw new ConnectionQueryException("Failed to execute a sensor: " + sensorExecutionResult.getException().getMessage(), sensorExecutionResult.getException());
         }

@@ -15,6 +15,7 @@
  */
 package ai.dqo.connectors;
 
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.utils.conversion.NumericTypeConverter;
@@ -124,7 +125,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         sqlBuilder.append(getInformationSchemaName());
         sqlBuilder.append(".SCHEMATA WHERE SCHEMA_NAME <> 'INFORMATION_SCHEMA'");
         String listSchemataSql = sqlBuilder.toString();
-        Table schemaRows = this.executeQuery(listSchemataSql);
+        Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken());
 
         List<SourceSchemaModel> results = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < schemaRows.rowCount() ; rowIndex++) {
@@ -161,7 +162,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         }
 
         String listTablesSql = sqlBuilder.toString();
-        Table tablesRows = this.executeQuery(listTablesSql);
+        Table tablesRows = this.executeQuery(listTablesSql, JobCancellationToken.createDummyJobCancellationToken());
 
         List<SourceTableModel> results = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < tablesRows.rowCount() ; rowIndex++) {
@@ -188,7 +189,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         try {
             List<TableSpec> tableSpecs = new ArrayList<>();
             String sql = buildListColumnsSql(schemaName, tableNames);
-            tech.tablesaw.api.Table tableResult = this.executeQuery(sql);
+            tech.tablesaw.api.Table tableResult = this.executeQuery(sql, JobCancellationToken.createDummyJobCancellationToken());
             Column<?>[] columns = tableResult.columnArray();
             for (Column<?> column : columns) {
                 column.setName(column.name().toLowerCase(Locale.ROOT));
@@ -300,18 +301,20 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
      *
      * @param sqlQueryStatement SQL statement that returns a row set.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
      * @return Tabular result captured from the query.
      */
     @Override
-    public abstract Table executeQuery(String sqlQueryStatement);
+    public abstract Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken);
 
     /**
      * Executes a provider specific SQL that runs a command DML/DDL command.
      *
      * @param sqlStatement SQL DDL or DML statement.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
      */
     @Override
-    public abstract long executeCommand(String sqlStatement);
+    public abstract long executeCommand(String sqlStatement, JobCancellationToken jobCancellationToken);
 
     /**
      * Creates a target table following the table specification.
@@ -374,7 +377,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         sqlBuilder.append("\n)");
 
         String createTableSql = sqlBuilder.toString();
-		this.executeCommand(createTableSql);
+		this.executeCommand(createTableSql, JobCancellationToken.createDummyJobCancellationToken());
     }
 
     /**
@@ -433,6 +436,6 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         }
 
         String insertValueSql = sqlBuilder.toString();
-		this.executeCommand(insertValueSql);
+		this.executeCommand(insertValueSql, JobCancellationToken.createDummyJobCancellationToken());
     }
 }

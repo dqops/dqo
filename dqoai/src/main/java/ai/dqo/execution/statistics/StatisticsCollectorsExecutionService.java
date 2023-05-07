@@ -15,6 +15,7 @@
  */
 package ai.dqo.execution.statistics;
 
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
@@ -32,11 +33,13 @@ public interface StatisticsCollectorsExecutionService {
      * @param progressListener      Progress listener that receives progress calls.
      * @param statisticsDataScope Collector data scope to analyze - the whole table or each data stream separately.
      * @param dummySensorExecution  When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken Job cancellation token, used to detect if the job should be cancelled.
      * @return Collector summary table with the count of executed and successful profile executions for each table.
      */
     StatisticsCollectionExecutionSummary executeStatisticsCollectors(ExecutionContext executionContext,
                                                                      StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
                                                                      StatisticsCollectorExecutionProgressListener progressListener,
                                                                      StatisticsDataScope statisticsDataScope,
-                                                                     boolean dummySensorExecution);
+                                                                     boolean dummySensorExecution,
+                                                                     JobCancellationToken jobCancellationToken);
 }

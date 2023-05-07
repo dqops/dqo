@@ -15,6 +15,7 @@
  */
 package ai.dqo.connectors;
 
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import tech.tablesaw.api.Table;
@@ -66,16 +67,18 @@ public interface SourceConnection extends Closeable {
     /**
      * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
      * @param sqlQueryStatement SQL statement that returns a row set.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
      * @return Tabular result captured from the query.
      */
-    Table executeQuery(String sqlQueryStatement);
+    Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken);
 
     /**
      * Executes a provider specific SQL that runs a command DML/DDL command.
      *
      * @param sqlStatement SQL DDL or DML statement.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
      */
-    long executeCommand(String sqlStatement);
+    long executeCommand(String sqlStatement, JobCancellationToken jobCancellationToken);
 
     /**
      * Creates a target table following the table specification.

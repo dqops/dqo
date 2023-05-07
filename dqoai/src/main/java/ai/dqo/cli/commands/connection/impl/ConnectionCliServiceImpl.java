@@ -452,7 +452,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
 
         try {
             for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
-                job.getFuture().get();
+                job.getFinishedFuture().get();
             }
         } catch (InterruptedException e) {
             cliOperationStatus.setSuccessMessage(String.format("Removed %d connections.", connectionNames.size())

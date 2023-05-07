@@ -29,6 +29,7 @@ import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedChecksSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.core.jobqueue.DqoJobQueue;
+import ai.dqo.core.jobqueue.DqoJobQueueObjectMother;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.DqoQueueJobFactoryImpl;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
@@ -55,7 +56,6 @@ import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.services.metadata.ColumnService;
 import ai.dqo.services.metadata.ColumnServiceImpl;
 import ai.dqo.utils.BeanFactoryObjectMother;
-import ai.dqo.utils.jobs.DqoJobQueueObjectMother;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -81,7 +81,7 @@ public class ColumnsControllerUTTests extends BaseTest {
     void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
-        DqoJobQueue dqoJobQueue = DqoJobQueueObjectMother.getDefault();
+        DqoJobQueue dqoJobQueue = DqoJobQueueObjectMother.getDefaultJobQueue();
         ColumnService columnService = new ColumnServiceImpl(this.userHomeContextFactory, dqoQueueJobFactory, dqoJobQueue);
 
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();

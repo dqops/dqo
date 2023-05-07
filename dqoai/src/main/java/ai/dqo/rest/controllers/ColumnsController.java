@@ -1845,7 +1845,7 @@ public class ColumnsController {
      */
     @DeleteMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}")
     @ApiOperation(value = "deleteColumn", notes = "Deletes a column from the table")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Column successfully deleted", response = DqoQueueJobId.class),
             @ApiResponse(code = 404, message = "Column not found"),

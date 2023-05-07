@@ -16,6 +16,8 @@
 package ai.dqo.cli;
 
 import ai.dqo.core.jobqueue.DqoJobQueue;
+import ai.dqo.core.jobqueue.ParentDqoJobQueue;
+import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -29,21 +31,29 @@ import org.springframework.stereotype.Component;
 public class ApplicationShutdownManagerImpl implements ApplicationShutdownManager {
     private ApplicationContext applicationContext;
     private DqoJobQueue dqoJobQueue;
+    private ParentDqoJobQueue parentDqoJobQueue;
     private JobSchedulerService jobSchedulerService;
+    private DqoJobQueueMonitoringService jobQueueMonitoringService;
 
     /**
-     * Constructor that receives dependencies to services that should be notified to shutdown.
+     * Constructor that receives dependencies to services that should be notified to shut down.
      * @param applicationContext Spring application context - used to stop the web server.
      * @param dqoJobQueue Job queue.
+     * @param parentDqoJobQueue Second job queue for parent jobs.
      * @param jobSchedulerService Job scheduler.
+     * @param jobQueueMonitoringService Job queue monitoring service.
      */
     @Autowired
     public ApplicationShutdownManagerImpl(ApplicationContext applicationContext,
                                           DqoJobQueue dqoJobQueue,
-                                          JobSchedulerService jobSchedulerService) {
+                                          ParentDqoJobQueue parentDqoJobQueue,
+                                          JobSchedulerService jobSchedulerService,
+                                          DqoJobQueueMonitoringService jobQueueMonitoringService) {
         this.applicationContext = applicationContext;
         this.dqoJobQueue = dqoJobQueue;
+        this.parentDqoJobQueue = parentDqoJobQueue;
         this.jobSchedulerService = jobSchedulerService;
+        this.jobQueueMonitoringService = jobQueueMonitoringService;
     }
 
     /**
@@ -53,7 +63,9 @@ public class ApplicationShutdownManagerImpl implements ApplicationShutdownManage
     @Override
     public void initiateShutdown(int returnCode) {
         this.dqoJobQueue.stop();
-        jobSchedulerService.shutdown();
+        this.parentDqoJobQueue.stop();
+        this.jobQueueMonitoringService.stop();
+        this.jobSchedulerService.shutdown();
         SpringApplication.exit(this.applicationContext, () -> returnCode);
     }
 }

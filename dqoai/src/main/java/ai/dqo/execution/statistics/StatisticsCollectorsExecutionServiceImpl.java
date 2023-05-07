@@ -19,6 +19,9 @@ import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.connectors.ProviderDialectSettings;
+import ai.dqo.core.jobqueue.DummyJobCancellationToken;
+import ai.dqo.core.jobqueue.JobCancellationToken;
+import ai.dqo.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.data.statistics.normalization.StatisticsResultsNormalizationService;
 import ai.dqo.data.statistics.normalization.StatisticsResultsNormalizedResult;
@@ -94,6 +97,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
      * @param progressListener Progress listener that receives progress calls.
      * @param statisticsDataScope Collector data scope to analyze - the whole table or each data stream separately.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken Job cancellation token, used to detect if the job should be cancelled.
      * @return Statistics collector summary table with the count of executed and successful collectors executions for each table.
      */
     @Override
@@ -101,16 +105,18 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
                                                                             StatisticsCollectorSearchFilters statisticsCollectorSearchFilters,
                                                                             StatisticsCollectorExecutionProgressListener progressListener,
                                                                             StatisticsDataScope statisticsDataScope,
-                                                                            boolean dummySensorExecution) {
+                                                                            boolean dummySensorExecution,
+                                                                            JobCancellationToken jobCancellationToken) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         Collection<TableWrapper> targetTables = listTargetTables(userHome, statisticsCollectorSearchFilters);
         StatisticsCollectionExecutionSummary statisticsCollectorExecutionSummary = new StatisticsCollectionExecutionSummary();
         LocalDateTime profilingSessionStartAt = LocalDateTime.now();
+        jobCancellationToken.throwIfCancelled();
 
         for (TableWrapper targetTable :  targetTables) {
             ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
             executeCollectorsOnTable(executionContext, userHome, connectionWrapper, targetTable, statisticsCollectorSearchFilters, progressListener,
-                    dummySensorExecution, statisticsCollectorExecutionSummary, profilingSessionStartAt, statisticsDataScope);
+                    dummySensorExecution, statisticsCollectorExecutionSummary, profilingSessionStartAt, statisticsDataScope, jobCancellationToken);
         }
 
         progressListener.onCollectorsExecutionFinished(new StatisticsCollectorExecutionFinishedEvent(statisticsCollectorExecutionSummary));
@@ -141,6 +147,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
      * @param statisticsCollectionExecutionSummary Target object to gather the statistics collection execution summary information for the table.
      * @param collectionSessionStartAt Timestamp when the statistics collection session started. All statistics results will be saved with the same timestamp.
      * @param statisticsDataScope Collector data scope to analyze - the whole table or each data stream separately.
+     * @param jobCancellationToken Job cancellation token, used to detect if the job should be cancelled.
      */
     public void executeCollectorsOnTable(ExecutionContext executionContext,
                                          UserHome userHome,
@@ -151,12 +158,14 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
                                          boolean dummySensorExecution,
                                          StatisticsCollectionExecutionSummary statisticsCollectionExecutionSummary,
                                          LocalDateTime collectionSessionStartAt,
-                                         StatisticsDataScope statisticsDataScope) {
+                                         StatisticsDataScope statisticsDataScope,
+                                         JobCancellationToken jobCancellationToken) {
         Collection<AbstractStatisticsCollectorSpec<?>> collectors = this.hierarchyNodeTreeSearcher.findStatisticsCollectors(targetTable, statisticsCollectorSearchFilters);
         if (collectors.size() == 0) {
             statisticsCollectionExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0, 0, 0);
             return; // no checks for this table
         }
+        jobCancellationToken.throwIfCancelled();
 
         TableSpec tableSpec = targetTable.getSpec();
 //        progressListener.onExecuteProfilerOnTableStart(new ExecuteChecksOnTableStartEvent(connectionWrapper, tableSpec, checks));
@@ -170,6 +179,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
         Map<String, Integer> successfulCollectorsPerColumn = new HashMap<>();
 
         for (AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec : collectors) {
+            jobCancellationToken.throwIfCancelled();
             collectorsExecuted++;
 
             try {
@@ -181,7 +191,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
                 progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorRunParameters));
 
                 SensorExecutionResult sensorResult = this.dataQualitySensorRunner.executeSensor(executionContext,
-                        sensorRunParameters, progressListener, dummySensorExecution);
+                        sensorRunParameters, progressListener, dummySensorExecution, jobCancellationToken);
                 progressListener.onSensorExecuted(new SensorExecutedEvent(tableSpec, sensorRunParameters, sensorResult));
 
                 if (!sensorResult.isSuccess()) {
@@ -210,6 +220,10 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
 //                progressListener.onSensorResultsNormalized(new SensorResultsNormalizedEvent(
 //                        tableSpec, sensorRunParameters, sensorResult, normalizedSensorResults));
                 allNormalizedStatisticsTable.append(normalizedStatisticsResults.getTable());
+            }
+            catch (DqoQueueJobCancelledException cex) {
+                // ignore
+                break;
             }
             catch (Exception ex) {
                 log.error("Statistics collector " + statisticsCollectorSpec.getProfilerName() + " failed to execute: " + ex);

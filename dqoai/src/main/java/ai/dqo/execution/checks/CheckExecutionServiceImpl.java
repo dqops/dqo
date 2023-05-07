@@ -24,6 +24,8 @@ import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.incidents.IncidentImportQueueService;
 import ai.dqo.core.incidents.TableIncidentImportBatch;
+import ai.dqo.core.jobqueue.*;
+import ai.dqo.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
 import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import ai.dqo.data.errors.normalization.ErrorsNormalizationService;
@@ -35,6 +37,8 @@ import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import ai.dqo.execution.ExecutionContext;
+import ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJob;
+import ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJobParameters;
 import ai.dqo.execution.checks.progress.*;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationResult;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationService;
@@ -72,9 +76,7 @@ import reactor.core.publisher.Mono;
 import tech.tablesaw.api.Table;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Service that executes data quality checks.
@@ -86,6 +88,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
     private final SensorExecutionRunParametersFactory sensorExecutionRunParametersFactory;
     private final DataQualitySensorRunner dataQualitySensorRunner;
     private final ConnectionProviderRegistry connectionProviderRegistry;
+    private DqoQueueJobFactory dqoQueueJobFactory;
+    private DqoJobQueue dqoJobQueue;
     private final SensorReadoutsNormalizationService sensorReadoutsNormalizationService;
     private final RuleEvaluationService ruleEvaluationService;
     private final SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory;
@@ -102,6 +106,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param sensorExecutionRunParametersFactory Sensor execution run parameters factory that expands parameters.
      * @param dataQualitySensorRunner Data quality sensor runner that executes sensors one by one.
      * @param connectionProviderRegistry Connection provider registry.
+     * @param dqoQueueJobFactory DQO job factory, used to create child jobs that will run checks per table.
+     * @param dqoJobQueue DQO job queue where child jobs (that run checks per table) are scheduled.
      * @param sensorReadoutsNormalizationService Sensor dataset parse service.
      * @param ruleEvaluationService  Rule evaluation service.
      * @param sensorReadoutsSnapshotFactory Sensor readouts storage service.
@@ -117,6 +123,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                      SensorExecutionRunParametersFactory sensorExecutionRunParametersFactory,
                                      DataQualitySensorRunner dataQualitySensorRunner,
                                      ConnectionProviderRegistry connectionProviderRegistry,
+                                     DqoQueueJobFactory dqoQueueJobFactory,
+                                     DqoJobQueue dqoJobQueue,
                                      SensorReadoutsNormalizationService sensorReadoutsNormalizationService,
                                      RuleEvaluationService ruleEvaluationService,
                                      SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory,
@@ -130,6 +138,8 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
         this.connectionProviderRegistry = connectionProviderRegistry;
+        this.dqoQueueJobFactory = dqoQueueJobFactory;
+        this.dqoJobQueue = dqoJobQueue;
         this.sensorReadoutsNormalizationService = sensorReadoutsNormalizationService;
         this.ruleEvaluationService = ruleEvaluationService;
         this.sensorReadoutsSnapshotFactory = sensorReadoutsSnapshotFactory;
@@ -148,22 +158,52 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param userTimeWindowFilters Optional user provided time window filters to restrict the range of dates that are analyzed.
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all checks without starting additional jobs.
+     * @param jobCancellationToken Job cancellation token.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
+    @Override
     public CheckExecutionSummary executeChecks(ExecutionContext executionContext,
                                                CheckSearchFilters checkSearchFilters,
                                                TimeWindowFilterParameters userTimeWindowFilters,
                                                CheckExecutionProgressListener progressListener,
-                                               boolean dummySensorExecution) {
+                                               boolean dummySensorExecution,
+                                               boolean startChildJobsPerTable,
+                                               JobCancellationToken jobCancellationToken) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         Collection<TableWrapper> targetTables = listTargetTables(userHome, checkSearchFilters);
         CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
 
-        for (TableWrapper targetTable : targetTables) {
-            // TODO: we can increase DOP here by turning each call (running sensors on a single table) into a multi step pipeline, we will start up to DOP pipelines, we will start new when a pipeline has finished...
-            ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
-			executeChecksOnTable(executionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, userTimeWindowFilters, progressListener,
-                    dummySensorExecution, checkExecutionSummary);
+        if (startChildJobsPerTable) {
+            List<DqoQueueJob<CheckExecutionSummary>> childTableJobs = new ArrayList<>();
+
+            for (TableWrapper targetTable : targetTables) {
+                ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
+
+                RunChecksOnTableQueueJobParameters runChecksOnTableQueueJobParameters = new RunChecksOnTableQueueJobParameters() {{
+                   setConnection(connectionWrapper.getName());
+                   setMaxJobsPerConnection(connectionWrapper.getSpec().getParallelRunsLimit());
+                   setTable(targetTable.getPhysicalTableName());
+                   setCheckSearchFilters(checkSearchFilters);
+                   setTimeWindowFilter(userTimeWindowFilters);
+                   setProgressListener(progressListener);
+                   setDummyExecution(dummySensorExecution);
+                }};
+                RunChecksOnTableQueueJob runChecksOnTableJob = this.dqoQueueJobFactory.createRunChecksOnTableJob();
+                runChecksOnTableJob.setParameters(runChecksOnTableQueueJobParameters);
+                childTableJobs.add(runChecksOnTableJob);
+            }
+
+            ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs);
+            List<CheckExecutionSummary> checkExecutionSummaries = childTableJobsContainer.waitForChildResults(jobCancellationToken);
+            checkExecutionSummaries.forEach(tableSummary -> checkExecutionSummary.append(tableSummary));
+        }
+        else {
+            for (TableWrapper targetTable : targetTables) {
+                ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
+                executeChecksOnTable(executionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, userTimeWindowFilters, progressListener,
+                        dummySensorExecution, checkExecutionSummary, jobCancellationToken);
+            }
         }
 
         progressListener.onCheckExecutionFinished(new CheckExecutionFinishedEvent(checkExecutionSummary));
@@ -177,15 +217,18 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param executionContext Check execution context with access to the user home and dqo home.
      * @param targetSchedule        Target schedule to match, when finding checks that should be executed.
      * @param progressListener      Progress listener that receives progress calls.
+     * @param jobCancellationToken Job cancellation token.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     @Override
     public CheckExecutionSummary executeChecksForSchedule(ExecutionContext executionContext,
                                                           RecurringScheduleSpec targetSchedule,
-                                                          CheckExecutionProgressListener progressListener) {
+                                                          CheckExecutionProgressListener progressListener,
+                                                          JobCancellationToken jobCancellationToken) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         ScheduledChecksCollection checksForSchedule = this.scheduledTargetChecksFindService.findChecksForSchedule(userHome, targetSchedule);
         CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
+        List<DqoQueueJob<CheckExecutionSummary>> childTableJobs = new ArrayList<>();
 
         for(ScheduledTableChecksCollection scheduledChecksForTable : checksForSchedule.getTablesWithChecks()) {
             TableWrapper targetTable = scheduledChecksForTable.getTargetTable();
@@ -194,14 +237,68 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
             checkSearchFilters.setEnabled(true);
             checkSearchFilters.setConnectionName(connectionWrapper.getName());
-            checkSearchFilters.setSchemaTableName(targetTable.getPhysicalTableName().toString());
+            checkSearchFilters.setSchemaTableName(targetTable.getPhysicalTableName().toTableSearchFilter());
             checkSearchFilters.setCheckHierarchyIds(scheduledChecksForTable.getChecks());
 
-            executeChecksOnTable(executionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, null, progressListener,
-                    false, checkExecutionSummary);
+            RunChecksOnTableQueueJobParameters runChecksOnTableQueueJobParameters = new RunChecksOnTableQueueJobParameters() {{
+                setConnection(connectionWrapper.getName());
+                setMaxJobsPerConnection(connectionWrapper.getSpec().getParallelRunsLimit());
+                setTable(targetTable.getPhysicalTableName());
+                setCheckSearchFilters(checkSearchFilters);
+                setTimeWindowFilter(null);
+                setProgressListener(progressListener);
+            }};
+            RunChecksOnTableQueueJob runChecksOnTableJob = this.dqoQueueJobFactory.createRunChecksOnTableJob();
+            runChecksOnTableJob.setParameters(runChecksOnTableQueueJobParameters);
+            childTableJobs.add(runChecksOnTableJob);
         }
 
+        ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs);
+        List<CheckExecutionSummary> checkExecutionSummaries = childTableJobsContainer.waitForChildResults(jobCancellationToken);
+        checkExecutionSummaries.forEach(tableSummary -> checkExecutionSummary.append(tableSummary));
+
         progressListener.onCheckExecutionFinished(new CheckExecutionFinishedEvent(checkExecutionSummary));
+
+        return checkExecutionSummary;
+    }
+
+    /**
+     * Executes selected checks on a table. This method is called from {@link ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJob}
+     * that is a child job which runs checks for each table in parallel.
+     * @param executionContext Execution context that provides access to the user home.
+     * @param connectionName Connection name on which the checks are executed.
+     * @param targetTable Full name of the target table.
+     * @param checkSearchFilters Check search filters, may not specify the connection and the table name.
+     * @param userTimeWindowFilters Optional user provided time window filters to restrict the range of dates that are analyzed.
+     * @param progressListener Progress listener that receives progress calls.
+     * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken Job cancellation token.
+     * @return Check summary table with the count of alerts, checks and rules for each table, but having only one row for the target table. The result could be empty if the table was not found.
+     */
+    @Override
+    public CheckExecutionSummary executeSelectedChecksOnTable(ExecutionContext executionContext,
+                                                              String connectionName,
+                                                              PhysicalTableName targetTable,
+                                                              CheckSearchFilters checkSearchFilters,
+                                                              TimeWindowFilterParameters userTimeWindowFilters,
+                                                              CheckExecutionProgressListener progressListener,
+                                                              boolean dummySensorExecution,
+                                                              JobCancellationToken jobCancellationToken) {
+        UserHome userHome = executionContext.getUserHomeContext().getUserHome();
+        CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
+
+        ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return checkExecutionSummary; // the connection was probably deleted in the meantime
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(targetTable, true);
+        if (tableWrapper == null) {
+            return checkExecutionSummary; // the table was probably deleted in the meantime
+        }
+
+        executeChecksOnTable(executionContext, userHome, connectionWrapper, tableWrapper, checkSearchFilters, userTimeWindowFilters, progressListener,
+                dummySensorExecution, checkExecutionSummary, jobCancellationToken);
 
         return checkExecutionSummary;
     }
@@ -217,6 +314,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param progressListener Progress listener.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param checkExecutionSummary Target object to gather the check execution summary information for the table.
+     * @param jobCancellationToken Job cancellation token.
      */
     public void executeChecksOnTable(ExecutionContext executionContext,
                                      UserHome userHome,
@@ -226,13 +324,17 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                      TimeWindowFilterParameters userTimeWindowFilters,
                                      CheckExecutionProgressListener progressListener,
                                      boolean dummySensorExecution,
-                                     CheckExecutionSummary checkExecutionSummary) {
+                                     CheckExecutionSummary checkExecutionSummary,
+                                     JobCancellationToken jobCancellationToken) {
+        jobCancellationToken.throwIfCancelled();
+
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = this.hierarchyNodeTreeSearcher.findChecks(targetTable, checkSearchFilters);
         if (checks.size() == 0) {
             checkExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0,
                     0, 0, 0, 0);
             return; // no checks for this table
         }
+        jobCancellationToken.throwIfCancelled();
 
         TableSpec tableSpec = targetTable.getSpec();
         progressListener.onExecuteChecksOnTableStart(new ExecuteChecksOnTableStartEvent(connectionWrapper, tableSpec, checks));
@@ -241,12 +343,15 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
         SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
         Table allNormalizedSensorResultsTable = sensorReadoutsSnapshot.getTableDataChanges().getNewOrChangedRows();
+        jobCancellationToken.throwIfCancelled();
 
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
         Table allRuleEvaluationResultsTable = checkResultsSnapshot.getTableDataChanges().getNewOrChangedRows();
+        jobCancellationToken.throwIfCancelled();
 
         ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
         Table allErrorsTable = errorsSnapshot.getTableDataChanges().getNewOrChangedRows();
+        jobCancellationToken.throwIfCancelled();
 
         int checksCount = 0;
         int sensorResultsCount = 0;
@@ -258,6 +363,10 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         int erroredRules = 0;
 
         for (AbstractCheckSpec<?, ?, ?, ?> checkSpec : checks) {
+            if (jobCancellationToken.isCancelled()) {
+                break;
+            }
+
             checksCount++;
 
             try {
@@ -281,9 +390,11 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                     continue;
                 }
 
+                jobCancellationToken.throwIfCancelled();
                 progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorRunParameters));
                 SensorExecutionResult sensorResult = this.dataQualitySensorRunner.executeSensor(executionContext,
-                        sensorRunParameters, progressListener, dummySensorExecution);
+                        sensorRunParameters, progressListener, dummySensorExecution, jobCancellationToken);
+                jobCancellationToken.throwIfCancelled();
 
                 if (!sensorResult.isSuccess()) {
                     erroredSensors++;
@@ -352,6 +463,10 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                         progressListener.onRuleFailed(new RuleFailedEvent(tableSpec, sensorRunParameters, sensorResult, ex, ruleDefinitionName));
                     }
                 }
+            }
+            catch (DqoQueueJobCancelledException cex) {
+                // ignore the error, just stop running checks
+                break;
             }
             catch (Exception ex) {
                 log.error("Check runner failed to run checks: " + ex.getMessage(), ex);

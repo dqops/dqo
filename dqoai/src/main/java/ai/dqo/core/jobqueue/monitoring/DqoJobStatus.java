@@ -21,18 +21,45 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Job status of a job on the queue.
  */
 public enum DqoJobStatus {
+    /**
+     * The job is queued.
+     */
     @JsonProperty("queued")
-    QUEUED,
+    queued,
 
+    /**
+     * The job is now running.
+     */
     @JsonProperty("running")
-    RUNNING,
+    running,
 
+    /**
+     * The job is parked until the concurrency constraints are met.
+     */
     @JsonProperty("waiting")
-    WAITING,  // concurrency constraint is not letting to start the job, so it is waiting
+    waiting,  // concurrency constraint is not letting to start the job, so it is waiting
 
+    /**
+     * The job has finished successfully.
+     */
     @JsonProperty("succeeded")
-    SUCCEEDED,
+    succeeded,
 
+    /**
+     * The job has failed with an execution error.
+     */
     @JsonProperty("failed")
-    FAILED
+    failed,
+
+    /**
+     * A request to cancel a job was issued, but the job is not yet cancelled.
+     */
+    @JsonProperty("cancel_requested")
+    cancel_requested,
+
+    /**
+     * The job was fully cancelled and removed from the job queue.
+     */
+    @JsonProperty("cancelled")
+    cancelled
 }

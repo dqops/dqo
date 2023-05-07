@@ -15,6 +15,7 @@
  */
 package ai.dqo.execution.sensors.runners;
 
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
@@ -32,11 +33,13 @@ public abstract class AbstractSensorRunner {
      * @param sensorDefinition      Sensor definition (both the core sensor definition and the provider specific sensor definition).
      * @param progressListener      Progress listener that receives events when the sensor is executed.
      * @param dummySensorExecution  When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken  Job cancellation token, may cancel a running query.
      * @return Sensor result.
      */
     public abstract SensorExecutionResult executeSensor(ExecutionContext executionContext,
                                                         SensorExecutionRunParameters sensorRunParameters,
                                                         SensorDefinitionFindResult sensorDefinition,
                                                         SensorExecutionProgressListener progressListener,
-                                                        boolean dummySensorExecution);
+                                                        boolean dummySensorExecution,
+                                                        JobCancellationToken jobCancellationToken);
 }

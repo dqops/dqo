@@ -122,7 +122,7 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
      */
     @Override
     public void detectUnsynchronizedChangesInBackground() {
-        Schedulers.parallel().schedule(() -> {
+        Schedulers.boundedElastic().schedule(() -> {
             detectAndPublishLocalFolderStatus(DqoRoot.sources);
             detectAndPublishLocalFolderStatus(DqoRoot.sensors);
             detectAndPublishLocalFolderStatus(DqoRoot.rules);

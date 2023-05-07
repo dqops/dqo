@@ -2196,7 +2196,7 @@ public class TablesController {
      */
     @DeleteMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}")
     @ApiOperation(value = "deleteTable", notes = "Deletes a table")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Table successfully deleted", response = DqoQueueJobId.class),
             @ApiResponse(code = 404, message = "Table not found"),

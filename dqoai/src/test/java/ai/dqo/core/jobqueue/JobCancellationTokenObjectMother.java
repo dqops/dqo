@@ -13,15 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ai.dqo.core.jobqueue;
 
-import ai.dqo.utils.exceptions.DqoRuntimeException;
-
 /**
- * Exception thrown when the configuration of the job queue is invalid.
+ * Object mother for {@link JobCancellationToken}
  */
-public class InvalidQueueConfigurationException extends DqoRuntimeException {
-    public InvalidQueueConfigurationException(String message) {
-        super(message);
+public class JobCancellationTokenObjectMother {
+    /**
+     * Creates a dummy job cancellation token.
+     * @return Dummy job cancellation token.
+     */
+    public static DummyJobCancellationToken createDummyJobCancellationToken() {
+        return new DummyJobCancellationToken();
     }
 }

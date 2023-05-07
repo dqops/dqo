@@ -22,16 +22,16 @@ import java.util.concurrent.CompletableFuture;
  * @param <T> Job result type.
  */
 public class PushJobResult<T> {
-    private CompletableFuture<T> future;
+    private CompletableFuture<T> finishedFuture;
     private DqoQueueJobId jobId;
 
     /**
      * Creates a result object for an operation that started a new job.
-     * @param future Future to await for the result.
+     * @param finishedFuture Future to await for the result.
      * @param jobId Job id.
      */
-    public PushJobResult(CompletableFuture<T> future, DqoQueueJobId jobId) {
-        this.future = future;
+    public PushJobResult(CompletableFuture<T> finishedFuture, DqoQueueJobId jobId) {
+        this.finishedFuture = finishedFuture;
         this.jobId = jobId;
     }
 
@@ -39,8 +39,8 @@ public class PushJobResult<T> {
      * Future to await for the job to finish. Provides access to the result of a job if a job produces any result.
      * @return Future to await for the job to finish.
      */
-    public CompletableFuture<T> getFuture() {
-        return future;
+    public CompletableFuture<T> getFinishedFuture() {
+        return finishedFuture;
     }
 
     /**

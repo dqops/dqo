@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.execution.checks;
+package ai.dqo.execution.checks.jobs;
 
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
@@ -29,15 +29,27 @@ import io.swagger.annotations.ApiModel;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "RunChecksQueueJobParameters", description = "Run checks configuration, specifies the target checks that should be executed and an optional time window.")
 public class RunChecksQueueJobParameters {
-    @JsonPropertyDescription("Target data quality checks filter")
+    /**
+     * Target data quality checks filter.
+     */
+    @JsonPropertyDescription("Target data quality checks filter.")
     private CheckSearchFilters checkSearchFilters;
 
+    /**
+     * Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.
+     */
     @JsonPropertyDescription("Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.")
     private TimeWindowFilterParameters timeWindowFilter;
 
+    /**
+     * Job progress listener that will receive events showing the progress of execution.
+     */
     @JsonIgnore
     private CheckExecutionProgressListener progressListener;
 
+    /**
+     * Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.
+     */
     @JsonPropertyDescription("Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.")
     private boolean dummyExecution;
 

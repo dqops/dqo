@@ -19,8 +19,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Identifies a single job.
@@ -28,7 +26,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DqoQueueJobId implements Comparable<DqoQueueJobId> {
     private long jobId;
-    private List<Long> parentJobs;
+    private DqoQueueJobId parentJobId;
     private Instant createdAt;
 
     /**
@@ -80,31 +78,19 @@ public class DqoQueueJobId implements Comparable<DqoQueueJobId> {
     }
 
     /**
-     * Returns a list of parent job ids.
-     * @return List of parent job ids or null, when no parent jobs are present.
+     * Returns an optional ID of a parent job.
+     * @return Parent job id or null, when a parent job is not present.
      */
-    public List<Long> getParentJobs() {
-        return parentJobs;
+    public DqoQueueJobId getParentJobId() {
+        return parentJobId;
     }
 
     /**
-     * Sets a list orf parent job ids. Should be used only for deserialization.
-     * @param parentJobs List of parent job ids.
+     * Sets an job id of a parent job. Should be used only for deserialization.
+     * @param parentJobId ID of a parent job.
      */
-    public void setParentJobs(List<Long> parentJobs) {
-        this.parentJobs = parentJobs;
-    }
-
-    /**
-     * Registers a parent job id. If a parent job is cancelled, we can find all child jobs and also cancel them.
-     * @param parentJobId Job id of a parent job.
-     */
-    public void addParentJobId(Long parentJobId) {
-        if (this.parentJobs == null) {
-            this.parentJobs = new ArrayList<>();
-        }
-
-        this.parentJobs.add(parentJobId);
+    public void setParentJobId(DqoQueueJobId parentJobId) {
+        this.parentJobId = parentJobId;
     }
 
     @Override

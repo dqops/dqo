@@ -17,6 +17,7 @@ package ai.dqo.testutils;
 
 import ai.dqo.connectors.jdbc.JdbcTypeColumnMapping;
 import ai.dqo.core.configuration.DqoCloudConfigurationPropertiesObjectMother;
+import ai.dqo.core.jobqueue.DqoJobQueueObjectMother;
 import ai.dqo.data.storage.TablesawParquetSupportFix;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreatorObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;
@@ -42,6 +43,7 @@ public class BeforeAllIntegrationTestExtension implements BeforeAllCallback, Ext
         JdbcTypeColumnMapping.ensureInitializedJdbc();
         LocalUserHomeCreatorObjectMother.initializeDefaultDqoUserHomeSilentlyOnce();
         DqoCloudConfigurationPropertiesObjectMother.configureTestableApiKey();
+        DqoJobQueueObjectMother.ensureJobQueueIsStarted();
         // to be extended in the future when the need appears
     }
 

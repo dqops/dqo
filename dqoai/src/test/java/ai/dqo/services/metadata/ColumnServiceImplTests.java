@@ -18,6 +18,7 @@ package ai.dqo.services.metadata;
 
 import ai.dqo.BaseTest;
 import ai.dqo.core.jobqueue.DqoJobQueue;
+import ai.dqo.core.jobqueue.DqoJobQueueObjectMother;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.DqoQueueJobFactoryImpl;
 import ai.dqo.metadata.basespecs.InstanceStatus;
@@ -27,7 +28,6 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.utils.BeanFactoryObjectMother;
-import ai.dqo.utils.jobs.DqoJobQueueObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ public class ColumnServiceImplTests extends BaseTest {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
 
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
-        this.dqoJobQueue = DqoJobQueueObjectMother.getDefault();
+        this.dqoJobQueue = DqoJobQueueObjectMother.getDefaultJobQueue();
 
         this.sut = new ColumnServiceImpl(
                 this.userHomeContextFactory,

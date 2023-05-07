@@ -16,6 +16,7 @@
 package ai.dqo.execution.sensors;
 
 import ai.dqo.connectors.ProviderType;
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindService;
@@ -50,12 +51,14 @@ public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
      * @param sensorRunParameters Sensor run parameters (connection, table, column, sensor parameters).
      * @param progressListener Progress lister that receives information about the progress of a sensor execution.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken Job cancellation token, used to cancel a running sensor query.
      * @return Sensor execution result with the query result from the sensor.
      */
     public SensorExecutionResult executeSensor(ExecutionContext executionContext,
                                                SensorExecutionRunParameters sensorRunParameters,
                                                SensorExecutionProgressListener progressListener,
-                                               boolean dummySensorExecution) {
+                                               boolean dummySensorExecution,
+                                               JobCancellationToken jobCancellationToken) {
         String sensorName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
         ProviderType providerType = sensorRunParameters.getConnection().getProviderType();
 
@@ -66,7 +69,7 @@ public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
                 providerSensorSpec.getJavaClassName());
 
         SensorExecutionResult result = sensorRunner.executeSensor(executionContext, sensorRunParameters,
-                sensorDefinition, progressListener, dummySensorExecution);
+                sensorDefinition, progressListener, dummySensorExecution, jobCancellationToken);
         return result;
     }
 }

@@ -225,6 +225,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		settings.setApiKey(key);
 		userHomeContext.flush();
+		this.dqoCloudApiKeyProvider.invalidate();
 		this.dqoCloudAccessTokenCache.invalidate();
 		cliOperationStatus.setSuccessMessage("Successfully set api key");
 
@@ -257,6 +258,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		settings.setApiKey(null);
 		userHomeContext.flush();
+		this.dqoCloudApiKeyProvider.invalidate();
 		this.dqoCloudAccessTokenCache.invalidate();
 		cliOperationStatus.setSuccessMessage("Successfully removed api key");
 

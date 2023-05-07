@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.core.jobqueue;
+package ai.dqo.core.jobqueue.concurrency;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -81,5 +81,13 @@ public class ConcurrentJobLimit {
      */
     public boolean isConcurrencyLimitReached() {
         return this.atomicRunningJobsCount.get() >= this.atomicLimit.get();
+    }
+
+    /**
+     * Returns the current number of running tasks.
+     * @return Number of concurrent running tasks.
+     */
+    public int getRunningJobsCount() {
+        return this.atomicRunningJobsCount.get();
     }
 }

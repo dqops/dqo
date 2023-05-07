@@ -15,8 +15,11 @@
  */
 package ai.dqo.core.jobqueue;
 
+import java.util.Collection;
+
 /**
  * DQO job queue - manages a pool of threads that are executing operations.
+ * This is the entry point to manage the main DQO job queue that runs independent and child jobs, but not parent jobs.
  */
 public interface DqoJobQueue {
     /**
@@ -36,4 +39,18 @@ public interface DqoJobQueue {
      * @return Started job summary and a future to await for finish.
      */
     <T> PushJobResult<T> pushJob(DqoQueueJob<T> job);
+
+    /**
+     * Pushes a collection of child jobs.
+     * @param childJobs Collection of child jobs.
+     * @return Child jobs container that will track the completion of all child jobs.
+     * @param <T> Child job result type.
+     */
+    <T> ChildDqoQueueJobsContainer<T> pushChildJobs(Collection<DqoQueueJob<T>> childJobs);
+
+    /**
+     * Cancels a job given a job id.
+     * @param jobId Job id.
+     */
+    void cancelJob(DqoQueueJobId jobId);
 }

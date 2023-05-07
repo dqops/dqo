@@ -72,6 +72,20 @@ public interface DqoJobQueueMonitoringService {
     void publishJobFailedEvent(DqoJobQueueEntry jobQueueEntry, String errorMessage);
 
     /**
+     * Publishes a notification that a request to cancel a job was received.
+     *
+     * @param jobQueueEntry Job queue entry.
+     */
+    void publishJobCancellationRequestedEvent(DqoJobQueueEntry jobQueueEntry);
+
+    /**
+     * Publishes a notification that a job has been fully cancelled and removed from the queue.
+     *
+     * @param jobQueueEntry Job queue entry.
+     */
+    void publishJobFullyCancelledEvent(DqoJobQueueEntry jobQueueEntry);
+
+    /**
      * Creates an initial job list model that is retrieved by the UI when UI start up and the notification panel
      * must be filled with a list of jobs that are on the queue or jobs that have already finished.
      *

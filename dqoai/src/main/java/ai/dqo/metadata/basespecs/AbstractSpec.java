@@ -85,8 +85,10 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
      */
     @Override
     public void setHierarchyId(HierarchyId hierarchyId) {
-        this.hierarchyId = hierarchyId;
-		propagateHierarchyIdToFields(hierarchyId);
+        if (!Objects.equals(this.hierarchyId, hierarchyId)) {
+            this.hierarchyId = hierarchyId;
+            propagateHierarchyIdToFields(hierarchyId);
+        }
     }
 
     /**
@@ -375,7 +377,7 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
     /**
      * Creates and returns a clone (copy) of Map object.
      */
-    public  Map<?,?> cloneMap(Map<?,?> originalMap) {
+    public Map<?,?> cloneMap(Map<?,?> originalMap) {
 
         if (originalMap instanceof HashMap) {
             HashMap<?, ?> sourceHashMap = (HashMap<?, ?>) originalMap;

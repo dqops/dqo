@@ -15,6 +15,7 @@
  */
 package ai.dqo.sensors.table.availability;
 
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -48,15 +49,26 @@ public class TableAvailabilitySensorRunner extends AbstractSensorRunner {
         this.jinjaSqlTemplateSensorRunner = jinjaSqlTemplateSensorRunner;
     }
 
+    /**
+     * Executes a sensor and returns the sensor result.
+     * @param executionContext Check execution context with access to the dqo home and user home, if any metadata is needed.
+     * @param sensorRunParameters   Sensor run parameters - connection, table, column, sensor parameters.
+     * @param sensorDefinition      Sensor definition (both the core sensor definition and the provider specific sensor definition).
+     * @param progressListener      Progress listener that receives events when the sensor is executed.
+     * @param dummySensorExecution  When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken  Job cancellation token, may cancel a running query.
+     * @return Sensor result.
+     */
     @Override
     public SensorExecutionResult executeSensor(ExecutionContext executionContext,
                                                SensorExecutionRunParameters sensorRunParameters,
-                                               SensorDefinitionFindResult sensorDefinitions,
+                                               SensorDefinitionFindResult sensorDefinition,
                                                SensorExecutionProgressListener progressListener,
-                                               boolean dummySensorExecution) {
+                                               boolean dummySensorExecution,
+                                               JobCancellationToken jobCancellationToken) {
 
         SensorExecutionResult sensorExecutionResult = jinjaSqlTemplateSensorRunner.executeSensor(executionContext,
-                sensorRunParameters, sensorDefinitions, progressListener, dummySensorExecution);
+                sensorRunParameters, sensorDefinition, progressListener, dummySensorExecution, jobCancellationToken);
 
         if (sensorExecutionResult.isSuccess()) {
             try {

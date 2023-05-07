@@ -16,6 +16,9 @@
 package ai.dqo.core.jobqueue.jobs.data;
 
 import ai.dqo.core.jobqueue.*;
+import ai.dqo.core.jobqueue.concurrency.ConcurrentJobType;
+import ai.dqo.core.jobqueue.concurrency.JobConcurrencyConstraint;
+import ai.dqo.core.jobqueue.concurrency.JobConcurrencyTarget;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.data.checkresults.models.CheckResultsFragmentFilter;
 import ai.dqo.data.checkresults.services.CheckResultsDeleteService;
@@ -201,10 +204,11 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
      * @return Optional concurrency constraint that limits the number of parallel jobs or null, when no limits are required.
      */
     @Override
-    public JobConcurrencyConstraint getConcurrencyConstraint() {
+    public JobConcurrencyConstraint[] getConcurrencyConstraints() {
         DeleteStoredDataQueueJobConcurrencyTarget target = new DeleteStoredDataQueueJobConcurrencyTarget(
                 this.deletionParameters.getConnectionName());
         JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.DELETE_STORED_DATA, target);
-        return new JobConcurrencyConstraint(concurrencyTarget, 1);
+        JobConcurrencyConstraint deleteLimit = new JobConcurrencyConstraint(concurrencyTarget, 1);
+        return new JobConcurrencyConstraint[] { deleteLimit };
     }
 }

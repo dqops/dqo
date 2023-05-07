@@ -21,6 +21,7 @@ import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.SourceSchemaModel;
 import ai.dqo.connectors.SourceTableModel;
 import ai.dqo.connectors.bigquery.*;
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.core.secrets.SecretValueProviderObjectMother;
 import ai.dqo.metadata.sources.ConnectionSpec;
@@ -136,7 +137,8 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
         this.connectionSpec.getBigquery().setQuotaProjectId(null);
         this.connectionSpec.getBigquery().setSourceProjectId("bigquery-public-data");
         this.sut.open();
-        Table results = this.sut.executeQuery("select count(*) from `bigquery-public-data.austin_crime.crime`");
+        Table results = this.sut.executeQuery("select count(*) from `bigquery-public-data.austin_crime.crime`",
+                JobCancellationToken.createDummyJobCancellationToken());
 
         Assertions.assertNotNull(results);
         Assertions.assertEquals(1, results.rowCount());

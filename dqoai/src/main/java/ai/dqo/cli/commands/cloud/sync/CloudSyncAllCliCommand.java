@@ -21,7 +21,7 @@ import ai.dqo.cli.commands.cloud.sync.impl.CloudSynchronizationService;
 import ai.dqo.cli.terminal.TerminalFactory;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.dqocloud.accesskey.DqoCloudCredentialsException;
-import ai.dqo.core.jobqueue.DqoQueueJobExecutionException;
+import ai.dqo.core.jobqueue.exceptions.DqoQueueJobExecutionException;
 import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.core.synchronization.fileexchange.FileSynchronizationDirection;
 import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;

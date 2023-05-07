@@ -31,6 +31,11 @@ public interface DqoCloudApiKeyProvider {
     DqoCloudApiKey getApiKey();
 
     /**
+     * Invalidates the cached api key.
+     */
+    void invalidate();
+
+    /**
      * Decodes a given API Key.
      * @param apiKey API key to decode.
      * @return Decoded api key.

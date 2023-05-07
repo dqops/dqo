@@ -16,6 +16,9 @@
 package ai.dqo.core.jobqueue.jobs.data;
 
 import ai.dqo.core.jobqueue.*;
+import ai.dqo.core.jobqueue.concurrency.ConcurrentJobType;
+import ai.dqo.core.jobqueue.concurrency.JobConcurrencyConstraint;
+import ai.dqo.core.jobqueue.concurrency.JobConcurrencyTarget;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
@@ -154,10 +157,11 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
      * @return Optional concurrency constraint that limits the number of parallel jobs or null, when no limits are required.
      */
     @Override
-    public JobConcurrencyConstraint getConcurrencyConstraint() {
+    public JobConcurrencyConstraint[] getConcurrencyConstraints() {
         RepairStoredDataQueueJobConcurrencyTarget target = new RepairStoredDataQueueJobConcurrencyTarget(
                 this.repairParameters.getConnectionName());
         JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.REPAIR_STORED_DATA, target);
-        return new JobConcurrencyConstraint(concurrencyTarget, 1);
+        JobConcurrencyConstraint repairLimit = new JobConcurrencyConstraint(concurrencyTarget, 1);
+        return new JobConcurrencyConstraint[] { repairLimit };
     }
 }

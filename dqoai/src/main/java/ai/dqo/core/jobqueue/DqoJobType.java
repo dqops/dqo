@@ -24,6 +24,9 @@ public enum DqoJobType {
     @JsonProperty("run checks")
     RUN_CHECKS,
 
+    @JsonProperty("run checks on table")
+    RUN_CHECKS_ON_TABLE,
+
     @JsonProperty("collect statistics")
     COLLECT_STATISTICS,
 
@@ -33,8 +36,8 @@ public enum DqoJobType {
     @JsonProperty("synchronize folder")
     SYNCHRONIZE_FOLDER,
 
-    @JsonProperty("scheduled synchronization")
-    SCHEDULED_SYNCHRONIZATION,
+    @JsonProperty("synchronize multiple folders")
+    SYNCHRONIZE_MULTIPLE_FOLDERS,
 
     @JsonProperty("run scheduled checks by cron")
     RUN_SCHEDULED_CHECKS_CRON,
@@ -44,9 +47,6 @@ public enum DqoJobType {
 
     @JsonProperty("import selected tables")
     IMPORT_TABLES,
-
-//    @JsonProperty("import table")
-//    IMPORT_TABLE,
 
     @JsonProperty("delete stored data")
     DELETE_STORED_DATA,
