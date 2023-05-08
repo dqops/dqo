@@ -20,6 +20,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const history = useHistory();
   const handleChange = (value: string) => {
     dispatch(setActiveFirstLevelTab(sourceRoute, value));
+    history.push(value);
   };
 
   const closeTab = (value: string) => {
