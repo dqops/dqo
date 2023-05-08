@@ -7,12 +7,13 @@ import {
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { useSelector } from 'react-redux';
 import ConnectionActionGroup from './ConnectionActionGroup';
-import { useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import ScheduleView from "../../ScheduleView";
 import Tabs from "../../Tabs";
 import { CheckRunRecurringScheduleGroup } from "../../../shared/enums/scheduling.enum";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 import { CheckTypes } from "../../../shared/routes";
+import qs from "query-string";
 
 const pageTabs = [
   {
@@ -40,8 +41,10 @@ const pageTabs = [
 const ScheduleDetail = () => {
   const { connection, checkTypes }: { checkTypes: CheckTypes, connection: string } = useParams();
   const [tabs, setTabs] = useState(pageTabs);
-  const [activeTab, setActiveTab] = useState<CheckRunRecurringScheduleGroup>(CheckRunRecurringScheduleGroup.profiling);
   const dispatch = useActionDispatch();
+  const location = useLocation() as any;
+  const { activeTab = CheckRunRecurringScheduleGroup.profiling } = qs.parse(location.search) as any;
+  const history = useHistory();
 
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
@@ -55,7 +58,7 @@ const ScheduleDetail = () => {
   const isUpdatedSchedule = scheduleGroups?.[activeTab]?.isUpdatedSchedule;
 
   const onChangeTab = (tab: CheckRunRecurringScheduleGroup) => {
-    setActiveTab(tab);
+    history.push(`${location.pathname}?activeTab=${tab}`)
   }
 
   const handleChange = (obj: any) => {
@@ -93,6 +96,10 @@ const ScheduleDetail = () => {
   }, [connection]);
 
   useEffect(() => {
+    if (activeTab) {
+      return;
+    }
+
     if (checkTypes === 'profiling') {
       setTabs([
         {
@@ -100,7 +107,7 @@ const ScheduleDetail = () => {
           value: CheckRunRecurringScheduleGroup.profiling
         },
       ]);
-      setActiveTab(CheckRunRecurringScheduleGroup.profiling);
+      onChangeTab(CheckRunRecurringScheduleGroup.profiling);
     } else if (checkTypes === 'recurring') {
       setTabs([
         {
@@ -112,7 +119,7 @@ const ScheduleDetail = () => {
           value: CheckRunRecurringScheduleGroup.recurring_monthly
         },
       ]);
-      setActiveTab(CheckRunRecurringScheduleGroup.recurring_daily);
+      onChangeTab(CheckRunRecurringScheduleGroup.recurring_daily);
     } else if (checkTypes === 'partitioned') {
       setTabs([
         {
@@ -124,7 +131,7 @@ const ScheduleDetail = () => {
           value: CheckRunRecurringScheduleGroup.partitioned_monthly
         },
       ]);
-      setActiveTab(CheckRunRecurringScheduleGroup.partitioned_daily);
+      onChangeTab(CheckRunRecurringScheduleGroup.partitioned_daily);
     } else {
       setTabs([
         {
@@ -148,7 +155,7 @@ const ScheduleDetail = () => {
           value: CheckRunRecurringScheduleGroup.partitioned_monthly
         },
       ]);
-      setActiveTab(CheckRunRecurringScheduleGroup.profiling);
+      onChangeTab(CheckRunRecurringScheduleGroup.profiling);
     }
   }, [checkTypes]);
 
