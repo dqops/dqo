@@ -101,7 +101,7 @@ public class RuleModel {
      * @param ruleDefinitionWrapper The RuleDefinitionWrapper to compare.
      * @return true if the RuleModel is equal to the RuleDefinitionWrapper, false otherwise.
      */
-    public boolean equalsRuleDqo(RuleDefinitionWrapper ruleDefinitionWrapper) {
+    public boolean equalsBuiltInRule(RuleDefinitionWrapper ruleDefinitionWrapper) {
         if (ruleDefinitionWrapper == null) {
             return false;
         }
@@ -144,7 +144,7 @@ public class RuleModel {
      * Returns the rule definition spec object.
      * @return the rule definition spec object.
      */
-    public RuleDefinitionSpec withRuleDefinitionSpec() {
+    public RuleDefinitionSpec toRuleDefinitionSpec() {
 
         RuleDefinitionSpec ruleDefinitionSpec = new RuleDefinitionSpec();
         ruleDefinitionSpec.setType(type);
@@ -161,7 +161,7 @@ public class RuleModel {
      * Returns the file content object with Python module content.
      * @return file content object with Python module content.
      */
-    public FileContent withRuleDefinitionPythonModuleContent() {
+    public FileContent makePythonModuleFileContent() {
         return new FileContent(rulePythonModuleContent);
     }
 }
