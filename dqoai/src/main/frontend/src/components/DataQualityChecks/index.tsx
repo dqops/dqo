@@ -1,12 +1,20 @@
 import React, { useEffect } from 'react';
-import { CheckResultsOverviewDataModel, UICheckContainerModel, UICheckModel } from '../../api';
+import {
+  CheckResultsOverviewDataModel,
+  UICheckContainerModel,
+  UICheckModel,
+  UIEffectiveScheduleModelScheduleLevelEnum
+} from '../../api';
 import { useTree } from '../../contexts/treeContext';
 import clsx from 'clsx';
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import CheckCategoriesView from "./CheckCategoriesView";
 import TableHeader from "./CheckTableHeader";
 import Loader from "../Loader";
-import { CheckTypes } from "../../shared/routes";
+import { CheckTypes, ROUTES } from "../../shared/routes";
+import moment from "moment/moment";
+import { useActionDispatch } from "../../hooks/useActionDispatch";
+import { addFirstLevelTab } from "../../redux/actions/source.actions";
 
 interface IDataQualityChecksProps {
   checksUI?: UICheckContainerModel;
@@ -20,6 +28,8 @@ interface IDataQualityChecksProps {
 
 const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview = [], getCheckOverview, onUpdate, loading }: IDataQualityChecksProps) => {
   const { checkTypes, connection, schema, table, column, timeScale }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string, timeScale: 'daily' | 'monthly' } = useParams();
+  const history = useHistory();
+  const dispatch = useActionDispatch();
 
   const { sidebarWidth } = useTree();
   const handleChangeDataDataStreams = (
@@ -50,6 +60,53 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
     getCheckOverview();
   }, [checkTypes, connection, schema, table, column, timeScale]);
 
+  const goToSchedule = () => {
+    if (checksUI?.effective_schedule?.schedule_level === UIEffectiveScheduleModelScheduleLevelEnum.connection) {
+      dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
+        url: ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'schedule'),
+        value: ROUTES.CONNECTION_LEVEL_VALUE(CheckTypes.SOURCES, connection),
+        state: {},
+        label: connection
+      }))
+      history.push(ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'schedule'));
+      return;
+    }
+    if (checksUI?.effective_schedule?.schedule_level === UIEffectiveScheduleModelScheduleLevelEnum.table_override) {
+      dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
+        url: ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'schedule'),
+        value: ROUTES.TABLE_LEVEL_VALUE(CheckTypes.SOURCES, connection, schema, table),
+        state: {},
+        label: table
+      }))
+      history.push(ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'schedule'));
+      return;
+    }
+  };
+
+  const goToScheduleTab = () => {
+    if (checksUI?.effective_schedule?.schedule_level === UIEffectiveScheduleModelScheduleLevelEnum.connection) {
+      const url = `${ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'schedule')}?activeTab=${checksUI?.effective_schedule?.schedule_group}`;
+      dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
+        url,
+        value: ROUTES.CONNECTION_LEVEL_VALUE(CheckTypes.SOURCES, connection),
+        state: {},
+        label: connection
+      }))
+      history.push(url);
+      return;
+    }
+    if (checksUI?.effective_schedule?.schedule_level === UIEffectiveScheduleModelScheduleLevelEnum.table_override) {
+      dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
+        url: ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'schedule'),
+        value: ROUTES.TABLE_LEVEL_VALUE(CheckTypes.SOURCES, connection, schema, table),
+        state: {},
+        label: table
+      }))
+      history.push(`${ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'schedule')}?activeTab=${checksUI?.effective_schedule?.schedule_group}`);
+      return;
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center min-h-80">
@@ -67,6 +124,34 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
       className={clsx(className, 'p-4 overflow-auto')}
       style={{ maxWidth: `calc(100vw - ${sidebarWidth + 30}px` }}
     >
+      <div className="flex items-center text-3xs justify-between mb-3 gap-4">
+        <div className="flex items-center space-x-1">
+          <span>Scheduling status:</span>
+          <span>{checksUI?.effective_schedule_enabled_status}</span>
+        </div>
+        <div className="flex items-center space-x-1">
+          <span>Scheduling configured at:</span>
+          <a
+            className="underline cursor-pointer"
+            onClick={goToSchedule}
+          >{checksUI?.effective_schedule?.schedule_level}</a>
+        </div>
+        <div className="flex items-center space-x-1">
+          <span>Effective cron expression:</span>
+          <span>{checksUI?.effective_schedule?.cron_expression}</span>
+        </div>
+        <div className="flex items-center space-x-1">
+          <span>Next execution at:</span>
+          <span>{moment(checksUI?.effective_schedule?.time_of_execution).format('MMM, DD YYYY')}</span>
+        </div>
+        <div className="flex items-center space-x-1">
+          <span>Configure at:</span>
+          <a
+            className="underline cursor-pointer"
+            onClick={goToScheduleTab}
+          >{checksUI?.effective_schedule?.schedule_group}</a>
+        </div>
+      </div>
       <table className="w-full">
         <TableHeader checksUI={checksUI} />
         <tbody>

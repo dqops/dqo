@@ -19,6 +19,7 @@ const DefinitionLayout = ({ children }: LayoutProps) => {
 
   const handleChange = (value: string) => {
     dispatch(setActiveFirstLevelTab(value));
+    history.push(value);
   };
 
   const closeTab = (value: string) => {

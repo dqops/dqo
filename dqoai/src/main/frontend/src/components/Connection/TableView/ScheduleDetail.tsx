@@ -7,12 +7,13 @@ import {
   setUpdatedSchedulingGroup,
   updateTableSchedulingGroup
 } from '../../../redux/actions/table.actions';
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import ScheduleView from "../../ScheduleView";
 import { CheckRunRecurringScheduleGroup } from "../../../shared/enums/scheduling.enum";
 import Tabs from "../../Tabs";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 import { CheckTypes } from "../../../shared/routes";
+import qs from "query-string";
 
 const pageTabs = [
   {
@@ -40,17 +41,19 @@ const pageTabs = [
 const ScheduleDetail = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
   const [tabs, setTabs] = useState(pageTabs);
-  const [activeTab, setActiveTab] = useState<CheckRunRecurringScheduleGroup>(CheckRunRecurringScheduleGroup.profiling);
+  const { activeTab = CheckRunRecurringScheduleGroup.profiling } = qs.parse(location.search) as any;
 
   const { isUpdating, scheduleGroups } = useSelector(getFirstLevelState(checkTypes));
   const updatedSchedule = scheduleGroups?.[activeTab]?.updatedSchedule;
   const isUpdatedSchedule = scheduleGroups?.[activeTab]?.isUpdatedSchedule;
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const history = useHistory();
 
   const dispatch = useActionDispatch();
   const onChangeTab = (tab: CheckRunRecurringScheduleGroup) => {
-    setActiveTab(tab);
+    history.push(`${location.pathname}?activeTab=${tab}`)
   }
+
   useEffect(() => {
     if (updatedSchedule === null || updatedSchedule === undefined) {
       dispatch(getTableSchedulingGroup(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, activeTab));
