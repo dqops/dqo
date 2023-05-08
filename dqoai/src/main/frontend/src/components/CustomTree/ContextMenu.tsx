@@ -13,6 +13,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { ROUTES } from "../../shared/routes";
 import DeleteOnlyDataDialog from "./DeleteOnlyDataDialog";
 import AddColumnDialog from "./AddColumnDialog";
+import AddTableDialog from "./AddTableDialog";
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -26,6 +27,7 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
   const history = useHistory();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const [addColumnDialogOpen, setAddColumnDialogOpen] = useState(false);
+  const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
 
   const handleRefresh = () => {
     refreshNode(node);
@@ -63,6 +65,11 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
 
   const closeAddColumnDialog = () => {
     setAddColumnDialogOpen(false);
+    setOpen(false);
+  };
+
+  const closeAddTableDialog = () => {
+    setAddTableDialogOpen(false);
     setOpen(false);
   };
 
@@ -153,6 +160,14 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
               Delete column
             </div>
           )}
+          {node.level === TREE_LEVEL.SCHEMA && (
+            <div
+              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+              onClick={() => setAddTableDialogOpen(true)}
+            >
+              Add Table
+            </div>
+          )}
           {node.level === TREE_LEVEL.TABLE && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
@@ -187,6 +202,11 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
         <AddColumnDialog
           open={addColumnDialogOpen}
           onClose={closeAddColumnDialog}
+          node={node}
+        />
+        <AddTableDialog
+          open={addTableDialogOpen}
+          onClose={closeAddTableDialog}
           node={node}
         />
       </PopoverContent>
