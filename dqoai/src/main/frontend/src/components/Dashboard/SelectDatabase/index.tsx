@@ -2,7 +2,7 @@ import React from 'react';
 
 import { DATABASE_TYPE } from '../../../shared/enums';
 import SvgIcon from '../../SvgIcon';
-import { ConnectionBasicModelProviderTypeEnum } from "../../../api";
+import { ConnectionBasicModelProviderTypeEnum } from '../../../api';
 
 interface ISelectDatabaseProps {
   onSelect: (db: ConnectionBasicModelProviderTypeEnum) => void;
@@ -17,38 +17,50 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
       <div className="grid grid-cols-2 gap-6">
         <div
           className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-          onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.bigquery)}
+          onClick={() =>
+            onSelect(ConnectionBasicModelProviderTypeEnum.bigquery)
+          }
         >
           <SvgIcon name="big-query" className="mb-3 w-16" />
           <div className="text-3xl font-semibold text-gray-700">Bigquery</div>
         </div>
         <div
           className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-          onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.snowflake)}
+          onClick={() =>
+            onSelect(ConnectionBasicModelProviderTypeEnum.snowflake)
+          }
         >
           <SvgIcon name="snowflake" className="mb-3 w-16 text-blue-500" />
           <div className="text-3xl font-semibold text-gray-700">Snowflake</div>
         </div>
         <div
           className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-          onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.postgresql)}
+          onClick={() =>
+            onSelect(ConnectionBasicModelProviderTypeEnum.postgresql)
+          }
         >
           <SvgIcon name="postgresql" className="mb-3 w-16 text-blue-500" />
           <div className="text-3xl font-semibold text-gray-700">PostgreSQL</div>
         </div>
         <div
           className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-          onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.redshift)}
+          onClick={() =>
+            onSelect(ConnectionBasicModelProviderTypeEnum.redshift)
+          }
         >
           <SvgIcon name="redshift" className="mb-3 w-16 text-blue-500" />
           <div className="text-3xl font-semibold text-gray-700">Redshift</div>
         </div>
         <div
           className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-          onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.sqlserver)}
+          onClick={() =>
+            onSelect(ConnectionBasicModelProviderTypeEnum.sqlserver)
+          }
         >
           <SvgIcon name="sqlserver" className="mb-3 w-20 text-blue-500" />
-          <div className="text-3xl font-semibold text-gray-700">Microsoft SQL Server</div>
+          <div className="text-3xl font-semibold text-gray-700">
+            Microsoft SQL Server
+          </div>
         </div>
         <div
           className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
@@ -56,6 +68,13 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
         >
           <SvgIcon name="mysql" className="mb-3 w-20 text-blue-500" />
           <div className="text-3xl font-semibold text-gray-700">MySQL</div>
+        </div>
+        <div
+          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
+          onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.mysql)}
+        >
+          <SvgIcon name="cloudsql" className="mb-3 w-20 text-blue-500" />
+          <div className="text-3xl font-semibold text-gray-700">Cloud SQL</div>
         </div>
       </div>
     </div>

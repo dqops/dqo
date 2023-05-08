@@ -67,6 +67,7 @@ import { ReactComponent as MSSqlServerSvg } from './svg/mssql-server.svg';
 import { ReactComponent as MySqlSvg } from './svg/mysql.svg';
 import { ReactComponent as SpinnerSvg } from './svg/spinner.svg';
 import { ReactComponent as SyncSvg } from './svg/sync.svg';
+import { ReactComponent as CloudSqlSvg } from './svg/cloud-sql.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -136,6 +137,7 @@ const iconsMap: any = {
   mysql: MySqlSvg,
   spinner: SpinnerSvg,
   sync: SyncSvg,
+  cloudsql: CloudSqlSvg
 };
 
 interface SvgIconProps {
