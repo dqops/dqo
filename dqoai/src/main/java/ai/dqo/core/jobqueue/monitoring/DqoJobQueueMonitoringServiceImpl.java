@@ -47,7 +47,6 @@ import java.util.stream.Collectors;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
 public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringService {
-    public static final int SINK_BACKPRESSURE_BUFFER_SIZE = 1000;
     public static final int SUBSCRIBER_BACKPRESSURE_BUFFER_SIZE = 1000;
 
     private final Object lock = new Object();
@@ -84,7 +83,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             return;
         }
 
-        this.jobUpdateSink = Sinks.many().multicast().onBackpressureBuffer(SINK_BACKPRESSURE_BUFFER_SIZE);
+        this.jobUpdateSink = Sinks.many().unicast().onBackpressureBuffer();
         Flux<DqoChangeNotificationEntry> dqoNotificationModelFlux = this.jobUpdateSink.asFlux().onBackpressureBuffer(SUBSCRIBER_BACKPRESSURE_BUFFER_SIZE);
         dqoNotificationModelFlux.subscribeOn(Schedulers.parallel())
                 .doOnComplete(() -> releaseAwaitingClients())
