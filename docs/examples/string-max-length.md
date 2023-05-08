@@ -10,16 +10,13 @@ The platform analyzes more than 340 measures of behaviors, social and economic f
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
 the world’s largest, annual population-based telephone survey of over 400,000 people.
 
-The `string_max_length` column indicates if the length of values does not exceed the indicated by the user thresholds. If length of values exceeds the set thresholds then the file is not ready to be transcribed.
-
-We want to verify the number of valid length values on `string_max_length` column, which will tell us what number of data are
-ready to be transcribed.
+The `measure_name` contains measure name data. We want to verify the number of valid length values on `measure_name` column.
 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using profiling
 [string_max_length](../checks/column/strings/string-length-above-max-length-percent.md) column check.
-Our goal is to verify if the number of valid length values on `string_max_length` column does not exceed 5.0.
+Our goal is to verify if the number of valid length values on `measure_name` column does not exceed the setup thresholds.
 
 In this example, we will set three maximum number thresholds levels for the check:
 
@@ -31,7 +28,7 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the number of data that is available for transcription exceed 5.0, a warning alert will be triggered.
+If the string length exceed 5.0, a warning alert will be triggered.
 
 ## Data structure
 
@@ -150,7 +147,7 @@ GROUP BY time_period, time_period_utc
 ORDER BY time_period, time_period_utc
 **************************************************
 ```
-You can also see the results returned by the sensor. The actual value in this example is 31, what is above maximum
+You can also see the results returned by the sensor. The actual value in this example is 31, which is above the maximum
 threshold level set in the Fatal error (8.0).
 
 ```

@@ -10,16 +10,13 @@ The platform analyzes more than 340 measures of behaviors, social and economic f
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
 the world’s largest, annual population-based telephone survey of over 400,000 people.
 
-The `subpopulation` column indicates if the gender data contains not null values. If the number of not null values exceeds the set thresholds then the file is not ready to be transcribed.
-
-We want to verify the number of not null values on `subpopulation` column, which will tell us what number of data are
-ready to be transcribed.
+We want to verify the number of not null values on `subpopulation` column.
 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using profiling
 [not_nulls_count](../checks/column/nulls/not-nulls-count.md) column check.
-Our goal is to verify if the number of not null values on `subpopulation` column does not exceed 15.
+Our goal is to verify if the number of not null values on the `subpopulation` column does not exceed the setup thresholds.
 
 In this example, we will set three maximum number thresholds levels for the check:
 
@@ -31,24 +28,24 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the number of data that is available for transcription exceed 15, a warning alert will be triggered.
+If the number of not nulls values exceed 15, a fatal alert will be triggered.
 
 ## Data structure
 
 The following is a fragment of the `bigquery-public-data.america_health_rankings.ahr` dataset. Some columns were omitted for clarity.  
 The `subpopulation` column of interest contains NULL values.
 
-| edition | report_type             | measure_name | state_name    | subpopulation | value |
-|:--------|:------------------------|:-------------|:--------------|:--------------|:------|
-| 2021    | 2021 Health Disparities | Able-Bodied  | Hawaii        |               | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Kentucky      |               | 79    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Maryland      |               | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | New Jersey    |               | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Utah          |               | 88    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | West Virginia |               | 77    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Arkansas      | **Female**    | 78    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | California    | **Female**    | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Colorado      | **Female**    | 87    |
+| edition | report_type             | measure_name | state_name    | subpopulation                     | value |
+|:--------|:------------------------|:-------------|:--------------|:----------------------------------|:------|
+| 2021    | 2021 Health Disparities | Able-Bodied  | Hawaii        |                                   | 87    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Kentucky      |                                   | 79    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Maryland      |                                   | 87    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | New Jersey    |                                   | 87    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Utah          |                                   | 88    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | West Virginia | **Male**                          | 77    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Arkansas      | **American Indian/Alaska Native** | 78    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | California    | **Female**                        | 87    |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Colorado      | **Female**                        | 87    |
 
 ## YAML configuration file
 
@@ -152,7 +149,7 @@ ORDER BY time_period, time_period_utc
 **************************************************
 ```
 
-You can also see the results returned by the sensor. The actual value in this example is 16647, what is above maximum 
+You can also see the results returned by the sensor. The actual value in this example is 16647, which is above the maximum 
 threshold level set in the fatal error (15).
 
 ```

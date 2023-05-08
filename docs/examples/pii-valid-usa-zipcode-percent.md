@@ -9,16 +9,13 @@ Verifies that the percentage of valid USA zip code in a column does not exceed t
 What started as police non-emergency line for the City of Austin has become a robust Citywide Information Center
 where ambassadors are available to answer residents’ concerns 24 hours a day, 7 days a week, and 365 days a year.
 
-The `incident_zip` column indicates if the USA zipcode values are valid. If the percentage of the USA zipcode values falls below the set thresholds then the file is not ready to be transcribed.
-
-We want to verify the percent of valid USA zipcode on `incident_zip` column, which will tell us what percentage of data are
-ready to be transcribed.
+The `incident_zip` column contains USA zipcode data. We want to verify the percent of valid USA zipcode on `incident_zip` column.
 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.austin_311.311_service_requests` using profiling
 [valid_usa_zipcode_percent](../checks/column/pii/valid-usa-zipcode-percent.md) column check.
-Our goal is to verify if the percentage of valid USA zipcode values on `incident_zip` column does not fall below 99.0%.
+Our goal is to verify if the percentage of valid USA zipcode values on `incident_zip` column does not fall below the setup thresholds.
 
 In this example, we will set three minimum percentage thresholds levels for the check:
 
@@ -30,7 +27,7 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the percentage of data that is available for transcription falls below 99.0%, a warning alert will be triggered.
+If the percentage of zipcode values falls below 99.0%, a warning alert will be triggered.
 
 ## Data structure
 
@@ -159,7 +156,7 @@ GROUP BY time_period, time_period_utc
 ORDER BY time_period, time_period_utc
 **************************************************
 ```
-You can also see the results returned by the sensor. The actual value in this example is 100.0%, what is above minimal
+You can also see the results returned by the sensor. The actual value in this example is 100.0%, which is above the minimal
 threshold level set in the warning (99.0%).
 
 ```

@@ -13,12 +13,12 @@ the world’s largest, annual population-based telephone survey of over 400,000 
 
 Here is a table with some sample customer data. In this example, we will verify if the number of rows in a table does not exceed the minimum accepted count.
 
-We want to verify that the number of rows in a table does not exceed the minimum accepted count, which will tell us what percentage of data are ready to be transcribed.
+We want to verify that the number of rows in a table does not exceed the minimum accepted count.
 
 **SOLUTION**
 
 We will verify the data using profiling [row_count](../checks/table/standard/row-count.md) table check.
-Our goal is to verify if number of rows does not fall below 692.
+Our goal is to verify if number of rows does not fall below setup thresholds.
 
 In this example, we will set three minimum count thresholds levels for the check:
 
@@ -142,7 +142,7 @@ GROUP BY time_period, time_period_utc
 ORDER BY time_period, time_period_utc
 **************************************************
 ```
-You can also see the results returned by the sensor. The actual value of rows in this example is 18155, what is above minimum
+You can also see the results returned by the sensor. The actual value of rows in this example is 18155, which is above the minimum
 threshold level set in the warning (692).
 ```
 **************************************************

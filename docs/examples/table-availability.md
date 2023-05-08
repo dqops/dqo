@@ -13,13 +13,12 @@ the world’s largest, annual population-based telephone survey of over 400,000 
 
 Here is a table with some sample customer data. In this example, we will verify table availability in database using simple row count.
 
-We want to verify that a query can be executed on a table and that the server does not return errors, that the table exists, and that there are accesses to it, 
-which will tell us what percentage of data are ready to be transcribed.
+We want to verify that a query can be executed on a table and that the server does not return errors, that the table exists, and that there are accesses to it.
 
 **SOLUTION**
 
 We will verify the data using profiling [table_availability](../checks/table/availability/table-availability.md) table check.
-Our goal is to verify if the failures of table availability check does not exceed 10.
+Our goal is to verify if the failures of table availability check does not exceed the setup thresholds.
 
 In this example, we will set three maximum failures thresholds levels for the check:
 
@@ -155,7 +154,7 @@ GROUP BY time_period
 ORDER BY time_period
 **************************************************
 ```
-You can also see the results returned by the sensor. The actual value of failures in this example is 1.0, what is below maximum
+You can also see the results returned by the sensor. The actual value of failures in this example is 1.0, which is below the maximum
 threshold level set in the warning (2).
 ```
 **************************************************

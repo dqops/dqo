@@ -11,28 +11,25 @@ The platform analyzes more than 340 measures of behaviors, social and economic f
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
 the world’s largest, annual population-based telephone survey of over 400,000 people.
 
-The `edition` column indicates how many percent of values are within the indicated by the user range. If the percentage of values in range exceeds the set thresholds then the file is not ready to be transcribed.
-
-We want to verify the percent of range values on `edition` column, which will tell us what percentage of data are
-ready to be transcribed.
+We want to verify the percent of range values on `edition` column.
 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using profiling
 [values_in_range_integers_percent](../checks/column/numeric/values-in-range-integers-percent.md) column check.
-Our goal is to verify if the percentage of indicated by the user range values on `edition` column does not fall below 1.0%.
+Our goal is to verify if the percentage of indicated by the user range values on `edition` column does not fall below the setup thresholds.
 
 In this example, we will set three minimum percentage thresholds levels for the check:
 
-- warning: 1.0%
+- warning: 5.0%
 - error: 2.0%
-- fatal: 5.0%
+- fatal: 1.0%
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../dqo-concepts/checks/index.md).
 
 **VALUE**
 
-If the percentage of data that is available for transcription falls below 1.0%, a warning alert will be triggered.
+If the percentage of valid values falls below 5.0%, a warning alert will be triggered.
 
 ## Data structure
 
@@ -57,9 +54,9 @@ The YAML configuration file stores both the table details and checks configurati
 
 In this example, we have set three minimum percentage thresholds levels for the check:
 
-- warning: 1.0%
+- warning: 5.0%
 - error: 2.0%
-- fatal: 5.0%
+- fatal: 1.0%
 
 The highlighted fragments in the YAML file below represent the segment where the profiling `values_in_range_integers_percent` check is configured.
 
@@ -90,11 +87,11 @@ spec:
               min_value: 2021
               max_value: 2022
             warning:
-              min_percent: 1.0
+              min_percent: 5.0
             error:
               min_percent: 2.0
             fatal:
-              min_percent: 5.0
+              min_percent: 1.0
     report_type:
       type_snapshot:
         column_type: STRING
@@ -126,7 +123,7 @@ To execute the check prepared in the example, run the following command in DQO S
 check run
 ```
 You should see the results as the one below.
-The percent of values within the indicated by the user range, in this case this is `2021 - 2022` in the `edition` column is above 5% and the check gives valid result.
+The percent of values indicated by the user range, in this case this is `2021 - 2022` in the `edition` column is above 5% and the check gives valid result.
 
 ```
 Check evaluation summary per table:
@@ -165,8 +162,8 @@ ORDER BY time_period, time_period_utc
 **************************************************
 ```
 
-You can also see the results returned by the sensor. The actual value in this example is 100.0%, what is above minimal
-threshold level set in the fatal error (5%).
+You can also see the results returned by the sensor. The actual value in this example is 100.0%, which is above the minimal
+threshold level set in the warning alert(5%).
 
 ```
 **************************************************

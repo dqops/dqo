@@ -9,28 +9,27 @@ Verifies that the percentage of valid latitude values in a column does not excee
 What started as police non-emergency line for the City of Austin has become a robust Citywide Information Center
 where ambassadors are available to answer residents’ concerns 24 hours a day, 7 days a week, and 365 days a year.
 
-The `latitude` column indicates if the latitude values are valid. If the percentage of latitude values exceeds the set thresholds then the file is not ready to be transcribed.
+The `latitude` column contains latitude values.
 
-We want to verify the percent of valid latitude values on `latitude` column, which will tell us what percentage of data are
-ready to be transcribed.
+We want to verify the percentage of valid latitude values on `latitude` column.
 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.austin_311.311_service_requests` using profiling
 [valid_latitude_percent](../checks/column/numeric/valid-latitude-percent.md) column check.
-Our goal is to verify if the percentage of valid latitude values on `latitude` column does not exceed 99.0%.
+Our goal is to verify if the percentage of valid latitude values on `latitude` column does not exceed the setup thresholds.
 
 In this example, we will set three maximum percentage thresholds levels for the check:
 
-- warning: 99.0%
+- warning: 95.0%
 - error: 98.0%
-- fatal: 95.0%
+- fatal: 99.0%
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../dqo-concepts/checks/index.md).
 
 **VALUE**
 
-If the percentage of data that is available for transcription exceed 99.0%, a warning alert will be triggered.
+If the percentage of valid latitude values exceed 95.0%, a warning alert will be triggered.
 
 ## Data structure
 
@@ -52,9 +51,9 @@ The YAML configuration file stores both the table details and checks configurati
 
 In this example, we have set three maximum percentage thresholds levels for the check:
 
-- warning: 99.0%
+- warning: 95.0%
 - error: 98.0%
-- fatal: 95.0%
+- fatal: 99.0%
 
 The highlighted fragments in the YAML file below represent the segment where the profiling `valid_latitude_percent` check is configured.
 
@@ -82,11 +81,11 @@ spec:
                   the percentage of values within the latitude range does not exceed
                   the indicated thresholds.
             warning:
-              max_percent: 99.0
+              max_percent: 95.0
             error:
               max_percent: 98.0
             fatal:
-              max_percent: 95.0
+              max_percent: 99.0
     longitude:
       type_snapshot:
         column_type: FLOAT64
@@ -119,7 +118,7 @@ To execute the check prepared in the example, run the following command in DQO S
 check run
 ```
 You should see the results as the one below.
-The percent of valid latitude values in the `latitude` column is above the 95% and the check raised the Fatal error.
+The percent of valid latitude values in the `latitude` column is above the 99% and the check raised the Fatal error.
 
 ```
 Check evaluation summary per table:
@@ -157,8 +156,8 @@ ORDER BY time_period, time_period_utc
 **************************************************
 ```
 
-You can also see the results returned by the sensor. The actual value in this example is 99.1864%, what is above maximum
-threshold level set in the fatal error (95%).
+You can also see the results returned by the sensor. The actual value in this example is 99.1864%, which is above the maximum
+threshold level set in the fatal error (99%).
 
 ```
 **************************************************
