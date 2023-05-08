@@ -43,6 +43,6 @@ public class RuleBasicModel {
     @JsonPropertyDescription("This rule is provided with DQO as built-in rule.")
     public boolean builtIn;
 
-    public RuleBasicModel(){}
-
+    public RuleBasicModel() {
+    }
 }

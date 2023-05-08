@@ -28,6 +28,8 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Rule model that is returned by the REST API. Describes a single unique rule name.
@@ -37,7 +39,6 @@ import java.util.Map;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "RuleModel", description = "Rule model")
 public class RuleModel {
-
     @JsonPropertyDescription("Rule name")
     private String ruleName;
 
@@ -73,7 +74,8 @@ public class RuleModel {
     /**
      * Default constructor for RuleModel.
      */
-    public RuleModel(){}
+    public RuleModel() {
+    }
 
     /**
      * Constructor for RuleModel with a given {@link RuleDefinitionWrapper}, custom flag, and built-in flag.
@@ -95,7 +97,6 @@ public class RuleModel {
         this.builtIn = builtIn;
     }
 
-
     /**
      * Checks whether the RuleModel is equal to a given {@link RuleDefinitionWrapper}.
      * @param ruleDefinitionWrapper The RuleDefinitionWrapper to compare.
@@ -106,34 +107,32 @@ public class RuleModel {
             return false;
         }
 
-        if (!ruleDefinitionWrapper.getRulePythonModuleContent().getTextContent().equals(rulePythonModuleContent)) {
+        if (!Objects.equals(Optional.of(ruleDefinitionWrapper.getRulePythonModuleContent()).orElse(new FileContent()).getTextContent(),
+                rulePythonModuleContent)) {
             return false;
         }
 
-        if (!ruleDefinitionWrapper.getSpec().getType().equals(type)) {
+        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getType(), type)) {
             return false;
         }
 
-        if (!ruleDefinitionWrapper.getSpec().getJavaClassName().equals(javaClassName)) {
+        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getJavaClassName(), javaClassName)) {
             return false;
         }
 
-        if (!ruleDefinitionWrapper.getSpec().getMode().equals(mode)) {
+        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getMode(), mode)) {
             return false;
         }
 
-        if(ruleDefinitionWrapper.getSpec().getParameters() == null && parameters != null){
-            return false;
-        }
-        if(ruleDefinitionWrapper.getSpec().getParameters() != null && !ruleDefinitionWrapper.getSpec().getParameters().equals(parameters)){
+        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getParameters() == null, parameters)) {
             return false;
         }
 
-        if(!ruleDefinitionWrapper.getSpec().getFields().equals(fields)){
+        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getFields(), fields)) {
             return false;
         }
 
-        if(!ruleDefinitionWrapper.getSpec().getTimeWindow().equals(timeWindow)){
+        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getTimeWindow(), timeWindow)) {
             return false;
         }
 
