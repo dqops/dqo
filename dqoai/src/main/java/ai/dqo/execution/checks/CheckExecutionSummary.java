@@ -174,6 +174,14 @@ public class CheckExecutionSummary {
     }
 
     /**
+     * Counts the number of valid results.
+     * @return Number of valid results.
+     */
+    public int getValidResultsCount() {
+        return (int)this.validResultsColumn.sum();
+    }
+
+    /**
      * Counts the number of warnings that were raised.
      * @return Number of warnings.
      */

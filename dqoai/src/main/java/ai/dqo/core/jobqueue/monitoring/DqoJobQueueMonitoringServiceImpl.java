@@ -188,7 +188,26 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     @Override
     public void publishJobSucceededEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
-            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.succeeded, jobQueueEntry.getJobId());
+            DqoJobHistoryEntryModel previousJobHistoryModel;
+
+            synchronized (this.lock) {
+                previousJobHistoryModel = this.allJobs.get(jobQueueEntry.getJobId());
+            }
+
+            DqoJobEntryParametersModel mostRecentJobParameters = jobQueueEntry.getJob().createParametersModel();
+
+            DqoJobChange dqoJobChange;
+            if (previousJobHistoryModel != null && !Objects.equals(previousJobHistoryModel.getParameters(), mostRecentJobParameters)) {
+                DqoJobHistoryEntryModel newJobHistoryModel = previousJobHistoryModel.clone();
+                newJobHistoryModel.setStatus(DqoJobStatus.succeeded);
+                newJobHistoryModel.setStatusChangedAt(Instant.now());
+                newJobHistoryModel.setParameters(mostRecentJobParameters);
+                dqoJobChange = new DqoJobChange(DqoJobStatus.succeeded, newJobHistoryModel);
+            }
+            else {
+                dqoJobChange = new DqoJobChange(DqoJobStatus.succeeded, jobQueueEntry.getJobId());
+            }
+
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                     this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);

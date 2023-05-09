@@ -29,7 +29,7 @@ public class DqoQueueConfigurationProperties implements Cloneable {
     private Integer maxNonBlockingCapacity;  // the default is null, which is unlimited
     private int keepFinishedJobsHistorySeconds = 3600;
     private int keepJobsChangesHistorySeconds = 300;
-    private int getJobChangesSinceWaitSeconds = 30;
+    private int getJobChangesSinceWaitSeconds = 20;
     private int publishBusyLoopingDurationSeconds = 30;
 
     /**
