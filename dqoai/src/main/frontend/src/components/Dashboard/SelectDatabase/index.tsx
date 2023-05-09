@@ -14,12 +14,12 @@ interface ISelectDatabaseProps {
 
 const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
   return (
-    <div className="w-full flex flex-col justify-center items-center">
+    <div className="w-full">
       <div className="text-2xl font-semibold text-gray-900 mb-4">
         Select a database
       </div>
-      <div className="flex justify-center items-center content-center">
-        <div className="w-fit inline-flex flex-wrap gap-6">
+      <div className="flex justify-center content-center">
+        <div className="flex flex-wrap gap-6 ">
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>

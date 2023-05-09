@@ -27,6 +27,7 @@ import SqlServerLogo from '../../SvgIcon/svg/mssql-server.svg';
 import MySQLConnection from './MySQLConnection';
 import YugabyteDBConnection from './YugabyteDBConnection';
 import MySQLLogo from '../../SvgIcon/svg/mysql.svg';
+import SvgIcon from '../../SvgIcon';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -213,7 +214,14 @@ const DatabaseConnection = ({
               : getTitle(database.provider_type)}
           </div>
         </div>
-        <img src={dbImage} className="h-16" alt="db logo" />
+        {nameOfdatabase ? (
+          <SvgIcon
+            name={nameOfdatabase.toLowerCase().replace(/\s/g, '')}
+            className="mb-3 w-20 text-blue-500"
+          />
+        ) : (
+          <img src={dbImage} className="h-16" alt="db logo" />
+        )}
       </div>
 
       <div className="bg-white rounded-lg px-4 py-6 border border-gray-100">
