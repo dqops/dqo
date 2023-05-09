@@ -15,14 +15,14 @@ a link to a copy of the PDF, which can be found on Google Cloud Storage.
 The `invalidOcr` column indicates if the OCR does match the raw file text (false value) or does not (true value). In case
 of the true value, the OCR process needs more work and the file is not ready to be transcribed.
 
-We want to verify the percentage of false values on `invalidOcr` column, which will tell us what percentage of data are 
+We want to verify the percentage of false values in the `invalidOcr` column, which will tell us what percentage of data is 
 ready to be transcribed.
 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.fcc_political_ads.content_info` using profiling 
 [bool_false_percent](../checks/column/bool/false-percent.md) column check.
-Our goal is to verify if the percentage of false values on `invalidOcr` column does not fall below 99%. 
+Our goal is to verify that the percentage of false values on `invalidOcr` column does not fall below 99%. 
 
 In this example, we will set three minimum percentage thresholds levels for the check:
 

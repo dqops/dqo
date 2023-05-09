@@ -1,4 +1,4 @@
-# Table row count
+# Number of the rows in the table
 
 Verifies that the number of rows in a table does not exceed the minimum accepted count.
 

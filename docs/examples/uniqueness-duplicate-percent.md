@@ -1,4 +1,4 @@
-# Duplicate percent
+# Percentage of duplicates
 
 Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.
 
@@ -15,7 +15,7 @@ The `unique_key` column contains unique key data. We want to verify the percent 
 
 We will verify the data of `bigquery-public-data.austin_311.311_service_requests` using profiling
 [duplicate_percent](../checks/column/uniqueness/duplicate-percent.md) column check.
-Our goal is to verify if the percentage of duplicated values on `unique_key` column does not exceed setup thresholds.
+Our goal is to verify if the percentage of duplicated values in `unique_key` column does not exceed set thresholds.
 
 In this example, we will set three maximum percentage thresholds levels for the check:
 

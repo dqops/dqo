@@ -1,4 +1,4 @@
-# String match date regex percent
+# Percent of strings matching date regex
 
 Verifies that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage.
 

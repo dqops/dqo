@@ -1,6 +1,6 @@
-# Not nulls count
+# Nulls count
 
-Verifies that the number of not null values in a column does not exceed the maximum accepted count.
+Verifies that the number of null values in a column does not exceed the maximum accepted count.
 
 **PROBLEM**
 
@@ -10,17 +10,17 @@ The platform analyzes more than 340 measures of behaviors, social and economic f
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
 the world’s largest, annual population-based telephone survey of over 400,000 people.
 
-We want to verify the number of not null values on `subpopulation` column.
+We want to verify the number of null values on `source ` column.
 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using profiling
-[not_nulls_count](../checks/column/nulls/not-nulls-count.md) column check.
-Our goal is to verify if the number of not null values on the `subpopulation` column does not exceed the setup thresholds.
+[nulls_count](../checks/column/nulls/nulls-count.md) column check.
+Our goal is to verify that the number of null values in the `source ` column does not exceed the set thresholds.
 
 In this example, we will set three maximum number thresholds levels for the check:
 
-- warning: 0
+- warning: 5
 - error: 10
 - fatal: 15
 
@@ -28,24 +28,25 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the number of not nulls values exceed 15, a fatal alert will be triggered.
+If the number of not nulls values exceed 5, a warning alert will be triggered.
 
 ## Data structure
 
 The following is a fragment of the `bigquery-public-data.america_health_rankings.ahr` dataset. Some columns were omitted for clarity.  
-The `subpopulation` column of interest contains NULL values.
+The `source ` column of interest contains NULL values.
 
-| edition | report_type             | measure_name | state_name    | subpopulation                     | value |
-|:--------|:------------------------|:-------------|:--------------|:----------------------------------|:------|
-| 2021    | 2021 Health Disparities | Able-Bodied  | Hawaii        |                                   | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Kentucky      |                                   | 79    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Maryland      |                                   | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | New Jersey    |                                   | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Utah          |                                   | 88    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | West Virginia | **Male**                          | 77    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Arkansas      | **American Indian/Alaska Native** | 78    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | California    | **Female**                        | 87    |
-| 2021    | 2021 Health Disparities | Able-Bodied  | Colorado      | **Female**                        | 87    |
+| report_type             | measure_name                   | state_name    | subpopulation                 | source                                              |
+|:------------------------|:-------------------------------|:--------------|:------------------------------|:----------------------------------------------------|
+| 2021 Health Disparities | Maternal Mortality             | United States | Non-Metropolitan Area         |                                                     |
+| 2021 Health Disparities | Dedicated Health Care Provider | Indiana       | Other Race                    | **CDC, Behavioral Risk Factor Surveillance System** |
+| 2021 Health Disparities | Dedicated Health Care Provider | Hawaii        | Black/African American        | **CDC, Behavioral Risk Factor Surveillance System** |
+| 2021 Health Disparities | Dedicated Health Care Provider | Kansas        | Other Race                    | **CDC, Behavioral Risk Factor Surveillance System** |
+| 2021 Health Disparities | Dedicated Health Care Provider | Idaho         |                               | **CDC, Behavioral Risk Factor Surveillance System** |
+| 2021 Health Disparities | Dedicated Health Care Provider | New York      | American Indian/Alaska Native | **CDC, Behavioral Risk Factor Surveillance System** |
+| 2021 Health Disparities | Dedicated Health Care Provider | Indiana       | Black/African American        | **CDC, Behavioral Risk Factor Surveillance System** |
+| 2021 Health Disparities | Dedicated Health Care Provider | Montana       | High School Grad              | **CDC, Behavioral Risk Factor Surveillance System** |
+| 2021 Health Disparities | Dedicated Health Care Provider | Alabama       | Male                          | **CDC, Behavioral Risk Factor Surveillance System** |
+| 2021 Health Disparities | Dedicated Health Care Provider | Alaska        | Male                          | **CDC, Behavioral Risk Factor Surveillance System** |
 
 ## YAML configuration file
 
@@ -53,15 +54,15 @@ The YAML configuration file stores both the table details and checks configurati
 
 In this example, we have set three maximum number thresholds levels for the check:
 
-- warning: 0
+- warning: 5
 - error: 10
 - fatal: 15
 
-The highlighted fragments in the YAML file below represent the segment where the profiling `not_nulls_count` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the profiling `nulls_count` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../dqo-concepts/checks/index.md).
 
-```yaml hl_lines="24-42"
+```yaml hl_lines="45-57"
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -89,21 +90,40 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
+    value:
+      type_snapshot:
+        column_type: FLOAT64
+        nullable: true
+    lower_ci:
+      type_snapshot:
+        column_type: FLOAT64
+        nullable: true
+    upper_ci:
+      type_snapshot:
+        column_type: FLOAT64
+        nullable: true
+    source:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
       profiling_checks:
         nulls:
-          not_nulls_count:
+          nulls_count:
             comments:
-            - date: 2023-04-25T12:16:36.057+00:00
+            - date: 2023-05-08T12:08:21.558+00:00
               comment_by: user
-              comment: "\"In this example, values in \"subpopulation\" column are\
-                \ verified whether the number of not null values reaches the indicated\
-                \ thresholds.\""
+              comment: "In this exmple, values in the `source ` column are verified\
+                \ whether the number of null values does not exceed the set thresholds."
             warning:
-              max_count: 0
+              max_count: 5
             error:
               max_count: 10
             fatal:
               max_count: 15
+    source_date:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
 ```
 
 ## Running the checks in the example and evaluating the results
@@ -116,14 +136,14 @@ To execute the check prepared in the example, run the following command in DQO S
 check run
 ```
 You should see the results as the one below.
-The number of not null values in the `subpopulation` column is above 15 and the check raised the Fatal error.
+The number of null values in the `source ` column is above 5 and the check raised warning.
 
 ```
 Check evaluation summary per table:
 +-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
 |Connection             |Table                      |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
 +-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|america_health_rankings|america_health_rankings.ahr|1     |1             |0            |0       |0     |1           |0               |
+|america_health_rankings|america_health_rankings.ahr|1     |1             |1            |1       |0     |0           |0               |
 +-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
 ```
 For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
@@ -139,8 +159,12 @@ In the debug mode you can view the SQL query (sensor) executed in the check.
 Executing SQL on connection america_health_rankings (bigquery)
 SQL to be executed on the connection:
 SELECT
-    COUNT(analyzed_table.`subpopulation`)
-    AS actual_value,
+    SUM(
+        CASE
+            WHEN analyzed_table.`source` IS NULL THEN 1
+            ELSE 0
+        END
+    ) AS actual_value,
     CURRENT_TIMESTAMP() AS time_period,
     TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
 FROM `bigquery-public-data`.`america_health_rankings`.`ahr` AS analyzed_table
@@ -149,18 +173,18 @@ ORDER BY time_period, time_period_utc
 **************************************************
 ```
 
-You can also see the results returned by the sensor. The actual value in this example is 16647, which is above the maximum 
-threshold level set in the fatal error (15).
+You can also see the results returned by the sensor. The actual value in this example is 8, which is above the maximum 
+threshold level set in the warning (5).
 
 ```
 **************************************************
-Finished executing a sensor for a check not_nulls_count on the table america_health_rankings.ahr using a sensor definition column/nulls/not_null_count, sensor result count: 1
+Finished executing a sensor for a check nulls_count on the table america_health_rankings.ahr using a sensor definition column/nulls/null_count, sensor result count: 1
 
 Results returned by the sensor:
 +------------+------------------------+------------------------+
 |actual_value|time_period             |time_period_utc         |
 +------------+------------------------+------------------------+
-|16647       |2023-04-25T12:10:34.061Z|2023-04-25T12:10:34.061Z|
+|8           |2023-05-08T12:05:28.996Z|2023-05-08T12:05:28.996Z|
 +------------+------------------------+------------------------+
 **************************************************
 ```

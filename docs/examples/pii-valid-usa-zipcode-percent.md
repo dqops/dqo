@@ -1,4 +1,4 @@
-# Valid USA zipcode percent
+# Percentage of valid USA zipcodes
 
 Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage.
 
@@ -15,7 +15,7 @@ The `incident_zip` column contains USA zipcode data. We want to verify the perce
 
 We will verify the data of `bigquery-public-data.austin_311.311_service_requests` using profiling
 [valid_usa_zipcode_percent](../checks/column/pii/valid-usa-zipcode-percent.md) column check.
-Our goal is to verify if the percentage of valid USA zipcode values on `incident_zip` column does not fall below the setup thresholds.
+Our goal is to verify if the percentage of valid USA zipcode values in the `incident_zip` column does not fall below the setup thresholds.
 
 In this example, we will set three minimum percentage thresholds levels for the check:
 
@@ -60,7 +60,7 @@ The highlighted fragments in the YAML file below represent the segment where the
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../dqo-concepts/checks/index.md).
 
-```yaml hl_lines="9-27"
+```yaml hl_lines="8-26"
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -114,7 +114,7 @@ To execute the check prepared in the example, run the following command in DQO S
 check run
 ```
 You should see the results as the one below.
-The percent of the valid USA zipcode values in the `incident_zip` column is above 99.0% and the check gives valid result.
+The percent of the valid USA zipcode values in the `incident_zip` column is below 99.0% and the check raised a warning.
 ```
 Check evaluation summary per table:
 +----------+-------------------------------+------+--------------+-------------+--------+------+------------+----------------+
