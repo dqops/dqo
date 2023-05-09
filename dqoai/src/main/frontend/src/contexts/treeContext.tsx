@@ -183,6 +183,19 @@ function TreeProvider(props: any) {
     return items;
   };
 
+  const addSchema = async (node: CustomTreeNode, schemaName: string) => {
+    const newNode = {
+      id: `${node.id}.${schemaName}`,
+      label: schemaName || '',
+      level: TREE_LEVEL.SCHEMA,
+      parentId: node.id,
+      items: [],
+      tooltip: `${node?.label}.${schemaName}`,
+      open: false
+    };
+    setTreeData([...treeData, newNode]);
+  }
+
   const refreshSchemaNode = async (node: CustomTreeNode) => {
     const connectionNode = findTreeNode(treeData, node.parentId ?? '');
     const res: AxiosResponse<TableBasicModel[]> =
@@ -1168,6 +1181,7 @@ function TreeProvider(props: any) {
         selectedTreeNode,
         setSelectedTreeNode,
         loadingNodes,
+        addSchema,
       }}
       {...props}
     />

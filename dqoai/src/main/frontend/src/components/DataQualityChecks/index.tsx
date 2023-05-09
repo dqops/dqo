@@ -107,6 +107,17 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
     }
   };
 
+  const goToTableTimestamps = () => {
+    const url = ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'timestamps');
+    dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
+      url,
+      value: ROUTES.TABLE_LEVEL_VALUE(CheckTypes.SOURCES, connection, schema, table),
+      state: {},
+      label: table
+    }))
+    history.push(url);
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center min-h-80">
@@ -152,6 +163,22 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
           >{checksUI?.effective_schedule?.schedule_group}</a>
         </div>
       </div>
+      {checkTypes === CheckTypes.PARTITIONED && (
+        <div className="flex items-center mb-3 gap-6">
+          <div className="text-xs">
+            <span className="mr-3">
+              The results are partitioned (grouped) by a timestamp column:
+            </span>
+            {checksUI.partition_by_column || 'Not configured'}
+          </div>
+          <span
+            className="text-primary underline text-xs cursor-pointer"
+            onClick={goToTableTimestamps}
+          >
+            Configure the partition by column
+          </span>
+        </div>
+      )}
       <table className="w-full">
         <TableHeader checksUI={checksUI} />
         <tbody>

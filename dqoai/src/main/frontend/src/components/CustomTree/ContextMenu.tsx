@@ -12,6 +12,9 @@ import { useTree } from '../../contexts/treeContext';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTES } from "../../shared/routes";
 import DeleteOnlyDataDialog from "./DeleteOnlyDataDialog";
+import AddColumnDialog from "./AddColumnDialog";
+import AddTableDialog from "./AddTableDialog";
+import AddSchemaDialog from "./AddSchemaDialog";
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -24,6 +27,10 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
   const [open, setOpen] = useState(false);
   const history = useHistory();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
+  const [addColumnDialogOpen, setAddColumnDialogOpen] = useState(false);
+  const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
+  const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
+
   const handleRefresh = () => {
     refreshNode(node);
     setOpen(false);
@@ -55,6 +62,21 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
     setOpen(false);
   };
   const importTables = () => {
+    setOpen(false);
+  };
+
+  const closeAddColumnDialog = () => {
+    setAddColumnDialogOpen(false);
+    setOpen(false);
+  };
+
+  const closeAddTableDialog = () => {
+    setAddTableDialogOpen(false);
+    setOpen(false);
+  };
+
+  const closeAddSchemaDialog = () => {
+    setAddSchemaDialogOpen(false);
     setOpen(false);
   };
 
@@ -94,6 +116,14 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
               onClick={importMetaData}
             >
               Import metadata
+            </div>
+          )}
+          {node.level === TREE_LEVEL.DATABASE && (
+            <div
+              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+              onClick={() => setAddSchemaDialogOpen(true)}
+            >
+              Add Schema
             </div>
           )}
           {node.level === TREE_LEVEL.SCHEMA && (
@@ -145,6 +175,22 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
               Delete column
             </div>
           )}
+          {node.level === TREE_LEVEL.SCHEMA && (
+            <div
+              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+              onClick={() => setAddTableDialogOpen(true)}
+            >
+              Add Table
+            </div>
+          )}
+          {node.level === TREE_LEVEL.TABLE && (
+            <div
+              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+              onClick={() => setAddColumnDialogOpen(true)}
+            >
+              Add Column
+            </div>
+          )}
           {(node.level === TREE_LEVEL.DATABASE ||
             node.level === TREE_LEVEL.SCHEMA ||
             node.level === TREE_LEVEL.TABLE ||
@@ -168,6 +214,21 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
             </>
           )}
         </div>
+        <AddColumnDialog
+          open={addColumnDialogOpen}
+          onClose={closeAddColumnDialog}
+          node={node}
+        />
+        <AddTableDialog
+          open={addTableDialogOpen}
+          onClose={closeAddTableDialog}
+          node={node}
+        />
+        <AddSchemaDialog
+          open={addSchemaDialogOpen}
+          onClose={closeAddSchemaDialog}
+          node={node}
+        />
       </PopoverContent>
     </Popover>
   );

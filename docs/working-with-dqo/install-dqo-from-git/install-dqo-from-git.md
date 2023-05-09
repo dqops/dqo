@@ -4,7 +4,7 @@
 
 To use DQO you need:
 
-  - Python version 3.6 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
+  - Python version 3.8 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
   - JDK 17 and a java compiler
 
 ## Installation

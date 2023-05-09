@@ -332,11 +332,12 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 return null; // skip this check
             }
 
-            if (!providerSensorDefinitionSpec.isSupportsGrouping() && checkType == CheckType.PARTITIONED) {
+            if (providerSensorDefinitionSpec.isSupportsPartitionedChecks() != null &&
+                    !providerSensorDefinitionSpec.isSupportsPartitionedChecks() && checkType == CheckType.PARTITIONED) {
                 return null; // skip this check
             }
 
-            checkModel.setSupportsDataStreams(providerSensorDefinitionSpec.isSupportsGrouping());
+            checkModel.setSupportsDataStreams(providerSensorDefinitionSpec.isSupportsGroupingByDataStream() == null || providerSensorDefinitionSpec.isSupportsGroupingByDataStream());
 
             SensorDefinitionSpec sensorDefinitionSpec = providerSensorDefinition.getSensorDefinitionSpec();
             if (sensorDefinitionSpec.isRequiresEventTimestamp() &&
@@ -435,7 +436,8 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 return null; // skip this check
             }
 
-            if (!providerSensorDefinitionSpec.isSupportsGrouping() && checkType == CheckType.PARTITIONED) {
+            if (providerSensorDefinitionSpec.isSupportsPartitionedChecks() != null &&
+                    !providerSensorDefinitionSpec.isSupportsPartitionedChecks() && checkType == CheckType.PARTITIONED) {
                 return null; // skip this check
             }
         }

@@ -47,6 +47,8 @@ import java.util.stream.Collectors;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @Slf4j
 public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringService {
+    public static final int SUBSCRIBER_BACKPRESSURE_BUFFER_SIZE = 1000;
+
     private final Object lock = new Object();
     private boolean started;
     private final Duration publishBusyLoopingDuration = Duration.ofSeconds(30);
@@ -80,8 +82,9 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         if (this.started) {
             return;
         }
+
         this.jobUpdateSink = Sinks.many().unicast().onBackpressureBuffer();
-        Flux<DqoChangeNotificationEntry> dqoNotificationModelFlux = this.jobUpdateSink.asFlux();
+        Flux<DqoChangeNotificationEntry> dqoNotificationModelFlux = this.jobUpdateSink.asFlux().onBackpressureBuffer(SUBSCRIBER_BACKPRESSURE_BUFFER_SIZE);
         dqoNotificationModelFlux.subscribeOn(Schedulers.parallel())
                 .doOnComplete(() -> releaseAwaitingClients())
                 .subscribe(changeNotificationEntry -> onJobChange(changeNotificationEntry));
@@ -117,7 +120,9 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         try {
             Sinks.Many<DqoChangeNotificationEntry> currentSink = this.jobUpdateSink;
             this.jobUpdateSink = null;
-            currentSink.emitComplete(Sinks.EmitFailureHandler.FAIL_FAST);
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
+                    this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
+            currentSink.emitComplete(emitFailureHandler);
         }
         finally {
             this.started = false;
@@ -134,7 +139,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             DqoJobHistoryEntryModel dqoJobHistoryEntryModel = new DqoJobHistoryEntryModel(jobQueueEntry);
             DqoJobChange dqoJobChange = new DqoJobChange(dqoJobHistoryEntryModel.getStatus(), dqoJobHistoryEntryModel);
 
-            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
+                    this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
@@ -150,7 +156,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     public void publishJobRunningEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
             DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.running, jobQueueEntry.getJobId());
-            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
+                    this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
@@ -166,7 +173,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     public void publishJobParkedEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
             DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.waiting, jobQueueEntry.getJobId());
-            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
+                    this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
@@ -182,7 +190,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     public void publishJobSucceededEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
             DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.succeeded, jobQueueEntry.getJobId());
-            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
+                    this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
@@ -199,7 +208,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     public void publishJobFailedEvent(DqoJobQueueEntry jobQueueEntry, String errorMessage) {
         try {
             DqoJobChange dqoJobChange = new DqoJobChange(jobQueueEntry.getJobId(), errorMessage);
-            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
+                    this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
@@ -216,7 +226,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     public void publishJobCancellationRequestedEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
             DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.cancel_requested, jobQueueEntry.getJobId());
-            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
+                    this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
@@ -233,7 +244,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     public void publishJobFullyCancelledEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
             DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.cancelled, jobQueueEntry.getJobId());
-            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
+                    this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
@@ -254,7 +266,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         }
 
         try {
-            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
+                    this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(synchronizationStatus), emitFailureHandler);
         }
         catch (Exception ex) {

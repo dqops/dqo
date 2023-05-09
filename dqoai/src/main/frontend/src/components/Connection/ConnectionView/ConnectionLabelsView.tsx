@@ -20,10 +20,8 @@ const ConnectionLabelsView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
-    if (!labels || connectionBasic?.connection_name !== connection) {
-      dispatch(getConnectionLabels(checkTypes, firstLevelActiveTab, connection));
-    }
-  }, [connection]);
+    dispatch(getConnectionLabels(checkTypes, firstLevelActiveTab, connection));
+  }, [connection, checkTypes, firstLevelActiveTab]);
 
   const onUpdate = async () => {
     await dispatch(updateConnectionLabels(checkTypes, firstLevelActiveTab, connection, labels || []));
