@@ -5,6 +5,15 @@ spec:
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
+  profiling_checks:
+    availability:
+      table_availability:
+        warning:
+          max_failures: 1
+        error:
+          max_failures: 5
+        fatal:
+          max_failures: 10
   columns:
     edition:
       type_snapshot:
@@ -18,16 +27,6 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-      profiling_checks:
-        strings:
-          string_max_length:
-            comments:
-            - date: 2023-04-14T09:11:51.993+00:00
-              comment_by: user
-              comment: "In this example, values in \"measure_name\" column are verified\
-                \ whether the length of values does not exceed the indicated threshold."
-            error:
-              max_value: 30.0
     state_name:
       type_snapshot:
         column_type: STRING

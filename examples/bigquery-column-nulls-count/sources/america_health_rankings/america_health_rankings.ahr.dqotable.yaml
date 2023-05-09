@@ -18,21 +18,6 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-      profiling_checks:
-        nulls:
-          not_nulls_count:
-            comments:
-              - date: 2023-04-14T09:01:23.388+00:00
-                comment_by: user
-                comment: In this example, values in "measure_name" column are verified
-                  whether the number of not null values does not exceed the indicated
-                  thresholds.
-            warning:
-              max_count: 0
-            error:
-              max_count: 10
-            fatal:
-              max_count: 15
     state_name:
       type_snapshot:
         column_type: STRING
@@ -57,6 +42,20 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
+      profiling_checks:
+        nulls:
+          nulls_count:
+            comments:
+            - date: 2023-05-08T12:08:21.558+00:00
+              comment_by: user
+              comment: "In this example, values in the `source ` column are verified\
+                \ whether the number of null values does not exceed the set thresholds."
+            warning:
+              max_count: 5
+            error:
+              max_count: 10
+            fatal:
+              max_count: 15
     source_date:
       type_snapshot:
         column_type: STRING
