@@ -1,6 +1,6 @@
 # Table availability
 
-Verifies availability on table in database using simple row count.
+Verifies the availability of a table in the database using a simple row count.
 
 **PROBLEM**
 
@@ -13,29 +13,29 @@ the world’s largest, annual population-based telephone survey of over 400,000 
 
 Here is a table with some sample customer data. When working with a large dataset, it's common to have multiple tables within it. 
 
-However, it's important to ensure that these tables are easily accessible and actually exist. This can be achieved using a table availability check, which helps to guarantee that the necessary data is readily available for analysis and decision-making.
+However, it is important to ensure that these tables are available and actually exist. This can be achieved using a table availability check, which helps ensure that the necessary data is readily available for analysis.
 
-The typical table availability issues are:
-- the table does not exist because it was removed
-- the table is corrupted and cannot be queried
-- the database is down or unreachable
-- the credentials to the database are invalid
-- the access rights to the table have changed
+Typical table availability issues are:
+- the table does not exist because it has been deleted,
+- the table is corrupted and cannot be queried,
+- the database is down or is unreachable,
+- database credentials are incorrect,
+- access rights to the table have changed.
 
-In this example, we will verify table availability in database using simple row count.
+In this example, we will verify table availability in database using a simple row count.
 
 We want to verify that a query can be executed on a table and that the server does not return errors, that the table exists, and that there are accesses to it.
 
 **SOLUTION**
 
-We will verify the data using profiling [table_availability](../checks/table/availability/table-availability.md) table check.
-Our goal is to verify if the failures of table availability check does not exceed the set thresholds.
-In this check, you can only get two actual values in result 1 or 0. If you receive a value of 1, it means the table is fully available and exists, so the result is valid. 
+We will verify the data using profiling [table_availability](../checks/table/availability/table-availability.md) check.
+Our goal is to verify that table availability check failures do not exceed the set thresholds.
+In this check, you can only get two values in the result 1 or 0. If you get a value of 1, it means the table is fully available and exists, so the result is valid. 
 
-However, if you receive a value of 0, then there is some problem, and you need to run this check again after correcting the table. 
-The number of unsuccessful attempts is the failures, which we set in thresholds.
+However, if you receive a value of 0, then there is a problem, and you need to run this check again after fixing the issue with the table. 
+The number of failed attempts are failures, which we set in thresholds.
 
-In this example, we will set three maximum failures thresholds levels for the check:
+In this example, we will set three maximum failure threshold levels for the check:
 
 - warning: 1
 - error: 5
