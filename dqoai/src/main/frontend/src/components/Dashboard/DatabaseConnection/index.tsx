@@ -25,18 +25,20 @@ import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
 import SqlServerConnection from './SqlServerConnection';
 import SqlServerLogo from '../../SvgIcon/svg/mssql-server.svg';
 import MySQLConnection from './MySQLConnection';
-import MySQLLogo from '../../SvgIcon/svg/mysql.svg';
 import YugabyteDBConnection from './YugabyteDBConnection';
+import MySQLLogo from '../../SvgIcon/svg/mysql.svg';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
   database: ConnectionBasicModel;
   onChange: (db: ConnectionBasicModel) => void;
+  nameOfdatabase?: string;
 }
 
 const DatabaseConnection = ({
   database,
-  onChange
+  onChange,
+  nameOfdatabase
 }: IDatabaseConnectionProps) => {
   const { addConnection } = useTree();
   const [isTesting, setIsTesting] = useState(false);
@@ -137,7 +139,6 @@ const DatabaseConnection = ({
         return 'SQL Server Connection Settings';
       case ConnectionBasicModelProviderTypeEnum.mysql:
         return 'MYSQL Connection Settings';
-
       default:
         return 'Database Connection Settings';
     }
@@ -206,7 +207,11 @@ const DatabaseConnection = ({
       <div className="flex justify-between mb-4">
         <div>
           <div className="text-2xl font-semibold mb-3">Connect a database</div>
-          <div>{getTitle(database.provider_type)}</div>
+          <div>
+            {nameOfdatabase
+              ? nameOfdatabase + ' Connection Settings'
+              : getTitle(database.provider_type)}
+          </div>
         </div>
         <img src={dbImage} className="h-16" alt="db logo" />
       </div>

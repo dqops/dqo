@@ -6,7 +6,10 @@ import { ConnectionBasicModelProviderTypeEnum } from '../../../api';
 import YugabyteDbJpg from '../../SvgIcon/missingSvg/YugabyteDB.jpg';
 
 interface ISelectDatabaseProps {
-  onSelect: (db: ConnectionBasicModelProviderTypeEnum) => void;
+  onSelect: (
+    db: ConnectionBasicModelProviderTypeEnum,
+    nameOfdatabase?: string
+  ) => void;
 }
 
 const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
@@ -15,12 +18,15 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
       <div className="text-2xl font-semibold text-gray-900 mb-4">
         Select a database
       </div>
-      <div className="w-full flex justify-center items-center content-center">
-        <div className="w-fit flex flex-wrap gap-6 ">
+      <div className="flex justify-center items-center content-center">
+        <div className="w-fit inline-flex flex-wrap gap-6">
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.postgresql)
+              onSelect(
+                ConnectionBasicModelProviderTypeEnum.postgresql,
+                'AlloyDB'
+              )
             }
           >
             <SvgIcon name="alloydb" className="mb-3 w-20 text-blue-500" />
@@ -31,7 +37,10 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.postgresql)
+              onSelect(
+                ConnectionBasicModelProviderTypeEnum.postgresql,
+                'Amazon Aurora'
+              )
             }
           >
             <SvgIcon name="amazonrds" className="mb-3 w-20 text-blue-500" />
@@ -41,7 +50,12 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           </div>
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.mysql)}
+            onClick={() =>
+              onSelect(
+                ConnectionBasicModelProviderTypeEnum.mysql,
+                'Amazon RDS for mySQL'
+              )
+            }
           >
             <SvgIcon name="amazonrds" className="mb-3 w-20 text-blue-500" />
             <div className="text-xl font-semibold text-gray-700">
@@ -51,7 +65,10 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.postgresql)
+              onSelect(
+                ConnectionBasicModelProviderTypeEnum.postgresql,
+                'Amazon RDS for PostgreSQL'
+              )
             }
           >
             <SvgIcon name="amazonrds" className="mb-3 w-20 text-blue-500" />
@@ -72,7 +89,12 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           </div>
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.mysql)}
+            onClick={() =>
+              onSelect(
+                ConnectionBasicModelProviderTypeEnum.mysql,
+                'Amazon RDS for SQL Server'
+              )
+            }
           >
             <SvgIcon name="azuremysql" className="mb-3 w-20 text-blue-500" />
             <div className="text-xl font-semibold text-gray-700">
@@ -82,7 +104,10 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.postgresql)
+              onSelect(
+                ConnectionBasicModelProviderTypeEnum.postgresql,
+                'Azure Database for MySQL'
+              )
             }
           >
             <SvgIcon
@@ -96,7 +121,10 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.sqlserver)
+              onSelect(
+                ConnectionBasicModelProviderTypeEnum.sqlserver,
+                'Azure Database for PostgreSQL'
+              )
             }
           >
             <SvgIcon name="azuresql" className="mb-3 w-20 text-blue-500" />
