@@ -72,6 +72,12 @@ import { ReactComponent as AmazonRdsSvg } from './svg/amazon-rds.svg';
 import { ReactComponent as AzurePostgreSqlSvg } from './svg/azure-database-postgresql.svg';
 import { ReactComponent as CockroachDbSvg } from './svg/cockroach-db.svg';
 import { ReactComponent as MariaSvg } from './svg/maria-db.svg';
+import { ReactComponent as AzureMySqlSvg } from './svg/azure-database-mysql.svg';
+import { ReactComponent as PerconaServerSvg } from './svg/percona-server.svg';
+import { ReactComponent as AzureSqlSvg } from './svg/azure-sql-database.svg';
+import { ReactComponent as AzureSqlManagedInstanceSvg } from './svg/azure-sql-managed-instance.svg';
+import { ReactComponent as AzureSynapseAnalyticsSvg } from './svg/azure-synapse-analytics.svg';
+import { ReactComponent as AlloyDbSvg } from './svg/alloy-db.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -145,7 +151,13 @@ const iconsMap: any = {
   amazonrds: AmazonRdsSvg,
   azurepostgresql: AzurePostgreSqlSvg,
   cockroachbd: CockroachDbSvg,
-  mariadb: MariaSvg
+  mariadb: MariaSvg,
+  azuremysql: AzureMySqlSvg,
+  perconaserver: PerconaServerSvg,
+  azuresql: AzureSqlSvg,
+  azuresqlmanagedinstance: AzureSqlManagedInstanceSvg,
+  azuresynapseanalytics: AzureSynapseAnalyticsSvg,
+  alloydb: AlloyDbSvg
 };
 
 interface SvgIconProps {
