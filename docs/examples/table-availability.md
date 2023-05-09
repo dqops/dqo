@@ -11,18 +11,33 @@ The platform analyzes more than 340 measures of behaviors, social and economic f
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
 the world’s largest, annual population-based telephone survey of over 400,000 people.
 
-Here is a table with some sample customer data. In this example, we will verify table availability in database using simple row count.
+Here is a table with some sample customer data. When working with a large dataset, it's common to have multiple tables within it. 
+
+However, it's important to ensure that these tables are easily accessible and actually exist. This can be achieved using a table availability check, which helps to guarantee that the necessary data is readily available for analysis and decision-making.
+
+The typical table availability issues are:
+- the table does not exist because it was removed
+- the table is corrupted and cannot be queried
+- the database is down or unreachable
+- the credentials to the database are invalid
+- the access rights to the table have changed
+
+In this example, we will verify table availability in database using simple row count.
 
 We want to verify that a query can be executed on a table and that the server does not return errors, that the table exists, and that there are accesses to it.
 
 **SOLUTION**
 
 We will verify the data using profiling [table_availability](../checks/table/availability/table-availability.md) table check.
-Our goal is to verify if the failures of table availability check does not exceed the setup thresholds.
+Our goal is to verify if the failures of table availability check does not exceed the set thresholds.
+In this check, you can only get two actual values in result 1 or 0. If you receive a value of 1, it means the table is fully available and exists, so the result is valid. 
+
+However, if you receive a value of 0, then there is some problem, and you need to run this check again after correcting the table. 
+The number of unsuccessful attempts is the failures, which we set in thresholds.
 
 In this example, we will set three maximum failures thresholds levels for the check:
 
-- warning: 2
+- warning: 1
 - error: 5
 - fatal: 10
 
@@ -30,7 +45,7 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the percentage of data that is available for transcription exceed 1, a warning alert will be triggered.
+If the number of failures will exceed 1, a warning alert will be triggered.
 
 ## Data structure
 
@@ -54,7 +69,7 @@ The YAML configuration file stores both the table details and checks configurati
 
 In this example, we have set three maximum failures thresholds levels for the check:
 
-- warning: 2
+- warning: 1
 - error: 5
 - fatal: 10
 
@@ -73,12 +88,12 @@ spec:
     availability:
       table_availability:
         comments:
-        - date: 2023-05-05T10:53:02.960+00:00
+        - date: 2023-05-09T11:05:06.960+00:00
           comment_by: user
           comment: "\"In this example, we verify availability on table in database\
             \ using simple row count.\""
         warning:
-          max_failures: 2
+          max_failures: 1
         error:
           max_failures: 5
         fatal:
@@ -111,7 +126,7 @@ To execute the check prepared in the example, run the following command in DQO S
 check run
 ```
 You should see the results as the one below.
-The number of failures is below 2 and the check gives valid result.
+The number of failures is 0 and the check gives valid result.
 ```
 Check evaluation summary per table:
 +------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
@@ -154,8 +169,7 @@ GROUP BY time_period
 ORDER BY time_period
 **************************************************
 ```
-You can also see the results returned by the sensor. The actual value of failures in this example is 1.0, which is below the maximum
-threshold level set in the warning (2).
+You can also see the results returned by the sensor. The actual value of the check is 1.0, which means that the table exists and is accessible so the result is valid.
 ```
 **************************************************
 Finished executing a sensor for a check table_availability on the table america_health_rankings.ahr using a sensor definition table/availability/table_availability, sensor result count: 1
@@ -164,7 +178,7 @@ Results returned by the sensor:
 +------------+------------------------+------------------------+
 |actual_value|time_period             |time_period_utc         |
 +------------+------------------------+------------------------+
-|1.0         |2023-05-05T10:53:41.233Z|2023-05-05T10:53:41.233Z|
+|1.0         |2023-05-09T11:05:06.211Z|2023-05-09T11:05:06.211Z|
 +------------+------------------------+------------------------+
 **************************************************
 ```
