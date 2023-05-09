@@ -79,7 +79,7 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
 
             put("daily_string_most_popular_values", o -> o.dailyStringMostPopularValues);
 
-            put("daily_string_datatype_changed", o -> o.dailyStringDatatypeChanged);
+            put("daily_string_datatype_detected", o -> o.dailyStringDatatypeDetected);
         }
     };
 
@@ -188,8 +188,8 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringMostPopularValuesCheckSpec dailyStringMostPopularValues;
 
-    @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringDatatypeChangedCheckSpec dailyStringDatatypeChanged;
+    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringDatatypeDetectedCheckSpec dailyStringDatatypeDetected;
 
     /**
      * Returns a maximum string length below check.
@@ -822,21 +822,21 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Returns a count of expected values in datatype changed check.
-     * @return Datatype changed check.
+     * Returns a count of expected values in datatype detected check.
+     * @return Datatype detected check.
      */
-    public ColumnStringDatatypeChangedCheckSpec getDailyStringDatatypeChanged() {
-        return dailyStringDatatypeChanged;
+    public ColumnStringDatatypeDetectedCheckSpec getDailyStringDatatypeDetected() {
+        return dailyStringDatatypeDetected;
     }
 
     /**
-     * Sets a new definition of a datatype changed check.
-     * @param dailyStringDatatypeChanged Datatype changed check.
+     * Sets a new definition of a datatype detected check.
+     * @param dailyStringDatatypeDetected Datatype detected check.
      */
-    public void setDailyStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec dailyStringDatatypeChanged) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringDatatypeChanged, dailyStringDatatypeChanged));
-        this.dailyStringDatatypeChanged = dailyStringDatatypeChanged;
-        propagateHierarchyIdToField(dailyStringDatatypeChanged, "daily_string_datatype_changed");
+    public void setDailyStringDatatypeDetected(ColumnStringDatatypeDetectedCheckSpec dailyStringDatatypeDetected) {
+        this.setDirtyIf(!Objects.equals(this.dailyStringDatatypeDetected, dailyStringDatatypeDetected));
+        this.dailyStringDatatypeDetected = dailyStringDatatypeDetected;
+        propagateHierarchyIdToField(dailyStringDatatypeDetected, "daily_string_datatype_detected");
     }
 
     /**

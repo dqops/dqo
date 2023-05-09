@@ -16,7 +16,7 @@
 package ai.dqo.postgresql.sensors.column.strings;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringDatatypeChangedCheckSpec;
+import ai.dqo.checks.column.checkspecs.consistency.ColumnStringDatatypeChangedCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;

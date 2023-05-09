@@ -78,7 +78,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
             put("monthly_partition_string_most_popular_values", o -> o.monthlyPartitionStringMostPopularValues);
 
-            put("monthly_partition_string_datatype_changed", o -> o.monthlyPartitionStringDatatypeChanged);
+            put("monthly_partition_string_datatype_detected", o -> o.monthlyPartitionStringDatatypeDetected);
 
         }
     };
@@ -188,8 +188,8 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringMostPopularValuesCheckSpec monthlyPartitionStringMostPopularValues;
 
-    @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringDatatypeChangedCheckSpec monthlyPartitionStringDatatypeChanged;
+    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnStringDatatypeDetectedCheckSpec monthlyPartitionStringDatatypeDetected;
     
     /**
      * Returns a maximum string length below check.
@@ -827,21 +827,21 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a count of expected values in datatype changed check.
-     * @return Datatype changed check.
+     * Returns a count of expected values in datatype detected check.
+     * @return Datatype detected check.
      */
-    public ColumnStringDatatypeChangedCheckSpec getMonthlyPartitionStringDatatypeChanged() {
-        return monthlyPartitionStringDatatypeChanged;
+    public ColumnStringDatatypeDetectedCheckSpec getMonthlyPartitionStringDatatypeDetected() {
+        return monthlyPartitionStringDatatypeDetected;
     }
 
     /**
-     * Sets a new definition of a datatype changed check.
-     * @param monthlyPartitionStringDatatypeChanged Datatype changed check.
+     * Sets a new definition of a datatype detected check.
+     * @param monthlyPartitionStringDatatypeDetected Datatype detected check.
      */
-    public void setMonthlyPartitionStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec monthlyPartitionStringDatatypeChanged) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringDatatypeChanged, monthlyPartitionStringDatatypeChanged));
-        this.monthlyPartitionStringDatatypeChanged = monthlyPartitionStringDatatypeChanged;
-        propagateHierarchyIdToField(monthlyPartitionStringDatatypeChanged, "monthly_partition_string_datatype_changed");
+    public void setMonthlyPartitionStringDatatypeDetected(ColumnStringDatatypeDetectedCheckSpec monthlyPartitionStringDatatypeDetected) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringDatatypeDetected, monthlyPartitionStringDatatypeDetected));
+        this.monthlyPartitionStringDatatypeDetected = monthlyPartitionStringDatatypeDetected;
+        propagateHierarchyIdToField(monthlyPartitionStringDatatypeDetected, "monthly_partition_string_datatype_detected");
     }
 
     /**

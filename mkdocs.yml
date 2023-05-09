@@ -102,6 +102,7 @@ nav:
         - false percent: 'checks/column/bool/false-percent.md'
       - consistency:
         - date match format percent: 'checks/column/consistency/date-match-format-percent.md'
+        - string datatype changed: 'checks/column/consistency/string-datatype-changed.md'
       - datetime:
         - date values in future percent: 'checks/column/datetime/date-values-in-future-percent.md'
         - datetime value in range date percent: 'checks/column/datetime/datetime-value-in-range-date-percent.md'
@@ -190,7 +191,7 @@ nav:
         - string match date regex percent: 'checks/column/strings/string-match-date-regex-percent.md'
         - string match name regex percent: 'checks/column/strings/string-match-name-regex-percent.md'
         - string most popular values: 'checks/column/strings/string-most-popular-values.md'
-        - string datatype changed: 'checks/column/strings/string-datatype-changed.md'
+        - string datatype detected: 'checks/column/strings/string-datatype-detected.md'
       - uniqueness:
         - unique count: 'checks/column/uniqueness/unique-count.md'
         - unique percent: 'checks/column/uniqueness/unique-percent.md'
