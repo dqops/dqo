@@ -14,6 +14,7 @@ import { ROUTES } from "../../shared/routes";
 import DeleteOnlyDataDialog from "./DeleteOnlyDataDialog";
 import AddColumnDialog from "./AddColumnDialog";
 import AddTableDialog from "./AddTableDialog";
+import AddSchemaDialog from "./AddSchemaDialog";
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -28,6 +29,7 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const [addColumnDialogOpen, setAddColumnDialogOpen] = useState(false);
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
+  const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
 
   const handleRefresh = () => {
     refreshNode(node);
@@ -73,6 +75,11 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
     setOpen(false);
   };
 
+  const closeAddSchemaDialog = () => {
+    setAddSchemaDialogOpen(false);
+    setOpen(false);
+  };
+
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
       <PopoverHandler onClick={openPopover}>
@@ -109,6 +116,14 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
               onClick={importMetaData}
             >
               Import metadata
+            </div>
+          )}
+          {node.level === TREE_LEVEL.DATABASE && (
+            <div
+              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+              onClick={() => setAddSchemaDialogOpen(true)}
+            >
+              Add Schema
             </div>
           )}
           {node.level === TREE_LEVEL.SCHEMA && (
@@ -207,6 +222,11 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
         <AddTableDialog
           open={addTableDialogOpen}
           onClose={closeAddTableDialog}
+          node={node}
+        />
+        <AddSchemaDialog
+          open={addSchemaDialogOpen}
+          onClose={closeAddSchemaDialog}
           node={node}
         />
       </PopoverContent>
