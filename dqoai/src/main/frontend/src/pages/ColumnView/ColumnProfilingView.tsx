@@ -55,18 +55,10 @@ const ProfilingView = ({
   };
 
   useEffect(() => {
-    if (
-      !checksUI ||
-      columnBasic?.connection_name !== connectionName ||
-      columnBasic?.table?.schema_name !== schemaName ||
-      columnBasic?.table?.table_name !== tableName ||
-      columnBasic.column_name !== columnName
-    ) {
-      dispatch(
-        getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
-      );
-    }
-  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, columnName, tableName, columnBasic]);
+    dispatch(
+      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+    );
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, columnName, tableName]);
 
   const onUpdate = async () => {
     if (!checksUI) {

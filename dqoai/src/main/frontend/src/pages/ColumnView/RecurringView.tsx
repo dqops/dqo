@@ -55,43 +55,27 @@ const RecurringView = () => {
   };
 
   useEffect(() => {
-    if (
-      !dailyRecurring ||
-      columnBasic?.connection_name !== connection ||
-      columnBasic?.table?.schema_name !== schema ||
-      columnBasic?.table?.table_name !== table ||
-      columnBasic.column_name !== column
-    ) {
-      dispatch(
-        getColumnDailyRecurring(
-          checkTypes,
-          firstLevelActiveTab,
-          connection,
-          schema,
-          table,
-          column
-        )
-      );
-    }
-    if (
-      !monthlyRecurring ||
-      columnBasic?.connection_name !== connection ||
-      columnBasic?.table?.schema_name !== schema ||
-      columnBasic?.table?.table_name !== table ||
-      columnBasic.column_name !== column
-    ) {
-      dispatch(
-        getColumnMonthlyRecurring(
-          checkTypes,
-          firstLevelActiveTab,
-          connection,
-          schema,
-          table,
-          column
-        )
-      );
-    }
-  }, [connection, schema, table, column, columnBasic]);
+    dispatch(
+      getColumnDailyRecurring(
+        checkTypes,
+        firstLevelActiveTab,
+        connection,
+        schema,
+        table,
+        column
+      )
+    );
+    dispatch(
+      getColumnMonthlyRecurring(
+        checkTypes,
+        firstLevelActiveTab,
+        connection,
+        schema,
+        table,
+        column
+      )
+    );
+  }, [checkTypes, firstLevelActiveTab, connection, schema, table, column]);
 
   const onUpdate = async () => {
     if (tab === 'daily') {
