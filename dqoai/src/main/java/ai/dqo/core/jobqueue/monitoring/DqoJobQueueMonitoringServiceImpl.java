@@ -51,7 +51,6 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
 
     private final Object lock = new Object();
     private boolean started;
-    private final Duration publishBusyLoopingDuration = Duration.ofSeconds(30);
     private final TreeMap<DqoQueueJobId, DqoJobHistoryEntryModel> allJobs = new TreeMap<>();
     private final TreeMap<Long, DqoJobChangeModel> jobChanges = new TreeMap<>();
     private final DqoJobIdGenerator dqoJobIdGenerator;
