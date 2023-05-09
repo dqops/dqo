@@ -6,21 +6,27 @@ import BigqueryConnection from './BigqueryConnection';
 import SnowflakeConnection from './SnowflakeConnection';
 import {
   ConnectionBasicModel,
-  ConnectionBasicModelProviderTypeEnum, ConnectionRemoteModel, ConnectionRemoteModelConnectionStatusEnum
+  ConnectionBasicModelProviderTypeEnum,
+  ConnectionRemoteModel,
+  ConnectionRemoteModelConnectionStatusEnum
 } from '../../../api';
-import { ConnectionApiClient, SourceConnectionApi } from '../../../services/apiClient';
+import {
+  ConnectionApiClient,
+  SourceConnectionApi
+} from '../../../services/apiClient';
 import { useTree } from '../../../contexts/treeContext';
-import Loader from "../../Loader";
-import ErrorModal from "./ErrorModal";
-import ConfirmErrorModal from "./ConfirmErrorModal";
-import PostgreSQLConnection from "./PostgreSQLConnection";
+import Loader from '../../Loader';
+import ErrorModal from './ErrorModal';
+import ConfirmErrorModal from './ConfirmErrorModal';
+import PostgreSQLConnection from './PostgreSQLConnection';
 import PostgreSQLLogo from '../../SvgIcon/svg/postgresql.svg';
-import RedshiftConnection from "./RedshiftConnection";
+import RedshiftConnection from './RedshiftConnection';
 import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
-import SqlServerConnection from "./SqlServerConnection";
+import SqlServerConnection from './SqlServerConnection';
 import SqlServerLogo from '../../SvgIcon/svg/mssql-server.svg';
-import MySQLConnection from "./MySQLConnection";
+import MySQLConnection from './MySQLConnection';
 import MySQLLogo from '../../SvgIcon/svg/mysql.svg';
+import YugabyteDBConnection from './YugabyteDBConnection';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -62,8 +68,11 @@ const DatabaseConnection = ({
   useEffect(() => {
     if (!/^([A-Za-z0-9-_])*$/.test(database.connection_name as string)) {
       setNameError('Database name should be alphanumeric characters');
-    }  else if (database.connection_name?.length && database.connection_name.length > 36) {
-          setNameError('Database name cannot be longer than 36 characters');
+    } else if (
+      database.connection_name?.length &&
+      database.connection_name.length > 36
+    ) {
+      setNameError('Database name cannot be longer than 36 characters');
     } else {
       setNameError('');
     }
@@ -86,7 +95,10 @@ const DatabaseConnection = ({
     } catch (err) {
       setIsTesting(false);
     } finally {
-      if (testRes?.data?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS) {
+      if (
+        testRes?.data?.connectionStatus ===
+        ConnectionRemoteModelConnectionStatusEnum.SUCCESS
+      ) {
         await onConfirmSave();
       } else {
         setShowConfirm(true);
@@ -123,10 +135,11 @@ const DatabaseConnection = ({
         return 'Redshift Connection Settings';
       case ConnectionBasicModelProviderTypeEnum.sqlserver:
         return 'SQL Server Connection Settings';
-        case ConnectionBasicModelProviderTypeEnum.mysql:
-          return 'MYSQL Connection Settings';
+      case ConnectionBasicModelProviderTypeEnum.mysql:
+        return 'MYSQL Connection Settings';
+
       default:
-        return 'Database Connection Settings'
+        return 'Database Connection Settings';
     }
   };
 
@@ -148,7 +161,7 @@ const DatabaseConnection = ({
         postgresql={database.postgresql}
         onChange={(postgresql) => onChange({ ...database, postgresql })}
       />
-      ),
+    ),
     [ConnectionBasicModelProviderTypeEnum.redshift]: (
       <RedshiftConnection
         redshift={database.redshift}
@@ -186,7 +199,7 @@ const DatabaseConnection = ({
       default:
         return '';
     }
-  }, [database.provider_type])
+  }, [database.provider_type]);
 
   return (
     <div>
@@ -195,11 +208,7 @@ const DatabaseConnection = ({
           <div className="text-2xl font-semibold mb-3">Connect a database</div>
           <div>{getTitle(database.provider_type)}</div>
         </div>
-        <img
-          src={dbImage}
-          className="h-16"
-          alt="db logo"
-        />
+        <img src={dbImage} className="h-16" alt="db logo" />
       </div>
 
       <div className="bg-white rounded-lg px-4 py-6 border border-gray-100">
@@ -221,26 +230,22 @@ const DatabaseConnection = ({
           {isTesting && (
             <Loader isFull={false} className="w-8 h-8 !text-primary" />
           )}
-          {
-            testResult?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS && (
-              <div className="text-primary text-sm">
-                Connection successful
-              </div>
-            )
-          }
-          {
-            testResult?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.FAILURE && (
-              <div className="text-red-700 text-sm">
-                <span>Connection failed</span>
-                <span
-                  className="ml-2 underline cursor-pointer"
-                  onClick={openErrorModal}
-                >
-                  Show more
-                </span>
-              </div>
-            )
-          }
+          {testResult?.connectionStatus ===
+            ConnectionRemoteModelConnectionStatusEnum.SUCCESS && (
+            <div className="text-primary text-sm">Connection successful</div>
+          )}
+          {testResult?.connectionStatus ===
+            ConnectionRemoteModelConnectionStatusEnum.FAILURE && (
+            <div className="text-red-700 text-sm">
+              <span>Connection failed</span>
+              <span
+                className="ml-2 underline cursor-pointer"
+                onClick={openErrorModal}
+              >
+                Show more
+              </span>
+            </div>
+          )}
           <Button
             color="primary"
             variant="outlined"
