@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import MainLayout from "../MainLayout";
 import PageTabs from "../PageTabs";
 import { useTree } from "../../contexts/treeContext";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { CheckTypes } from "../../shared/routes";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
@@ -18,6 +18,8 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const { tabs: pageTabs, activeTab } = useSelector((state: IRootState) => state.source[sourceRoute as CheckTypes || CheckTypes.SOURCES]);
   const dispatch= useDispatch();
   const history = useHistory();
+  const location = useLocation();
+
   const handleChange = (value: string) => {
     dispatch(setActiveFirstLevelTab(sourceRoute, value));
     history.push(value);
@@ -33,6 +35,12 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
       label: item.label
     }))
   }, [pageTabs]);
+
+  useEffect(() => {
+    if (activeTab && activeTab !== location.pathname) {
+      history.push(activeTab);
+    }
+  }, [activeTab]);
 
   return (
     <MainLayout>
