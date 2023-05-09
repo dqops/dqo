@@ -423,7 +423,9 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         List<DqoQueueJobId> oldJobIdsToDelete = this.allJobs.entrySet()
                 .stream()
                 .takeWhile(e -> e.getValue().getStatusChangedAt().compareTo(oldJobsHistoryThresholdTimestamp) < 1)
-                .filter(e -> e.getValue().getStatus() == DqoJobStatus.succeeded || e.getValue().getStatus() == DqoJobStatus.failed)
+                .filter(e -> e.getValue().getStatus() == DqoJobStatus.succeeded ||
+                        e.getValue().getStatus() == DqoJobStatus.failed ||
+                        e.getValue().getStatus() == DqoJobStatus.cancelled)
                 .map(e -> e.getKey())
                 .collect(Collectors.toList());
 
