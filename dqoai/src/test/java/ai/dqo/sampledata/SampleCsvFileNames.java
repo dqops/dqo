@@ -52,6 +52,7 @@ public class SampleCsvFileNames {
     public static final String contains_ip6_test = "contains_ip6_test.csv";
 
     public static final String detect_datatype_test = "detect_datatype_test.csv";
+    public static final String data_type_changed_test = "data_type_changed_test.csv";
 
 
 }
