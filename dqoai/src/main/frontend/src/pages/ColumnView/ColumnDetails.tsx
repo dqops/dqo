@@ -115,6 +115,17 @@ const TableDetails = ({
             </td>
           </tr>
           <tr>
+            <td className="px-4 py-2">SQL Expression for a Calculated Column, use an {'{'}alias{'}'}. token to reference the table</td>
+            <td className="px-4 py-2">
+              <Input
+                value={columnBasic?.sql_expression}
+                onChange={(e) =>
+                  handleSnapTypeChange({ sql_expression: e.target.value })
+                }
+              />
+            </td>
+          </tr>
+          <tr>
             <td className="px-4 py-2">Column Type</td>
             <td className="px-4 py-2">
               <Input

@@ -19,6 +19,7 @@ const AddColumnDialog = ({
   node
 }: AddColumnDialogProps) => {
   const [name, setName] = useState("");
+  const [sqlExpression, setSqlExpression] = useState("");
   const [loading, setLoading] = useState(false);
   const { refreshNode } = useTree();
   const { connection, table, schema }: { connection: string, schema: string, table: string } = useParams()
@@ -28,10 +29,10 @@ const AddColumnDialog = ({
       setLoading(true);
       if (node) {
         const args = node.id.toString().split('.');
-        await ColumnApiClient.createColumn(args[0], args[1], args[2], name);
+        await ColumnApiClient.createColumn(args[0], args[1], args[2], name, { sql_expression: sqlExpression });
         refreshNode(node);
       } else {
-        await ColumnApiClient.createColumn(connection, schema, table, name);
+        await ColumnApiClient.createColumn(connection, schema, table, name, { sql_expression: sqlExpression });
       }
       onClose();
     } finally {
@@ -49,6 +50,13 @@ const AddColumnDialog = ({
               label="Column Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div>
+            <Input
+              label="SQL Expression for a calculated column"
+              value={sqlExpression}
+              onChange={(e) => setSqlExpression(e.target.value)}
             />
           </div>
         </DialogBody>

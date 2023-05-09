@@ -451,7 +451,7 @@ Column level sensor that analyzes all values in a text column and detects the da
 === "sqlserver"
       
     ```
-    {% import '/dialects/postgresql.sql.jinja2' as lib with conNVARCHAR(MAX) -%}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro make_text_constant(string) -%}
         {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
     {%- endmacro %}

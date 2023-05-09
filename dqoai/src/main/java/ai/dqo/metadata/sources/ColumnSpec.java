@@ -67,6 +67,10 @@ public class ColumnSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
+    @JsonPropertyDescription("SQL expression used for calculated fields or when additional column value transformation is required before the column could be used analyzed in data quality checks (data type conversion, transformation). It should be an SQL expression using the SQL language of the analyzed database type. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name. An example to extract a value from a string column that stores a JSON in PostgreSQL: json_extract_path({alias}.json_column, 'address.city')")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private String sqlExpression;
+
     @JsonPropertyDescription("Column data type that was retrieved when the table metadata was imported.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ColumnTypeSnapshotSpec typeSnapshot;
@@ -127,6 +131,23 @@ public class ColumnSpec extends AbstractSpec {
     public void setDisabled(boolean disabled) {
 		this.setDirtyIf(this.disabled != disabled);
         this.disabled = disabled;
+    }
+
+    /**
+     * Returns an SQL expression for a calculated column.
+     * @return SQL expression.
+     */
+    public String getSqlExpression() {
+        return sqlExpression;
+    }
+
+    /**
+     * Sets an SQL expression used for a calculated column.
+     * @param sqlExpression SQL expression used for a calculated column.
+     */
+    public void setSqlExpression(String sqlExpression) {
+        this.setDirtyIf(!Objects.equals(this.sqlExpression, sqlExpression));
+        this.sqlExpression = sqlExpression;
     }
 
     /**
@@ -477,9 +498,6 @@ public class ColumnSpec extends AbstractSpec {
             if (cloned.typeSnapshot != null) {
                 cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider);
             }
-//            if (cloned.labels != null) {
-//                cloned.labels = cloned.labels.deepClone();
-//            }
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

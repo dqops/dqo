@@ -702,7 +702,7 @@ spec:
 === "Sensor template for SQL Server"
       
     ```
-    {% import '/dialects/postgresql.sql.jinja2' as lib with conNVARCHAR(MAX) -%}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro make_text_constant(string) -%}
         {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
     {%- endmacro %}
@@ -787,6 +787,77 @@ spec:
 === "Rendered SQL for SQL Server"
       
     ```
+    SELECT
+        CASE
+            WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 1
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 2
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 3
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 4
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 5
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN analyzed_table.[target_column] IS NULL OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                            THEN 0
+                        WHEN TRIM(CAST(analyzed_table.[target_column] AS NVARCHAR(MAX))) <> ''
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 6
+            ELSE 7
+        END AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM [your_postgresql_database].[<target_schema>].[<target_table>] AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -1460,7 +1531,7 @@ spec:
       
     === "Sensor template for SQL Server"
         ```
-        {% import '/dialects/postgresql.sql.jinja2' as lib with conNVARCHAR(MAX) -%}
+        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         {% macro make_text_constant(string) -%}
             {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
         {%- endmacro %}
@@ -1544,6 +1615,79 @@ spec:
         ```
     === "Rendered SQL for SQL Server"
         ```
+        SELECT
+            CASE
+                WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 1
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 2
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 3
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 4
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 5
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN analyzed_table.[target_column] IS NULL OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                THEN 0
+                            WHEN TRIM(CAST(analyzed_table.[target_column] AS NVARCHAR(MAX))) <> ''
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 6
+                ELSE 7
+            END AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            LOCALTIMESTAMP AS time_period,
+            CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM [your_postgresql_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -2251,7 +2395,7 @@ spec:
 === "Sensor template for SQL Server"
       
     ```
-    {% import '/dialects/postgresql.sql.jinja2' as lib with conNVARCHAR(MAX) -%}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro make_text_constant(string) -%}
         {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
     {%- endmacro %}
@@ -2336,6 +2480,77 @@ spec:
 === "Rendered SQL for SQL Server"
       
     ```
+    SELECT
+        CASE
+            WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 1
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 2
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 3
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 4
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 5
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN analyzed_table.[target_column] IS NULL OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                            THEN 0
+                        WHEN TRIM(CAST(analyzed_table.[target_column] AS NVARCHAR(MAX))) <> ''
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 6
+            ELSE 7
+        END AS actual_value,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM [your_postgresql_database].[<target_schema>].[<target_table>] AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -3010,7 +3225,7 @@ spec:
       
     === "Sensor template for SQL Server"
         ```
-        {% import '/dialects/postgresql.sql.jinja2' as lib with conNVARCHAR(MAX) -%}
+        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         {% macro make_text_constant(string) -%}
             {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
         {%- endmacro %}
@@ -3094,6 +3309,79 @@ spec:
         ```
     === "Rendered SQL for SQL Server"
         ```
+        SELECT
+            CASE
+                WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 1
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 2
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 3
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 4
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 5
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN analyzed_table.[target_column] IS NULL OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                THEN 0
+                            WHEN TRIM(CAST(analyzed_table.[target_column] AS NVARCHAR(MAX))) <> ''
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 6
+                ELSE 7
+            END AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            CAST(LOCALTIMESTAMP AS date) AS time_period,
+            CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM [your_postgresql_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -3801,7 +4089,7 @@ spec:
 === "Sensor template for SQL Server"
       
     ```
-    {% import '/dialects/postgresql.sql.jinja2' as lib with conNVARCHAR(MAX) -%}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro make_text_constant(string) -%}
         {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
     {%- endmacro %}
@@ -3886,6 +4174,77 @@ spec:
 === "Rendered SQL for SQL Server"
       
     ```
+    SELECT
+        CASE
+            WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 1
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 2
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 3
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 4
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 5
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN analyzed_table.[target_column] IS NULL OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                            THEN 0
+                        WHEN TRIM(CAST(analyzed_table.[target_column] AS NVARCHAR(MAX))) <> ''
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 6
+            ELSE 7
+        END AS actual_value,
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM [your_postgresql_database].[<target_schema>].[<target_table>] AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -4560,7 +4919,7 @@ spec:
       
     === "Sensor template for SQL Server"
         ```
-        {% import '/dialects/postgresql.sql.jinja2' as lib with conNVARCHAR(MAX) -%}
+        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         {% macro make_text_constant(string) -%}
             {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
         {%- endmacro %}
@@ -4644,6 +5003,79 @@ spec:
         ```
     === "Rendered SQL for SQL Server"
         ```
+        SELECT
+            CASE
+                WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 1
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 2
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 3
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 4
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 5
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN analyzed_table.[target_column] IS NULL OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                THEN 0
+                            WHEN TRIM(CAST(analyzed_table.[target_column] AS NVARCHAR(MAX))) <> ''
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 6
+                ELSE 7
+            END AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM [your_postgresql_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -5351,7 +5783,7 @@ spec:
 === "Sensor template for SQL Server"
       
     ```
-    {% import '/dialects/postgresql.sql.jinja2' as lib with conNVARCHAR(MAX) -%}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro make_text_constant(string) -%}
         {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
     {%- endmacro %}
@@ -5436,6 +5868,77 @@ spec:
 === "Rendered SQL for SQL Server"
       
     ```
+    SELECT
+        CASE
+            WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 1
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 2
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 3
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 4
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 5
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN analyzed_table.[target_column] IS NULL OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                            THEN 0
+                        WHEN TRIM(CAST(analyzed_table.[target_column] AS NVARCHAR(MAX))) <> ''
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 6
+            ELSE 7
+        END AS actual_value,
+        CAST(analyzed_table.[] AS date) AS time_period,
+        CAST((CAST(analyzed_table.[] AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM [your_postgresql_database].[<target_schema>].[<target_table>] AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -6110,7 +6613,7 @@ spec:
       
     === "Sensor template for SQL Server"
         ```
-        {% import '/dialects/postgresql.sql.jinja2' as lib with conNVARCHAR(MAX) -%}
+        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         {% macro make_text_constant(string) -%}
             {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
         {%- endmacro %}
@@ -6194,6 +6697,79 @@ spec:
         ```
     === "Rendered SQL for SQL Server"
         ```
+        SELECT
+            CASE
+                WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 1
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 2
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 3
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 4
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 5
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN analyzed_table.[target_column] IS NULL OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                THEN 0
+                            WHEN TRIM(CAST(analyzed_table.[target_column] AS NVARCHAR(MAX))) <> ''
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 6
+                ELSE 7
+            END AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            CAST(analyzed_table.[] AS date) AS time_period,
+            CAST((CAST(analyzed_table.[] AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM [your_postgresql_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -6901,7 +7477,7 @@ spec:
 === "Sensor template for SQL Server"
       
     ```
-    {% import '/dialects/postgresql.sql.jinja2' as lib with conNVARCHAR(MAX) -%}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro make_text_constant(string) -%}
         {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
     {%- endmacro %}
@@ -6986,6 +7562,77 @@ spec:
 === "Rendered SQL for SQL Server"
       
     ```
+    SELECT
+        CASE
+            WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 1
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 2
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 3
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 4
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 5
+            WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                SUM(
+                    CASE
+                        WHEN analyzed_table.[target_column] IS NULL OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                             CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                            THEN 0
+                        WHEN TRIM(CAST(analyzed_table.[target_column] AS NVARCHAR(MAX))) <> ''
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 6
+            ELSE 7
+        END AS actual_value,
+        DATE_TRUNC('MONTH', CAST(analyzed_table.[] AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table.[] AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM [your_postgresql_database].[<target_schema>].[<target_table>] AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -7660,7 +8307,7 @@ spec:
       
     === "Sensor template for SQL Server"
         ```
-        {% import '/dialects/postgresql.sql.jinja2' as lib with conNVARCHAR(MAX) -%}
+        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         {% macro make_text_constant(string) -%}
             {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
         {%- endmacro %}
@@ -7744,6 +8391,79 @@ spec:
         ```
     === "Rendered SQL for SQL Server"
         ```
+        SELECT
+            CASE
+                WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 1
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 2
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 3
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 4
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 5
+                WHEN COUNT_BIG(analyzed_table.[target_column]) =
+                    SUM(
+                        CASE
+                            WHEN analyzed_table.[target_column] IS NULL OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[-+]?\d+$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                 CAST(analyzed_table.[target_column] AS NVARCHAR(MAX)) LIKE '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                THEN 0
+                            WHEN TRIM(CAST(analyzed_table.[target_column] AS NVARCHAR(MAX))) <> ''
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 6
+                ELSE 7
+            END AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            DATE_TRUNC('MONTH', CAST(analyzed_table.[] AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table.[] AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM [your_postgresql_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 

@@ -517,7 +517,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                     providerDocModel.setListOfRenderedTemplate(splitStringByEndOfLine(renderedTemplate));
                 }
                 catch (Exception ex) {
-                    System.err.println("Failed to render a sample SQL for check " + checkSpec.getCheckName() + ", error: " + ex.getMessage());
+                    System.err.println("Failed to render a sample SQL for check " + checkSpec.getCheckName() + " for provider: " + providerType + ", error: " + ex.getMessage());
                 }
             }
             results.add(providerDocModel);

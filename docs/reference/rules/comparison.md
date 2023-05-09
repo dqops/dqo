@@ -252,6 +252,15 @@ spec:
   type: python
   java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
+  fields:
+  - field_name: expected_datatype
+    display_name: expected_datatype
+    help_text: &quot;Expected data type code, the data type codes are: 1 - integers, 2\
+      \ - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed\
+      \ data types.&quot;
+    data_type: integer
+    sample_values:
+    - 1
 ```
 
 
