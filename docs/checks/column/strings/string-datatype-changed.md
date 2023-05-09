@@ -1,7 +1,9 @@
 **string datatype changed** checks  
 
 **Description**  
-Table level check that returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype.
+Table level check that scans all values in a string column and detects the data type of all values in a column. The actual_value returned from the sensor is one of: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
+ The check compares the data type detected during the current run to the last known data type detected during a previous run. For daily recurring checks, it will compare the value to yesterday&#x27;s value (or an earlier date).
+ For partitioned checks, it will compare the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
 
 ___
 
@@ -12,7 +14,7 @@ Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - times
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_datatype_changed|profiling| |[string_datatype_changed](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-changed)|[value_changed](../../../../reference/rules/comparison/#value-changed)|
+|string_datatype_changed|profiling| |[string_datatype_detect](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -84,64 +86,68 @@ spec:
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 1
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN(REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN ({{ lib.render_target_column('analyzed_table') }} AS STRING) IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
+                            THEN 1
+                        ELSE 0
                     END
-            )
+                )
+                THEN 1
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 2
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 3
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN(REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 4
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 5
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 0
+                        WHEN TRIM(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) <> ''
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 6
+            ELSE 7
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -156,64 +162,68 @@ spec:
     SELECT
         CASE
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 1
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN(REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN (analyzed_table.`target_column` AS STRING) IS NOT NULL AND (TRIM(CAST(analyzed_table.`target_column` AS STRING) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
+                            THEN 1
+                        ELSE 0
                     END
-            )
+                )
+                THEN 1
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 2
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 3
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN(REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 4
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 5
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN analyzed_table.`target_column` IS NULL OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 0
+                        WHEN TRIM(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <> ''
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 6
+            ELSE 7
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
         TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
@@ -422,199 +432,66 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        END
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
-                    END
-            )
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
+        actual_value,
+        time_period,
+        time_period_utc
+    FROM (
+        SELECT
+            CASE
+                WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+    	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+    	        ELSE 0 END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM (
+            SELECT
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+        ) AS data_type_counts
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+    ) AS result
     {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for PostgreSQL"
       
     ```
     SELECT
-        CASE
-            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        END
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN analyzed_table."target_column" IS NOT NULL AND (TRIM(CAST(analyzed_table."target_column" AS VARCHAR) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
-                    END
-            )
-        END AS actual_value,
+        actual_value,
+        time_period,
+        time_period_utc
+    FROM (
+        SELECT
+            CASE
+                WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+    	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+    	        ELSE 0 END AS actual_value,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
+        FROM (
+            SELECT
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ) AS data_type_counts
+    GROUP BY time_period, time_period_utc) AS result
     ORDER BY time_period, time_period_utc
     ```
 ### **Redshift**
@@ -865,64 +742,68 @@ spec:
         SELECT
             CASE
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 1
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN(REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN ({{ lib.render_target_column('analyzed_table') }} AS STRING) IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
+                                THEN 1
+                            ELSE 0
                         END
-                )
+                    )
+                    THEN 1
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 2
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 3
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN(REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 4
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 5
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 0
+                            WHEN TRIM(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) <> ''
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 6
+                ELSE 7
             END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -936,64 +817,68 @@ spec:
         SELECT
             CASE
                 WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 1
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN(REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN (analyzed_table.`target_column` AS STRING) IS NOT NULL AND (TRIM(CAST(analyzed_table.`target_column` AS STRING) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
+                                THEN 1
+                            ELSE 0
                         END
-                )
+                    )
+                    THEN 1
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 2
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 3
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN(REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 4
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 5
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` IS NULL OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 0
+                            WHEN TRIM(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <> ''
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 6
+                ELSE 7
             END AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
@@ -1205,200 +1090,69 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         SELECT
-            CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            END
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
-                        END
-                )
-            END AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
+            actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                CASE
+                    WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                    WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+        	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+        	        ELSE 0 END AS actual_value
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM (
+                SELECT
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+            ) AS data_type_counts
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+        ) AS result
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
         ```
         SELECT
-            CASE
-                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            END
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN analyzed_table."target_column" IS NOT NULL AND (TRIM(CAST(analyzed_table."target_column" AS VARCHAR) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
-                        END
-                )
-            END AS actual_value,
+            actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                CASE
+                    WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                    WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+        	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+        	        ELSE 0 END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+            FROM (
+                SELECT
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            LOCALTIMESTAMP AS time_period,
+            CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            ) AS data_type_counts
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc) AS result
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     **Redshift**  
@@ -1611,7 +1365,7 @@ Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - times
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_datatype_changed|recurring|daily|[string_datatype_changed](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-changed)|[value_changed](../../../../reference/rules/comparison/#value-changed)|
+|daily_string_datatype_changed|recurring|daily|[string_datatype_detect](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1685,64 +1439,68 @@ spec:
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 1
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN(REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN ({{ lib.render_target_column('analyzed_table') }} AS STRING) IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
+                            THEN 1
+                        ELSE 0
                     END
-            )
+                )
+                THEN 1
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 2
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 3
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN(REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 4
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 5
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 0
+                        WHEN TRIM(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) <> ''
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 6
+            ELSE 7
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1757,64 +1515,68 @@ spec:
     SELECT
         CASE
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 1
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN(REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN (analyzed_table.`target_column` AS STRING) IS NOT NULL AND (TRIM(CAST(analyzed_table.`target_column` AS STRING) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
+                            THEN 1
+                        ELSE 0
                     END
-            )
+                )
+                THEN 1
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 2
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 3
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN(REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 4
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 5
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN analyzed_table.`target_column` IS NULL OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 0
+                        WHEN TRIM(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <> ''
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 6
+            ELSE 7
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
         TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
@@ -2023,199 +1785,66 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        END
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
-                    END
-            )
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
+        actual_value,
+        time_period,
+        time_period_utc
+    FROM (
+        SELECT
+            CASE
+                WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+    	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+    	        ELSE 0 END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM (
+            SELECT
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+        ) AS data_type_counts
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+    ) AS result
     {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for PostgreSQL"
       
     ```
     SELECT
-        CASE
-            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        END
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN analyzed_table."target_column" IS NOT NULL AND (TRIM(CAST(analyzed_table."target_column" AS VARCHAR) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
-                    END
-            )
-        END AS actual_value,
+        actual_value,
+        time_period,
+        time_period_utc
+    FROM (
+        SELECT
+            CASE
+                WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+    	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+    	        ELSE 0 END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
+        FROM (
+            SELECT
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ) AS data_type_counts
+    GROUP BY time_period, time_period_utc) AS result
     ORDER BY time_period, time_period_utc
     ```
 ### **Redshift**
@@ -2467,64 +2096,68 @@ spec:
         SELECT
             CASE
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 1
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN(REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN ({{ lib.render_target_column('analyzed_table') }} AS STRING) IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
+                                THEN 1
+                            ELSE 0
                         END
-                )
+                    )
+                    THEN 1
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 2
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 3
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN(REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 4
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 5
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 0
+                            WHEN TRIM(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) <> ''
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 6
+                ELSE 7
             END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2538,64 +2171,68 @@ spec:
         SELECT
             CASE
                 WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 1
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN(REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN (analyzed_table.`target_column` AS STRING) IS NOT NULL AND (TRIM(CAST(analyzed_table.`target_column` AS STRING) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
+                                THEN 1
+                            ELSE 0
                         END
-                )
+                    )
+                    THEN 1
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 2
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 3
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN(REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 4
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 5
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` IS NULL OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 0
+                            WHEN TRIM(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <> ''
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 6
+                ELSE 7
             END AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
@@ -2807,200 +2444,69 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         SELECT
-            CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            END
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
-                        END
-                )
-            END AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
+            actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                CASE
+                    WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                    WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+        	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+        	        ELSE 0 END AS actual_value
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM (
+                SELECT
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+            ) AS data_type_counts
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+        ) AS result
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
         ```
         SELECT
-            CASE
-                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            END
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN analyzed_table."target_column" IS NOT NULL AND (TRIM(CAST(analyzed_table."target_column" AS VARCHAR) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
-                        END
-                )
-            END AS actual_value,
+            actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                CASE
+                    WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                    WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+        	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+        	        ELSE 0 END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+            FROM (
+                SELECT
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            CAST(LOCALTIMESTAMP AS date) AS time_period,
+            CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            ) AS data_type_counts
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc) AS result
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     **Redshift**  
@@ -3213,7 +2719,7 @@ Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - times
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_datatype_changed|recurring|monthly|[string_datatype_changed](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-changed)|[value_changed](../../../../reference/rules/comparison/#value-changed)|
+|monthly_string_datatype_changed|recurring|monthly|[string_datatype_detect](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -3287,64 +2793,68 @@ spec:
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 1
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN(REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN ({{ lib.render_target_column('analyzed_table') }} AS STRING) IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
+                            THEN 1
+                        ELSE 0
                     END
-            )
+                )
+                THEN 1
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 2
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 3
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN(REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 4
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 5
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 0
+                        WHEN TRIM(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) <> ''
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 6
+            ELSE 7
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3359,64 +2869,68 @@ spec:
     SELECT
         CASE
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 1
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN(REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN (analyzed_table.`target_column` AS STRING) IS NOT NULL AND (TRIM(CAST(analyzed_table.`target_column` AS STRING) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
+                            THEN 1
+                        ELSE 0
                     END
-            )
+                )
+                THEN 1
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 2
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 3
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN(REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 4
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 5
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN analyzed_table.`target_column` IS NULL OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 0
+                        WHEN TRIM(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <> ''
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 6
+            ELSE 7
         END AS actual_value,
         DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
@@ -3625,199 +3139,66 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        END
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
-                    END
-            )
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
+        actual_value,
+        time_period,
+        time_period_utc
+    FROM (
+        SELECT
+            CASE
+                WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+    	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+    	        ELSE 0 END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM (
+            SELECT
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+        ) AS data_type_counts
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+    ) AS result
     {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for PostgreSQL"
       
     ```
     SELECT
-        CASE
-            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        END
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN analyzed_table."target_column" IS NOT NULL AND (TRIM(CAST(analyzed_table."target_column" AS VARCHAR) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
-                    END
-            )
-        END AS actual_value,
+        actual_value,
+        time_period,
+        time_period_utc
+    FROM (
+        SELECT
+            CASE
+                WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+    	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+    	        ELSE 0 END AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
+        FROM (
+            SELECT
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool,
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ) AS data_type_counts
+    GROUP BY time_period, time_period_utc) AS result
     ORDER BY time_period, time_period_utc
     ```
 ### **Redshift**
@@ -4069,64 +3450,68 @@ spec:
         SELECT
             CASE
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 1
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN(REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN ({{ lib.render_target_column('analyzed_table') }} AS STRING) IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
+                                THEN 1
+                            ELSE 0
                         END
-                )
+                    )
+                    THEN 1
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 2
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 3
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN(REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 4
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 5
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 0
+                            WHEN TRIM(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) <> ''
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 6
+                ELSE 7
             END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4140,64 +3525,68 @@ spec:
         SELECT
             CASE
                 WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 1
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN(REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN (analyzed_table.`target_column` AS STRING) IS NOT NULL AND (TRIM(CAST(analyzed_table.`target_column` AS STRING) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
+                                THEN 1
+                            ELSE 0
                         END
-                )
+                    )
+                    THEN 1
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 2
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 3
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN(REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 4
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 5
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` IS NULL OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 0
+                            WHEN TRIM(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <> ''
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 6
+                ELSE 7
             END AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
@@ -4409,200 +3798,69 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         SELECT
-            CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            END
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
-                        END
-                )
-            END AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
+            actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                CASE
+                    WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                    WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+        	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+        	        ELSE 0 END AS actual_value
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM (
+                SELECT
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+            ) AS data_type_counts
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+        ) AS result
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
         ```
         SELECT
-            CASE
-                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            END
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN analyzed_table."target_column" IS NOT NULL AND (TRIM(CAST(analyzed_table."target_column" AS VARCHAR) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
-                        END
-                )
-            END AS actual_value,
+            actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                CASE
+                    WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                    WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+        	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+        	        ELSE 0 END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+            FROM (
+                SELECT
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            ) AS data_type_counts
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc) AS result
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     **Redshift**  
@@ -4815,7 +4073,7 @@ Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - times
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_datatype_changed|partitioned|daily|[string_datatype_changed](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-changed)|[value_changed](../../../../reference/rules/comparison/#value-changed)|
+|daily_partition_string_datatype_changed|partitioned|daily|[string_datatype_detect](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -4889,64 +4147,68 @@ spec:
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 1
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN(REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN ({{ lib.render_target_column('analyzed_table') }} AS STRING) IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
+                            THEN 1
+                        ELSE 0
                     END
-            )
+                )
+                THEN 1
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 2
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 3
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN(REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 4
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 5
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 0
+                        WHEN TRIM(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) <> ''
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 6
+            ELSE 7
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4961,64 +4223,68 @@ spec:
     SELECT
         CASE
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 1
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN(REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN (analyzed_table.`target_column` AS STRING) IS NOT NULL AND (TRIM(CAST(analyzed_table.`target_column` AS STRING) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
+                            THEN 1
+                        ELSE 0
                     END
-            )
+                )
+                THEN 1
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 2
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 3
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN(REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 4
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 5
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN analyzed_table.`target_column` IS NULL OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 0
+                        WHEN TRIM(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <> ''
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 6
+            ELSE 7
         END AS actual_value,
         CAST(analyzed_table.`` AS DATE) AS time_period,
         TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
@@ -5227,199 +4493,66 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        END
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
-                    END
-            )
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
+        actual_value,
+        time_period,
+        time_period_utc
+    FROM (
+        SELECT
+            CASE
+                WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+    	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+    	        ELSE 0 END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM (
+            SELECT
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+        ) AS data_type_counts
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+    ) AS result
     {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for PostgreSQL"
       
     ```
     SELECT
-        CASE
-            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        END
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN analyzed_table."target_column" IS NOT NULL AND (TRIM(CAST(analyzed_table."target_column" AS VARCHAR) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
-                    END
-            )
-        END AS actual_value,
+        actual_value,
+        time_period,
+        time_period_utc
+    FROM (
+        SELECT
+            CASE
+                WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+    	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+    	        ELSE 0 END AS actual_value,
         CAST(analyzed_table."" AS date) AS time_period,
         CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
+        FROM (
+            SELECT
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool,
+        CAST(analyzed_table."" AS date) AS time_period,
+        CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ) AS data_type_counts
+    GROUP BY time_period, time_period_utc) AS result
     ORDER BY time_period, time_period_utc
     ```
 ### **Redshift**
@@ -5671,64 +4804,68 @@ spec:
         SELECT
             CASE
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 1
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN(REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN ({{ lib.render_target_column('analyzed_table') }} AS STRING) IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
+                                THEN 1
+                            ELSE 0
                         END
-                )
+                    )
+                    THEN 1
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 2
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 3
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN(REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 4
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 5
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 0
+                            WHEN TRIM(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) <> ''
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 6
+                ELSE 7
             END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5742,64 +4879,68 @@ spec:
         SELECT
             CASE
                 WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 1
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN(REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN (analyzed_table.`target_column` AS STRING) IS NOT NULL AND (TRIM(CAST(analyzed_table.`target_column` AS STRING) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
+                                THEN 1
+                            ELSE 0
                         END
-                )
+                    )
+                    THEN 1
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 2
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 3
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN(REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 4
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 5
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` IS NULL OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 0
+                            WHEN TRIM(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <> ''
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 6
+                ELSE 7
             END AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
@@ -6011,200 +5152,69 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         SELECT
-            CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            END
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
-                        END
-                )
-            END AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
+            actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                CASE
+                    WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                    WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+        	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+        	        ELSE 0 END AS actual_value
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM (
+                SELECT
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+            ) AS data_type_counts
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+        ) AS result
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
         ```
         SELECT
-            CASE
-                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            END
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN analyzed_table."target_column" IS NOT NULL AND (TRIM(CAST(analyzed_table."target_column" AS VARCHAR) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
-                        END
-                )
-            END AS actual_value,
+            actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                CASE
+                    WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                    WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+        	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+        	        ELSE 0 END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
             CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+            FROM (
+                SELECT
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            CAST(analyzed_table."" AS date) AS time_period,
+            CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            ) AS data_type_counts
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc) AS result
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     **Redshift**  
@@ -6417,7 +5427,7 @@ Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - times
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_datatype_changed|partitioned|monthly|[string_datatype_changed](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-changed)|[value_changed](../../../../reference/rules/comparison/#value-changed)|
+|monthly_partition_string_datatype_changed|partitioned|monthly|[string_datatype_detect](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -6491,64 +5501,68 @@ spec:
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 1
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN(REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN ({{ lib.render_target_column('analyzed_table') }} AS STRING) IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
+                            THEN 1
+                        ELSE 0
                     END
-            )
+                )
+                THEN 1
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 2
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 3
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN(REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 4
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 5
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 0
+                        WHEN TRIM(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) <> ''
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 6
+            ELSE 7
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6563,64 +5577,68 @@ spec:
     SELECT
         CASE
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 1
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN(REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                        CASE
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                THEN 0
-                            END
-                            WHEN (analyzed_table.`target_column` AS STRING) IS NOT NULL AND (TRIM(CAST(analyzed_table.`target_column` AS STRING) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
+                            THEN 1
+                        ELSE 0
                     END
-            )
+                )
+                THEN 1
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 2
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 3
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN(REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 4
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 1
+                        ELSE 0
+                        END
+                )
+                THEN 5
+            WHEN COUNT(analyzed_table.`target_column`) =
+                SUM(
+                    CASE
+                        WHEN analyzed_table.`target_column` IS NULL OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                             REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                            THEN 0
+                        WHEN TRIM(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <> ''
+                            THEN 1
+                        ELSE 0
+                    END
+                )
+                THEN 6
+            ELSE 7
         END AS actual_value,
         DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
         TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
@@ -6829,199 +5847,66 @@ spec:
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        END
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
-                    END
-            )
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
+        actual_value,
+        time_period,
+        time_period_utc
+    FROM (
+        SELECT
+            CASE
+                WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+    	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+    	        ELSE 0 END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM (
+            SELECT
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+        ) AS data_type_counts
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+    ) AS result
     {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for PostgreSQL"
       
     ```
     SELECT
-        CASE
-            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-            ELSE(
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        END
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 2
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 3
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                $') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 4
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 1
-                            ELSE 0)
-                        THEN 5
-                    WHEN COUNT(analyzed_table."target_column") = SUM(
-                        CASE
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                THEN 0
-                            END
-                            WHEN analyzed_table."target_column" IS NOT NULL AND (TRIM(CAST(analyzed_table."target_column" AS VARCHAR) <> ''))
-                                THEN 1
-                            END
-                            ELSE 0)
-                        THEN 6
-                    ELSE
-                        ELSE 7
-                    END
-            )
-        END AS actual_value,
+        actual_value,
+        time_period,
+        time_period_utc
+    FROM (
+        SELECT
+            CASE
+                WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+    	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+    	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+    	        ELSE 0 END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-    GROUP BY time_period, time_period_utc
+        FROM (
+            SELECT
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ) AS data_type_counts
+    GROUP BY time_period, time_period_utc) AS result
     ORDER BY time_period, time_period_utc
     ```
 ### **Redshift**
@@ -7273,64 +6158,68 @@ spec:
         SELECT
             CASE
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 1
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN(REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN ({{ lib.render_target_column('analyzed_table') }} AS STRING) IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE
+                                THEN 1
+                            ELSE 0
                         END
-                )
+                    )
+                    THEN 1
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 2
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 3
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN(REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 4
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 5
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                    SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 0
+                            WHEN TRIM(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) <> ''
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 6
+                ELSE 7
             END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7344,64 +6233,68 @@ spec:
         SELECT
             CASE
                 WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 1
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN(REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT(analyzed_table.`target_column`) = SUM(
-                            CASE
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$| ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
-                                    THEN 0
-                                END
-                                WHEN (analyzed_table.`target_column` AS STRING) IS NOT NULL AND (TRIM(CAST(analyzed_table.`target_column` AS STRING) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE
+                                THEN 1
+                            ELSE 0
                         END
-                )
+                    )
+                    THEN 1
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 2
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 3
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN(REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$")) IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 4
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 1
+                            ELSE 0
+                            END
+                    )
+                    THEN 5
+                WHEN COUNT(analyzed_table.`target_column`) =
+                    SUM(
+                        CASE
+                            WHEN analyzed_table.`target_column` IS NULL OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[-+]?\d+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[+-]?([0-9]*[.])[0-9]+$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING),r"^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$") IS TRUE OR
+                                 REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$") IS TRUE
+                                THEN 0
+                            WHEN TRIM(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <> ''
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                    THEN 6
+                ELSE 7
             END AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
@@ -7613,200 +6506,69 @@ spec:
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         SELECT
-            CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            END
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN {{lib.render_target_column('analyzed_table')}} IS NOT NULL AND (TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
-                        END
-                )
-            END AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
+            actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                CASE
+                    WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                    WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+        	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+        	        ELSE 0 END AS actual_value
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM (
+                SELECT
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+            ) AS data_type_counts
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+        ) AS result
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
         ```
         SELECT
-            CASE
-                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                ELSE(
-                    CASE
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            END
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 2
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 3
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)
-                                    $') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 4
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 1
-                                ELSE 0)
-                            THEN 5
-                        WHEN COUNT(analyzed_table."target_column") = SUM(
-                            CASE
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[-+]?\d+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^[+-]?([0-9]*[.])[0-9]+$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^
-                                    ((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$|
-                                    ^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(\b(am|pm|AM|PM)\b)?)$')
-                                    IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN SUBSTRING(CAST(analyzed_table."target_column" AS VARCHAR) FROM '^(\b(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)\b)$') IS NOT NULL
-                                    THEN 0
-                                END
-                                WHEN analyzed_table."target_column" IS NOT NULL AND (TRIM(CAST(analyzed_table."target_column" AS VARCHAR) <> ''))
-                                    THEN 1
-                                END
-                                ELSE 0)
-                            THEN 6
-                        ELSE
-                            ELSE 7
-                        END
-                )
-            END AS actual_value,
+            actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                CASE
+                    WHEN COUNT(*) = SUM(matches_bool) AND COUNT(*) > 0 THEN 1
+                    WHEN COUNT(*) = SUM(matches_date) AND COUNT(*) > 0 THEN 2
+        	        WHEN COUNT(CASE WHEN matches_int > 0 AND matches_float = 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 3
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float > 0 AND matches_string = 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 4
+        	        WHEN COUNT(CASE WHEN matches_int = 0 AND matches_float = 0 AND matches_string > 0 AND matches_date = 0 AND matches_bool = 0 THEN 1 END) = COUNT(*) THEN 5
+        	        ELSE 0 END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+            FROM (
+                SELECT
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+$', 'g')) AS matches_int,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[+-]?\d+\.\d+$', 'g')) AS matches_float,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^[^0-9]*$', 'g')) AS matches_string,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^((20|21|22)\d{2})([\/\-\.])((0?[1-9]|1[012])([\/\-\.])(0?[1-9]|[12][0-9]|3[01])|((0?[1-9]|[12][0-9]|3[01])([\/\-\.])(0?[1-9]|1[012])))(\s(0?[0-9]|1[0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9]))?)?$|(?:\d{4}[./-]\d{2}[./-]\d{2}(?: \d{2}:\d{2}:\d{2})?|\d{2}[./-]\d{2}[./-]\d{4}(?: \d{2}:\d{2}(?::\d{2})?)?)$|^(\d{4})[-./](\d{2})[-./](\d{2})([ T]\d{2}:\d{2}:\d{2})?$|^(\d{2})[-./](\d{2})[-./](\d{2})$', 'g')) AS matches_date,
+                    (SELECT COUNT(*) FROM regexp_matches(CAST(analyzed_table."target_column" AS TEXT), '^(1|0|true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$', 'g')) AS matches_bool,
+            analyzed_table."country" AS stream_level_1,
+            analyzed_table."state" AS stream_level_2,
+            DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            ) AS data_type_counts
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc) AS result
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     **Redshift**  

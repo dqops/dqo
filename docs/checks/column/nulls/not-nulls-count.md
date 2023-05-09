@@ -12,7 +12,7 @@ Verifies that the number of not null values in a column does not exceed the maxi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|not_nulls_count|profiling| |[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|not_nulls_count|profiling| |[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -42,11 +42,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=not_null
         nulls:
           not_nulls_count:
             warning:
-              max_count: 0
+              min_count: 5
             error:
-              max_count: 10
+              min_count: 0
             fatal:
-              max_count: 15
+              min_count: 100
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-21"
@@ -66,11 +66,11 @@ spec:
         nulls:
           not_nulls_count:
             warning:
-              max_count: 0
+              min_count: 5
             error:
-              max_count: 10
+              min_count: 0
             fatal:
-              max_count: 15
+              min_count: 100
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -236,11 +236,11 @@ spec:
             nulls:
               not_nulls_count:
                 warning:
-                  max_count: 0
+                  min_count: 5
                 error:
-                  max_count: 10
+                  min_count: 0
                 fatal:
-                  max_count: 15
+                  min_count: 100
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -410,7 +410,7 @@ Verifies that the number of not null values in a column does not exceed the maxi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_not_nulls_count|recurring|daily|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_not_nulls_count|recurring|daily|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -441,11 +441,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_no
           nulls:
             daily_not_nulls_count:
               warning:
-                max_count: 0
+                min_count: 5
               error:
-                max_count: 10
+                min_count: 0
               fatal:
-                max_count: 15
+                min_count: 100
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -466,11 +466,11 @@ spec:
           nulls:
             daily_not_nulls_count:
               warning:
-                max_count: 0
+                min_count: 5
               error:
-                max_count: 10
+                min_count: 0
               fatal:
-                max_count: 15
+                min_count: 100
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -637,11 +637,11 @@ spec:
               nulls:
                 daily_not_nulls_count:
                   warning:
-                    max_count: 0
+                    min_count: 5
                   error:
-                    max_count: 10
+                    min_count: 0
                   fatal:
-                    max_count: 15
+                    min_count: 100
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -811,7 +811,7 @@ Verifies that the number of not null values in a column does not exceed the maxi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_not_nulls_count|recurring|monthly|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_not_nulls_count|recurring|monthly|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -842,11 +842,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
           nulls:
             monthly_not_nulls_count:
               warning:
-                max_count: 0
+                min_count: 5
               error:
-                max_count: 10
+                min_count: 0
               fatal:
-                max_count: 15
+                min_count: 100
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -867,11 +867,11 @@ spec:
           nulls:
             monthly_not_nulls_count:
               warning:
-                max_count: 0
+                min_count: 5
               error:
-                max_count: 10
+                min_count: 0
               fatal:
-                max_count: 15
+                min_count: 100
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1038,11 +1038,11 @@ spec:
               nulls:
                 monthly_not_nulls_count:
                   warning:
-                    max_count: 0
+                    min_count: 5
                   error:
-                    max_count: 10
+                    min_count: 0
                   fatal:
-                    max_count: 15
+                    min_count: 100
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1212,7 +1212,7 @@ Verifies that the number of not null values in a column does not exceed the set 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_not_nulls_count|partitioned|daily|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_partition_not_nulls_count|partitioned|daily|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1243,11 +1243,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_pa
           nulls:
             daily_partition_not_nulls_count:
               warning:
-                max_count: 0
+                min_count: 5
               error:
-                max_count: 10
+                min_count: 0
               fatal:
-                max_count: 15
+                min_count: 100
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1268,11 +1268,11 @@ spec:
           nulls:
             daily_partition_not_nulls_count:
               warning:
-                max_count: 0
+                min_count: 5
               error:
-                max_count: 10
+                min_count: 0
               fatal:
-                max_count: 15
+                min_count: 100
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1443,11 +1443,11 @@ spec:
               nulls:
                 daily_partition_not_nulls_count:
                   warning:
-                    max_count: 0
+                    min_count: 5
                   error:
-                    max_count: 10
+                    min_count: 0
                   fatal:
-                    max_count: 15
+                    min_count: 100
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1614,7 +1614,7 @@ Verifies that the number of not null values in a column does not exceed the set 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_not_nulls_count|partitioned|monthly|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_partition_not_nulls_count|partitioned|monthly|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1645,11 +1645,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
           nulls:
             monthly_partition_not_nulls_count:
               warning:
-                max_count: 0
+                min_count: 5
               error:
-                max_count: 10
+                min_count: 0
               fatal:
-                max_count: 15
+                min_count: 100
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1670,11 +1670,11 @@ spec:
           nulls:
             monthly_partition_not_nulls_count:
               warning:
-                max_count: 0
+                min_count: 5
               error:
-                max_count: 10
+                min_count: 0
               fatal:
-                max_count: 15
+                min_count: 100
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1845,11 +1845,11 @@ spec:
               nulls:
                 monthly_partition_not_nulls_count:
                   warning:
-                    max_count: 0
+                    min_count: 5
                   error:
-                    max_count: 10
+                    min_count: 0
                   fatal:
-                    max_count: 15
+                    min_count: 100
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:

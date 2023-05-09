@@ -20,7 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.ValueChangedParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringDatatypeChangedSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringDatatypeDetectSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -32,33 +32,35 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype.
+ * Table level check that scans all values in a string column and detects the data type of all values in a column. The actual_value returned from the sensor is one of: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
+ * The check compares the data type detected during the current run to the last known data type detected during a previous run. For daily recurring checks, it will compare the value to yesterday's value (or an earlier date).
+ * For partitioned checks, it will compare the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringDatatypeChangedCheckSpec extends AbstractCheckSpec<ColumnStringsStringDatatypeChangedSensorParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec> {
+public class ColumnStringDatatypeChangedCheckSpec extends AbstractCheckSpec<ColumnStringsStringDatatypeDetectSensorParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStringDatatypeChangedCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Row count sensor parameters")
+    @JsonPropertyDescription("The sensor parameters for a sensor that returns a value that identifies the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringDatatypeChangedSensorParametersSpec parameters = new ColumnStringsStringDatatypeChangedSensorParametersSpec();
+    private ColumnStringsStringDatatypeDetectSensorParametersSpec parameters = new ColumnStringsStringDatatypeDetectSensorParametersSpec();
 
-    @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
+    @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check, detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ValueChangedParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
+    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert), detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ValueChangedParametersSpec error;
 
-    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
+    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem, detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ValueChangedParametersSpec fatal;
@@ -68,7 +70,7 @@ public class ColumnStringDatatypeChangedCheckSpec extends AbstractCheckSpec<Colu
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringDatatypeChangedSensorParametersSpec getParameters() {
+    public ColumnStringsStringDatatypeDetectSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -76,7 +78,7 @@ public class ColumnStringDatatypeChangedCheckSpec extends AbstractCheckSpec<Colu
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringDatatypeChangedSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringDatatypeDetectSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

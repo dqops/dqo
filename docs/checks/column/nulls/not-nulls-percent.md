@@ -12,7 +12,7 @@ Verifies that the percent of not null values in a column does not exceed the max
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|not_nulls_percent|profiling| |[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|not_nulls_percent|profiling| |[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -42,11 +42,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=not_null
         nulls:
           not_nulls_percent:
             warning:
-              max_percent: 1.0
+              min_percent: 99.0
             error:
-              max_percent: 2.0
+              min_percent: 98.0
             fatal:
-              max_percent: 5.0
+              min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-21"
@@ -66,11 +66,11 @@ spec:
         nulls:
           not_nulls_percent:
             warning:
-              max_percent: 1.0
+              min_percent: 99.0
             error:
-              max_percent: 2.0
+              min_percent: 98.0
             fatal:
-              max_percent: 5.0
+              min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -262,11 +262,11 @@ spec:
             nulls:
               not_nulls_percent:
                 warning:
-                  max_percent: 1.0
+                  min_percent: 99.0
                 error:
-                  max_percent: 2.0
+                  min_percent: 98.0
                 fatal:
-                  max_percent: 5.0
+                  min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -462,7 +462,7 @@ Verifies that the percentage of not nulls in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_not_nulls_percent|recurring|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_not_nulls_percent|recurring|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -493,11 +493,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_no
           nulls:
             daily_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -518,11 +518,11 @@ spec:
           nulls:
             daily_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -715,11 +715,11 @@ spec:
               nulls:
                 daily_not_nulls_percent:
                   warning:
-                    max_percent: 1.0
+                    min_percent: 99.0
                   error:
-                    max_percent: 2.0
+                    min_percent: 98.0
                   fatal:
-                    max_percent: 5.0
+                    min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -915,7 +915,7 @@ Verifies that the percentage of not nulls in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_not_nulls_percent|recurring|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_not_nulls_percent|recurring|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -946,11 +946,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
           nulls:
             monthly_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -971,11 +971,11 @@ spec:
           nulls:
             monthly_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1168,11 +1168,11 @@ spec:
               nulls:
                 monthly_not_nulls_percent:
                   warning:
-                    max_percent: 1.0
+                    min_percent: 99.0
                   error:
-                    max_percent: 2.0
+                    min_percent: 98.0
                   fatal:
-                    max_percent: 5.0
+                    min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1368,7 +1368,7 @@ Verifies that the percentage of not null values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_not_nulls_percent|partitioned|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_partition_not_nulls_percent|partitioned|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1399,11 +1399,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_pa
           nulls:
             daily_partition_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1424,11 +1424,11 @@ spec:
           nulls:
             daily_partition_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1625,11 +1625,11 @@ spec:
               nulls:
                 daily_partition_not_nulls_percent:
                   warning:
-                    max_percent: 1.0
+                    min_percent: 99.0
                   error:
-                    max_percent: 2.0
+                    min_percent: 98.0
                   fatal:
-                    max_percent: 5.0
+                    min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1822,7 +1822,7 @@ Verifies that the percentage of not null values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_not_nulls_percent|partitioned|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_partition_not_nulls_percent|partitioned|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1853,11 +1853,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
           nulls:
             monthly_partition_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1878,11 +1878,11 @@ spec:
           nulls:
             monthly_partition_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2079,11 +2079,11 @@ spec:
               nulls:
                 monthly_partition_not_nulls_percent:
                   warning:
-                    max_percent: 1.0
+                    min_percent: 99.0
                   error:
-                    max_percent: 2.0
+                    min_percent: 98.0
                   fatal:
-                    max_percent: 5.0
+                    min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:

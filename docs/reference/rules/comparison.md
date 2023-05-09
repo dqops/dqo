@@ -728,13 +728,13 @@ ___
 comparison/max_failures
 ```
 **Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
+Data quality rule that verifies if the number of executive failures (the sensor returned 0) is below the max_failures. The default maximum failures is 0 failures (the first failure is reported).
 
 **Parameters**  
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
+|max_failures|Maximum number of consecutive check failures, a check is failed when the sensor&#x27;s query failed to execute due to a connection error, missing table or a corrupted table.|long| ||
 
 
 
@@ -754,8 +754,9 @@ spec:
   fields:
   - field_name: max_failures
     display_name: max_failures
-    help_text: Maximum accepted value for the actual_value returned by the sensor
-      (inclusive).
+    help_text: &quot;Maximum number of consecutive check failures, a check is failed when\
+      \ the sensor&#x27;s query failed to execute due to a connection error, missing table\
+      \ or a corrupted table.&quot;
     data_type: long
 ```
 

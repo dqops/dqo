@@ -23,7 +23,7 @@ Checks whether the table is accessible and available for use.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[table_availability](./table/availability/table-availability/#table-availability)|profiling|Verifies availability on table in database using simple row count.|
+|[table_availability](./table/availability/table-availability/#table-availability)|profiling|Verifies availability of the table in a database using a simple row count.|
 |[daily_table_availability](./table/availability/table-availability/#daily-table-availability)|recurring|Verifies availability on table in database using simple row count. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[monthly_table_availability](./table/availability/table-availability/#monthly-table-availability)|recurring|Verifies availability on table in database using simple row count. Stores the most recent row count for each month when the data quality check was evaluated.|
 
