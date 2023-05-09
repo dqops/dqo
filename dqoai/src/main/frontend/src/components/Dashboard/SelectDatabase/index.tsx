@@ -73,8 +73,47 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
           onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.mysql)}
         >
+          <SvgIcon name="cockroachbd" className="mb-3 w-20 text-blue-500" />
+          <div className="text-3xl font-semibold text-gray-700">Cockroach</div>
+        </div>
+        <div
+          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
+          onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.mysql)}
+        >
           <SvgIcon name="cloudsql" className="mb-3 w-20 text-blue-500" />
           <div className="text-3xl font-semibold text-gray-700">Cloud SQL</div>
+        </div>
+        <div
+          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
+          onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.mysql)}
+        >
+          <SvgIcon name="amazonrds" className="mb-3 w-20 text-blue-500" />
+          <div className="text-3xl font-semibold text-gray-700">Amazon RDS</div>
+        </div>
+        <div
+          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
+          onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.mysql)}
+        >
+          <SvgIcon name="amazonrds" className="mb-3 w-20 text-blue-500" />
+          <div className="text-3xl font-semibold text-gray-700">
+            Amazon Aurora
+          </div>
+        </div>
+        <div
+          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
+          onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.mysql)}
+        >
+          <SvgIcon name="azurepostgresql" className="mb-3 w-20 text-blue-500" />
+          <div className="text-3xl font-semibold text-gray-700">
+            Azure PostgreSQL
+          </div>
+        </div>
+        <div
+          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
+          onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.mysql)}
+        >
+          <SvgIcon name="mariadb" className="mb-3 w-20 text-blue-500" />
+          <div className="text-3xl font-semibold text-gray-700">MariaDB</div>
         </div>
       </div>
     </div>

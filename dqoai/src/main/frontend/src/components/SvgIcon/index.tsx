@@ -68,6 +68,10 @@ import { ReactComponent as MySqlSvg } from './svg/mysql.svg';
 import { ReactComponent as SpinnerSvg } from './svg/spinner.svg';
 import { ReactComponent as SyncSvg } from './svg/sync.svg';
 import { ReactComponent as CloudSqlSvg } from './svg/cloud-sql.svg';
+import { ReactComponent as AmazonRdsSvg } from './svg/amazon-rds.svg';
+import { ReactComponent as AzurePostgreSqlSvg } from './svg/azure-database-postgresql.svg';
+import { ReactComponent as CockroachDbSvg } from './svg/cockroach-db.svg';
+import { ReactComponent as MariaSvg } from './svg/maria-db.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -137,7 +141,11 @@ const iconsMap: any = {
   mysql: MySqlSvg,
   spinner: SpinnerSvg,
   sync: SyncSvg,
-  cloudsql: CloudSqlSvg
+  cloudsql: CloudSqlSvg,
+  amazonrds: AmazonRdsSvg,
+  azurepostgresql: AzurePostgreSqlSvg,
+  cockroachbd: CockroachDbSvg,
+  mariadb: MariaSvg
 };
 
 interface SvgIconProps {
