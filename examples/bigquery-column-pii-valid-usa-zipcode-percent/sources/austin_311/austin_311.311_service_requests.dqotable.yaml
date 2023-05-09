@@ -62,11 +62,11 @@ spec:
         pii:
           valid_usa_zipcode_percent:
             comments:
-              - date: 2023-04-14T09:06:29.764+00:00
-                comment_by: user
-                comment: In this example, values in "incident_zip" column are verified
-                  whether the percentage of USA zip-code values reaches the indicated
-                  thresholds.
+            - date: 2023-04-14T09:06:29.764+00:00
+              comment_by: user
+              comment: "In this example, values in \"incident_zip\" column are verified\
+                \ whether the percentage of USA zip-code values reaches the indicated\
+                \ thresholds."
             warning:
               min_percent: 99.0
             error:

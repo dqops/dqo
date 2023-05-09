@@ -1,6 +1,6 @@
-# Values in range integers percent
+# Percentage of integer values in range
 
-Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.
+Verifies that the percentage of integer values from a range in a column does not exceed the minimum accepted percentage.
 
 **PROBLEM**
 
@@ -11,45 +11,42 @@ The platform analyzes more than 340 measures of behaviors, social and economic f
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
 the world’s largest, annual population-based telephone survey of over 400,000 people.
 
-The `edition` column indicates how many percent of values are within the indicated by the user range. If the percentage of values in range exceeds the set thresholds then the file is not ready to be transcribed.
-
-We want to verify the percent of range values on `edition` column, which will tell us what percentage of data are
-ready to be transcribed.
+We want to verify the percent of values between 0 ad 100,000 in `values` column.
 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using profiling
-[values_in_range_integers_percent](../checks/column/numeric/values-in-range-integers-percent.md) column check.
-Our goal is to verify if the percentage of indicated by the user range values on `edition` column does not fall below 1.0%.
+[values_in_range_numeric_percent](../checks/column/numeric/values-in-range-numeric-percent.md) column check.
+Our goal is to verify if the percentage of values in a range in the `values` column does not fall below the set thresholds.
 
 In this example, we will set three minimum percentage thresholds levels for the check:
 
-- warning: 1.0%
-- error: 2.0%
-- fatal: 5.0%
+- warning: 99.0%
+- error: 95.0%
+- fatal: 90.0%
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../dqo-concepts/checks/index.md).
 
 **VALUE**
 
-If the percentage of data that is available for transcription falls below 1.0%, a warning alert will be triggered.
+If the percentage of valid values falls below 5.0%, a warning alert will be triggered.
 
 ## Data structure
 
 The following is a fragment of the `bigquery-public-data.america_health_rankings.ahr` dataset. Some columns were omitted for clarity.  
-The `edition` column of interest contains values in range between `2021 - 2022`.
+The `value` column of interest contains values in range between 0 and 100,000.
 
-| edition  | report_type             | measure_name | state_name    | subpopulation | value |
-|:---------|:------------------------|:-------------|:--------------|:--------------|:------|
-| **2021** | 2021 Health Disparities | Able-Bodied  | California    |               | 87    |
-| **2021** | 2021 Health Disparities | Able-Bodied  | Colorado      |               | 87    |
-| **2021** | 2021 Health Disparities | Able-Bodied  | Hawaii        |               | 87    |
-| **2021** | 2021 Health Disparities | Able-Bodied  | Kentucky      |               | 79    |
-| **2021** | 2021 Health Disparities | Able-Bodied  | Maryland      |               | 87    |
-| **2021** | 2021 Health Disparities | Able-Bodied  | New Jersey    |               | 87    |
-| **2021** | 2021 Health Disparities | Able-Bodied  | Utah          |               | 88    |
-| **2021** | 2021 Health Disparities | Able-Bodied  | West Virginia |               | 77    |
-| **2021** | 2021 Health Disparities | Able-Bodied  | Arkansas      | Female        | 78    |
+| edition | report_type             | measure_name | state_name    | subpopulation | value  |
+|:--------|:------------------------|:-------------|:--------------|:--------------|:-------|
+| 2021    | 2021 Health Disparities | Able-Bodied  | California    |               | **87** |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Colorado      |               | **87** |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Hawaii        |               | **87** |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Kentucky      |               | **79** |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Maryland      |               | **87** |
+| 2021    | 2021 Health Disparities | Able-Bodied  | New Jersey    |               | **87** |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Utah          |               | **88** |
+| 2021    | 2021 Health Disparities | Able-Bodied  | West Virginia |               | **77** |
+| 2021    | 2021 Health Disparities | Able-Bodied  | Arkansas      | Female        | **78** |
 
 ## YAML configuration file
 
@@ -57,15 +54,15 @@ The YAML configuration file stores both the table details and checks configurati
 
 In this example, we have set three minimum percentage thresholds levels for the check:
 
-- warning: 1.0%
-- error: 2.0%
-- fatal: 5.0%
+- warning: 99.0%
+- error: 95.0%
+- fatal: 90.0%
 
-The highlighted fragments in the YAML file below represent the segment where the profiling `values_in_range_integers_percent` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the profiling `values_in_range_numeric_percent` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../dqo-concepts/checks/index.md).
 
-```yaml hl_lines="9-30"
+```yaml hl_lines="28-49"
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -77,24 +74,6 @@ spec:
       type_snapshot:
         column_type: INT64
         nullable: true
-      profiling_checks:
-        numeric:
-          values_in_range_integers_percent:
-            comments:
-            - date: 2023-04-25T13:08:18.592+00:00
-              comment_by: user
-              comment: "\"In this example, values in \"edition\" column are verified\
-                \ whether the percent of values are within the indicated by the user\
-                \ range reaches the indicated thresholds\""
-            parameters:
-              min_value: 2021
-              max_value: 2022
-            warning:
-              min_percent: 1.0
-            error:
-              min_percent: 2.0
-            fatal:
-              min_percent: 5.0
     report_type:
       type_snapshot:
         column_type: STRING
@@ -115,6 +94,40 @@ spec:
       type_snapshot:
         column_type: FLOAT64
         nullable: true
+      profiling_checks:
+        numeric:
+          values_in_range_numeric_percent:
+            comments:
+            - date: 2023-05-09T07:28:29.188+00:00
+              comment_by: user
+              comment: "In this example, the values in the `values` column are verified\
+                \ that they are within the set range and that the percentage of these\
+                \ values does not exceed the set thresholds."
+            parameters:
+              min_value: 0.0
+              max_value: 100000.0
+            warning:
+              min_percent: 99.0
+            error:
+              min_percent: 95.0
+            fatal:
+              min_percent: 90.0
+    lower_ci:
+      type_snapshot:
+        column_type: FLOAT64
+        nullable: true
+    upper_ci:
+      type_snapshot:
+        column_type: FLOAT64
+        nullable: true
+    source:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    source_date:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
 ```
 ## Running the checks in the example and evaluating the results
 
@@ -126,14 +139,14 @@ To execute the check prepared in the example, run the following command in DQO S
 check run
 ```
 You should see the results as the one below.
-The percent of values within the indicated by the user range, in this case this is `2021 - 2022` in the `edition` column is above 5% and the check gives valid result.
+The percentage of values between 1 and 100,000 in the `value` column is less than 95% and more than 90% and the check raised an error.
 
 ```
 Check evaluation summary per table:
 +-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
 |Connection             |Table                      |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
 +-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|america_health_rankings|america_health_rankings.ahr|1     |1             |1            |0       |0     |0           |0               |
+|america_health_rankings|america_health_rankings.ahr|1     |1             |0            |0       |1     |0           |0               |
 +-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
 ```
 
@@ -153,7 +166,7 @@ SQL to be executed on the connection:
 SELECT
     100.0 * SUM(
         CASE
-            WHEN analyzed_table.`edition` >= 2021 AND analyzed_table.`edition` <= 2022 THEN 1
+            WHEN analyzed_table.`value` >= 0.0 AND analyzed_table.`value` <= 100000.0 THEN 1
             ELSE 0
         END
     ) / COUNT(*) AS actual_value,
@@ -165,18 +178,19 @@ ORDER BY time_period, time_period_utc
 **************************************************
 ```
 
-You can also see the results returned by the sensor. The actual value in this example is 100.0%, what is above minimal
-threshold level set in the fatal error (5%).
+You can also see the results returned by the sensor. The actual value in this example is 92.9%, which is below the minimal
+threshold level set in the warning alert(95.0%).
 
 ```
 **************************************************
-Finished executing a sensor for a check values_in_range_integers_percent on the table america_health_rankings.ahr using a sensor definition column/numeric/values_in_range_integers_percent, sensor result count: 1
+Finished executing a sensor for a check values_in_range_numeric_percent on the table america_health_rankings.ahr
+using a sensor definition column/numeric/values_in_range_numeric_percent, sensor result count: 1
 
 Results returned by the sensor:
-+------------+------------------------+------------------------+
-|actual_value|time_period             |time_period_utc         |
-+------------+------------------------+------------------------+
-|100.0       |2023-04-25T13:08:32.018Z|2023-04-25T13:08:32.018Z|
-+------------+------------------------+------------------------+
++-----------------+------------------------+------------------------+
+|actual_value     |time_period             |time_period_utc         |
++-----------------+------------------------+------------------------+
+|92.87799504268797|2023-05-09T07:20:03.160Z|2023-05-09T07:20:03.160Z|
++-----------------+------------------------+------------------------+
 **************************************************
 ```

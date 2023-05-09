@@ -1,4 +1,4 @@
-# Duplicate percent
+# Percentage of duplicates
 
 Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.
 
@@ -9,16 +9,13 @@ Verifies that the percentage of duplicate values in a column does not exceed the
 What started as police non-emergency line for the City of Austin has become a robust Citywide Information Center
 where ambassadors are available to answer residents’ concerns 24 hours a day, 7 days a week, and 365 days a year.
 
-The `unique_key` column indicates how many percent of values are duplicated. If the percentage of duplicated values exceeds the set thresholds then the file is not ready to be transcribed.
-
-We want to verify the percent of duplicated values on `unique_key` column, which will tell us what percentage of data are
-ready to be transcribed.
+The `unique_key` column contains unique key data. We want to verify the percent of duplicated values on `unique_key` column.
 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.austin_311.311_service_requests` using profiling
 [duplicate_percent](../checks/column/uniqueness/duplicate-percent.md) column check.
-Our goal is to verify if the percentage of duplicated values on `unique_key` column does not exceed 1.0%.
+Our goal is to verify if the percentage of duplicated values in `unique_key` column does not exceed set thresholds.
 
 In this example, we will set three maximum percentage thresholds levels for the check:
 
@@ -30,7 +27,7 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the percentage of data that is available for transcription exceed 1.0%, a warning alert will be triggered.
+If the percentage of duplicated values on `unqiue_key` column exceed 1.0%, a warning alert will be triggered.
 
 ## Data structure
 
@@ -156,7 +153,7 @@ GROUP BY time_period, time_period_utc
 ORDER BY time_period, time_period_utc
 **************************************************
 ```
-You can also see the results returned by the sensor. The actual value in this example is 0.0%, what is below maximum
+You can also see the results returned by the sensor. The actual value in this example is 0.0%, which is below the maximum
 threshold level set in the warning (5.0%).
 ```
 **************************************************

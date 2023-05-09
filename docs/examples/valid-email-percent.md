@@ -1,4 +1,4 @@
-# Valid email percent
+# Percentage of valid emails
 
 Verifies that the percentage of valid email values in a column does not exceed the maximum accepted percentage.
 
@@ -6,15 +6,12 @@ Verifies that the percentage of valid email values in a column does not exceed t
 
 Here is a table with some sample customer data. In this example, we will monitor the `email` column and verify that each email is in the correct format.
 
-The `email` column indicates how many percent of email values are valid. If the percentage of invalid values exceeds the set thresholds then the file is not ready to be transcribed.
-
-We want to verify the percent of invalid email values on `email` column, which will tell us what percentage of data are
-ready to be transcribed.
+The `email` column contains email values. We want to verify the percent of invalid email values on `email` column.
 
 **SOLUTION**
 
 We will verify the data using profiling [valid_email_percent](../checks/column/pii/valid-email-percent.md) column check.
-Our goal is to verify if the percentage of valid email values on `email` column does not fall below 99.0%.
+Our goal is to verify if the percentage of valid email values in `email` column does not fall below set thresholds.
 
 In this example, we will set three minimum percentage thresholds levels for the check:
 
@@ -26,7 +23,7 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the percentage of data that is available for transcription exceed 99.0%, a warning alert will be triggered.
+If the percentage of valid email values falls below 99.0%, a warning alert will be triggered.
 
 ## Data structure
 
@@ -116,7 +113,7 @@ To execute the check prepared in the example, run the following command in DQO S
 check run
 ```
 You should see the results as the one below.
-The percent of the invalid email values in the `email` column is above 95.0% and the check raised the Fatal error.
+The percent of the invalid email values in the `email` column is below 95.0% and the check raised the fatal error.
 ```
 Check evaluation summary per table:
 +--------------------+-----------------------------------------------------+------+--------------+-------------+--------+------+------------+----------------+
@@ -156,8 +153,8 @@ GROUP BY time_period, time_period_utc
 ORDER BY time_period, time_period_utc
 **************************************************
 ```
-You can also see the results returned by the sensor. The actual value of valid email values in this example is 40.0%, what is below minimum
-threshold level set in the warning (99.0%).
+You can also see the results returned by the sensor. The actual value of valid email values in this example is 40.0%, which is below the minimum
+threshold level set in the fatal error (95.0%).
 ```
 **************************************************
 Finished executing a sensor for a check valid_email_percent on the table dqo_ai_test_data.string_test_data_3888926926528139965 using a sensor definition column/pii/valid_email_percent, sensor result count: 1
