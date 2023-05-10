@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-
 import Button from '../../Button';
 import Input from '../../Input';
 import BigqueryConnection from './BigqueryConnection';
@@ -25,7 +24,6 @@ import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
 import SqlServerConnection from './SqlServerConnection';
 import SqlServerLogo from '../../SvgIcon/svg/mssql-server.svg';
 import MySQLConnection from './MySQLConnection';
-import YugabyteDBConnection from './YugabyteDBConnection';
 import MySQLLogo from '../../SvgIcon/svg/mysql.svg';
 import SvgIcon from '../../SvgIcon';
 
