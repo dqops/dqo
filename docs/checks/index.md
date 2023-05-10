@@ -87,8 +87,8 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 |[days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#days-since-most-recent-event)|profiling|Calculates the number of days since the most recent event timestamp (freshness)|
 |[daily_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#daily-days-since-most-recent-event)|recurring|Daily  calculating the number of days since the most recent event timestamp (freshness)|
 |[monthly_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#monthly-days-since-most-recent-event)|recurring|Monthly recurring calculating the number of days since the most recent event timestamp (freshness)|
-|[daily_partition_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#daily-partition-days-since-most-recent-event)|partitioned|Daily partition checkpoint calculating the number of days since the most recent event timestamp (freshness)|
-|[monthly_partition_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#monthly-partition-days-since-most-recent-event)|partitioned|Monthly partition checkpoint calculating the number of days since the most recent event (freshness)|
+|[daily_partition_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#daily-partition-days-since-most-recent-event)|partitioned|Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)|
+|[monthly_partition_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#monthly-partition-days-since-most-recent-event)|partitioned|Monthly partitioned check calculating the number of days since the most recent event (freshness)|
 
 
 | Check name | Check type | Description |
@@ -96,8 +96,8 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 |[data_ingestion_delay](./table/timeliness/data-ingestion-delay/#data-ingestion-delay)|profiling|Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
 |[daily_data_ingestion_delay](./table/timeliness/data-ingestion-delay/#daily-data-ingestion-delay)|recurring|Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
 |[monthly_data_ingestion_delay](./table/timeliness/data-ingestion-delay/#monthly-data-ingestion-delay)|recurring|Monthly recurring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
-|[daily_partition_data_ingestion_delay](./table/timeliness/data-ingestion-delay/#daily-partition-data-ingestion-delay)|partitioned|Daily partition checkpoint calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
-|[monthly_partition_data_ingestion_delay](./table/timeliness/data-ingestion-delay/#monthly-partition-data-ingestion-delay)|partitioned|Monthly partition checkpoint calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
+|[daily_partition_data_ingestion_delay](./table/timeliness/data-ingestion-delay/#daily-partition-data-ingestion-delay)|partitioned|Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
+|[monthly_partition_data_ingestion_delay](./table/timeliness/data-ingestion-delay/#monthly-partition-data-ingestion-delay)|partitioned|Monthly partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
 
 
 | Check name | Check type | Description |
@@ -105,14 +105,14 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 |[days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#days-since-most-recent-ingestion)|profiling|Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
 |[daily_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#daily-days-since-most-recent-ingestion)|recurring|Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
 |[monthly_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#monthly-days-since-most-recent-ingestion)|recurring|Monthly recurring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
-|[daily_partition_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#daily-partition-days-since-most-recent-ingestion)|partitioned|Daily partition checkpoint calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
-|[monthly_partition_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#monthly-partition-days-since-most-recent-ingestion)|partitioned|Monthly partition checkpoint calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)|
+|[daily_partition_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#daily-partition-days-since-most-recent-ingestion)|partitioned|Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
+|[monthly_partition_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#monthly-partition-days-since-most-recent-ingestion)|partitioned|Monthly partitioned check calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[daily_partition_reload_lag](./table/timeliness/daily-partition-reload-lag/#daily-partition-reload-lag)|partitioned|Daily partition checkpoint calculating the longest time a row waited to be load|
-|[monthly_partition_reload_lag](./table/timeliness/daily-partition-reload-lag/#monthly-partition-reload-lag)|partitioned|Monthly partition checkpoint calculating the longest time a row waited to be load|
+|[daily_partition_reload_lag](./table/timeliness/daily-partition-reload-lag/#daily-partition-reload-lag)|partitioned|Daily partitioned check calculating the longest time a row waited to be load|
+|[monthly_partition_reload_lag](./table/timeliness/daily-partition-reload-lag/#monthly-partition-reload-lag)|partitioned|Monthly partitioned check calculating the longest time a row waited to be load|
 
 
 

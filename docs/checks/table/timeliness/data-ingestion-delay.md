@@ -2114,7 +2114,7 @@ ___
 ## **daily partition data ingestion delay**  
   
 **Check description**  
-Daily partition checkpoint calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp  
+Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2818,7 +2818,7 @@ ___
 ## **monthly partition data ingestion delay**  
   
 **Check description**  
-Monthly partition checkpoint calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp  
+Monthly partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

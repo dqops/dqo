@@ -39,7 +39,7 @@ dqo.ai> data clean [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] -b=<begin> -c=<conne
 |`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name| ||
 |`-cr`<br/>`--check-results`<br/>|Delete the check results| ||
-|`-ct`<br/>`--check-type`<br/>|Data quality check type (adhoc, checkpoint, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
+|`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, recurring, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
 |`-col`<br/>`--column`<br/>|Column name| ||
 |`-c`<br/>`--connection`<br/>|Connection name|:material-check-bold:||
 |`-ds`<br/>`--data-stream`<br/>|Data stream hierarchy level filter (tag)| ||
