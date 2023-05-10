@@ -75,11 +75,10 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
             </tr>
             {job.jobType === 'synchronize multiple folders' ? (
               <Accordion open={open2}>
-                <AccordionHeader
-                  onClick={() => setOpen2(!open2)}
-                  className="px-2 capitalize text-xl"
-                >
-                  Tasks{' '}
+                <AccordionHeader onClick={() => setOpen2(!open2)}>
+                  <div className="px-2 flex justify-between items-center text-sm w-full text-gray-700">
+                    Tasks{' '}
+                  </div>
                 </AccordionHeader>
                 <AccordionBody>
                   <ul>

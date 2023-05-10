@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import {
   Popover,
@@ -15,12 +15,13 @@ import { useError, IError } from '../../contexts/errrorContext';
 import JobItem from './JobItem';
 import ErrorItem from './ErrorItem';
 import moment from 'moment';
+import { clear, error } from 'console';
 
 const NotificationMenu = () => {
   const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
   const dispatch = useActionDispatch();
   const { errors } = useError();
-
+  const [counter, setCounter] = useState(0);
   // const data = jobs?.jobs
   //   ? jobs?.jobs.sort((a, b) => {
   //       return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
@@ -50,6 +51,7 @@ const NotificationMenu = () => {
           })
           .map((item) => ({ type: 'job', item }))
       : [];
+
     const errorData = errors.map((item: IError) => ({ type: 'error', item }));
 
     const newData = jobsData.concat(errorData);
@@ -83,6 +85,7 @@ const NotificationMenu = () => {
       <PopoverContent className="z-50 min-w-120 max-w-120 px-0 ">
         <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex items-center justify-between px-4">
           <div>Notifications</div>
+          <div className="text-red-600 border-solid">Clear</div>
         </div>
         <div className="overflow-auto max-h-100 py-4 px-4">
           {data.map((notification: any, index) =>
