@@ -137,7 +137,7 @@ public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Voi
                 })
                 .collect(Collectors.toList());
 
-        ChildDqoQueueJobsContainer<Void> childJobsContainer = this.dqoJobQueue.pushChildJobs(synchronizeFolderJobs);
+        ChildDqoQueueJobsContainer<Void> childJobsContainer = this.dqoJobQueue.pushChildJobs(synchronizeFolderJobs, jobExecutionContext.getJobId());
         childJobsContainer.waitForChildResults(jobExecutionContext.getCancellationToken());
         return null;
     }

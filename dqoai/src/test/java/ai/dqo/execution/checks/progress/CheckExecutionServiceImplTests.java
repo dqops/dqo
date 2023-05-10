@@ -176,17 +176,17 @@ public class CheckExecutionServiceImplTests extends BaseTest {
 
         CheckExecutionSummary profilingSummary = this.sut.executeChecks(
                 this.executionContext, profilingFilters, null, this.progressListener, true,
-                false, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
+                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
         CheckExecutionSummary recurringSummary = this.sut.executeChecks(
                 this.executionContext, recurringFilters, null, this.progressListener, true,
-                false, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
+                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
         CheckExecutionSummary partitionedSummary = this.sut.executeChecks(
                 this.executionContext, partitionedFilters, null, this.progressListener, true,
-                false, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
+                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
 
         CheckExecutionSummary allSummary = this.sut.executeChecks(
                 this.executionContext, allFilters, null, this.progressListener, true,
-                false, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
+                false, null, JobCancellationTokenObjectMother.createDummyJobCancellationToken());
 
         Assertions.assertEquals(0, partitionedSummary.getTotalChecksExecutedCount());
         Assertions.assertEquals(2, profilingSummary.getTotalChecksExecutedCount());
