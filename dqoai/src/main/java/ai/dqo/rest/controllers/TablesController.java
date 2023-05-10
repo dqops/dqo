@@ -16,6 +16,7 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
@@ -32,7 +33,6 @@ import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.statistics.services.StatisticsDataService;
 import ai.dqo.data.statistics.services.models.StatisticsResultsForTableModel;
 import ai.dqo.execution.ExecutionContext;
-import ai.dqo.metadata.basespecs.ElementWrapper;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
@@ -46,16 +46,25 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.check.CheckTemplate;
-import ai.dqo.rest.models.metadata.*;
+import ai.dqo.rest.models.metadata.TableBasicModel;
+import ai.dqo.rest.models.metadata.TableModel;
+import ai.dqo.rest.models.metadata.TablePartitioningModel;
+import ai.dqo.rest.models.metadata.TableStatisticsModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
+import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
 import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
 import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
+import ai.dqo.services.check.mapping.models.UIAllChecksModel;
 import ai.dqo.services.check.mapping.models.UICheckContainerModel;
+import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
+import ai.dqo.services.check.mapping.models.column.UITableColumnChecksModel;
 import ai.dqo.services.metadata.TableService;
 import ai.dqo.statistics.StatisticsCollectorTarget;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -80,11 +89,13 @@ import java.util.stream.Stream;
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Tables", description = "Manages tables inside a connection/schema")
 public class TablesController {
+    private static final Logger LOG = LoggerFactory.getLogger(TablesController.class);
     private final TableService tableService;
     private UserHomeContextFactory userHomeContextFactory;
     private DqoHomeContextFactory dqoHomeContextFactory;
     private SpecToUiCheckMappingService specToUiCheckMappingService;
     private UiToSpecCheckMappingService uiToSpecCheckMappingService;
+    private final UIAllChecksModelFactory uiAllChecksModelFactory;
     private StatisticsDataService statisticsDataService;
 
     /**
@@ -94,6 +105,7 @@ public class TablesController {
      * @param dqoHomeContextFactory            DQO home context factory, used to retrieve the definition of built-in sensors.
      * @param specToUiCheckMappingService      Check mapper to convert the check specification to a UI model.
      * @param uiToSpecCheckMappingService      Check mapper to convert the check UI model to a check specification.
+     * @param uiAllChecksModelFactory          Factory for producing complex UI friendly views of check configurations.
      * @param statisticsDataService            Statistics data service, provides access to the statistics (basic profiling).
      */
     @Autowired
@@ -102,12 +114,14 @@ public class TablesController {
                             DqoHomeContextFactory dqoHomeContextFactory,
                             SpecToUiCheckMappingService specToUiCheckMappingService,
                             UiToSpecCheckMappingService uiToSpecCheckMappingService,
+                            UIAllChecksModelFactory uiAllChecksModelFactory,
                             StatisticsDataService statisticsDataService) {
         this.tableService = tableService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.specToUiCheckMappingService = specToUiCheckMappingService;
         this.uiToSpecCheckMappingService = uiToSpecCheckMappingService;
+        this.uiAllChecksModelFactory = uiAllChecksModelFactory;
         this.statisticsDataService = statisticsDataService;
     }
 
@@ -1185,7 +1199,6 @@ public class TablesController {
     }
 
     /**
-<<<<<<< HEAD
      * Returns a list of table level statistics for a table.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
@@ -1250,7 +1263,228 @@ public class TablesController {
     }
 
     /**
-=======
+     * Retrieves a UI friendly data quality profiling check configuration list of column-level checks on a requested table.
+     * @param connectionName    Connection name.
+     * @param schemaName        Schema name.
+     * @param tableName         Table name.
+     * @param columnNamePattern (Optional) Column search pattern filter.
+     * @param columnDataType    (Optional) Filter on column data-type.
+     * @param checkCategory     (Optional) Filter on check category.
+     * @param checkName         (Optional) Filter on check name.
+     * @param checkEnabled      (Optional) Filter on check enabled status.
+     * @return UI friendly data quality profiling check configuration list on a requested schema.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/profiling/ui")
+    @ApiOperation(value = "getTableColumnsProfilingChecksUI", notes = "Return a UI friendly model of configurations for column-level data quality profiling checks on a table", response = UITableColumnChecksModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of data quality profiling checks on a schema returned", response = UITableColumnChecksModel.class),
+            @ApiResponse(code = 404, message = "Connection, schema or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UITableColumnChecksModel>> getTableColumnsProfilingChecksUI(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam(value = "Column name pattern", required = false) @RequestParam(required = false)
+            Optional<String> columnNamePattern,
+            @ApiParam(value = "Column data-type", required = false) @RequestParam(required = false)
+            Optional<String> columnDataType,
+            @ApiParam(value = "Check category", required = false) @RequestParam(required = false)
+            Optional<String> checkCategory,
+            @ApiParam(value = "Check name", required = false) @RequestParam(required = false)
+            Optional<String> checkName,
+            @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
+            Optional<Boolean> checkEnabled) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+        
+        PhysicalTableName schemaTableName = new PhysicalTableName(schemaName, tableName);
+        TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, schemaTableName);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        CheckSearchFilters filters = new CheckSearchFilters();
+        filters.setCheckType(CheckType.PROFILING);
+        filters.setConnectionName(connectionName);
+        filters.setSchemaTableName(schemaTableName.toTableSearchFilter());
+        filters.setColumnName(columnNamePattern.orElse(null));
+        filters.setColumnDataType(columnDataType.orElse(null));
+        filters.setCheckCategory(checkCategory.orElse(null));
+        filters.setCheckName(checkName.orElse(null));
+        filters.setCheckTarget(CheckTarget.column);
+        filters.setEnabled(checkEnabled.orElse(null));
+
+        List<UIAllChecksModel> uiAllChecksModels = this.uiAllChecksModelFactory.fromCheckSearchFilters(filters);
+        if (uiAllChecksModels.size() != 1) {
+            LOG.warn("Unexpected result size in getTableColumnsProfilingChecksUI: " + uiAllChecksModels.size());
+        }
+        
+        UITableColumnChecksModel uiTableColumnChecksModel = this.getTableColumnChecksFromAllChecksModel(uiAllChecksModels.get(0));
+
+        return new ResponseEntity<>(Mono.justOrEmpty(uiTableColumnChecksModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves a UI friendly data quality recurring check configuration list of column-level checks on a requested table.
+     * @param connectionName    Connection name.
+     * @param schemaName        Schema name.
+     * @param tableName         Table name.
+     * @param timeScale         Check time-scale.
+     * @param columnNamePattern (Optional) Column search pattern filter.
+     * @param columnDataType    (Optional) Filter on column data-type.
+     * @param checkCategory     (Optional) Filter on check category.
+     * @param checkName         (Optional) Filter on check name.
+     * @param checkEnabled      (Optional) Filter on check enabled status.
+     * @return UI friendly data quality recurring check configuration list on a requested schema.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/recurring/{timeScale}/ui")
+    @ApiOperation(value = "getTableColumnsRecurringChecksUI", notes = "Return a UI friendly model of configurations for column-level data quality recurring checks on a table", response = UITableColumnChecksModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of data quality recurring checks on a schema returned", response = UITableColumnChecksModel.class),
+            @ApiResponse(code = 404, message = "Connection, schema or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UITableColumnChecksModel>> getTableColumnsRecurringChecksUI(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Check time-scale") @PathVariable CheckTimeScale timeScale,
+            @ApiParam(value = "Column name pattern", required = false) @RequestParam(required = false)
+            Optional<String> columnNamePattern,
+            @ApiParam(value = "Column data-type", required = false) @RequestParam(required = false)
+            Optional<String> columnDataType,
+            @ApiParam(value = "Check category", required = false) @RequestParam(required = false)
+            Optional<String> checkCategory,
+            @ApiParam(value = "Check name", required = false) @RequestParam(required = false)
+            Optional<String> checkName,
+            @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
+            Optional<Boolean> checkEnabled) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        PhysicalTableName schemaTableName = new PhysicalTableName(schemaName, tableName);
+        TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, schemaTableName);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        CheckSearchFilters filters = new CheckSearchFilters();
+        filters.setCheckType(CheckType.RECURRING);
+        filters.setTimeScale(timeScale);
+        filters.setConnectionName(connectionName);
+        filters.setSchemaTableName(schemaTableName.toTableSearchFilter());
+        filters.setColumnName(columnNamePattern.orElse(null));
+        filters.setColumnDataType(columnDataType.orElse(null));
+        filters.setCheckCategory(checkCategory.orElse(null));
+        filters.setCheckName(checkName.orElse(null));
+        filters.setCheckTarget(CheckTarget.column);
+        filters.setEnabled(checkEnabled.orElse(null));
+
+        List<UIAllChecksModel> uiAllChecksModels = this.uiAllChecksModelFactory.fromCheckSearchFilters(filters);
+        if (uiAllChecksModels.size() != 1) {
+            LOG.warn("Unexpected result size in getTableColumnsRecurringChecksUI: " + uiAllChecksModels.size());
+        }
+
+        UITableColumnChecksModel uiTableColumnChecksModel = this.getTableColumnChecksFromAllChecksModel(uiAllChecksModels.get(0));
+
+        return new ResponseEntity<>(Mono.justOrEmpty(uiTableColumnChecksModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves a UI friendly data quality partitioned check configuration list of column-level checks on a requested table.
+     * @param connectionName    Connection name.
+     * @param schemaName        Schema name.
+     * @param tableName         Table name.
+     * @param timeScale         Check time-scale.
+     * @param columnNamePattern (Optional) Column search pattern filter.
+     * @param columnDataType    (Optional) Filter on column data-type.
+     * @param checkCategory     (Optional) Filter on check category.
+     * @param checkName         (Optional) Filter on check name.
+     * @param checkEnabled      (Optional) Filter on check enabled status.
+     * @return UI friendly data quality partitioned check configuration list on a requested schema.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/partitioned/{timeScale}/ui")
+    @ApiOperation(value = "getTableColumnsPartitionedChecksUI", notes = "Return a UI friendly model of configurations for column-level data quality partitioned checks on a table", response = UITableColumnChecksModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Configuration of data quality partitioned checks on a schema returned", response = UITableColumnChecksModel.class),
+            @ApiResponse(code = 404, message = "Connection, schema or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<UITableColumnChecksModel>> getTableColumnsPartitionedChecksUI(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Check time-scale") @PathVariable CheckTimeScale timeScale,
+            @ApiParam(value = "Column name pattern", required = false) @RequestParam(required = false)
+            Optional<String> columnNamePattern,
+            @ApiParam(value = "Column data-type", required = false) @RequestParam(required = false)
+            Optional<String> columnDataType,
+            @ApiParam(value = "Check category", required = false) @RequestParam(required = false)
+            Optional<String> checkCategory,
+            @ApiParam(value = "Check name", required = false) @RequestParam(required = false)
+            Optional<String> checkName,
+            @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
+            Optional<Boolean> checkEnabled) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        PhysicalTableName schemaTableName = new PhysicalTableName(schemaName, tableName);
+        TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, schemaTableName);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        CheckSearchFilters filters = new CheckSearchFilters();
+        filters.setCheckType(CheckType.PARTITIONED);
+        filters.setTimeScale(timeScale);
+        filters.setConnectionName(connectionName);
+        filters.setSchemaTableName(schemaTableName.toTableSearchFilter());
+        filters.setColumnName(columnNamePattern.orElse(null));
+        filters.setColumnDataType(columnDataType.orElse(null));
+        filters.setCheckCategory(checkCategory.orElse(null));
+        filters.setCheckName(checkName.orElse(null));
+        filters.setCheckTarget(CheckTarget.column);
+        filters.setEnabled(checkEnabled.orElse(null));
+
+        List<UIAllChecksModel> uiAllChecksModels = this.uiAllChecksModelFactory.fromCheckSearchFilters(filters);
+        if (uiAllChecksModels.size() != 1) {
+            LOG.warn("Unexpected result size in getTableColumnsPartitionedChecksUI: " + uiAllChecksModels.size());
+        }
+
+        UITableColumnChecksModel uiTableColumnChecksModel = this.getTableColumnChecksFromAllChecksModel(uiAllChecksModels.get(0));
+
+        return new ResponseEntity<>(Mono.justOrEmpty(uiTableColumnChecksModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Gets a {@link UITableColumnChecksModel} from {@link UIAllChecksModel}. Additional assumptions apply and unexpected states are logged.
+     * 
+     * @param uiAllChecksModel All checks model with only column-level checks on a single table.
+     * @return Extracted checks model for the specific table.
+     */
+    protected UITableColumnChecksModel getTableColumnChecksFromAllChecksModel(UIAllChecksModel uiAllChecksModel) {
+        if (uiAllChecksModel.getTableChecksModel() != null) {
+            LOG.warn("Unexpected table checks where only column checks are permitted");
+        }
+
+        UIAllColumnChecksModel uiAllColumnChecksModel = uiAllChecksModel.getColumnChecksModel();
+        if (uiAllColumnChecksModel == null) {
+            return null;
+        }
+        
+        List<UITableColumnChecksModel> uiTableColumnChecksModels = uiAllColumnChecksModel.getUiTableColumnChecksModels();
+        if (uiTableColumnChecksModels.size() != 1) {
+            LOG.warn("Unexpected result size in getTableColumnChecksFromAllChecksModel: " + uiTableColumnChecksModels.size());
+        }
+        
+        return uiTableColumnChecksModels.get(0);
+    }
+
+    /**
      * Retrieves the list of profiling checks templates on the given table.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
@@ -1373,7 +1607,6 @@ public class TablesController {
 
 
     /**
->>>>>>> a76fd6228 (Project-wide rename checkpoint, adhoc. Rest api (WIP))
      * Creates (adds) a new table.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
