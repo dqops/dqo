@@ -29,9 +29,7 @@ import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.cli.commands.check.impl.models.UIAllChecksCliPatchParameters;
-import ai.dqo.core.jobqueue.DqoJobQueue;
-import ai.dqo.core.jobqueue.DqoQueueJobFactory;
-import ai.dqo.core.jobqueue.DqoQueueJobFactoryImpl;
+import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.scheduler.quartz.*;
 import ai.dqo.execution.ExecutionContextFactory;
 import ai.dqo.execution.ExecutionContextFactoryImpl;
@@ -52,10 +50,8 @@ import ai.dqo.rules.comparison.*;
 import ai.dqo.services.check.CheckService;
 import ai.dqo.services.check.CheckServiceImpl;
 import ai.dqo.services.check.mapping.*;
-import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;
-import ai.dqo.utils.jobs.DqoJobQueueObjectMother;
 import ai.dqo.utils.reflection.ReflectionService;
 import ai.dqo.utils.reflection.ReflectionServiceSingleton;
 import ai.dqo.utils.serialization.JsonSerializerImpl;
@@ -95,13 +91,13 @@ public class CheckCliServiceImplTests extends BaseTest {
         UIAllChecksPatchApplier uiAllChecksPatchApplier = new UIAllChecksPatchApplierImpl(uiToSpecCheckMappingService);
 
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
-        DqoJobQueue dqoJobQueue = DqoJobQueueObjectMother.getDefault();
+        ParentDqoJobQueue parentDqoJobQueue = DqoJobQueueObjectMother.getDefaultParentJobQueue();
 
         CheckService checkService = new CheckServiceImpl(
                 uiAllChecksModelFactory,
                 uiAllChecksPatchApplier,
                 dqoQueueJobFactory,
-                dqoJobQueue,
+                parentDqoJobQueue,
                 userHomeContextFactory);
 
         this.sut = new CheckCliServiceImpl(
