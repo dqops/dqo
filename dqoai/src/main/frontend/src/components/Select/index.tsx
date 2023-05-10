@@ -12,15 +12,15 @@ import {
 } from '@material-tailwind/react';
 
 interface Option {
-  label: string;
-  value?: string;
+  label: string | number;
+  value?: string | number;
 }
 
 interface SelectProps {
   label?: string;
   options: Option[];
   placeholder?: string;
-  value?: string;
+  value?: string | number;
   onChange?: (val: any) => void;
   className?: string;
   info?: boolean;
