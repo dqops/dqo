@@ -79,6 +79,7 @@ public class CollectStatisticsQueueJob extends ParentDqoQueueJob<StatisticsColle
                 this.parameters.getDataScope(),
                 this.parameters.isDummySensorExecution(),
                 true,
+                jobExecutionContext.getJobId(),
                 jobExecutionContext.getCancellationToken());
         return statisticsCollectionExecutionSummary;
     }

@@ -62,17 +62,35 @@ public class DqoJobQueueImpl extends BaseDqoJobQueueImpl implements DqoJobQueue 
             throw new DqoJobQueuePushFailedException("Parent jobs must be pushed to the ParentDqoJobQueue only.");
         }
 
-        return super.pushJobCore(job);
+        return super.pushJobCore(job, null);
+    }
+
+    /**
+     * Pushes a job to the job queue without waiting, storing also a reference to the parent job.
+     *
+     * @param job Job to be pushed.
+     * @param parentJobId Parent job id.
+     * @return Started job summary and a future to await for finish.
+     */
+    @Override
+    public <T> PushJobResult<T> pushJob(DqoQueueJob<T> job, DqoQueueJobId parentJobId) {
+        if (job instanceof ParentDqoQueueJob) {
+            throw new DqoJobQueuePushFailedException("Parent jobs must be pushed to the ParentDqoJobQueue only.");
+        }
+
+        return super.pushJobCore(job, parentJobId);
     }
 
     /**
      * Pushes a collection of child jobs.
      * @param childJobs Collection of child jobs.
+     * @param parentJobId Parent job id.
      * @return Child jobs container that will track the completion of all child jobs.
      * @param <T> Child job result type.
      */
     @Override
-    public <T> ChildDqoQueueJobsContainer<T> pushChildJobs(Collection<DqoQueueJob<T>> childJobs) {
+    public <T> ChildDqoQueueJobsContainer<T> pushChildJobs(Collection<DqoQueueJob<T>> childJobs, DqoQueueJobId parentJobId) {
+        assert parentJobId != null;
         ChildDqoQueueJobsContainer<T> childDqoQueueJobsContainer = new ChildDqoQueueJobsContainer<T>(childJobs);
         int maxDegreeOfParallelism = this.parallelJobLimitProvider.getMaxDegreeOfParallelism();
 
@@ -82,7 +100,7 @@ public class DqoJobQueueImpl extends BaseDqoJobQueueImpl implements DqoJobQueue 
             DqoQueueJob<T> finishedJob = (DqoQueueJob<T>) job;
             DqoQueueJob<T> nextJobToSchedule = childDqoQueueJobsContainer.notifyChildJobFinished(finishedJob, completionStatus);
             if (nextJobToSchedule != null) {
-                this.pushJob(nextJobToSchedule);
+                this.pushJob(nextJobToSchedule, parentJobId);
             }
         };
 
@@ -97,7 +115,7 @@ public class DqoJobQueueImpl extends BaseDqoJobQueueImpl implements DqoJobQueue 
             }
 
             assert !(nextChildJob instanceof ParentDqoQueueJob);
-            this.pushJob(nextChildJob);
+            this.pushJob(nextChildJob, parentJobId);
         }
 
         return childDqoQueueJobsContainer;

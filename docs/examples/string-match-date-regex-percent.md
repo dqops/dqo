@@ -1,4 +1,4 @@
-# String match date regex percent
+# Percent of strings matching date regex
 
 Verifies that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage.
 
@@ -11,16 +11,13 @@ The platform analyzes more than 340 measures of behaviors, social and economic f
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
 the world’s largest, annual population-based telephone survey of over 400,000 people.
 
-The `source_date` column indicates how many percent of values matches the indicated by the user date format. If the percentage of values in range falls below the set thresholds then the file is not ready to be transcribed.
-
-We want to verify the percent of range values on `source_date` column, which will tell us what percentage of data are
-ready to be transcribed.
+The `source_date` column contains non-standard date format. We want to verify the percent of values matches the indicated by the user date format on `source_date` column.
 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using profiling
 [string_match_date_regex_percent](../checks/column/strings/string-match-date-regex-percent.md) column check.
-Our goal is to verify if the percentage of values matches the indicated by the user date format on `source_date` column does not fall below 99.0%.
+Our goal is to verify if the percentage of values matches the indicated by the user date format on `source_date` column does not fall below the setup thresholds.
 
 In this example, we will set three minimum percentage thresholds levels for the check:
 
@@ -32,7 +29,7 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the percentage of data that is available for transcription falls below 99.0%, a warning alert will be triggered.
+If the percentage of data falls below 99.0%, a warning alert will be triggered.
 
 ## Data structure
 
@@ -165,7 +162,7 @@ GROUP BY time_period, time_period_utc
 ORDER BY time_period, time_period_utc
 **************************************************
 ```
-You can also see the results returned by the sensor. The actual value in this example is 0.0%, what is below minimum
+You can also see the results returned by the sensor. The actual value in this example is 0.0%, which is below the minimum
 threshold level set in the Fatal error (95.0%).
 ```
 **************************************************

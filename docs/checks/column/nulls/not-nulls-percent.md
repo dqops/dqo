@@ -12,7 +12,7 @@ Verifies that the percent of not null values in a column does not exceed the max
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|not_nulls_percent|profiling| |[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|not_nulls_percent|profiling| |[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -42,11 +42,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=not_null
         nulls:
           not_nulls_percent:
             warning:
-              max_percent: 1.0
+              min_percent: 99.0
             error:
-              max_percent: 2.0
+              min_percent: 98.0
             fatal:
-              max_percent: 5.0
+              min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-21"
@@ -66,11 +66,11 @@ spec:
         nulls:
           not_nulls_percent:
             warning:
-              max_percent: 1.0
+              min_percent: 99.0
             error:
-              max_percent: 2.0
+              min_percent: 98.0
             fatal:
-              max_percent: 5.0
+              min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -234,6 +234,37 @@ spec:
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+        END AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -262,11 +293,11 @@ spec:
             nulls:
               not_nulls_percent:
                 warning:
-                  max_percent: 1.0
+                  min_percent: 99.0
                 error:
-                  max_percent: 2.0
+                  min_percent: 98.0
                 fatal:
-                  max_percent: 5.0
+                  min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -447,6 +478,38 @@ spec:
         
             
         ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+            END AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            LOCALTIMESTAMP AS time_period,
+            CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
     
 
 
@@ -462,7 +525,7 @@ Verifies that the percentage of not nulls in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_not_nulls_percent|recurring|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_not_nulls_percent|recurring|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -493,11 +556,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_no
           nulls:
             daily_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -518,11 +581,11 @@ spec:
           nulls:
             daily_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -686,6 +749,37 @@ spec:
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+        END AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -715,11 +809,11 @@ spec:
               nulls:
                 daily_not_nulls_percent:
                   warning:
-                    max_percent: 1.0
+                    min_percent: 99.0
                   error:
-                    max_percent: 2.0
+                    min_percent: 98.0
                   fatal:
-                    max_percent: 5.0
+                    min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -900,6 +994,38 @@ spec:
         
             
         ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+            END AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            LOCALTIMESTAMP AS time_period,
+            CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
     
 
 
@@ -915,7 +1041,7 @@ Verifies that the percentage of not nulls in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_not_nulls_percent|recurring|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_not_nulls_percent|recurring|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -946,11 +1072,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
           nulls:
             monthly_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -971,11 +1097,11 @@ spec:
           nulls:
             monthly_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1139,6 +1265,37 @@ spec:
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+        END AS actual_value,
+        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+        CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -1168,11 +1325,11 @@ spec:
               nulls:
                 monthly_not_nulls_percent:
                   warning:
-                    max_percent: 1.0
+                    min_percent: 99.0
                   error:
-                    max_percent: 2.0
+                    min_percent: 98.0
                   fatal:
-                    max_percent: 5.0
+                    min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1353,6 +1510,38 @@ spec:
         
             
         ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+            END AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+            CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
     
 
 
@@ -1368,7 +1557,7 @@ Verifies that the percentage of not null values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_not_nulls_percent|partitioned|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_partition_not_nulls_percent|partitioned|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1399,11 +1588,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_pa
           nulls:
             daily_partition_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1424,11 +1613,11 @@ spec:
           nulls:
             daily_partition_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1596,6 +1785,37 @@ spec:
     
         
     ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+        END AS actual_value,
+        analyzed_table.`` AS time_period,
+        CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -1625,11 +1845,11 @@ spec:
               nulls:
                 daily_partition_not_nulls_percent:
                   warning:
-                    max_percent: 1.0
+                    min_percent: 99.0
                   error:
-                    max_percent: 2.0
+                    min_percent: 98.0
                   fatal:
-                    max_percent: 5.0
+                    min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1807,6 +2027,38 @@ spec:
         
             
         ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+            END AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            analyzed_table.`` AS time_period,
+            CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
     
 
 
@@ -1822,7 +2074,7 @@ Verifies that the percentage of not null values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_not_nulls_percent|partitioned|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_partition_not_nulls_percent|partitioned|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1853,11 +2105,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
           nulls:
             monthly_partition_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1878,11 +2130,11 @@ spec:
           nulls:
             monthly_partition_not_nulls_percent:
               warning:
-                max_percent: 1.0
+                min_percent: 99.0
               error:
-                max_percent: 2.0
+                min_percent: 98.0
               fatal:
-                max_percent: 5.0
+                min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2050,6 +2302,37 @@ spec:
     
         
     ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+        END AS actual_value,
+        DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
+        CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -2079,11 +2362,11 @@ spec:
               nulls:
                 monthly_partition_not_nulls_percent:
                   warning:
-                    max_percent: 1.0
+                    min_percent: 99.0
                   error:
-                    max_percent: 2.0
+                    min_percent: 98.0
                   fatal:
-                    max_percent: 5.0
+                    min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -2260,6 +2543,38 @@ spec:
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+            END AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
+            CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 

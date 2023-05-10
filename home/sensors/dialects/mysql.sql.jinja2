@@ -6,6 +6,7 @@
 {% set timestamp_column_data_type = table.columns[time_series.timestamp_column].type_snapshot.column_type | upper | default(none, true) -%}
 {% set data_streams = effective_data_streams | default(none, true) -%}
 {% set target_column_data_type = table.columns[column_name].type_snapshot.column_type | default(none, true) -%}
+{% set calculated_column_expression = table.columns[column_name].sql_expression | default('', true) -%}
 
 {% macro quote_identifier(name) -%}
     {{ dialect_settings.quote_begin }}{{ name | replace(dialect_settings.quote_end, dialect_settings.quote_escape) }}{{ dialect_settings.quote_end }}
@@ -24,7 +25,11 @@
 {%- endmacro %}
 
 {%- macro render_target_column(table_alias_prefix = 'analyzed_table') -%}
-    {{ table_alias_prefix }}.{{ quote_identifier(column_name) }}
+    {%- if calculated_column_expression != '' -%}
+        ({{ calculated_column_expression | replace('{column}', table_alias_prefix ~ '.' ~ quote_identifier(column_name)) | replace('{table}', render_target_table()) | replace('{alias}', table_alias_prefix) }})
+    {%- else -%}
+        {{ table_alias_prefix }}.{{ quote_identifier(column_name) }}
+    {%- endif -%}
 {%- endmacro %}
 
 {%- macro render_column(name, table_alias_prefix = '') -%}
@@ -334,16 +339,16 @@
                 {{ prefix_to_render -}}
                 {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                         {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                             DATE_SUB(DATE_TRUNC((NOW(), INTERVAL {{ time_window_filter.monthly_partitioning_recent_months }} MONTH), INTERVAL 0 DAY)
+                             DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL {{ time_window_filter.monthly_partitioning_recent_months }} MONTH)
                          {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                              {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                             DATE_SUB(DATE_TRUNC((NOW(), INTERVAL {{ time_window_filter.monthly_partitioning_recent_months }} MONTH), INTERVAL 0 DAY)
+                             DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL {{ time_window_filter.monthly_partitioning_recent_months }} MONTH)
                          {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                              {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                             CAST(DATE_SUB(DATE_TRUNC((NOW(), INTERVAL {{ time_window_filter.monthly_partitioning_recent_months }} MONTH), INTERVAL 0 DAY) AS DATETIME)
+                             DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL {{ time_window_filter.monthly_partitioning_recent_months }} MONTH)
                          {%- else -%}
                              CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
-                             DATE_SUB(DATE_TRUNC(NOW(), INTERVAL {{ time_window_filter.monthly_partitioning_recent_months }} MONTH), INTERVAL 0 DAY)
+                             DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL {{ time_window_filter.monthly_partitioning_recent_months }} MONTH)
                 {%- endif -%}
                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
             {%- elif time_window_filter.monthly_partitioning_recent_months | default(none, true) is not none -%}

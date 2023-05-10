@@ -418,7 +418,7 @@ export const getColumnDailyRecurring =
       dispatch(getColumnDailyRecurringRequest(checkType, activeTab));
     }
     try {
-      const res = await ColumnApiClient.getColumnRecurringUI(
+      const res = await ColumnApiClient.getColumnRecurringChecksUI(
         connectionName,
         schemaName,
         tableName,
@@ -463,7 +463,7 @@ export const updateColumnDailyRecurring =
   async (dispatch: Dispatch) => {
     dispatch(updateColumnDailyRecurringRequest(checkType, activeTab));
     try {
-      await ColumnApiClient.updateColumnRecurringUI(
+      await ColumnApiClient.updateColumnRecurringChecksUI(
         connectionName,
         schemaName,
         tableName,
@@ -512,7 +512,7 @@ export const getColumnMonthlyRecurring =
       dispatch(getColumnMonthlyRecurringRequest(checkType, activeTab));
     }
     try {
-      const res = await ColumnApiClient.getColumnRecurringUI(
+      const res = await ColumnApiClient.getColumnRecurringChecksUI(
         connectionName,
         schemaName,
         tableName,
@@ -557,7 +557,7 @@ export const updateColumnMonthlyRecurring =
   async (dispatch: Dispatch) => {
     dispatch(updateColumnMonthlyRecurringRequest(checkType, activeTab));
     try {
-      await ColumnApiClient.updateColumnRecurringUI(
+      await ColumnApiClient.updateColumnRecurringChecksUI(
         connectionName,
         schemaName,
         tableName,
@@ -883,13 +883,13 @@ export const getColumnProfilingChecksUIFilter =
       }
     };
 
-export const getColumnRecurringUIFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
+export const getColumnRecurringChecksUIFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
   type: SOURCE_ACTION.GET_COLUMN_RECURRING_UI_FILTER,
   checkType,
   activeTab,
 });
 
-export const getColumnRecurringUIFilterSuccess = (
+export const getColumnRecurringChecksUIFilterSuccess = (
   checkType: CheckTypes,
   activeTab: string,
   data: UICheckContainerModel
@@ -900,21 +900,21 @@ export const getColumnRecurringUIFilterSuccess = (
   data
 });
 
-export const getColumnRecurringUIFilterFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
+export const getColumnRecurringChecksUIFilterFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
   type: SOURCE_ACTION.GET_COLUMN_RECURRING_UI_FILTER_ERROR,
   checkType,
   activeTab,
   error
 });
 
-export const getColumnRecurringUIFilter =
+export const getColumnRecurringChecksUIFilter =
   (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, columnName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string, loading = true) =>
     async (dispatch: Dispatch) => {
       if (loading) {
-        dispatch(getColumnRecurringUIFilterRequest(checkType, activeTab));
+        dispatch(getColumnRecurringChecksUIFilterRequest(checkType, activeTab));
       }
       try {
-        const res = await ColumnApiClient.getColumnRecurringUIFilter(
+        const res = await ColumnApiClient.getColumnRecurringChecksUIFilter(
           connectionName,
           schemaName,
           tableName,
@@ -923,9 +923,9 @@ export const getColumnRecurringUIFilter =
           category,
           checkName
         );
-        dispatch(getColumnRecurringUIFilterSuccess(checkType, activeTab, res.data));
+        dispatch(getColumnRecurringChecksUIFilterSuccess(checkType, activeTab, res.data));
       } catch (err) {
-        dispatch(getColumnRecurringUIFilterFailed(checkType, activeTab, err));
+        dispatch(getColumnRecurringChecksUIFilterFailed(checkType, activeTab, err));
       }
     };
 
@@ -982,7 +982,7 @@ export const setColumnUpdatedCheckUiFilter = (checkType: CheckTypes, activeTab: 
   data: ui
 });
 
-export const setColumnUpdatedRecurringUIFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
+export const setColumnUpdatedRecurringChecksUIFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
   type: SOURCE_ACTION.SET_UPDATED_RECURRING_UI_FILTER,
   checkType,
   activeTab,

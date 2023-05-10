@@ -19,8 +19,8 @@ import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingNullsChecksSpec;
-import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
-import ai.dqo.checks.column.recurring.ColumnDailyRecurringCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
+import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
 import ai.dqo.checks.column.recurring.nulls.ColumnNullsDailyRecurringSpec;
 import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
@@ -166,11 +166,11 @@ public class ColumnsControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getColumnRecurringUI_whenColumnFromSampleTableRequested_thenReturnsRecurringUi(CheckTimeScale timePartition) {
+    void getColumnRecurringChecksUI_whenColumnFromSampleTableRequested_thenReturnsRecurringChecksUI(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getColumnRecurringUI(
+        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getColumnRecurringChecksUI(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -218,11 +218,11 @@ public class ColumnsControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getColumnRecurringUIBasic_whenColumnFromSampleTableRequested_thenReturnsRecurringUiBasic(CheckTimeScale timePartition) {
+    void getColumnRecurringChecksUIBasic_whenColumnFromSampleTableRequested_thenReturnsRecurringChecksUIBasic(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getColumnRecurringUIBasic(
+        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getColumnRecurringChecksUIBasic(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
@@ -287,7 +287,7 @@ public class ColumnsControllerUTTests extends BaseTest {
     }
 
     @Test
-    void updateColumnRecurringDaily_whenColumnAndRecurringRequested_updatesRecurring() {
+    void updateColumnRecurringChecksDaily_whenColumnAndRecurringRequested_updatesRecurring() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
@@ -305,12 +305,12 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         ColumnNullsDailyRecurringSpec nullDailyRecurring = new ColumnNullsDailyRecurringSpec();
         nullDailyRecurring.setDailyNullsCount(nullsChecksSpec);
-        ColumnDailyRecurringCategoriesSpec dailyRecurring = new ColumnDailyRecurringCategoriesSpec();
+        ColumnDailyRecurringCheckCategoriesSpec dailyRecurring = new ColumnDailyRecurringCheckCategoriesSpec();
         dailyRecurring.setNulls(nullDailyRecurring);
-        ColumnRecurringSpec sampleRecurring = new ColumnRecurringSpec();
+        ColumnRecurringChecksRootSpec sampleRecurring = new ColumnRecurringChecksRootSpec();
         sampleRecurring.setDaily(dailyRecurring);
         
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnRecurringDaily(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnRecurringChecksDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),

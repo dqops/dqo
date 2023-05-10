@@ -101,7 +101,7 @@ dqo:
   queue:
     keep-finished-jobs-history-seconds: 3600
     keep-jobs-changes-history-seconds: 1200
-    get-job-changes-since-wait-seconds: 30
+    get-job-changes-since-wait-seconds: 20
   scheduler:
     #start: true
     synchronization-mode: silent

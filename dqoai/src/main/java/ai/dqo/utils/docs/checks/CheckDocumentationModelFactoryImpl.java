@@ -384,9 +384,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     private List<String> createCheckSample(String yamlSample, SimilarCheckModel similarCheckModel, CheckDocumentationModel checkDocumentationModel) {
         List<String> checkSample = new ArrayList<>();
         boolean isCheckSection = false;
-        String checkBeginMarker = "profiling_checks:";
-        String checkpointBeginMarker = "recurring_checks:";
-        String partitionedCheckBeginMarker = "partitioned_checks:";
+        String profilingBeginMarker = "profiling_checks:";
+        String recurringBeginMarker = "recurring_checks:";
+        String partitionedBeginMarker = "partitioned_checks:";
         String checkEndMarker = "";
         if (similarCheckModel.getCheckTarget() == CheckTarget.table) {
             checkEndMarker = "  columns:";
@@ -396,7 +396,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         List<String> splitYaml = List.of(yamlSample.split("\\r?\\n|\\r"));
         for (int i = 0; i <= splitYaml.size(); i++) {
-            if (splitYaml.get(i).contains(checkBeginMarker) || splitYaml.get(i).contains(checkpointBeginMarker) || splitYaml.get(i).contains(partitionedCheckBeginMarker)) {
+            if (splitYaml.get(i).contains(profilingBeginMarker) || splitYaml.get(i).contains(recurringBeginMarker) || splitYaml.get(i).contains(partitionedBeginMarker)) {
                 isCheckSection = true;
                 checkDocumentationModel.setCheckSampleBeginLine(i + 1);
             }
@@ -517,7 +517,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                     providerDocModel.setListOfRenderedTemplate(splitStringByEndOfLine(renderedTemplate));
                 }
                 catch (Exception ex) {
-                    System.err.println("Failed to render a sample SQL for check " + checkSpec.getCheckName() + ", error: " + ex.getMessage());
+                    System.err.println("Failed to render a sample SQL for check " + checkSpec.getCheckName() + " for provider: " + providerType + ", error: " + ex.getMessage());
                 }
             }
             results.add(providerDocModel);

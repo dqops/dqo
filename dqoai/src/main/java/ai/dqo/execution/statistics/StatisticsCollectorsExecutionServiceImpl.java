@@ -108,6 +108,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
      * @param statisticsDataScope Collector data scope to analyze - the whole table or each data stream separately.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all collectors without starting additional jobs.
+     * @param parentJobId Parent job id.
      * @param jobCancellationToken Job cancellation token, used to detect if the job should be cancelled.
      * @return Statistics collector summary table with the count of executed and successful collectors executions for each table.
      */
@@ -118,6 +119,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
                                                                             StatisticsDataScope statisticsDataScope,
                                                                             boolean dummySensorExecution,
                                                                             boolean startChildJobsPerTable,
+                                                                            DqoQueueJobId parentJobId,
                                                                             JobCancellationToken jobCancellationToken) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         Collection<TableWrapper> targetTables = listTargetTables(userHome, statisticsCollectorSearchFilters);
@@ -145,7 +147,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
                 childTableJobs.add(collectStatisticsOnTableQueueJob);
             }
 
-            ChildDqoQueueJobsContainer<StatisticsCollectionExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs);
+            ChildDqoQueueJobsContainer<StatisticsCollectionExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId);
             List<StatisticsCollectionExecutionSummary> collectorExecutionSummaries = childTableJobsContainer.waitForChildResults(jobCancellationToken);
             collectorExecutionSummaries.forEach(tableSummary -> statisticsCollectorExecutionSummary.append(tableSummary));
         }

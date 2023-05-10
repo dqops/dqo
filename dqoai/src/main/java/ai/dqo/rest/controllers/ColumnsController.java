@@ -22,9 +22,9 @@ import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpe
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import ai.dqo.checks.column.recurring.ColumnDailyRecurringCategoriesSpec;
-import ai.dqo.checks.column.recurring.ColumnMonthlyRecurringCategoriesSpec;
-import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
+import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnMonthlyRecurringCheckCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
@@ -395,7 +395,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Data quality profiling checks on a requested column of the table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling")
     @ApiOperation(value = "getColumnProfilingChecks", notes = "Return the configuration of column level data quality profiling checks on a column", response = ColumnProfilingCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -427,14 +427,14 @@ public class ColumnsController {
      * @return Daily data quality recurring on a requested column of the table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/daily")
-    @ApiOperation(value = "getColumnRecurringDaily", notes = "Return the configuration of daily column level data quality recurring on a column", response = ColumnRecurringSpec.class)
+    @ApiOperation(value = "getColumnRecurringChecksDaily", notes = "Return the configuration of daily column level data quality recurring on a column", response = ColumnRecurringChecksRootSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of daily column level data quality recurring on a column returned", response = ColumnDailyRecurringCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of daily column level data quality recurring on a column returned", response = ColumnDailyRecurringCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<ColumnDailyRecurringCategoriesSpec>> getColumnRecurringDaily(
+    public ResponseEntity<Mono<ColumnDailyRecurringCheckCategoriesSpec>> getColumnRecurringChecksDaily(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -445,12 +445,12 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnRecurringSpec recurringSpec = columnSpec.getRecurringChecks();
+        ColumnRecurringChecksRootSpec recurringSpec = columnSpec.getRecurringChecks();
         if (recurringSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
 
-        ColumnDailyRecurringCategoriesSpec dailyRecurring = recurringSpec.getDaily();
+        ColumnDailyRecurringCheckCategoriesSpec dailyRecurring = recurringSpec.getDaily();
         return new ResponseEntity<>(Mono.justOrEmpty(dailyRecurring), HttpStatus.OK); // 200
     }
 
@@ -463,14 +463,14 @@ public class ColumnsController {
      * @return Monthly data quality recurring on a requested column of the table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/monthly")
-    @ApiOperation(value = "getColumnRecurringMonthly", notes = "Return the configuration of monthly column level data quality recurring on a column", response = ColumnRecurringSpec.class)
+    @ApiOperation(value = "getColumnRecurringChecksMonthly", notes = "Return the configuration of monthly column level data quality recurring on a column", response = ColumnRecurringChecksRootSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of monthly column level data quality recurring on a column returned", response = ColumnMonthlyRecurringCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of monthly column level data quality recurring on a column returned", response = ColumnMonthlyRecurringCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<ColumnMonthlyRecurringCategoriesSpec>> getColumnRecurringMonthly(
+    public ResponseEntity<Mono<ColumnMonthlyRecurringCheckCategoriesSpec>> getColumnRecurringChecksMonthly(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -481,12 +481,12 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnRecurringSpec recurringSpec = columnSpec.getRecurringChecks();
+        ColumnRecurringChecksRootSpec recurringSpec = columnSpec.getRecurringChecks();
         if (recurringSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
 
-        ColumnMonthlyRecurringCategoriesSpec monthlyRecurring = recurringSpec.getMonthly();
+        ColumnMonthlyRecurringCheckCategoriesSpec monthlyRecurring = recurringSpec.getMonthly();
         return new ResponseEntity<>(Mono.justOrEmpty(monthlyRecurring), HttpStatus.OK); // 200
     }
     
@@ -498,7 +498,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Daily data quality partitioned checks on a requested column of the table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/daily")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily")
     @ApiOperation(value = "getColumnPartitionedChecksDaily", notes = "Return the configuration of daily column level data quality partitioned checks on a column", response = ColumnDailyPartitionedCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -522,8 +522,8 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
 
-        ColumnDailyPartitionedCheckCategoriesSpec dailyPartitionedChecks = partitionedChecksSpec.getDaily();
-        return new ResponseEntity<>(Mono.justOrEmpty(dailyPartitionedChecks), HttpStatus.OK); // 200
+        ColumnDailyPartitionedCheckCategoriesSpec dailyPartitioned = partitionedChecksSpec.getDaily();
+        return new ResponseEntity<>(Mono.justOrEmpty(dailyPartitioned), HttpStatus.OK); // 200
     }
 
     /**
@@ -534,7 +534,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Monthly data quality partitioned checks on a requested column of the table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/monthly")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly")
     @ApiOperation(value = "getColumnPartitionedChecksMonthly", notes = "Return the configuration of monthly column level data quality partitioned checks on a column", response = ColumnMonthlyPartitionedCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -558,8 +558,8 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
 
-        ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedChecks = partitionedChecksSpec.getMonthly();
-        return new ResponseEntity<>(Mono.justOrEmpty(monthlyPartitionedChecks), HttpStatus.OK); // 200
+        ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitioned = partitionedChecksSpec.getMonthly();
+        return new ResponseEntity<>(Mono.justOrEmpty(monthlyPartitioned), HttpStatus.OK); // 200
     }
 
 
@@ -571,7 +571,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return UI friendly model of data quality profiling checks on a requested column.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui")
     @ApiOperation(value = "getColumnProfilingChecksUI", notes = "Return a UI friendly model of data quality profiling checks on a column", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -637,14 +637,14 @@ public class ColumnsController {
      * @return UI friendly model of data quality recurring on a requested column for a requested time scale.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/ui")
-    @ApiOperation(value = "getColumnRecurringUI", notes = "Return a UI friendly model of column level data quality recurring on a column", response = UICheckContainerModel.class)
+    @ApiOperation(value = "getColumnRecurringChecksUI", notes = "Return a UI friendly model of column level data quality recurring on a column", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "UI model of column level data quality recurring on a column returned", response = UICheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UICheckContainerModel>> getColumnRecurringUI(
+    public ResponseEntity<Mono<UICheckContainerModel>> getColumnRecurringChecksUI(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -701,7 +701,7 @@ public class ColumnsController {
      * @param timeScale  Time scale.
      * @return UI friendly model of data quality partitioned checks on a requested column for a requested time scale.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timeScale}/ui")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui")
     @ApiOperation(value = "getColumnPartitionedChecksUI", notes = "Return a UI friendly model of column level data quality partitioned checks on a column", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -767,7 +767,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Simplistic UI friendly data quality profiling check list on a requested column.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui/basic")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui/basic")
     @ApiOperation(value = "getColumnProfilingChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality profiling checks on a column", response = UICheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -820,14 +820,14 @@ public class ColumnsController {
      * @return Simplistic UI friendly data quality recurring list on a requested column for a requested time scale.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/ui/basic")
-    @ApiOperation(value = "getColumnRecurringUIBasic", notes = "Return a simplistic UI friendly model of column level data quality recurring on a column", response = UICheckContainerBasicModel.class)
+    @ApiOperation(value = "getColumnRecurringChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality recurring on a column", response = UICheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Simplistic UI model of column level data quality recurring on a column returned", response = UICheckContainerBasicModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UICheckContainerBasicModel>> getColumnRecurringUIBasic(
+    public ResponseEntity<Mono<UICheckContainerBasicModel>> getColumnRecurringChecksUIBasic(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -872,7 +872,7 @@ public class ColumnsController {
      * @param timeScale  Time scale.
      * @return Simplistic UI friendly data quality partitioned checks list on a requested column for a requested time scale.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timeScale}/ui/basic")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui/basic")
     @ApiOperation(value = "getColumnPartitionedChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality partitioned checks on a column", response = UICheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -926,7 +926,7 @@ public class ColumnsController {
      * @param checkName      Check name.
      * @return UI friendly model of data quality profiling checks on a requested column.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui/filter/{checkCategory}/{checkName}")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui/filter/{checkCategory}/{checkName}")
     @ApiOperation(value = "getColumnProfilingChecksUIFilter", notes = "Return a UI friendly model of data quality profiling checks on a column filtered by category and check name", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -998,14 +998,14 @@ public class ColumnsController {
      * @return UI friendly model of data quality recurring on a requested column for a requested time scale, filtered by category and check name.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/ui/filter/{checkCategory}/{checkName}")
-    @ApiOperation(value = "getColumnRecurringUIFilter", notes = "Return a UI friendly model of column level data quality recurring on a column filtered by category and check name", response = UICheckContainerModel.class)
+    @ApiOperation(value = "getColumnRecurringChecksUIFilter", notes = "Return a UI friendly model of column level data quality recurring on a column filtered by category and check name", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "UI model of column level data quality recurring on a column returned", response = UICheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UICheckContainerModel>> getColumnRecurringUIFilter(
+    public ResponseEntity<Mono<UICheckContainerModel>> getColumnRecurringChecksUIFilter(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1068,7 +1068,7 @@ public class ColumnsController {
      * @param checkName      Check name.
      * @return UI friendly model of data quality partitioned checks on a requested column for a requested time scale, filtered by category and check name.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timeScale}/ui/filter/{checkCategory}/{checkName}")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui/filter/{checkCategory}/{checkName}")
     @ApiOperation(value = "getColumnPartitionedChecksUIFilter", notes = "Return a UI friendly model of column level data quality partitioned checks on a column, filtered by category and check name", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1397,7 +1397,7 @@ public class ColumnsController {
      * @param columnCheckCategoriesSpec New configuration of the column level data quality profiling checks to configure on a column or an empty optional to clear the list of profiling checks.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling")
     @ApiOperation(value = "updateColumnProfilingChecks", notes = "Updates configuration of column level data quality profiling checks on a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1438,16 +1438,16 @@ public class ColumnsController {
     }
 
     /**
-     * Updates the configuration of daily column level data quality recurring configured on a column.
+     * Updates the configuration of daily column level data quality recurring checks configured on a column.
      * @param connectionName             Connection name.
      * @param schemaName                 Schema name.
      * @param tableName                  Table name.
      * @param columnName                 Column name.
-     * @param columnDailyRecurringSpec New configuration of the daily column level data quality recurring to configure on a column or an empty optional to clear the list of daily recurring.
+     * @param columnDailyRecurringSpec New configuration of the daily column level data quality recurring checks to configure on a column or an empty optional to clear the list of daily recurring.
      * @return Empty response.
      */
     @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/daily")
-    @ApiOperation(value = "updateColumnRecurringDaily", notes = "Updates configuration of daily column level data quality recurring on a column.")
+    @ApiOperation(value = "updateColumnRecurringChecksDaily", notes = "Updates configuration of daily column level data quality recurring on a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Daily column level data quality recurring successfully updated"),
@@ -1456,13 +1456,13 @@ public class ColumnsController {
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumnRecurringDaily(
+    public ResponseEntity<Mono<?>> updateColumnRecurringChecksDaily(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of daily column level data quality recurring to configure on a column or an empty object to clear the list of assigned daily data quality recurring on the column")
-            @RequestBody Optional<ColumnDailyRecurringCategoriesSpec> columnDailyRecurringSpec) {
+            @RequestBody Optional<ColumnDailyRecurringCheckCategoriesSpec> columnDailyRecurringSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)  ||
@@ -1476,50 +1476,50 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        ColumnRecurringSpec recurringSpec = columnSpec.getRecurringChecks();
-        if (recurringSpec == null) {
-            recurringSpec = new ColumnRecurringSpec();
+        ColumnRecurringChecksRootSpec recurringChecksSpec = columnSpec.getRecurringChecks();
+        if (recurringChecksSpec == null) {
+            recurringChecksSpec = new ColumnRecurringChecksRootSpec();
         }
         
         if (columnDailyRecurringSpec.isPresent()) {
-            recurringSpec.setDaily(columnDailyRecurringSpec.get());
-            columnSpec.setRecurringChecks(recurringSpec);
-        } else if (recurringSpec.getMonthly() == null) {
-            // If there is no monthly recurring, and it's been requested to delete daily recurring, then delete all.
+            recurringChecksSpec.setDaily(columnDailyRecurringSpec.get());
+            columnSpec.setRecurringChecks(recurringChecksSpec);
+        } else if (recurringChecksSpec.getMonthly() == null) {
+            // If there is no monthly recurring checks, and it's been requested to delete daily recurring checks, then delete all.
             columnSpec.setRecurringChecks(null);
         } else {
-            recurringSpec.setDaily(null);
+            recurringChecksSpec.setDaily(null);
         }
         
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
     /**
-     * Updates the configuration of monthly column level data quality recurring configured on a column.
+     * Updates the configuration of monthly column level data quality recurring checks configured on a column.
      * @param connectionName               Connection name.
      * @param schemaName                   Schema name.
      * @param tableName                    Table name.
      * @param columnName                   Column name.
-     * @param columnMonthlyRecurringSpec New configuration of the monthly column level data quality recurring to configure on a column or an empty optional to clear the list of monthly recurring.
+     * @param columnMonthlyRecurringSpec New configuration of the monthly column level data quality recurring checks to configure on a column or an empty optional to clear the list of monthly recurring.
      * @return Empty response.
      */
     @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/monthly")
-    @ApiOperation(value = "updateColumnRecurringMonthly", notes = "Updates configuration of monthly column level data quality recurring on a column.")
+    @ApiOperation(value = "updateColumnRecurringChecksMonthly", notes = "Updates configuration of monthly column level data quality recurring checks on a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Monthly column level data quality recurring successfully updated"),
+            @ApiResponse(code = 204, message = "Monthly column level data quality recurring checks successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumnRecurringMonthly(
+    public ResponseEntity<Mono<?>> updateColumnRecurringChecksMonthly(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of monthly column level data quality recurring to configure on a column or an empty object to clear the list of assigned monthly data quality recurring on the column")
-            @RequestBody Optional<ColumnMonthlyRecurringCategoriesSpec> columnMonthlyRecurringSpec) {
+            @RequestBody Optional<ColumnMonthlyRecurringCheckCategoriesSpec> columnMonthlyRecurringSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1533,19 +1533,19 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnRecurringSpec recurringSpec = columnSpec.getRecurringChecks();
-        if (recurringSpec == null) {
-            recurringSpec = new ColumnRecurringSpec();
+        ColumnRecurringChecksRootSpec recurringChecksSpec = columnSpec.getRecurringChecks();
+        if (recurringChecksSpec == null) {
+            recurringChecksSpec = new ColumnRecurringChecksRootSpec();
         }
 
         if (columnMonthlyRecurringSpec.isPresent()) {
-            recurringSpec.setMonthly(columnMonthlyRecurringSpec.get());
-            columnSpec.setRecurringChecks(recurringSpec);
-        } else if (recurringSpec.getDaily() == null) {
-            // If there is no daily recurring, and it's been requested to delete monthly recurring, then delete all.
+            recurringChecksSpec.setMonthly(columnMonthlyRecurringSpec.get());
+            columnSpec.setRecurringChecks(recurringChecksSpec);
+        } else if (recurringChecksSpec.getDaily() == null) {
+            // If there is no daily recurring checks, and it's been requested to delete monthly recurring checks, then delete all.
             columnSpec.setRecurringChecks(null);
         } else {
-            recurringSpec.setMonthly(null);
+            recurringChecksSpec.setMonthly(null);
         }
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -1557,10 +1557,10 @@ public class ColumnsController {
      * @param schemaName                       Schema name.
      * @param tableName                        Table name.
      * @param columnName                       Column name.
-     * @param columnDailyPartitionedChecksSpec New configuration of the daily column level data quality partitioned checks to configure on a column or an empty optional to clear the list of daily partitioned checks.
+     * @param columnDailyPartitionedSpec New configuration of the daily column level data quality partitioned checks to configure on a column or an empty optional to clear the list of daily partitioned checks.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/daily")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily")
     @ApiOperation(value = "updateColumnPartitionedChecksDaily", notes = "Updates configuration of daily column level data quality partitioned checks on a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1576,7 +1576,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of daily column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column")
-            @RequestBody Optional<ColumnDailyPartitionedCheckCategoriesSpec> columnDailyPartitionedChecksSpec) {
+            @RequestBody Optional<ColumnDailyPartitionedCheckCategoriesSpec> columnDailyPartitionedSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1595,11 +1595,11 @@ public class ColumnsController {
             partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
         }
 
-        if (columnDailyPartitionedChecksSpec.isPresent()) {
-            partitionedChecksSpec.setDaily(columnDailyPartitionedChecksSpec.get());
+        if (columnDailyPartitionedSpec.isPresent()) {
+            partitionedChecksSpec.setDaily(columnDailyPartitionedSpec.get());
             columnSpec.setPartitionedChecks(partitionedChecksSpec);
         } else if (partitionedChecksSpec.getMonthly() == null) {
-            // If there is no monthly partitionedChecks, and it's been requested to delete daily partitionedChecks, then delete all.
+            // If there is no monthly partitioned checks, and it's been requested to delete daily partitioned checks, then delete all.
             columnSpec.setPartitionedChecks(null);
         } else {
             partitionedChecksSpec.setDaily(null);
@@ -1614,10 +1614,10 @@ public class ColumnsController {
      * @param schemaName                         Schema name.
      * @param tableName                          Table name.
      * @param columnName                         Column name.
-     * @param columnMonthlyPartitionedChecksSpec New configuration of the monthly column level data quality partitioned checks to configure on a column or an empty optional to clear the list of monthly partitioned checks.
+     * @param columnMonthlyPartitionedSpec New configuration of the monthly column level data quality partitioned checks to configure on a column or an empty optional to clear the list of monthly partitioned checks.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/monthly")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly")
     @ApiOperation(value = "updateColumnPartitionedChecksMonthly", notes = "Updates configuration of monthly column level data quality partitioned checks on a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1633,7 +1633,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of monthly column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column")
-            @RequestBody Optional<ColumnMonthlyPartitionedCheckCategoriesSpec> columnMonthlyPartitionedChecksSpec) {
+            @RequestBody Optional<ColumnMonthlyPartitionedCheckCategoriesSpec> columnMonthlyPartitionedSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1652,11 +1652,11 @@ public class ColumnsController {
             partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
         }
 
-        if (columnMonthlyPartitionedChecksSpec.isPresent()) {
-            partitionedChecksSpec.setMonthly(columnMonthlyPartitionedChecksSpec.get());
+        if (columnMonthlyPartitionedSpec.isPresent()) {
+            partitionedChecksSpec.setMonthly(columnMonthlyPartitionedSpec.get());
             columnSpec.setPartitionedChecks(partitionedChecksSpec);
         } else if (partitionedChecksSpec.getMonthly() == null) {
-            // If there is no daily partitionedChecks, and it's been requested to delete monthly partitionedChecks, then delete all.
+            // If there is no daily partitioned checks, and it's been requested to delete monthly partitioned checks, then delete all.
             columnSpec.setPartitionedChecks(null);
         } else {
             partitionedChecksSpec.setMonthly(null);
@@ -1675,7 +1675,7 @@ public class ColumnsController {
      * @param uiCheckContainerModel     UI model of the column level data quality checks to be applied on the configuration of the data quality profiling checks on a column. Only data quality dimensions and data quality checks that are present in the UI model are updated (patched).
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui")
     @ApiOperation(value = "updateColumnProfilingChecksUI", notes = "Updates configuration of column level data quality profiling checks on a column from a UI friendly model.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1732,7 +1732,7 @@ public class ColumnsController {
      * @return Empty response.
      */
     @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/ui")
-    @ApiOperation(value = "updateColumnRecurringUI", notes = "Updates configuration of column level data quality recurring on a column, for a given time scale, from a UI friendly model.")
+    @ApiOperation(value = "updateColumnRecurringChecksUI", notes = "Updates configuration of column level data quality recurring on a column, for a given time scale, from a UI friendly model.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Column level data quality recurring successfully updated"),
@@ -1741,7 +1741,7 @@ public class ColumnsController {
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateColumnRecurringUI(
+    public ResponseEntity<Mono<?>> updateColumnRecurringChecksUI(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1788,7 +1788,7 @@ public class ColumnsController {
      * @param uiAllChecksModel          UI model of the column level data quality checks to be applied on the configuration of the data quality partitioned checks on a column, for a given time scale. Only data quality dimensions and data quality checks that are present in the UI model are updated (patched).
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timeScale}/ui")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui")
     @ApiOperation(value = "updateColumnPartitionedChecksUI", notes = "Updates configuration of column level data quality partitioned checks on a column, for a given time scale, from a UI friendly model.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {

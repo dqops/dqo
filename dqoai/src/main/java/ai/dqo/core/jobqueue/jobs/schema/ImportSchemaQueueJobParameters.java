@@ -16,11 +16,13 @@
 package ai.dqo.core.jobqueue.jobs.schema;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.EqualsAndHashCode;
 
 /**
  * Parameters for the {@link ImportSchemaQueueJob} job that imports tables from a database.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode(callSuper = false)
 public class ImportSchemaQueueJobParameters {
     private String connectionName;
     private String schemaName;

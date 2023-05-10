@@ -79,7 +79,12 @@ public class RunChecksQueueJob extends ParentDqoQueueJob<CheckExecutionSummary> 
                 this.parameters.getProgressListener(),
                 this.parameters.isDummyExecution(),
                 true,
+                jobExecutionContext.getJobId(),
                 jobExecutionContext.getCancellationToken());
+
+        RunChecksQueueJobResult jobResultSummary = RunChecksQueueJobResult.fromCheckExecutionSummary(checkExecutionSummary);
+        this.getParameters().setResult(jobResultSummary);
+
         return checkExecutionSummary;
     }
 

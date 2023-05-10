@@ -269,6 +269,50 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.[target_column] IS NOT NULL
+                    AND (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG(analyzed_table.[target_column])
+        END AS actual_value,
+        SYSDATETIMEOFFSET() AS time_period,
+        CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -506,6 +550,58 @@ spec:
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            CASE
+                WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN analyzed_table.[target_column] IS NOT NULL
+                        AND (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT_BIG(analyzed_table.[target_column])
+            END AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            SYSDATETIMEOFFSET() AS time_period,
+            CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+                , 
+            
+        ORDER BY level_1, level_2
+                , 
+            
+        
+            
         ```
     
 
@@ -781,6 +877,50 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.[target_column] IS NOT NULL
+                    AND (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG(analyzed_table.[target_column])
+        END AS actual_value,
+        CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
+        CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -1019,6 +1159,58 @@ spec:
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            CASE
+                WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN analyzed_table.[target_column] IS NOT NULL
+                        AND (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT_BIG(analyzed_table.[target_column])
+            END AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
+            CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+                , 
+            
+        ORDER BY level_1, level_2
+                , 
+            
+        
+            
         ```
     
 
@@ -1294,6 +1486,50 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.[target_column] IS NOT NULL
+                    AND (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG(analyzed_table.[target_column])
+        END AS actual_value,
+        DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+        CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -1532,6 +1768,58 @@ spec:
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            CASE
+                WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN analyzed_table.[target_column] IS NOT NULL
+                        AND (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT_BIG(analyzed_table.[target_column])
+            END AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+            CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+                , 
+            
+        ORDER BY level_1, level_2
+                , 
+            
+        
+            
         ```
     
 
@@ -1807,6 +2095,54 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.[target_column] IS NOT NULL
+                    AND (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG(analyzed_table.[target_column])
+        END AS actual_value,
+        CAST([] AS date) AS time_period,
+        CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    GROUP BY CAST([] AS date), CAST([] AS date)
+    ORDER BY CAST([] AS date)
+    
+        
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -2045,6 +2381,55 @@ spec:
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            CASE
+                WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN analyzed_table.[target_column] IS NOT NULL
+                        AND (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT_BIG(analyzed_table.[target_column])
+            END AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            CAST([] AS date) AS time_period,
+            CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+        GROUP BY CAST([] AS date), CAST([] AS date)
+        ORDER BY level_1, level_2CAST([] AS date)
+        
+            
         ```
     
 
@@ -2320,6 +2705,54 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.[target_column] IS NOT NULL
+                    AND (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG(analyzed_table.[target_column])
+        END AS actual_value,
+        DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
+        CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+    ORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
+    
+        
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -2558,6 +2991,55 @@ spec:
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            CASE
+                WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN analyzed_table.[target_column] IS NOT NULL
+                        AND (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT_BIG(analyzed_table.[target_column])
+            END AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
+            CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
+        
+            
         ```
     
 

@@ -51,7 +51,6 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
 
     private final Object lock = new Object();
     private boolean started;
-    private final Duration publishBusyLoopingDuration = Duration.ofSeconds(30);
     private final TreeMap<DqoQueueJobId, DqoJobHistoryEntryModel> allJobs = new TreeMap<>();
     private final TreeMap<Long, DqoJobChangeModel> jobChanges = new TreeMap<>();
     private final DqoJobIdGenerator dqoJobIdGenerator;
@@ -189,7 +188,26 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     @Override
     public void publishJobSucceededEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
-            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.succeeded, jobQueueEntry.getJobId());
+            DqoJobHistoryEntryModel previousJobHistoryModel;
+
+            synchronized (this.lock) {
+                previousJobHistoryModel = this.allJobs.get(jobQueueEntry.getJobId());
+            }
+
+            DqoJobEntryParametersModel mostRecentJobParameters = jobQueueEntry.getJob().createParametersModel();
+
+            DqoJobChange dqoJobChange;
+            if (previousJobHistoryModel != null && !Objects.equals(previousJobHistoryModel.getParameters(), mostRecentJobParameters)) {
+                DqoJobHistoryEntryModel newJobHistoryModel = previousJobHistoryModel.clone();
+                newJobHistoryModel.setStatus(DqoJobStatus.succeeded);
+                newJobHistoryModel.setStatusChangedAt(Instant.now());
+                newJobHistoryModel.setParameters(mostRecentJobParameters);
+                dqoJobChange = new DqoJobChange(DqoJobStatus.succeeded, newJobHistoryModel);
+            }
+            else {
+                dqoJobChange = new DqoJobChange(DqoJobStatus.succeeded, jobQueueEntry.getJobId());
+            }
+
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                     this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
@@ -424,7 +442,9 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         List<DqoQueueJobId> oldJobIdsToDelete = this.allJobs.entrySet()
                 .stream()
                 .takeWhile(e -> e.getValue().getStatusChangedAt().compareTo(oldJobsHistoryThresholdTimestamp) < 1)
-                .filter(e -> e.getValue().getStatus() == DqoJobStatus.succeeded || e.getValue().getStatus() == DqoJobStatus.failed)
+                .filter(e -> e.getValue().getStatus() == DqoJobStatus.succeeded ||
+                        e.getValue().getStatus() == DqoJobStatus.failed ||
+                        e.getValue().getStatus() == DqoJobStatus.cancelled)
                 .map(e -> e.getKey())
                 .collect(Collectors.toList());
 

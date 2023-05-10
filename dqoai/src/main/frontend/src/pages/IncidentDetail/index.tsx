@@ -11,6 +11,7 @@ import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { getIncidentsByConnection, setIncidentsFilter } from "../../redux/actions/incidents.actions";
 import { Table } from "../../components/Table";
 import { CheckTypes, ROUTES } from "../../shared/routes";
+import { Pagination } from "../../components/Pagination";
 import moment from "moment";
 
 const getDaysString = (value: string) => {
@@ -142,7 +143,7 @@ export const IncidentDetail = () => {
           <div className="grow">
             <Input
               value={filters.optionalFilter || ""}
-              onChange={(e) => onChangeFilter({ optionalFilter: e.target.value })}
+              onChange={(e) => onChangeFilter({ optionalFilter: e.target.value, page: 1 })}
               placeholder="Filter incidents"
               className="!h-12"
             />
@@ -154,7 +155,7 @@ export const IncidentDetail = () => {
                 key={index}
                 label={o.label}
                 color={o.value === (filters?.numberOfMonth || 3) ? 'primary' : undefined}
-                onClick={() => onChangeFilter({ numberOfMonth: o.value })}
+                onClick={() => onChangeFilter({ numberOfMonth: o.value, page: 1 })}
               />
             ))}
           </div>
@@ -164,6 +165,16 @@ export const IncidentDetail = () => {
             columns={columns}
             data={incidents || []}
             className="w-full"
+          />
+
+          <Pagination
+            page={filters.page || 1}
+            pageSize={filters.pageSize || 5}
+            totalPages={10}
+            onChange={(page, pageSize) => onChangeFilter({
+              page,
+              pageSize
+            })}
           />
         </div>
       </div>
