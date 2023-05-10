@@ -42,8 +42,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 @SpringBootTest
-public class UIAllChecksPatchFactoryImplTests extends BaseTest {
-    private UIAllChecksPatchFactoryImpl sut;
+public class UIAllChecksModelFactoryImplTests extends BaseTest {
+    private UIAllChecksModelFactoryImpl sut;
     private ConnectionSpec connectionSpec;
     private TableSpec tableSpec;
     private ExecutionContext executionContext;
@@ -69,7 +69,7 @@ public class UIAllChecksPatchFactoryImplTests extends BaseTest {
                 DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory()
         );
 
-        this.sut = new UIAllChecksPatchFactoryImpl(
+        this.sut = new UIAllChecksModelFactoryImpl(
                 executionContextFactory,
                 new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl()),
                 specToUiCheckMappingService);

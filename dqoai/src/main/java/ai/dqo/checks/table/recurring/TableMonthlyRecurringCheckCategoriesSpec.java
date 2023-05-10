@@ -50,8 +50,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableMonthlyRecurringCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
-    public static final ChildHierarchyNodeFieldMapImpl<TableMonthlyRecurringCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
+public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
+    public static final ChildHierarchyNodeFieldMapImpl<TableMonthlyRecurringCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("standard", o -> o.standard);
             put("timeliness", o -> o.timeliness);
@@ -214,7 +214,7 @@ public class TableMonthlyRecurringCategoriesSpec extends AbstractRootChecksConta
 
     /**
      * Returns the time range for recurring and partitioned checks (daily, monthly, etc.).
-     * Adhoc checks do not have a time range and return null.
+     * Profiling checks do not have a time range and return null.
      *
      * @return Time range (daily, monthly, ...).
      */

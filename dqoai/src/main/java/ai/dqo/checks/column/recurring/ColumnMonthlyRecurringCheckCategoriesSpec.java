@@ -19,17 +19,17 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.column.recurring.accuracy.ColumnAccuracyDailyRecurringSpec;
-import ai.dqo.checks.column.recurring.bool.ColumnBoolDailyRecurringSpec;
-import ai.dqo.checks.column.recurring.consistency.ColumnConsistencyDailyRecurringSpec;
-import ai.dqo.checks.column.recurring.datetime.ColumnDatetimeDailyRecurringSpec;
-import ai.dqo.checks.column.recurring.integrity.ColumnIntegrityDailyRecurringSpec;
-import ai.dqo.checks.column.recurring.nulls.ColumnNullsDailyRecurringSpec;
-import ai.dqo.checks.column.recurring.numeric.ColumnNumericDailyRecurringSpec;
-import ai.dqo.checks.column.recurring.pii.ColumnPiiDailyRecurringSpec;
-import ai.dqo.checks.column.recurring.sql.ColumnSqlDailyRecurringSpec;
-import ai.dqo.checks.column.recurring.strings.ColumnStringsDailyRecurringSpec;
-import ai.dqo.checks.column.recurring.uniqueness.ColumnUniquenessDailyRecurringSpec;
+import ai.dqo.checks.column.recurring.accuracy.ColumnAccuracyMonthlyRecurringSpec;
+import ai.dqo.checks.column.recurring.bool.ColumnBoolMonthlyRecurringChecksSpec;
+import ai.dqo.checks.column.recurring.consistency.ColumnConsistencyMonthlyRecurringSpec;
+import ai.dqo.checks.column.recurring.datetime.ColumnDatetimeMonthlyRecurringSpec;
+import ai.dqo.checks.column.recurring.integrity.ColumnIntegrityMonthlyRecurringSpec;
+import ai.dqo.checks.column.recurring.nulls.ColumnNullsMonthlyRecurringSpec;
+import ai.dqo.checks.column.recurring.numeric.ColumnNumericMonthlyRecurringSpec;
+import ai.dqo.checks.column.recurring.pii.ColumnPiiMonthlyRecurringSpec;
+import ai.dqo.checks.column.recurring.sql.ColumnSqlMonthlyRecurringSpec;
+import ai.dqo.checks.column.recurring.strings.ColumnStringsMonthlyRecurringSpec;
+import ai.dqo.checks.column.recurring.uniqueness.ColumnUniquenessMonthlyRecurringSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimePeriodGradient;
@@ -50,13 +50,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of column level daily recurring. Contains categories of daily recurring.
+ * Container of column level monthly recurring. Contains categories of monthly recurring.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnDailyRecurringCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
+public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnMonthlyRecurringCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
            put("nulls", o -> o.nulls);
            put("numeric", o -> o.numeric);
@@ -73,66 +73,66 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
         }
     };
 
-    @JsonPropertyDescription("Daily recurring of nulls in the column")
+    @JsonPropertyDescription("Monthly recurring of nulls in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsDailyRecurringSpec nulls;
+    private ColumnNullsMonthlyRecurringSpec nulls;
 
-    @JsonPropertyDescription("Daily recurring of numeric in the column")
+    @JsonPropertyDescription("Monthly recurring of numeric in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericDailyRecurringSpec numeric;
+    private ColumnNumericMonthlyRecurringSpec numeric;
 
-    @JsonPropertyDescription("Daily recurring of strings in the column")
+    @JsonPropertyDescription("Monthly recurring of strings in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsDailyRecurringSpec strings;
+    private ColumnStringsMonthlyRecurringSpec strings;
 
-    @JsonPropertyDescription("Daily recurring of uniqueness in the column")
+    @JsonPropertyDescription("Monthly recurring of uniqueness in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessDailyRecurringSpec uniqueness;
+    private ColumnUniquenessMonthlyRecurringSpec uniqueness;
 
-    @JsonPropertyDescription("Daily recurring of datetime in the column")
+    @JsonPropertyDescription("Monthly recurring of datetime in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnDatetimeDailyRecurringSpec datetime;
+    private ColumnDatetimeMonthlyRecurringSpec datetime;
 
-    @JsonPropertyDescription("Daily recurring of Personal Identifiable Information (PII) in the column")
+    @JsonPropertyDescription("Monthly recurring of Personal Identifiable Information (PII) in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnPiiDailyRecurringSpec pii;
+    private ColumnPiiMonthlyRecurringSpec pii;
 
-    @JsonPropertyDescription("Daily recurring of custom SQL checks in the column")
+    @JsonPropertyDescription("Monthly recurring of custom SQL checks in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnSqlDailyRecurringSpec sql;
+    private ColumnSqlMonthlyRecurringSpec sql;
 
-    @JsonPropertyDescription("Daily recurring of booleans in the column")
+    @JsonPropertyDescription("Monthly recurring of booleans in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnBoolDailyRecurringSpec bool;
+    private ColumnBoolMonthlyRecurringChecksSpec bool;
 
-    @JsonPropertyDescription("Daily recurring of integrity in the column")
+    @JsonPropertyDescription("Monthly recurring of integrity in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnIntegrityDailyRecurringSpec integrity;
+    private ColumnIntegrityMonthlyRecurringSpec integrity;
 
-    @JsonPropertyDescription("Daily recurring of accuracy in the column")
+    @JsonPropertyDescription("Monthly recurring of accuracy in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAccuracyDailyRecurringSpec accuracy;
+    private ColumnAccuracyMonthlyRecurringSpec accuracy;
 
-    @JsonPropertyDescription("Daily recurring of consistency in the column")
+    @JsonPropertyDescription("Monthly recurring of consistency in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnConsistencyDailyRecurringSpec consistency;
+    private ColumnConsistencyMonthlyRecurringSpec consistency;
 
     /**
      * Returns the container of recurring for standard data quality checks.
      * @return Container of row standard data quality recurring.
      */
-    public ColumnNullsDailyRecurringSpec getNulls() {
+    public ColumnNullsMonthlyRecurringSpec getNulls() {
         return nulls;
     }
 
@@ -140,7 +140,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Sets the container of nulls data quality checks (recurring).
      * @param nulls New nulls checks.
      */
-    public void setNulls(ColumnNullsDailyRecurringSpec nulls) {
+    public void setNulls(ColumnNullsMonthlyRecurringSpec nulls) {
 		this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
 		this.propagateHierarchyIdToField(nulls, "nulls");
@@ -150,7 +150,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Returns the container of recurring for standard data quality checks.
      * @return Container of row standard data quality recurring.
      */
-    public ColumnNumericDailyRecurringSpec getNumeric() {
+    public ColumnNumericMonthlyRecurringSpec getNumeric() {
         return numeric;
     }
 
@@ -158,7 +158,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Sets the container of numeric data quality checks (recurring).
      * @param numeric New numeric checks.
      */
-    public void setNumeric(ColumnNumericDailyRecurringSpec numeric) {
+    public void setNumeric(ColumnNumericMonthlyRecurringSpec numeric) {
         this.setDirtyIf(!Objects.equals(this.numeric, numeric));
         this.numeric = numeric;
         this.propagateHierarchyIdToField(numeric, "numeric");
@@ -168,7 +168,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Returns the container of recurring for standard data quality checks.
      * @return Container of row standard data quality recurring.
      */
-    public ColumnStringsDailyRecurringSpec getStrings() {
+    public ColumnStringsMonthlyRecurringSpec getStrings() {
         return strings;
     }
 
@@ -176,7 +176,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Sets the container of strings data quality checks (recurring).
      * @param strings New strings checks.
      */
-    public void setStrings(ColumnStringsDailyRecurringSpec strings) {
+    public void setStrings(ColumnStringsMonthlyRecurringSpec strings) {
         this.setDirtyIf(!Objects.equals(this.strings, strings));
         this.strings = strings;
         this.propagateHierarchyIdToField(strings, "strings");
@@ -186,7 +186,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Returns the container of recurring for standard data quality checks.
      * @return Container of row standard data quality recurring.
      */
-    public ColumnUniquenessDailyRecurringSpec getUniqueness() {
+    public ColumnUniquenessMonthlyRecurringSpec getUniqueness() {
         return uniqueness;
     }
 
@@ -194,7 +194,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Sets the container of uniqueness data quality checks (recurring).
      * @param uniqueness New uniqueness checks.
      */
-    public void setUniqueness(ColumnUniquenessDailyRecurringSpec uniqueness) {
+    public void setUniqueness(ColumnUniquenessMonthlyRecurringSpec uniqueness) {
         this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
         this.uniqueness = uniqueness;
         this.propagateHierarchyIdToField(uniqueness, "uniqueness");
@@ -204,7 +204,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Returns the container of recurring for standard data quality checks.
      * @return Container of row standard data quality recurring.
      */
-    public ColumnDatetimeDailyRecurringSpec getDatetime() {
+    public ColumnDatetimeMonthlyRecurringSpec getDatetime() {
         return datetime;
     }
 
@@ -212,7 +212,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Sets the container of datetime data quality checks (recurring).
      * @param datetime New datetime checks.
      */
-    public void setDatetime(ColumnDatetimeDailyRecurringSpec datetime) {
+    public void setDatetime(ColumnDatetimeMonthlyRecurringSpec datetime) {
         this.setDirtyIf(!Objects.equals(this.datetime, datetime));
         this.datetime = datetime;
         this.propagateHierarchyIdToField(datetime, "datetime");
@@ -222,7 +222,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Returns the container of recurring for standard data quality checks.
      * @return Container of row standard data quality recurring.
      */
-    public ColumnPiiDailyRecurringSpec getPii() {
+    public ColumnPiiMonthlyRecurringSpec getPii() {
         return pii;
     }
 
@@ -230,25 +230,25 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Sets the container of Personal Identifiable Information (PII) data quality checks (recurring).
      * @param pii New Personal Identifiable Information (PII) checks.
      */
-    public void setPii(ColumnPiiDailyRecurringSpec pii) {
+    public void setPii(ColumnPiiMonthlyRecurringSpec pii) {
         this.setDirtyIf(!Objects.equals(this.pii, pii));
         this.pii = pii;
         this.propagateHierarchyIdToField(pii, "pii");
     }
 
     /**
-     * Returns the container of custom SQL checks that use custom SQL expressions in checks.
+     * Returns a container of custom SQL checks.
      * @return Custom SQL checks.
      */
-    public ColumnSqlDailyRecurringSpec getSql() {
+    public ColumnSqlMonthlyRecurringSpec getSql() {
         return sql;
     }
 
     /**
-     * Sets a reference to a container of custom SQL checks.
+     * Sets a reference to a container with custom SQL checks.
      * @param sql Custom SQL checks.
      */
-    public void setSql(ColumnSqlDailyRecurringSpec sql) {
+    public void setSql(ColumnSqlMonthlyRecurringSpec sql) {
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
@@ -258,7 +258,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Returns the container of recurring for standard data quality checks.
      * @return Container of row standard data quality recurring.
      */
-    public ColumnBoolDailyRecurringSpec getBool() {
+    public ColumnBoolMonthlyRecurringChecksSpec getBool() {
         return bool;
     }
 
@@ -266,7 +266,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Sets the container of booleans data quality checks (recurring).
      * @param bool New booleans checks.
      */
-    public void setBool(ColumnBoolDailyRecurringSpec bool) {
+    public void setBool(ColumnBoolMonthlyRecurringChecksSpec bool) {
         this.setDirtyIf(!Objects.equals(this.bool, bool));
         this.bool = bool;
         this.propagateHierarchyIdToField(bool, "bool");
@@ -276,7 +276,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Returns the container of recurring for standard data quality checks.
      * @return Container of row standard data quality recurring.
      */
-    public ColumnIntegrityDailyRecurringSpec getIntegrity() {
+    public ColumnIntegrityMonthlyRecurringSpec getIntegrity() {
         return integrity;
     }
 
@@ -284,7 +284,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Sets the container of integrity data quality checks (recurring).
      * @param integrity New integrity checks.
      */
-    public void setIntegrity(ColumnIntegrityDailyRecurringSpec integrity) {
+    public void setIntegrity(ColumnIntegrityMonthlyRecurringSpec integrity) {
         this.setDirtyIf(!Objects.equals(this.integrity, integrity));
         this.integrity = integrity;
         this.propagateHierarchyIdToField(integrity, "integrity");
@@ -294,7 +294,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Returns the container of recurring for standard data quality checks.
      * @return Container of row standard data quality recurring.
      */
-    public ColumnAccuracyDailyRecurringSpec getAccuracy() {
+    public ColumnAccuracyMonthlyRecurringSpec getAccuracy() {
         return accuracy;
     }
 
@@ -302,7 +302,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Sets the container of accuracy data quality checks (recurring).
      * @param accuracy New accuracy checks.
      */
-    public void setAccuracy(ColumnAccuracyDailyRecurringSpec accuracy) {
+    public void setAccuracy(ColumnAccuracyMonthlyRecurringSpec accuracy) {
         this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
         this.accuracy = accuracy;
         this.propagateHierarchyIdToField(accuracy, "accuracy");
@@ -312,7 +312,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Returns the container of recurring for standard data quality checks.
      * @return Container of row standard data quality recurring.
      */
-    public ColumnConsistencyDailyRecurringSpec getConsistency() {
+    public ColumnConsistencyMonthlyRecurringSpec getConsistency() {
         return consistency;
     }
 
@@ -320,7 +320,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
      * Sets the container of consistency data quality checks (recurring).
      * @param consistency New consistency checks.
      */
-    public void setConsistency(ColumnConsistencyDailyRecurringSpec consistency) {
+    public void setConsistency(ColumnConsistencyMonthlyRecurringSpec consistency) {
         this.setDirtyIf(!Objects.equals(this.consistency, consistency));
         this.consistency = consistency;
         this.propagateHierarchyIdToField(consistency, "consistency");
@@ -347,7 +347,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
         return new TimeSeriesConfigurationSpec()
         {{
             setMode(TimeSeriesMode.current_time);
-            setTimeGradient(TimePeriodGradient.day);
+            setTimeGradient(TimePeriodGradient.month);
         }};
     }
 
@@ -364,14 +364,14 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
 
     /**
      * Returns the time range for recurring and partitioned checks (daily, monthly, etc.).
-     * Adhoc checks do not have a time range and return null.
+     * Profiling checks do not have a time range and return null.
      *
      * @return Time range (daily, monthly, ...).
      */
     @Override
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
-        return CheckTimeScale.daily;
+        return CheckTimeScale.monthly;
     }
 
     /**
@@ -393,6 +393,6 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
     @Override
     @JsonIgnore
     public CheckRunRecurringScheduleGroup getSchedulingGroup() {
-        return CheckRunRecurringScheduleGroup.recurring_daily;
+        return CheckRunRecurringScheduleGroup.recurring_monthly;
     }
 }

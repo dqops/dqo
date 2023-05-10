@@ -34,8 +34,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableRecurringSpec extends AbstractSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableRecurringSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class TableRecurringChecksSpec extends AbstractSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("daily", o -> o.daily);
             put("monthly", o -> o.monthly);
@@ -50,7 +50,7 @@ public class TableRecurringSpec extends AbstractSpec {
     @JsonPropertyDescription("Configuration of monthly recurring evaluated at a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMonthlyRecurringCategoriesSpec monthly;
+    private TableMonthlyRecurringCheckCategoriesSpec monthly;
 
     // TODO: add other time periods that make sense (hourly, weekly, etc.)
 
@@ -63,8 +63,8 @@ public class TableRecurringSpec extends AbstractSpec {
     }
 
     /**
-     * Sets the daily check points container.
-     * @param daily New daily check points container.
+     * Sets the daily recurring checks container.
+     * @param daily New daily recurring checks container.
      */
     public void setDaily(TableDailyRecurringCategoriesSpec daily) {
 		this.setDirtyIf(!Objects.equals(this.daily, daily));
@@ -73,18 +73,18 @@ public class TableRecurringSpec extends AbstractSpec {
     }
 
     /**
-     * Returns monthly recurring.
-     * @return Monthly recurring.
+     * Returns monthly recurring checks.
+     * @return Monthly recurring checks.
      */
-    public TableMonthlyRecurringCategoriesSpec getMonthly() {
+    public TableMonthlyRecurringCheckCategoriesSpec getMonthly() {
         return monthly;
     }
 
     /**
-     * Sets the monthly check points container.
-     * @param monthly New monthly check points container.
+     * Sets the monthly recurring checks container.
+     * @param monthly New monthly recurring checks container.
      */
-    public void setMonthly(TableMonthlyRecurringCategoriesSpec monthly) {
+    public void setMonthly(TableMonthlyRecurringCheckCategoriesSpec monthly) {
         this.setDirtyIf(!Objects.equals(this.monthly, monthly));
         this.monthly = monthly;
         this.propagateHierarchyIdToField(monthly, "monthly");

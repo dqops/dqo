@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableRecurringUIFilter, setTableUpdatedRecurringUIFilter,
+  getTableRecurringChecksUIFilter, setTableUpdatedRecurringChecksUIFilter,
 } from '../../redux/actions/table.actions';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
@@ -14,44 +14,44 @@ import Button from "../../components/Button";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckTypes } from "../../shared/routes";
 
-const TableRecurringUIFilterView = () => {
+const TableRecurringChecksUIFilterView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, timePartitioned, category, checkName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string } = useParams();
-  const { recurringUIFilter, isUpdatedRecurringUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
+  const { recurringChecksUIFilter, isUpdatedRecurringChecksUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const [isUpdating, setIsUpdating] = useState(false);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getTableRecurringOverview(connectionName, schemaName, tableName, timePartitioned).then((res) => {
+    CheckResultOverviewApi.getTableRecurringChecksOverview(connectionName, schemaName, tableName, timePartitioned).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
 
   useEffect(() => {
     dispatch(
-      getTableRecurringUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName)
+      getTableRecurringChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName)
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
 
   const onUpdate = async () => {
     setIsUpdating(true);
-    await TableApiClient.updateTableRecurringUI(
+    await TableApiClient.updateTableRecurringChecksUI(
       connectionName,
       schemaName,
       tableName,
       timePartitioned,
-      recurringUIFilter
+      recurringChecksUIFilter
     );
 
     await dispatch(
-      getTableRecurringUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName, false)
+      getTableRecurringChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName, false)
     );
     setIsUpdating(false);
   };
 
   const onChange = (ui: UICheckContainerModel) => {
-    dispatch(setTableUpdatedRecurringUIFilter(checkTypes, firstLevelActiveTab, ui));
+    dispatch(setTableUpdatedRecurringChecksUIFilter(checkTypes, firstLevelActiveTab, ui));
   };
 
   return (
@@ -62,7 +62,7 @@ const TableRecurringUIFilterView = () => {
           <div className="text-xl font-semibold truncate">{`${connectionName}.${schemaName}.${tableName}.checks.${category} - ${checkName}`}</div>
         </div>
         <Button
-          color={isUpdatedRecurringUIFilter ? 'primary' : 'secondary'}
+          color={isUpdatedRecurringChecksUIFilter ? 'primary' : 'secondary'}
           variant="contained"
           label="Save"
           className="w-40"
@@ -74,7 +74,7 @@ const TableRecurringUIFilterView = () => {
         <DataQualityChecks
           onUpdate={onUpdate}
           className="max-h-checks-1"
-          checksUI={recurringUIFilter}
+          checksUI={recurringChecksUIFilter}
           onChange={onChange}
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
@@ -85,4 +85,4 @@ const TableRecurringUIFilterView = () => {
   );
 };
 
-export default TableRecurringUIFilterView;
+export default TableRecurringChecksUIFilterView;

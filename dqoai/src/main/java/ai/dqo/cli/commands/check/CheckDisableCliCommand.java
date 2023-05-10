@@ -19,11 +19,11 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.cli.commands.check.impl.CheckCliService;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.*;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.services.check.CheckService;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -39,14 +39,14 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "disable", description = "Disable data quality checks matching specified filters")
 public class CheckDisableCliCommand extends BaseCommand implements ICommand, ITableNameCommand {
     private TerminalReader terminalReader;
-    private CheckService checkService;
+    private CheckCliService checkService;
 
     public CheckDisableCliCommand() {
     }
 
     @Autowired
     public CheckDisableCliCommand(TerminalReader terminalReader,
-                                  CheckService checkService) {
+                                  CheckCliService checkService) {
         this.terminalReader = terminalReader;
         this.checkService = checkService;
     }
@@ -71,10 +71,10 @@ public class CheckDisableCliCommand extends BaseCommand implements ICommand, ITa
             completionCandidates = SensorNameCompleter.class)
     private String sensor;
 
-    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (profiling, checkpoint, partitioned)")
+    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (profiling, recurring, partitioned)")
     private CheckType checkType;
 
-    @CommandLine.Option(names = {"-ts", "--time-scale"}, description = "Time scale for checkpoint and partitioned checks (daily, monthly, etc.)")
+    @CommandLine.Option(names = {"-ts", "--time-scale"}, description = "Time scale for recurring and partitioned checks (daily, monthly, etc.)")
     private CheckTimeScale timeScale;
 
     @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (standard, nulls, numeric, etc.)")
@@ -183,7 +183,7 @@ public class CheckDisableCliCommand extends BaseCommand implements ICommand, ITa
     }
 
     /**
-     * Gets the time scale filter for checkpoint and partitioned checks.
+     * Gets the time scale filter for recurring and partitioned checks.
      * @return Time scale filter.
      */
     public CheckTimeScale getTimeScale() {
@@ -191,7 +191,7 @@ public class CheckDisableCliCommand extends BaseCommand implements ICommand, ITa
     }
 
     /**
-     * Sets the time scale filter for checkpoint and partitioned checks.
+     * Sets the time scale filter for recurring and partitioned checks.
      * @param timeScale Time scale filter.
      */
     public void setTimeScale(CheckTimeScale timeScale) {

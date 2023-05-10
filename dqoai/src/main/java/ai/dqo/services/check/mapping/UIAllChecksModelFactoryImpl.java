@@ -16,6 +16,7 @@
 package ai.dqo.services.check.mapping;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.execution.ExecutionContext;
@@ -40,13 +41,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
+public class UIAllChecksModelFactoryImpl implements UIAllChecksModelFactory {
     ExecutionContextFactory executionContextFactory;
     HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher;
     SpecToUiCheckMappingService specToUiCheckMappingService;
 
     @Autowired
-    public UIAllChecksPatchFactoryImpl(ExecutionContextFactory executionContextFactory,
+    public UIAllChecksModelFactoryImpl(ExecutionContextFactory executionContextFactory,
                                        HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
                                        SpecToUiCheckMappingService specToUiCheckMappingService) {
         this.executionContextFactory = executionContextFactory;
@@ -69,8 +70,7 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
         ConnectionSearchFilters connectionSearchFilters = new ConnectionSearchFilters();
         connectionSearchFilters.setConnectionName(checkSearchFilters.getConnectionName());
 
-        Collection<ConnectionSpec> connectionSpecs = this.hierarchyNodeTreeSearcher
-                .findConnections(userHome, connectionSearchFilters);
+        Collection<ConnectionSpec> connectionSpecs = this.hierarchyNodeTreeSearcher.findConnections(userHome, connectionSearchFilters);
         if (connectionSpecs.isEmpty()) {
             // No connections matching the filter.
             return new ArrayList<>();
@@ -95,17 +95,19 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
 
         // TODO: Add templates.
 
-        if (checkSearchFilters.getColumnName() == null
-                && checkSearchFilters.getColumnNullable() == null
-                && checkSearchFilters.getColumnDataType() == null) {
-            // No info specifying columns, we include whole table checks.
+        CheckTarget checkTarget = checkSearchFilters.getCheckTarget();
+
+        if (checkTarget != CheckTarget.column) {
             UIAllTableChecksModel uiAllTableChecksModel = this.getAllTableChecksForConnection(
                     connectionWrapper, checkSearchFilters, executionContext);
             uiAllChecksModel.setTableChecksModel(uiAllTableChecksModel);
         }
-        UIAllColumnChecksModel columnChecksModel = this.getAllColumnChecksForConnection(
-                connectionWrapper, checkSearchFilters, executionContext);
-        uiAllChecksModel.setColumnChecksModel(columnChecksModel);
+
+        if (checkTarget != CheckTarget.table) {
+            UIAllColumnChecksModel columnChecksModel = this.getAllColumnChecksForConnection(
+                    connectionWrapper, checkSearchFilters, executionContext);
+            uiAllChecksModel.setColumnChecksModel(columnChecksModel);
+        }
 
         return uiAllChecksModel;
     }
