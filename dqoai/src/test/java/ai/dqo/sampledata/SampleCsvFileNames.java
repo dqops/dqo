@@ -32,6 +32,7 @@ public class SampleCsvFileNames {
     public static final String string_test_data = "string_test_data.csv";
     public static final String nulls_and_uniqueness = "nulls_and_uniqueness.csv";
     public static final String full_name_test = "full_name_test.csv";
+    public static final String json_fields_test = "json_fields_test.csv";
 
     public static final String uuid_test = "uuid_test.csv";
 

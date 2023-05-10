@@ -58,6 +58,43 @@ public class ValueConverter {
     }
 
     /**
+     * Converts any type of object to a long. Throws exception when the conversion fails.
+     * @param obj Object to convert.
+     * @return Value converted to a long.
+     */
+    public static Long toLong(Object obj) {
+        if (obj == null) {
+            return null;
+        }
+
+        if (obj instanceof Long) {
+            return (Long)obj;
+        }
+
+        if (obj instanceof Integer) {
+            return ((Integer)obj).longValue();
+        }
+
+        if (obj instanceof Short) {
+            return ((Short)obj).longValue();
+        }
+
+        if (obj instanceof Float) {
+            return ((Float)obj).longValue();
+        }
+
+        if (obj instanceof Double) {
+            return ((Double)obj).longValue();
+        }
+
+        if (obj instanceof String) {
+            return Long.valueOf((String)obj);
+        }
+
+        return Long.valueOf(obj.toString());
+    }
+
+    /**
      * Converts any type of object to a double. Throws exception when the conversion fails.
      * @param obj Object to convert.
      * @return Value converted to an double.

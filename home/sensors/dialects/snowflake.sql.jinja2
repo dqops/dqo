@@ -26,7 +26,7 @@
 
 {%- macro render_target_column(table_alias_prefix = 'analyzed_table') -%}
     {%- if calculated_column_expression != '' -%}
-        ({{ calculated_column_expression | replace('{column}', render_target_column('analyzed_table')) | replace('{table}', render_target_table()) | replace('{alias}', table_alias_prefix) }})
+        ({{ calculated_column_expression | replace('{column}', '{{ table_alias_prefix }}.{{ quote_identifier(column_name) }}') | replace('{table}', render_target_table()) | replace('{alias}', table_alias_prefix) }})
     {%- else -%}
         {{ table_alias_prefix }}.{{ quote_identifier(column_name) }}
     {%- endif -%}
