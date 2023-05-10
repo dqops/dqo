@@ -36,7 +36,7 @@ pg_hba.conf file. In case of restrictions you need to add the IP address used by
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
     
     For example:
-    ![Adding connection settings - environmental variables](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-postgresql-envvar.jpg)
+    ![Adding connection settings - environmental variables](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-envvar.jpg)
     
     To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value
     can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
