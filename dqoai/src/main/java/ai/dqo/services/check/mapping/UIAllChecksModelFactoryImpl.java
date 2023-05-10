@@ -16,6 +16,7 @@
 package ai.dqo.services.check.mapping;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.execution.ExecutionContext;
@@ -94,17 +95,19 @@ public class UIAllChecksModelFactoryImpl implements UIAllChecksModelFactory {
 
         // TODO: Add templates.
 
-        if (checkSearchFilters.getColumnName() == null
-                && checkSearchFilters.getColumnNullable() == null
-                && checkSearchFilters.getColumnDataType() == null) {
-            // No info specifying columns, we include whole table checks.
+        CheckTarget checkTarget = checkSearchFilters.getCheckTarget();
+
+        if (checkTarget != CheckTarget.column) {
             UIAllTableChecksModel uiAllTableChecksModel = this.getAllTableChecksForConnection(
                     connectionWrapper, checkSearchFilters, executionContext);
             uiAllChecksModel.setTableChecksModel(uiAllTableChecksModel);
         }
-        UIAllColumnChecksModel columnChecksModel = this.getAllColumnChecksForConnection(
-                connectionWrapper, checkSearchFilters, executionContext);
-        uiAllChecksModel.setColumnChecksModel(columnChecksModel);
+
+        if (checkTarget != CheckTarget.table) {
+            UIAllColumnChecksModel columnChecksModel = this.getAllColumnChecksForConnection(
+                    connectionWrapper, checkSearchFilters, executionContext);
+            uiAllChecksModel.setColumnChecksModel(columnChecksModel);
+        }
 
         return uiAllChecksModel;
     }

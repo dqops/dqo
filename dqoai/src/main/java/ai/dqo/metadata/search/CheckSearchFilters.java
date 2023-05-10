@@ -15,6 +15,7 @@
  */
 package ai.dqo.metadata.search;
 
+import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.metadata.id.HierarchyId;
@@ -42,6 +43,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     private String columnName;
     private String columnDataType;
     private Boolean columnNullable;
+    private CheckTarget checkTarget;
     private CheckType checkType;
     private CheckTimeScale timeScale;
     private String checkCategory;
@@ -153,6 +155,22 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      */
     public void setCheckType(CheckType checkType) {
         this.checkType = checkType;
+    }
+
+    /**
+     * Returns a check target (table, column) filter.
+     * @return Check target filter.
+     */
+    public CheckTarget getCheckTarget() {
+        return checkTarget;
+    }
+
+    /**
+     * Sets a check target (table, column) filter.
+     * @param checkTarget Check target filter.
+     */
+    public void setCheckTarget(CheckTarget checkTarget) {
+        this.checkTarget = checkTarget;
     }
 
     /**
