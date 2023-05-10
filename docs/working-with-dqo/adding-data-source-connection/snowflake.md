@@ -132,7 +132,12 @@ spec:
     database: TESTING
     user: john
     password: xxx
+    role: ACCOUNTADMIN
     properties:
-      loginTimeout: 55
-      queryTimeout: 20
+      CLIENT_SESSION_KEEP_ALIVE_HEARTBEAT_FREQUENCEY: 3500
+  incident_grouping:
+    grouping_level: table_dimension_category
+    minimum_severity: warning
+    max_incident_length_days: 60
+    mute_for_days: 60
 ```

@@ -67,6 +67,7 @@ Database provider type (--provider):
  [ 3] postgresql
  [ 4] redshift
  [ 5] sqlserver
+ [ 6] mysql
 Please enter one of the [] values: 1
 Source GCP project ID (--bigquery-source-project-id") [dqo-ai-testing]: dqo-ai-testing
 Billing GCP project ID (--bigquery-billing-project-id), leave null to use the default GCP project from credentials (dqo-ai-testing):

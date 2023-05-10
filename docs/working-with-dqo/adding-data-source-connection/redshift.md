@@ -127,14 +127,17 @@ kind: source
 spec:
   provider_type: redshift
   redshift:
-    host: localhost
+    host: redshift-cluster-2.cds5vq1bzgx5.us-east-1.redshift.amazonaws.com
     port: 5439
     database: testing
-    user: test
+    user: testing
     password: test
-  time_zone: UTC
+    ssl: false
     properties:
-      loginTimeout: 55
-      queryTimeout: 20
-
+      'connectTimeout': 15
+  incident_grouping:
+    grouping_level: table_dimension_category
+    minimum_severity: warning
+    max_incident_length_days: 60
+    mute_for_days: 60
 ```
