@@ -77,12 +77,13 @@ Database provider type (--provider):
 [ 3] postgresql
 [ 4] redshift
 [ 5] sqlserver
+[ 6] mysql
 Please enter one of the [] values: 4
 Redshift host (--redshift-host)[${REDSHIFT_HOST}]: localhost
 Redshift port (--redshift-port) [${REDSHIFT_PORT}]: 5439
-Redshift database (--redshift-database) [${REDSHIFT_DATABASE}]: TESTING
-Redshift user name (--redshift-username) [${REDSHIFT_USER}]: TESTING
-Redshift password (--redshift-password) [${REDSHIFT_PASSWORD}]: test
+Redshift database (--redshift-database) [${REDSHIFT_DATABASE}]: testing
+Redshift user name (--redshift-username) [${REDSHIFT_USER}]: testing
+Redshift password (--redshift-password) [${REDSHIFT_PASSWORD}]: xxx
 Connection connecton1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -94,9 +95,9 @@ dqo.ai> connection add --name=connection1
 --provider=redshift
 --redshift-host=localhost
 --redshift-port=5439
---redshift-database=TESTING
+--redshift-database=testing
 --redshift-user=testing
---redshift-password=test
+--redshift-password=xxx
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
@@ -131,7 +132,7 @@ spec:
     port: 5439
     database: testing
     user: testing
-    password: test
+    password: xxx
     ssl: false
     properties:
       'connectTimeout': 15

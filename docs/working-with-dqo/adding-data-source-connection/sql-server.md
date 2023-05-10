@@ -75,12 +75,13 @@ Database provider type (--provider):
 [ 3] postgresql
 [ 4] redshift
 [ 5] sqlserver
+[ 6] mysql
 Please enter one of the [] values: 5
 SQL Server host (--sqlserver-host)[${SQLSERVER_HOST}]: localhost
 SQL Server port (--sqlserver-port) [${SQLSERVER_PORT}]: 1433
 SQL Server database name (--sqlserver-database) [${SQLSERVER_DATABASE}]: TESTING
-SQL Server user name (--sqlserver-user) [${SQLSERVER_USER}]: TESTING
-SQL Server password (--sqlserver-password) [${SQLSERVER_PASSWORD}]: test
+SQL Server user name (--sqlserver-user) [${SQLSERVER_USER}]: testing
+SQL Server password (--sqlserver-password) [${SQLSERVER_PASSWORD}]: xxx
 Connection connecton1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -94,7 +95,7 @@ dqo.ai> connection add --name=connection1
 --sqlserver-port=1433
 --sqlserver-database=TESTING
 --sqlserver-username=testing
---sqlserver-password=test
+--sqlserver-password=xxx
 
 !!!!!
 ```
@@ -131,7 +132,7 @@ spec:
     port: 1433
     database: TESTING
     user: testing
-    password: test
+    password: xxx
     ssl: true
     properties:
       lastUpdateCount: "false"

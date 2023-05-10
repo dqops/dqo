@@ -74,11 +74,12 @@ Database provider type (--provider):
 [ 3] postgresql
 [ 4] redshift
 [ 5] sqlserver
+[ 6] mysql
 Please enter one of the [] values: 3
 PostgreSQL host (--postgresql-host)[${POSTGRESQL_HOST}]: localhost
 PostgreSQL port (--postgresql-port) [${POSTGRESQL_PORT}]: 65234
-PostgreSQL user (--postgresql-user) [${POSTGRESQL_USER}]: TESTING
-PostgreSQL password (--postgresql-password) [${POSTGRESQL_PASSWORD}]: test
+PostgreSQL user (--postgresql-user) [${POSTGRESQL_USER}]: testing
+PostgreSQL password (--postgresql-password) [${POSTGRESQL_PASSWORD}]: xxx
 Connection connecton1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -91,7 +92,7 @@ dqo.ai> connection add --name=connection1
 --postgresql-host=localhost
 --postgresql-port=65234
 --postgresql-user=testing
---postgresql-password=test
+--postgresql-password=xxx
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
@@ -125,7 +126,7 @@ spec:
     host: localhost
     port: 65234
     user: testing
-    password: test
+    password: xxx
     ssl: false
     properties:
       'connectTimeout ': 12

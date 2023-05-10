@@ -76,6 +76,7 @@ Database provider type (--provider):
  [ 3] postgresql
  [ 4] redshift
  [ 5] sqlserver
+ [ 6] mysql
 Please enter one of the [] values: 2
 Snowflake account name (--snowflake-account) [${SNOWFLAKE_ACCOUNT}]: xx-kh8138
 Snowflake warehouse name (--snowflake-warehouse) [${SNOWFLAKE_WAREHOUSE}]: OMPUTE_WH

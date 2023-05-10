@@ -1,7 +1,8 @@
 # MySQL
 
-MySQL offers a fully managed database service. This service seamlessly combines transactions, analytics, and machine learning services 
-into a single MySQL Database, delivering secure and real-time analytics without the need for costly, time-consuming, and intricate ETL duplication.
+MySQL is an open source, easy-to-use and flexible SQL database management system developed, distributed, and supported by Oracle Corporation.
+MySQL is generally faster and more efficient than other relational database management systems (RDBMS), so it is often the preferred
+choice for applications that require high performance.
 
 ## Prerequisite credentials
 
@@ -21,17 +22,17 @@ You need a MySQL account. Use the TCP/IP Properties (IP Addresses Tab) dialog bo
 
    ![Adding connection settings](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-mysql.jpg)
 
-    | MySQL connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                             | 
-    |---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-    | Connection name           |                                          | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                                 |
-    | Host                      | host                                     | MySQL host name. Supports also a ${MYSQL_HOST} configuration with a custom environment variable.                                                                                                                                                                        |
-    | Port                      | port                                     | MySQL port name. The default port is 3306 Supports also a ${MYSQL_PORT} configuration with a custom environment variable.                                                                                                                                               |
-    | Database                  | database                                 | MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                           |        
-    | User name                 | user                                     | MySQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                               |
-    | Password                  | password                                 | MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                       |
-    | Options                   | options                                  | MySQL connection 'options' initialization parameter. For example, setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable. |
-    | SSL                       | ssl                                      | Connect to MySQL using SSL. The default value is false.                                                                                                                                                                                                                 |
-    | JDBC connection property  |                                          | Optional setting. DQO supports using JDBC driver to access MySQL. [JDBC Concepts.](https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-usagenotes-basic.html).                                                                                                     |
+    | MySQL connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                           | 
+    |---------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+    | Connection name           |                                          | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                               |
+    | Host                      | host                                     | MySQL host name. Supports also a ${MYSQL_HOST} configuration with a custom environment variable.                                                                                                                                                                      |
+    | Port                      | port                                     | MySQL port name. The default port is 3306 Supports also a ${MYSQL_PORT} configuration with a custom environment variable.                                                                                                                                             |
+    | Database                  | database                                 | MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                         |
+    | User name                 | user                                     | MySQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                             |
+    | Password                  | password                                 | MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                     |
+    | Options                   | options                                  | MySQL connection 'options' initialization parameter. For example, setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable.|
+    | SSL                       | ssl                                      | Connect to MySQL using SSL. The default value is false.                                                                                                                                                                                                               |
+    | JDBC connection property  |                                          | Optional setting. DQO supports using JDBC driver to access MySQL. [JDBC Concepts.](https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-usagenotes-basic.html).                                                                                                   |
     
     DQO allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -81,7 +82,7 @@ MySQL host (--mysql-host)[${MYSQL_HOST}]: localhost
 MySQL port (--mysql-port) [${MYSQL_PORT}]: 3306
 MySQL database(--mysql-database) [${MYSQL_DATABASE}]: testing
 MySQL user name (--mysql-user) [${MYSQL_USER}]: test
-MySQL password (--mysql-password) [${MYSQL_PASSWORD}]: test
+MySQL password (--mysql-password) [${MYSQL_PASSWORD}]: xxx
 Connection connecton1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -93,9 +94,9 @@ dqo.ai> connection add --name=connection1
 --provider=mysql
 --mysql-host=localhost
 --mysql-port=3306
---mysql-database=testng
+--mysql-database=testing
 --mysql-username=test
---mysql-password=test
+--mysql-password=xxx
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
@@ -129,8 +130,8 @@ spec:
     host: localhost
     port: 3306
     user: testing
-    database: test
-    password: test
+    database: testing
+    password: xxx
     ssl: true
     properties:
       cacheDefaultTimeZone: "false"
