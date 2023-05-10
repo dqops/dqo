@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import {
   Popover,
@@ -15,13 +15,12 @@ import { useError, IError } from '../../contexts/errrorContext';
 import JobItem from './JobItem';
 import ErrorItem from './ErrorItem';
 import moment from 'moment';
-import { clear, error } from 'console';
 
 const NotificationMenu = () => {
   const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
   const dispatch = useActionDispatch();
   const { errors } = useError();
-  const [counter, setCounter] = useState(0);
+
   // const data = jobs?.jobs
   //   ? jobs?.jobs.sort((a, b) => {
   //       return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);

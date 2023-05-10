@@ -2,7 +2,7 @@ import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import SvgIcon from '../../SvgIcon';
 import {
   Accordion,
@@ -10,8 +10,62 @@ import {
   AccordionHeader
 } from '@material-tailwind/react';
 import moment from 'moment';
+import JobChild from '../JobChild';
+import { useSelector } from 'react-redux';
+import { useError, IError } from '../../../contexts/errrorContext';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { toggleMenu } from '../../../redux/actions/job.actions';
+import { IRootState } from '../../../redux/reducers';
 
 const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
+  const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
+  const dispatch = useActionDispatch();
+  const { errors } = useError();
+
+  // const data = jobs?.jobs
+  //   ? jobs?.jobs.sort((a, b) => {
+  //       return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
+  //     })
+  //   : [];
+
+  const toggleOpen = () => {
+    dispatch(toggleMenu(!isOpen));
+  };
+
+  // const badRequests = useMemo(() => {
+  //   return errors.filter((item: any) => item.name === 'Bad Request');
+  // }, [errors]);
+
+  const getNotificationDate = (notification: any) => {
+    if (notification.type === 'job') {
+      return notification.item.jobId?.createdAt;
+    }
+    return notification.item.date;
+  };
+
+  const data = useMemo(() => {
+    const jobsData = jobs?.jobs
+      ? jobs?.jobs
+          .sort((a, b) => {
+            return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
+          })
+          .map((item) => ({ type: 'job', item }))
+      : [];
+
+    const errorData = errors.map((item: IError) => ({ type: 'error', item }));
+
+    const newData = jobsData.concat(errorData);
+
+    newData.sort((a, b) => {
+      const date1 = getNotificationDate(a);
+      const date2 = getNotificationDate(b);
+
+      return moment(date1).isBefore(moment(date2)) ? 1 : -1;
+    });
+
+    return newData;
+  }, [jobs, errors]);
+
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
 
@@ -81,12 +135,11 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                   </div>
                 </AccordionHeader>
                 <AccordionBody>
-                  <ul>
-                    <li>1</li>
-                    <li>2</li>
-                    <li>3</li>
-                    <li>4</li>
-                  </ul>
+                  <div className="overflow-auto max-h-100 py-4 px-4">
+                    {data.map((notification: any, index) => (
+                      <JobChild job={notification.item} key={index} />
+                    ))}
+                  </div>
                 </AccordionBody>
               </Accordion>
             ) : (
