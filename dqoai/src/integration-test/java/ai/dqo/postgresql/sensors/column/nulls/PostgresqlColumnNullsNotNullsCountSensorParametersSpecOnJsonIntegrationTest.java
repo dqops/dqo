@@ -48,7 +48,7 @@ public class PostgresqlColumnNullsNotNullsCountSensorParametersSpecOnJsonIntegra
     void setUp() {
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.json_fields_test, ProviderType.postgresql);
         ColumnSpec jsonNullsColumn = sampleTableMetadata.getTableSpec().getColumns().get("json_nulls");
-        jsonNullsColumn.setSqlExpression("json_extract_path({alias}.{column}, 'address.zip')");
+        jsonNullsColumn.setSqlExpression("{column}::json->'address'->'zip'");
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnNullsNotNullsCountSensorParametersSpec();
