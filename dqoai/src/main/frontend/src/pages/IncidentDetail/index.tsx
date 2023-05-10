@@ -11,6 +11,15 @@ import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { getIncidentsByConnection, setIncidentsFilter } from "../../redux/actions/incidents.actions";
 import { Table } from "../../components/Table";
 import { CheckTypes, ROUTES } from "../../shared/routes";
+import moment from "moment";
+
+const getDaysString = (value: string) => {
+  const daysDiff = moment().diff(moment(value), 'day');
+  if (daysDiff === 0) return 'Today';
+  if (daysDiff === 1) return '1 day ago';
+
+  return `${daysDiff} days ago`;
+}
 
 const options = [
   {
@@ -64,12 +73,22 @@ const columns = [
   {
     label: 'First seen',
     className: 'text-left py-2 px-4',
-    value: 'firstSeen'
+    value: 'firstSeen',
+    render: (value: string) => (
+      <div>
+        {getDaysString(value)}
+      </div>
+    )
   },
   {
     label: 'Last seen',
     className: 'text-left py-2 px-4',
-    value: 'lastSeen'
+    value: 'lastSeen',
+    render: (value: string) => (
+      <div>
+        {getDaysString(value)}
+      </div>
+    )
   },
   {
     label: 'Issue Link',
@@ -87,9 +106,9 @@ export const IncidentDetail = () => {
   useEffect(() => {
     dispatch(getIncidentsByConnection({
       connection,
-      numberOfMonth: 3,
+      ...filters
     }));
-  }, [connection]);
+  }, [connection, filters]);
 
   const onChangeFilter = (obj: any) => {
     dispatch(setIncidentsFilter({
