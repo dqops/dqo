@@ -73,6 +73,27 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                 {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
               </td>
             </tr>
+            {job.jobType === 'synchronize multiple folders' ? (
+              <Accordion open={open2}>
+                <AccordionHeader
+                  onClick={() => setOpen2(!open2)}
+                  className="px-2 capitalize text-xl"
+                >
+                  Tasks{' '}
+                </AccordionHeader>
+                <AccordionBody>
+                  <ul>
+                    <li>1</li>
+                    <li>2</li>
+                    <li>3</li>
+                    <li>4</li>
+                  </ul>
+                </AccordionBody>
+              </Accordion>
+            ) : (
+              ''
+            )}
+
             {job?.errorMessage && (
               <>
                 <tr>
