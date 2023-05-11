@@ -21,7 +21,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
   const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
   const dispatch = useActionDispatch();
   const { errors } = useError();
-
+  const [parrentId, setParrentId] = useState(0);
   // const data = jobs?.jobs
   //   ? jobs?.jobs.sort((a, b) => {
   //       return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
@@ -103,7 +103,10 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
         <AccordionHeader onClick={() => setOpen(!open)}>
           <div className="flex justify-between items-center text-sm w-full text-gray-700">
             <div className="flex space-x-1 items-center">
-              <div>{job.jobType}</div>
+              <div>
+                {job.jobType}
+                {job.jobId?.jobId}
+              </div>
               {renderStatus()}
             </div>
             <div>
@@ -137,7 +140,13 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                 <AccordionBody>
                   <div className="overflow-auto max-h-100 py-4 px-4">
                     {data.map((notification: any, index) => (
-                      <JobChild job={notification.item} key={index} />
+                      <div key={index}>
+                        <JobChild
+                          job={notification.item}
+                          key={index}
+                          parentId={Number(job.jobId?.jobId)}
+                        />
+                      </div>
                     ))}
                   </div>
                 </AccordionBody>

@@ -12,24 +12,16 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { toggleMenu } from '../../../redux/actions/job.actions';
 import { IRootState } from '../../../redux/reducers';
 
-const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
+const JobChild = ({
+  job,
+  parentId
+}: {
+  job: DqoJobHistoryEntryModel;
+  parentId: number;
+}) => {
   const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
   const dispatch = useActionDispatch();
   const { errors } = useError();
-
-  // const data = jobs?.jobs
-  //   ? jobs?.jobs.sort((a, b) => {
-  //       return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
-  //     })
-  //   : [];
-
-  const toggleOpen = () => {
-    dispatch(toggleMenu(!isOpen));
-  };
-
-  // const badRequests = useMemo(() => {
-  //   return errors.filter((item: any) => item.name === 'Bad Request');
-  // }, [errors]);
 
   const getNotificationDate = (notification: any) => {
     if (notification.type === 'job') {
@@ -83,11 +75,14 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
 
   return (
     <Accordion open={open}>
-      {job.jobType === 'synchronize folder' ? (
+      {job.jobId?.parentJobId?.jobId === parentId ? (
         <AccordionHeader onClick={() => setOpen(!open)}>
           <div className="flex justify-between items-center text-sm w-full text-gray-700">
             <div className="flex space-x-1 items-center">
-              <div>{job.jobType}</div>
+              <div>
+                {job.jobType}
+                {job.jobId?.parentJobId?.jobId}
+              </div>
               {renderStatus()}
             </div>
             <div>
