@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 
 import clsx from 'clsx';
 
@@ -14,6 +14,7 @@ import {
 interface Option {
   label: string | number;
   value?: string | number;
+  icon?: ReactNode;
 }
 
 interface SelectProps {
@@ -103,7 +104,12 @@ const Select = ({
               error ? 'border-red-500' : 'border-gray-300'
             )}
           >
-            {selectedOption ? (prefix ? prefix + ' ' : '') + selectedOption.label : placeholder}
+            {selectedOption ? (
+              <div className="flex items-center gap-2">
+                {selectedOption.icon || ""}
+                {(prefix ? prefix + ' ' : '') + selectedOption.label}
+              </div>
+            ) : placeholder}
             <SvgIcon
               name="chevron-down"
               className="absolute transform top-1/2 -translate-y-2/4 right-2 w-4"
@@ -125,7 +131,10 @@ const Select = ({
                 onClick={() => handleClick(option)}
                 style={{ minWidth: menuWidth }}
               >
-                {option.label}
+                <div className="flex gap-2 items-center">
+                  {option.icon || ""}
+                  {option.label}
+                </div>
               </MenuItem>
             ))}
             {onAdd && (
