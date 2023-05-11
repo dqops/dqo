@@ -37,8 +37,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class MultiplyMovingStdevRuleParametersSpecTests extends BaseTest {
-    private MultiplyMovingStdevRuleParametersSpec sut;
+public class MultiplyMovingStdevWithin7DaysRuleParametersSpecTests extends BaseTest {
+    private MultiplyMovingStdevWithin7DaysRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -48,7 +48,7 @@ public class MultiplyMovingStdevRuleParametersSpecTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new MultiplyMovingStdevRuleParametersSpec();
+        this.sut = new MultiplyMovingStdevWithin7DaysRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
@@ -58,8 +58,7 @@ public class MultiplyMovingStdevRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsPassed() {
-        this.sut.setMultiplyStdevAbove(1.0);
-        this.sut.setMultiplyStdevBelow(1.0);
+        this.sut.setMultiplyStdev(2.0);
 
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             if(i % 2 == 0) {

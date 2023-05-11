@@ -38,8 +38,8 @@ import java.time.LocalDateTime;
 import java.util.Random;
 
 @SpringBootTest
-public class ChangeMultiplyMovingStdevWithinRuleParametersSpecTests extends BaseTest {
-    private ChangeMultiplyMovingStdevWithinRuleParametersSpec sut;
+public class ChangePercentileMoving7DaysRuleParametersSpecTests extends BaseTest {
+    private ChangePercentileMoving7DaysRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -49,7 +49,7 @@ public class ChangeMultiplyMovingStdevWithinRuleParametersSpecTests extends Base
 
     @BeforeEach
     void setUp() {
-        this.sut = new ChangeMultiplyMovingStdevWithinRuleParametersSpec();
+        this.sut = new ChangePercentileMoving7DaysRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
@@ -58,8 +58,9 @@ public class ChangeMultiplyMovingStdevWithinRuleParametersSpecTests extends Base
     }
 
     @Test
-    void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsPassed() {
-        this.sut.setMultiplyStdev(2.0);
+    void executeRule_whenActualValueIsBelowMaxValueAndPastValuesAreNormal_thenReturnsPassed() {
+        this.sut.setPercentileBelow(5.0);
+        this.sut.setPercentileAbove(15.0);
 
         Random random = new Random(0);
         Double increment = 5.0;
@@ -81,13 +82,14 @@ public class ChangeMultiplyMovingStdevWithinRuleParametersSpecTests extends Base
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertEquals(55.87, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(52.53, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(59.22, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(50.37, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(59.34, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
-    void executeRule_whenActualValueIsWithinStdevAndPastValuesAreSteady_thenReturnsPassed() {
-        this.sut.setMultiplyStdev(1.0);
+    void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreSteady_thenReturnsPassed() {
+        this.sut.setPercentileBelow(10.0);
+        this.sut.setPercentileAbove(20.0);
 
         Double increment = 7.0;
         this.sensorReadouts[0] = 0.0;

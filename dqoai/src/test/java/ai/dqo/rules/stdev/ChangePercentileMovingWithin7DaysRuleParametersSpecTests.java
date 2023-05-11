@@ -35,12 +35,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Random;
 
 @SpringBootTest
-public class ChangePercentileMovingWithinRuleParametersSpecTests extends BaseTest {
-    private ChangePercentileMovingWithinRuleParametersSpec sut;
+public class ChangePercentileMovingWithin7DaysRuleParametersSpecTests extends BaseTest {
+    private ChangePercentileMovingWithin7DaysRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -50,7 +49,7 @@ public class ChangePercentileMovingWithinRuleParametersSpecTests extends BaseTes
 
     @BeforeEach
     void setUp() {
-        this.sut = new ChangePercentileMovingWithinRuleParametersSpec();
+        this.sut = new ChangePercentileMovingWithin7DaysRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());

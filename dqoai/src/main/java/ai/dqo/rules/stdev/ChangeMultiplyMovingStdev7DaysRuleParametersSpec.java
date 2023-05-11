@@ -34,8 +34,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ChangeMultiplyMovingStdevRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<ChangeMultiplyMovingStdevRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class ChangeMultiplyMovingStdev7DaysRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<ChangeMultiplyMovingStdev7DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -44,16 +44,16 @@ public class ChangeMultiplyMovingStdevRuleParametersSpec extends AbstractRulePar
     @JsonPropertyDescription("How many multiples of the estimated standard deviation the current" +
             " sensor readout could be above the moving average within the time window. Set" +
             " the time window at the threshold level for all severity levels (warning, error," +
-            " fatal) at once. The default is a 14 time periods (days, etc.) time window," +
-            " but at least 7 readouts must exist to run the calculation.")
+            " fatal) at once. The default is a 7 time periods (days, etc.) time window," +
+            " but at least 3 readouts must exist to run the calculation.")
     @SampleValues(values = "1.5")
     private Double multiplyStdevAbove;
 
     @JsonPropertyDescription("How many multiples of the estimated standard deviation the current" +
             " sensor readout could be below the moving average within the time window. Set" +
             " the time window at the threshold level for all severity levels (warning, error," +
-            " fatal) at once. The default is a 14 time periods (days, etc.) time window," +
-            " but at least 7 readouts must exist to run the calculation.")
+            " fatal) at once. The default is a 7 time periods (days, etc.) time window," +
+            " but at least 3 readouts must exist to run the calculation.")
     @SampleValues(values = "2.5")
     private Double multiplyStdevBelow;
 
@@ -109,6 +109,6 @@ public class ChangeMultiplyMovingStdevRuleParametersSpec extends AbstractRulePar
      */
     @Override
     public String getRuleDefinitionName() {
-        return "stdev/change_multiply_moving_stdev";
+        return "stdev/change_multiply_moving_stdev_7_days";
     }
 }

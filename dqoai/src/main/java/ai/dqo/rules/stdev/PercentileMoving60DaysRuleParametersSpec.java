@@ -34,8 +34,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class PercentileMovingRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<PercentileMovingRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class PercentileMoving60DaysRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<PercentileMoving60DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -45,8 +45,8 @@ public class PercentileMovingRuleParametersSpec extends AbstractRuleParametersSp
             " than it would be expected from the estimated distribution based on the previous values" +
             " gathered within the time window. In other words, the upper quantile of the estimated" +
             " normal distribution. Set the time window at the threshold level for all severity" +
-            " levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.)" +
-            " time window, but at least 7 readouts must exist to run the calculation.")
+            " levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.)" +
+            " time window, but at least 20 readouts must exist to run the calculation.")
     @SampleValues(values = "5")
     private Double percentileAbove;
 
@@ -54,15 +54,15 @@ public class PercentileMovingRuleParametersSpec extends AbstractRuleParametersSp
             " than it would be expected from the estimated distribution based on the previous values" +
             " gathered within the time window. In other words, the lower quantile of the estimated" +
             " normal distribution. Set the time window at the threshold level for all severity" +
-            " levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.)" +
-            " time window, but at least 7 readouts must exist to run the calculation.")
+            " levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.)" +
+            " time window, but at least 20 readouts must exist to run the calculation.")
     @SampleValues(values = "5")
     private Double percentileBelow;
 
     /**
      * Default constructor.
      */
-    public PercentileMovingRuleParametersSpec() {
+    public PercentileMoving60DaysRuleParametersSpec() {
         this.percentileBelow = null;
         this.percentileAbove = null;
     }
@@ -123,6 +123,6 @@ public class PercentileMovingRuleParametersSpec extends AbstractRuleParametersSp
      */
     @Override
     public String getRuleDefinitionName() {
-        return "stdev/percentile_moving";
+        return "stdev/percentile_moving_60_days";
     }
 }

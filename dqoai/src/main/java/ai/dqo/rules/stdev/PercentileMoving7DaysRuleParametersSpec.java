@@ -29,14 +29,13 @@ import java.util.Objects;
 
 /**
  * Data quality rule that verifies if a data quality sensor readout value is probable under
- * the estimated normal distribution based on the increments of previous values gathered
- * within a time window.
+ * the estimated normal distribution based on the previous values gathered within a time window.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ChangePercentileMovingRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<ChangePercentileMovingRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class PercentileMoving7DaysRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<PercentileMoving7DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -46,8 +45,8 @@ public class ChangePercentileMovingRuleParametersSpec extends AbstractRuleParame
             " than it would be expected from the estimated distribution based on the previous values" +
             " gathered within the time window. In other words, the upper quantile of the estimated" +
             " normal distribution. Set the time window at the threshold level for all severity" +
-            " levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.)" +
-            " time window, but at least 7 readouts must exist to run the calculation.")
+            " levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.)" +
+            " time window, but at least 3 readouts must exist to run the calculation.")
     @SampleValues(values = "5")
     private Double percentileAbove;
 
@@ -55,15 +54,15 @@ public class ChangePercentileMovingRuleParametersSpec extends AbstractRuleParame
             " than it would be expected from the estimated distribution based on the previous values" +
             " gathered within the time window. In other words, the lower quantile of the estimated" +
             " normal distribution. Set the time window at the threshold level for all severity" +
-            " levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.)" +
-            " time window, but at least 7 readouts must exist to run the calculation.")
+            " levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.)" +
+            " time window, but at least 3 readouts must exist to run the calculation.")
     @SampleValues(values = "5")
     private Double percentileBelow;
 
     /**
      * Default constructor.
      */
-    public ChangePercentileMovingRuleParametersSpec() {
+    public PercentileMoving7DaysRuleParametersSpec() {
         this.percentileBelow = null;
         this.percentileAbove = null;
     }
@@ -124,6 +123,6 @@ public class ChangePercentileMovingRuleParametersSpec extends AbstractRuleParame
      */
     @Override
     public String getRuleDefinitionName() {
-        return "stdev/change_percentile_moving";
+        return "stdev/percentile_moving_7_days";
     }
 }

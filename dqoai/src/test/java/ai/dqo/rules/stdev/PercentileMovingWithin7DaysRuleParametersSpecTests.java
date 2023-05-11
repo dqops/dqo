@@ -38,8 +38,8 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @SpringBootTest
-public class PercentileMovingWithinRuleParametersSpecTests extends BaseTest {
-    private PercentileMovingWithinRuleParametersSpec sut;
+public class PercentileMovingWithin7DaysRuleParametersSpecTests extends BaseTest {
+    private PercentileMovingWithin7DaysRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -49,7 +49,7 @@ public class PercentileMovingWithinRuleParametersSpecTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new PercentileMovingWithinRuleParametersSpec();
+        this.sut = new PercentileMovingWithin7DaysRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());

@@ -29,13 +29,13 @@ import java.util.Objects;
 
 /**
  * Data quality rule that verifies if a data quality sensor readout value
- * doesn't excessively deviate from the moving average of a time window.
+ * doesn't excessively deviate from the moving average of increments on a time window.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MultiplyMovingStdevWithinRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MultiplyMovingStdevWithinRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class ChangeMultiplyMovingStdevWithin30DaysRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<ChangeMultiplyMovingStdevWithin30DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -44,8 +44,8 @@ public class MultiplyMovingStdevWithinRuleParametersSpec extends AbstractRulePar
     @JsonPropertyDescription("How many multiples of the estimated standard deviation within the moving average" +
             " the current sensor readout could be, with regards to the time window. Set" +
             " the time window at the threshold level for all severity levels (warning, error," +
-            " fatal) at once. The default is a 14 time periods (days, etc.) time window," +
-            " but at least 7 readouts must exist to run the calculation.")
+            " fatal) at once. The default is a 30 time periods (days, etc.) time window," +
+            " but at least 10 readouts must exist to run the calculation.")
     @SampleValues(values = "1.5")
     private Double multiplyStdev;
 
@@ -83,6 +83,6 @@ public class MultiplyMovingStdevWithinRuleParametersSpec extends AbstractRulePar
      */
     @Override
     public String getRuleDefinitionName() {
-        return "stdev/multiply_moving_stdev_within";
+        return "stdev/change_multiply_moving_stdev_within_30_days";
     }
 }

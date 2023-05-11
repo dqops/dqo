@@ -29,14 +29,13 @@ import java.util.Objects;
 
 /**
  * Data quality rule that verifies if a data quality sensor readout value is probable under
- * the estimated normal distribution based on the increments of previous values gathered
- * within a time window.
+ * the estimated normal distribution based on the previous values gathered within a time window.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ChangePercentileMovingWithinRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<ChangePercentileMovingWithinRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class PercentileMovingWithin30DaysRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<PercentileMovingWithin30DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -46,7 +45,7 @@ public class ChangePercentileMovingWithinRuleParametersSpec extends AbstractRule
             " the mean according to the distribution of the previous values gathered within the time window." +
             " In other words, the inter-quantile range around the mean of the estimated normal distribution." +
             " Set the time window at the threshold level for all severity levels (warning, error, fatal) at once." +
-            " The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist" +
+            " The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist" +
             " to run the calculation.")
     @SampleValues(values = "95")
     private Double percentileWithin;
@@ -54,7 +53,7 @@ public class ChangePercentileMovingWithinRuleParametersSpec extends AbstractRule
     /**
      * Default constructor.
      */
-    public ChangePercentileMovingWithinRuleParametersSpec() {
+    public PercentileMovingWithin30DaysRuleParametersSpec() {
         this.percentileWithin = null;
     }
 
@@ -94,6 +93,6 @@ public class ChangePercentileMovingWithinRuleParametersSpec extends AbstractRule
      */
     @Override
     public String getRuleDefinitionName() {
-        return "stdev/change_percentile_moving_within";
+        return "stdev/percentile_moving_within_30_days";
     }
 }
