@@ -35,20 +35,20 @@ import ai.dqo.data.statistics.services.models.StatisticsResultsForTableModel;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.rest.models.metadata.ColumnBasicModel;
-import ai.dqo.rest.models.metadata.ColumnModel;
-import ai.dqo.rest.models.metadata.ColumnStatisticsModel;
+import ai.dqo.rest.models.metadata.*;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
 import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
 import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
 import ai.dqo.services.check.mapping.models.UICheckContainerModel;
 import ai.dqo.services.metadata.ColumnService;
+import ai.dqo.statistics.StatisticsCollectorTarget;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,8 +59,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -148,14 +150,14 @@ public class ColumnsController {
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/statistics")
     @ApiOperation(value = "getColumnsStatistics",
             notes = "Returns a list of columns inside a table with the metrics captured by the most recent statistics collection.",
-            response = ColumnStatisticsModel[].class)
+            response = TableColumnsStatisticsModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = ColumnStatisticsModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = TableColumnsStatisticsModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<ColumnStatisticsModel>> getColumnsStatistics(
+    public ResponseEntity<Mono<TableColumnsStatisticsModel>> getColumnsStatistics(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -165,21 +167,21 @@ public class ColumnsController {
         ConnectionList connections = userHome.getConnections();
         ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
         if (connectionWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
         }
 
         PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
         TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
                 physicalTableName, true);
         if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
         }
 
         StatisticsResultsForTableModel mostRecentStatisticsMetricsForTable =
                 this.statisticsDataService.getMostRecentStatisticsForTable(connectionName, physicalTableName,
                         CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME, true);
 
-        Stream<ColumnStatisticsModel> columnModels = tableWrapper.getSpec().getColumns()
+        List<ColumnStatisticsModel> columnModels = tableWrapper.getSpec().getColumns()
                 .entrySet()
                 .stream()
                 .sorted(Comparator.comparing(kv -> kv.getKey()))
@@ -187,9 +189,23 @@ public class ColumnsController {
                         connectionName, tableWrapper.getPhysicalTableName(),
                         kv.getKey(), // column name
                         kv.getValue(), // column specification
-                        mostRecentStatisticsMetricsForTable.getColumns().get(kv.getKey())));
+                        mostRecentStatisticsMetricsForTable.getColumns().get(kv.getKey())))
+                .collect(Collectors.toList());
 
-        return new ResponseEntity<>(Flux.fromStream(columnModels), HttpStatus.OK);
+        TableColumnsStatisticsModel resultModel = new TableColumnsStatisticsModel();
+        resultModel.setConnectionName(connectionName);
+        resultModel.setTable(physicalTableName);
+        resultModel.setColumnStatistics(columnModels);
+
+        resultModel.setCollectColumnStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
+        {{
+            setConnectionName(connectionName);
+            setSchemaTableName(physicalTableName.toTableSearchFilter());
+            setTarget(StatisticsCollectorTarget.column);
+            setEnabled(true);
+        }});
+
+        return new ResponseEntity<>(Mono.just(resultModel), HttpStatus.OK);
     }
 
     /**
