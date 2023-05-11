@@ -47,33 +47,33 @@ If you want to install DQO directly from Git go to [this section](../../working-
 2. Open a terminal, navigate to the created directory, and create a [virtual environment](https://docs.python.org/3/library/venv.html) by running:
 
     === "Windows"
-        ```python
+        ```
         py -m venv myvenv
         ```
     === "MacOS/Linux"
-        ``` python
+        ```
         python -m venv myvenv
         ```
 
 3. Activate virtual environment by changing directory to `myvenv/Scripts` and run
 
     === "Windows"
-        ```python
+        ```
         activate.bat
         ```
     === "MacOS/Linux"
-        ``` python
+        ```
         activate
         ```
 
 4. Install DQO via pip manager
 
     === "Windows"
-        ```python
+        ```
         py -m pip install dqoai
         ```
     === "MacOS/Linux"
-        ``` python
+        ```
         pip install dqoai
         ```
 
@@ -82,11 +82,11 @@ If you want to install DQO directly from Git go to [this section](../../working-
 1. Run dqo app to finalize the installation. 
 
     === "Windows"
-        ```python
+        ```
         dqo
         ```
     === "MacOS/Linux"
-        ``` python
+        ```
         ./dqo
         ```
 
