@@ -46,6 +46,9 @@ def main():
     install.install_jre_if_missing(java_install_dir)
     java_home = os.path.join(java_install_dir, os.listdir(java_install_dir)[0])
 
+    if os.path.exists(os.path.join(java_home, 'Contents/Home')):
+        java_home = os.path.join(java_home, 'Contents/Home')  # support MacOS correctly
+
     os_platform = sys.platform.lower()[0:3]
     dqo_envs = os.environ.copy()
     dqo_envs['DQO_HOME'] = dqo_home
