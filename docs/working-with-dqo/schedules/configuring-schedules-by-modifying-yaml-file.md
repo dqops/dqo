@@ -1,7 +1,7 @@
 # Configuring schedule by modifying the YAML file
 
 In this section, we describe how you can customize when checks are run by setting schedules by modifying the YAML files.
-Instructions on how to configure the schedule using a graphic interface can be found [here.](./index.md)
+Instructions on how to configure the schedule using the graphical interface can be found [here.](./index.md)
 
 ## Configuring a schedule at the connection level
 
@@ -17,7 +17,7 @@ connection edit -c=testconnection
 
 To add a schedule to the YAML file, start by including the `schedules:` parameter at the end of the document. Then, specify the check type you want
 to run (`profiling`, `recurring_daily`, `recurring_monthly`, `partitioned_daily`, or `partitioned_monthly`).
-Next, define the frequency at which the check should be run using the `cron_expression:` and input the frequency in the [cron format](./cron_formatting.md)..
+Next, define the frequency at which the check should be run using the `cron_expression:` and input the frequency in the [cron format](./cron-formatting.md)..
 
 For example, to schedule checks to run every day at 12:00 for all check types, the YAML file will look like the one provided below:
 
@@ -61,7 +61,7 @@ table edit -c=testconnection -t=austin_crime.crime
 
 To set a schedule for an entire table in the YAML file, begin by adding the `schedules_override:` parameter before the 
 column section. Then, specify the check type you want to run (`profiling`, `recurring_daily`, `recurring_monthly`, `partitioned_daily`, or `partitioned_monthly`).
-Next, define the frequency at which the check should be run using the `cron_expression:` and input the frequency in the [cron format](./cron_formatting.md).
+Next, define the frequency at which the check should be run using the `cron_expression:` and input the frequency in the [cron format](./cron-formatting.md).
 
 
 For example, to schedule checks to run every day at 10:00 for all profiling checks, the YAML file will look like the one provided below:
@@ -96,7 +96,7 @@ spec:
 
 If you want to modify the schedule for a specific check type, open the YAML file of the table as described in the previous section.
 Then, simply add the `schedules_override:` under that check type's name. Next, define the frequency at which the check 
-should be run using the `cron_expression:` and input the frequency in the [cron format](./cron_formatting.md).
+should be run using the `cron_expression:` and input the frequency in the [cron format](./cron-formatting.md).
 
 For example, to schedule profiling on a table level row_count check to run every day at 09:00 or column level nulls_count check to run every day at 08:00
 the YAML files will look like the ones provided below:

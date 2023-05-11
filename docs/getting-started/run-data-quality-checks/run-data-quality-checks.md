@@ -4,7 +4,7 @@ After [adding your first connection in the previous step](../adding-data-source-
 we describe how to run first checks. 
 
 In our example on BigQuery public dataset Austin Crime Data you will enable and run a table-level [row_count](../../checks/table/standard/row-count.md)
-and column-level [nulls_percent](../../checks/column/nulls/not-nulls-percent.md) checks using the graphic interface.
+and column-level [nulls_percent](../../checks/column/nulls/not-nulls-percent.md) checks using the graphical interface.
 
 For more information about checks, see [DQO concepts section](../../dqo-concepts/checks/index.md). 
 

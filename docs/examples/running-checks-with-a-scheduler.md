@@ -88,7 +88,7 @@ The YAML connection configuration file stores data source configurations and all
 In the YAML data source configuration file below, the highlighted sections indicate the area where the cron expression 
 for the schedule is set to run every day at 8:00 AM (0 8 * * *).
 
-If you want to learn more about cron formatting, please refer to the [Working with DQO section](../working-with-dqo/schedules/cron_formatting.md).
+If you want to learn more about cron formatting, please refer to the [Working with DQO section](../working-with-dqo/schedules/cron-formatting.md).
 
 ```yaml hl_lines="9-11"
 
