@@ -4,24 +4,18 @@ import Checkbox from "../../components/Checkbox";
 import SvgIcon from "../../components/SvgIcon";
 import { useSelector } from "react-redux";
 import { getFirstLevelIncidentsState } from "../../redux/selectors";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { setIncidentsFilter } from "../../redux/actions/incidents.actions";
 import { IncidentFilter } from "../../redux/reducers/incidents.reducer";
 
-const StatusSelect = () => {
+type StatusSelectProps = {
+  onChangeFilter: (obj: Partial<IncidentFilter>) => void;
+};
+
+const StatusSelect = ({ onChangeFilter }: StatusSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { filters = { connection: '' } }: { filters: IncidentFilter} = useSelector(getFirstLevelIncidentsState);
-  const dispatch = useActionDispatch();
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
-  };
-
-  const onChangeFilter = (obj: Partial<IncidentFilter>) => {
-    dispatch(setIncidentsFilter({
-      ...filters || {},
-      ...obj
-    }));
   };
 
   const valueString = useMemo(() => {
