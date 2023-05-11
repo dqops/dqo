@@ -16,6 +16,7 @@
 package ai.dqo.core.incidents;
 
 import ai.dqo.data.incidents.factory.IncidentStatus;
+import ai.dqo.metadata.incidents.IncidentGroupingSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -61,6 +62,12 @@ public class IncidentStatusChangeParameters {
     @JsonPropertyDescription("New incident status to be assigned to an incident. Activates a new notification if a status is changed.")
     private IncidentStatus newIncidentStatus;
 
+    /**
+     * Incident grouping configuration retrieved from the connection.
+     */
+    @JsonPropertyDescription("Incident grouping configuration retrieved from the connection.")
+    private IncidentGroupingSpec incidentGrouping;
+
     public IncidentStatusChangeParameters() {
     }
 
@@ -68,11 +75,13 @@ public class IncidentStatusChangeParameters {
                                           int firstSeenYear,
                                           int firstSeenMonth,
                                           String incidentId,
-                                          IncidentStatus newIncidentStatus) {
+                                          IncidentStatus newIncidentStatus,
+                                          IncidentGroupingSpec incidentGrouping ) {
         this.connectionName = connectionName;
         this.firstSeenYear = firstSeenYear;
         this.firstSeenMonth = firstSeenMonth;
         this.incidentId = incidentId;
         this.newIncidentStatus = newIncidentStatus;
+        this.incidentGrouping = incidentGrouping;
     }
 }

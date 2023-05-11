@@ -22,6 +22,11 @@ import ai.dqo.core.incidents.IncidentStatusChangeParameters;
 import ai.dqo.data.incidents.factory.IncidentStatus;
 import ai.dqo.data.incidents.services.models.*;
 import ai.dqo.data.incidents.services.IncidentsDataService;
+import ai.dqo.metadata.sources.ConnectionList;
+import ai.dqo.metadata.sources.ConnectionWrapper;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.metadata.ConnectionModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import io.swagger.annotations.*;
@@ -45,17 +50,21 @@ import java.util.Optional;
 public class IncidentsController {
     private IncidentsDataService incidentsDataService;
     private IncidentImportQueueService incidentImportQueueService;
+    private UserHomeContextFactory userHomeContextFactory;
 
     /**
      * Creates an incident management service, given all used dependencies.
      * @param incidentsDataService Incident data service used to load incidents.
      * @param incidentImportQueueService Incident queued update service that updates the statuses of incidents.
+     * @param userHomeContextFactory User home factory.
      */
     @Autowired
     public IncidentsController(IncidentsDataService incidentsDataService,
-                               IncidentImportQueueService incidentImportQueueService) {
+                               IncidentImportQueueService incidentImportQueueService,
+                               UserHomeContextFactory userHomeContextFactory) {
         this.incidentsDataService = incidentsDataService;
         this.incidentImportQueueService = incidentImportQueueService;
+        this.userHomeContextFactory = userHomeContextFactory;
     }
 
     /**
@@ -196,6 +205,7 @@ public class IncidentsController {
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Data quality incident's status successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
+            @ApiResponse(code = 404, message = "Connection was not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> setIncidentStatus(
@@ -205,7 +215,17 @@ public class IncidentsController {
             @ApiParam("Incident id") @PathVariable String incidentId,
             @ApiParam(name = "status", value = "New incident status, supported values: open, acknowledged, resolved, muted")
                 @RequestParam IncidentStatus status) {
-        IncidentStatusChangeParameters incidentStatusChangeParameters = new IncidentStatusChangeParameters(connectionName, year, month, incidentId, status);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        IncidentStatusChangeParameters incidentStatusChangeParameters = new IncidentStatusChangeParameters(
+                connectionName, year, month, incidentId, status, connectionWrapper.getSpec().getIncidentGrouping());
         this.incidentImportQueueService.setIncidentStatus(incidentStatusChangeParameters); // operation performed in the background, no result is returned
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
