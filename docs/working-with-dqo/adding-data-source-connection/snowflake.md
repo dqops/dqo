@@ -76,6 +76,7 @@ Database provider type (--provider):
  [ 3] postgresql
  [ 4] redshift
  [ 5] sqlserver
+ [ 6] mysql
 Please enter one of the [] values: 2
 Snowflake account name (--snowflake-account) [${SNOWFLAKE_ACCOUNT}]: xx-kh8138
 Snowflake warehouse name (--snowflake-warehouse) [${SNOWFLAKE_WAREHOUSE}]: OMPUTE_WH
@@ -132,7 +133,12 @@ spec:
     database: TESTING
     user: john
     password: xxx
+    role: ACCOUNTADMIN
     properties:
-      loginTimeout: 55
-      queryTimeout: 20
+      CLIENT_SESSION_KEEP_ALIVE_HEARTBEAT_FREQUENCEY: 3500
+  incident_grouping:
+    grouping_level: table_dimension_category
+    minimum_severity: warning
+    max_incident_length_days: 60
+    mute_for_days: 60
 ```

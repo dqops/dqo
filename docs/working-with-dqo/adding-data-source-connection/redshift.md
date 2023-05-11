@@ -19,7 +19,7 @@ to [Allowed IP Addresses in Redshift Network Policies](https://docs.aws.amazon.c
 
     ![Selecting Redshift database type](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connection-redshift.jpg)
 
- Add connection settings.
+3. Add connection settings.
 
     ![Adding connection settings](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-redshift.jpg)
 
@@ -38,7 +38,7 @@ to [Allowed IP Addresses in Redshift Network Policies](https://docs.aws.amazon.c
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
     
     For example:
-    ![Adding connection settings - environmental variables](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-redshift-envvar.jpg)
+    ![Adding connection settings - environmental variables](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-envvar.jpg)
     
     To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value
     can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
@@ -77,12 +77,13 @@ Database provider type (--provider):
 [ 3] postgresql
 [ 4] redshift
 [ 5] sqlserver
+[ 6] mysql
 Please enter one of the [] values: 4
 Redshift host (--redshift-host)[${REDSHIFT_HOST}]: localhost
 Redshift port (--redshift-port) [${REDSHIFT_PORT}]: 5439
-Redshift database (--redshift-database) [${REDSHIFT_DATABASE}]: TESTING
-Redshift user name (--redshift-username) [${REDSHIFT_USER}]: TESTING
-Redshift password (--redshift-password) [${REDSHIFT_PASSWORD}]: test
+Redshift database (--redshift-database) [${REDSHIFT_DATABASE}]: testing
+Redshift user name (--redshift-username) [${REDSHIFT_USER}]: testing
+Redshift password (--redshift-password) [${REDSHIFT_PASSWORD}]: xxx
 Connection connecton1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -94,9 +95,9 @@ dqo.ai> connection add --name=connection1
 --provider=redshift
 --redshift-host=localhost
 --redshift-port=5439
---redshift-database=TESTING
+--redshift-database=testing
 --redshift-user=testing
---redshift-password=test
+--redshift-password=xxx
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
@@ -127,14 +128,17 @@ kind: source
 spec:
   provider_type: redshift
   redshift:
-    host: localhost
+    host: redshift-cluster-2.cds5vq1bzgx5.us-east-1.redshift.amazonaws.com
     port: 5439
     database: testing
-    user: test
-    password: test
-  time_zone: UTC
+    user: testing
+    password: xxx
+    ssl: false
     properties:
-      loginTimeout: 55
-      queryTimeout: 20
-
+      'connectTimeout': 15
+  incident_grouping:
+    grouping_level: table_dimension_category
+    minimum_severity: warning
+    max_incident_length_days: 60
+    mute_for_days: 60
 ```

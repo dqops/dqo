@@ -36,7 +36,7 @@ pg_hba.conf file. In case of restrictions you need to add the IP address used by
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
     
     For example:
-    ![Adding connection settings - environmental variables](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-postgresql-envvar.jpg)
+    ![Adding connection settings - environmental variables](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-envvar.jpg)
     
     To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value
     can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
@@ -74,12 +74,12 @@ Database provider type (--provider):
 [ 3] postgresql
 [ 4] redshift
 [ 5] sqlserver
+[ 6] mysql
 Please enter one of the [] values: 3
 PostgreSQL host (--postgresql-host)[${POSTGRESQL_HOST}]: localhost
 PostgreSQL port (--postgresql-port) [${POSTGRESQL_PORT}]: 65234
-PostgreSQL database(--postgresql-database) [${POSTGRESQL_DATABASE}]: TESTING
-PostgreSQL user (--postgresql-user) [${POSTGRESQL_USER}]: TESTING
-PostgreSQL password (--postgresql-password) [${POSTGRESQL_PASSWORD}]: test
+PostgreSQL user (--postgresql-user) [${POSTGRESQL_USER}]: testing
+PostgreSQL password (--postgresql-password) [${POSTGRESQL_PASSWORD}]: xxx
 Connection connecton1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -91,10 +91,8 @@ dqo.ai> connection add --name=connection1
 --provider=postgresql
 --postgresql-host=localhost
 --postgresql-port=65234
---postgresql-database=testing
 --postgresql-user=testing
---postgresql-password=test
-
+--postgresql-password=xxx
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
@@ -127,9 +125,14 @@ spec:
   postgresql:
     host: localhost
     port: 65234
-    user: test
-    password: test
-  time_zone: UTC
+    user: testing
+    password: xxx
+    ssl: false
     properties:
-      loginTimeout: 55
+      'connectTimeout ': 12
+  incident_grouping:
+    grouping_level: table_dimension_category
+    minimum_severity: warning
+    max_incident_length_days: 60
+    mute_for_days: 60
 ```

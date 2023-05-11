@@ -1,6 +1,6 @@
 # Percentage of valid USA zipcodes
 
-Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage.
+Verifies that the percentage of valid USA zip code in a column does not fall below the minimum accepted percentage.
 
 **PROBLEM**
 
