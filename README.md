@@ -1,78 +1,81 @@
-DQO.ai Data Quality Observer
-============================
+# DQO Data Quality Operations Center
 
-DQO.ai is a Data Observability tool that was designed to analyze the quality of databases, data warehouses and data lakes.
-What makes DQO.ai unique is extensibility. DQO.ai comes with a built-in list of verified and proven data quality checks
-that are verifying the most important DAMA data quality dimensions.
-New data quality checks may be easily added or built-in checks could be customised to meet the needs.
-Data quality checks are separated into the sensor part (a Jinja2 template of the SQL query) and a python rule that
-can use custom anomaly prediction logic.
+DQO is an DataOps friendly data quality monitoring tool with customizable data quality checks and data quality dashboards.
+DQO comes with around 100 predefined data quality checks which helps you monitor the quality of your data.
 
-Why should you choose DQO.ai over any other Data Observability tool? The first reason is our extensibility that lets you
-define business specific data quality checks.
+## Key features
+- Intuitive graphical interface and access via CLI
+- Support of a number of different data sources: BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server and MySQL
+- ~450 build-in table and column checks with easy customization
+- Table and column-level checks which allows writing your own SQL queries
+- Daily and monthly date partition testing
+- Data segmentation by up to 9 different data streams
+- Build-in scheduling
+- Calculation of data quality KPIs which can be displayed on multiple built-in data quality dashboards
 
-Our second reason: DQO.ai is DevOps and MLOps friendly!
+## Installation
 
-We designed DQO.ai after we had to define 6000 custom data quality checks.
-DQO.ai stores all definitions in yaml files. You can store the data quality rules along with your data pipeline code or ML code, just check it to Git.
-If that is not enough, just open your text editor of choice on any platform (Windows, Linux, MacOS) and edit your data quality
-definition files without even looking into the documentation. DQO.ai supports code completion on all mayor text editors (VSCode, PyCharm, Eclipse to name a few).
+To use DQO you need:
 
-
-Installation
-------------
-All you need to do is just perform:
-
-``$ pip install dqoai``
-
-which will install a local DQO.ai agent on your system.
-If you prefer to work with the source code, just clone our GitHub repository [https://github.com/dqoai/dqo](https://github.com/dqoai/dqo)
-and run
-
-``$ ./dqo``
-
-on MacOS/Linux or
-
-``$ dqo.cmd``
-
-on Microsoft Windows.
+- Python version 3.8 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
+- Ability to install Python packages with pip.
+- Installed JDK software (version 17) and set the JAVA_HOME environment variable.
 
 
-Repository
-----------
-The project is hosted on GitHub. You can look at the source here:
+DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
 
-https://github.com/dqoai/dqo
+1. To install DQO via pip manager just run
 
+   === "Windows"
+   ```
+   py -m pip install dqops
+   ```
+   === "MacOS/Linux"
+   ```
+   pip install dqops
+   ```
+   
+    If you prefer to work with the source code, just clone our GitHub repository [https://github.com/dqops/dqo](https://github.com/dqops/dqo)
+    and run
 
-Documentation
--------------
-Our documentation for the most recent release of DQO.ai is hosted here:
+2. Run dqo app to finalize the installation.
 
-https://docs.dqo.ai/
+    === "Windows"
+        ```
+        dqo
+        ```
+    === "MacOS/Linux"
+        ```
+        ./dqo
+        ```
 
+3. Create DQO `userhome` folder.
 
-Get more from DQO.ai
---------------------
-Standalone DQO.ai distributed as a pip package will serve you well. You can register data sources, import source tables
-and define data quality requirements for your tables. You can also analyze the quality of your data over the time.
-DQO.ai will maintain a local database that is compliant with Apache Spark, Apache Hive, Google BigQuery and many other platforms
-that can read Parquet files structured in Apache Hive partition folders.
+   After installation, you will be asked whether to initialize the DQO `userhome` folder in the default location. Type Y to create the folder.  
+   The `userhome` folder locally stores data such as sensor readouts and checkout results, as well as data source configurations. [You can learn more about data storage here](../../dqo-concepts/data-storage/data-storage.md).
 
-Please register for our free DQO Cloud account at https://cloud.dqo.ai/registration. DQO Cloud will give you additional free benefits:
-- store, pull and push your data quality definitions to the cloud
-- observe the data quality on dashboards
-- find anomalies in your data on charts
+4. Login to DQO Cloud.
 
+   To use DQO features, such as storing data quality definitions and results in the cloud or data quality dashboards, you
+   must create a DQO cloud account.
 
-Contact and issues
-------------------
-If you find any issues with the tool, just post the issue here:
+   After creating a userhome folder, you will be asked whether to log in to the DQO cloud. After typing Y, you will be
+   redirected to [https://cloud.dqo.ai/registration](https://cloud.dqo.ai/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
 
-https://github.com/dqoai/dqo/issues
+   During the first registration, a unique identification code (API Key) will be generated and automatically retrieved by DQO application.
+   The API Key is now stored in the configuration file.
 
-or contact us through our website:
+5. Open the DQO User Interface Console in your browser by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888)
+   or by copying the link.
 
-https://dqo.ai/
+## Documentation
 
-Enjoy!
+For full documentation with guides and use cases, visit https://dqo.ai/docs
+
+## Contact and issues
+
+If you find any issues with the tool, just post it here:
+
+https://github.com/dqops/dqo/issues
+
+or contact us via https://dqo.ai/

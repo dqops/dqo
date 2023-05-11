@@ -50,36 +50,36 @@ const HelpMenu = () => {
           <h6 className="mb-3">Promote DQO on GitHub</h6>
           <div className="mb-2">
             <GitHubButton
-              href="https://github.com/dqoai/dqo"
+              href="https://github.com/dqops/dqo"
               data-color-scheme="no-preference: light_high_contrast; light: light; dark: light;"
               data-icon="octicon-star"
               data-size="large"
               data-show-count="true"
-              aria-label="Star dqoai/dqo on GitHub"
+              aria-label="Star dqops/dqo on GitHub"
             >
               Star
             </GitHubButton>
           </div>
           <div className="mb-2">
             <GitHubButton
-              href="https://github.com/dqoai/dqo/fork"
+              href="https://github.com/dqops/dqo/fork"
               data-color-scheme="no-preference: light_high_contrast; light: light; dark: light;"
               data-icon="octicon-repo-forked"
               data-size="large"
               data-show-count="true"
-              aria-label="Fork dqoai/dqo on GitHub"
+              aria-label="Fork dqops/dqo on GitHub"
             >
               Fork
             </GitHubButton>
           </div>
           <div>
             <GitHubButton
-              href="https://github.com/dqoai/dqo/subscription"
+              href="https://github.com/dqops/dqo/subscription"
               data-color-scheme="no-preference: light_high_contrast; light: light; dark: light;"
               data-icon="octicon-eye"
               data-size="large"
               data-show-count="true"
-              aria-label="Watch dqoai/dqo on GitHub"
+              aria-label="Watch dqops/dqo on GitHub"
             >
               Watch
             </GitHubButton>
