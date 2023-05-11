@@ -37,7 +37,6 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   }, [pageTabs]);
 
   useEffect(() => {
-    console.log('------activeTab', activeTab)
     if (activeTab && activeTab !== location.pathname) {
       history.push(activeTab);
     }
