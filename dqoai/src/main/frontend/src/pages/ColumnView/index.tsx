@@ -6,8 +6,8 @@ import ColumnDetails from './ColumnDetails';
 import { useTree } from '../../contexts/treeContext';
 import ColumnCommentsView from './ColumnCommentsView';
 import ColumnLabelsView from './ColumnLabelsView';
-import RecurringView from './RecurringView';
-import ColumnProfilingView from './ColumnProfilingView';
+import ColumnRecurringChecksView from './ColumnRecurringChecksView';
+import ColumnProfilingView from './ColumnProfilingChecksView';
 import ColumnPartitionedChecksView from './ColumnPartitionedChecksView';
 import { useSelector } from 'react-redux';
 import { CheckTypes, ROUTES } from "../../shared/routes";
@@ -172,7 +172,7 @@ const ColumnView = () => {
         </div>
         <ColumnNavigation />
         {isRecurringOnly && (
-          <RecurringView />
+          <ColumnRecurringChecksView />
         )}
         {isPartitionCheckOnly && (
           <ColumnPartitionedChecksView />

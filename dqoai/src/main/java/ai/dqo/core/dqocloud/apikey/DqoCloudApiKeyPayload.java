@@ -34,6 +34,9 @@ public class DqoCloudApiKeyPayload {
      */
     public static final long CURRENT_API_KEY_VERSION = 5;
 
+    @JsonProperty("sub")
+    private String subject;
+
     @JsonProperty("ver")
     private Long version;
 
@@ -75,6 +78,22 @@ public class DqoCloudApiKeyPayload {
 
     public DqoCloudApiKeyPayload(String tenantId) {
         this.tenantId = tenantId;
+    }
+
+    /**
+     * Returns the subject (the user email) for whom the API Key was issues.
+     * @return Subject (user email).
+     */
+    public String getSubject() {
+        return subject;
+    }
+
+    /**
+     * Sets the subject (the user email) for whom the API Key was issues.
+     * @param subject New subject.
+     */
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 
     /**

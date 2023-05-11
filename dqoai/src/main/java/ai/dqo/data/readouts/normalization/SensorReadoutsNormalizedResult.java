@@ -290,7 +290,7 @@ public class SensorReadoutsNormalizedResult {
     }
 
     /**
-     * Returns a column that stores the check type (adhoc, checkpoint, partitioned).
+     * Returns a column that stores the check type (profiling, recurring, partitioned).
      * @return Check type column.
      */
     public TextColumn getCheckTypeColumn() {

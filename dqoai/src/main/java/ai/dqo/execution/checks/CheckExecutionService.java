@@ -15,6 +15,7 @@
  */
 package ai.dqo.execution.checks;
 
+import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
@@ -35,6 +36,7 @@ public interface CheckExecutionService {
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all checks without starting additional jobs.
+     * @param parentJobId Parent job id.
      * @param jobCancellationToken Job cancellation token.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
@@ -44,6 +46,7 @@ public interface CheckExecutionService {
                                         CheckExecutionProgressListener progressListener,
                                         boolean dummySensorExecution,
                                         boolean startChildJobsPerTable,
+                                        DqoQueueJobId parentJobId,
                                         JobCancellationToken jobCancellationToken);
 
     /**
@@ -51,12 +54,14 @@ public interface CheckExecutionService {
      * @param executionContext Check execution context with access to the user home and dqo home.
      * @param targetSchedule Target schedule to match, when finding checks that should be executed.
      * @param progressListener Progress listener that receives progress calls.
+     * @param parentJobId Parent job id.
      * @param jobCancellationToken Job cancellation token.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     CheckExecutionSummary executeChecksForSchedule(ExecutionContext executionContext,
                                                    RecurringScheduleSpec targetSchedule,
                                                    CheckExecutionProgressListener progressListener,
+                                                   DqoQueueJobId parentJobId,
                                                    JobCancellationToken jobCancellationToken);
 
     /**

@@ -102,7 +102,8 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
                 checkRunReportingMode, true);
         CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecksForSchedule(
-                executionContext, this.cronSchedule, progressListener, jobExecutionContext.getCancellationToken());
+                executionContext, this.cronSchedule, progressListener, jobExecutionContext.getJobId(),
+                jobExecutionContext.getCancellationToken());
 
         return null;
     }

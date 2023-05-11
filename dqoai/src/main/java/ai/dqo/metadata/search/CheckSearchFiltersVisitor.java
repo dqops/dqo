@@ -178,6 +178,13 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      */
     @Override
     public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, SearchParameterObject parameter) {
+        // TODO: The HierarchyTree structure doesn't allow for similar filtering when filters.checkTarget == column.
+        //       Both table and column-level checks will be included.
+        //       We need to think it through and implement changes.
+        if (this.filters.getCheckTarget() == CheckTarget.table) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN; // column checks don't concern us
+        }
+
         String columnNameFilter = this.filters.getColumnName();
         if (Strings.isNullOrEmpty(columnNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;

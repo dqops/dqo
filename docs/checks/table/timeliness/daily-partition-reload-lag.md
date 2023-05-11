@@ -8,7 +8,7 @@ ___
 ## **daily partition reload lag**  
   
 **Check description**  
-Daily partition checkpoint calculating the longest time a row waited to be load  
+Daily partitioned check calculating the longest time a row waited to be load  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -800,7 +800,7 @@ ___
 ## **monthly partition reload lag**  
   
 **Check description**  
-Monthly partition checkpoint calculating the longest time a row waited to be load  
+Monthly partitioned check calculating the longest time a row waited to be load  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

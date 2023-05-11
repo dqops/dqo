@@ -193,7 +193,7 @@ spec:
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        STDEV({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        STDEVP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -205,7 +205,7 @@ spec:
       
     ```
     SELECT
-        STDEV(analyzed_table.[target_column]) AS actual_value,
+        STDEVP(analyzed_table.[target_column]) AS actual_value,
         SYSDATETIMEOFFSET() AS time_period,
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -371,7 +371,7 @@ spec:
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
-            STDEV({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            STDEVP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -382,7 +382,7 @@ spec:
     === "Rendered SQL for SQL Server"
         ```
         SELECT
-            STDEV(analyzed_table.[target_column]) AS actual_value,
+            STDEVP(analyzed_table.[target_column]) AS actual_value,
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
@@ -594,7 +594,7 @@ spec:
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        STDEV({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        STDEVP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -606,7 +606,7 @@ spec:
       
     ```
     SELECT
-        STDEV(analyzed_table.[target_column]) AS actual_value,
+        STDEVP(analyzed_table.[target_column]) AS actual_value,
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -773,7 +773,7 @@ spec:
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
-            STDEV({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            STDEVP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -784,7 +784,7 @@ spec:
     === "Rendered SQL for SQL Server"
         ```
         SELECT
-            STDEV(analyzed_table.[target_column]) AS actual_value,
+            STDEVP(analyzed_table.[target_column]) AS actual_value,
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
@@ -996,7 +996,7 @@ spec:
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        STDEV({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        STDEVP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1008,7 +1008,7 @@ spec:
       
     ```
     SELECT
-        STDEV(analyzed_table.[target_column]) AS actual_value,
+        STDEVP(analyzed_table.[target_column]) AS actual_value,
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -1175,7 +1175,7 @@ spec:
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
-            STDEV({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            STDEVP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1186,7 +1186,7 @@ spec:
     === "Rendered SQL for SQL Server"
         ```
         SELECT
-            STDEV(analyzed_table.[target_column]) AS actual_value,
+            STDEVP(analyzed_table.[target_column]) AS actual_value,
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
@@ -1398,7 +1398,7 @@ spec:
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        STDEV({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        STDEVP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1410,7 +1410,7 @@ spec:
       
     ```
     SELECT
-        STDEV(analyzed_table.[target_column]) AS actual_value,
+        STDEVP(analyzed_table.[target_column]) AS actual_value,
         CAST([] AS date) AS time_period,
         CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -1581,7 +1581,7 @@ spec:
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
-            STDEV({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            STDEVP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1592,7 +1592,7 @@ spec:
     === "Rendered SQL for SQL Server"
         ```
         SELECT
-            STDEV(analyzed_table.[target_column]) AS actual_value,
+            STDEVP(analyzed_table.[target_column]) AS actual_value,
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2,
             CAST([] AS date) AS time_period,
@@ -1801,7 +1801,7 @@ spec:
     ```
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        STDEV({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        STDEVP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1813,7 +1813,7 @@ spec:
       
     ```
     SELECT
-        STDEV(analyzed_table.[target_column]) AS actual_value,
+        STDEVP(analyzed_table.[target_column]) AS actual_value,
         DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
         CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -1984,7 +1984,7 @@ spec:
         ```
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
-            STDEV({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            STDEVP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1995,7 +1995,7 @@ spec:
     === "Rendered SQL for SQL Server"
         ```
         SELECT
-            STDEV(analyzed_table.[target_column]) AS actual_value,
+            STDEVP(analyzed_table.[target_column]) AS actual_value,
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2,
             DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
