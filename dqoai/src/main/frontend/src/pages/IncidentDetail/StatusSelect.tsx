@@ -12,7 +12,7 @@ type StatusSelectProps = {
 
 const StatusSelect = ({ onChangeFilter }: StatusSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { filters = { connection: '' } }: { filters: IncidentFilter} = useSelector(getFirstLevelIncidentsState);
+  const { filters = { connection: '', openIncidents: true, acknowledgedIncidents: true, resolvedIncidents: true } }: { filters: IncidentFilter} = useSelector(getFirstLevelIncidentsState);
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -23,7 +23,7 @@ const StatusSelect = ({ onChangeFilter }: StatusSelectProps) => {
     if (filters.openIncidents) {
       strArray.push('Open');
     }
-    if (filters.acknowledgeIncidents) {
+    if (filters.acknowledgedIncidents) {
       strArray.push('Acknowledged');
     }
     if (filters.resolvedIncidents) {
@@ -53,9 +53,9 @@ const StatusSelect = ({ onChangeFilter }: StatusSelectProps) => {
               onChange={(checked) => onChangeFilter({ openIncidents: checked })}
             />
             <Checkbox
-              checked={filters.acknowledgeIncidents}
+              checked={filters.acknowledgedIncidents}
               label="Acknowledged"
-              onChange={(checked) => onChangeFilter({ acknowledgeIncidents: checked })}
+              onChange={(checked) => onChangeFilter({ acknowledgedIncidents: checked })}
             />
             <Checkbox
               checked={filters.resolvedIncidents}
