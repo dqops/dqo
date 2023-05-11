@@ -39,7 +39,7 @@ To use DQO you need:
 
 ## Install DQO with pip manager
 
-DQO is available on [PyPi repository](https://pypi.org/project/dqoai/). 
+DQO is available on [PyPi repository](https://pypi.org/project/dqops/). 
 
 If you want to install DQO directly from Git go to [this section](../../working-with-dqo/install-dqo-from-git/install-dqo-from-git.md).
 
@@ -70,11 +70,11 @@ If you want to install DQO directly from Git go to [this section](../../working-
 
     === "Windows"
         ```
-        py -m pip install dqoai
+        py -m pip install dqops
         ```
     === "MacOS/Linux"
         ```
-        pip install dqoai
+        pip install dqops
         ```
 
 ## Start DQO application
