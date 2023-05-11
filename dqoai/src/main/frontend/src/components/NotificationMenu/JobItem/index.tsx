@@ -105,7 +105,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
             <div className="flex space-x-1 items-center">
               <div>
                 {job.jobType}
-                {job.jobId?.jobId}
+                {/* {job.jobId?.jobId} */}
               </div>
               {renderStatus()}
             </div>
@@ -130,7 +130,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                 {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
               </td>
             </tr>
-            {job.jobType === 'synchronize multiple folders' ? (
+            {job.jobId?.parentJobId?.jobId === undefined ? (
               <Accordion open={open2}>
                 <AccordionHeader onClick={() => setOpen2(!open2)}>
                   <div className="px-2 flex justify-between items-center text-sm w-full text-gray-700">

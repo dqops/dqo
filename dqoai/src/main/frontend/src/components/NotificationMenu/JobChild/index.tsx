@@ -81,7 +81,7 @@ const JobChild = ({
             <div className="flex space-x-1 items-center">
               <div>
                 {job.jobType}
-                {job.jobId?.parentJobId?.jobId}
+                {/* {job.jobId?.parentJobId?.jobId} */}
               </div>
               {renderStatus()}
             </div>
