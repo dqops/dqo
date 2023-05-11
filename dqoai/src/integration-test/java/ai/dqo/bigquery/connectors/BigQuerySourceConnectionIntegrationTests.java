@@ -21,6 +21,7 @@ import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.SourceSchemaModel;
 import ai.dqo.connectors.SourceTableModel;
 import ai.dqo.connectors.bigquery.*;
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.core.secrets.SecretValueProviderObjectMother;
 import ai.dqo.metadata.sources.ConnectionSpec;
@@ -31,6 +32,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import tech.tablesaw.api.Table;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,16 +45,8 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
     private ConnectionSpec connectionSpec;
     private BigQuerySqlRunner bigQuerySqlRunner;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
         BigQueryConnectionProvider connectionProvider = (BigQueryConnectionProvider) ConnectionProviderRegistryObjectMother.getConnectionProvider(ProviderType.bigquery);
         BigQueryConnectionPoolImpl bigQueryConnectionPool = new BigQueryConnectionPoolImpl();
         SecretValueProvider secretValueProvider = SecretValueProviderObjectMother.getInstance();
@@ -62,16 +56,8 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
 		this.sut.setConnectionSpec(connectionSpec);
     }
 
-    /**
-     * Called after each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add @AfterEach in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @AfterEach
-    protected void tearDown() throws Throwable {
-        super.tearDown();
+    void tearDown() {
 		this.sut.close(); // maybe it does nothing, but it should be called anyway as an example
     }
 
@@ -83,7 +69,7 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
     @Test
     void getBigQueryService_whenOpenWasCalledBefore_thenReturnsBigQueryConnectionObject() {
 		this.sut.open();
-        Assertions.assertNotNull(this.sut.getBigQueryService());
+        Assertions.assertNotNull(this.sut.getBigQueryInternalConnection());
     }
 
     @Test
@@ -91,9 +77,21 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
 		this.sut.open();
         List<SourceSchemaModel> schemas = this.sut.listSchemas();
 
-        Assertions.assertEquals(1, schemas.size());
+        Assertions.assertTrue(schemas.size() >= 1);
         String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(ProviderType.bigquery);
         Assertions.assertTrue(schemas.stream().anyMatch(m -> Objects.equals(m.getSchemaName(), expectedSchema)));
+    }
+
+    @Test
+    void listSchemas_whenBillingProjectIdNotPresentAndListeningPublicGoogleProjects_thenUsesBillingProjectIdFromCredentials() {
+        this.connectionSpec.getBigquery().setBillingProjectId(null);
+        this.connectionSpec.getBigquery().setQuotaProjectId(null);
+        this.connectionSpec.getBigquery().setSourceProjectId("bigquery-public-data");
+        this.sut.open();
+        List<SourceSchemaModel> schemas = this.sut.listSchemas();
+
+        Assertions.assertTrue(schemas.size() >= 100);
+        Assertions.assertTrue(schemas.stream().anyMatch(m -> Objects.equals(m.getSchemaName(), "austin_crime")));
     }
 
     @Test
@@ -131,6 +129,19 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
         List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata(expectedSchema, tableNames);
 
         Assertions.assertTrue(tableSpecs.size() > 0);
+    }
+
+    @Test
+    void executeQuery_whenBillingProjectIdNotPresentAndQueryingPublicGoogleProjects_thenUsesBillingProjectIdFromDefaultApplicationCredentials() {
+        this.connectionSpec.getBigquery().setBillingProjectId(null);
+        this.connectionSpec.getBigquery().setQuotaProjectId(null);
+        this.connectionSpec.getBigquery().setSourceProjectId("bigquery-public-data");
+        this.sut.open();
+        Table results = this.sut.executeQuery("select count(*) from `bigquery-public-data.austin_crime.crime`",
+                JobCancellationToken.createDummyJobCancellationToken());
+
+        Assertions.assertNotNull(results);
+        Assertions.assertEquals(1, results.rowCount());
     }
 
     // TODO: add more integration tests to list tables, retrieve the table metadata, etc.

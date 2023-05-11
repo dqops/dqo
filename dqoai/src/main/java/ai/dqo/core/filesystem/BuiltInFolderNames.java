@@ -35,9 +35,39 @@ public final class BuiltInFolderNames {
     public static final String RULES = "rules";
 
     /**
+     * Checks folder.
+     */
+    public static final String CHECKS = "checks";
+
+    /**
      * Local data folder.
      */
     public static final String DATA = ".data";
+
+    /**
+     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the sensor readouts are stored.
+     */
+    public static final String SENSOR_READOUTS = "sensor_readouts";
+
+    /**
+     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the rule results are stored.
+     */
+    public static final String CHECK_RESULTS = "check_results";
+
+    /**
+     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the statistics results (basic profile) are stored.
+     */
+    public static final String STATISTICS = "statistics";
+
+    /**
+     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the errors are stored.
+     */
+    public static final String ERRORS = "errors";
+
+    /**
+     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the incidents are stored.
+     */
+    public static final String INCIDENTS = "incidents";
 
     /**
      * Local index folder.
@@ -48,4 +78,9 @@ public final class BuiltInFolderNames {
      * Credentials folder to store local credentials that are not stored in the repository.
      */
     public static final String CREDENTIALS = ".credentials";
+
+    /**
+     * Local log folder inside the user home that stores logs.
+     */
+    public static final String LOGS = ".logs";
 }

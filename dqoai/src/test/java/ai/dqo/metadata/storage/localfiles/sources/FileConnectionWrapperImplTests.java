@@ -16,6 +16,7 @@
 package ai.dqo.metadata.storage.localfiles.sources;
 
 import ai.dqo.BaseTest;
+import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.core.filesystem.virtual.FolderTreeNode;
 import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.sources.ConnectionSpec;
@@ -38,16 +39,8 @@ public class FileConnectionWrapperImplTests extends BaseTest {
     private FolderTreeNode connectionFolder;
     private YamlSerializer yamlSerializer;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.userHomeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
 		this.connectionList = (FileConnectionListImpl) userHomeContext.getUserHome().getConnections();
 		this.connectionFolder = this.connectionList.getSourcesFolder().getOrAddDirectFolder("conn");
@@ -64,7 +57,9 @@ public class FileConnectionWrapperImplTests extends BaseTest {
     @Test
     void flush_whenNew_thenSavesSpec() {
         ConnectionSpec spec = new ConnectionSpec();
-        spec.setDatabaseName("dbname1");
+        PostgresqlParametersSpec postgresql = new PostgresqlParametersSpec();
+        spec.setPostgresql(postgresql);
+        postgresql.setDatabase("dbname1");
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();
@@ -75,32 +70,36 @@ public class FileConnectionWrapperImplTests extends BaseTest {
         Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
         FileConnectionWrapperImpl sut2 = new FileConnectionWrapperImpl(connectionFolder, this.yamlSerializer);
         ConnectionSpec spec2 = sut2.getSpec();
-        Assertions.assertEquals("dbname1", spec2.getDatabaseName());
+        Assertions.assertEquals("dbname1", spec2.getPostgresql().getDatabase());
     }
 
     @Test
     void flush_whenModified_thenSavesSpec() {
         ConnectionSpec spec = new ConnectionSpec();
-        spec.setDatabaseName("dbname1");
+        PostgresqlParametersSpec postgresql = new PostgresqlParametersSpec();
+        spec.setPostgresql(postgresql);
+        postgresql.setDatabase("dbname1");
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();
 		userHomeContext.flush();
 
-		this.sut.getSpec().setDatabaseName("dbname2");
+		this.sut.getSpec().getPostgresql().setDatabase("dbname2");
 		this.sut.flush();
 		userHomeContext.flush();
 
         Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
         FileConnectionWrapperImpl sut2 = new FileConnectionWrapperImpl(connectionFolder, this.yamlSerializer);
         ConnectionSpec spec2 = sut2.getSpec();
-        Assertions.assertEquals("dbname2", spec2.getDatabaseName());
+        Assertions.assertEquals("dbname2", spec2.getPostgresql().getDatabase());
     }
 
     @Test
     void flush_whenExistingWasMarkedForDeletion_thenDeletesConnectionFromDisk() {
         ConnectionSpec spec = new ConnectionSpec();
-        spec.setDatabaseName("dbname1");
+        PostgresqlParametersSpec postgresql = new PostgresqlParametersSpec();
+        spec.setPostgresql(postgresql);
+        postgresql.setDatabase("dbname1");
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();
@@ -119,7 +118,9 @@ public class FileConnectionWrapperImplTests extends BaseTest {
     @Test
     void getSpec_whenSpecFilePresentInFolder_thenReturnsSpec() {
         ConnectionSpec spec = new ConnectionSpec();
-        spec.setDatabaseName("dbname1");
+        PostgresqlParametersSpec postgresql = new PostgresqlParametersSpec();
+        spec.setPostgresql(postgresql);
+        postgresql.setDatabase("dbname1");
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();
@@ -133,7 +134,9 @@ public class FileConnectionWrapperImplTests extends BaseTest {
     @Test
     void getSpec_whenCalledTwice_thenReturnsTheSameInstance() {
         ConnectionSpec spec = new ConnectionSpec();
-        spec.setDatabaseName("dbname1");
+        PostgresqlParametersSpec postgresql = new PostgresqlParametersSpec();
+        spec.setPostgresql(postgresql);
+        postgresql.setDatabase("dbname1");
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();

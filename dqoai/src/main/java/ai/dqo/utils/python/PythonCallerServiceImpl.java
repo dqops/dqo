@@ -16,11 +16,14 @@
 package ai.dqo.utils.python;
 
 import ai.dqo.core.configuration.DqoConfigurationProperties;
+import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
@@ -38,8 +41,10 @@ import java.util.Map;
  * Service that starts python to execute a givens script.
  */
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class PythonCallerServiceImpl implements PythonCallerService {
     private final DqoConfigurationProperties configurationProperties;
+    private DqoPythonConfigurationProperties pythonConfigurationProperties;
     private final JsonSerializer jsonSerializer;
     private final PythonVirtualEnvService pythonVirtualEnvService;
     private final Map<String, StreamingPythonProcess> pythonModuleProcesses = new HashMap<>();
@@ -47,15 +52,18 @@ public class PythonCallerServiceImpl implements PythonCallerService {
 
     /**
      * Default injection constructor.
-     * @param configurationProperties DQO configuration properties.
+     * @param configurationProperties Configuration properties with the DQO Home path.
+     * @param pythonConfigurationProperties DQO python configuration properties.
      * @param jsonSerializer Json serializer.
      * @param pythonVirtualEnvService Python virtual environment management service.
      */
     @Autowired
     public PythonCallerServiceImpl(DqoConfigurationProperties configurationProperties,
-								   JsonSerializer jsonSerializer,
-								   PythonVirtualEnvService pythonVirtualEnvService){
+                                   DqoPythonConfigurationProperties pythonConfigurationProperties,
+                                   JsonSerializer jsonSerializer,
+                                   PythonVirtualEnvService pythonVirtualEnvService){
         this.configurationProperties = configurationProperties;
+        this.pythonConfigurationProperties = pythonConfigurationProperties;
         this.jsonSerializer = jsonSerializer;
         this.pythonVirtualEnvService = pythonVirtualEnvService;
     }
@@ -107,8 +115,13 @@ public class PythonCallerServiceImpl implements PythonCallerService {
             if (streamingPythonProcess == null) {
                 String absolutePythonPath = resolveAbsolutePathToHomeFile(pythonFilePathInHome);
                 PythonVirtualEnv virtualEnv = this.pythonVirtualEnvService.getVirtualEnv();
-                String commandLineText = virtualEnv.getPythonInterpreterPath() + " -u \"" + absolutePythonPath + "\"";
-                streamingPythonProcess = new StreamingPythonProcess(this.jsonSerializer, commandLineText, this.configurationProperties.getPython().getPythonScriptTimeoutSeconds());
+                // TODO: DRY
+                String commandLineText = String.format(
+                        "\"%s\" -u \"%s\"",
+                        virtualEnv.getPythonInterpreterPath(),
+                        absolutePythonPath
+                );
+                streamingPythonProcess = new StreamingPythonProcess(this.jsonSerializer, commandLineText, this.pythonConfigurationProperties.getPythonScriptTimeoutSeconds());
                 streamingPythonProcess.startProcess(virtualEnv);
 				this.pythonModuleProcesses.put(pythonFilePathInHome, streamingPythonProcess);
             }
@@ -130,7 +143,7 @@ public class PythonCallerServiceImpl implements PythonCallerService {
     }
 
     /**
-     * Executes a python script in the DQO_HOME folder in an ad-hoc mode. A new process is started, inputs sent, outputs received and the process finishes.
+     * Executes a python script in the DQO_HOME folder in an profiling mode. A new process is started, inputs sent, outputs received and the process finishes.
      * @param inputs List of input objects to serialize to JSON and feed to the standard input of the python script.
      * @param pythonFilePathInHome Path to the python module (.py file) that is relative to the DQO_HOME folder.
      * @param outputType Output type to parse the returned json objects.
@@ -143,7 +156,12 @@ public class PythonCallerServiceImpl implements PythonCallerService {
             String fullInputText = serializeInputs(inputs);
             String absolutePythonPath = resolveAbsolutePathToHomeFile(pythonFilePathInHome);
             PythonVirtualEnv virtualEnv = this.pythonVirtualEnvService.getVirtualEnv();
-            String commandLineText = virtualEnv.getPythonInterpreterPath() + " \"" + absolutePythonPath + "\"";
+            // TODO: Change string format with clumsy \" additions to some builder.
+            String commandLineText = String.format(
+                    "\"%s\" -u \"%s\"",
+                    virtualEnv.getPythonInterpreterPath(),
+                    absolutePythonPath
+            );
             CommandLine cmdLine = CommandLine.parse(commandLineText);
 
             ByteArrayInputStream inputStream = new ByteArrayInputStream(fullInputText.getBytes(StandardCharsets.UTF_8));

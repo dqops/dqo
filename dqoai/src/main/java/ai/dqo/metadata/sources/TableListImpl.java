@@ -16,8 +16,8 @@
 package ai.dqo.metadata.sources;
 
 import ai.dqo.metadata.basespecs.AbstractIndexingList;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.metadata.search.StringPatternComparer;
 
 import java.util.List;
 
@@ -48,7 +48,6 @@ public class TableListImpl extends AbstractIndexingList<PhysicalTableName, Table
     @Override
     public TableWrapper createAndAddNew(PhysicalTableName physicalTableName) {
         TableWrapper newTable = super.createAndAddNew(physicalTableName);
-        newTable.getSpec().getTarget().copyFrom(physicalTableName);
         return newTable;
     }
 
@@ -83,20 +82,19 @@ public class TableListImpl extends AbstractIndexingList<PhysicalTableName, Table
      * @param sourceTableSpecs Source tables.
      */
     @Override
-    public void importTables(List<TableSpec> sourceTableSpecs) {
+    public void importTables(List<TableSpec> sourceTableSpecs, DataStreamMappingSpec defaultDataStreamMapping) {
         for (TableSpec sourceTableSpec : sourceTableSpecs) {
-            TableTargetSpec tableTarget = sourceTableSpec.getTarget();
-            PhysicalTableName sourceTablePhysicalName = tableTarget.toPhysicalTableName();
+            PhysicalTableName sourceTablePhysicalName = sourceTableSpec.getPhysicalTableName();
 
             TableWrapper existingTableWrapper = this.getByObjectName(sourceTablePhysicalName, true);
             if (existingTableWrapper == null) {
                 TableWrapper newTableWrapper = this.createAndAddNew(sourceTablePhysicalName);
                 newTableWrapper.setSpec(sourceTableSpec);
+                sourceTableSpec.getDataStreams().setFirstDataStreamMapping(defaultDataStreamMapping);
             }
             else {
                 // merge columns and update
                 TableSpec existingTableSpec = existingTableWrapper.getSpec();
-                existingTableSpec.setTarget(sourceTableSpec.getTarget()); // replace the target
                 existingTableSpec.mergeColumnsFrom(sourceTableSpec);
             }
         }
@@ -107,7 +105,6 @@ public class TableListImpl extends AbstractIndexingList<PhysicalTableName, Table
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {

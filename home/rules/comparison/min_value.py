@@ -27,12 +27,12 @@ class HistoricDataPoint:
     timestamp_utc: datetime
     local_datetime: datetime
     back_periods_index: int
-    sensor_reading: float
+    sensor_readout: float
 
 
 class RuleTimeWindowSettingsSpec:
     prediction_time_window: int
-    min_periods_with_reading: int
+    min_periods_with_readouts: int
 
 
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
@@ -40,7 +40,7 @@ class RuleExecutionRunParameters:
     actual_value: float
     parameters: MinValueRuleParametersSpec
     time_period_local: datetime
-    previous_readings: Sequence[HistoricDataPoint]
+    previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
 
 
@@ -61,8 +61,12 @@ class RuleExecutionResult:
 
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    passed = rule_parameters.actual_value >= rule_parameters.parameters.min_value
-    expected_value = rule_parameters.parameters.min_value
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    expected_value = None
     lower_bound = rule_parameters.parameters.min_value
     upper_bound = None
+    passed = rule_parameters.actual_value >= lower_bound
+
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

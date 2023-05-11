@@ -27,10 +27,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class CustomRuleParametersSpecTests extends BaseTest {
     private MinValueRuleParametersSpec sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new MinValueRuleParametersSpec();
     }
 
@@ -39,7 +37,7 @@ public class CustomRuleParametersSpecTests extends BaseTest {
 		this.sut.setMinValue(20.3);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.5, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20.3, ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(20.3, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
@@ -49,7 +47,7 @@ public class CustomRuleParametersSpecTests extends BaseTest {
 		this.sut.setMinValue(20.3);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.3, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20.3, ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(20.3, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
@@ -59,33 +57,14 @@ public class CustomRuleParametersSpecTests extends BaseTest {
 		this.sut.setMinValue(20.3);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.2, this.sut);
         Assertions.assertFalse(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20.3, ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(20.3, ruleExecutionResult.getLowerBound());
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
 
     @Test
-    void isDirty_whenDisableSet_thenIsDirtyIsTrue() {
-		this.sut.setDisable(true);
-        Assertions.assertTrue(this.sut.isDisable());
-        Assertions.assertTrue(this.sut.isDirty());
-		this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
-    @Test
-    void isDirty_whenDisableBooleanSameAsCurrentSet_thenIsDirtyIsFalse() {
-		this.sut.setDisable(true);
-        Assertions.assertTrue(this.sut.isDirty());
-		this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setDisable(true);
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
-    @Test
     void isDirty_whenMinValueSet_thenIsDirtyIsTrue() {
-		this.sut.setMinValue(1);
+		this.sut.setMinValue(1.0);
         Assertions.assertEquals(1, this.sut.getMinValue());
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
@@ -94,11 +73,20 @@ public class CustomRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMinValueNumberSameAsCurrentSet_thenIsDirtyIsFalse() {
-		this.sut.setMinValue(1);
+		this.sut.setMinValue(1.0);
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setMinValue(1);
+		this.sut.setMinValue(1.0);
         Assertions.assertFalse(this.sut.isDirty());
+    }
+
+    @Test
+    void executeRule_whenActualValueIsNull_thenReturnsPassed() {
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
+        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
 }

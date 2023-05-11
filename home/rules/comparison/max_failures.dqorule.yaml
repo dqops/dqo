@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 0
+    historic_data_point_grouping: last_n_readouts
+  fields:
+  - field_name: max_failures
+    display_name: max_failures
+    help_text: "Maximum number of consecutive check failures, a check is failed when\
+      \ the sensor's query failed to execute due to a connection error, missing table\
+      \ or a corrupted table."
+    data_type: long

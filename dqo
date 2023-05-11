@@ -15,8 +15,34 @@
 # limitations under the License.
 #
 
-# Figure out where the Dqo framework is installed
-source $(dirname $0)/find-dqo-home.sh
+export DQO_VERSION=0.2.0-alpha0
 
+# Configure local development environment overrides
+if [ -f $(dirname $0)/set-dqo-envs.sh ]; then
+    . $(dirname $0)/set-dqo-envs.sh
 
-$DQO_RUNNER -Xmx1024m -XX:TieredStopAtLevel=1 --add-opens java.base/java.nio=ALL-UNNAMED -cp "$DQO_LAUNCH_CLASSPATH" org.springframework.boot.loader.JarLauncher $*
+    returnedValue=$?
+    if [ $returnedValue -ne 0 ]; then
+        echo "DQO cannot be started"
+        exit $returnedValue
+    fi
+fi
+
+# Figure out where DQO is installed
+. $(dirname $0)/find-dqo-home.sh
+returnedValue=$?
+if [ $returnedValue -ne 0 ]; then
+    echo "DQO cannot be started"
+    exit $returnedValue
+fi
+
+# Configure class paths
+. $(dirname $0)/find-dqo-classpath.sh
+
+returnedValue=$?
+if [ $returnedValue -ne 0 ]; then
+    echo "DQO cannot be started"
+    exit $returnedValue
+fi
+
+$DQO_RUNNER $DQO_JAVA_OPTS --add-opens java.base/java.nio=ALL-UNNAMED -cp "$DQO_LAUNCH_CLASSPATH" org.springframework.boot.loader.JarLauncher $*

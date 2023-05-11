@@ -15,7 +15,7 @@
  */
 package ai.dqo.utils.datetime;
 
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -25,26 +25,26 @@ import java.time.temporal.ChronoUnit;
  */
 public class LocalDateTimePeriodUtility {
     /**
-     * Calculates the number of time periods between the <code>start</code> timestamp of a previous reading
-     * and the current sensor reading that is the <code>end</code> timestamp.
+     * Calculates the number of time periods between the <code>start</code> timestamp of a previous readout
+     * and the current sensor readout that is the <code>end</code> timestamp.
      * @param start Start timestamp.
      * @param end End timestamp.
      * @param gradient Time gradient.
      * @return Number of time periods. The type of the time period (weeks, days, etc.) is configured as the time gradient.
      */
-    public static long calculateDifferenceInPeriodsCount(LocalDateTime start, LocalDateTime end, TimeSeriesGradient gradient) {
+    public static long calculateDifferenceInPeriodsCount(LocalDateTime start, LocalDateTime end, TimePeriodGradient gradient) {
         switch (gradient) {
-            case YEAR:
+            case year:
                 return start.until(end, ChronoUnit.YEARS);
-            case QUARTER:
+            case quarter:
                 return start.until(end, ChronoUnit.MONTHS) / 3;
-            case MONTH:
+            case month:
                 return start.until(end, ChronoUnit.MONTHS);
-            case WEEK:
+            case week:
                 return start.until(end, ChronoUnit.WEEKS);
-            case DAY:
+            case day:
                 return start.until(end, ChronoUnit.DAYS);
-            case HOUR:
+            case hour:
                 return start.until(end, ChronoUnit.HOURS);
             default:
                 throw new RuntimeException("Unsupported gradient: " + gradient);
@@ -52,26 +52,26 @@ public class LocalDateTimePeriodUtility {
     }
 
     /**
-     * Calculates a date that is <code>timePeriodsCount</code> time series gradients (months, days, etc.) before <code>readingTimestamp</code>.
-     * @param readingTimestamp Reference date.
+     * Calculates a date that is <code>timePeriodsCount</code> time series gradients (months, days, etc.) before <code>readoutTimestamp</code>.
+     * @param readoutTimestamp Reference date.
      * @param timePeriodsCount Number of time periods.
      * @param gradient Time gradient.
      * @return Date before the given number of periods.
      */
-    public static LocalDateTime calculateLocalDateTimeMinusTimePeriods(LocalDateTime readingTimestamp, int timePeriodsCount, TimeSeriesGradient gradient) {
+    public static LocalDateTime calculateLocalDateTimeMinusTimePeriods(LocalDateTime readoutTimestamp, int timePeriodsCount, TimePeriodGradient gradient) {
         switch (gradient) {
-            case YEAR:
-                return readingTimestamp.minus(timePeriodsCount, ChronoUnit.YEARS);
-            case QUARTER:
-                return readingTimestamp.minus(timePeriodsCount * 3, ChronoUnit.MONTHS);
-            case MONTH:
-                return readingTimestamp.minus(timePeriodsCount, ChronoUnit.MONTHS);
-            case WEEK:
-                return readingTimestamp.minus(timePeriodsCount, ChronoUnit.WEEKS);
-            case DAY:
-                return readingTimestamp.minus(timePeriodsCount, ChronoUnit.DAYS);
-            case HOUR:
-                return readingTimestamp.minus(timePeriodsCount, ChronoUnit.HOURS);
+            case year:
+                return readoutTimestamp.minus(timePeriodsCount, ChronoUnit.YEARS);
+            case quarter:
+                return readoutTimestamp.minus(timePeriodsCount * 3, ChronoUnit.MONTHS);
+            case month:
+                return readoutTimestamp.minus(timePeriodsCount, ChronoUnit.MONTHS);
+            case week:
+                return readoutTimestamp.minus(timePeriodsCount, ChronoUnit.WEEKS);
+            case day:
+                return readoutTimestamp.minus(timePeriodsCount, ChronoUnit.DAYS);
+            case hour:
+                return readoutTimestamp.minus(timePeriodsCount, ChronoUnit.HOURS);
             default:
                 throw new RuntimeException("Unsupported gradient: " + gradient);
         }

@@ -15,6 +15,7 @@
  */
 package ai.dqo.rules.comparison;
 
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.AbstractRuleParametersSpec;
@@ -24,8 +25,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
+import java.util.Objects;
+
 /**
- * Data quality rule that verifies if a data quality check reading is greater or equal a minimum value.
+ * Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -35,6 +38,10 @@ public class MinValueRuleParametersSpec extends AbstractRuleParametersSpec {
         {
         }
     };
+
+    @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
+    @SampleValues(values = "1.5")
+    private Double minValue;
 
     /**
      * Default constructor, the minimum accepted value is 0.
@@ -46,27 +53,24 @@ public class MinValueRuleParametersSpec extends AbstractRuleParametersSpec {
      * Creates a rule with a given value.
      * @param minValue Minimum accepted value.
      */
-    public MinValueRuleParametersSpec(double minValue) {
+    public MinValueRuleParametersSpec(Double minValue) {
         this.minValue = minValue;
     }
 
-    @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    private double minValue;
-
     /**
-     * Minimum value for a data quality check reading, for example a minimum row count.
-     * @return Minimum value for a data quality check reading.
+     * Minimum value for a data quality check readout, for example a minimum row count.
+     * @return Minimum value for a data quality check readout.
      */
-    public double getMinValue() {
+    public Double getMinValue() {
         return minValue;
     }
 
     /**
-     * Changes the minimum value (threshold) for a data quality reading.
+     * Changes the minimum value (threshold) for a data quality readout.
      * @param minValue Minimum value.
      */
-    public void setMinValue(double minValue) {
-		this.setDirtyIf(this.minValue != minValue);
+    public void setMinValue(Double minValue) {
+        this.setDirtyIf(!Objects.equals(this.minValue,minValue));
         this.minValue = minValue;
     }
 

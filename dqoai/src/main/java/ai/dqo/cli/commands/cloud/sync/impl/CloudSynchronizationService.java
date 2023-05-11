@@ -15,7 +15,9 @@
  */
 package ai.dqo.cli.commands.cloud.sync.impl;
 
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.fileexchange.FileSynchronizationDirection;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 
 /**
  * Service called by "cloud sync" CLI commands to synchronize the data with DQO Cloud.
@@ -23,10 +25,19 @@ import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 public interface CloudSynchronizationService {
     /**
      * Synchronize a folder type to/from DQO Cloud.
-     * @param rootType Root type.
-     * @param reportFiles When true, files are reported.
-     * @param headlessMode The application was started in a headless mode and should not bother the user with questions (prompts).
-     * @return 0 when success, -1 when an error.
+     * @param rootType      Root type.
+     * @param reportingMode File synchronization progress reporting mode.
+     * @param headlessMode  The application was started in a headless mode and should not bother the user with questions (prompts).
+     * @param synchronizationDirection File synchronization direction.
+     * @param forceRefreshNativeTable Forces to refresh a whole native table for data folders.
+     * @param runOnBackgroundQueue True when the actual synchronization operation should be executed in the background on the DQO job queue.
+     *                             False when the operation should be executed on the caller's thread.
+     * @return 0 when success, -1 when an error, -2 when login to cloud dqo failed.
      */
-    int synchronizeRoot(DqoRoot rootType, boolean reportFiles, boolean headlessMode);
+    int synchronizeRoot(DqoRoot rootType,
+                        FileSystemSynchronizationReportingMode reportingMode,
+                        FileSynchronizationDirection synchronizationDirection,
+                        boolean forceRefreshNativeTable,
+                        boolean headlessMode,
+                        boolean runOnBackgroundQueue);
 }

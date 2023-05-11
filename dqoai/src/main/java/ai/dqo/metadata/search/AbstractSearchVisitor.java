@@ -15,61 +15,63 @@
  */
 package ai.dqo.metadata.search;
 
+import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.checks.AbstractRuleSetSpec;
-import ai.dqo.checks.column.ColumnCheckCategoriesSpec;
-import ai.dqo.checks.column.completeness.BuiltInColumnCompletenessChecksSpec;
-import ai.dqo.checks.column.custom.CustomColumnCheckSpecMap;
-import ai.dqo.checks.column.uniqueness.BuiltInColumnUniquenessChecksSpec;
-import ai.dqo.checks.column.validity.BuiltInColumnValidityChecksSpec;
-import ai.dqo.checks.table.TableCheckCategoriesSpec;
-import ai.dqo.checks.table.consistency.BuiltInTableConsistencyChecksSpec;
-import ai.dqo.checks.table.custom.CustomTableCheckSpecMap;
-import ai.dqo.checks.table.timeliness.BuiltInTableTimelinessChecksSpec;
-import ai.dqo.checks.table.relevance.BuiltInTableRelevanceChecksSpec;
-import ai.dqo.checks.table.validity.BuiltInTableValidityChecksSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
+import ai.dqo.checks.custom.CustomCheckSpecMap;
+import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import ai.dqo.metadata.incidents.IncidentGroupingSpec;
+import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.metadata.comments.CommentSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
+import ai.dqo.metadata.dashboards.*;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionListImpl;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionSpec;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionWrapperImpl;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.*;
 import ai.dqo.metadata.dqohome.DqoHomeImpl;
+import ai.dqo.metadata.fields.ParameterDefinitionSpec;
+import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.fileindices.FileIndexListImpl;
 import ai.dqo.metadata.fileindices.FileIndexSpec;
 import ai.dqo.metadata.fileindices.FileIndexWrapperImpl;
-import ai.dqo.metadata.groupings.DimensionMappingSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamLevelSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.incidents.IncidentWebhookNotificationsSpec;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
+import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rules.AbstractRuleParametersSpec;
-import ai.dqo.rules.AbstractRuleThresholdsSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
-import ai.dqo.rules.custom.CustomRuleThresholdsMap;
-import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
-import ai.dqo.sensors.column.AllColumnSensorsSpec;
-import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
-import ai.dqo.sensors.table.AllTableSensorsSpec;
-
-import java.util.List;
+import ai.dqo.sensors.AbstractSensorParametersSpec;
+import ai.dqo.statistics.AbstractRootStatisticsCollectorsContainerSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorCategorySpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 
 /**
  * Base class for search visitors that simply visits all nodes.
  */
-public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisitor<List<HierarchyNode>, TreeNodeTraversalResult> {
+public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVisitor<T, TreeNodeTraversalResult> {
     /**
      * Accepts a user home.
      *
      * @param userHome User home instance.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(UserHome userHome, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(UserHome userHome, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -77,11 +79,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a list of connections.
      *
      * @param connectionList List of connections.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionList connectionList, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ConnectionList connectionList, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -89,11 +91,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a connection wrapper (lazy loader).
      *
      * @param connectionWrapper Connection wrapper.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -101,11 +103,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accept a connection spec.
      *
      * @param connectionSpec Connection spec.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -117,7 +119,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(BaseProviderParametersSpec providerParametersSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(BaseProviderParametersSpec providerParametersSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -125,11 +127,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a collection of tables inside a connection.
      *
      * @param tableList Table list.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableList tableList, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(TableList tableList, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -137,11 +139,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a table wrapper (lazy loader).
      *
      * @param tableWrapper Table wrapper.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableWrapper tableWrapper, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(TableWrapper tableWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -149,23 +151,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a table specification.
      *
      * @param tableSpec Table specification.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableSpec tableSpec, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a table target (physical table information).
-     *
-     * @param tableTargetSpec Physical target table specification.
-     * @param parameter Target list where found hierarchy nodes should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(TableTargetSpec tableTargetSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(TableSpec tableSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -173,11 +163,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a column collection (map).
      *
      * @param columnSpecMap Column collection.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -185,11 +175,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a column specification.
      *
      * @param columnSpec Column specification.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnSpec columnSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ColumnSpec columnSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -197,11 +187,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a column data type snapshot.
      *
      * @param columnTypeSnapshotSpec Column data type snapshot specification.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnTypeSnapshotSpec columnTypeSnapshotSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ColumnTypeSnapshotSpec columnTypeSnapshotSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -209,11 +199,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a label set specification.
      *
      * @param strings Label set.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(LabelSetSpec strings, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(LabelSetSpec strings, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -221,215 +211,23 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a rule parameters (abstract).
      *
      * @param abstractRuleParametersSpec Base class for rule parameters.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractRuleParametersSpec abstractRuleParametersSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(AbstractRuleParametersSpec abstractRuleParametersSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
-     * Accepts a configuration of built-in table level checks.
+     * Accepts any sensor specification (sensor call parameters).
      *
-     * @param tableCheckCategoriesSpec Built-in table level checks.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param abstractSensorParameters Sensor specification (parameters).
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableCheckCategoriesSpec tableCheckCategoriesSpec, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of built-in column level checks.
-     *
-     * @param columnCheckCategoriesSpec Built-in column level checks.
-     * @param parameter                        Additional parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(ColumnCheckCategoriesSpec columnCheckCategoriesSpec, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a collection (dictionary) of custom table level data quality checks.
-     *
-     * @param customTableCheckSpecMap Dictionary of custom checks.
-     * @param parameter Target list where found hierarchy nodes should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(CustomTableCheckSpecMap customTableCheckSpecMap, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a custom column check specification.
-     *
-     * @param customColumnCheckSpecMap Custom column check specification.
-     * @param parameter                Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(CustomColumnCheckSpecMap customColumnCheckSpecMap, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts any check specification.
-     *
-     * @param abstractCheckSpec Data quality check specification (any).
-     * @param parameter Target list where found hierarchy nodes should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec abstractCheckSpec, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a rule set for a single check.
-     *
-     * @param abstractRuleSetSpec Rule set specification.
-     * @param parameter           Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(AbstractRuleSetSpec abstractRuleSetSpec, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a container object with all possible built-in table level data quality sensors.
-     *
-     * @param allTableSensorsSpec All possible table sensors.
-     * @param parameter Target list where found hierarchy nodes should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(AllTableSensorsSpec allTableSensorsSpec, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a list of all supported built-in column sensors.
-     *
-     * @param allColumnSensorsSpec List of all supported column sensors.
-     * @param parameter            Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(AllColumnSensorsSpec allColumnSensorsSpec, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts any table level sensor specification (sensor call parameters).
-     *
-     * @param abstractTableSensorParameters Table level sensor specification (parameters).
-     * @param parameter Target list where found hierarchy nodes should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(AbstractTableSensorParametersSpec abstractTableSensorParameters, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts any column level sensor specification (sensor call parameters).
-     *
-     * @param abstractColumnSensorParameters Column level sensor specification (parameters).
-     * @param parameter                      Additional parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(AbstractColumnSensorParametersSpec abstractColumnSensorParameters, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a container of table level consistency data quality checks.
-     *
-     * @param builtInTableConsistencyChecksSpec Consistency checks.
-     * @param parameter Target list where found hierarchy nodes should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(BuiltInTableConsistencyChecksSpec builtInTableConsistencyChecksSpec, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of built-in validity sensors on a table level.
-     *
-     * @param builtInTableValidityChecksSpec Built-in validity sensors on a table level.
-     * @param parameter                      Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(BuiltInTableValidityChecksSpec builtInTableValidityChecksSpec, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of built-in timeliness sensors on a column level.
-     *
-     * @param builtInTableTimelinessChecksSpec Built-in timeliness sensors on a table level.
-     * @param parameter                       Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(BuiltInTableTimelinessChecksSpec builtInTableTimelinessChecksSpec, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of built-in validity sensors on a column level.
-     *
-     * @param builtInColumnValidityChecksSpec Built-in validity sensors on a column level.
-     * @param parameter                       Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(BuiltInColumnValidityChecksSpec builtInColumnValidityChecksSpec, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of built-in relevance sensors on a table level.
-     *
-     * @param builtInTableRelevanceChecksSpec Built-in relevance sensors on a table level.
-     * @param parameter                      Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(BuiltInTableRelevanceChecksSpec builtInTableRelevanceChecksSpec, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of built-in uniqueness sensors on a column level.
-     *
-     * @param builtInColumnUniquenessChecksSpec Built-in validity sensors on a column level.
-     * @param parameter                       Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(BuiltInColumnUniquenessChecksSpec builtInColumnUniquenessChecksSpec, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of built-in completeness sensors on a column level.
-     *
-     * @param builtInColumnCompletenessChecksSpec Built-in completeness sensors on a column level.
-     * @param parameter                       Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(BuiltInColumnCompletenessChecksSpec builtInColumnCompletenessChecksSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(AbstractSensorParametersSpec abstractSensorParameters, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -437,11 +235,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a list of sensor definitions.
      *
      * @param sensorDefinitionWrappers Sensor definitions list.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(SensorDefinitionList sensorDefinitionWrappers, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(SensorDefinitionList sensorDefinitionWrappers, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -449,11 +247,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a sensor definition wrapper.
      *
      * @param sensorDefinitionWrapper Sensor definition wrapper.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(SensorDefinitionWrapper sensorDefinitionWrapper, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(SensorDefinitionWrapper sensorDefinitionWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -461,11 +259,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a sensor definition specification.
      *
      * @param sensorDefinitionSpec Sensor definition.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(SensorDefinitionSpec sensorDefinitionSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(SensorDefinitionSpec sensorDefinitionSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -473,11 +271,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a list of sensor definitions for different providers.
      *
      * @param providerSensorDefinitionList List of sensor definitions per provider.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ProviderSensorDefinitionList providerSensorDefinitionList, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ProviderSensorDefinitionList providerSensorDefinitionList, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -485,11 +283,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a provider specific sensor definition wrapper (lazy loader).
      *
      * @param providerSensorDefinitionWrapper Provider specific table wrapper.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -497,11 +295,11 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * Accepts a provider specific sensor definition.
      *
      * @param providerSensorDefinitionSpec Provider specific sensor definition.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ProviderSensorDefinitionSpec providerSensorDefinitionSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ProviderSensorDefinitionSpec providerSensorDefinitionSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -513,7 +311,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(RuleDefinitionList ruleDefinitionList, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(RuleDefinitionList ruleDefinitionList, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -525,7 +323,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(RuleDefinitionWrapper ruleDefinitionWrapper, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(RuleDefinitionWrapper ruleDefinitionWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -537,19 +335,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DqoHomeImpl dqoHome, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts an abstract rule threshold object with multiple level of thresholds.
-     *
-     * @param abstractRuleThresholdsSpec Abstract rule thresholds.
-     * @param parameter                  Visitor parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(AbstractRuleThresholdsSpec abstractRuleThresholdsSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(DqoHomeImpl dqoHome, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -561,7 +347,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(RuleDefinitionSpec ruleDefinitionSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(RuleDefinitionSpec ruleDefinitionSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -573,31 +359,31 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TimeSeriesConfigurationSpec timeSeriesConfigurationSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(TimeSeriesConfigurationSpec timeSeriesConfigurationSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
-     * Accepts a dimension configuration specification on a table level.
+     * Accepts a data streams mapping configuration specification on a table level.
      *
-     * @param dimensionsConfigurationSpec Dimension specification.
-     * @param parameter                   Additional visitor's parameter.
+     * @param dataStreamMappingSpec Data streams mapping specification.
+     * @param parameter             Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DimensionsConfigurationSpec dimensionsConfigurationSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(DataStreamMappingSpec dataStreamMappingSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
     /**
-     * Accepts a configuration of a single dimension.
+     * Accepts a configuration of a single data stream level.
      *
-     * @param dimensionMappingSpec Dimension mapping specification.
-     * @param parameter            Additional visitor's parameter.
+     * @param dataStreamLevelSpec Data stream level mapping specification.
+     * @param parameter           Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(DimensionMappingSpec dimensionMappingSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(DataStreamLevelSpec dataStreamLevelSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -609,7 +395,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableOwnerSpec tableOwnerSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(TableOwnerSpec tableOwnerSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -621,7 +407,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(CommentSpec commentSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(CommentSpec commentSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -633,19 +419,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(CommentsListSpec commentSpecs, List<HierarchyNode> parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a dictionary of custom rules.
-     *
-     * @param customRuleThresholdsMap Dictionary of custom rules.
-     * @param parameter               Additional visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(CustomRuleThresholdsMap customRuleThresholdsMap, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(CommentsListSpec commentSpecs, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -657,7 +431,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(RuleTimeWindowSettingsSpec ruleTimeWindowSettingsSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(RuleTimeWindowSettingsSpec ruleTimeWindowSettingsSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -668,7 +442,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(SettingsSpec settingsSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(SettingsSpec settingsSpec, T parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;//we don't want to enter SettingSpec anymore
     }
 
@@ -680,7 +454,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(FileIndexListImpl fileIndexWrappers, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(FileIndexListImpl fileIndexWrappers, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -692,7 +466,7 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(FileIndexSpec fileIndexSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(FileIndexSpec fileIndexSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -704,7 +478,343 @@ public abstract class AbstractSearchVisitor implements HierarchyNodeResultVisito
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(FileIndexWrapperImpl fileIndexWrapper, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(FileIndexWrapperImpl fileIndexWrapper, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a recurring schedule specification, it is the cron expression how to schedule the job.
+     *
+     * @param recurringScheduleSpec Recurring schedule.
+     * @param parameter             Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(RecurringScheduleSpec recurringScheduleSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a parameter definition specification, it describes a single parameter for custom sensors and rules.
+     *
+     * @param parameterDefinitionSpec Parameter definition specification.
+     * @param parameter               Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ParameterDefinitionSpec parameterDefinitionSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of parameter definitions, it describes all parameters for custom sensors and rules.
+     *
+     * @param parameterDefinitionSpecs Parameter definitions list.
+     * @param parameter                Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ParameterDefinitionsListSpec parameterDefinitionSpecs, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a base class for all data quality checks.
+     *
+     * @param checkSpec Data quality check instance.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> checkSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of categories of data quality checks.
+     *
+     * @param checksContainerSpec Container of data quality checks that has nested categories (and categories contain checks).
+     * @param parameter           Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractRootChecksContainerSpec checksContainerSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of data quality checks for a single category.
+     *
+     * @param abstractCheckCategorySpec Container of data quality checks for a single category.
+     * @param parameter                 Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractCheckCategorySpec abstractCheckCategorySpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of table level recurring checks (daily, monthly, etc.)
+     *
+     * @param tableRecurringChecksSpec Table level recurring checks container.
+     * @param parameter            Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableRecurringChecksSpec tableRecurringChecksSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of table level partitioned checks (daily, monthly, etc.)
+     *
+     * @param tablePartitionedChecksRootSpec Table level partitioned checks container.
+     * @param parameter                      Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TablePartitionedChecksRootSpec tablePartitionedChecksRootSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of column level recurring checks (daily, monthly, etc.)
+     *
+     * @param columnRecurringChecksRootSpec Column level recurring checks container.
+     * @param parameter             Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnRecurringChecksRootSpec columnRecurringChecksRootSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of column level partitioned checks (daily, monthly, etc.)
+     *
+     * @param columnPartitionedChecksRootSpec Column level partitioned checks container.
+     * @param parameter                       Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnPartitionedChecksRootSpec columnPartitionedChecksRootSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of timestamp related columns on a table level.
+     *
+     * @param timestampColumnsSpec Configuration of timestamp related columns.
+     * @param parameter            Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TimestampColumnsSpec timestampColumnsSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a map (hashtable) of named data stream mappings.
+     *
+     * @param dataStreamMappingSpecMap Data stream mappings map.
+     * @param parameter                Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DataStreamMappingSpecMap dataStreamMappingSpecMap, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a profiler check instance.
+     *
+     * @param profileSpec Profiler instance.
+     * @param parameter   Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractStatisticsCollectorSpec<?> profileSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of profiling checks (a profiling category) instance.
+     *
+     * @param profileCategorySpec Profiling category instance that contains profilers.
+     * @param parameter           Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractStatisticsCollectorCategorySpec profileCategorySpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a root container of profiling checks (a profiling category) instance.
+     *
+     * @param rootProfilerContainerSpec Profiling root container instance that contains profilers.
+     * @param parameter                 Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractRootStatisticsCollectorsContainerSpec rootProfilerContainerSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a dashboard configuration object.
+     *
+     * @param dashboardSpec Dashboard configuration.
+     * @param parameter     Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DashboardSpec dashboardSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of dashboard configuration objects.
+     *
+     * @param dashboardListSpec Dashboard configuration objects.
+     * @param parameter         Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DashboardListSpec dashboardListSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a folder with a list of dashboards.
+     *
+     * @param dashboardsFolderSpec Dashboard folder.
+     * @param parameter            Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DashboardsFolderSpec dashboardsFolderSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of dashboard folders.
+     *
+     * @param dashboardsFolderSpecs List of dashboard folders.
+     * @param parameter             Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DashboardsFolderListSpec dashboardsFolderSpecs, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of dashboards list.
+     *
+     * @param dashboardDefinitionWrapper List of dashboards list.
+     * @param parameter             Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DashboardFolderListSpecWrapperImpl dashboardDefinitionWrapper, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a container of schedules, divided by the time range.
+     *
+     * @param recurringSchedulesSpec Container of schedule categories.
+     * @param parameter                     Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(RecurringSchedulesSpec recurringSchedulesSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a configuration of incremental partition checks..
+     *
+     * @param partitionIncrementalTimeWindowSpec Configuration of incremental partition checks.
+     * @param parameter                          Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(PartitionIncrementalTimeWindowSpec partitionIncrementalTimeWindowSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a dictionary of custom checks. The keys must be names of configured custom checks.
+     *
+     * @param customCheckSpecMap Dictionary of custom checks.
+     * @param parameter          Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(CustomCheckSpecMap customCheckSpecMap, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a definition of a custom check.
+     *
+     * @param checkDefinitionSpec Custom check specification.
+     * @param parameter           Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(CheckDefinitionSpec checkDefinitionSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a wrapper for a definition of a custom check.
+     *
+     * @param checkDefinitionWrapper Custom check specification wrapper.
+     * @param parameter              Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(CheckDefinitionWrapperImpl checkDefinitionWrapper, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of custom checks.
+     *
+     * @param checkDefinitionWrappers Custom check list.
+     * @param parameter               Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(CheckDefinitionListImpl checkDefinitionWrappers, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts an incident grouping configuration.
+     *
+     * @param incidentGroupingSpec Incident grouping configuration.
+     * @param parameter            Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(IncidentGroupingSpec incidentGroupingSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts an incident notifications using webhooks configuration.
+     *
+     * @param incidentWebhookNotificationsSpec Webhooks for incident notifications.
+     * @param parameter                        Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(IncidentWebhookNotificationsSpec incidentWebhookNotificationsSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

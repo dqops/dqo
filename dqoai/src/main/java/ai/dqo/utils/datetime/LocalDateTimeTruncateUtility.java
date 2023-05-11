@@ -15,8 +15,8 @@
  */
 package ai.dqo.utils.datetime;
 
-import ai.dqo.data.readings.normalization.SensorResultNormalizeException;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.data.readouts.normalization.SensorResultNormalizeException;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,26 +32,28 @@ public class LocalDateTimeTruncateUtility {
     /**
      * Truncates a value of a time period to the beginning of the requested time series gradient.
      * @param dateTime Date time to truncate.
-     * @param timeSeriesGradient Time series gradient.
+     * @param timePeriodGradient Time series gradient.
      * @return Truncated date time, at the beginning of the requested period.
      */
-    public static LocalDateTime truncateTimePeriod(LocalDateTime dateTime, TimeSeriesGradient timeSeriesGradient) {
-        switch (timeSeriesGradient) {
-            case YEAR:
+    public static LocalDateTime truncateTimePeriod(LocalDateTime dateTime, TimePeriodGradient timePeriodGradient) {
+        switch (timePeriodGradient) {
+            case year:
                 return LocalDateTime.of(LocalDate.of(dateTime.getYear(), 1, 1), LocalTime.MIDNIGHT);
-            case QUARTER:
+            case quarter:
                 int monthValue = dateTime.getMonthValue();
                 return LocalDateTime.of(LocalDate.of(dateTime.getYear(), monthValue - ((monthValue - 1) % 3), 1), LocalTime.MIDNIGHT);
-            case MONTH:
+            case month:
                 return LocalDateTime.of(LocalDate.of(dateTime.getYear(), dateTime.getMonth(), 1), LocalTime.MIDNIGHT);
-            case WEEK:
+            case week:
                 return LocalDateTime.of(dateTime.toLocalDate().with(WeekFields.of(Locale.US).dayOfWeek(), 1), LocalTime.MIDNIGHT);
-            case DAY:
+            case day:
                 return dateTime.truncatedTo(ChronoUnit.DAYS);
-            case HOUR:
+            case hour:
                 return dateTime.truncatedTo(ChronoUnit.HOURS);
+            case millisecond:
+                return dateTime; // no truncation
             default:
-                throw new SensorResultNormalizeException(null, "Unsupported time series gradient: " + timeSeriesGradient);
+                throw new SensorResultNormalizeException(null, "Unsupported time series gradient: " + timePeriodGradient);
         }
     }
 

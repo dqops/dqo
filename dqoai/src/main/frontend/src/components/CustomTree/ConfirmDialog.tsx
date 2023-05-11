@@ -1,0 +1,51 @@
+import React from 'react';
+import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
+import Button from '../Button';
+
+interface ConfirmDialogProps {
+  open: boolean;
+  onClose: () => void;
+  message: string;
+  onConfirm: () => Promise<void>;
+}
+
+const ConfirmDialog = ({
+  open,
+  onClose,
+  onConfirm,
+  message
+}: ConfirmDialogProps) => {
+  const handleSubmit = async () => {
+    await onConfirm();
+    onClose();
+  };
+
+  return (
+    <div>
+      <Dialog open={open} handler={onClose}>
+        <DialogBody className="pt-10 pb-2 px-8">
+          <div className="text-2xl text-gray-700 text-center whitespace-normal break-all">
+            {message}
+          </div>
+        </DialogBody>
+        <DialogFooter className="justify-center space-x-6 pb-8">
+          <Button
+            color="primary"
+            variant="outlined"
+            className="px-8"
+            onClick={onClose}
+            label="Cancel"
+          />
+          <Button
+            color="primary"
+            className="px-8"
+            onClick={handleSubmit}
+            label="Confirm"
+          />
+        </DialogFooter>
+      </Dialog>
+    </div>
+  );
+};
+
+export default ConfirmDialog;

@@ -15,6 +15,8 @@
  */
 package ai.dqo.execution.checks.progress;
 
+import ai.dqo.execution.sensors.progress.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +25,27 @@ import java.util.List;
  */
 public class CheckExecutionProgressListenerStub implements CheckExecutionProgressListener {
     private final List<CheckExecutionProgressEvent> events = new ArrayList<>();
+    private boolean showSummary;
+
+    /**
+     * Returns the flag that says if the summary should be printed.
+     *
+     * @return true when the summary will be printed, false otherwise.
+     */
+    @Override
+    public boolean isShowSummary() {
+        return this.showSummary;
+    }
+
+    /**
+     * Sets the flag to show the summary.
+     *
+     * @param showSummary Show summary (effective only when the mode is not silent).
+     */
+    @Override
+    public void setShowSummary(boolean showSummary) {
+        this.showSummary = showSummary;
+    }
 
     /**
      * Called before checks are started on a target table.
@@ -70,8 +93,28 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      * @param event Log event.
      */
     @Override
-    public void onRulesExecuted(RulesExecutedEvent event) {
+    public void onRuleExecuted(RuleExecutedEvent event) {
 		this.events.add(event);
+    }
+
+    /**
+     * Called after data quality rule were executed for all rows of normalized sensor results, but the rule failed with an exception.
+     *
+     * @param event Log event.
+     */
+    @Override
+    public void onRuleFailed(RuleFailedEvent event) {
+        this.events.add(event);
+    }
+
+    /**
+     * Called after a sensor was executed but failed.
+     *
+     * @param event Log event.
+     */
+    @Override
+    public void onSensorFailed(SensorFailedEvent event) {
+        this.events.add(event);
     }
 
     /**
@@ -90,8 +133,18 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      * @param event Log event.
      */
     @Override
-    public void onSavingRuleEvaluationResults(SavingRuleEvaluationResults event) {
+    public void onSavingRuleEvaluationResults(SavingRuleEvaluationResultsEvent event) {
 		this.events.add(event);
+    }
+
+    /**
+     * Called before errors are saved.
+     *
+     * @param event Log event.
+     */
+    @Override
+    public void onSavingErrors(SavingErrorsEvent event) {
+        this.events.add(event);
     }
 
     /**
@@ -100,7 +153,7 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      * @param event Log event.
      */
     @Override
-    public void onTableChecksProcessingFinished(TableChecksProcessingFinished event) {
+    public void onTableChecksProcessingFinished(TableChecksProcessingFinishedEvent event) {
 		this.events.add(event);
     }
 
@@ -120,7 +173,7 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
      * @param event Log event.
      */
     @Override
-    public void onSqlTemplateRendered(SqlTemplateRenderedRendered event) {
+    public void onSqlTemplateRendered(SqlTemplateRenderedRenderedEvent event) {
 		this.events.add(event);
     }
 
@@ -132,5 +185,15 @@ public class CheckExecutionProgressListenerStub implements CheckExecutionProgres
     @Override
     public void onExecutingSqlOnConnection(ExecutingSqlOnConnectionEvent event) {
 		this.events.add(event);
+    }
+
+    /**
+     * Called after all data quality checks were executed.
+     *
+     * @param event Data quality check execution summary for one batch of checks.
+     */
+    @Override
+    public void onCheckExecutionFinished(CheckExecutionFinishedEvent event) {
+        this.events.add(event);
     }
 }

@@ -16,26 +16,30 @@
 package ai.dqo.cli.commands.settings.apikey;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.settings.impl.SettingsService;
-import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * Cli command to remove a api key to settings.
+ * Cli command to remove a api key in settings.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "remove", description = "Remove api key")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "remove", header = "Remove API key", description = "Remove the API key used for accessing external services.")
 public class SettingsApiKeyRemoveCliCommand extends BaseCommand implements ICommand {
-	private final SettingsService settingsService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private SettingsService settingsService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public SettingsApiKeyRemoveCliCommand() {
+	}
 
 	@Autowired
 	public SettingsApiKeyRemoveCliCommand(SettingsService settingsService,

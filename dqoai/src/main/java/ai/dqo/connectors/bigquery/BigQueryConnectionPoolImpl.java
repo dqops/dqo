@@ -20,10 +20,14 @@ import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.jdbc.JdbConnectionPoolCreateException;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.oauth2.ServiceAccountCredentials;
+import com.google.auth.oauth2.UserCredentials;
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.BigQueryOptions;
+import com.google.common.base.MoreObjects;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -38,12 +42,12 @@ import java.util.concurrent.TimeUnit;
  * BigQuery connection pool that supports multiple connections.
  */
 @Component
-@Scope("singleton")
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
     /**
      * Data sources cache.
      */
-    private final Cache<ConnectionSpec, BigQuery> bigQueryServiceCache =
+    private final Cache<BigQueryParametersSpec, BigQueryInternalConnection> bigQueryServiceCache =
             CacheBuilder.newBuilder()
                     .maximumSize(5000)
                     .expireAfterWrite(1, TimeUnit.HOURS) // after 1h, we want to re-authenticate
@@ -54,14 +58,15 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
      * @param connectionSpec Connection specification (should be not mutable).
      * @return BigQuery service.
      */
-    public BigQuery getBigQueryService(ConnectionSpec connectionSpec) {
+    public BigQueryInternalConnection getBigQueryService(ConnectionSpec connectionSpec) {
         assert connectionSpec != null;
         assert connectionSpec.getProviderType() == ProviderType.bigquery;
         assert connectionSpec.getBigquery() != null;
 
         try {
-            final ConnectionSpec clonedConnectionSpec = connectionSpec.clone();
-            return this.bigQueryServiceCache.get(clonedConnectionSpec, () -> createBigQueryService(clonedConnectionSpec));
+            final BigQueryParametersSpec clonedBigQueryConnectionSpec = connectionSpec.getBigquery().deepClone();
+            final String connectionName = connectionSpec.getConnectionName();
+            return this.bigQueryServiceCache.get(clonedBigQueryConnectionSpec, () -> createBigQueryService(clonedBigQueryConnectionSpec, connectionName));
         } catch (ExecutionException e) {
             throw new JdbConnectionPoolCreateException("Cannot create a BigQuery connection for " + connectionSpec.getConnectionName(), e);
         }
@@ -69,12 +74,12 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
 
     /**
      * Creates a big query service.
-     * @param connectionSpec Connection specification for a BigQuery connection.
+     * @param bigQueryParametersSpec Connection specification for a BigQuery connection.
+     * @param connectionName Connection name, used for error reporting.
      * @return Connection specification.
      */
-    public BigQuery createBigQueryService(ConnectionSpec connectionSpec) {
+    public BigQueryInternalConnection createBigQueryService(BigQueryParametersSpec bigQueryParametersSpec, String connectionName) {
         try {
-            BigQueryParametersSpec bigQueryParametersSpec = connectionSpec.getBigquery();
             GoogleCredentials googleCredentials = null;
             switch (bigQueryParametersSpec.getAuthenticationMode()) {
                 case google_application_credentials:
@@ -94,26 +99,39 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
                     }
                     break;
                 default:
-                    throw new ConnectorOperationFailedException("Unsupported authentication mode for BigQuery connection " + connectionSpec.getConnectionName() + ", mode: " + bigQueryParametersSpec.getAuthenticationMode());
+                    throw new ConnectorOperationFailedException("Unsupported authentication mode for BigQuery connection " + connectionName +
+                            ", mode: " + bigQueryParametersSpec.getAuthenticationMode());
             }
+
+            String defaultProjectFromCredentials = null;
+
+            if (googleCredentials instanceof UserCredentials) {
+                UserCredentials userCredentials = (UserCredentials)googleCredentials;
+                defaultProjectFromCredentials = userCredentials.getQuotaProjectId();
+            }
+            if(googleCredentials instanceof ServiceAccountCredentials) {
+                ServiceAccountCredentials serviceAccountCredentials = (ServiceAccountCredentials) googleCredentials;
+                defaultProjectFromCredentials = serviceAccountCredentials.getQuotaProjectId();
+            }
+
+            String effectiveJobProjectId = MoreObjects.firstNonNull(MoreObjects.firstNonNull(
+                    bigQueryParametersSpec.getBillingProjectId(), defaultProjectFromCredentials), bigQueryParametersSpec.getSourceProjectId());
+            String effectiveQuotaProjectId = MoreObjects.firstNonNull(
+                    MoreObjects.firstNonNull(bigQueryParametersSpec.getQuotaProjectId(), defaultProjectFromCredentials), bigQueryParametersSpec.getSourceProjectId());
 
             BigQueryOptions.Builder builder = BigQueryOptions.newBuilder()
-                    .setCredentials(googleCredentials);
-
-            if (bigQueryParametersSpec.getBillingProjectId() != null) {
-                builder = builder.setProjectId(bigQueryParametersSpec.getBillingProjectId());
-            }
-
-            if (bigQueryParametersSpec.getQuotaProjectId() != null) {
-                builder = builder.setQuotaProjectId(bigQueryParametersSpec.getQuotaProjectId());
-            }
+                    .setCredentials(googleCredentials)
+                    .setProjectId(effectiveJobProjectId)
+                    .setQuotaProjectId(effectiveQuotaProjectId);
 
             BigQueryOptions bigQueryOptions = builder.build();
             BigQuery service = bigQueryOptions.getService();
-            return service;
+
+            BigQueryInternalConnection bigQueryInternalConnection = new BigQueryInternalConnection(service, effectiveJobProjectId, effectiveQuotaProjectId);
+            return bigQueryInternalConnection;
         }
         catch (Exception ex) {
-            throw new ConnectorOperationFailedException("Failed to open a BigQuery connection " + connectionSpec.getConnectionName(), ex);
+            throw new ConnectorOperationFailedException("Failed to open a BigQuery connection " + connectionName, ex);
         }
     }
 }

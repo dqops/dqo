@@ -16,15 +16,17 @@
 package ai.dqo.cli.commands.connection.schema;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.connection.impl.ConnectionService;
-import ai.dqo.cli.commands.connection.impl.models.ConnectionListModel;
-import ai.dqo.cli.terminal.FormattedTableDto;
-import ai.dqo.cli.terminal.TerminalReader;
-import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.cli.commands.TabularOutputFormat;
+import ai.dqo.cli.commands.connection.impl.ConnectionCliService;
+import ai.dqo.cli.terminal.*;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.shell.table.BorderStyle;
+import org.springframework.shell.table.TableBuilder;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
@@ -32,24 +34,39 @@ import picocli.CommandLine;
  * "connection schema list" 3nd level cli command.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "list", description = "List schemas in source connection")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "list", header = "List schemas in the specified connection", description = "It allows the user to view the summary of all schemas in a selected connection.")
 public class ConnectionSchemaListCliCommand extends BaseCommand implements ICommand {
-	private final ConnectionService connectionService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private ConnectionCliService connectionCliService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+	private TerminalTableWritter terminalTableWritter;
+	private FileWritter fileWritter;
+
+	public ConnectionSchemaListCliCommand() {
+	}
 
 	@Autowired
-	public ConnectionSchemaListCliCommand(ConnectionService connectionService,
-								  	TerminalReader terminalReader,
-									TerminalWriter terminalWriter) {
-		this.connectionService = connectionService;
-		this.terminalReader = terminalReader;
+	public ConnectionSchemaListCliCommand(ConnectionCliService connectionCliService,
+                                          TerminalReader terminalReader,
+                                          TerminalWriter terminalWriter,
+                                          TerminalTableWritter terminalTableWritter,
+                                          FileWritter fileWritter) {
+		this.connectionCliService = connectionCliService;
 		this.terminalWriter = terminalWriter;
+		this.terminalReader = terminalReader;
+		this.terminalTableWritter = terminalTableWritter;
+		this.fileWritter = fileWritter;
 	}
 
 	@CommandLine.Option(names = {"-n", "--name"}, description = "Connection name filter", required = false)
 	private String name;
+
+	@CommandLine.Option(names = {"-d", "--dimension"}, description = "Dimension filter", required = false)
+	private String[] dimensions;
+
+	@CommandLine.Option(names = {"-l", "--label"}, description = "Label filter", required = false)
+	private String[] labels;
 
 	/**
 	 * Computes a result, or throws an exception if unable to do so.
@@ -64,9 +81,32 @@ public class ConnectionSchemaListCliCommand extends BaseCommand implements IComm
 			this.name = this.terminalReader.prompt("Connection name (--name)", null, false);
 		}
 
-		FormattedTableDto<ConnectionListModel> formattedTable = this.connectionService.loadConnectionTable(name);
-		this.terminalWriter.writeTable(formattedTable, true);
-
-		return 0;
+		CliOperationStatus cliOperationStatus= this.connectionCliService.loadSchemaList(this.name, this.getOutputFormat(), dimensions, labels);
+		if (cliOperationStatus.isSuccess()) {
+			if (this.getOutputFormat() == TabularOutputFormat.TABLE) {
+				if (this.isWriteToFile()) {
+					TableBuilder tableBuilder = new TableBuilder(new TablesawDatasetTableModel(cliOperationStatus.getTable()));
+					tableBuilder.addInnerBorder(BorderStyle.oldschool);
+					tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+					String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+					CliOperationStatus cliOperationStatus2 = this.fileWritter.writeStringToFile(renderedTable);
+					this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
+				} else {
+					this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
+				}
+			} else {
+				if (this.isWriteToFile()) {
+					CliOperationStatus cliOperationStatus2 = this.fileWritter.writeStringToFile(cliOperationStatus.getMessage());
+					this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
+				}
+				else {
+					this.terminalWriter.write(cliOperationStatus.getMessage());
+				}
+			}
+			return 0;
+		} else {
+			this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+			return -1;
+		}
 	}
 }

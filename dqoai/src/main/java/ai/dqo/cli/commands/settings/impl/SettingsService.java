@@ -15,7 +15,7 @@
  */
 package ai.dqo.cli.commands.settings.impl;
 
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.CliOperationStatus;
 
 /**
  * Settings management service.
@@ -74,4 +74,23 @@ public interface SettingsService {
 	 * @return Cli operation status.
 	 */
 	CliOperationStatus showApiKey();
+
+	/**
+	 * Sets a new IANA time zone name.
+	 * @param timeZone Time zone name.
+	 * @return Cli operation status.
+	 */
+	CliOperationStatus setTimeZone(String timeZone);
+
+	/**
+	 * Removes a time zone name.
+	 * @return Cli operation status.
+	 */
+	CliOperationStatus removeTimeZone();
+
+	/**
+	 * Shows a time zone.
+	 * @return Cli operation status.
+	 */
+	CliOperationStatus showTimeZone();
 }

@@ -15,12 +15,14 @@
  */
 package ai.dqo.cli.commands.column.impl;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 import java.security.PrivilegedActionException;
 
 /**
  * Table failed exception.
  */
-public class ColumnCommandFailedException extends RuntimeException {
+public class ColumnCommandFailedException extends DqoRuntimeException {
 	/**
 	 * Constructs a new exception with {@code null} as its detail message.
 	 * The cause is not initialized, and may subsequently be initialized by a

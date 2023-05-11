@@ -15,12 +15,12 @@
  */
 package ai.dqo.rules;
 
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
@@ -31,39 +31,17 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractRuleParametersSpec extends AbstractSpec {
+public abstract class AbstractRuleParametersSpec extends AbstractSpec implements Cloneable {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
     };
-
-    @JsonPropertyDescription("Disable the rule. The rule will not be evaluated. The sensor will also not be executed if it has no enabled rules.")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean disable;
-
-    /**
-     * Disable the quality check and prevent it from executing.
-     * @return Quality check is disabled.
-     */
-    public boolean isDisable() {
-        return disable;
-    }
-
-    /**
-     * Changes the disabled flag of a quality test.
-     * @param disable When true, the test will be disabled and will not be executed.
-     */
-    public void setDisable(boolean disable) {
-		this.setDirtyIf(this.disable != disable);
-        this.disable = disable;
-    }
 
     /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
@@ -71,7 +49,7 @@ public abstract class AbstractRuleParametersSpec extends AbstractSpec {
     }
 
     /**
-     * Retrieves the severity level for this class. The rule parameters should be always referenced from (parent) a {@link AbstractRuleThresholdsSpec}
+     * Retrieves the severity level for this class.
      * in fields named: low, medium, high  - and those are the severity levels returned.
      * @return Severity level.
      */

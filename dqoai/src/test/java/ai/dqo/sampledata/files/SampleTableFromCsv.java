@@ -17,6 +17,9 @@ package ai.dqo.sampledata.files;
 
 import tech.tablesaw.api.Table;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Sample table holder. Stores a sample data for a single table, with a hash of the data.
  */
@@ -24,17 +27,20 @@ public class SampleTableFromCsv {
     private final Table table;
     private final String hashedTableName;
     private final long hash;
+    private final Map<String, String> physicalColumnTypes;
 
     /**
      * Creates a sample table holder.
      * @param table Table content.
      * @param hashedTableName Table name with a hash suffix, this is the name of the csv file (without the .csv file extension), followed by a hashcode of the table to make the tables unique.
      * @param hash Hash of the table content.
+     * @param physicalColumnTypes Map of column names to physical colum names when a column has a hint to use a specified physical data type that is database specific.
      */
-    public SampleTableFromCsv(Table table, String hashedTableName, long hash) {
+    public SampleTableFromCsv(Table table, String hashedTableName, long hash, Map<String, String> physicalColumnTypes) {
         this.table = table;
         this.hashedTableName = hashedTableName;
         this.hash = hash;
+        this.physicalColumnTypes = physicalColumnTypes != null ? physicalColumnTypes : new HashMap<>();
     }
 
     /**
@@ -59,5 +65,14 @@ public class SampleTableFromCsv {
      */
     public long getHash() {
         return hash;
+    }
+
+    /**
+     * Returns a dictionary of mapping of column names to their physical data types that are expected.
+     * The mapping is optional and may return null if the file has no proposal for a physical data type name that is a database specific.
+     * @return Mapping of column names to their physical data types, if a physical data type is requested.
+     */
+    public Map<String, String> getPhysicalColumnTypes() {
+        return physicalColumnTypes;
     }
 }

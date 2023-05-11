@@ -15,10 +15,12 @@
  */
 package ai.dqo.connectors;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception raised when a connector failed to execute a query or a sensor failed to execute the code.
  */
-public class ConnectorOperationFailedException extends RuntimeException {
+public class ConnectorOperationFailedException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be

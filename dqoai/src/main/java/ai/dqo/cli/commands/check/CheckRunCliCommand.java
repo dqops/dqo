@@ -15,21 +15,32 @@
  */
 package ai.dqo.cli.commands.check;
 
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.check.impl.CheckService;
-import ai.dqo.cli.commands.check.impl.CliCheckExecutionProgressListener;
+import ai.dqo.cli.commands.check.impl.CheckCliService;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
-import ai.dqo.cli.completion.completers.ColumnNameCompleter;
-import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
-import ai.dqo.cli.completion.completers.FullTableNameCompleter;
+import ai.dqo.cli.completion.completers.*;
+import ai.dqo.cli.output.OutputFormatService;
+import ai.dqo.cli.terminal.FileWritter;
 import ai.dqo.cli.terminal.TablesawDatasetTableModel;
+import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.execution.checks.CheckExecutionSummary;
+import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
+import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
+import ai.dqo.execution.checks.progress.CheckRunReportingMode;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.services.check.CheckService;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
+import org.springframework.shell.table.BorderStyle;
+import org.springframework.shell.table.TableBuilder;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
@@ -37,12 +48,19 @@ import picocli.CommandLine;
  * "check run" 2nd level CLI command that executes data quality checks.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "run", description = "Run checks matching specified filters")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "run", header = "Run data quality checks that match a given condition", description = "Run data quality checks on your dataset that match a given condition. The command output is a table with the results that provides insight into the data quality.")
 public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITableNameCommand {
-    private final TerminalWriter terminalWriter;
-    private final CheckService checkService;
+    private TerminalWriter terminalWriter;
+    private TerminalTableWritter terminalTableWritter;
+    private CheckCliService checkService;
+    private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private JsonSerializer jsonSerializer;
+    private OutputFormatService outputFormatService;
+    private FileWritter fileWritter;
+
+    public CheckRunCliCommand() {
+    }
 
     /**
      * Dependency injection constructor.
@@ -51,17 +69,27 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
      * @param jsonSerializer  Json serializer.
      */
     @Autowired
-    public CheckRunCliCommand(TerminalWriter terminalWriter, CheckService checkService, JsonSerializer jsonSerializer) {
+    public CheckRunCliCommand(TerminalWriter terminalWriter,
+                              TerminalTableWritter terminalTableWritter,
+                              CheckCliService checkService,
+                              CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
+                              JsonSerializer jsonSerializer,
+                              OutputFormatService outputFormatService,
+                              FileWritter fileWritter) {
         this.terminalWriter = terminalWriter;
+        this.terminalTableWritter = terminalTableWritter;
         this.checkService = checkService;
+        this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
         this.jsonSerializer = jsonSerializer;
+        this.outputFormatService = outputFormatService;
+        this.fileWritter = fileWritter;
     }
 
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name, supports patterns like 'conn*'",
             completionCandidates = ConnectionNameCompleter.class)
     private String connection;
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports patterns like 'sch*.tab*'",
+    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'",
             completionCandidates = FullTableNameCompleter.class)
     private String table;
 
@@ -69,20 +97,44 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
             completionCandidates = ColumnNameCompleter.class)
     private String column;
 
-    @CommandLine.Option(names = {"-k", "--check"}, description = "Data quality check name, supports patterns like '*_id'")
+    @CommandLine.Option(names = {"-ch", "--check"}, description = "Data quality check name, supports patterns like '*_id'",
+            completionCandidates = CheckNameCompleter.class)
     private String check;
 
-    @CommandLine.Option(names = {"-s", "--sensor"}, description = "Data quality sensor name (sensor definition or sensor name), supports patterns like 'table/validity/*'")
+    @CommandLine.Option(names = {"-s", "--sensor"}, description = "Data quality sensor name (sensor definition or sensor name), supports patterns like 'table/validity/*'",
+            completionCandidates = SensorNameCompleter.class)
     private String sensor;
 
     @CommandLine.Option(names = {"-e", "--enabled"}, description = "Runs only enabled or only disabled sensors, by default only enabled sensors are executed", defaultValue = "true")
     private Boolean enabled = true;
 
+    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (profiling, recurring, partitioned)")
+    private CheckType checkType;
+
+    @CommandLine.Option(names = {"-ts", "--time-scale"}, description = "Time scale for recurring and partitioned checks (daily, monthly, etc.)")
+    private CheckTimeScale timeScale;
+
+    @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (standard, nulls, numeric, etc.)")
+    private String checkCategory;
+
     @CommandLine.Option(names = {"-d", "--dummy"}, description = "Runs data quality check in a dummy mode, sensors are not executed on the target database, but the rest of the process is performed", defaultValue = "false")
     private boolean dummyRun;
 
-    @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, debug)", defaultValue = "summary")
+    @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, info, debug)", defaultValue = "summary")
     private CheckRunReportingMode mode = CheckRunReportingMode.summary;
+
+    @CommandLine.Option(names = {"-tag", "--data-stream-level-tag"}, description = "Data stream hierarchy level filter (tag)",
+            required = false)
+    private String[] tags;
+
+    @CommandLine.Option(names = {"-l", "--label"}, description = "Label filter", required = false)
+    private String[] labels;
+
+    @CommandLine.Option(names = {"-f", "--fail-at"}, description = "Lowest data quality issue severity level (warning, error, fatal) that will cause the command to return with an error code. Use 'none' to return always a success error code.", defaultValue = "error")
+    private CheckRunCommandFailThreshold failAt;
+
+    @CommandLine.Mixin
+    private TimeWindowFilterParameters timeWindowFilterParameters;
 
     /**
      * Gets the connection name.
@@ -181,6 +233,86 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     }
 
     /**
+     * Returns the check type (category).
+     * @return Check type (category).
+     */
+    public CheckType getCheckType() {
+        return checkType;
+    }
+
+    /**
+     * Sets the check type to filter.
+     * @param checkType Check type filter.
+     */
+    public void setCheckType(CheckType checkType) {
+        this.checkType = checkType;
+    }
+
+    /**
+     * Gets the time scale filter for recurring and partitioned checks.
+     * @return Time scale filter.
+     */
+    public CheckTimeScale getTimeScale() {
+        return timeScale;
+    }
+
+    /**
+     * Sets the time scale filter for recurring and partitioned checks.
+     * @param timeScale Time scale filter.
+     */
+    public void setTimeScale(CheckTimeScale timeScale) {
+        this.timeScale = timeScale;
+    }
+
+    /**
+     * Returns a check category filter.
+     * @return Check category filter.
+     */
+    public String getCheckCategory() {
+        return checkCategory;
+    }
+
+    /**
+     * Sets the checks category filter.
+     * @param checkCategory Check category filter.
+     */
+    public void setCheckCategory(String checkCategory) {
+        this.checkCategory = checkCategory;
+    }
+
+    /**
+     * Returns an array of data stream hierarchy tags that must be assigned.
+     * @return Array of data stream hierarchy tags.
+     */
+    public String[] getTags() {
+        return tags;
+    }
+
+    /**
+     * Sets an array of required tags on the data stream hierarchy.
+     * @param tags Tags on the hierarchy.
+     */
+    public void setTags(String[] tags) {
+        this.tags = tags;
+    }
+
+    /**
+     * Sets the array of required labels to be assigned to target objects or their parents.
+     * @return Array of labels.
+     */
+    public String[] getLabels() {
+        return labels;
+    }
+
+    /**
+     * Sets a reference to an array with required labels.
+     * @param labels Array with required labels.
+     */
+    public void setLabels(String[] labels) {
+        this.labels = labels;
+    }
+
+    /**
      * Is the dummy run enabled.
      * @return Dummy run is enabled.
      */
@@ -213,6 +345,22 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     }
 
     /**
+     * Returns the time window filter parameters.
+     * @return Time window filter parameters.
+     */
+    public TimeWindowFilterParameters getTimeWindowFilterParameters() {
+        return timeWindowFilterParameters;
+    }
+
+    /**
+     * Sets the time window filter parameters.
+     * @param timeWindowFilterParameters Time window filter parameters.
+     */
+    public void setTimeWindowFilterParameters(TimeWindowFilterParameters timeWindowFilterParameters) {
+        this.timeWindowFilterParameters = timeWindowFilterParameters;
+    }
+
+    /**
      * Computes a result, or throws an exception if unable to do so.
      *
      * @return computed result
@@ -226,16 +374,85 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         filters.setColumnName(this.column);
         filters.setCheckName(this.check);
         filters.setSensorName(this.sensor);
+        filters.setCheckType(this.checkType);
+        filters.setTimeScale(this.timeScale);
+        filters.setCheckCategory(this.checkCategory);
         filters.setEnabled(this.enabled);
+        filters.setTags(this.tags);
+        filters.setLabels(this.labels);
 
-        CliCheckExecutionProgressListener progressListener = new CliCheckExecutionProgressListener(this.terminalWriter, this.mode, this.jsonSerializer);
-        CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, progressListener, this.dummyRun);
+        CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode, false);
+        CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, this.timeWindowFilterParameters, progressListener, this.dummyRun);
 
         if (this.mode != CheckRunReportingMode.silent) {
+            TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());
 			this.terminalWriter.writeLine("Check evaluation summary per table:");
-			this.terminalWriter.writeTable(new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable()), true);
+            switch(this.getOutputFormat()) {
+                case CSV: {
+                    String csvContent = this.outputFormatService.tableToCsv(tablesawDatasetTableModel);
+                    if (this.isWriteToFile()) {
+                        CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(csvContent);
+                        this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+                    }
+                    else {
+                        this.terminalWriter.write(csvContent);
+                    }
+                    break;
+                }
+                case JSON: {
+                    String jsonContent = this.outputFormatService.tableToJson(tablesawDatasetTableModel);
+                    if (this.isWriteToFile()) {
+                        CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(jsonContent);
+                        this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+                    }
+                    else {
+                        this.terminalWriter.write(jsonContent);
+                    }
+                    break;
+                }
+                default: {
+                    if (this.isWriteToFile()) {
+                        TableBuilder tableBuilder = new TableBuilder(tablesawDatasetTableModel);
+                        tableBuilder.addInnerBorder(BorderStyle.oldschool);
+                        tableBuilder.addHeaderBorder(BorderStyle.oldschool);
+                        String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
+                        CliOperationStatus cliOperationStatus = this.fileWritter.writeStringToFile(renderedTable);
+                        this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+                    }
+                    else {
+                        this.terminalTableWritter.writeTable(tablesawDatasetTableModel, true);
+                    }
+                    break;
+                }
+            }
         }
 
-        return 0; // TODO: check the highest severity (0, 1, 2, 3) and return it as an error code
+        int fatalIssuesCount = checkExecutionSummary.getFatalSeverityIssuesCount();
+        int errorIssuesCount = checkExecutionSummary.getErrorSeverityIssuesCount();
+        int warningIssuesCount = checkExecutionSummary.getWarningSeverityIssuesCount();
+
+        CheckRunCommandFailThreshold checkRunCommandFailThreshold = this.failAt != null ? this.failAt : CheckRunCommandFailThreshold.error;
+        switch (checkRunCommandFailThreshold) {
+            case warning:
+                if (warningIssuesCount > 0 && errorIssuesCount == 0 && fatalIssuesCount == 0) {
+                    return 1;
+                }
+                // move to the next level...
+
+            case error:
+                if (errorIssuesCount > 0 && fatalIssuesCount == 0) {
+                    return 2;
+                }
+                // move to the next level...
+
+            case fatal:
+                if (fatalIssuesCount > 0) {
+                    return 3;
+                }
+                // move to the next level...
+
+            default:
+                return 0;
+        }
     }
 }

@@ -18,6 +18,8 @@ package ai.dqo.utils.python;
 import ai.dqo.BaseTest;
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
+import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
+import ai.dqo.core.configuration.DqoPythonConfigurationPropertiesObjectMother;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderInput;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderOutput;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderParameters;
@@ -35,20 +37,15 @@ public class PythonCallerServiceImplTests extends BaseTest {
     private PythonCallerServiceImpl sut;
     private DqoConfigurationProperties configurationProperties;
     private PythonVirtualEnvService pythonVirtualEnvService;
+    private DqoPythonConfigurationProperties pythonConfigurationProperties;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.configurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
 		this.pythonVirtualEnvService = PythonVirtualEnvServiceObjectMother.getDefault();
-		this.sut = new PythonCallerServiceImpl(configurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
+        this.pythonConfigurationProperties = DqoPythonConfigurationPropertiesObjectMother.getDefaultCloned();
+        this.sut = new PythonCallerServiceImpl(configurationProperties, pythonConfigurationProperties,
+                new JsonSerializerImpl(), pythonVirtualEnvService);
     }
 
     @Test
@@ -56,7 +53,7 @@ public class PythonCallerServiceImplTests extends BaseTest {
         JinjaTemplateRenderInput inputDto = new JinjaTemplateRenderInput();
         inputDto.setTemplateText("sample template content");
         inputDto.setParameters(new JinjaTemplateRenderParameters());
-        String pythonModulePath = this.configurationProperties.getPython().getEvaluateTemplatesModule();
+        String pythonModulePath = this.pythonConfigurationProperties.getEvaluateTemplatesModule();
 
         JinjaTemplateRenderOutput output =
 				this.sut.executePythonHomeScript(inputDto, pythonModulePath, JinjaTemplateRenderOutput.class);
@@ -67,7 +64,7 @@ public class PythonCallerServiceImplTests extends BaseTest {
 
     @Test
     void executePythonHomeScript_whenTemplateEvaluationPythonCalledTwice_thenIsExecuted() {
-        String pythonModulePath = this.configurationProperties.getPython().getEvaluateTemplatesModule();
+        String pythonModulePath = this.pythonConfigurationProperties.getEvaluateTemplatesModule();
 
         JinjaTemplateRenderInput inputDto1 = new JinjaTemplateRenderInput();
         inputDto1.setTemplateText("sample template content");
@@ -101,7 +98,7 @@ public class PythonCallerServiceImplTests extends BaseTest {
         List<JinjaTemplateRenderInput> inputs = new ArrayList<JinjaTemplateRenderInput>();
         inputs.add(inputDto1);
         inputs.add(inputDto2);
-        String pythonModulePath = this.configurationProperties.getPython().getEvaluateTemplatesModule();
+        String pythonModulePath = this.pythonConfigurationProperties.getEvaluateTemplatesModule();
 
         List<JinjaTemplateRenderOutput> outputs =
 				this.sut.executePythonHomeScriptAndFinish(inputs, pythonModulePath, JinjaTemplateRenderOutput.class);

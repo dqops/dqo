@@ -16,8 +16,8 @@
 package ai.dqo.metadata.userhome;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.table.consistency.BuiltInTableConsistencyChecksSpec;
-import ai.dqo.checks.table.consistency.TableConsistencyRowCountCheckSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.sources.*;
 import org.junit.jupiter.api.Assertions;
@@ -29,16 +29,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class UserHomeImplTests extends BaseTest {
     private UserHomeImpl sut;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new UserHomeImpl();
     }
 
@@ -60,10 +52,10 @@ public class UserHomeImplTests extends BaseTest {
         ConnectionWrapper connectionWrapper = this.sut.getConnections().createAndAddNew("src");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
-        BuiltInTableConsistencyChecksSpec consistency = new BuiltInTableConsistencyChecksSpec();
-        tableSpec.getChecks().setConsistency(consistency);
-        TableConsistencyRowCountCheckSpec check = new TableConsistencyRowCountCheckSpec();
-        consistency.setRowCount(check);
+        TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
+        tableSpec.getProfilingChecks().setStandard(standard);
+        TableRowCountCheckSpec check = new TableRowCountCheckSpec();
+        standard.setRowCount(check);
 
         ConnectionWrapper result = this.sut.findConnectionFor(check.getHierarchyId());
         Assertions.assertNotNull(result);
@@ -75,10 +67,10 @@ public class UserHomeImplTests extends BaseTest {
         ConnectionWrapper connectionWrapper = this.sut.getConnections().createAndAddNew("src");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
-        BuiltInTableConsistencyChecksSpec consistency = new BuiltInTableConsistencyChecksSpec();
-        tableSpec.getChecks().setConsistency(consistency);
-        TableConsistencyRowCountCheckSpec check = new TableConsistencyRowCountCheckSpec();
-        consistency.setRowCount(check);
+        TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
+        tableSpec.getProfilingChecks().setStandard(standard);
+        TableRowCountCheckSpec check = new TableRowCountCheckSpec();
+        standard.setRowCount(check);
 
         TableWrapper result = this.sut.findTableFor(check.getHierarchyId());
         Assertions.assertNotNull(result);
@@ -90,10 +82,10 @@ public class UserHomeImplTests extends BaseTest {
         ConnectionWrapper connectionWrapper = this.sut.getConnections().createAndAddNew("src");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
-        BuiltInTableConsistencyChecksSpec consistency = new BuiltInTableConsistencyChecksSpec();
-        tableSpec.getChecks().setConsistency(consistency);
-        TableConsistencyRowCountCheckSpec check = new TableConsistencyRowCountCheckSpec();
-        consistency.setRowCount(check);
+        TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
+        tableSpec.getProfilingChecks().setStandard(standard);
+        TableRowCountCheckSpec check = new TableRowCountCheckSpec();
+        standard.setRowCount(check);
 
         ColumnSpec result = this.sut.findColumnFor(check.getHierarchyId());
         Assertions.assertNull(result);

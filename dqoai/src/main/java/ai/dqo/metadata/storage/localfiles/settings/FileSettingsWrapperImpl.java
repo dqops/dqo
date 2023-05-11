@@ -15,13 +15,13 @@
  */
 package ai.dqo.metadata.storage.localfiles.settings;
 
+import ai.dqo.core.filesystem.localfiles.LocalFileSystemException;
 import ai.dqo.core.filesystem.virtual.FileContent;
 import ai.dqo.core.filesystem.virtual.FileTreeNode;
 import ai.dqo.core.filesystem.virtual.FolderTreeNode;
-import ai.dqo.core.filesystem.localfiles.LocalFileSystemException;
 import ai.dqo.metadata.basespecs.InstanceStatus;
-import ai.dqo.metadata.sources.SettingsSpec;
-import ai.dqo.metadata.sources.SettingsWrapperImpl;
+import ai.dqo.metadata.settings.SettingsSpec;
+import ai.dqo.metadata.settings.SettingsWrapperImpl;
 import ai.dqo.metadata.storage.localfiles.SpecFileNames;
 import ai.dqo.metadata.storage.localfiles.SpecificationKind;
 import ai.dqo.utils.serialization.YamlSerializer;

@@ -17,13 +17,15 @@ package ai.dqo.metadata.traversal;
 
 import ai.dqo.metadata.id.HierarchyNode;
 
+import java.util.List;
+
 /**
  * Object returned as a result of a tree traversal. Decides how to continue the tree traversal, but it can also point
  * a single child node to visit.
  */
 public final class TreeNodeTraversalResult {
     private final TreeTraverseAction action;
-    private final HierarchyNode selectedChild;
+    private final List<HierarchyNode> selectedChildren;
 
     /**
      * Continue visiting tree nodes by traversing (visiting) all child hierarchy nodes.
@@ -46,7 +48,7 @@ public final class TreeNodeTraversalResult {
      */
     private TreeNodeTraversalResult(TreeTraverseAction action) {
         this.action = action;
-		this.selectedChild = null;
+		this.selectedChildren = null;
     }
 
     /**
@@ -54,19 +56,19 @@ public final class TreeNodeTraversalResult {
      * @param action Action to remember, should be TRAVERSE_ONE_CHILD.
      * @param selectedChild Selected child node.
      */
-    private TreeNodeTraversalResult(TreeTraverseAction action, HierarchyNode selectedChild) {
-        assert selectedChild != null && action == TreeTraverseAction.TRAVERSE_ONE_CHILD;
+    private TreeNodeTraversalResult(TreeTraverseAction action, HierarchyNode... selectedChild) {
+        assert selectedChild != null && action == TreeTraverseAction.TRAVERSE_SELECTED_CHILDREN;
         this.action = action;
-        this.selectedChild = selectedChild;
+        this.selectedChildren = List.of(selectedChild);
     }
 
     /**
      * Creates a tree traversal result that points a single child node that should be traversed.
-     * @param childNode Selected child node.
+     * @param childNodes Selected child node.
      * @return Tree traversal result with a single child node.
      */
-    public static TreeNodeTraversalResult traverseChildNode(HierarchyNode childNode) {
-        return new TreeNodeTraversalResult(TreeTraverseAction.TRAVERSE_ONE_CHILD, childNode);
+    public static TreeNodeTraversalResult traverseSelectedChildNodes(HierarchyNode... childNodes) {
+        return new TreeNodeTraversalResult(TreeTraverseAction.TRAVERSE_SELECTED_CHILDREN, childNodes);
     }
 
     /**
@@ -78,10 +80,10 @@ public final class TreeNodeTraversalResult {
     }
 
     /**
-     * Selected child node to traverse when a TRAVERSE_ONE_CHILD was selected.
+     * Selected child node to traverse when a TRAVERSE_SELECTED_CHILDREN was selected.
      * @return Child node to jump to, skipping sibling nodes.
      */
-    public HierarchyNode getSelectedChild() {
-        return selectedChild;
+    public List<HierarchyNode> getSelectedChildren() {
+        return selectedChildren;
     }
 }

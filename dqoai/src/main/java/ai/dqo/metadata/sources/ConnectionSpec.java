@@ -15,19 +15,22 @@
  */
 package ai.dqo.metadata.sources;
 
+import ai.dqo.connectors.ConnectionProviderSpecificParameters;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
+import ai.dqo.connectors.mysql.MysqlParametersSpec;
+import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
+import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
+import ai.dqo.connectors.sqlserver.SqlServerParametersSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
-import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.metadata.id.HierarchyId;
-import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.id.*;
+import ai.dqo.metadata.incidents.IncidentGroupingSpec;
+import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -35,67 +38,83 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import picocli.CommandLine;
 
-import java.time.ZoneId;
-import java.util.LinkedHashMap;
 import java.util.Objects;
 
 /**
- * Connection specification.
+ * Data source (connection) specification.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class ConnectionSpec extends AbstractSpec implements Cloneable {
+public class ConnectionSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<ConnectionSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("comments", o -> o.comments);
-			put("default_time_series", o -> o.defaultTimeSeries);
-			put("default_dimensions", o -> o.defaultDimensions);
+			put("default_data_stream_mapping", o -> o.defaultDataStreamMapping);
 			put("bigquery", o -> o.bigquery);
 			put("snowflake", o -> o.snowflake);
+            put("postgresql", o -> o.postgresql);
+            put("redshift", o -> o.redshift);
+            put("sqlserver", o -> o.sqlserver);
+            put("mysql", o -> o.mysql);
+            put("labels", o -> o.labels);
+            put("schedules", o -> o.schedules);
+            put("incident_grouping", o -> o.incidentGrouping);
         }
     };
-
-    @JsonPropertyDescription("Database name (for those sources that have a database/schema/table separation).")
-    private String databaseName;
 
     @JsonPropertyDescription("Database provider type (required). Accepts: bigquery, snowflake.")
     private ProviderType providerType;
 
-    @JsonPropertyDescription("JDBC driver url (overrides custom configuration for the provider and uses a hardcoded JDBC url).")
-    private String url;
-
-    @JsonPropertyDescription("Database user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
-    private String user;
-
-    @JsonPropertyDescription("Database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
-    private String password;
-
+    @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("BigQuery connection parameters. Specify parameters in the bigquery section.")
     private BigQueryParametersSpec bigquery;
 
+    @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).")
     private SnowflakeParametersSpec snowflake;
 
-    @JsonPropertyDescription("Timezone name for the time period timestamps. This should be the timezone of the monitored database. Use valid Java ZoneId name, the list of possible timezones is listed as 'TZ database name' on https://en.wikipedia.org/wiki/List_of_tz_database_time_zones")
-    private String timeZone = "UTC";
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the Snowflake JDBC url).")
+    private PostgresqlParametersSpec postgresql;
 
-    @JsonPropertyDescription("Default time series source configuration for all tables. Chooses the source for the time series for all tables. The configuration may be overridden on table, column and check levels. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Redshift JDBC url).")
+    private RedshiftParametersSpec redshift;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("SQL Server connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).")
+    private SqlServerParametersSpec sqlserver;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("MySQL connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).")
+    private MysqlParametersSpec mysql;
+
+    @JsonPropertyDescription("The concurrency limit for the maximum number of parallel executions of checks on this connection.")
+    private Integer parallelRunsLimit;
+
+    @JsonPropertyDescription("Default data streams configuration for all tables. The configuration may be overridden on table, column and check level. Data streams are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TimeSeriesConfigurationSpec defaultTimeSeries;
+    private DataStreamMappingSpec defaultDataStreamMapping;
 
-    @JsonPropertyDescription("Default data quality dimensions configuration for all tables. The configuration may be overridden on table, column and check level. Dimensions are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
+    @JsonPropertyDescription("Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.")
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DimensionsConfigurationSpec defaultDimensions;
+    private RecurringSchedulesSpec schedules;
+
+    @JsonPropertyDescription("Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.")
+    @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private IncidentGroupingSpec incidentGrouping = new IncidentGroupingSpec();
 
     @JsonPropertyDescription("Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).")
     @ToString.Exclude
@@ -103,13 +122,10 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CommentsListSpec comments;
 
+    @JsonPropertyDescription("Custom labels that were assigned to the connection. Labels are used for searching for tables when filtered data quality checks are executed.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, String> properties = new LinkedHashMap<>();
-
-    @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private LinkedHashMap<String, String> originalProperties = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private LabelSetSpec labels;
 
     /**
      * Default constructor.
@@ -123,23 +139,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
      */
     public ConnectionSpec(ProviderType providerType) {
         this.providerType = providerType;
-    }
-
-    /**
-     * Returns a physical database name.
-     * @return Physical database name.
-     */
-    public String getDatabaseName() {
-        return databaseName;
-    }
-
-    /**
-     * Sets a physical database name.
-     * @param databaseName Physical database name.
-     */
-    public void setDatabaseName(String databaseName) {
-		setDirtyIf(!Objects.equals(this.databaseName, databaseName));
-        this.databaseName = databaseName;
     }
 
     /**
@@ -157,63 +156,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     public void setProviderType(ProviderType providerType) {
 		setDirtyIf(!Objects.equals(this.providerType, providerType));
         this.providerType = providerType;
-    }
-
-    /**
-     * Returns a JDBC database connection url.
-     * @return JDBC database connection url.
-     */
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     * Sets a JDBC database connection url.
-     * @param url JDBC connection url.
-     */
-    public void setUrl(String url) {
-		setDirtyIf(!Objects.equals(this.url, url));
-        this.url = url;
-    }
-
-    /**
-     * Returns the user that is used to log in to the data source (JDBC user or similar).
-     * @return User name.
-     */
-    public String getUser() {
-        return user;
-    }
-
-    /**
-     * Sets a user name.
-     * @param user User name.
-     */
-    public void setUser(String user) {
-		setDirtyIf(!Objects.equals(this.user, user));
-        this.user = user;
-    }
-
-    /**
-     * Returns a password used to authenticate to the server.
-     * @return Password.
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Sets a password that is used to connect to the database.
-     * @param password Password.
-     */
-    public void setPassword(String password) {
-        // TODO: support storing passwords in a credentials file,
-        // we can support a special format like "$secret"
-        // which means that the password must be stored locally or taken from an env variable $secret,
-        // the format could be a name of an ENV variable or a variable in .credentials folder,
-        // we can also support notation @filename which could be used for special files like private keys (GCP),
-        // those files would be stored in the .credentials folder only
-		setDirtyIf(!Objects.equals(this.password, password));
-        this.password = password;
     }
 
     /**
@@ -253,64 +195,127 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Get the target database timezone name. Should match one of available {@link java.time.ZoneId} time zone.
-     * @return Time zone name.
+     * Returns the connection parameters for PostgreSQL.
+     * @return PostgreSQL connection parameters.
      */
-    public String getTimeZone() {
-        return timeZone;
+    public PostgresqlParametersSpec getPostgresql() {
+        return postgresql;
     }
 
     /**
-     * Sets a time zone name. Zone names are not validated on set.
-     * @param timeZone Time zone name.
+     * Sets the PostgreSQL connection parameters.
+     * @param postgresql New PostgreSQL connection parameters.
      */
-    public void setTimeZone(String timeZone) {
-		setDirtyIf(!Objects.equals(this.timeZone, timeZone));
-        this.timeZone = timeZone;
+    public void setPostgresql(PostgresqlParametersSpec postgresql) {
+        setDirtyIf(!Objects.equals(this.postgresql, postgresql));
+        this.postgresql = postgresql;
+        propagateHierarchyIdToField(postgresql, "postgresql");
+    }
+    /**
+     * Returns the connection parameters for Redshift.
+     * @return Redshift connection parameters.
+     */
+    public RedshiftParametersSpec getRedshift() {
+        return redshift;
     }
 
     /**
-     * Parses the time zone. Returns a Java zoneId. Returns UTC if the time zone name is invalid.
-     * @return Time zone object with the zone rules.
+     * Sets the Redshift connection parameters.
+     * @param redshift New Redshift connection parameters.
      */
-    @JsonIgnore
-    public ZoneId getJavaTimeZoneId() {
-        if (Strings.isNullOrEmpty(this.timeZone)) {
-            return ZoneId.of("UTC");
-        }
-
-        try {
-            ZoneId zoneId = ZoneId.of(this.timeZone);
-            return zoneId;
-        }
-        catch (Exception ex) {
-            try {
-                ZoneId zoneIdShort = ZoneId.of(this.timeZone, ZoneId.SHORT_IDS);
-                return zoneIdShort;
-            }
-            catch (Exception ex2) {
-            }
-        }
-
-        return ZoneId.of("UTC");
+    public void setRedshift(RedshiftParametersSpec redshift) {
+        setDirtyIf(!Objects.equals(this.redshift, redshift));
+        this.redshift = redshift;
+        propagateHierarchyIdToField(redshift, "redshift");
     }
 
     /**
-     * Returns a key/value map of additional provider specific properties.
-     * @return Key/value dictionary of additional properties.
+     * Returns the connection parameters for SQL Server.
+     * @return SQL Server connection parameters.
      */
-    public LinkedHashMap<String, String> getProperties() {
-        return properties;
+    public SqlServerParametersSpec getSqlserver() {
+        return sqlserver;
     }
 
     /**
-     * Sets a dictionary of additional connection parameters.
-     * @param properties Key/value dictionary with extra parameters.
+     * Sets the SQL Server connection parameters.
+     * @param sqlserver New SQL Server connection parameters.
      */
-    public void setProperties(LinkedHashMap<String, String> properties) {
-		setDirtyIf(!Objects.equals(this.properties, properties));
-        this.properties = properties;
-		this.originalProperties = (LinkedHashMap<String, String>) properties.clone();
+    public void setSqlserver(SqlServerParametersSpec sqlserver) {
+        setDirtyIf(!Objects.equals(this.sqlserver, sqlserver));
+        this.sqlserver = sqlserver;
+        propagateHierarchyIdToField(sqlserver, "sqlserver");
+    }
+
+    /**
+     * Returns the connection parameters for MySQL.
+     * @return MySQL connection parameters.
+     */
+    public MysqlParametersSpec getMysql() {
+        return mysql;
+    }
+
+    /**
+     * Sets the MySQL connection parameters.
+     * @param mysql New MySQL connection parameters.
+     */
+    public void setMysql(MysqlParametersSpec mysql) {
+        setDirtyIf(!Objects.equals(this.mysql, mysql));
+        this.mysql = mysql;
+        propagateHierarchyIdToField(mysql, "mysql");
+    }
+
+    /**
+     * Returns the configuration of schedules for each type of check.
+     * @return Configuration of schedules for each type of checks.
+     */
+    public RecurringSchedulesSpec getSchedules() {
+        return schedules;
+    }
+
+    /**
+     * Sets the configuration of schedules for running each type of checks.
+     * @param schedules Configuration of schedules.
+     */
+    public void setSchedules(RecurringSchedulesSpec schedules) {
+        setDirtyIf(!Objects.equals(this.schedules, schedules));
+        this.schedules = schedules;
+        propagateHierarchyIdToField(schedules, "schedules");
+    }
+
+    /**
+     * Returns the limit of parallel data quality checks that could be started at the same time on the connection.
+     * @return Concurrency limit (number of parallel jobs) that are executing checks or null when no limits are enforced.
+     */
+    public Integer getParallelRunsLimit() {
+        return parallelRunsLimit;
+    }
+
+    /**
+     * Sets the concurrency limit of the number of checks that can run in parallel on this connection.
+     * @param parallelRunsLimit New concurrency limit or null when no limit is applied.
+     */
+    public void setParallelRunsLimit(Integer parallelRunsLimit) {
+        this.setDirtyIf(!Objects.equals(this.parallelRunsLimit, parallelRunsLimit));
+        this.parallelRunsLimit = parallelRunsLimit;
+    }
+
+    /**
+     * Returns the configuration of grouping failed data quality checks into data quality incidents.
+     * @return Grouping of failed data quality checks into incidents.
+     */
+    public IncidentGroupingSpec getIncidentGrouping() {
+        return incidentGrouping;
+    }
+
+    /**
+     * Sets the configuration of data quality issued into incidents.
+     * @param incidentGrouping New configuration of data quality issue grouping into incidents.
+     */
+    public void setIncidentGrouping(IncidentGroupingSpec incidentGrouping) {
+        setDirtyIf(!Objects.equals(this.incidentGrouping, incidentGrouping));
+        this.incidentGrouping = incidentGrouping;
+        propagateHierarchyIdToField(incidentGrouping, "incident_grouping");
     }
 
     /**
@@ -332,59 +337,39 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns the time series configuration for all tables on the connection.
-     * @return Time series configuration.
+     * Returns the default data streams configuration for all tables on the connection.
+     * @return Default data streams configuration.
      */
-    public TimeSeriesConfigurationSpec getDefaultTimeSeries() {
-        return defaultTimeSeries;
+    public DataStreamMappingSpec getDefaultDataStreamMapping() {
+        return defaultDataStreamMapping;
     }
 
     /**
-     * Sets a new time series configuration for all tables on the connection.
-     * @param defaultTimeSeries New time series configuration.
+     * Returns the default data streams configuration for all tables on this connection.
+     * @param defaultDataStreamMapping Data streams configuration.
      */
-    public void setDefaultTimeSeries(TimeSeriesConfigurationSpec defaultTimeSeries) {
-		setDirtyIf(!Objects.equals(this.defaultTimeSeries, defaultTimeSeries));
-        this.defaultTimeSeries = defaultTimeSeries;
-		propagateHierarchyIdToField(defaultTimeSeries, "default_time_series");
+    public void setDefaultDataStreamMapping(DataStreamMappingSpec defaultDataStreamMapping) {
+		setDirtyIf(!Objects.equals(this.defaultDataStreamMapping, defaultDataStreamMapping));
+        this.defaultDataStreamMapping = defaultDataStreamMapping;
+		propagateHierarchyIdToField(defaultDataStreamMapping, "default_data_stream_mapping");
     }
 
     /**
-     * Returns the data quality measure dimensions configuration for all tables on the connection.
-     * @return Dimension configuration.
+     * List of labels assigned to a table. Labels are used for targeting the execution of tests.
+     * @return Labels collection.
      */
-    public DimensionsConfigurationSpec getDefaultDimensions() {
-        return defaultDimensions;
+    public LabelSetSpec getLabels() {
+        return labels;
     }
 
     /**
-     * Returns the dimension configuration for all tables on this connection.
-     * @param defaultDimensions Dimension configuration.
+     * Changes a list of labels.
+     * @param labels Labels collection.
      */
-    public void setDefaultDimensions(DimensionsConfigurationSpec defaultDimensions) {
-		setDirtyIf(!Objects.equals(this.defaultDimensions, defaultDimensions));
-        this.defaultDimensions = defaultDimensions;
-		propagateHierarchyIdToField(defaultDimensions, "default_dimensions");
-    }
-
-    /**
-     * Check if the object is dirty (has changes).
-     *
-     * @return True when the object is dirty and has modifications.
-     */
-    @Override
-    public boolean isDirty() {
-        return super.isDirty() || !Objects.equals(this.properties, this.originalProperties);
-    }
-
-    /**
-     * Clears the dirty flag (sets the dirty to false). Called after flushing or when changes should be considered as unimportant.
-     * @param propagateToChildren When true, clears also the dirty status of child objects.
-     */
-    @Override
-    public void clearDirty(boolean propagateToChildren) {
-        super.clearDirty(propagateToChildren);
-		this.originalProperties = (LinkedHashMap<String, String>) this.properties.clone();
+    public void setLabels(LabelSetSpec labels) {
+        setDirtyIf(!Objects.equals(this.labels, labels));
+        this.labels = labels;
+        propagateHierarchyIdToField(labels, "labels");
     }
 
     /**
@@ -402,7 +387,6 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
@@ -413,39 +397,9 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a deep copy of this object.
      */
     @Override
-    public ConnectionSpec clone() {
-        try {
-            ConnectionSpec cloned = (ConnectionSpec)super.clone();
-            if (cloned.bigquery != null) {
-                cloned.bigquery = cloned.bigquery.clone();
-            }
-            if (cloned.snowflake != null) {
-                cloned.snowflake = cloned.snowflake.clone();
-            }
-            if (cloned.defaultDimensions != null) {
-                cloned.defaultDimensions = cloned.defaultDimensions.clone();
-            }
-            if (cloned.defaultTimeSeries != null) {
-                cloned.defaultTimeSeries = cloned.defaultTimeSeries.clone();
-            }
-            if (cloned.comments != null) {
-                cloned.comments = cloned.comments.clone();
-            }
-            if (cloned.comments != null) {
-                cloned.comments = cloned.comments.clone();
-            }
-            if (cloned.properties != null) {
-                cloned.properties = (LinkedHashMap<String, String>) cloned.properties.clone();
-            }
-            if (cloned.originalProperties != null) {
-                cloned.originalProperties = (LinkedHashMap<String, String>) cloned.originalProperties.clone();
-            }
-
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned", ex);
-        }
+    public ConnectionSpec deepClone() {
+        ConnectionSpec cloned = (ConnectionSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -455,16 +409,8 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     public ConnectionSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         try {
             ConnectionSpec cloned = (ConnectionSpec) super.clone();
-            cloned.databaseName = secretValueProvider.expandValue(cloned.databaseName);
-            cloned.url = secretValueProvider.expandValue(cloned.url);
-            cloned.user = secretValueProvider.expandValue(cloned.user);
-            cloned.password = secretValueProvider.expandValue(cloned.password);
-            cloned.properties = secretValueProvider.expandProperties(cloned.properties);
-            if (cloned.defaultTimeSeries != null) {
-                cloned.defaultTimeSeries = cloned.defaultTimeSeries.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.defaultDimensions != null) {
-                cloned.defaultDimensions = cloned.defaultDimensions.expandAndTrim(secretValueProvider);
+            if (cloned.defaultDataStreamMapping != null) {
+                cloned.defaultDataStreamMapping = cloned.defaultDataStreamMapping.expandAndTrim(secretValueProvider);
             }
             if (cloned.bigquery != null) {
                 cloned.bigquery = cloned.bigquery.expandAndTrim(secretValueProvider);
@@ -472,8 +418,20 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             if (cloned.snowflake != null) {
                 cloned.snowflake = cloned.snowflake.expandAndTrim(secretValueProvider);
             }
+            if (cloned.postgresql != null) {
+                cloned.postgresql = cloned.postgresql.expandAndTrim(secretValueProvider);
+            }
+            if (cloned.redshift != null) {
+                cloned.redshift = cloned.redshift.expandAndTrim(secretValueProvider);
+            }
+            if (cloned.sqlserver != null) {
+                cloned.sqlserver = cloned.sqlserver.expandAndTrim(secretValueProvider);
+            }
+            if (cloned.incidentGrouping != null) {
+                cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider);
+            }
             cloned.comments = null;
-            cloned.originalProperties = null;
+            cloned.schedules = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -489,10 +447,10 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
     public ConnectionSpec trim() {
         try {
             ConnectionSpec cloned = (ConnectionSpec) super.clone();
-            cloned.defaultTimeSeries = null;
-            cloned.defaultDimensions = null;
+            cloned.defaultDataStreamMapping = null;
             cloned.comments = null;
-            cloned.originalProperties = null;
+            cloned.schedules = null;
+            cloned.incidentGrouping = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -511,5 +469,22 @@ public class ConnectionSpec extends AbstractSpec implements Cloneable {
             return null;
         }
         return hierarchyId.get(hierarchyId.size() - 2).toString();
+    }
+
+    /**
+     * Returns the provider specific configuration object. Takes the name of the provider and returns the child object of that name (postgresql, snowflake, bigquery).
+     * @return Provider specific configuration.
+     */
+    @JsonIgnore
+    public ConnectionProviderSpecificParameters getProviderSpecificConfiguration() {
+        if (this.providerType == null) {
+            throw new DqoRuntimeException("Missing provider type in the connection");
+        }
+
+        HierarchyNode providerConfigChild = this.getChild(this.providerType.name());
+        ConnectionProviderSpecificParameters providerConfiguration =
+                (ConnectionProviderSpecificParameters) providerConfigChild;
+
+        return providerConfiguration;
     }
 }

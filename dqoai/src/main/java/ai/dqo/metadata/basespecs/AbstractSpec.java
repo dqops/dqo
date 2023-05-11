@@ -15,26 +15,58 @@
  */
 package ai.dqo.metadata.basespecs;
 
+import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.id.*;
+import ai.dqo.utils.reflection.ClassInfo;
+import ai.dqo.utils.reflection.FieldInfo;
+import ai.dqo.utils.reflection.ReflectionService;
+import ai.dqo.utils.reflection.ReflectionServiceSingleton;
+import ai.dqo.utils.serialization.DeserializationAware;
 import ai.dqo.utils.serialization.YamlNotRenderWhenDefault;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rits.cloning.Cloner;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import java.util.*;
 
 /**
  * Base class for all spec classes in the tree. Provides basic dirty checking.
  */
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements HierarchyNode, YamlNotRenderWhenDefault {
+public abstract class AbstractSpec extends BaseDirtyTrackingSpec
+        implements HierarchyNode, YamlNotRenderWhenDefault, DeserializationAware, Cloneable {
     /**
      * Default empty field map.
      */
     public static final ChildHierarchyNodeFieldMapImpl<AbstractSpec> FIELDS = (ChildHierarchyNodeFieldMapImpl<AbstractSpec>) ChildHierarchyNodeFieldMap.empty();
 
+    /**
+     * Node hierarchy id that identifies the node within the node tree.
+     */
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private HierarchyId hierarchyId;
+
+    /**
+     * Set to true when the object was created as a result of deserialization from YAML.
+     * We can detect that the object was not simply created by a constructor, but was created by jackson.
+     */
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private boolean wasDeserialized;
+
+    /**
+     * Collection of ignored properties that were present in the YAML specification file, but were not present on the node.
+     * The user has added invalid properties. We only want to know the names of these properties for validation purposes.
+     */
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Map<String, Object> additionalProperties;
 
     /**
      * Returns the hierarchy ID of this node.
@@ -53,9 +85,18 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements Hier
      */
     @Override
     public void setHierarchyId(HierarchyId hierarchyId) {
-        assert hierarchyId != null;
-        this.hierarchyId = hierarchyId;
-		propagateHierarchyIdToFields(hierarchyId);
+        if (!Objects.equals(this.hierarchyId, hierarchyId)) {
+            this.hierarchyId = hierarchyId;
+            propagateHierarchyIdToFields(hierarchyId);
+        }
+    }
+
+    /**
+     * Returns true if the object instance was created as a result of deserialization from YAML.
+     * @return True when this object instance was created by the jackson deserializer. False when it was created using the constructor.
+     */
+    public boolean isWasDeserialized() {
+        return wasDeserialized;
     }
 
     /**
@@ -82,9 +123,11 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements Hier
     @Override
     public HierarchyNode getChild(Object childName) {
         ChildHierarchyNodeFieldMap childFieldMap = this.getChildMap();
-        assert (childName.toString() != null) : "child name is null";
-        assert (childFieldMap.getFieldGetter(childName.toString()) != null) : "child name missing, verify that the field name in the field name is correct";
-        return childFieldMap.getFieldGetter(childName.toString()).apply(this);
+        GetHierarchyChildNodeFunc<HierarchyNode> child = childFieldMap.getFieldGetter(childName.toString());
+        if (child != null) {
+            return child.apply(this);
+        }
+        return null;
     }
 
     /**
@@ -92,7 +135,7 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements Hier
      * @param childNode Child node.
      * @param fieldName Field name.
      */
-    protected void propagateHierarchyIdToField(HierarchyNode childNode, String fieldName) {
+    protected void propagateHierarchyIdToField(HierarchyNode childNode, Object fieldName) {
         if (childNode == null || this.hierarchyId == null) {
             return;
         }
@@ -169,9 +212,185 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec implements Hier
                     return false;
                 }
             }
-            return false; // non default child found
+            else {
+                return false; // non default child found
+            }
+        }
+
+        ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
+        ClassInfo myClassInfo = reflectionService.getClassInfoForClass(this.getClass());
+
+        List<FieldInfo> fields = myClassInfo.getFields();
+        for (FieldInfo fieldInfo : fields) {
+            ParameterDataType dataType = fieldInfo.getDataType();
+            if (dataType == ParameterDataType.object_type) {
+                continue;
+            }
+
+            Object fieldValue = fieldInfo.getRawFieldValue(this);
+            Object defaultValue = fieldInfo.getDefaultValue();
+
+            if (!Objects.equals(fieldValue, defaultValue)) {
+                return false;
+            }
         }
 
         return true;
+    }
+
+    /**
+     * Copies non-null properties from <code>sourceObject</code> to the current instance.
+     * @param sourceObject Source object.
+     */
+    public void copyNotNullPropertiesFrom(AbstractSpec sourceObject) {
+        if (sourceObject == null) {
+            return;
+        }
+
+        ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
+        ClassInfo myClassInfo = reflectionService.getClassInfoForClass(this.getClass());
+
+        List<FieldInfo> fields = myClassInfo.getFields();
+        for (FieldInfo fieldInfo : fields) {
+            ParameterDataType dataType = fieldInfo.getDataType();
+            Object newValue = fieldInfo.getRawFieldValue(sourceObject);
+            Object currentValue = fieldInfo.getRawFieldValue(this);
+
+            if (newValue == null) {
+                continue;
+            }
+
+            if (dataType == ParameterDataType.object_type) {
+                if (newValue instanceof AbstractSpec) {
+                    if (currentValue == null) {
+                        fieldInfo.setRawFieldValue(newValue, this);
+                    }
+                    else {
+                        AbstractSpec currentObject = (AbstractSpec) currentValue;
+                        currentObject.copyNotNullPropertiesFrom((AbstractSpec) newValue);
+                    }
+                } else if (newValue instanceof Map) {
+                    if (currentValue == null) {
+                        fieldInfo.setRawFieldValue(newValue, this);
+                    } else {
+                        @SuppressWarnings("rawtypes") Map currentObjectMap = (Map) currentValue;
+                        //noinspection rawtypes
+                        currentObjectMap.putAll((Map)newValue);
+                    }
+                }
+            } else {
+                fieldInfo.setRawFieldValue(newValue, this);
+            }
+        }
+    }
+
+    /**
+     * Called after the object was deserialized from JSON or YAML.
+     */
+    @Override
+    public void onDeserialized() {
+        this.wasDeserialized = true;
+    }
+
+    /**
+     * Returns a dictionary of invalid properties that were present in the YAML specification file, but were not declared in the class.
+     * Returns null when all properties were valid.
+     * @return True when undefined properties were present in the YAML file that failed the deserialization. Null when all properties were valid (declared).
+     */
+    public Map<String, Object> getAdditionalProperties() {
+        return additionalProperties;
+    }
+
+    /**
+     * Sets a new dictionary of additional properties. It is used to store custom sensor and custom rule parameters.
+     * @param additionalProperties Dictionary of additional properties (fields that were not mapped to JSON).
+     */
+    public void setAdditionalProperties(Map<String, Object> additionalProperties) {
+        this.setDirtyIf(!Objects.equals(this.additionalProperties, additionalProperties));
+        this.additionalProperties = additionalProperties;
+    }
+
+    /**
+     * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text.
+     * @param name Undeclared (and ignored) property name.
+     * @param value Property value.
+     */
+    @JsonAnySetter
+    public void handleUndeclaredProperty(String name, Object value) {
+        if (this.additionalProperties == null) {
+            this.additionalProperties = new LinkedHashMap<>();
+        }
+        this.additionalProperties.put(name, value);
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public AbstractSpec deepClone() {
+        try {
+            AbstractSpec cloned = (AbstractSpec) super.clone();
+            if (this.additionalProperties != null) {
+                Cloner cloner = new Cloner();
+                cloned.additionalProperties = cloner.deepClone(this.additionalProperties);
+            }
+
+            ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
+            ClassInfo myClassInfo = reflectionService.getClassInfoForClass(this.getClass());
+
+            List<FieldInfo> fields = myClassInfo.getFields();
+            for (FieldInfo fieldInfo : fields) {
+                ParameterDataType dataType = fieldInfo.getDataType();
+                if (dataType != ParameterDataType.object_type) {
+                    continue; // we are not cloning basic types
+                }
+
+                Object currentValue = fieldInfo.getRawFieldValue(this);
+
+                if (currentValue == null) {
+                    continue;
+                }
+
+                if (currentValue instanceof HierarchyNode) {
+                    HierarchyNode hierarchyNode = (HierarchyNode)currentValue;
+                    HierarchyNode clonedChild = hierarchyNode.deepClone();
+                    fieldInfo.setRawFieldValue(clonedChild, cloned);
+                }
+                else if (currentValue instanceof Map){
+                    Map<?,?> clonedChild = cloneMap((Map<?,?>) currentValue);
+                    fieldInfo.setRawFieldValue(clonedChild, cloned);
+                }
+                else {
+                    throw new UnsupportedOperationException("Cannot clone object of type " + currentValue.getClass().getCanonicalName() +
+                            " on field: " + fieldInfo.getClassFieldName() + ", class: " + this.getClass().getCanonicalName());
+                }
+            }
+
+            cloned.clearDirty(false);
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new UnsupportedOperationException("Cannot clone the object ", ex);
+        }
+    }
+
+    /**
+     * Creates and returns a clone (copy) of Map object.
+     */
+    public Map<?,?> cloneMap(Map<?,?> originalMap) {
+
+        if (originalMap instanceof HashMap) {
+            HashMap<?, ?> sourceHashMap = (HashMap<?, ?>) originalMap;
+            return (HashMap<?, ?>) sourceHashMap.clone();
+        }
+        HashMap<?,?> sourceMap = new LinkedHashMap<>();
+
+        for (Map.Entry<?,?> keyValuePair : originalMap.entrySet()) {
+            Object key = keyValuePair.getKey();
+            Object value = keyValuePair.getValue();
+            Map<Object, Object> objectMap = (Map<Object, Object>) sourceMap;
+            objectMap.put(key, value);
+        }
+        return sourceMap;
     }
 }

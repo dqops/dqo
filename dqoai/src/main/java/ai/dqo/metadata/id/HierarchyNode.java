@@ -76,4 +76,10 @@ public interface HierarchyNode extends DirtyStatus {
      * @return Result value returned by an "accept" method of the visitor.
      */
     <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter);
+
+    /**
+     * Performs a deep clone of the hierarchy node object.
+     * @return Deep cloned object.
+     */
+    HierarchyNode deepClone();
 }

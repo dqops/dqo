@@ -15,19 +15,21 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.metadata.id.HierarchyNode;
+import ai.dqo.checks.*;
+import ai.dqo.checks.custom.CustomCheckSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import com.google.common.base.Strings;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Visitor for {@link CheckSearchFilters} that finds the correct nodes.
  */
-public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
+public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
     private final CheckSearchFilters filters;
 
     /**
@@ -42,11 +44,11 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a list of connections.
      *
      * @param connectionList List of connections.
-     * @param parameter      Target list where found hierarchy nodes should be added.
+     * @param parameter      Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionList connectionList, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ConnectionList connectionList, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -62,19 +64,23 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(connectionWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(connectionWrapper);
     }
 
     /**
      * Accepts a connection wrapper (lazy loader).
      *
      * @param connectionWrapper Connection wrapper.
-     * @param parameter         Target list where found hierarchy nodes should be added.
+     * @param parameter         Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
+
+        LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
+        labelsSearcherObject.setConnectionLabels(connectionWrapper.getSpec().getLabels());
+
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -90,11 +96,11 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a collection of tables inside a connection.
      *
      * @param tableList Table list.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableList tableList, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(TableList tableList, SearchParameterObject parameter) {
         String schemaTableName = this.filters.getSchemaTableName();
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -110,19 +116,20 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(tableWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(tableWrapper);
     }
 
     /**
      * Accepts a table wrapper (lazy loader).
      *
      * @param tableWrapper Table wrapper.
-     * @param parameter    Target list where found hierarchy nodes should be added.
+     * @param parameter    Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableWrapper tableWrapper, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
         String schemaTableName = this.filters.getSchemaTableName();
+
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -143,24 +150,19 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a table specification.
      *
      * @param tableSpec Table specification.
-     * @param parameter Target list where found hierarchy nodes should be added.
+     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableSpec tableSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(TableSpec tableSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
-        if (enabledFilter != null) {
-            if (enabledFilter && tableSpec.isDisabled()) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-            if (!enabledFilter && !tableSpec.isDisabled()) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
 
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-        }
+        LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
+        labelsSearcherObject.setTableLabels(tableSpec.getLabels());
+        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
+        dataStreamSearcherObject.setTableDataStreams(tableSpec.getDataStreams());
 
-        if (tableSpec.isDisabled()) {
+        if (tableSpec.isDisabled() && (enabledFilter == null || enabledFilter)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
@@ -171,11 +173,18 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a column collection (map).
      *
      * @param columnSpecMap Column collection.
-     * @param parameter     Target list where found hierarchy nodes should be added.
+     * @param parameter     Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, SearchParameterObject parameter) {
+        // TODO: The HierarchyTree structure doesn't allow for similar filtering when filters.checkTarget == column.
+        //       Both table and column-level checks will be included.
+        //       We need to think it through and implement changes.
+        if (this.filters.getCheckTarget() == CheckTarget.table) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN; // column checks don't concern us
+        }
+
         String columnNameFilter = this.filters.getColumnName();
         if (Strings.isNullOrEmpty(columnNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -191,26 +200,36 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
 
-        return TreeNodeTraversalResult.traverseChildNode(columnSpec);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(columnSpec);
     }
 
     /**
      * Accepts a column specification.
      *
      * @param columnSpec Column specification.
-     * @param parameter  Target list where found hierarchy nodes should be added.
+     * @param parameter  Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnSpec columnSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
-        if (enabledFilter != null) {
-            if (enabledFilter && columnSpec.isDisabled()) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-            if (!enabledFilter && !columnSpec.isDisabled()) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
+
+        LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
+        labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
+
+        if (columnSpec.isDisabled() && (enabledFilter == null || enabledFilter)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        if (this.filters.getColumnDataType() != null
+                && !this.filters.getColumnDataType().equals(columnSpec.getTypeSnapshot().getColumnType())) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        Boolean columnIsNullable = columnSpec.getTypeSnapshot() == null ? null : columnSpec.getTypeSnapshot().getNullable();
+        if (this.filters.getColumnNullable() != null
+                && (columnIsNullable == null || this.filters.getColumnNullable() ^ columnIsNullable)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
         if (columnSpec.isDisabled()) {
@@ -234,26 +253,47 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts any check specification.
      *
      * @param abstractCheckSpec Data quality check specification (any).
-     * @param matchingNodes     Target list where found hierarchy nodes should be added.
+     * @param parameter     Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec abstractCheckSpec, List<HierarchyNode> matchingNodes) {
+    public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> abstractCheckSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
-        AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getSensorParameters();
-        boolean sensorEnabled = sensorParameters != null && !sensorParameters.isDisabled();
-        if (enabledFilter != null) {
-            if (enabledFilter && !sensorEnabled) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-            if (!enabledFilter && sensorEnabled) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-        }
 
-        if (!sensorEnabled) {
+        DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
+        LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
+
+        AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getParameters();
+        boolean checkEnabled = !abstractCheckSpec.isDisabled();
+        if ((enabledFilter != null && (checkEnabled ^ enabledFilter))
+                || (enabledFilter == null && !checkEnabled)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
+
+        DataStreamMappingSpec selectedDataStream =
+                abstractCheckSpec.getDataStream() != null && dataStreamSearcherObject.getTableDataStreams() != null ?
+                        dataStreamSearcherObject.getTableDataStreams().get(abstractCheckSpec.getDataStream()) : null;
+        LabelSetSpec overriddenLabels = new LabelSetSpec();
+
+        if (labelsSearcherObject.getColumnLabels() != null) {
+            overriddenLabels.addAll(labelsSearcherObject.getColumnLabels());
+        }
+
+        if (labelsSearcherObject.getTableLabels() != null) {
+            overriddenLabels.addAll(labelsSearcherObject.getTableLabels());
+        }
+
+        if (labelsSearcherObject.getConnectionLabels() != null) {
+            overriddenLabels.addAll(labelsSearcherObject.getConnectionLabels());
+        }
+
+        if (!DataStreamsTagsSearchMatcher.matchAllCheckDataStreamsMapping(this.filters, selectedDataStream)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+        if (!LabelsSearchMatcher.matchCheckLabels(this.filters, overriddenLabels)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
 
         String checkNameFilter = this.filters.getCheckName();
         if (!Strings.isNullOrEmpty(checkNameFilter)) {
@@ -268,16 +308,82 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor {
             if (sensorParameters == null) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN; // sensor is not configured (has no parameters, we don't know what to run)
             }
-            String sensorDefinitionName = sensorParameters.getSensorDefinitionName();
-            String sensorEntryName = sensorParameters.getHierarchyId().getLast().toString();
-            if (!StringPatternComparer.matchSearchPattern(sensorDefinitionName, sensorNameFilter) &&
-                    !StringPatternComparer.matchSearchPattern(sensorEntryName, sensorNameFilter)) {
+
+            String sensorDefinitionName;
+
+            if (abstractCheckSpec instanceof CustomCheckSpec) {
+                CustomCheckSpec customCheckSpec = (CustomCheckSpec) abstractCheckSpec;
+                sensorDefinitionName = customCheckSpec.getSensorName(); // we can filter by a sensor name only for custom checks that have an explicitly given a sensor name, user defined custom checks cannot be filtered this way
+            }
+            else {
+                sensorDefinitionName = sensorParameters.getSensorDefinitionName();
+            }
+
+            if (!StringPatternComparer.matchSearchPattern(sensorDefinitionName, sensorNameFilter)) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
         }
 
-        matchingNodes.add(abstractCheckSpec);
+        Set<HierarchyId> checkHierarchyIds = this.filters.getCheckHierarchyIds();
+        if (checkHierarchyIds != null) {
+            if (!checkHierarchyIds.contains(abstractCheckSpec.getHierarchyId())) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
+        parameter.getNodes().add(abstractCheckSpec);
 
         return TreeNodeTraversalResult.SKIP_CHILDREN; // no need to search any deeper, we have found what we were looking for
+    }
+
+    /**
+     * Accepts a container of categories of data quality checks.
+     *
+     * @param checksContainerSpec Container of data quality checks that has nested categories (and categories contain checks).
+     * @param parameter           Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractRootChecksContainerSpec checksContainerSpec, SearchParameterObject parameter) {
+        CheckType checkTypeFilter = this.filters.getCheckType();
+        if (checkTypeFilter != null) {
+            if (checksContainerSpec.getCheckType() != checkTypeFilter) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
+        CheckTimeScale checkTimeScaleFilter = this.filters.getTimeScale();
+        if (checkTimeScaleFilter != null) {
+            if (checksContainerSpec.getCheckTimeScale() != checkTimeScaleFilter) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
+        CheckTarget checkTarget = this.filters.getColumnName() == null ? null : CheckTarget.column;
+        if (checkTarget != null && checkTarget != checksContainerSpec.getCheckTarget()) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        return super.accept(checksContainerSpec, parameter);
+    }
+
+    /**
+     * Accepts a container of data quality checks for a single category.
+     *
+     * @param abstractCheckCategorySpec Container of data quality checks for a single category.
+     * @param parameter                 Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(AbstractCheckCategorySpec abstractCheckCategorySpec, SearchParameterObject parameter) {
+        String checkCategoryFilter = this.filters.getCheckCategory();
+        if (!Strings.isNullOrEmpty(checkCategoryFilter)) {
+            String categoryName = abstractCheckCategorySpec.getHierarchyId().getLast().toString();
+            if (!StringPatternComparer.matchSearchPattern(categoryName, checkCategoryFilter)) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
+
+        return super.accept(abstractCheckCategorySpec, parameter);
     }
 }

@@ -27,10 +27,8 @@ import java.util.LinkedHashMap;
 public class RuleDefinitionSpecTests extends BaseTest {
     private RuleDefinitionSpec sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new RuleDefinitionSpec();
     }
 
@@ -38,8 +36,8 @@ public class RuleDefinitionSpecTests extends BaseTest {
     void isDirty_whenParamsSet_thenIsDirtyIsTrue() {
         LinkedHashMap hashMap = new LinkedHashMap<String, String>();
         hashMap.put("test", "test");
-		this.sut.setParams(hashMap);
-        Assertions.assertEquals(hashMap, this.sut.getParams());
+		this.sut.setParameters(hashMap);
+        Assertions.assertEquals(hashMap, this.sut.getParameters());
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
@@ -49,11 +47,11 @@ public class RuleDefinitionSpecTests extends BaseTest {
     void isDirty_whenParamsObjectSameAsCurrentSet_thenIsDirtyIsFalse() {
         LinkedHashMap hashMap = new LinkedHashMap<String, String>();
         hashMap.put("test", "test");
-		this.sut.setParams(hashMap);
+		this.sut.setParameters(hashMap);
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setParams(hashMap);
+		this.sut.setParameters(hashMap);
         Assertions.assertFalse(this.sut.isDirty());
     }
 }

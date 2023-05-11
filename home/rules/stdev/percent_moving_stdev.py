@@ -1,18 +1,18 @@
 #
-# Licensed to the Apache Software Foundation (ASF) under one or more
-# contributor license agreements.  See the NOTICE file distributed with
-# this work for additional information regarding copyright ownership.
-# The ASF licenses this file to You under the Apache License, Version 2.0
-# (the "License"); you may not use this file except in compliance with
-# the License.  You may obtain a copy of the License at
+# Copyright © 2021 DQO.ai (support@dqo.ai)
 #
-#    http://www.apache.org/licenses/LICENSE-2.0
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+#
 
 from datetime import datetime
 from typing import Sequence
@@ -29,12 +29,12 @@ class HistoricDataPoint:
     timestamp_utc: datetime
     local_datetime: datetime
     back_periods_index: int
-    sensor_reading: float
+    sensor_readout: float
 
 
 class RuleTimeWindowSettingsSpec:
     prediction_time_window: int
-    min_periods_with_reading: int
+    min_periods_with_readout: int
 
 
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
@@ -42,7 +42,7 @@ class RuleExecutionRunParameters:
     actual_value: float
     parameters: PercentMovingStdRuleParametersSpec
     time_period_local: datetime
-    previous_readings: Sequence[HistoricDataPoint]
+    previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
 
 
@@ -63,21 +63,26 @@ class RuleExecutionResult:
 
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    filtered = [readings.sensor_reading for readings in rule_parameters.previous_readings if readings is not None]
+    if not hasattr(rule_parameters,'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
     filtered_std = float(scipy.stats.tstd(filtered))
     filtered_mean = float(scipy.mean(filtered))
 
-    if rule_parameters.parameters.multiple_stdev_above != None:
-        threshold_upper = filtered_mean + rule_parameters.parameters.multiple_stdev_above * filtered_std
-    else:
-        threshold_upper = None
 
-    if rule_parameters.parameters.multiple_stdev_below != None:
-        threshold_lower = filtered_mean - rule_parameters.parameters.multiple_stdev_below * filtered_std
-    else:
-        threshold_lower = None
+    threshold_upper = filtered_mean + rule_parameters.parameters.multiple_stdev_above * filtered_std
 
-    passed = (threshold_lower <= rule_parameters.actual_value and rule_parameters.actual_value <= threshold_upper)
+    threshold_lower = filtered_mean - rule_parameters.parameters.multiple_stdev_below * filtered_std
+
+    if rule_parameters.parameters.multiple_stdev_above != None and rule_parameters.parameters.multiple_stdev_below != None:
+        passed = (threshold_lower <= rule_parameters.actual_value and rule_parameters.actual_value <= threshold_upper)
+    elif rule_parameters.parameters.multiple_stdev_above != None and threshold_lower == None:
+        passed = (rule_parameters.actual_value <= threshold_upper)
+    elif threshold_upper == None and rule_parameters.parameters.multiple_stdev_below != None:
+        passed = (threshold_lower <= rule_parameters.actual_value)
+
+
 
     expected_value = filtered_mean
     lower_bound = threshold_lower

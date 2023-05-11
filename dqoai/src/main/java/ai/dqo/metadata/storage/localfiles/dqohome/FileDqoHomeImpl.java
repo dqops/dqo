@@ -18,6 +18,8 @@ package ai.dqo.metadata.storage.localfiles.dqohome;
 import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.filesystem.virtual.FolderTreeNode;
 import ai.dqo.metadata.dqohome.DqoHomeImpl;
+import ai.dqo.metadata.storage.localfiles.checkdefinitions.FileCheckDefinitionListImpl;
+import ai.dqo.metadata.storage.localfiles.dashboards.FileDashboardFolderListSpecWrapperImpl;
 import ai.dqo.metadata.storage.localfiles.ruledefinitions.FileRuleDefinitionListImpl;
 import ai.dqo.metadata.storage.localfiles.sensordefinitions.FileSensorDefinitionListImpl;
 import ai.dqo.utils.serialization.YamlSerializer;
@@ -32,8 +34,12 @@ public class FileDqoHomeImpl extends DqoHomeImpl {
     @JsonIgnore
     private final DqoHomeContext dqoHomeContext;
 
-    public FileDqoHomeImpl(FileSensorDefinitionListImpl sensors, FileRuleDefinitionListImpl customRules, DqoHomeContext dqoHomeContext) {
-        super(sensors, customRules);
+    public FileDqoHomeImpl(FileSensorDefinitionListImpl sensors,
+                           FileRuleDefinitionListImpl rules,
+                           FileCheckDefinitionListImpl checks,
+                           FileDashboardFolderListSpecWrapperImpl dashboards,
+                           DqoHomeContext dqoHomeContext) {
+        super(sensors, rules, checks, dashboards);
         this.dqoHomeContext = dqoHomeContext;
 		this.homeFolder = dqoHomeContext.getHomeRoot(); // just a convenience
     }
@@ -46,9 +52,14 @@ public class FileDqoHomeImpl extends DqoHomeImpl {
     public static FileDqoHomeImpl create(DqoHomeContext dqoHomeContext, YamlSerializer yamlSerializer) {
         FolderTreeNode sensorsFolder = dqoHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.SENSORS);
         FolderTreeNode rulesFolder = dqoHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.RULES);
+        FolderTreeNode checksFolder = dqoHomeContext.getHomeRoot().getOrAddDirectFolder(BuiltInFolderNames.CHECKS);
+        FolderTreeNode dashboardsFolder = dqoHomeContext.getHomeRoot();
         FileSensorDefinitionListImpl sensors = new FileSensorDefinitionListImpl(sensorsFolder, yamlSerializer);
         FileRuleDefinitionListImpl rules = new FileRuleDefinitionListImpl(rulesFolder, yamlSerializer);
-        return new FileDqoHomeImpl(sensors, rules, dqoHomeContext);
+        FileCheckDefinitionListImpl checks = new FileCheckDefinitionListImpl(checksFolder, yamlSerializer);
+        FileDashboardFolderListSpecWrapperImpl dashboards = new FileDashboardFolderListSpecWrapperImpl(dashboardsFolder, yamlSerializer);
+
+        return new FileDqoHomeImpl(sensors, rules, checks, dashboards, dqoHomeContext);
     }
 
     /**

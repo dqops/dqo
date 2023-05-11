@@ -19,6 +19,7 @@ import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.connectors.bigquery.BigQueryConnectionPool;
 import ai.dqo.connectors.bigquery.BigQueryConnectionPoolImpl;
 import ai.dqo.connectors.bigquery.BigQueryConnectionSpecObjectMother;
+import ai.dqo.connectors.bigquery.BigQueryInternalConnection;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.utils.BeanFactoryObjectMother;
 import com.google.cloud.bigquery.BigQuery;
@@ -32,16 +33,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class BigQueryConnectionPoolImplIntegrationTests extends BaseBigQueryIntegrationTest {
     private BigQueryConnectionPoolImpl sut;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
         BeanFactory beanFactory = BeanFactoryObjectMother.getBeanFactory();
 		this.sut = (BigQueryConnectionPoolImpl) beanFactory.getBean(BigQueryConnectionPool.class);
     }
@@ -49,23 +42,37 @@ public class BigQueryConnectionPoolImplIntegrationTests extends BaseBigQueryInte
     @Test
     void getBigQueryService_whenCalledOnce_thenReturnsConnection() {
         ConnectionSpec connectionSpec = BigQueryConnectionSpecObjectMother.create();
-        BigQuery bigQueryService = this.sut.getBigQueryService(connectionSpec);
+        BigQueryInternalConnection bigQueryInternalConnection = this.sut.getBigQueryService(connectionSpec);
+        BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
         Assertions.assertNotNull(bigQueryService);
     }
 
     @Test
     void getBigQueryService_whenCalledAgain_thenReturnsTheSameInstance() {
         ConnectionSpec connectionSpec = BigQueryConnectionSpecObjectMother.create();
-        BigQuery bigQueryService = this.sut.getBigQueryService(connectionSpec);
+        BigQueryInternalConnection bigQueryInternalConnection = this.sut.getBigQueryService(connectionSpec);
+        BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
         Assertions.assertNotNull(bigQueryService);
-        Assertions.assertSame(bigQueryService, this.sut.getBigQueryService(connectionSpec));
+        Assertions.assertSame(bigQueryService, this.sut.getBigQueryService(connectionSpec).getBigQueryClient());
     }
 
     @Test
     void getBigQueryService_whenCalledWithQuotaProject_thenReturnsConnection() {
         ConnectionSpec connectionSpec = BigQueryConnectionSpecObjectMother.create();
         connectionSpec.getBigquery().setQuotaProjectId(connectionSpec.getBigquery().getSourceProjectId());
-        BigQuery bigQueryService = this.sut.getBigQueryService(connectionSpec);
+        BigQueryInternalConnection bigQueryInternalConnection = this.sut.getBigQueryService(connectionSpec);
+        BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
+        Assertions.assertNull(connectionSpec.getBigquery().getSourceProjectId(), connectionSpec.getBigquery().getSourceProjectId());
+        Assertions.assertNotNull(bigQueryService);
+    }
+
+    @Test
+    void getBigQueryService_whenCalledWithBillingProject_thenReturnsConnection() {
+        ConnectionSpec connectionSpec = BigQueryConnectionSpecObjectMother.create();
+        connectionSpec.getBigquery().setBillingProjectId(connectionSpec.getBigquery().getSourceProjectId());
+        BigQueryInternalConnection bigQueryInternalConnection = this.sut.getBigQueryService(connectionSpec);
+        BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
+        Assertions.assertNull(connectionSpec.getBigquery().getSourceProjectId(), connectionSpec.getBigquery().getSourceProjectId());
         Assertions.assertNotNull(bigQueryService);
     }
 }

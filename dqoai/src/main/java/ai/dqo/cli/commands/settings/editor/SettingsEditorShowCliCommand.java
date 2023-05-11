@@ -16,12 +16,13 @@
 package ai.dqo.cli.commands.settings.editor;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.settings.impl.SettingsService;
-import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -30,12 +31,15 @@ import picocli.CommandLine;
  * Cli command to show a editor name from settings.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "show", description = "Show editor settings")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "show", header = "Show editor settings", description = "Display the current editor settings.")
 public class SettingsEditorShowCliCommand extends BaseCommand implements ICommand {
-	private final SettingsService settingsService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private SettingsService settingsService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public SettingsEditorShowCliCommand() {
+	}
 
 	@Autowired
 	public SettingsEditorShowCliCommand(SettingsService settingsService,

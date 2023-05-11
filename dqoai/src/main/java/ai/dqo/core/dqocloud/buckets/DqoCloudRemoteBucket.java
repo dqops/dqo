@@ -15,7 +15,7 @@
  */
 package ai.dqo.core.dqocloud.buckets;
 
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import com.google.cloud.storage.Storage;
 
 /**
@@ -42,7 +42,7 @@ public class DqoCloudRemoteBucket {
     }
 
     /**
-     * Returns the bucket type (readings, alerts, etc.)
+     * Returns the bucket type (sensor readouts, rule results, etc.)
      * @return Bucket type.
      */
     public DqoRoot getRootType() {

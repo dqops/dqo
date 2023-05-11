@@ -42,15 +42,16 @@ public class BigQuerySqlRunner {
      */
     public Table executeQuery(BigQuerySourceConnection connection, String sql) {
         try {
-            BigQuerySourceConnection bgConn = connection;
-            String projectId = connection.getConnectionSpec().getDatabaseName();
+            BigQueryInternalConnection bigQueryInternalConnection = connection.getBigQueryInternalConnection();
+
+            String jobProjectId = bigQueryInternalConnection.getBillingProjectId();
             QueryJobConfiguration queryJobConfiguration = QueryJobConfiguration.newBuilder(sql).build();
             JobId.Builder jobBuilder = JobId.newBuilder();
-            if (!Strings.isNullOrEmpty(projectId)) {
-                jobBuilder = jobBuilder.setProject(projectId);
+            if (!Strings.isNullOrEmpty(jobProjectId)) {
+                jobBuilder = jobBuilder.setProject(jobProjectId);
             }
             JobId jobId = jobBuilder.build();
-            BigQuery bigQueryService = connection.getBigQueryService();
+            BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
 
             TableResult tableResult = bigQueryService.query(queryJobConfiguration, jobId);
             Schema tableSchema = tableResult.getSchema();
@@ -82,7 +83,6 @@ public class BigQuerySqlRunner {
                             row.setDouble(colIndex, fieldValue.getDoubleValue());
                             break;
                         case NUMERIC:
-                            row.setDouble(colIndex, fieldValue.getNumericValue().doubleValue());
                         case BIGNUMERIC:
                             row.setDouble(colIndex, fieldValue.getNumericValue().doubleValue());
                             break;
@@ -127,6 +127,33 @@ public class BigQuerySqlRunner {
     }
 
     /**
+     * Executes an SQL statement that does not return results (DML or DDL).
+     * @param connection Connection object.
+     * @param sql SQL string to execute.
+     * @return Number of rows affected.
+     */
+    public long executeStatement(BigQuerySourceConnection connection, String sql) {
+        try {
+            BigQueryInternalConnection bigQueryInternalConnection = connection.getBigQueryInternalConnection();
+
+            String jobProjectId = bigQueryInternalConnection.getBillingProjectId();
+            QueryJobConfiguration queryJobConfiguration = QueryJobConfiguration.newBuilder(sql).build();
+            JobId.Builder jobBuilder = JobId.newBuilder();
+            if (!Strings.isNullOrEmpty(jobProjectId)) {
+                jobBuilder = jobBuilder.setProject(jobProjectId);
+            }
+            JobId jobId = jobBuilder.build();
+            BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
+
+            TableResult tableResult = bigQueryService.query(queryJobConfiguration, jobId);
+            return tableResult.getTotalRows();
+        }
+        catch (Exception ex) {
+            throw new ConnectionQueryException(String.format("Failed to execute query: %s, error: %s", sql, ex.getMessage()), ex);
+        }
+    }
+
+    /**
      * Creates a list of columns for a bigquery result schema.
      * @param tableSchema Table schema.
      * @return List of columns.
@@ -150,8 +177,6 @@ public class BigQuerySqlRunner {
                     columns.add(tech.tablesaw.api.DoubleColumn.create(field.getName()));
                     break;
                 case STRING:
-                    columns.add(tech.tablesaw.api.StringColumn.create(field.getName()));
-                    break;
                 case BYTES:
                 case STRUCT:
                 case ARRAY:

@@ -23,6 +23,10 @@ public class ColumnSearchFilters {
     private String schemaTableName;
     private String columnName;
     private Boolean enabled = true;
+    private String columnDataType;
+    private Boolean nullable;
+    private String[] tags;
+    private String[] labels;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -81,7 +85,7 @@ public class ColumnSearchFilters {
     }
 
     /**
-     * Sets the enabled search criteria. null - search is ignored on the enabled/disabled flags,
+     * Gets the enabled search criteria. null - search is ignored on the enabled/disabled flags,
      * true - only enabled (not explicitly disabled) nodes are returned (disabled connection or table stops search for nested elements),
      * false - only nodes that are disabled are returned.
      * @return Enabled search flag.
@@ -97,4 +101,69 @@ public class ColumnSearchFilters {
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
+
+    /**
+     * Gets the searched column datatype.
+     * @return Column datatype name.
+     */
+    public String getColumnDataType() {
+        return columnDataType;
+    }
+
+    /**
+     * Sets the desired column datatype.
+     * @param columnDataType New datatype to be sought after.
+     */
+    public void setColumnDataType(String columnDataType) {
+        this.columnDataType = columnDataType;
+    }
+
+    /**
+     * Gets the column nullable flag.
+     * @return Column nullable flag.
+     */
+    public Boolean getNullable() {
+        return nullable;
+    }
+
+    /**
+     * Sets the column nullable flag.
+     * @param nullable New column nullable flag.
+     */
+    public void setNullable(Boolean nullable) {
+        this.nullable = nullable;
+    }
+
+    /**
+     * Returns the dimension name search patterns.
+     * @return Dimension search patterns.
+     */
+    public String[] getTags() {
+        return tags;
+    }
+
+    /**
+     * Sets the dimension search patterns.
+     * @param tags dimension search patterns.
+     */
+    public void setTags(String[] tags) {
+        this.tags = tags;
+    }
+
+    /**
+     * Returns the label search patterns.
+     * @return Label search patterns.
+     */
+    public String[] getLabels() {
+        return labels;
+    }
+
+    /**
+     * Sets the label search patterns.
+     * @param labels label search patterns.
+     */
+    public void setLabels(String[] labels) {
+        this.labels = labels;
+    }
+
 }

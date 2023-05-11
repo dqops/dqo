@@ -43,8 +43,7 @@ public class DqoHomeContextObjectMother {
      * @return Local dqo home context.
      */
     public static DqoHomeContext getRealDqoHomeContext() {
-        BeanFactory beanFactory = BeanFactoryObjectMother.getBeanFactory();
-        DqoHomeContextFactory dqoHomeContextFactory = beanFactory.getBean(DqoHomeContextFactory.class);
+        DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
         return dqoHomeContextFactory.openLocalDqoHome();
     }
 }

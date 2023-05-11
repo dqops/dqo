@@ -21,13 +21,12 @@ import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 /**
  * List of comments.
  */
-public class CommentsListSpec extends AbstractDirtyTrackingSpecList<CommentSpec> implements Cloneable {
+public class CommentsListSpec extends AbstractDirtyTrackingSpecList<CommentSpec> {
     /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
@@ -38,20 +37,17 @@ public class CommentsListSpec extends AbstractDirtyTrackingSpecList<CommentSpec>
      * Creates and returns a copy of this object.
      */
     @Override
-    public CommentsListSpec clone() {
+    public CommentsListSpec deepClone() {
         CommentsListSpec cloned = new CommentsListSpec();
         if (this.getHierarchyId() != null) {
             cloned.setHierarchyId(cloned.getHierarchyId().clone());
         }
 
         for (CommentSpec comment : this) {
-            cloned.add(comment.clone());
+            cloned.add(comment.deepClone());
         }
 
-        if (!this.isDirty()) {
-            cloned.clearDirty(false);
-        }
-
+        cloned.clearDirty(false);
         return cloned;
     }
 }

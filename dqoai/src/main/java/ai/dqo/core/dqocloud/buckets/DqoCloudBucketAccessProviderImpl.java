@@ -15,12 +15,11 @@
  */
 package ai.dqo.core.dqocloud.buckets;
 
-import ai.dqo.cloud.rest.model.TenantAccessTokenModel;
+import ai.dqo.core.dqocloud.accesskey.DqoCloudAccessTokenCache;
+import ai.dqo.core.dqocloud.accesskey.DqoCloudCredentials;
 import ai.dqo.core.dqocloud.accesskey.DqoCloudCredentialsException;
-import ai.dqo.core.dqocloud.accesskey.DqoCloudCredentialsProvider;
 import ai.dqo.core.dqocloud.accesskey.DqoCloudOAuth2BucketRWRefreshHandler;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
-import com.google.auth.oauth2.AccessToken;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import com.google.auth.oauth2.OAuth2CredentialsWithRefresh;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
@@ -32,31 +31,30 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DqoCloudBucketAccessProviderImpl implements DqoCloudBucketAccessProvider {
-    private DqoCloudCredentialsProvider dqoCloudCredentialsProvider;
+    private DqoCloudAccessTokenCache accessTokenCache;
 
     /**
      * Default injection constructor.
-     * @param dqoCloudCredentialsProvider DQO Cloud credentials provider.
+     * @param accessTokenCache DQO Cloud credentials provider (access token provider).
      */
     @Autowired
-    public DqoCloudBucketAccessProviderImpl(DqoCloudCredentialsProvider dqoCloudCredentialsProvider) {
-        this.dqoCloudCredentialsProvider = dqoCloudCredentialsProvider;
+    public DqoCloudBucketAccessProviderImpl(DqoCloudAccessTokenCache accessTokenCache) {
+        this.accessTokenCache = accessTokenCache;
     }
 
     /**
      * Creates a configured Google storage client to access a tenant' folder in a DQO Cloud bucket.
-     * @param rootType Bucket type (readings, alerts, etc.)
+     * @param rootType Bucket type (sensor readouts, rule results, etc.)
      * @return Configured bucket access with a {@link Storage} client to access the data with downscoped credentials.
      */
     public DqoCloudRemoteBucket getRemoteBucketClientRW(DqoRoot rootType) {
         try {
-            TenantAccessTokenModel initialAccessToken = this.dqoCloudCredentialsProvider.issueTenantAccessToken(rootType);
-            DqoCloudOAuth2BucketRWRefreshHandler refreshHandler = new DqoCloudOAuth2BucketRWRefreshHandler(rootType, this.dqoCloudCredentialsProvider);
-            AccessToken tenantAccessToken = this.dqoCloudCredentialsProvider.createAccessToken(initialAccessToken);
+            DqoCloudOAuth2BucketRWRefreshHandler refreshHandler = new DqoCloudOAuth2BucketRWRefreshHandler(rootType, this.accessTokenCache);
+            DqoCloudCredentials dqoCloudCredentials = this.accessTokenCache.getCredentials(rootType);
 
             OAuth2CredentialsWithRefresh credentials =
                     OAuth2CredentialsWithRefresh.newBuilder()
-                            .setAccessToken(tenantAccessToken)
+                            .setAccessToken(dqoCloudCredentials.getAccessToken())
                             .setRefreshHandler(refreshHandler)
                             .build();
 
@@ -66,8 +64,8 @@ public class DqoCloudBucketAccessProviderImpl implements DqoCloudBucketAccessPro
             Storage storage = options.getService();
 
             DqoCloudRemoteBucket dqoCloudRemoteBucket = new DqoCloudRemoteBucket(rootType,
-                    initialAccessToken.getBucketName(),
-                    initialAccessToken.getBucketPathPrefix(),
+                    dqoCloudCredentials.getTenantAccessTokenModel().getBucketName(),
+                    dqoCloudCredentials.getTenantAccessTokenModel().getBucketPathPrefix(),
                     storage);
 
             return dqoCloudRemoteBucket;

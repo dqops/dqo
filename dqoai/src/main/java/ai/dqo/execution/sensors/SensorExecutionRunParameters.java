@@ -15,14 +15,17 @@
  */
 package ai.dqo.execution.sensors;
 
+import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.execution.checks.EffectiveSensorRuleNames;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -30,7 +33,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
-import java.time.ZoneId;
 
 /**
  * Sensor execution parameter object that contains all objects required to run the sensor.
@@ -42,24 +44,32 @@ public class SensorExecutionRunParameters {
     private ConnectionSpec connection;
     private TableSpec table;
     private ColumnSpec column; // may be null
-    private HierarchyId checkHierarchyId;
+    private CheckType checkType;
+    @JsonIgnore
+    private AbstractCheckSpec<?,?,?,?> check;
+    @JsonIgnore
+    private AbstractStatisticsCollectorSpec<?> profiler;
+    private EffectiveSensorRuleNames effectiveSensorRuleNames;
     private TimeSeriesConfigurationSpec timeSeries;
-    private DimensionsConfigurationSpec dimensions;
+    private TimeWindowFilterParameters timeWindowFilter;
+    private DataStreamMappingSpec dataStreams;
     private AbstractSensorParametersSpec sensorParameters;
     private ProviderDialectSettings dialectSettings;
     @JsonIgnore
     private Instant startedAt = Instant.now();
-    @JsonIgnore
-    private ZoneId connectionTimeZoneId;
 
     /**
      * Creates a sensor run parameters object with all objects required to run a sensor.
      * @param connection Connection specification.
      * @param table Table specification.
      * @param column Column specification.
-     * @param checkHierarchyId Check hierarchy id to identify the check.
+     * @param check Check specification (when a quality check is executed).
+     * @param profiler Profiler specification (when a profiler is executed).
+     * @param effectiveSensorRuleNames A pair of effective sensor names and rule names. The sensor name and rule name are retrieved from the check definition (for custom checks) or from the sensor parameters and rule parameters for built-in checks.
+     * @param checkType Check type (profiling, recurring, partitioned).
      * @param timeSeries Effective time series configuration.
-     * @param dimensions Effective dimensions configuration.
+     * @param timeWindowFilter Time window filter (optional), configures the absolute time range of data to analyze and/or the time window (recent days/months) for incremental partition checks.
+     * @param dataStreams Effective data streams configuration.
      * @param sensorParameters Sensor parameters.
      * @param dialectSettings Dialect settings.
      */
@@ -67,20 +77,27 @@ public class SensorExecutionRunParameters {
 			ConnectionSpec connection,
 			TableSpec table,
 			ColumnSpec column,
-			HierarchyId checkHierarchyId,
+			AbstractCheckSpec<?,?,?,?> check,
+            AbstractStatisticsCollectorSpec<?> profiler,
+            EffectiveSensorRuleNames effectiveSensorRuleNames,
+            CheckType checkType,
             TimeSeriesConfigurationSpec timeSeries,
-            DimensionsConfigurationSpec dimensions,
+            TimeWindowFilterParameters timeWindowFilter,
+            DataStreamMappingSpec dataStreams,
 			AbstractSensorParametersSpec sensorParameters,
 			ProviderDialectSettings dialectSettings) {
         this.connection = connection;
         this.table = table;
         this.column = column;
-        this.checkHierarchyId = checkHierarchyId;
+        this.check = check;
+        this.profiler = profiler;
+        this.effectiveSensorRuleNames = effectiveSensorRuleNames;
+        this.checkType = checkType;
         this.timeSeries = timeSeries;
-        this.dimensions = dimensions;
+        this.timeWindowFilter = timeWindowFilter;
+        this.dataStreams = dataStreams;
         this.sensorParameters = sensorParameters;
         this.dialectSettings = dialectSettings;
-        this.connectionTimeZoneId = connection.getJavaTimeZoneId();
     }
 
     /**
@@ -132,19 +149,67 @@ public class SensorExecutionRunParameters {
     }
 
     /**
-     * Check hierarchy id to identify the check.
-     * @return Check id.
+     * Returns the data quality check specification.
+     * @return Data quality check specification.
      */
-    public HierarchyId getCheckHierarchyId() {
-        return checkHierarchyId;
+    public AbstractCheckSpec<?,?,?,?> getCheck() {
+        return check;
     }
 
     /**
-     * Sets the check hierarchy id.
-     * @param checkHierarchyId Check hierarchy id.
+     * Sets the data quality check specification.
+     * @param check Check specification.
      */
-    public void setCheckHierarchyId(HierarchyId checkHierarchyId) {
-        this.checkHierarchyId = checkHierarchyId;
+    public void setCheck(AbstractCheckSpec<?,?,?,?> check) {
+        this.check = check;
+    }
+
+    /**
+     * Returns the profiler instance that is executed.
+     * @return Profiler instance.
+     */
+    public AbstractStatisticsCollectorSpec<?> getProfiler() {
+        return profiler;
+    }
+
+    /**
+     * Sets the profiler instance.
+     * @param profiler Profiler instance.
+     */
+    public void setProfiler(AbstractStatisticsCollectorSpec<?> profiler) {
+        this.profiler = profiler;
+    }
+
+    /**
+     * Returns the effective sensor and rule names.
+     * @return Effective sensor and rule names.
+     */
+    public EffectiveSensorRuleNames getEffectiveSensorRuleNames() {
+        return effectiveSensorRuleNames;
+    }
+
+    /**
+     * Sets the object that contains the effective sensor and rule names.
+     * @param effectiveSensorRuleNames Effective sensor and rule names.
+     */
+    public void setEffectiveSensorRuleNames(EffectiveSensorRuleNames effectiveSensorRuleNames) {
+        this.effectiveSensorRuleNames = effectiveSensorRuleNames;
+    }
+
+    /**
+     * Returns the check type (profiling, recurring, partitioned).
+     * @return Check type.
+     */
+    public CheckType getCheckType() {
+        return checkType;
+    }
+
+    /**
+     * Sets the check type (profiling, recurring, partitioned).
+     * @param checkType Check type.
+     */
+    public void setCheckType(CheckType checkType) {
+        this.checkType = checkType;
     }
 
     /**
@@ -164,19 +229,35 @@ public class SensorExecutionRunParameters {
     }
 
     /**
-     * Returns the effective dimensions configuration.
-     * @return Effective dimensions configuration.
+     * Returns the time window filter when a date/time range filters were applied.
+     * @return Time window filter.
      */
-    public DimensionsConfigurationSpec getDimensions() {
-        return dimensions;
+    public TimeWindowFilterParameters getTimeWindowFilter() {
+        return timeWindowFilter;
     }
 
     /**
-     * Sets the effective time series configuration.
-     * @param dimensions Effective time series configuration.
+     * Sets a time window filter, when the time window filter was applied.
+     * @param timeWindowFilter Time window filter.
      */
-    public void setDimensions(DimensionsConfigurationSpec dimensions) {
-        this.dimensions = dimensions;
+    public void setTimeWindowFilter(TimeWindowFilterParameters timeWindowFilter) {
+        this.timeWindowFilter = timeWindowFilter;
+    }
+
+    /**
+     * Returns the effective data streams configuration.
+     * @return Effective data streams configuration.
+     */
+    public DataStreamMappingSpec getDataStreams() {
+        return dataStreams;
+    }
+
+    /**
+     * Sets the effective data streams configuration.
+     * @param dataStreams Effective data streams configuration.
+     */
+    public void setDataStreams(DataStreamMappingSpec dataStreams) {
+        this.dataStreams = dataStreams;
     }
 
     /**
@@ -226,47 +307,5 @@ public class SensorExecutionRunParameters {
      */
     public void setStartedAt(Instant startedAt) {
         this.startedAt = startedAt;
-    }
-
-    /**
-     * Java time zone for the connection. By default, it is a parsed time zone retrieved from the connection.
-     * @return Java time zone of the connection.
-     */
-    public ZoneId getConnectionTimeZoneId() {
-        return connectionTimeZoneId;
-    }
-
-    /**
-     * Sets the java time zone of the connection.
-     * @param connectionTimeZoneId Connection time zone.
-     */
-    public void setConnectionTimeZoneId(ZoneId connectionTimeZoneId) {
-        this.connectionTimeZoneId = connectionTimeZoneId;
-    }
-
-    /**
-     * Finds the effective time series configuration as it will be used by the sensor. The priority is: check/column/table/connection.
-     * @return Effective time series configuration or a default time series (current time, day granularity).
-     */
-    @JsonIgnore
-    @Deprecated
-    public TimeSeriesConfigurationSpec getEffectiveTimeSeries() {
-        if (this.timeSeries != null) {
-            return this.timeSeries;
-        }
-
-        if (this.column != null && this.column.getTimeSeriesOverride() != null) {
-            return this.column.getTimeSeriesOverride();
-        }
-
-        if (this.table != null && this.table.getTimeSeries() != null) {
-            return this.table.getTimeSeries();
-        }
-
-        if (this.connection != null && this.connection.getDefaultTimeSeries() != null) {
-            return this.connection.getDefaultTimeSeries();
-        }
-
-        return TimeSeriesConfigurationSpec.createDefault();
     }
 }

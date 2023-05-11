@@ -27,6 +27,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.blackbird.BlackbirdModule;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +37,7 @@ import java.nio.file.Path;
  * Yaml serializer and deserializer.
  */
 @Component
+@Slf4j
 public class YamlSerializerImpl implements YamlSerializer {
     private final ObjectMapper mapper;
     private final DqoConfigurationProperties configurationProperties;
@@ -56,13 +58,14 @@ public class YamlSerializerImpl implements YamlSerializer {
 		this.mapper.registerModule(new JavaTimeModule());
         this.mapper.registerModule(new Jdk8Module());
         this.mapper.registerModule(new BlackbirdModule());
+        this.mapper.registerModule(new DeserializationAwareModule());  // our custom module to notify objects that they were deserialized
+        this.mapper.registerModule(new LooseDeserializationModule());
         this.mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 		this.mapper.disable(SerializationFeature.WRITE_DURATIONS_AS_TIMESTAMPS);
 		this.mapper.disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
 
-        // Fail fast and reject invalid yamls, we have a validating reader
-		this.mapper.enable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
-		this.mapper.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		this.mapper.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
+		this.mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		this.mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
     }
 
@@ -137,7 +140,14 @@ public class YamlSerializerImpl implements YamlSerializer {
                 message += ", file path: " + filePathForMessage;
             }
 
-            throw new YamlSerializationException(message, e);
+            log.error("Failed to deserialize YAML, " + message, e);
+            try {
+                T emptyInstance = clazz.getDeclaredConstructor().newInstance();
+                return emptyInstance;
+            }
+            catch (Exception ex) {
+                throw new YamlSerializationException("Failed to instantiate a new object, because a YAML file was empty: " + message, e);
+            }
         }
     }
 }

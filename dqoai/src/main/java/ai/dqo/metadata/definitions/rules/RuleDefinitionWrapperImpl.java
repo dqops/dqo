@@ -108,10 +108,19 @@ public class RuleDefinitionWrapperImpl extends AbstractElementWrapper<String, Ru
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
+    }
+
+    /**
+     * Creates a deep clone of the object.
+     *
+     * @return Deeply cloned object.
+     */
+    @Override
+    public RuleDefinitionWrapper clone() {
+        return (RuleDefinitionWrapper) super.deepClone();
     }
 }

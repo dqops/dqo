@@ -15,6 +15,7 @@
  */
 package ai.dqo.cli.commands;
 
+import ai.dqo.cli.completion.completers.OutputFormatCompleter;
 import ai.dqo.cli.exceptions.CliRequiredParameterMissingException;
 import picocli.CommandLine;
 
@@ -25,14 +26,18 @@ public abstract class BaseCommand {
     /**
      * Default parameter to enable a headless (no user input allowed) mode. The default behavior of the command line is to prompt the user for all required parameters. When the --headless mode is enabled, user prompting is disabled and a lack of required parameter generates an error
      */
-    @CommandLine.Option(names = {"--headless", "-hl"}, description = "Run the command in an headless (no user input allowed) mode", required = false)
+    @CommandLine.Option(names = {"-hl", "--headless"}, description = "Run the command in an headless (no user input allowed) mode", required = false)
     private boolean headless;
 
     @CommandLine.Option(names = {"-h", "--help"}, description = "Show the help for the command and parameters", required = false, usageHelp = true)
     private boolean help;
 
-    @CommandLine.Option(names = {"-of", "--output-format"}, description = "Output format for tabular responses", required = false)
+    @CommandLine.Option(names = {"-of", "--output-format"}, description = "Output format for tabular responses", required = false,
+            completionCandidates = OutputFormatCompleter.class)
     private TabularOutputFormat outputFormat = TabularOutputFormat.TABLE;
+
+    @CommandLine.Option(names = {"-fw", "--file-write"}, description = "Write command response to a file", required = false)
+    private boolean writeToFile = false;
 
     /**
      * Throws a {@link CliRequiredParameterMissingException} exception because a <code>parameterName</code> is missing. Otherwise the method silently passes through
@@ -91,5 +96,21 @@ public abstract class BaseCommand {
      */
     public void setOutputFormat(TabularOutputFormat outputFormat) {
         this.outputFormat = outputFormat;
+    }
+
+    /**
+     * True when a cli command response will be written to a file.
+     * @return Write to file boolean value.
+     */
+    public boolean isWriteToFile() {
+        return writeToFile;
+    }
+
+    /**
+     * Sets the write to file parameter value.
+     * @param writeToFile Write to file parameter value.
+     */
+    public void setWriteToFile(boolean writeToFile) {
+        this.writeToFile = writeToFile;
     }
 }

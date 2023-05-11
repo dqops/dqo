@@ -16,6 +16,7 @@
 package ai.dqo.connectors.bigquery;
 
 import ai.dqo.connectors.*;
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ColumnTypeSnapshotSpec;
@@ -28,6 +29,7 @@ import com.google.cloud.bigquery.DatasetId;
 import com.google.cloud.bigquery.Table;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Row;
@@ -41,9 +43,9 @@ import java.util.Objects;
  * Big query connection.
  */
 @Component("bigquery-connection")
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
-    private BigQuery bigQueryService;
+    private BigQueryInternalConnection bigQueryService;
     private final BigQuerySqlRunner bigQuerySqlRunner;
     private final BigQueryConnectionPool bigQueryConnectionPool;
 
@@ -65,10 +67,10 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
     }
 
     /**
-     * Returns a big query service.
-     * @return Big query service.
+     * Returns a big query internal connection (BigQuery client).
+     * @return Big query internal connection.
      */
-    public BigQuery getBigQueryService() {
+    public BigQueryInternalConnection getBigQueryInternalConnection() {
         return bigQueryService;
     }
 
@@ -77,7 +79,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
      */
     @Override
     public void open() {
-		this.bigQueryService = this.bigQueryConnectionPool.getBigQueryService(this.getConnectionSpec());
+        this.bigQueryService = this.bigQueryConnectionPool.getBigQueryService(this.getConnectionSpec());
    }
 
     /**
@@ -92,11 +94,23 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
      * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
      *
      * @param sqlQueryStatement SQL statement that returns a row set.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
      * @return Tabular result captured from the query.
      */
     @Override
-    public tech.tablesaw.api.Table executeQuery(String sqlQueryStatement) {
+    public tech.tablesaw.api.Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken) {
         return this.bigQuerySqlRunner.executeQuery(this, sqlQueryStatement);
+    }
+
+    /**
+     * Executes a provider specific SQL that runs a command DML/DDL command.
+     *
+     * @param sqlStatement SQL DDL or DML statement.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
+     */
+    @Override
+    public long executeCommand(String sqlStatement, JobCancellationToken jobCancellationToken) {
+        return this.bigQuerySqlRunner.executeStatement(this, sqlStatement);
     }
 
     /**
@@ -110,11 +124,12 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
             List<SourceSchemaModel> schemas = new ArrayList<>();
             String projectId = this.getConnectionSpec().getBigquery().getSourceProjectId();
             Page<Dataset> datasetPage = null;
+            BigQuery bigQueryClient = this.bigQueryService.getBigQueryClient();
             if (Strings.isNullOrEmpty(projectId)) {
-                datasetPage = this.bigQueryService.listDatasets(BigQuery.DatasetListOption.all());
+                datasetPage = bigQueryClient.listDatasets(BigQuery.DatasetListOption.all());
             } else {
                 // only datasets in the given GCP project
-                datasetPage = this.bigQueryService.listDatasets(projectId, BigQuery.DatasetListOption.all());
+                datasetPage = bigQueryClient.listDatasets(projectId, BigQuery.DatasetListOption.all());
             }
 
             for( Dataset dataset : datasetPage.iterateAll() ) {
@@ -148,13 +163,15 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
             List<SourceTableModel> tables = new ArrayList<>();
             String projectId = this.getConnectionSpec().getBigquery().getSourceProjectId();
             Page<Table> tablePages = null;
+            BigQuery bigQueryClient = this.bigQueryService.getBigQueryClient();
+
             if (Strings.isNullOrEmpty(projectId)) {
                 DatasetId dataSetId = DatasetId.of(schemaName);
-                tablePages = this.bigQueryService.listTables(dataSetId, BigQuery.TableListOption.pageSize(1000));
+                tablePages = bigQueryClient.listTables(dataSetId, BigQuery.TableListOption.pageSize(1000));
             } else {
                 // only datasets in the given GCP project
                 DatasetId dataSetId = DatasetId.of(projectId, schemaName);
-                tablePages = this.bigQueryService.listTables(dataSetId, BigQuery.TableListOption.pageSize(1000));
+                tablePages = bigQueryClient.listTables(dataSetId, BigQuery.TableListOption.pageSize(1000));
             }
 
             for( Table table : tablePages.iterateAll()) {
@@ -201,8 +218,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
                 TableSpec tableSpec = tablesByTableName.get(physicalTableName);
                 if (tableSpec == null) {
                     tableSpec = new TableSpec();
-                    tableSpec.getTarget().setSchemaName(schemaName);
-                    tableSpec.getTarget().setTableName(physicalTableName);
+                    tableSpec.setPhysicalTableName(new PhysicalTableName(schemaName, physicalTableName));
                     tablesByTableName.put(physicalTableName, tableSpec);
                     tableSpecs.add(tableSpec);
                 }
@@ -236,7 +252,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
         sqlBuilder.append(dialectSettings.quoteIdentifier(schemaName));
         sqlBuilder.append(".INFORMATION_SCHEMA.COLUMNS ");
 
-        if (tableNames.size() > 0) {
+        if (tableNames != null && tableNames.size() > 0) {
             sqlBuilder.append("WHERE table_name IN (");
             for (int ti = 0; ti < tableNames.size(); ti++) {
                 String tableName = tableNames.get(ti);

@@ -16,10 +16,11 @@
 package ai.dqo.execution.sensors;
 
 import ai.dqo.connectors.ProviderType;
-import ai.dqo.execution.CheckExecutionContext;
-import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
+import ai.dqo.core.jobqueue.JobCancellationToken;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindService;
+import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.execution.sensors.runners.SensorRunnerFactory;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
@@ -46,27 +47,29 @@ public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
 
     /**
      * Executes a sensor and returns the sensor result as a table returned from the query.
-     * @param checkExecutionContext Check execution context that provides access to the user home and dqo home.
+     * @param executionContext Check execution context that provides access to the user home and dqo home.
      * @param sensorRunParameters Sensor run parameters (connection, table, column, sensor parameters).
      * @param progressListener Progress lister that receives information about the progress of a sensor execution.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken Job cancellation token, used to cancel a running sensor query.
      * @return Sensor execution result with the query result from the sensor.
      */
-    public SensorExecutionResult executeSensor(CheckExecutionContext checkExecutionContext,
-											   SensorExecutionRunParameters sensorRunParameters,
-											   CheckExecutionProgressListener progressListener,
-											   boolean dummySensorExecution) {
-        String sensorName = sensorRunParameters.getSensorParameters().getSensorDefinitionName();
+    public SensorExecutionResult executeSensor(ExecutionContext executionContext,
+                                               SensorExecutionRunParameters sensorRunParameters,
+                                               SensorExecutionProgressListener progressListener,
+                                               boolean dummySensorExecution,
+                                               JobCancellationToken jobCancellationToken) {
+        String sensorName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
         ProviderType providerType = sensorRunParameters.getConnection().getProviderType();
 
         SensorDefinitionFindResult sensorDefinition = this.sensorDefinitionFindService.findProviderSensorDefinition(
-                checkExecutionContext, sensorName, providerType);
+                executionContext, sensorName, providerType);
         ProviderSensorDefinitionSpec providerSensorSpec = sensorDefinition.getProviderSensorDefinitionSpec();
         AbstractSensorRunner sensorRunner = this.sensorRunnerFactory.getSensorRunner(providerSensorSpec.getType(),
                 providerSensorSpec.getJavaClassName());
 
-        SensorExecutionResult result = sensorRunner.executeSensor(checkExecutionContext, sensorRunParameters,
-                sensorDefinition, progressListener, dummySensorExecution);
+        SensorExecutionResult result = sensorRunner.executeSensor(executionContext, sensorRunParameters,
+                sensorDefinition, progressListener, dummySensorExecution, jobCancellationToken);
         return result;
     }
 }

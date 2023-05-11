@@ -16,28 +16,30 @@
 package ai.dqo.cli.commands.settings;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.settings.impl.SettingsService;
-import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
-
-import static java.lang.Integer.parseInt;
 
 /**
  * Cli command to remove settings yaml.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "remove", description = "Remove settings file from user home")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "remove", header = "Remove settings file from UserHome directory", description = "Removes the settings file from your UserHome directory.")
 public class SettingsRemoveCliCommand extends BaseCommand implements ICommand {
-	private final SettingsService settingsService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private SettingsService settingsService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public SettingsRemoveCliCommand() {
+	}
 
 	@Autowired
 	public SettingsRemoveCliCommand(SettingsService settingsService,

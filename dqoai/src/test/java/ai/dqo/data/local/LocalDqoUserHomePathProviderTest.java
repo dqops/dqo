@@ -16,8 +16,8 @@
 package ai.dqo.data.local;
 
 import ai.dqo.BaseTest;
-import ai.dqo.core.configuration.DqoConfigurationProperties;
-import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
+import ai.dqo.core.configuration.DqoUserConfigurationProperties;
+import ai.dqo.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,25 +30,16 @@ import java.nio.file.Path;
 public class LocalDqoUserHomePathProviderTest extends BaseTest {
     private LocalDqoUserHomePathProvider sut;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
-		this.sut = BeanFactoryObjectMother.getBeanFactory().getBean(LocalDqoUserHomePathProvider.class);
+    void setUp() {
+    	this.sut = BeanFactoryObjectMother.getBeanFactory().getBean(LocalDqoUserHomePathProvider.class);
     }
 
     @Test
     void getLocalUserHomePath_whenRetrieved_thenReturnsUserHomePath() {
         Path userHomePath = this.sut.getLocalUserHomePath();
-        DqoConfigurationProperties configurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
-        String expected = configurationProperties.getUser().getHome().replace('\\', '/');
+        DqoUserConfigurationProperties dqoUserConfigurationProperties = DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration();
+        String expected = dqoUserConfigurationProperties.getHome().replace('\\', '/');
         Assertions.assertEquals(expected, userHomePath.toString().replace('\\', '/'));
     }
-
 }

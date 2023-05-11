@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 public class DqoUserConfigurationProperties implements Cloneable {
     private String home;
     private boolean hasLocalHome;
+    private boolean initializeUserHome;
 
     /**
      * Returns the location of the dqo.io user home folder. The user home folder is the location of connections and the data model.
@@ -61,6 +62,22 @@ public class DqoUserConfigurationProperties implements Cloneable {
      */
     public void setHasLocalHome(boolean hasLocalHome) {
         this.hasLocalHome = hasLocalHome;
+    }
+
+    /**
+     * Returns true when the user home should be initialized without asking the user.
+     * @return True when an empty user home should be initialized without asking the user for confirmation, false when the user must confirm.
+     */
+    public boolean isInitializeUserHome() {
+        return initializeUserHome;
+    }
+
+    /**
+     * Sets the flag if an empty user home is initialized without asking for confirmation, false when the user must confirm.
+     * @param initializeUserHome True - initialize user home without asking, false - ask the user.
+     */
+    public void setInitializeUserHome(boolean initializeUserHome) {
+        this.initializeUserHome = initializeUserHome;
     }
 
     @Override

@@ -15,15 +15,18 @@
  */
 package ai.dqo.connectors.bigquery;
 
+import ai.dqo.connectors.ConnectionProviderSpecificParameters;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.sources.BaseProviderParametersSpec;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import picocli.CommandLine;
 
 import java.util.Objects;
 
@@ -33,27 +36,34 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BigQueryParametersSpec extends BaseProviderParametersSpec implements Cloneable {
+public class BigQueryParametersSpec extends BaseProviderParametersSpec
+        implements ConnectionProviderSpecificParameters {
     private static final ChildHierarchyNodeFieldMapImpl<BigQueryParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
         {
         }
     };
 
+    @CommandLine.Option(names = {"--bigquery-source-project-id"}, description = "Bigquery source GCP project id. This is the project that has datasets that will be imported.")
     @JsonPropertyDescription("Source GCP project ID. This is the project that has datasets that will be imported.")
     private String sourceProjectId;
 
+    @CommandLine.Option(names = {"--bigquery-billing-project-id"}, description = "Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.")
     @JsonPropertyDescription("Billing GCP project ID. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.")
     private String billingProjectId;
 
+    @CommandLine.Option(names = {"--bigquery-authentication-mode"}, description = "Bigquery authentication mode.")
     @JsonPropertyDescription("Authentication mode to the Google Cloud.")
     private BigQueryAuthenticationMode authenticationMode;
 
+    @CommandLine.Option(names = {"--bigquery-json-key-content"}, description = "Bigquery service account key content as JSON.")
     @JsonPropertyDescription("JSON key content. Use an environment variable that contains the content of the key as ${KEY_ENV} or a name of a secret in the GCP Secret Manager: ${sm://key-secret-name}. Requires the authentication-mode: json_key_content.")
     private String jsonKeyContent;
 
+    @CommandLine.Option(names = {"--bigquery-json-key-path"}, description = "Path to a GCP service account key JSON file used to authenticate to Bigquery.")
     @JsonPropertyDescription("A path to the JSON key file. Requires the authentication-mode: json_key_path.")
     private String jsonKeyPath;
 
+    @CommandLine.Option(names = {"--bigquery-quota-project-id"}, description = "Bigquery quota GCP project id.")
     @JsonPropertyDescription("Quota GCP project ID.")
     private String quotaProjectId;
 
@@ -173,14 +183,9 @@ public class BigQueryParametersSpec extends BaseProviderParametersSpec implement
      * Creates and returns a deep copy of this object.
      */
     @Override
-    public BigQueryParametersSpec clone() {
-        try {
-            BigQueryParametersSpec cloned = (BigQueryParametersSpec)super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned", ex);
-        }
+    public BigQueryParametersSpec deepClone() {
+        BigQueryParametersSpec cloned = (BigQueryParametersSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -188,19 +193,14 @@ public class BigQueryParametersSpec extends BaseProviderParametersSpec implement
      * @return Trimmed and expanded version of this object.
      */
     public BigQueryParametersSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            BigQueryParametersSpec cloned = (BigQueryParametersSpec) super.clone();
-            cloned.sourceProjectId = secretValueProvider.expandValue(cloned.sourceProjectId);
-            cloned.billingProjectId = secretValueProvider.expandValue(cloned.billingProjectId);
-            cloned.jsonKeyContent = secretValueProvider.expandValue(cloned.jsonKeyContent);
-            cloned.jsonKeyPath = secretValueProvider.expandValue(cloned.jsonKeyPath);
-            cloned.quotaProjectId = secretValueProvider.expandValue(cloned.quotaProjectId);
+        BigQueryParametersSpec cloned = this.deepClone();
+        cloned.sourceProjectId = secretValueProvider.expandValue(cloned.sourceProjectId);
+        cloned.billingProjectId = secretValueProvider.expandValue(cloned.billingProjectId);
+        cloned.jsonKeyContent = secretValueProvider.expandValue(cloned.jsonKeyContent);
+        cloned.jsonKeyPath = secretValueProvider.expandValue(cloned.jsonKeyPath);
+        cloned.quotaProjectId = secretValueProvider.expandValue(cloned.quotaProjectId);
 
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned", ex);
-        }
+        return cloned;
     }
 
     /**
@@ -221,5 +221,16 @@ public class BigQueryParametersSpec extends BaseProviderParametersSpec implement
                 this.quotaProjectId == null &&
 				this.jsonKeyContent == null &&
 				this.jsonKeyPath == null;
+    }
+
+    /**
+     * Returns a database name. Used only for the CLI connection list command to return the GCP project name.
+     *
+     * @return Database name.
+     */
+    @JsonIgnore
+    @Override
+    public String getDatabase() {
+        return this.sourceProjectId;
     }
 }

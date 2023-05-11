@@ -18,6 +18,9 @@ package ai.dqo.metadata.traversal;
 import ai.dqo.BaseTest;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.search.AbstractSearchVisitor;
+import ai.dqo.metadata.search.DataStreamSearcherObject;
+import ai.dqo.metadata.search.LabelsSearcherObject;
+import ai.dqo.metadata.search.SearchParameterObject;
 import ai.dqo.metadata.sources.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,22 +28,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootTest
 public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
     public HierarchyNodeTreeWalkerImpl sut;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new HierarchyNodeTreeWalkerImpl();
     }
 
@@ -51,8 +45,10 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
         columns.put("col2", new ColumnSpec());
 
         ArrayList<HierarchyNode> foundNodes = new ArrayList<>();
+        LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
+        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
         VisitAllVisitor visitor = new VisitAllVisitor();
-		this.sut.traverseHierarchyNodeTree(columns, node -> node.visit(visitor, foundNodes));
+		this.sut.traverseHierarchyNodeTree(columns, node -> node.visit(visitor, new SearchParameterObject(foundNodes, dataStreamSearcherObject, labelsSearcherObject)));
 
         Assertions.assertEquals(2, foundNodes.size());
         Assertions.assertTrue(foundNodes.contains(columns.get("col1")));
@@ -66,8 +62,10 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
         columns.put("col2", new ColumnSpec());
 
         ArrayList<HierarchyNode> foundNodes = new ArrayList<>();
+        LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
+        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
         VisitSelectedColumnVisitor visitor = new VisitSelectedColumnVisitor(columns.get("col1"));
-		this.sut.traverseHierarchyNodeTree(columns, node -> node.visit(visitor, foundNodes));
+		this.sut.traverseHierarchyNodeTree(columns, node -> node.visit(visitor, new SearchParameterObject(foundNodes, dataStreamSearcherObject, labelsSearcherObject)));
 
         Assertions.assertEquals(1, foundNodes.size());
         Assertions.assertTrue(foundNodes.contains(columns.get("col1")));
@@ -80,8 +78,10 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
         columns.put("col2", new ColumnSpec());
 
         ArrayList<HierarchyNode> foundNodes = new ArrayList<>();
+        LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
+        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
         VisitStopTraversalAfterFound visitor = new VisitStopTraversalAfterFound(columns.get("col1")); // java maps are iterated in the reverse order, so we need to look at col2
-		this.sut.traverseHierarchyNodeTree(columns, node -> node.visit(visitor, foundNodes));
+		this.sut.traverseHierarchyNodeTree(columns, node -> node.visit(visitor, new SearchParameterObject(foundNodes, dataStreamSearcherObject, labelsSearcherObject)));
 
         Assertions.assertEquals(1, foundNodes.size());
         Assertions.assertTrue(foundNodes.contains(columns.get("col1")));
@@ -99,15 +99,17 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
         table2.getSpec().getColumns().put("col2", col2);
 
         ArrayList<HierarchyNode> foundNodes = new ArrayList<>();
+        LabelsSearcherObject labelsSearcherObject = new LabelsSearcherObject();
+        DataStreamSearcherObject dataStreamSearcherObject = new DataStreamSearcherObject();
         VisitAllVisitor visitor = new VisitAllVisitor();
-		this.sut.traverseHierarchyNodeTree(connectionWrapper, node -> node.visit(visitor, foundNodes));
+		this.sut.traverseHierarchyNodeTree(connectionWrapper, node -> node.visit(visitor, new SearchParameterObject(foundNodes, dataStreamSearcherObject, labelsSearcherObject)));
 
         Assertions.assertEquals(2, foundNodes.size());
         Assertions.assertTrue(foundNodes.contains(col1));
         Assertions.assertTrue(foundNodes.contains(col2));
     }
 
-    public class VisitAllVisitor extends AbstractSearchVisitor {
+    public class VisitAllVisitor extends AbstractSearchVisitor<SearchParameterObject> {
         /**
          * Accepts a column specification.
          *
@@ -116,13 +118,13 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
          * @return Accept's result.
          */
         @Override
-        public TreeNodeTraversalResult accept(ColumnSpec columnSpec, List<HierarchyNode> parameter) {
-            parameter.add(columnSpec);
+        public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject parameter) {
+            parameter.getNodes().add(columnSpec);
             return super.accept(columnSpec, parameter);
         }
     }
 
-    public class VisitSelectedColumnVisitor extends AbstractSearchVisitor {
+    public class VisitSelectedColumnVisitor extends AbstractSearchVisitor<SearchParameterObject> {
         private final ColumnSpec selected;
 
         public VisitSelectedColumnVisitor(ColumnSpec selected) {
@@ -137,8 +139,8 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
          * @return Accept's result.
          */
         @Override
-        public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, List<HierarchyNode> parameter) {
-            return TreeNodeTraversalResult.traverseChildNode(selected);
+        public TreeNodeTraversalResult accept(ColumnSpecMap columnSpecMap, SearchParameterObject parameter) {
+            return TreeNodeTraversalResult.traverseSelectedChildNodes(selected);
         }
 
         /**
@@ -149,13 +151,13 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
          * @return Accept's result.
          */
         @Override
-        public TreeNodeTraversalResult accept(ColumnSpec columnSpec, List<HierarchyNode> parameter) {
-            parameter.add(columnSpec);
+        public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject parameter) {
+            parameter.getNodes().add(columnSpec);
             return super.accept(columnSpec, parameter);
         }
     }
 
-    public class VisitStopTraversalAfterFound extends AbstractSearchVisitor {
+    public class VisitStopTraversalAfterFound extends AbstractSearchVisitor<SearchParameterObject> {
         private final ColumnSpec selected;
 
         public VisitStopTraversalAfterFound(ColumnSpec selected) {
@@ -166,12 +168,11 @@ public class HierarchyNodeTreeWalkerImplTests extends BaseTest {
          * Accepts a column specification.
          *
          * @param columnSpec Column specification.
-         * @param parameter  Target list where found hierarchy nodes should be added.
          * @return Accept's result.
          */
         @Override
-        public TreeNodeTraversalResult accept(ColumnSpec columnSpec, List<HierarchyNode> parameter) {
-            parameter.add(columnSpec);
+        public TreeNodeTraversalResult accept(ColumnSpec columnSpec, SearchParameterObject parameter) {
+            parameter.getNodes().add(columnSpec);
             if (columnSpec == selected) {
                 return TreeNodeTraversalResult.STOP_TRAVERSAL;
             }

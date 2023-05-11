@@ -16,9 +16,9 @@
 package ai.dqo.cli.commands.settings.editor;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.settings.impl.SettingsService;
-import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.completion.completedcommands.IEditorNameCommand;
 import ai.dqo.cli.completion.completers.EditorNameCompleter;
 import ai.dqo.cli.completion.completers.EditorPathCompleter;
@@ -26,20 +26,24 @@ import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * Cli command to set a new editor to settings.
+ * Cli command to set a new editor in settings.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "set", description = "Set editor settings")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "set", header = "Set editor settings", description = "Set the settings for the editor. It allows user to set the editor to use a specific output format.")
 public class SettingsEditorSetCliCommand extends BaseCommand implements ICommand, IEditorNameCommand {
-	private final SettingsService settingsService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private SettingsService settingsService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public SettingsEditorSetCliCommand() {
+	}
 
 	@Autowired
 	public SettingsEditorSetCliCommand(SettingsService settingsService,

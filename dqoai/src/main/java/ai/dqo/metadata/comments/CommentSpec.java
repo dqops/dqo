@@ -19,11 +19,13 @@ import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+import org.apache.parquet.Strings;
 
 import java.util.Date;
 import java.util.Objects;
@@ -34,19 +36,19 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class CommentSpec extends AbstractSpec implements Cloneable {
+public class CommentSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<CommentSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Comment date and time.")
+    @JsonPropertyDescription("Comment date and time")
     private Date date;
 
-    @JsonPropertyDescription("Commented by.")
+    @JsonPropertyDescription("Commented by")
     private String commentBy;
 
-    @JsonPropertyDescription("Comment text.")
+    @JsonPropertyDescription("Comment text")
     private String comment;
 
     /**
@@ -115,7 +117,6 @@ public class CommentSpec extends AbstractSpec implements Cloneable {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
@@ -126,13 +127,26 @@ public class CommentSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public CommentSpec clone() {
-        try {
-            CommentSpec cloned = (CommentSpec)super.clone();
-            return cloned;
+    public CommentSpec deepClone() {
+        CommentSpec cloned = (CommentSpec)super.deepClone();
+        return cloned;
+    }
+
+    /**
+     * Checks if the object is a default value, so it would be rendered as an empty node. We want to skip it and not render it to YAML.
+     * The implementation of this interface method should check all object's fields to find if at least one of them has a non-default value or is not null, so it should be rendered.
+     *
+     * @return true when the object has the default values only and should not be rendered to YAML, false when it should be rendered.
+     */
+    @Override
+    @JsonIgnore
+    public boolean isDefault() {
+        if (!Strings.isNullOrEmpty(this.comment) ||
+                this.date != null ||
+                !Strings.isNullOrEmpty(this.commentBy)) {
+            return false;
         }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+
+        return true;
     }
 }

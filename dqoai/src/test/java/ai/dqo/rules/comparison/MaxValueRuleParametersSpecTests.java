@@ -16,6 +16,8 @@
 package ai.dqo.rules.comparison;
 
 import ai.dqo.BaseTest;
+import ai.dqo.execution.rules.RuleExecutionResult;
+import ai.dqo.execution.rules.runners.python.PythonRuleRunnerObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,35 +27,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class MaxValueRuleParametersSpecTests extends BaseTest {
     private MaxValueRuleParametersSpec sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new MaxValueRuleParametersSpec();
     }
 
     @Test
-    void isDirty_whenDisableSet_thenIsDirtyIsTrue() {
-		this.sut.setDisable(true);
-        Assertions.assertTrue(this.sut.isDisable());
-        Assertions.assertTrue(this.sut.isDirty());
-		this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
-    @Test
-    void isDirty_whenDisableBooleanSameAsCurrentSet_thenIsDirtyIsFalse() {
-		this.sut.setDisable(true);
-        Assertions.assertTrue(this.sut.isDirty());
-		this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setDisable(true);
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
-    @Test
     void isDirty_whenMaxValueSet_thenIsDirtyIsTrue() {
-		this.sut.setMaxValue(1);
+		this.sut.setMaxValue(1.0);
         Assertions.assertEquals(1, this.sut.getMaxValue());
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
@@ -62,11 +43,20 @@ public class MaxValueRuleParametersSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenMaxValueNumberSameAsCurrentSet_thenIsDirtyIsFalse() {
-		this.sut.setMaxValue(1);
+		this.sut.setMaxValue(1.0);
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setMaxValue(1);
+		this.sut.setMaxValue(1.0);
         Assertions.assertFalse(this.sut.isDirty());
+    }
+
+    @Test
+    void executeRule_whenActualValueIsNull_thenReturnsPassed() {
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
+        Assertions.assertTrue(ruleExecutionResult.isPassed());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
 }

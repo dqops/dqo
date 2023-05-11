@@ -36,9 +36,15 @@ public enum SpecificationKind {
     @JsonProperty("rule")
     RULE,
 
+    @JsonProperty("check")
+    CHECK,
+
     @JsonProperty("settings")
     SETTINGS,
 
     @JsonProperty("file_index")
-    FILE_INDEX
+    FILE_INDEX,
+
+    @JsonProperty("dashboards")
+    DASHBOARDS
 }

@@ -15,8 +15,10 @@
  */
 package ai.dqo.execution.sensors;
 
+import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Table;
 
 import java.time.Instant;
@@ -31,6 +33,8 @@ public class SensorExecutionResult {
     private Table resultTable;
     private Instant finishedAt;
     private int sensorDurationMs;
+    private boolean success;
+    private Exception exception;
 
     /**
      * Creates an empty sensor execution result object.
@@ -49,6 +53,24 @@ public class SensorExecutionResult {
         this.resultTable = resultTable;
 		this.finishedAt = Instant.now();
 		this.sensorDurationMs = (int)ChronoUnit.MILLIS.between(parameters.getStartedAt(), this.finishedAt);
+        this.success = true;
+    }
+
+    /**
+     * Creates a sensor execution result object with the sensor parameters when the sensor failed. The isSensorFailed result will be false
+     * and the exception will be preserved.
+     * @param parameters Sensor execution parameters.
+     * @param exception The exception throw by the sensor.
+     */
+    public SensorExecutionResult(SensorExecutionRunParameters parameters, Exception exception) {
+        this.parameters = parameters;
+        this.exception = exception;
+        this.finishedAt = Instant.now();
+        this.sensorDurationMs = (int)ChronoUnit.MILLIS.between(parameters.getStartedAt(), this.finishedAt);
+        this.success = false;
+        this.resultTable = Table.create("error");
+        this.resultTable.addColumns(DoubleColumn.create(ErrorsColumnNames.ACTUAL_VALUE_COLUMN_NAME));
+        this.resultTable.appendRow(); // one placeholder row added, so we can use error result in the sensor readout normalization service to make the error row
     }
 
     /**
@@ -114,5 +136,37 @@ public class SensorExecutionResult {
      */
     public void setSensorDurationMs(int sensorDurationMs) {
         this.sensorDurationMs = sensorDurationMs;
+    }
+
+    /**
+     * Returns true if the sensor has finished successfully. False means that the sensor has failed.
+     * @return True - sensor executed successfully and the resultTable contains the sensor output, false - the sensor failed, the exception should be provided to find more information about the failure.
+     */
+    public boolean isSuccess() {
+        return success;
+    }
+
+    /**
+     * Sets the execution status. True - success, false - error.
+     * @param success Sensor status.
+     */
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    /**
+     * Returns the exception thrown by the sensor if the execution failed.
+     * @return Exception.
+     */
+    public Exception getException() {
+        return exception;
+    }
+
+    /**
+     * Sets the exception that was thrown by the sensor.
+     * @param exception Exception.
+     */
+    public void setException(Exception exception) {
+        this.exception = exception;
     }
 }

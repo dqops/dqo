@@ -118,7 +118,8 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
                 throw new PythonExecutionException("Python command " + this.commandLineText + " failed, stderr:\n" + errStreamText);
             }
 
-            return receiveResponseFuture.get(1, TimeUnit.MILLISECONDS);
+            O result = receiveResponseFuture.get(1, TimeUnit.MILLISECONDS);
+            return result;
         } catch (PythonExecutionException ex) {
             throw ex;
         } catch (Exception e) {
@@ -141,7 +142,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
 			this.readFromProcessStreamProcessSide = new PipedOutputStream();
 			this.readFromProcessStream = new PipedInputStream(this.readFromProcessStreamProcessSide);
 
-			this.readFromProcessStreamReader = new InputStreamReader(new BufferedInputStream(readFromProcessStream));
+			this.readFromProcessStreamReader = new InputStreamReader(new BufferedInputStream(readFromProcessStream, PYTHON_BUFFER_SIZE));
 			this.errorStream = new ByteArrayOutputStream();
 			this.jsonFactory = new JsonFactory();
 			this.jsonParser = jsonFactory.createParser(this.readFromProcessStreamReader);
@@ -172,6 +173,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
             Map<String, String> systemEnvVariables = System.getenv();
             HashMap<String, String> processEnvVariables = new HashMap<>(systemEnvVariables);
             processEnvVariables.put("PYTHONUNBUFFERED", "1");
+            processEnvVariables.put("PYTHONIOENCODING", "utf-8");
             processEnvVariables.remove("PYTHONHOME");
             for (Map.Entry<String, String> venvEnvironmentVarKeyValPair : pythonVirtualEnv.getEnvironmentVariables().entrySet()) {
                 processEnvVariables.put(venvEnvironmentVarKeyValPair.getKey(), venvEnvironmentVarKeyValPair.getValue());

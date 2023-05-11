@@ -15,7 +15,7 @@
  */
 package ai.dqo.cli;
 
-import org.springframework.boot.ExitCodeGenerator;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +23,7 @@ import org.springframework.stereotype.Component;
  * Exit code generator that caches the exit code that should be returned.
  */
 @Component
-@Scope("singleton")
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class CliExitCodeGeneratorImpl implements CliExitCodeGenerator {
     private int exitCode;
 

@@ -36,14 +36,16 @@ import java.util.Iterator;
  * Command line completer that will complete the list of tables as entry when the connection name was already provided in the command line.
  */
 public class TableNameCompleter extends AbstractCommandAwareCompleter<IConnectionNameCommand> {
-	private final UserHomeContextCache userHomeContextCache;
+	private UserHomeContextCache userHomeContextCache;
 
 	/**
 	 * Default constructor called by the auto completion system.
 	 */
 	public TableNameCompleter() {
 		BeanFactory beanFactory = StaticBeanFactory.getBeanFactory();
-		this.userHomeContextCache = beanFactory.getBean(UserHomeContextCache.class);
+		if (beanFactory != null) {
+			this.userHomeContextCache = beanFactory.getBean(UserHomeContextCache.class);
+		}
 	}
 
 	/**
@@ -62,7 +64,7 @@ public class TableNameCompleter extends AbstractCommandAwareCompleter<IConnectio
 	 */
 	@Override
 	public Iterator<String> createIterator(IConnectionNameCommand command) {
-		if (command == null) {
+		if (command == null || this.userHomeContextCache == null) {
 			return createEmptyCompletionIterator();
 		}
 

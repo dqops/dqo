@@ -25,6 +25,7 @@ import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -33,12 +34,15 @@ import picocli.CommandLine;
  * Cli command to edit a table.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "edit", description = "Edit table which match filters")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "edit", header = "Edit table that matches a given condition", description = "Edit the table or tables that match the filter conditions specified in the options. It allows the user to modify the details of an existing table in the application.")
 public class TableEditCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
-    private final TerminalReader terminalReader;
-    private final TerminalWriter terminalWriter;
-    private final TableEditService tableEditService;
+    private TerminalReader terminalReader;
+    private TerminalWriter terminalWriter;
+    private TableEditService tableEditService;
+
+    public TableEditCliCommand() {
+    }
 
     /**
      * Default injection constructor.
@@ -55,7 +59,7 @@ public class TableEditCliCommand extends BaseCommand implements ICommand, IConne
         this.tableEditService = tableEditService;
     }
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table)", completionCandidates = FullTableNameCompleter.class)
+    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'", completionCandidates = FullTableNameCompleter.class)
     private String table;
 
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection Name", completionCandidates = ConnectionNameCompleter.class)
@@ -109,7 +113,7 @@ public class TableEditCliCommand extends BaseCommand implements ICommand, IConne
 
         if (Strings.isNullOrEmpty(this.table)) {
 			throwRequiredParameterMissingIfHeadless("--table");
-			this.table = this.terminalReader.prompt("Full table name e.g. schemaname.tablename (--table)", null, false);
+			this.table = this.terminalReader.prompt("Full table name (schema.table), supports wildcard patterns 'sch*.tab*'", null, false);
         }
 
         return this.tableEditService.launchEditorForTable(this.connection, this.table);

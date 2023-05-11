@@ -17,12 +17,16 @@ package ai.dqo.cli;
 
 import ai.dqo.cli.commands.DqoRootCliCommand;
 import ai.dqo.cli.completion.InputCapturingCompleter;
+import ai.dqo.cli.configuration.DqoCliOneshotConfigurationProperties;
 import ai.dqo.cli.exceptions.CommandExecutionErrorHandler;
-import ai.dqo.cli.terminal.CommandHelpStrategy;
-import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.cli.terminal.*;
+import ai.dqo.cli.terminal.ansi.UrlFormatter;
 import ai.dqo.core.configuration.DqoCoreConfigurationProperties;
+import ai.dqo.utils.StaticBeanFactory;
+import org.jline.builtins.Nano.SyntaxHighlighter;
 import org.jline.console.SystemRegistry;
 import org.jline.console.impl.Builtins;
+import org.jline.console.impl.SystemHighlighter;
 import org.jline.console.impl.SystemRegistryImpl;
 import org.jline.keymap.KeyMap;
 import org.jline.reader.*;
@@ -32,6 +36,7 @@ import org.jline.widget.TailTipWidgets;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import picocli.CommandLine;
 import picocli.shell.jline3.PicocliCommands;
 
@@ -42,6 +47,7 @@ import java.util.function.Supplier;
 /**
  * Configuration class to configure the terminal and line reader beans.
  */
+@Lazy
 @Configuration
 public class CliConfiguration {
     /**
@@ -68,24 +74,43 @@ public class CliConfiguration {
     }
 
     /**
-     * Configures a picocli command line using the root command.
+     * Creates a configuration of terminal writer based on application's running mode.
+     * @param dqoCliOneshotConfigurationProperties Properties for CLI if running in one-shot mode.
+     * @return Terminal writer applicable to the application's running mode.
+     */
+    @Lazy
+    @Bean(name = "terminalWriter")
+    public TerminalWriter terminalWriter(DqoCliOneshotConfigurationProperties dqoCliOneshotConfigurationProperties) {
+        if (CliApplication.isRunningOneShotMode()) {
+            return new TerminalWriterSystemImpl(dqoCliOneshotConfigurationProperties.getTerminalWidth());
+        }
+
+        Terminal terminal = StaticBeanFactory.getBeanFactory().getBean(Terminal.class);
+        UrlFormatter urlFormatter = StaticBeanFactory.getBeanFactory().getBean(UrlFormatter.class);
+        return new TerminalWriterImpl(terminal, urlFormatter);
+    }
+
+    /**
+     * Configures a picocli command line using the root command, based on the application's running mode.
      * @param rootShellCommand Root cli command.
      * @param factory Picocli command factory (default).
-     * @param terminal Terminal.
-     * @param terminalWriter Terminal writer.
+     * @param terminalFactory Terminal reader and writer factory, used to delay the instance creation.
      * @param coreConfigurationProperties Core configuration properties.
      * @return Command line.
      */
     @Bean(name = "commandLine")
     public CommandLine commandLine(DqoRootCliCommand rootShellCommand,
 								   CommandLine.IFactory factory,
-								   Terminal terminal,
-								   TerminalWriter terminalWriter,
+                                   TerminalFactory terminalFactory,
 								   DqoCoreConfigurationProperties coreConfigurationProperties) {
         PicocliCommands.PicocliCommandsFactory shellCommandFactory = new PicocliCommands.PicocliCommandsFactory(factory);
-        shellCommandFactory.setTerminal(terminal);
+        if (!CliApplication.isRunningOneShotMode()) {
+            Terminal terminal = StaticBeanFactory.getBeanFactory().getBean(Terminal.class);
+            shellCommandFactory.setTerminal(terminal);
+        }
+
         CommandLine commandLine = new CommandLine(rootShellCommand, factory);
-        commandLine.setExecutionExceptionHandler(new CommandExecutionErrorHandler(terminalWriter, coreConfigurationProperties));
+        commandLine.setExecutionExceptionHandler(new CommandExecutionErrorHandler(terminalFactory, coreConfigurationProperties));
         commandLine.setCaseInsensitiveEnumValuesAllowed(true);
 //        CommandHelpStrategy helpExecutionStrategy = new CommandHelpStrategy(commandLine.getExecutionStrategy(), terminalWriter);
 //        commandLine.setExecutionStrategy(helpExecutionStrategy);
@@ -123,10 +148,16 @@ public class CliConfiguration {
 									SystemRegistry systemRegistry,
 									Builtins builtins) {
         LineReader lineReader = LineReaderBuilder.builder()
+                .highlighter(new SystemHighlighter(
+                        SyntaxHighlighter.build("classpath:dqo_cli.nanorc"),  // For optional future use.
+                        SyntaxHighlighter.build("classpath:dqo_cli.nanorc"),  // The editable file is in
+                        SyntaxHighlighter.build("classpath:dqo_cli.nanorc")   // resources/org/jline/builtins/dqo_cli.nanorc
+                ))
                 .terminal(terminal)
                 .completer(new InputCapturingCompleter(systemRegistry.completer()))
                 .parser(defaultParser)
-                .variable(LineReader.LIST_MAX, 50)   // max tab completion candidates
+                .variable(LineReader.LIST_MAX, 50)  // max tab completion candidates
+                .variable(LineReader.COMPLETION_STYLE_STARTING, "fg:yellow")  // starting part highlight of the completer widget
                 .build();
 
         builtins.setLineReader(lineReader);
@@ -136,5 +167,21 @@ public class CliConfiguration {
         keyMap.bind(new Reference("tailtip-toggle"), KeyMap.alt("s"));
 
         return lineReader;
+    }
+
+    /**
+     * Creates a configuration of terminal reader based on application's running mode.
+     * @param terminalWriter Configured terminal writer.
+     * @return Terminal reader applicable to the application's running mode.
+     */
+    @Lazy
+    @Bean(name = "terminalReader")
+    public TerminalReader terminalReader(TerminalWriter terminalWriter) {
+        if (CliApplication.isRunningOneShotMode()) {
+            return new TerminalReaderSystemImpl(terminalWriter);
+        }
+
+        LineReader cliLineReader = (LineReader) StaticBeanFactory.getBeanFactory().getBean("cliLineReader");
+        return new TerminalReaderImpl(terminalWriter, cliLineReader);
     }
 }

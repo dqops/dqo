@@ -29,16 +29,8 @@ public class TableListImplTests extends BaseTest {
     private UserHomeContext inMemoryFileHomeContext;
     private ConnectionWrapper connection;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		inMemoryFileHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContext();
 		connection = inMemoryFileHomeContext.getUserHome().getConnections().createAndAddNew("src");
 		this.sut = (TableListImpl) connection.getTables();
@@ -48,7 +40,7 @@ public class TableListImplTests extends BaseTest {
     void createAndAddNew_whenPhysicalTableNameGiven_thenCopiesToTarget() {
         PhysicalTableName physicalTableName = new PhysicalTableName("s2", "tab2");
         TableWrapper tableWrapper = this.sut.createAndAddNew(physicalTableName);
-        Assertions.assertEquals(physicalTableName.getSchemaName(), tableWrapper.getSpec().getTarget().getSchemaName());
-        Assertions.assertEquals(physicalTableName.getTableName(), tableWrapper.getSpec().getTarget().getTableName());
+        Assertions.assertEquals(physicalTableName.getSchemaName(), tableWrapper.getSpec().getPhysicalTableName().getSchemaName());
+        Assertions.assertEquals(physicalTableName.getTableName(), tableWrapper.getSpec().getPhysicalTableName().getTableName());
     }
 }

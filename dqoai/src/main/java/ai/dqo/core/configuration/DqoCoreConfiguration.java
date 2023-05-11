@@ -16,7 +16,6 @@
 package ai.dqo.core.configuration;
 
 import lombok.EqualsAndHashCode;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -27,42 +26,4 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties
 @EqualsAndHashCode(callSuper = false)
 public class DqoCoreConfiguration {
-    @Autowired
-    private DqoCoreConfigurationProperties core;
-
-    @Autowired
-    private DqoConfigurationProperties dqo;
-
-
-    /**
-     * Configuration properties for the core module.
-     * @return Configuration properties.
-     */
-    public DqoCoreConfigurationProperties getCore() {
-        return core;
-    }
-
-    /**
-     * Sets the configuration properties for the core project.
-     * @param core Core configuration properties.
-     */
-    public void setCore(DqoCoreConfigurationProperties core) {
-        this.core = core;
-    }
-
-    /**
-     * Configuration properties on the "dqo." prefix.
-     * @return Root dqo configuration properties.
-     */
-    public DqoConfigurationProperties getDqo() {
-        return dqo;
-    }
-
-    /**
-     *  Stores (replaces) the root configuration properties.
-     * @param dqo Configuration properties.
-     */
-    public void setDqo(DqoConfigurationProperties dqo) {
-        this.dqo = dqo;
-    }
 }

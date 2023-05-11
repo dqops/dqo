@@ -20,7 +20,7 @@ package ai.dqo.metadata.storage.localfiles.dqohome;
  */
 public interface DqoHomeContextFactory {
     /**
-     * Opens a local DQO_HOME home context, loads the files from the local file system.
+     * Opens and returns a shared DQO user home.
      * @return Dqo home context with an active dqo home model that is backed by the local home file system.
      */
     DqoHomeContext openLocalDqoHome();

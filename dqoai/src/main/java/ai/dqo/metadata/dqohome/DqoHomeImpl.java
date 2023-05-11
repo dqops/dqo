@@ -15,6 +15,8 @@
  */
 package ai.dqo.metadata.dqohome;
 
+import ai.dqo.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionListImpl;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionListImpl;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionListImpl;
@@ -23,13 +25,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Root dqo.io home model for reading and managing the definitions in the application's home (DQO_HOME).
- * Those are built in rule and sensor definitions.
+ * Those are built in rule, sensor and dashboard definitions.
  */
-public class DqoHomeImpl implements DqoHome {
+public class DqoHomeImpl implements DqoHome, Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<DqoHomeImpl> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(ChildHierarchyNodeFieldMap.empty()) {
         {
 			put("sensors", o -> o.sensors);
 			put("rules", o -> o.rules);
+            put("checks", o -> o.checks);
+			put("dashboards", o -> o.dashboards);
         }
     };
 
@@ -37,6 +41,8 @@ public class DqoHomeImpl implements DqoHome {
     private HierarchyId hierarchyId = HierarchyId.getRoot();
     private RuleDefinitionListImpl rules;
     private SensorDefinitionListImpl sensors;
+    private CheckDefinitionListImpl checks;
+    private DashboardFolderListSpecWrapperImpl dashboards;
     @JsonIgnore
     private boolean dirty;
 
@@ -46,33 +52,34 @@ public class DqoHomeImpl implements DqoHome {
     public DqoHomeImpl() {
 		this.setSensors(new SensorDefinitionListImpl());
 		this.setRules(new RuleDefinitionListImpl());
+        this.setChecks(new CheckDefinitionListImpl());
+        this.setDashboards(new DashboardFolderListSpecWrapperImpl());
     }
 
     /**
      * Creates a dqo.io home implementation with alternative implementations (file based) of collections.
      * @param sensors Collection of sensor definitions.
      * @param rules Collection of custom rule definitions.
+     * @param checks Collection of check definitions.
+     * @param dashboards Collection of dashboard definitions.
      */
-    public DqoHomeImpl(SensorDefinitionListImpl sensors, RuleDefinitionListImpl rules) {
+    public DqoHomeImpl(SensorDefinitionListImpl sensors,
+                       RuleDefinitionListImpl rules,
+                       CheckDefinitionListImpl checks,
+                       DashboardFolderListSpecWrapperImpl dashboards) {
 		this.setSensors(sensors);
 		this.setRules(rules);
+        this.setChecks(checks);
+        this.setDashboards(dashboards);
     }
 
     /**
      * Returns a collection of sensor definitions in the user home folder.
      * @return Collection of user's sensor definitions.
      */
+    @Override
     public SensorDefinitionListImpl getSensors() {
         return sensors;
-    }
-
-    /**
-     * Returns a collection of custom rules in the user home folder.
-     * @return Collection of user's custom rules.
-     */
-    @Override
-    public RuleDefinitionList getRules() {
-        return rules;
     }
 
     /**
@@ -86,6 +93,16 @@ public class DqoHomeImpl implements DqoHome {
             sensors.setHierarchyId(childHierarchyId);
             assert FIELDS.get("sensors").apply(this).getHierarchyId().equals(childHierarchyId);
         }
+    }
+
+
+    /**
+     * Returns a collection of custom rules in the user home folder.
+     * @return Collection of user's custom rules.
+     */
+    @Override
+    public RuleDefinitionList getRules() {
+        return rules;
     }
 
     /**
@@ -102,6 +119,49 @@ public class DqoHomeImpl implements DqoHome {
     }
 
     /**
+     * Returns a collection of check definitions.
+     * @return Collection of check definitions.
+     */
+    @Override
+    public CheckDefinitionListImpl getChecks() {
+        return checks;
+    }
+
+    /**
+     * Changes the collection of check definitions.
+     * @param checks New collection of check definitions.
+     */
+    public void setChecks(CheckDefinitionListImpl checks) {
+        this.checks = checks;
+        if (checks != null) {
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "checks");
+            checks.setHierarchyId(childHierarchyId);
+            assert FIELDS.get("checks").apply(this).getHierarchyId().equals(childHierarchyId);
+        }
+    }
+
+    /**
+     * Returns a collection of custom dashboards in the user home folder.
+     * @return Collection of user's custom dashboards.
+     */
+    public DashboardFolderListSpecWrapperImpl getDashboards() {
+        return dashboards;
+    }
+
+
+    /**
+     * Changes the collection of custom dashboards.
+     * @param dashboards New collection of custom dashboards.
+     */
+    public void setDashboards(DashboardFolderListSpecWrapperImpl dashboards) {
+        this.dashboards = dashboards;
+        if (dashboards != null) {
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "dashboards");
+            dashboards.setHierarchyId(childHierarchyId);
+            assert FIELDS.get("dashboards").apply(this).getHierarchyId().equals(childHierarchyId);
+        }
+    }
+    /**
      * Flushes an object to a persistent store.
      */
     @Override
@@ -109,6 +169,8 @@ public class DqoHomeImpl implements DqoHome {
         // synchronize changes back to the virtual file system
 		this.getSensors().flush();
 		this.getRules().flush();
+        this.getChecks().flush();
+		this.getDashboards().flush();
 
 		this.clearDirty(false); // children that were saved should be already not dirty, the next assert will detect forgotten instances
         assert !this.isDirty();
@@ -205,10 +267,39 @@ public class DqoHomeImpl implements DqoHome {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
+    }
+
+    /**
+     * Performs a deep clone of the object.
+     *
+     * @return Deep clone of the object.
+     */
+    @Override
+    public DqoHomeImpl deepClone() {
+        try {
+            DqoHomeImpl cloned = (DqoHomeImpl) super.clone();
+            if (cloned.sensors != null) {
+                cloned.sensors = (SensorDefinitionListImpl) cloned.sensors.deepClone();
+            }
+            if (cloned.rules != null) {
+                cloned.rules = (RuleDefinitionListImpl) cloned.rules.deepClone();
+            }
+            if (cloned.checks != null) {
+                cloned.checks = (CheckDefinitionListImpl) cloned.checks.deepClone();
+            }
+            if (cloned.dashboards != null) {
+                cloned.dashboards = (DashboardFolderListSpecWrapperImpl) cloned.dashboards.deepClone();
+            }
+            cloned.dirty = false;
+
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new UnsupportedOperationException("Cannot clone object", ex);
+        }
     }
 }

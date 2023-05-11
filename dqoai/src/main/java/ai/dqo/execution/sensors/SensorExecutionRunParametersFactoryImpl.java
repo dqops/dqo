@@ -16,15 +16,24 @@
 package ai.dqo.execution.sensors;
 
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.CheckType;
+import ai.dqo.checks.custom.CustomCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.secrets.SecretValueProvider;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.data.statistics.factory.StatisticsDataScope;
+import ai.dqo.execution.checks.EffectiveSensorRuleNames;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
-import ai.dqo.metadata.id.HierarchyId;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
+import ai.dqo.metadata.groupings.TimeSeriesMode;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.metadata.sources.PartitionIncrementalTimeWindowSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
+import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -51,45 +60,134 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
      * @param check Check specification.
+     * @param customCheckDefinition Optional custom check definition, required when the check is a custom check.
+     * @param checkType Check type (profiling, recurring, partitioned).
+     * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (profiling, recurring, partitioned).
+     * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
+     *                             When not provided, the defaults are copied from the table's incremental time window configuration for a matching partition time scale.
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
      */
     @Override
     public SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
-															   TableSpec table,
-															   ColumnSpec column,
-															   AbstractCheckSpec check,
-															   ProviderDialectSettings dialectSettings) {
+                                                               TableSpec table,
+                                                               ColumnSpec column,
+                                                               AbstractCheckSpec<?,?,?,?> check,
+                                                               CheckDefinitionSpec customCheckDefinition,
+                                                               CheckType checkType,
+                                                               TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
+                                                               TimeWindowFilterParameters userTimeWindowFilters,
+                                                               ProviderDialectSettings dialectSettings) {
         ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
         TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
         ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
-        HierarchyId checkHierarchyId = check.getHierarchyId();
-        AbstractSensorParametersSpec sensorParameters = check.getSensorParameters().expandAndTrim(this.secretValueProvider);
-        AbstractCheckSpec expandedCheck = check.expandAndTrim(this.secretValueProvider);
+        AbstractSensorParametersSpec sensorParameters = check.getParameters().expandAndTrim(this.secretValueProvider);
 
-        TimeSeriesConfigurationSpec timeSeries = expandedCheck.getTimeSeriesOverride();
-        if (timeSeries == null && expandedColumn != null) {
-            timeSeries = expandedColumn.getTimeSeriesOverride();
-        }
-        if (timeSeries == null) {
-            timeSeries = expandedTable.getTimeSeries();
-        }
-        if(timeSeries == null) {
-            timeSeries = expandedConnection.getDefaultTimeSeries();
+        TimeSeriesConfigurationSpec timeSeries = timeSeriesConfigurationSpec; // TODO: for very custom checks, we can extract the time series override from the check
+        DataStreamMappingSpec dataStreams = check.getDataStream() != null ?
+                expandedTable.getDataStreams().get(check.getDataStream()) : expandedTable.getDataStreams().getFirstDataStreamMapping();
+        TimeWindowFilterParameters timeWindowFilterParameters =
+                this.makeEffectiveIncrementalFilter(table, timeSeries, userTimeWindowFilters);
+        EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames();
+        if (customCheckDefinition != null) {
+            effectiveSensorRuleNames.setSensorName(customCheckDefinition.getSensorName());
+            effectiveSensorRuleNames.setRuleName(customCheckDefinition.getRuleName());
+        } else {
+            effectiveSensorRuleNames.setSensorName(check.getParameters().getSensorDefinitionName());
+            effectiveSensorRuleNames.setRuleName(check.getRuleDefinitionName());
         }
 
-        DimensionsConfigurationSpec dimensions = expandedCheck.getDimensionsOverride();
-        if (dimensions == null && column != null) {
-            dimensions = expandedColumn.getDimensionsOverride(); // TODO: support combining an affective dimension configuration
-        }
-        if (dimensions == null) {
-            dimensions = expandedTable.getDimensions();
-        }
-        if (dimensions == null) {
-            dimensions = expandedConnection.getDefaultDimensions();
+        if (check instanceof CustomCheckSpec) {
+            CustomCheckSpec customCheckSpec = (CustomCheckSpec) check;
+            if (!Strings.isNullOrEmpty(customCheckSpec.getSensorName())) {
+                effectiveSensorRuleNames.setSensorName(customCheckSpec.getSensorName());
+            }
+            if (!Strings.isNullOrEmpty(customCheckSpec.getRuleName())) {
+                effectiveSensorRuleNames.setRuleName(customCheckSpec.getRuleName());
+            }
         }
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                checkHierarchyId, timeSeries, dimensions, sensorParameters, dialectSettings);
+                check, null, effectiveSensorRuleNames, checkType, timeSeries, timeWindowFilterParameters,
+                dataStreams, sensorParameters, dialectSettings);
+    }
+
+    /**
+     * Creates a sensor parameters object for a statistics collector. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
+     * specifications for the target connection, table, column, check.
+     * @param connection Connection specification.
+     * @param table Table specification.
+     * @param column Optional column specification for column sensors.
+     * @param statisticsCollectorSpec Statistics collector specification.
+     * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
+     * @param statisticsDataScope Data scope (whole table or per data stream) for collecting statistics.
+     * @param dialectSettings Dialect settings.
+     * @return Sensor execution run parameters.
+     */
+    @Override
+    public SensorExecutionRunParameters createStatisticsSensorParameters(ConnectionSpec connection,
+                                                                         TableSpec table,
+                                                                         ColumnSpec column,
+                                                                         AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec,
+                                                                         TimeWindowFilterParameters userTimeWindowFilters,
+                                                                         StatisticsDataScope statisticsDataScope,
+                                                                         ProviderDialectSettings dialectSettings) {
+        ConnectionSpec expandedConnection = connection.expandAndTrim(this.secretValueProvider);
+        TableSpec expandedTable = table.expandAndTrim(this.secretValueProvider);
+        ColumnSpec expandedColumn = column != null ? column.expandAndTrim(this.secretValueProvider) : null;
+        AbstractSensorParametersSpec sensorParameters = statisticsCollectorSpec.getParameters().expandAndTrim(this.secretValueProvider);
+
+        TimeSeriesConfigurationSpec timeSeries = TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds();
+        DataStreamMappingSpec dataStreams = statisticsDataScope == StatisticsDataScope.table ? null :
+                expandedTable.getDataStreams().getFirstDataStreamMapping();
+        TimeWindowFilterParameters timeWindowFilterParameters =
+                this.makeEffectiveIncrementalFilter(table, timeSeries, userTimeWindowFilters);
+        EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames(
+                statisticsCollectorSpec.getParameters().getSensorDefinitionName(), null);
+
+        return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
+                null, statisticsCollectorSpec, effectiveSensorRuleNames, null, timeSeries, timeWindowFilterParameters,
+                dataStreams, sensorParameters, dialectSettings);
+    }
+
+    /**
+     * Creates an effective time range filter, picking the correct configuration from the table's incremental time window
+     * for the time scale used by a partitioned check or just uses the user provided filters.
+     * @param tableSpec Table specification with the incremental time window configuration.
+     * @param timeSeriesConfigurationSpec Time series configuration, to check what time scale (daily, monthly) is used.
+     * @param userTimeWindowFilters User provided time window filter that will override the default configuration.
+     * @return Effective incremental time window filers, not null (even empty, but not null).
+     */
+    private TimeWindowFilterParameters makeEffectiveIncrementalFilter(
+            TableSpec tableSpec,
+            TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
+            TimeWindowFilterParameters userTimeWindowFilters) {
+        if (timeSeriesConfigurationSpec.getMode() == TimeSeriesMode.current_time) {
+            return userTimeWindowFilters != null ? userTimeWindowFilters : new TimeWindowFilterParameters();
+        }
+
+        PartitionIncrementalTimeWindowSpec tableTimeWindowSpec = tableSpec.getIncrementalTimeWindow();
+        TimeWindowFilterParameters resultFilter = new TimeWindowFilterParameters();
+
+
+        TimePeriodGradient partitioningTimeGradient = timeSeriesConfigurationSpec.getMode() == TimeSeriesMode.timestamp_column ?
+                timeSeriesConfigurationSpec.getTimeGradient() : null;
+        switch (partitioningTimeGradient) {
+            case day:
+                resultFilter.setDailyPartitioningRecentDays(tableTimeWindowSpec.getDailyPartitioningRecentDays());
+                resultFilter.setDailyPartitioningIncludeToday(tableTimeWindowSpec.isDailyPartitioningIncludeToday());
+                break;
+
+            case month:
+                resultFilter.setMonthlyPartitioningRecentMonths(tableTimeWindowSpec.getMonthlyPartitioningRecentMonths());
+                resultFilter.setMonthlyPartitioningIncludeCurrentMonth(tableTimeWindowSpec.isMonthlyPartitioningIncludeCurrentMonth());
+                break;
+            default:
+                break;
+        }
+
+        TimeWindowFilterParameters effectiveFilter = resultFilter.withUserFilters(userTimeWindowFilters,
+                partitioningTimeGradient); // override defaults with the user provided settings
+        return effectiveFilter;
     }
 }

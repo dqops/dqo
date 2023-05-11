@@ -18,14 +18,15 @@ package ai.dqo.utils.serialization;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import lombok.extern.slf4j.Slf4j;
 
-import java.io.Console;
 import java.io.IOException;
 
 /**
  * Custom YAML serializer added to columns that return objects that should be not rendered in YAML because when they are empty (only default values),
  * then the rendered value would be like:  node_name: {}  which will make editing YAML much harder (it will become a JSON with JSON rules)
  */
+@Slf4j
 public class IgnoreEmptyYamlSerializer extends JsonSerializer<YamlNotRenderWhenDefault> {
     @Override
     public void serialize(YamlNotRenderWhenDefault o, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
@@ -42,7 +43,7 @@ public class IgnoreEmptyYamlSerializer extends JsonSerializer<YamlNotRenderWhenD
             return value == null || value.isDefault();
         }
         catch (Exception ex) {
-            System.out.println(ex.getMessage());
+            log.error("Failed to detect an empty field: " + ex.getMessage(), ex);
             throw ex;
         }
     }

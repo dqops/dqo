@@ -16,9 +16,9 @@
 package ai.dqo.cli.commands.table;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.status.CliOperationStatus;
-import ai.dqo.cli.commands.table.impl.TableService;
+import ai.dqo.cli.commands.table.impl.TableCliService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.terminal.TerminalReader;
@@ -26,6 +26,7 @@ import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -34,17 +35,20 @@ import picocli.CommandLine;
  * Cli command to add a new table.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "add", description = "Add table with specified name")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "add", header = "Add table with specified name", description = "Add a new table with the specified name to the database. It allows the user to create a new table in the application for performing various operations.")
 public class TableAddCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
-    private final TableService tableImportService;
-    private final TerminalReader terminalReader;
-    private final TerminalWriter terminalWriter;
+    private TableCliService tableImportService;
+    private TerminalReader terminalReader;
+    private TerminalWriter terminalWriter;
+
+    public TableAddCliCommand() {
+    }
 
     @Autowired
     public TableAddCliCommand(TerminalReader terminalReader,
 							  TerminalWriter terminalWriter,
-							  TableService tableImportService) {
+							  TableCliService tableImportService) {
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
         this.tableImportService = tableImportService;

@@ -1,0 +1,22 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  mode: current_value
+  fields:
+  - field_name: from
+    display_name: from
+    help_text: Minimum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: double
+    sample_values:
+    - 10.0
+  - field_name: to
+    display_name: to
+    help_text: Maximum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: double
+    sample_values:
+    - 20.5

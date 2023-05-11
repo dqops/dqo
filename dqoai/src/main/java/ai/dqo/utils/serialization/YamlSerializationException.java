@@ -15,10 +15,12 @@
  */
 package ai.dqo.utils.serialization;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * YAML serialization and deserialization exception thrown when the YAML file is invalid.
  */
-public class YamlSerializationException extends RuntimeException {
+public class YamlSerializationException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be

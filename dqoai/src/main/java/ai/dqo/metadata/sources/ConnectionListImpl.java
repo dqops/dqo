@@ -41,12 +41,12 @@ public class ConnectionListImpl extends AbstractIndexingList<String, ConnectionW
     /**
      * Removes a source model. The source is marked for deletion and will be removed on flush.
      *
-     * @param sourceName Source model to remove.
+     * @param connectionName Source model to remove.
      * @return True when the model will be removed, false otherwise.
      */
     @Override
-    public boolean remove(String sourceName) {
-        ConnectionWrapper connectionWrapper = this.getByObjectName(sourceName, true);
+    public boolean remove(String connectionName) {
+        ConnectionWrapper connectionWrapper = this.getByObjectName(connectionName, true);
         if (connectionWrapper == null) {
             return false;
         }
@@ -68,7 +68,6 @@ public class ConnectionListImpl extends AbstractIndexingList<String, ConnectionW
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {

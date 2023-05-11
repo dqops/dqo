@@ -37,17 +37,13 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
     @Autowired
     private LocalHomeTestUtilities localUserHomeTestUtilities;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = LocalHomeStorageServiceObjectMother.createLocalUserHomeStorageServiceForTestableHome(true);
     }
 
-    @Override
     @AfterEach
-    protected void tearDown() throws Throwable {
-        super.tearDown();
+    void tearDown() {
 		this.localUserHomeTestUtilities.recreateTestUserHome();
     }
 
@@ -69,10 +65,11 @@ public class LocalFileStorageServiceImplTests extends BaseTest {
     @Test
     void listFolders_whenRootFolder_thenReturnsStandardFolders() {
         List<HomeFolderPath> folders = this.sut.listFolders(new HomeFolderPath());
-        Assertions.assertEquals(5, folders.size());
+        Assertions.assertEquals(7, folders.size());
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("sources")));
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("rules")));
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("sensors")));
+        Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals("checks")));
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals(".data")));
         Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals(".index")));
 //        Assertions.assertTrue(folders.stream().anyMatch(f -> f.getTopFolder().getFileSystemName().equals(".credentials")));

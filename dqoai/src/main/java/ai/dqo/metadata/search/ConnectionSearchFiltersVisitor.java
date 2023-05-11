@@ -15,17 +15,16 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.metadata.id.HierarchyNode;
-import ai.dqo.metadata.sources.*;
+import ai.dqo.metadata.sources.ConnectionList;
+import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import com.google.common.base.Strings;
-
-import java.util.List;
 
 /**
  * Visitor for {@link ConnectionSearchFilters} that finds the correct nodes.
  */
-public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor {
+public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
     private final ConnectionSearchFilters filters;
 
     /**
@@ -40,11 +39,11 @@ public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a list of connections.
      *
      * @param connectionList List of connections.
-     * @param parameter      Target list where found hierarchy nodes should be added.
+     * @param parameter      Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionList connectionList, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ConnectionList connectionList, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -59,25 +58,32 @@ public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor {
         if (connectionWrapper == null) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN; // another try, maybe the name is case-sensitive
         }
-        return TreeNodeTraversalResult.traverseChildNode(connectionWrapper);
+        return TreeNodeTraversalResult.traverseSelectedChildNodes(connectionWrapper);
     }
 
     /**
      * Accepts a connection wrapper (lazy loader).
      *
      * @param connectionWrapper Connection wrapper.
-     * @param parameter         Target list where found hierarchy nodes should be added.
+     * @param parameter         Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
+        if (this.filters.getLabels() != null && this.filters.getLabels().length > 0) {
+            parameter.getLabelsSearcherObject().setConnectionLabels(connectionWrapper.getSpec().getLabels());
+            if (!LabelsSearchMatcher.matchConnectionLabels(this.filters, connectionWrapper.getSpec().getLabels())) {
+                return TreeNodeTraversalResult.SKIP_CHILDREN;
+            }
+        }
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
-            parameter.add(connectionWrapper.getSpec());
-            return TreeNodeTraversalResult.SKIP_CHILDREN;        }
+            parameter.getNodes().add(connectionWrapper.getSpec());
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
 
         if (StringPatternComparer.matchSearchPattern(connectionWrapper.getName(), connectionNameFilter)) {
-            parameter.add(connectionWrapper.getSpec());
+            parameter.getNodes().add(connectionWrapper.getSpec());
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
@@ -88,27 +94,28 @@ public class ConnectionSearchFiltersVisitor extends AbstractSearchVisitor {
      * Accepts a connection wrapper (lazy loader).
      *
      * @param connectionSpec Connection wrapper.
-     * @param parameter         Target list where found hierarchy nodes should be added.
+     * @param parameter         Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, List<HierarchyNode> parameter) {
+    public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, SearchParameterObject parameter) {
         String connectionNameFilter = this.filters.getConnectionName();
-        if(!this.filters.getEnabled()) {
+        parameter.getLabelsSearcherObject().setConnectionLabels(connectionSpec.getLabels());
+        if (!LabelsSearchMatcher.matchConnectionLabels(this.filters, connectionSpec.getLabels())) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
-            parameter.add(connectionSpec);
+            parameter.getNodes().add(connectionSpec);
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
         if (StringPatternComparer.matchSearchPattern(connectionSpec.getConnectionName(), connectionNameFilter)) {
-            parameter.add(connectionSpec);
+            parameter.getNodes().add(connectionSpec);
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
         if (connectionNameFilter.equals(connectionSpec.getConnectionName())) {
-            parameter.add(connectionSpec);
+            parameter.getNodes().add(connectionSpec);
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 

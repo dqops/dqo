@@ -15,9 +15,10 @@
  */
 package ai.dqo.connectors;
 
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.core.secrets.SecretValueProvider;
-import ai.dqo.metadata.search.StringPatternComparer;
 import ai.dqo.metadata.sources.*;
+import ai.dqo.utils.conversion.NumericTypeConverter;
 import org.apache.parquet.Strings;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
@@ -104,8 +105,10 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      * @return Information schema name.
      */
     public String getInformationSchemaName() {
-        if (this.getDialectSettings().isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(this.getConnectionSpec().getDatabaseName())) {
-            return this.getDialectSettings().quoteIdentifier(this.getConnectionSpec().getDatabaseName()) + ".INFORMATION_SCHEMA";
+        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
+
+        if (this.getDialectSettings().isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(providerSpecificConfiguration.getDatabase())) {
+            return this.getDialectSettings().quoteIdentifier(providerSpecificConfiguration.getDatabase()) + ".INFORMATION_SCHEMA";
         }
         return "INFORMATION_SCHEMA";
     }
@@ -122,7 +125,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         sqlBuilder.append(getInformationSchemaName());
         sqlBuilder.append(".SCHEMATA WHERE SCHEMA_NAME <> 'INFORMATION_SCHEMA'");
         String listSchemataSql = sqlBuilder.toString();
-        Table schemaRows = this.executeQuery(listSchemataSql);
+        Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken());
 
         List<SourceSchemaModel> results = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < schemaRows.rowCount() ; rowIndex++) {
@@ -142,6 +145,8 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      */
     @Override
     public List<SourceTableModel> listTables(String schemaName) {
+        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
+
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT TABLE_CATALOG AS table_catalog, TABLE_SCHEMA AS table_schema, TABLE_NAME AS table_name FROM ");
         sqlBuilder.append(getInformationSchemaName());
@@ -149,7 +154,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         sqlBuilder.append("WHERE TABLE_SCHEMA='");
         sqlBuilder.append(schemaName.replace("'", "''"));
         sqlBuilder.append("'");
-        String databaseName = this.secretValueProvider.expandValue(this.connectionSpec.getDatabaseName());
+        String databaseName = this.secretValueProvider.expandValue(providerSpecificConfiguration.getDatabase());
         if (!Strings.isNullOrEmpty(databaseName)) {
             sqlBuilder.append(" AND TABLE_CATALOG='");
             sqlBuilder.append(databaseName.replace("'", "''"));
@@ -157,7 +162,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         }
 
         String listTablesSql = sqlBuilder.toString();
-        Table tablesRows = this.executeQuery(listTablesSql);
+        Table tablesRows = this.executeQuery(listTablesSql, JobCancellationToken.createDummyJobCancellationToken());
 
         List<SourceTableModel> results = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < tablesRows.rowCount() ; rowIndex++) {
@@ -184,10 +189,10 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         try {
             List<TableSpec> tableSpecs = new ArrayList<>();
             String sql = buildListColumnsSql(schemaName, tableNames);
-            tech.tablesaw.api.Table tableResult = this.executeQuery(sql);
+            tech.tablesaw.api.Table tableResult = this.executeQuery(sql, JobCancellationToken.createDummyJobCancellationToken());
             Column<?>[] columns = tableResult.columnArray();
             for (Column<?> column : columns) {
-                column.setName(column.name().toUpperCase(Locale.ENGLISH));
+                column.setName(column.name().toLowerCase(Locale.ROOT));
             }
 
             HashMap<String, TableSpec> tablesByTableName = new HashMap<>();
@@ -195,21 +200,49 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             for (Row colRow : tableResult) {
                 String physicalTableName = colRow.getString("table_name");
                 String columnName = colRow.getString("column_name");
-                long ordinalPosition = colRow.getLong("ordinal_position");
                 boolean isNullable = Objects.equals(colRow.getString("is_nullable"),"YES");
                 String dataType = colRow.getString("data_type");
 
                 TableSpec tableSpec = tablesByTableName.get(physicalTableName);
                 if (tableSpec == null) {
                     tableSpec = new TableSpec();
-                    tableSpec.getTarget().setSchemaName(schemaName);
-                    tableSpec.getTarget().setTableName(physicalTableName);
+                    tableSpec.setPhysicalTableName(new PhysicalTableName(schemaName, physicalTableName));
                     tablesByTableName.put(physicalTableName, tableSpec);
                     tableSpecs.add(tableSpec);
                 }
 
                 ColumnSpec columnSpec = new ColumnSpec();
                 ColumnTypeSnapshotSpec columnType = ColumnTypeSnapshotSpec.fromType(dataType);
+
+                if (tableResult.containsColumn("character_maximum_length") &&
+                        !colRow.isMissing("character_maximum_length")) {
+                    columnType.setLength(NumericTypeConverter.toInt(colRow.getObject("character_maximum_length")));
+                }
+                else if (tableResult.containsColumn("character_octet_length") &&
+                        !colRow.isMissing("character_octet_length")) {
+                    columnType.setLength(NumericTypeConverter.toInt(colRow.getObject("character_octet_length")));
+                }
+
+                if (tableResult.containsColumn("numeric_precision") &&
+                        !colRow.isMissing("numeric_precision")) {
+                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("numeric_precision")));
+                }
+
+                if (tableResult.containsColumn("numeric_scale") &&
+                        !colRow.isMissing("numeric_scale")) {
+                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("numeric_scale")));
+                }
+
+                if (tableResult.containsColumn("datetime_precision") &&
+                        !colRow.isMissing("datetime_precision")) {
+                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("datetime_precision")));
+                }
+
+                if (tableResult.containsColumn("interval_precision") &&
+                        !colRow.isMissing("interval_precision")) {
+                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("interval_precision")));
+                }
+
                 columnType.setNullable(isNullable);
                 columnSpec.setTypeSnapshot(columnType);
                 tableSpec.getColumns().put(columnName, columnSpec);
@@ -229,9 +262,11 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      * @return SQL of the INFORMATION_SCHEMA query.
      */
     public String buildListColumnsSql(String schemaName, List<String> tableNames) {
+        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
+
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT * FROM ");
-        String databaseName = this.connectionSpec.getDatabaseName();
+        String databaseName = providerSpecificConfiguration.getDatabase();
         sqlBuilder.append(getInformationSchemaName());
         sqlBuilder.append(".COLUMNS ");
         sqlBuilder.append("WHERE TABLE_SCHEMA='");
@@ -244,7 +279,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             sqlBuilder.append("'");
         }
 
-        if (tableNames.size() > 0) {
+        if (tableNames != null && tableNames.size() > 0) {
             sqlBuilder.append(" AND TABLE_NAME IN (");
             for (int ti = 0; ti < tableNames.size(); ti++) {
                 String tableName = tableNames.get(ti);
@@ -266,10 +301,20 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
      *
      * @param sqlQueryStatement SQL statement that returns a row set.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
      * @return Tabular result captured from the query.
      */
     @Override
-    public abstract Table executeQuery(String sqlQueryStatement);
+    public abstract Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken);
+
+    /**
+     * Executes a provider specific SQL that runs a command DML/DDL command.
+     *
+     * @param sqlStatement SQL DDL or DML statement.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
+     */
+    @Override
+    public abstract long executeCommand(String sqlStatement, JobCancellationToken jobCancellationToken);
 
     /**
      * Creates a target table following the table specification.
@@ -278,16 +323,18 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      */
     @Override
     public void createTable(TableSpec tableSpec) {
+        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
+
         ProviderDialectSettings dialectSettings = this.connectionProvider.getDialectSettings(this.getConnectionSpec());
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("CREATE TABLE ");
-        if (dialectSettings.isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(this.getConnectionSpec().getDatabaseName())) {
-            sqlBuilder.append(dialectSettings.quoteIdentifier(this.getConnectionSpec().getDatabaseName()));
+        if (dialectSettings.isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(providerSpecificConfiguration.getDatabase())) {
+            sqlBuilder.append(dialectSettings.quoteIdentifier(providerSpecificConfiguration.getDatabase()));
             sqlBuilder.append(".");
         }
-        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getTarget().getSchemaName()));
+        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getSchemaName()));
         sqlBuilder.append(".");
-        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getTarget().getTableName()));
+        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getTableName()));
         sqlBuilder.append(" (\n");
 
         Map.Entry<String, ColumnSpec> [] columnKeyPairs = tableSpec.getColumns().entrySet().toArray(Map.Entry[]::new);
@@ -330,7 +377,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         sqlBuilder.append("\n)");
 
         String createTableSql = sqlBuilder.toString();
-		this.executeQuery(createTableSql);
+		this.executeCommand(createTableSql, JobCancellationToken.createDummyJobCancellationToken());
     }
 
     /**
@@ -345,16 +392,17 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             return;
         }
 
+        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
         ProviderDialectSettings dialectSettings = this.connectionProvider.getDialectSettings(this.getConnectionSpec());
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("INSERT INTO ");
-        if (dialectSettings.isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(this.getConnectionSpec().getDatabaseName())) {
-            sqlBuilder.append(dialectSettings.quoteIdentifier(this.getConnectionSpec().getDatabaseName()));
+        if (dialectSettings.isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(providerSpecificConfiguration.getDatabase())) {
+            sqlBuilder.append(dialectSettings.quoteIdentifier(providerSpecificConfiguration.getDatabase()));
             sqlBuilder.append(".");
         }
-        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getTarget().getSchemaName()));
+        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getSchemaName()));
         sqlBuilder.append(".");
-        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getTarget().getTableName()));
+        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getTableName()));
         sqlBuilder.append("(");
         for (int i = 0; i < data.columnCount() ; i++) {
             if (i > 0) {
@@ -376,8 +424,8 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
                     sqlBuilder.append(",\n");
                 }
 
-                Object cellValue = data.get(rowIndex, colIndex);
                 Column<?> column = data.column(colIndex);
+                Object cellValue = column.isMissing(rowIndex) ? null : data.get(rowIndex, colIndex);
                 ColumnSpec columnSpec = tableSpec.getColumns().get(column.name());
 
                 String formattedConstant = this.connectionProvider.formatConstant(cellValue, columnSpec.getTypeSnapshot());
@@ -388,6 +436,6 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         }
 
         String insertValueSql = sqlBuilder.toString();
-		this.executeQuery(insertValueSql);
+		this.executeCommand(insertValueSql, JobCancellationToken.createDummyJobCancellationToken());
     }
 }

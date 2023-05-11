@@ -17,6 +17,7 @@ package ai.dqo.core.filesystem.metadata;
 
 import ai.dqo.utils.serialization.PathAsStringJsonDeserializer;
 import ai.dqo.utils.serialization.PathAsStringJsonSerializer;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -42,11 +43,17 @@ public class FileMetadata implements Cloneable {
     @JsonProperty("m")
     private long lastModifiedAt;
 
-    @JsonProperty("h")
-    private byte[] fileHash;
+    @JsonProperty("c")
+    private String md5;
 
     @JsonProperty("s")
     private long statusCheckedAt;
+
+    @JsonProperty("l")
+    private long fileLength;
+
+    @JsonIgnore
+    private boolean deleted;
 
     /**
      * Default constructor - to be used by the deserializer.
@@ -56,19 +63,33 @@ public class FileMetadata implements Cloneable {
 
     /**
      * Creates a metadata object that describes a single local file.
-     * @param relativePath Path to the file that is relative to the root folder. The root folder is a root of the file kind (sensor readings files, alert files, etc.)
+     * @param relativePath Path to the file that is relative to the root folder. The root folder is a root of the file kind (sensor readouts files, rule results files, etc.)
      * @param lastModifiedAt Last modified timestamp retrieved from the file system.
-     * @param fileHash Hash of the file. It is actually a content of the .[filename].parquet.crc file if such a file was found. Otherwise, a hash must be calculated from the file.
+     * @param md5 MD5 hash of the file as base64 formatted string.
      * @param statusCheckedAt The timestamp (now) when the file status was checked for the last time.
+     * @param fileLength File length in bytes.
      */
     public FileMetadata(Path relativePath,
                         long lastModifiedAt,
-                        byte[] fileHash,
-                        long statusCheckedAt) {
+                        String md5,
+                        long statusCheckedAt,
+                        long fileLength) {
         this.relativePath = relativePath;
         this.lastModifiedAt = lastModifiedAt;
-        this.fileHash = fileHash;
+        this.md5 = md5;
         this.statusCheckedAt = statusCheckedAt;
+        this.fileLength = fileLength;
+    }
+
+    /**
+     * Creates a file metadata for a deleted file. Stores only the file path and the deleted flag as true.
+     * @param relativePath Relative path to the file.
+     * @return File metadata for a deleted file.
+     */
+    public static FileMetadata createDeleted(Path relativePath) {
+        FileMetadata fileMetadata = new FileMetadata(relativePath, 0L, null, Instant.now().toEpochMilli(), 0L);
+        fileMetadata.deleted = true;
+        return fileMetadata;
     }
 
     /**
@@ -81,7 +102,7 @@ public class FileMetadata implements Cloneable {
     }
 
     /**
-     * Returns a path to the file that is relative to the root folder. The root folder is a root of the file kind (sensor readings files, alert files, etc.)
+     * Returns a path to the file that is relative to the root folder. The root folder is a root of the file kind (sensor readouts files, rule results files, etc.)
      * @return Relative file path using a linux folder notation.
      */
     public Path getRelativePath() {
@@ -113,19 +134,19 @@ public class FileMetadata implements Cloneable {
     }
 
     /**
-     * Gets the hash of the file. It is actually a content of the .[filename].parquet.crc file if such a file was found.
-     * @return File hash.
+     * Gets the hash of the file as a base64 encoded MD5 hash.
+     * @return File hash as base64 encoded MD5.
      */
-    public byte[] getFileHash() {
-        return fileHash;
+    public String getMd5() {
+        return md5;
     }
 
     /**
      * Private setter - to set the file hash.
-     * @param fileHash File hash.
+     * @param md5 File hash as base64 encoded MD5.
      */
-    private void setFileHash(byte[] fileHash) {
-        this.fileHash = fileHash;
+    private void setMd5(String md5) {
+        this.md5 = md5;
     }
 
     /**
@@ -145,6 +166,47 @@ public class FileMetadata implements Cloneable {
     }
 
     /**
+     * Returns the file size.
+     * @return File size in bytes.
+     */
+    public long getFileLength() {
+        return fileLength;
+    }
+
+    /**
+     * Private setter - used by the deserializer.
+     * @param fileLength File length.
+     */
+    private void setFileLength(long fileLength) {
+        this.fileLength = fileLength;
+    }
+
+    /**
+     * Returns true if the file is deleted.
+     * @return True when the file is deleted.
+     */
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    /**
+     * Sets the flag to mark the file as deleted.
+     * @param deleted True - deleted, false - not deleted.
+     */
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    /**
+     * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text.
+     * @param name Undeclared (and ignored) property name.
+     * @param value Property value.
+     */
+    @JsonAnySetter
+    public void handleUndeclaredProperty(String name, Object value) {
+    }
+
+    /**
      * Calculates a 64 bit hash of the file path and the hash itself. The timestamps are not part of the hash.
      * @return 64 bit farm hash.
      */
@@ -152,7 +214,7 @@ public class FileMetadata implements Cloneable {
         String pathString = this.relativePath.toString().replace('\\', '/');
         HashFunction hashFunction = Hashing.farmHashFingerprint64();
         HashCode pathHash = hashFunction.hashString(pathString, StandardCharsets.UTF_8);
-        HashCode dataHash = hashFunction.hashBytes(this.fileHash);
+        HashCode dataHash = this.md5 != null ? hashFunction.hashString(this.md5, StandardCharsets.UTF_8) : HashCode.fromLong(0L);
         HashCode hashCode = Hashing.combineUnordered(new ArrayList<HashCode>() {{
             add(pathHash);
             add(dataHash);
@@ -167,7 +229,7 @@ public class FileMetadata implements Cloneable {
 
         FileMetadata that = (FileMetadata) o;
 
-        return relativePath.equals(that.relativePath);
+        return relativePath.equals(that.relativePath); // we are comparing only the paths, because we use it as a hash table key
     }
 
     @Override

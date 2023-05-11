@@ -34,6 +34,10 @@ public class JinjaTemplateRenderOutput {
     private Map<String, Object> parameters = new HashMap<>();
     private String result;
     private String error;
+    private Integer totalProcessingMillis;
+    private Integer receivingMillis;
+    private Integer parsingTemplateMillis;
+    private Integer renderingMillis;
 
     /**
      * Jinja2 template as a string that was rendered.
@@ -98,5 +102,69 @@ public class JinjaTemplateRenderOutput {
      */
     public void setError(String error) {
         this.error = error;
+    }
+
+    /**
+     * Returns the total time spent by the template from the moment of receiving the beginning of the request message until the response could be sent back to the client.
+     * @return Total time spent in processing, given in milliseconds.
+     */
+    public Integer getTotalProcessingMillis() {
+        return totalProcessingMillis;
+    }
+
+    /**
+     * Sets the total time spent in processing.
+     * @param totalProcessingMillis Total time spent in processing.
+     */
+    public void setTotalProcessingMillis(Integer totalProcessingMillis) {
+        this.totalProcessingMillis = totalProcessingMillis;
+    }
+
+    /**
+     * Returns the total time spent in parsing the json parameters for the rendering operation, given in milliseconds.
+     * @return Milliseconds spends in parsing the rendering command.
+     */
+    public Integer getReceivingMillis() {
+        return receivingMillis;
+    }
+
+    /**
+     * Sets the time in milliseconds, spent in parsing the request message.
+     * @param receivingMillis  Parsing time milliseconds.
+     */
+    public void setReceivingMillis(Integer receivingMillis) {
+        this.receivingMillis = receivingMillis;
+    }
+
+    /**
+     * Returns the time spent at parsing the Jinja2 template, given in milliseconds.
+     * @return Time spent in parsing the template.
+     */
+    public Integer getParsingTemplateMillis() {
+        return parsingTemplateMillis;
+    }
+
+    /**
+     * Sets the time spent in parsing the template.
+     * @param parsingTemplateMillis Time spent in parsing the template.
+     */
+    public void setParsingTemplateMillis(Integer parsingTemplateMillis) {
+        this.parsingTemplateMillis = parsingTemplateMillis;
+    }
+
+    /**
+     * Returns the time spent in rendering the template, given in milliseconds.
+     * @return Time spent in rendering the template.
+     */
+    public Integer getRenderingMillis() {
+        return renderingMillis;
+    }
+
+    /**
+     * Sets the time spent in rendering the template.
+     * @param renderingMillis Time spent in rendering the template.
+     */
+    public void setRenderingMillis(Integer renderingMillis) {
+        this.renderingMillis = renderingMillis;
     }
 }

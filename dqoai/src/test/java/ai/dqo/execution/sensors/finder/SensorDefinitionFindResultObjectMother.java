@@ -16,7 +16,7 @@
 package ai.dqo.execution.sensors.finder;
 
 import ai.dqo.connectors.ProviderType;
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -37,8 +37,8 @@ public class SensorDefinitionFindResultObjectMother {
         UserHomeContext inMemoryFileHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContext();
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
 
-        CheckExecutionContext checkExecutionContext = new CheckExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
-        SensorDefinitionFindResult providerSensorDefinition = sensorDefinitionFindService.findProviderSensorDefinition(checkExecutionContext, sensorName, providerType);
+        ExecutionContext executionContext = new ExecutionContext(inMemoryFileHomeContext, dqoHomeContext);
+        SensorDefinitionFindResult providerSensorDefinition = sensorDefinitionFindService.findProviderSensorDefinition(executionContext, sensorName, providerType);
         return providerSensorDefinition;
     }
 
@@ -53,8 +53,8 @@ public class SensorDefinitionFindResultObjectMother {
         SensorDefinitionFindService sensorDefinitionFindService = SensorDefinitionFindServiceObjectMother.getSensorDefinitionFindService();
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
 
-        CheckExecutionContext checkExecutionContext = new CheckExecutionContext(userHomeContext, dqoHomeContext);
-        SensorDefinitionFindResult providerSensorDefinition = sensorDefinitionFindService.findProviderSensorDefinition(checkExecutionContext, sensorName, providerType);
+        ExecutionContext executionContext = new ExecutionContext(userHomeContext, dqoHomeContext);
+        SensorDefinitionFindResult providerSensorDefinition = sensorDefinitionFindService.findProviderSensorDefinition(executionContext, sensorName, providerType);
         return providerSensorDefinition;
     }
 }

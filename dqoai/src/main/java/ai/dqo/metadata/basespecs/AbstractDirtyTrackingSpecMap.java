@@ -17,7 +17,9 @@ package ai.dqo.metadata.basespecs;
 
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
+import ai.dqo.utils.serialization.YamlNotRenderWhenDefault;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -25,8 +27,9 @@ import java.util.Map;
 /**
  * Dictionary of spec objects indexed by a key.
  */
-public abstract class AbstractDirtyTrackingSpecMap<V extends DirtyStatus & HierarchyNode>
-        extends LinkedHashMap<String, V> implements HierarchyNode {
+@JsonIgnoreProperties(value = { "" })
+public abstract class AbstractDirtyTrackingSpecMap<V extends HierarchyNode>
+        extends LinkedHashMap<String, V> implements HierarchyNode, YamlNotRenderWhenDefault {
     @JsonIgnore
     private boolean dirty;
     @JsonIgnore
@@ -198,5 +201,56 @@ public abstract class AbstractDirtyTrackingSpecMap<V extends DirtyStatus & Hiera
     public V putIfAbsent(String key, V value) {
 		this.setDirty();
         return super.putIfAbsent(key, value);
+    }
+
+    /**
+     * Checks if the object is a default value, so it would be rendered as an empty node. We want to skip it and not render it to YAML.
+     * The implementation of this interface method should check all object's fields to find if at least one of them has a non-default value or is not null, so it should be rendered.
+     *
+     * @return true when the object has the default values only and should not be rendered to YAML, false when it should be rendered.
+     */
+    @Override
+    public boolean isDefault() {
+        return this.size() == 0;
+    }
+
+    /**
+     * Returns an object at the given index. The map uses a linked hash map which preserves the insert order, so the object will be returned from the given index.
+     * NOTE: this method will iterate over values to find the object at the requested index, it should not be called in a loop.
+     * @param index 0-based index of the object to return.
+     * @return Returned object or null if there is no such index.
+     */
+    public V getAt(int index) {
+        int currentIndex = 0;
+        for (V value : this.values()) {
+            if (currentIndex++ == index) {
+                return value;
+            }
+        }
+
+        return null; // not found
+    }
+
+    /**
+     * Performs a deep clone of the object.
+     *
+     * @return Deep clone of the object.
+     */
+    @Override
+    public AbstractDirtyTrackingSpecMap<V> deepClone() {
+        AbstractDirtyTrackingSpecMap<V> cloned = (AbstractDirtyTrackingSpecMap<V>) super.clone();
+        cloned.clear();
+        cloned.dirty = false;
+
+        if (this.size() == 0) {
+            return cloned;
+        }
+
+        for (Map.Entry<String, V> childEntry : this.entrySet()) {
+            V clonedChild = (V)childEntry.getValue().deepClone();
+            cloned.put(childEntry.getKey(), clonedChild);
+        }
+
+        return cloned;
     }
 }

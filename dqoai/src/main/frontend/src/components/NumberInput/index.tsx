@@ -1,0 +1,142 @@
+import React, { FocusEvent, useCallback, KeyboardEvent, ChangeEvent } from 'react';
+
+import clsx from 'clsx';
+
+import SvgIcon from '../SvgIcon';
+import { Tooltip } from '@material-tailwind/react';
+
+interface INumberInputProps {
+  className?: string;
+  label?: string;
+  placeholder?: string;
+  name?: string;
+  value?: string | number;
+  onChange: (value: number) => void;
+  onBlur?: (e: FocusEvent) => void;
+  dataTestId?: string;
+  min?: number;
+  max?: number;
+  tooltipText?: string;
+  disabled?: boolean;
+  error?: boolean;
+  step?: number;
+}
+
+const NumberInput = ({
+  label,
+  className,
+  placeholder,
+  name,
+  value,
+  onChange,
+  onBlur,
+  dataTestId,
+  min,
+  max,
+  tooltipText,
+  disabled,
+  error,
+  step
+}: INumberInputProps) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value === '') {
+      onChange(+e.target.value);
+      return;
+    }
+    if (onChange) {
+      onChange(Number(e.target.value));
+    }
+  };
+
+  const increase = useCallback(() => {
+    if (!value) {
+      onChange(1);
+    } else {
+      onChange(Number(value) + 1);
+    }
+  }, [onChange, value]);
+
+  const decrease = useCallback(() => {
+    if (!value) {
+      if (min === undefined || min <= -1) {
+        onChange(-1);
+      }
+    } else if (min === undefined || min <= Number(value) - 1) {
+      onChange(Number(value) - 1);
+    }
+  }, [onChange, value]);
+
+  const onKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (!/[0-9]/.test(event.key)) {
+      event.preventDefault();
+    }
+  };
+
+  return (
+    <div>
+      <div className="flex space-x-1">
+        {label && (
+          <label
+            htmlFor={name}
+            className={clsx(
+              'block font-regular text-gray-700 mb-1 text-sm flex space-x-1',
+              error ? 'text-red-500' : ''
+            )}
+          >
+            <span>{label}</span>
+            {!!tooltipText && (
+              <Tooltip
+                content={tooltipText}
+                className="max-w-80 py-4 px-4 bg-gray-800"
+              >
+                <div>
+                  <SvgIcon
+                    name="info"
+                    className="w-4 h-4 text-gray-700 cursor-pointer"
+                  />
+                </div>
+              </Tooltip>
+            )}
+          </label>
+        )}
+      </div>
+      <div className="relative inline-flex">
+        <input
+          name={name}
+          type="number"
+          placeholder={placeholder}
+          className={clsx(
+            error
+              ? 'border border-red-500'
+              : 'focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-none border-gray-300',
+            'h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none block w-full sm:text-base rounded',
+            className
+          )}
+          value={value}
+          onChange={handleChange}
+          onBlur={onBlur}
+          data-testid={dataTestId}
+          min={min}
+          max={max}
+          disabled={disabled}
+          step={step}
+          onKeyPress={onKeyPress}
+        />
+        <div className="flex flex-col absolute top-1/2 transform -translate-y-1/2 right-2">
+          <SvgIcon
+            className="cursor-pointer w-4"
+            name="chevron-up"
+            onClick={increase}
+          />
+          <SvgIcon
+            className="cursor-pointer w-4"
+            name="chevron-down"
+            onClick={decrease}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default NumberInput;

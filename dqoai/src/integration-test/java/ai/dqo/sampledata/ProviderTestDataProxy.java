@@ -46,7 +46,7 @@ public class ProviderTestDataProxy {
      * @return Provided sample table metadata or a cached copy if a table with the same name is already present in the target database.
      */
     public SampleTableMetadata ensureTableExists(SampleTableMetadata sampleTableMetadata) {
-        String targetTableName = sampleTableMetadata.getTableSpec().getTarget().getTableName();
+        String targetTableName = sampleTableMetadata.getTableSpec().getPhysicalTableName().getTableName();
         ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
         ConnectionTablePair connectionTablePair = new ConnectionTablePair(connectionSpec, targetTableName);
         if (existingTables.containsKey(connectionTablePair)) {
@@ -54,7 +54,7 @@ public class ProviderTestDataProxy {
         }
 
         ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(this.providerType);
-        String schemaName = sampleTableMetadata.getTableSpec().getTarget().getSchemaName();
+        String schemaName = sampleTableMetadata.getTableSpec().getPhysicalTableName().getSchemaName();
         ConnectionSchemaPair schemaListKey = new ConnectionSchemaPair(connectionSpec, schemaName);
         List<SourceTableModel> tablesInSchema = tablesInSchemas.get(schemaListKey);
         if (tablesInSchema == null) {
@@ -81,4 +81,5 @@ public class ProviderTestDataProxy {
 		existingTables.put(connectionTablePair, sampleTableMetadata);
         return sampleTableMetadata;
     }
+
 }

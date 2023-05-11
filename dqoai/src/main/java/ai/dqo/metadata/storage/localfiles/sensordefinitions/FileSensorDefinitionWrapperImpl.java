@@ -16,10 +16,10 @@
 package ai.dqo.metadata.storage.localfiles.sensordefinitions;
 
 import ai.dqo.core.filesystem.ApiVersion;
+import ai.dqo.core.filesystem.localfiles.LocalFileSystemException;
 import ai.dqo.core.filesystem.virtual.FileContent;
 import ai.dqo.core.filesystem.virtual.FileTreeNode;
 import ai.dqo.core.filesystem.virtual.FolderTreeNode;
-import ai.dqo.core.filesystem.localfiles.LocalFileSystemException;
 import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperImpl;
@@ -50,6 +50,15 @@ public class FileSensorDefinitionWrapperImpl extends SensorDefinitionWrapperImpl
         this.yamlSerializer = yamlSerializer;
 		this.setProviderSensors(new FileProviderSensorDefinitionListImpl(sensorFolderNode, yamlSerializer));
 		this.setStatus(InstanceStatus.UNCHANGED);
+    }
+
+    /**
+     * Returns the folder that contains the sensor files.
+     * @return Sensor folder.
+     */
+    @JsonIgnore
+    public FolderTreeNode getSensorFolderNode() {
+        return sensorFolderNode;
     }
 
     /**

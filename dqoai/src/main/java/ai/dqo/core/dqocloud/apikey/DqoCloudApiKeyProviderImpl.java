@@ -17,14 +17,15 @@ package ai.dqo.core.dqocloud.apikey;
 
 import ai.dqo.core.configuration.DqoCloudConfigurationProperties;
 import ai.dqo.core.secrets.SecretValueProvider;
-import ai.dqo.metadata.sources.SettingsSpec;
-import ai.dqo.metadata.sources.SettingsWrapper;
+import ai.dqo.metadata.settings.SettingsSpec;
+import ai.dqo.metadata.settings.SettingsWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.parquet.Strings;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,6 +42,8 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     private UserHomeContextFactory userHomeContextFactory;
     private SecretValueProvider secretValueProvider;
     private JsonSerializer jsonSerializer;
+    private DqoCloudApiKey cachedApiKey;
+    private final Object lock = new Object();
 
     /**
      * Default injection constructor.
@@ -64,26 +67,61 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
      * Returns the api key for the DQO Cloud.
      * @return DQO Cloud api key or null when the key was not yet configured.
      */
+    @Override
     public DqoCloudApiKey getApiKey() {
         try {
-            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-            SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
-            SettingsSpec settingsSpec = settingsWrapper.getSpec();
-            String apiKey = null;
+            synchronized (this.lock) {
+                if (this.cachedApiKey != null) {
+                    return this.cachedApiKey;
+                }
 
-            if (settingsSpec != null) {
-                SettingsSpec settings = settingsSpec.expandAndTrim(this.secretValueProvider);
-                apiKey = settings.getApiKey();
+                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+                SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+                SettingsSpec settingsSpec = settingsWrapper.getSpec();
+                String apiKey = null;
+
+                if (settingsSpec != null) {
+                    SettingsSpec settings = settingsSpec.expandAndTrim(this.secretValueProvider);
+                    apiKey = settings.getApiKey();
+                }
+
+                if (Strings.isNullOrEmpty(apiKey)) {
+                    apiKey = this.dqoCloudConfigurationProperties.getApiKey(); // take the api keys from configuration, it could be pulled from a secret manager or environment variables
+                }
+
+                if (Strings.isNullOrEmpty(apiKey)) {
+                    return null;
+                }
+
+                DqoCloudApiKey dqoCloudApiKey = decodeApiKey(apiKey);
+                this.cachedApiKey = dqoCloudApiKey;
+                return dqoCloudApiKey;
             }
+        } catch (Exception e) {
+            throw new DqoCloudInvalidKeyException("API Key is invalid", e);
+        }
+    }
 
-            if (Strings.isNullOrEmpty(apiKey)) {
-                apiKey = this.dqoCloudConfigurationProperties.getApiKey(); // take the api keys from configuration, it could be pulled from a secret manager or environment variables
-            }
+    /**
+     * Invalidates the cached api key.
+     */
+    @Override
+    public void invalidate() {
+        synchronized (this.lock) {
+            this.cachedApiKey = null;
+        }
+    }
 
-            if (Strings.isNullOrEmpty(apiKey)) {
-                return null;
-            }
-
+    /**
+     * Decodes a given API Key.
+     * @param apiKey API key to decode.
+     * @return Decoded api key.
+     * @throws DecoderException When the api key is invalid.
+     */
+    @NotNull
+    @Override
+    public DqoCloudApiKey decodeApiKey(String apiKey) {
+        try {
             byte[] messageBytes = Hex.decodeHex(apiKey);
             byte[] payloadBytes = new byte[messageBytes.length - 32];
             System.arraycopy(messageBytes, 0, payloadBytes, 0, payloadBytes.length);
@@ -93,8 +131,9 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
 
             DqoCloudApiKey dqoCloudApiKey = new DqoCloudApiKey(apiKey, deserializedApiKeyPayload);
             return dqoCloudApiKey;
-        } catch (DecoderException e) {
-            throw new DqoCloudInvalidKeyException("API Key is invalid", e);
+        }
+        catch (DecoderException ex) {
+            throw new DqoCloudInvalidKeyException("Failed to decode a DQO Cloud API Key, error: " + ex.getMessage(), ex);
         }
     }
 }

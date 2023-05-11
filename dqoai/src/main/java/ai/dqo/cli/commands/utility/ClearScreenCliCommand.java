@@ -18,6 +18,7 @@ package ai.dqo.cli.commands.utility;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -26,10 +27,13 @@ import picocli.CommandLine;
  * Clear screen ("cls") command.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "cls", description = "Clears the screen")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "cls", header = "Clear the screen", description = "Clear the terminal screen or console, removing all the previous commands and outputs of the commands that were executed on the console. It allows the user to start with a clean slate for the next set of commands or outputs.")
 public class ClearScreenCliCommand implements ICommand {
     private TerminalWriter terminalWriter;
+
+    public ClearScreenCliCommand() {
+    }
 
     /**
      * Default injection constructor.

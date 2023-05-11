@@ -15,10 +15,10 @@
  */
 package ai.dqo.metadata.storage.localfiles.userhome;
 
-import ai.dqo.core.filesystem.virtual.FolderTreeNode;
-import ai.dqo.core.filesystem.virtual.HomeFolderPath;
 import ai.dqo.core.filesystem.localfiles.LocalFolderTreeNode;
 import ai.dqo.core.filesystem.localfiles.LocalFolderTreeNodeObjectMother;
+import ai.dqo.core.filesystem.virtual.FolderTreeNode;
+import ai.dqo.core.filesystem.virtual.HomeFolderPath;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.sampledata.SampleTableMetadata;
@@ -69,12 +69,11 @@ public final class UserHomeContextObjectMother {
      */
     public static void addSampleTable(UserHomeContext userHomeContext, SampleTableMetadata sampleTableMetadata) {
         Assertions.assertNull(sampleTableMetadata.getConnectionSpec().getHierarchyId(), "We have a race condition, the spec object was already attached to a home context");
-        Assertions.assertNull(sampleTableMetadata.getTableSpec().getHierarchyId(), "We have a race condition, the spec object was already attached to a home context");
 
         ConnectionWrapper connectionWrapper = userHomeContext.getUserHome().getConnections().createAndAddNew(sampleTableMetadata.getConnectionName());
         connectionWrapper.setSpec(sampleTableMetadata.getConnectionSpec());
 
-        TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(sampleTableMetadata.getTableSpec().getTarget().toPhysicalTableName());
+        TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(sampleTableMetadata.getTableSpec().getPhysicalTableName());
         tableWrapper.setSpec(sampleTableMetadata.getTableSpec());
     }
 

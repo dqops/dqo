@@ -17,12 +17,20 @@ package ai.dqo.cli.commands.cloud.sync.impl;
 
 import ai.dqo.cli.commands.cloud.impl.CloudLoginService;
 import ai.dqo.cli.exceptions.CliRequiredParameterMissingException;
-import ai.dqo.cli.terminal.TerminalReader;
-import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.cli.terminal.TerminalFactory;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
-import ai.dqo.core.dqocloud.synchronization.DqoCloudSynchronizationService;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.jobqueue.DqoJobQueue;
+import ai.dqo.core.jobqueue.DqoQueueJobFactory;
+import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.fileexchange.FileSynchronizationDirection;
+import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
+import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJobParameters;
+import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderParameters;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationListener;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationListenerProvider;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
+import ai.dqo.core.synchronization.service.DqoCloudSynchronizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,41 +40,59 @@ import org.springframework.stereotype.Service;
 @Service
 public class CloudSynchronizationServiceImpl implements CloudSynchronizationService {
     private DqoCloudSynchronizationService dqoCloudSynchronizationService;
+    private FileSystemSynchronizationListenerProvider systemSynchronizationListenerProvider;
     private DqoCloudApiKeyProvider apiKeyProvider;
     private CloudLoginService cloudLoginService;
-    private TerminalReader terminalReader;
-    private TerminalWriter terminalWriter;
+    private TerminalFactory terminalFactory;
+    private DqoQueueJobFactory dqoQueueJobFactory;
+    private DqoJobQueue dqoJobQueue;
 
     /**
      * Default injection constructor.
      * @param dqoCloudSynchronizationService Cloud synchronization service.
+     * @param systemSynchronizationListenerProvider Synchronization listener provider.
      * @param apiKeyProvider Api key provider - used to check if the user logged in to DQO Cloud.
      * @param cloudLoginService Cloud login service - used to log in.
-     * @param terminalReader Terminal reader.
-     * @param terminalWriter Terminal writer to write the results.
+     * @param terminalFactory Terminal factory.
+     * @param dqoQueueJobFactory DQO job factory used to create a new instance of a folder synchronization job.
+     * @param dqoJobQueue DQO job queue to execute a background synchronization.
      */
     @Autowired
     public CloudSynchronizationServiceImpl(
             DqoCloudSynchronizationService dqoCloudSynchronizationService,
+            FileSystemSynchronizationListenerProvider systemSynchronizationListenerProvider,
             DqoCloudApiKeyProvider apiKeyProvider,
             CloudLoginService cloudLoginService,
-            TerminalReader terminalReader,
-            TerminalWriter terminalWriter) {
+            TerminalFactory terminalFactory,
+            DqoQueueJobFactory dqoQueueJobFactory,
+            DqoJobQueue dqoJobQueue) {
         this.dqoCloudSynchronizationService = dqoCloudSynchronizationService;
+        this.systemSynchronizationListenerProvider = systemSynchronizationListenerProvider;
         this.apiKeyProvider = apiKeyProvider;
         this.cloudLoginService = cloudLoginService;
-        this.terminalReader = terminalReader;
-        this.terminalWriter = terminalWriter;
+        this.terminalFactory = terminalFactory;
+        this.dqoQueueJobFactory = dqoQueueJobFactory;
+        this.dqoJobQueue = dqoJobQueue;
     }
 
     /**
      * Synchronize a folder type to/from DQO Cloud.
      * @param rootType Root type.
-     * @param reportFiles When true, files are reported.
+     * @param reportingMode File synchronization progress reporting mode.
      * @param headlessMode The application was started in a headless mode and should not bother the user with questions (prompts).
+     * @param synchronizationDirection File synchronization direction.
+     * @param forceRefreshNativeTable Forces to refresh a whole native table for data folders.
+     * @param runOnBackgroundQueue True when the actual synchronization operation should be executed in the background on the DQO job queue.
+     *                             False when the operation should be executed on the caller's thread.
      * @return 0 when success, -1 when an error.
      */
-    public int synchronizeRoot(DqoRoot rootType, boolean reportFiles, boolean headlessMode) {
+    @Override
+    public int synchronizeRoot(DqoRoot rootType,
+                               FileSystemSynchronizationReportingMode reportingMode,
+                               FileSynchronizationDirection synchronizationDirection,
+                               boolean forceRefreshNativeTable,
+                               boolean headlessMode,
+                               boolean runOnBackgroundQueue) {
         DqoCloudApiKey apiKey = this.apiKeyProvider.getApiKey();
         if (apiKey == null) {
             // the api key is missing
@@ -75,8 +101,8 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
                 throw new CliRequiredParameterMissingException("API Key is missing, please run \"cloud login\" to configure your DQO Cloud API KEY");
             }
 
-            Boolean loginMe = this.terminalReader.promptBoolean("DQO Cloud API Key is missing, do you want to log in or register to DOQ Cloud?",
-                    true, true);
+            Boolean loginMe = this.terminalFactory.getReader().promptBoolean("DQO Cloud API Key is missing, do you want to log in or register to DOQ Cloud?",
+                    true);
             if (loginMe) {
                 if (!this.cloudLoginService.logInToDqoCloud()) {
                     return -2;
@@ -86,10 +112,24 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
             }
         }
 
-        CliFileSystemSynchronizationListener synchronizationListener = new CliFileSystemSynchronizationListener(rootType, reportFiles, terminalWriter);
-        this.dqoCloudSynchronizationService.synchronizeFolder(rootType, synchronizationListener);
+        FileSystemSynchronizationListener synchronizationListener = this.systemSynchronizationListenerProvider.getSynchronizationListener(reportingMode);
 
-        this.terminalWriter.writeLine(rootType.toString() + " synchronization between local DQO User Home and DQO Cloud finished.\n");
+        if (runOnBackgroundQueue) {
+            SynchronizeRootFolderDqoQueueJob synchronizeRootFolderJob = this.dqoQueueJobFactory.createSynchronizeRootFolderJob();
+            SynchronizeRootFolderParameters synchronizationParameter = new SynchronizeRootFolderParameters(
+                    rootType, synchronizationDirection, forceRefreshNativeTable);
+            SynchronizeRootFolderDqoQueueJobParameters jobParameters = new SynchronizeRootFolderDqoQueueJobParameters(
+                    synchronizationParameter, synchronizationListener);
+            synchronizeRootFolderJob.setParameters(jobParameters);
+
+            this.dqoJobQueue.pushJob(synchronizeRootFolderJob);
+            synchronizeRootFolderJob.waitForFinish();
+        }
+        else {
+            this.dqoCloudSynchronizationService.synchronizeFolder(rootType, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        }
+
+        this.terminalFactory.getWriter().writeLine(rootType.toString() + " synchronization between local DQO User Home and DQO Cloud finished.\n");
 
         return 0;
     }

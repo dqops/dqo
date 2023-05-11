@@ -15,12 +15,14 @@
  */
 package ai.dqo.execution.rules;
 
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindService;
 import ai.dqo.execution.rules.runners.AbstractRuleRunner;
 import ai.dqo.execution.rules.runners.RuleRunnerFactory;
+import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
+import ai.dqo.rules.RuleSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -45,19 +47,23 @@ public class DataQualityRuleRunnerImpl implements DataQualityRuleRunner {
 
     /**
      * Executes a rule and returns the rule evaluation result.
-     * @param checkExecutionContext Check execution context that provides access to the user home and dqo home.
+     * @param executionContext Check execution context that provides access to the user home and dqo home.
      * @param ruleRunParameters Rule run parameters (rule parameters, additional data that the rule requires).
+     * @param sensorRunParameters Sensor run parameters with the reference to the check.
      * @return Rule execution result with the severity status.
      */
-    public RuleExecutionResult executeRule(CheckExecutionContext checkExecutionContext, RuleExecutionRunParameters ruleRunParameters) {
-        String ruleName = ruleRunParameters.getParameters().getRuleDefinitionName();
+    @Override
+    public RuleExecutionResult executeRule(ExecutionContext executionContext,
+                                           RuleExecutionRunParameters ruleRunParameters,
+                                           SensorExecutionRunParameters sensorRunParameters) {
+        String ruleName = sensorRunParameters.getEffectiveSensorRuleNames().getRuleName();
 
-        RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(checkExecutionContext, ruleName);
+        RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleName);
         RuleDefinitionSpec ruleDefinitionSpec = ruleFindResult.getRuleDefinitionSpec();
         AbstractRuleRunner ruleRunner = this.ruleRunnerFactory.getRuleRunner(ruleDefinitionSpec.getType(),
                 ruleDefinitionSpec.getJavaClassName());
 
-        RuleExecutionResult result = ruleRunner.executeRule(checkExecutionContext, ruleRunParameters, ruleFindResult);
+        RuleExecutionResult result = ruleRunner.executeRule(executionContext, ruleRunParameters, ruleFindResult);
         return result;
     }
 }

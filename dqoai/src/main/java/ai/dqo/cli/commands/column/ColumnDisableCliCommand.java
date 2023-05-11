@@ -16,9 +16,9 @@
 package ai.dqo.cli.commands.column;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.column.impl.ColumnService;
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.column.impl.ColumnCliService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
@@ -26,9 +26,8 @@ import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
-import ai.dqo.metadata.sources.PhysicalTableName;
-import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -37,20 +36,23 @@ import picocli.CommandLine;
  * Cli command to disable a column.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "disable", description = "Disable column or columns which match filters")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "disable", header = "Disable the column(s)filtered by the given conditions", description = "Disable one or more columns in a table based on a specified condition. Disabling a column will prevent it from being queried or updated until it is enabled again.")
 public class ColumnDisableCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
-	private final ColumnService columnService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private ColumnCliService columnCliService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public ColumnDisableCliCommand() {
+	}
 
 	@Autowired
 	public ColumnDisableCliCommand(TerminalReader terminalReader,
 							   TerminalWriter terminalWriter,
-							   ColumnService columnService) {
+							   ColumnCliService columnCliService) {
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
-		this.columnService = columnService;
+		this.columnCliService = columnCliService;
 	}
 
 	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name", required = false,
@@ -122,7 +124,7 @@ public class ColumnDisableCliCommand extends BaseCommand implements ICommand, IC
 	@Override
 	public Integer call() throws Exception {
 
-		CliOperationStatus cliOperationStatus = columnService.setDisableTo(connectionName, fullTableName, columnName, true);
+		CliOperationStatus cliOperationStatus = columnCliService.setDisableTo(connectionName, fullTableName, columnName, true);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

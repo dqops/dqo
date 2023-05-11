@@ -16,15 +16,15 @@
 package ai.dqo.cli.commands.settings;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.settings.impl.EditorFinderService;
-import ai.dqo.cli.commands.settings.impl.EditorFinderServiceImpl;
 import ai.dqo.cli.commands.settings.impl.EditorInformation;
 import ai.dqo.cli.commands.settings.impl.SettingsService;
-import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -37,13 +37,16 @@ import static java.lang.Integer.parseInt;
  * Cli command to init settings yaml.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "init", description = "Init settings file in user home")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "init", header = "Initialize settings file in UserHome directory", description = "Settings file in your UserHome directory. This file stores configuration options for the DQO.")
 public class SettingsInitCliCommand extends BaseCommand implements ICommand {
-	private final SettingsService settingsService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
-	private final EditorFinderService editorFinderService;
+	private SettingsService settingsService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+	private EditorFinderService editorFinderService;
+
+	public SettingsInitCliCommand() {
+	}
 
 	@Autowired
 	public SettingsInitCliCommand(SettingsService settingsService,

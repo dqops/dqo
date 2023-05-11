@@ -36,14 +36,14 @@ public class SnowflakeConnectionSpecObjectMother {
         ConnectionSpec connectionSpec = new ConnectionSpec()
         {{
 			setProviderType(ProviderType.snowflake);
-			setDatabaseName(DevelopmentCredentialsSecretNames.SNOWFLAKE_DATABASE);
-			setUser(DevelopmentCredentialsSecretNames.SNOWFLAKE_USER);
-			setPassword(DevelopmentCredentialsSecretNames.SNOWFLAKE_PASSWORD);
 
 			setSnowflake(new SnowflakeParametersSpec()
             {{
 				setAccount(DevelopmentCredentialsSecretNames.SNOWFLAKE_ACCOUNT);
 				setWarehouse(DevelopmentCredentialsSecretNames.SNOWFLAKE_WAREHOUSE);
+                setDatabase(DevelopmentCredentialsSecretNames.SNOWFLAKE_DATABASE);
+                setUser(DevelopmentCredentialsSecretNames.SNOWFLAKE_USER);
+                setPassword(DevelopmentCredentialsSecretNames.SNOWFLAKE_PASSWORD);
             }});
         }};
         return connectionSpec;

@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 10
+    min_periods_with_readouts: 5
+    historic_data_point_grouping: day
+  fields:
+  - field_name: percentile_stdev_above
+    display_name: percentile_stdev_above
+    help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
+      \ above a moving average within the time window. Set the time window at the\
+      \ threshold level for all severity levels (warning, error, fatal) at once. The\
+      \ default is a 14 time periods (days, etc.) time window, but at least 7 readouts\
+      \ must exist to run the calculation."
+    data_type: double
+    sample_values:
+    - 5
+  - field_name: percentile_stdev_below
+    display_name: percentile_stdev_below
+    help_text: "Maximum percent (e.q. 3%) that the current sensorreadout could be\
+      \ below a moving average within the time window. Set the time window at the\
+      \ threshold level for all severity levels (warning, error, fatal) at once. The\
+      \ default is a 14 time periods (days, etc.) time window, but at least 7 readouts\
+      \ must exist to run the calculation."
+    data_type: double
+    sample_values:
+    - 5

@@ -15,56 +15,35 @@
 # limitations under the License.
 #
 
-source $(dirname $0)/set-dqo-envs.sh
-
-# Only attempt to find DQO_HOME if it is not set.
-
-export FIND_DQO_HOME_PYTHON_SCRIPT=$(dirname $0)/find_dqo_home.sh
-
-export DQO_VERSION=0.1.0
-
-if [[ -f $(dirname $0)/dqoai/pom.xml ]]; then
-
-     export DQO_LIBS=$(dirname $0)/lib/target/output/dqo-lib-"$DQO_VERSION"/jars
-     export DQO_JAR=$(dirname $0)/dqoai/target/dqo-dqoai-"$DQO_VERSION".jar
-    echo "Compiling DQO.ai"
-    sh $(dirname $0)/mvnw.sh package -DskipTests -Pbuild-with-jdk-11 -f $(dirname $0)/pom.xml
-    export DQO_LAUNCH_CLASSPATH=$DQO_JAR
-else
-    if [[ -f $(dirname $0)/jars ]]; then
-        export DQO_JARS_DIR=$DQO_HOME/jars
-    else
-        echo "DQO_HOME does not have a %DQO_HOME%/jars folder"
-        exit 0
-    fi
-    export DQO_LAUNCH_CLASSPATH=$DQO_JAR;$DQO_LIBS/*
+# Only attempt to find DQO_HOME if it is not set
+if [ -z $DQO_HOME ]; then
+  export DQO_HOME=$(dirname $0)/..
 fi
 
-# Add the launcher build dir to the classpath if requested.
-if [ ! -z "${DQO_PREPEND_CLASSES}" ]; then
-  export DQO_LAUNCH_CLASSPATH=$DQO_PREPEND_CLASSES;$DQO_LAUNCH_CLASSPATH
+if [ -z $DQO_USER_HOME ]; then
+  export DQO_USER_HOME=.
 fi
 
-
-if [ -z "$JAVA_HOME" ]; then
-  if [ -x "/usr/libexec/java_home" ]; then
-    export JAVA_HOME="`/usr/libexec/java_home`"
-  else
-    export JAVA_HOME="/Library/Java/Home"
-  fi
+if [ ! -d $DQO_USER_HOME ]; then
+  mkdir $DQO_USER_HOME
 fi
 
-if [ -z "$JAVA_HOME" ] ; then
-  if [ -r /etc/gentoo-release ] ; then
-    JAVA_HOME=`java-config --jre-home`
-  fi
+if [ -z $DQO_JAVA_OPTS ]; then
+  export DQO_JAVA_OPTS=-Xmx1024m
 fi
 
 # Figure out where java is.
-if [ ! -z "${JAVA_HOME}" ]; then
+export DQO_RUNNER=java
+if [ -n $JAVA_HOME ]; then
   export DQO_RUNNER=$JAVA_HOME/bin/java
 else
-    echo "Java not found and JAVA_HOME environment variable is not set."
-    echo "Install Java 11 or newer and set JAVA_HOME to point to the Java installation directory."
-fi
+  printenv DQO_RUNNER >> /dev/null
 
+  returnedValue=$?
+  if [ $returnedValue -ne 0 ]; then
+      echo Java not found and JAVA_HOME environment variable is not set.
+      echo Install Java 11 or newer and set JAVA_HOME to point to the Java installation directory.
+      exit $returnedValue
+  fi
+
+fi

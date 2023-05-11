@@ -20,15 +20,18 @@ import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
+import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
+import ai.dqo.core.configuration.DqoPythonConfigurationPropertiesObjectMother;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.metadata.sources.TableTargetSpec;
-import ai.dqo.sensors.table.consistency.TableConsistencyRowCountSensorParametersSpec;
+import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
 import ai.dqo.utils.python.PythonCallerServiceImpl;
 import ai.dqo.utils.python.PythonVirtualEnvService;
 import ai.dqo.utils.python.PythonVirtualEnvServiceObjectMother;
@@ -42,29 +45,27 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class JinjaTemplateRenderServiceImplTests extends BaseTest {
     private JinjaTemplateRenderServiceImpl sut;
     private JinjaTemplateRenderParameters renderParameters;
+    private TableSpec table;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
         DqoConfigurationProperties dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
+        DqoPythonConfigurationProperties pythonConfigurationProperties = DqoPythonConfigurationPropertiesObjectMother.getDefaultCloned();
         PythonVirtualEnvService pythonVirtualEnvService = PythonVirtualEnvServiceObjectMother.getDefault();
-        PythonCallerServiceImpl pythonCallerService = new PythonCallerServiceImpl(dqoConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
-		this.sut = new JinjaTemplateRenderServiceImpl(pythonCallerService, dqoConfigurationProperties);
-		this.renderParameters = new JinjaTemplateRenderParameters(
+        PythonCallerServiceImpl pythonCallerService = new PythonCallerServiceImpl(
+                dqoConfigurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
+		this.sut = new JinjaTemplateRenderServiceImpl(pythonCallerService, pythonConfigurationProperties);
+        table = new TableSpec();
+        table.setPhysicalTableName(new PhysicalTableName("schema1", "table1"));
+        this.renderParameters = new JinjaTemplateRenderParameters(
                 new ConnectionSpec(),
-                new TableSpec(),
+                table,
                 new ColumnSpec(),
                 null,
-                new TableConsistencyRowCountSensorParametersSpec(),
-                TimeSeriesConfigurationSpec.createDefault(),
-                new DimensionsConfigurationSpec(),
+                new TableStandardRowCountSensorParametersSpec(),
+                TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
+                new TimeWindowFilterParameters(),
+                new DataStreamMappingSpec(),
                 new SensorDefinitionSpec(),
                 new ProviderSensorDefinitionSpec(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery)
@@ -79,8 +80,7 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
 
     @Test
     void renderTemplate_whenSensorReferencingTable_thenRendersTemplateWithFilledField() {
-		this.renderParameters.getTable().setTarget(new TableTargetSpec("schema1", "table1"));
-        String result = this.sut.renderTemplate("select 1 from {{ table.target.table_name }}", this.renderParameters);
+        String result = this.sut.renderTemplate("select 1 from {{ target_table.table_name }}", this.renderParameters);
         Assertions.assertEquals("select 1 from table1", result);
     }
 }

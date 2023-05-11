@@ -16,8 +16,18 @@
 package ai.dqo.metadata.sources;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.table.TableCheckCategoriesSpec;
-import ai.dqo.checks.table.validity.TableValidityRowCountCheckSpec;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
+import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
+import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringSpec;
+import ai.dqo.checks.table.recurring.standard.TableStandardMonthlyRecurringSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
+import ai.dqo.metadata.groupings.DataStreamLevelSpecObjectMother;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.utils.serialization.YamlSerializer;
+import ai.dqo.utils.serialization.YamlSerializerObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,10 +37,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class TableSpecTests extends BaseTest {
     private TableSpec sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new TableSpec();
     }
 
@@ -73,27 +81,6 @@ public class TableSpecTests extends BaseTest {
     }
 
     @Test
-    void isDirty_whenTableTargetSpecSet_thenIsDirtyIsTrue() {
-        TableTargetSpec tableTargetSpec = new TableTargetSpec();
-        tableTargetSpec.setTableName("other");
-		this.sut.setTarget(tableTargetSpec);
-        Assertions.assertEquals(tableTargetSpec, this.sut.getTarget());
-        Assertions.assertTrue(this.sut.isDirty());
-    }
-
-    @Test
-    void isDirty_whenSameTableTargetSpecObjectAsCurrentSet_thenIsDirtyIsTru() {
-        TableTargetSpec tableTargetSpec = new TableTargetSpec();
-        tableTargetSpec.setTableName("other");
-		this.sut.setTarget(tableTargetSpec);
-        Assertions.assertTrue(this.sut.isDirty());
-		this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setTarget(tableTargetSpec);
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
-    @Test
     void mergeColumnsFrom_whenNewColumnsInSource_thenAddsNewColumns() {
         TableSpec sourceTableSpec = new TableSpec();
         ColumnSpec col1Spec = new ColumnSpec(ColumnTypeSnapshotSpec.fromType("string"));
@@ -132,22 +119,77 @@ public class TableSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenDefaultChecksSpecSet_thenIsDirtyIsTrue() {
-        TableCheckCategoriesSpec defaultChecks = new TableCheckCategoriesSpec();
-        defaultChecks.getValidity().setRowCount(new TableValidityRowCountCheckSpec());
-		this.sut.setChecks(defaultChecks);
-        Assertions.assertEquals(this.sut.getChecks(), defaultChecks);
+        TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
+        profilingChecks.setStandard(new TableProfilingStandardChecksSpec());
+        profilingChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
+		this.sut.setProfilingChecks(profilingChecks);
+        Assertions.assertEquals(this.sut.getProfilingChecks(), profilingChecks);
         Assertions.assertTrue(this.sut.isDirty());
     }
 
     @Test
     void isDirty_whenSameDefaultChecksSpecObjectAsCurrentSet_thenIsDirtyIsFalse() {
-        TableCheckCategoriesSpec defaultChecks = new TableCheckCategoriesSpec();
-        defaultChecks.getValidity().setRowCount(new TableValidityRowCountCheckSpec());
-		this.sut.setChecks(defaultChecks);
+        TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
+        profilingChecks.setStandard(new TableProfilingStandardChecksSpec());
+        profilingChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
+		this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setChecks(defaultChecks);
+		this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertFalse(this.sut.isDirty());
+    }
+
+    @Test
+    void hasAnyChecksConfigured_whenFreshObject_thenReturnsFalse() {
+        Assertions.assertFalse(this.sut.hasAnyChecksConfigured());
+    }
+
+    @Test
+    void hasAnyChecksConfigured_whenOneProfilingCheckConfigured_thenReturnsTrue() {
+        TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
+        profilingChecks.setStandard(new TableProfilingStandardChecksSpec());
+        profilingChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
+        this.sut.setProfilingChecks(profilingChecks);
+        Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
+    }
+
+    @Test
+    void hasAnyChecksConfigured_whenOneDailyRecurringCheckConfigured_thenReturnsTrue() {
+        TableRecurringChecksSpec recurring = new TableRecurringChecksSpec();
+        TableDailyRecurringCategoriesSpec daily = new TableDailyRecurringCategoriesSpec();
+        TableStandardDailyRecurringSpec standard = new TableStandardDailyRecurringSpec();
+        standard.setDailyRowCount(new TableRowCountCheckSpec());
+        daily.setStandard(standard);
+        recurring.setDaily(daily);
+        this.sut.setRecurringChecks(recurring);
+        Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
+    }
+
+    @Test
+    void hasAnyChecksConfigured_whenOneMonthlyRecurringCheckConfigured_thenReturnsTrue() {
+        TableRecurringChecksSpec recurring = new TableRecurringChecksSpec();
+        TableMonthlyRecurringCheckCategoriesSpec daily = new TableMonthlyRecurringCheckCategoriesSpec();
+        TableStandardMonthlyRecurringSpec standard = new TableStandardMonthlyRecurringSpec();
+        standard.setMonthlyRowCount(new TableRowCountCheckSpec());
+        daily.setStandard(standard);
+        recurring.setMonthly(daily);
+        this.sut.setRecurringChecks(recurring);
+        Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
+    }
+
+    @Test
+    void serialize_whenHasAnyDataStreams_thenDataStreamsSerialized() {
+        YamlSerializer yamlSerializer = YamlSerializerObjectMother.getDefault();
+        DataStreamMappingSpec dataStreamMapping = new DataStreamMappingSpec();
+        dataStreamMapping.setLevel1(DataStreamLevelSpecObjectMother.createTag("tag1"));
+        this.sut.getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
+
+        String yaml = yamlSerializer.serialize(this.sut);
+
+        TableSpec deserialized = yamlSerializer.deserialize(yaml, TableSpec.class);
+        Assertions.assertNotNull(deserialized.getDataStreams());
+        Assertions.assertEquals(1, deserialized.getDataStreams().size());
+        Assertions.assertEquals("tag1", deserialized.getDataStreams().get("default").getLevel1().getTag());
     }
 }

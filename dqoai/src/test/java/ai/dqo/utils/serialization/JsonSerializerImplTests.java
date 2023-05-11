@@ -33,16 +33,8 @@ import java.util.List;
 public class JsonSerializerImplTests extends BaseTest {
     private JsonSerializerImpl sut;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new JsonSerializerImpl();
     }
 
@@ -62,6 +54,15 @@ public class JsonSerializerImplTests extends BaseTest {
         Assertions.assertNotNull(deserialized);
         Assertions.assertEquals("aaa", deserialized.getField1());
         Assertions.assertEquals(10, deserialized.getInt1());
+    }
+
+    @Test
+    void deserialize_whenJsonGivenAndObjectImplementsDeserializableAware_thenObjectIsNotifiedOfDeserialization() {
+        YamlTestable deserialized = this.sut.deserialize("{\"field1\":\"aaa\",\"int1\":10}", YamlTestable.class);
+        Assertions.assertNotNull(deserialized);
+        Assertions.assertEquals("aaa", deserialized.getField1());
+        Assertions.assertEquals(10, deserialized.getInt1());
+        Assertions.assertTrue(deserialized.wasOnDeserializedCalled);
     }
 
     @Test
@@ -92,7 +93,7 @@ public class JsonSerializerImplTests extends BaseTest {
     void serialize_whenHistoricDataPointWithDatesSerialized_thenDateFormatIsCorrect() {
         HistoricDataPoint dataPoint = new HistoricDataPoint();
         dataPoint.setBackPeriodsIndex(-2);
-        dataPoint.setSensorReading(10.5);
+        dataPoint.setSensorReadout(10.5);
         LocalDateTime localDateTime = LocalDateTime.of(2022, 03, 07, 22, 15, 10);
         dataPoint.setLocalDatetime(localDateTime);
         dataPoint.setTimestampUtc(localDateTime.toInstant(ZoneOffset.ofHours(2)));
@@ -100,6 +101,6 @@ public class JsonSerializerImplTests extends BaseTest {
         String json = this.sut.serialize(dataPoint);
 
         Assertions.assertEquals("""
-                   {"timestamp_utc":"2022-03-07T20:15:10Z","local_datetime":"2022-03-07T22:15:10","back_periods_index":-2,"sensor_reading":10.5}""", json);
+                   {"timestamp_utc":"2022-03-07T20:15:10Z","local_datetime":"2022-03-07T22:15:10","back_periods_index":-2,"sensor_readout":10.5}""", json);
     }
 }

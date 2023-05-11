@@ -16,6 +16,7 @@
 package ai.dqo.cli.commands.settings;
 
 import ai.dqo.cli.commands.BaseCommand;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -24,12 +25,13 @@ import picocli.CommandLine;
  * "settings" 1st level cli command.
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "settings", description = "Show or set settings", subcommands = {
 		SettingsEditorCliCommand.class,
 		SettingsInitCliCommand.class,
 		SettingsRemoveCliCommand.class,
 		SettingsApiKeyCliCommand.class,
+		SettingsTimeZoneCliCommand.class,
 })
 public class SettingsCliCommand extends BaseCommand {
 }

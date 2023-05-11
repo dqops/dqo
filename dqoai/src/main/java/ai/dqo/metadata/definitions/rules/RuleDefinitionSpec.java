@@ -17,18 +17,19 @@ package ai.dqo.metadata.definitions.rules;
 
 import ai.dqo.execution.rules.runners.python.PythonRuleRunner;
 import ai.dqo.metadata.basespecs.AbstractSpec;
+import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-import java.util.LinkedHashMap;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -41,6 +42,7 @@ public class RuleDefinitionSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<RuleDefinitionSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("time_window", o -> o.timeWindow);
+            put("fields", o -> o.fields);
         }
     };
 
@@ -50,18 +52,19 @@ public class RuleDefinitionSpec extends AbstractSpec {
     @JsonPropertyDescription("Java class name for a rule runner that will execute the sensor. The \"type\" must be \"java_class\".")
     private String javaClassName = PythonRuleRunner.CLASS_NAME;
 
-    @JsonPropertyDescription("Rule historic (past) values mode. A rule may require just the current sensor reading or use sensor readings from past periods to perform prediction. The number of time windows is configured in the time_window setting.")
+    @JsonPropertyDescription("Rule historic (past) values mode. A rule may require just the current sensor readout or use sensor readouts from past periods to perform prediction. The number of time windows is configured in the time_window setting.")
     private RuleTimeWindowMode mode = RuleTimeWindowMode.current_value;
 
-    @JsonPropertyDescription("Rule time window configuration when the mode is previous_readings. Configures the number of past time windows (sensor readings) that are passes as a parameter to the rule. For example, to calculate the average or perform prediction on historic data.")
+    @JsonPropertyDescription("Rule time window configuration when the mode is previous_readouts. Configures the number of past time windows (sensor readouts) that are passes as a parameter to the rule. For example, to calculate the average or perform prediction on historic data.")
     private RuleTimeWindowSettingsSpec timeWindow;
+
+    @JsonPropertyDescription("List of fields that are parameters of a custom rule. Those fields are used by the DQO UI to display the data quality check editing screens with proper UI controls for all required fields.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private ParameterDefinitionsListSpec fields;
 
     @JsonPropertyDescription("Additional rule parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, String> params = new LinkedHashMap<>();
-
-    @JsonIgnore
-    private LinkedHashMap<String, String> originalParams = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
+    private Map<String, String> parameters;
 
     /**
      * Rule implementation type.
@@ -98,7 +101,7 @@ public class RuleDefinitionSpec extends AbstractSpec {
     }
 
     /**
-     * Gets the mode how the rule uses historic data (previous sensor readings).
+     * Gets the mode how the rule uses historic data (previous sensor readouts).
      * @return Time window mode.
      */
     public RuleTimeWindowMode getMode() {
@@ -133,41 +136,38 @@ public class RuleDefinitionSpec extends AbstractSpec {
     }
 
     /**
+     * Returns a list of parameters (fields) used on this rule. Those parameters are shown by the DQO UI.
+     * @return List of parameters.
+     */
+    public ParameterDefinitionsListSpec getFields() {
+        return fields;
+    }
+
+    /**
+     * Sets the new list of fields.
+     * @param fields List of fields.
+     */
+    public void setFields(ParameterDefinitionsListSpec fields) {
+        setDirtyIf(!Objects.equals(this.fields, fields));
+        this.fields = fields;
+        propagateHierarchyIdToField(fields, "fields");
+    }
+
+    /**
      * Returns a key/value map of additional rule parameters.
      * @return Key/value dictionary of additional parameters passed to the rule.
      */
-    public LinkedHashMap<String, String> getParams() {
-        return params;
+    public Map<String, String> getParameters() {
+        return parameters;
     }
 
     /**
      * Sets a dictionary of parameters passed to the rule.
-     * @param params Key/value dictionary with extra parameters.
+     * @param parameters Key/value dictionary with extra parameters.
      */
-    public void setParams(LinkedHashMap<String, String> params) {
-		setDirtyIf(!Objects.equals(this.params, params));
-        this.params = params;
-		this.originalParams = (LinkedHashMap<String, String>) params.clone();
-    }
-
-    /**
-     * Check if the object is dirty (has changes).
-     *
-     * @return True when the object is dirty and has modifications.
-     */
-    @Override
-    public boolean isDirty() {
-        return super.isDirty() || !Objects.equals(this.params, this.originalParams);
-    }
-
-    /**
-     * Clears the dirty flag (sets the dirty to false). Called after flushing or when changes should be considered as unimportant.
-     * @param propagateToChildren When true, clears also the dirty status of child objects.
-     */
-    @Override
-    public void clearDirty(boolean propagateToChildren) {
-        super.clearDirty(propagateToChildren);
-		this.originalParams = (LinkedHashMap<String, String>) this.params.clone();
+    public void setParameters(Map<String, String> parameters) {
+		setDirtyIf(!Objects.equals(this.parameters, parameters));
+        this.parameters = parameters != null ? Collections.unmodifiableMap(parameters) : null;
     }
 
     /**
@@ -185,7 +185,6 @@ public class RuleDefinitionSpec extends AbstractSpec {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
@@ -201,5 +200,24 @@ public class RuleDefinitionSpec extends AbstractSpec {
     @Override
     public boolean isDefault() {
         return false;
+    }
+
+    /**
+     * Creates and returns a copy of this object.
+     */
+    @Override
+    public RuleDefinitionSpec deepClone() {
+        RuleDefinitionSpec cloned = (RuleDefinitionSpec)super.deepClone();
+        return cloned;
+    }
+
+    /**
+     * Creates a trimmed version of the object without unwanted properties.
+     * @return Trimmed version of this object.
+     */
+    public RuleDefinitionSpec trim() {
+        RuleDefinitionSpec cloned = (RuleDefinitionSpec)super.deepClone();
+        cloned.fields = null;
+        return cloned;
     }
 }

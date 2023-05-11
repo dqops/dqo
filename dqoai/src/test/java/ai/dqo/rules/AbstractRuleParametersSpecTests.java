@@ -17,39 +17,16 @@ package ai.dqo.rules;
 
 import ai.dqo.BaseTest;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class AbstractRuleParametersSpecTests extends BaseTest {
     private AbstractRuleParametersSpec sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new TestableAbstractRuleParametersSpec();
-    }
-
-    @Test
-    void isDirty_whenDisableSet_thenIsDirtyIsTrue() {
-		this.sut.setDisable(true);
-        Assertions.assertTrue(this.sut.isDisable());
-        Assertions.assertTrue(this.sut.isDirty());
-		this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
-    @Test
-    void isDirty_whenDisableBooleanSameAsCurrentSet_thenIsDirtyIsFalse() {
-		this.sut.setDisable(true);
-        Assertions.assertTrue(this.sut.isDirty());
-		this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setDisable(true);
-        Assertions.assertFalse(this.sut.isDirty());
     }
 
     public class TestableAbstractRuleParametersSpec extends AbstractRuleParametersSpec {

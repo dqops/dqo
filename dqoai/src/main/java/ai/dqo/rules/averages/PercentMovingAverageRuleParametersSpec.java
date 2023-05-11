@@ -15,6 +15,7 @@
  */
 package ai.dqo.rules.averages;
 
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.AbstractRuleParametersSpec;
@@ -27,7 +28,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality sensor reading value is not above X percent of the moving average of a time window.
+ * Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -40,28 +41,30 @@ public class PercentMovingAverageRuleParametersSpec extends AbstractRuleParamete
 
 
     /**
-     * Default constructor, the minimum accepted value is 0.
+     * Default constructor.
      */
     public PercentMovingAverageRuleParametersSpec() {
     }
 
 
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor reading could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.")
+    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
+    @SampleValues(values = "10.0")
     private Double maxPercentAbove;
 
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor reading could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.")
+    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
+    @SampleValues(values = "10.0")
     private Double maxPercentBelow;
 
     /**
-     * Minimum percent value for a data quality check reading, for example a minimum row count.
+     * Minimum percent value for a data quality check readout, for example a minimum row count.
      * @return A percent that is used to calculate lower limit.
      */
-    public double getMaxPercentBelow() {
+    public Double getMaxPercentBelow() {
         return maxPercentBelow;
     }
 
     /**
-     * Changes the minimum value (threshold) for a data quality reading.
+     * Changes the minimum value (threshold) for a data quality readout.
      * @param maxPercentBelow
      */
     public void setMaxPercentBelow(Double maxPercentBelow) {
@@ -70,15 +73,15 @@ public class PercentMovingAverageRuleParametersSpec extends AbstractRuleParamete
     }
 
     /**
-     * Maximum percent value for a data quality check reading, for example a minimum row count.
-     * @return Maximum value for a data quality check reading.
+     * Maximum percent value for a data quality check readout, for example a minimum row count.
+     * @return Maximum value for a data quality check readout.
      */
     public Double getMaxPercentAbove() {
         return maxPercentAbove;
     }
 
     /**
-     * Changes the maximum value (threshold) for a data quality reading.
+     * Changes the maximum value (threshold) for a data quality readout.
      * @param maxPercentAbove Maximum value.
      */
     public void setMaxPercentAbove(Double maxPercentAbove) {

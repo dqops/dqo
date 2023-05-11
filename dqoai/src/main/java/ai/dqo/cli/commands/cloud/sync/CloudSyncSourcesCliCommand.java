@@ -18,8 +18,15 @@ package ai.dqo.cli.commands.cloud.sync;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.cloud.sync.impl.CloudSynchronizationService;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.cli.terminal.TerminalFactory;
+import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.core.dqocloud.accesskey.DqoCloudCredentialsException;
+import ai.dqo.core.jobqueue.exceptions.DqoQueueJobExecutionException;
+import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.fileexchange.FileSynchronizationDirection;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -28,33 +35,58 @@ import picocli.CommandLine;
  * 3st level CLI command "cloud sync sources" to synchronize the "sources" folder in the DQO user home.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "sources", description = "Synchronize local \"sources\" connection and table level quality definitions with DQO Cloud")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "sources", header = "Synchronize local \"sources\" connection and table level quality definitions with DQO Cloud", description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"sources\" folder.")
 public class CloudSyncSourcesCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
+    private TerminalFactory terminalFactory;
+
+    public CloudSyncSourcesCliCommand() {
+    }
 
     @Autowired
-    public CloudSyncSourcesCliCommand(CloudSynchronizationService cloudSynchronizationService) {
+    public CloudSyncSourcesCliCommand(CloudSynchronizationService cloudSynchronizationService,
+                                      TerminalFactory terminalFactory) {
         this.cloudSynchronizationService = cloudSynchronizationService;
+        this.terminalFactory = terminalFactory;
     }
 
-    @CommandLine.Option(names = {"-f", "--show-files"}, description = "Show progress for all files", defaultValue = "true", required = false)
-    private boolean showFiles = true;
+    @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, debug)", defaultValue = "summary")
+    private FileSystemSynchronizationReportingMode mode = FileSystemSynchronizationReportingMode.summary;
+
+    @CommandLine.Option(names = {"-d", "--direction"}, description = "File synchronization direction", defaultValue = "full")
+    private FileSynchronizationDirection direction = FileSynchronizationDirection.full;
 
     /**
-     * True when each file should be shown.
-     * @return Show files.
+     * Returns the synchronization logging mode.
+     * @return Logging mode.
      */
-    public boolean isShowFiles() {
-        return showFiles;
+    public FileSystemSynchronizationReportingMode getMode() {
+        return mode;
     }
 
     /**
-     * Sets the show files flag.
-     * @param showFiles Show files flag.
+     * Sets the reporting (logging) mode.
+     * @param mode Reporting mode.
      */
-    public void setShowFiles(boolean showFiles) {
-        this.showFiles = showFiles;
+    public void setMode(FileSystemSynchronizationReportingMode mode) {
+        this.mode = mode;
+    }
+
+    /**
+     * Returns the file synchronization direction.
+     * @return File synchronization direction.
+     */
+    public FileSynchronizationDirection getDirection() {
+        return direction;
+    }
+
+    /**
+     * Sets the file synchronization direction.
+     * @param direction File synchronization direction.
+     */
+    public void setDirection(FileSynchronizationDirection direction) {
+        this.direction = direction;
     }
 
     /**
@@ -65,6 +97,18 @@ public class CloudSyncSourcesCliCommand extends BaseCommand implements ICommand 
      */
     @Override
     public Integer call() throws Exception {
-        return this.cloudSynchronizationService.synchronizeRoot(DqoRoot.SOURCES, this.showFiles, this.isHeadless());
+        try {
+            return this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.sources, this.mode, this.direction, false, this.isHeadless(), true);
+        }
+        catch (DqoQueueJobExecutionException cex) {
+            if (cex.getRealCause() instanceof DqoCloudCredentialsException) {
+                TerminalWriter terminalWriter = this.terminalFactory.getWriter();
+                terminalWriter.writeLine("Invalid DQO Cloud credentials, please run \"cloud login\" to get a new DQO Cloud API Key.");
+                return -1;
+            }
+
+            throw cex;
+        }
     }
 }

@@ -20,14 +20,14 @@ import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-import java.util.LinkedHashMap;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -48,29 +48,33 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
     @JsonPropertyDescription("Java class name for a sensor runner that will execute the sensor. The \"type\" must be \"java_class\".")
     private String javaClassName = JinjaSqlTemplateSensorRunner.CLASS_NAME;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonPropertyDescription("The sensor supports grouping by the data stream, using the GROUP BY clause in SQL. Sensors that support a GROUP BY condition can capture separate data quality scores for each data stream. The default value is true, because most of the data quality sensor support grouping.")
+    private Boolean supportsGroupingByDataStream;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonPropertyDescription("The sensor supports grouping by a partition date, using the GROUP BY clause in SQL. Sensors that support grouping by a partition_by_column could be used for partition checks, calculating separate data quality metrics for each daily/monthly partition. The default value is true, because most of the data quality sensor support partitioned checks.")
+    private Boolean supportsPartitionedChecks;
+
     @JsonPropertyDescription("Additional provider specific sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, String> params = new LinkedHashMap<>();
-
-    @JsonIgnore
-    private LinkedHashMap<String, String> originalParams = new LinkedHashMap<>(); // used to perform comparison in the isDirty check
+    private Map<String, String> parameters;
 
     /**
      * Returns a key/value map of additional rule parameters.
      * @return Key/value dictionary of additional parameters passed to the rule.
      */
-    public LinkedHashMap<String, String> getParams() {
-        return params;
+    public Map<String, String> getParameters() {
+        return parameters;
     }
 
     /**
      * Sets a dictionary of parameters passed to the rule.
-     * @param params Key/value dictionary with extra parameters.
+     * @param parameters Key/value dictionary with extra parameters.
      */
-    public void setParams(LinkedHashMap<String, String> params) {
-		setDirtyIf(!Objects.equals(this.params, params));
-        this.params = params;
-		this.originalParams = (LinkedHashMap<String, String>) params.clone();
+    public void setParameters(Map<String, String> parameters) {
+		setDirtyIf(!Objects.equals(this.parameters, parameters));
+        this.parameters = parameters != null ? Collections.unmodifiableMap(parameters) : null;
     }
 
     /**
@@ -108,23 +112,37 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
     }
 
     /**
-     * Check if the object is dirty (has changes).
-     *
-     * @return True when the object is dirty and has modifications.
+     * Returns true if the sensor supports grouping by the data stream.
+     * @return True when the sensor supports grouping by the data stream.
      */
-    @Override
-    public boolean isDirty() {
-        return super.isDirty() || !Objects.equals(this.params, this.originalParams);
+    public Boolean isSupportsGroupingByDataStream() {
+        return supportsGroupingByDataStream;
     }
 
     /**
-     * Clears the dirty flag (sets the dirty to false). Called after flushing or when changes should be considered as unimportant.
-     * @param propagateToChildren When true, clears also the dirty status of child objects.
+     * Sets the flag if the sensor supports grouping by the data stream.
+     * @param supportsGroupingByDataStream True when the sensor supports grouping, false otherwise.
      */
-    @Override
-    public void clearDirty(boolean propagateToChildren) {
-        super.clearDirty(propagateToChildren);
-		this.originalParams = (LinkedHashMap<String, String>) this.params.clone();
+    public void setSupportsGroupingByDataStream(Boolean supportsGroupingByDataStream) {
+        this.setDirtyIf(!Objects.equals(this.supportsGroupingByDataStream, supportsGroupingByDataStream));
+        this.supportsGroupingByDataStream = supportsGroupingByDataStream;
+    }
+
+    /**
+     * Checks if the sensor supports grouping by the date column identified by the 'partition_by_column' parameter, that means the sensor can analyze daily and monthly partitioned data.
+     * @return True when the sensor supports partitioned checks.
+     */
+    public Boolean isSupportsPartitionedChecks() {
+        return supportsPartitionedChecks;
+    }
+
+    /**
+     * Sets the flag to enable/disable grouping by a partitioning column, enabling support for partitioned checks.
+     * @param supportsPartitionedChecks Supports partitioned checks.
+     */
+    public void setSupportsPartitionedChecks(Boolean supportsPartitionedChecks) {
+        this.setDirtyIf(!Objects.equals(this.supportsPartitionedChecks, supportsPartitionedChecks));
+        this.supportsPartitionedChecks = supportsPartitionedChecks;
     }
 
     /**
@@ -142,7 +160,6 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {

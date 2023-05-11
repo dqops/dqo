@@ -15,7 +15,6 @@
  */
 package ai.dqo.metadata.sources;
 
-import ai.dqo.metadata.basespecs.DirtyStatus;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
@@ -30,7 +29,7 @@ import java.util.LinkedHashSet;
 /**
  * Collection of unique labels assigned to items (tables, columns, checks) that could be targeted for a data quality check execution.
  */
-public class LabelSetSpec extends AbstractSet<String> implements HierarchyNode, Cloneable, YamlNotRenderWhenDefault {
+public class LabelSetSpec extends AbstractSet<String> implements HierarchyNode, YamlNotRenderWhenDefault {
     @JsonIgnore
     private LinkedHashSet<String> labels = new LinkedHashSet<>();
     @JsonIgnore
@@ -183,7 +182,6 @@ public class LabelSetSpec extends AbstractSet<String> implements HierarchyNode, 
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
@@ -194,17 +192,10 @@ public class LabelSetSpec extends AbstractSet<String> implements HierarchyNode, 
      * Creates and returns a copy of this object.
      */
     @Override
-    public LabelSetSpec clone() {
+    public LabelSetSpec deepClone() {
         LabelSetSpec cloned = new LabelSetSpec();
-        cloned.labels = (LinkedHashSet<String>) cloned.labels.clone();
-
-        if (this.getHierarchyId() != null) {
-            cloned.setHierarchyId(this.getHierarchyId().clone());
-        }
-
-        if (this.isDirty()) {
-            cloned.setDirty();
-        }
+        cloned.labels = (LinkedHashSet<String>) this.labels.clone();
+        cloned.clearDirty(false);
         return cloned;
     }
 

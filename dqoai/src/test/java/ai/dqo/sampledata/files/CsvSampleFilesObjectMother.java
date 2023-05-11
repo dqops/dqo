@@ -15,9 +15,12 @@
  */
 package ai.dqo.sampledata.files;
 
+import com.google.common.base.Strings;
 import org.junit.jupiter.api.Assertions;
 import tech.tablesaw.api.ColumnType;
+import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.api.TextColumn;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.io.csv.CsvReadOptions;
 
@@ -42,12 +45,13 @@ public class CsvSampleFilesObjectMother {
      * @param fileName CSV file name in the sampledata folder.
      * @return Loaded file.
      */
-    public static Table loadTableCsv(String fileName) {
+    public static CsvSampleFileContent loadTableCsv(String fileName) {
         try {
             String sampleDataFolder = System.getenv("SAMPLE_DATA_FOLDER");
             Path sampleFilePath = Path.of(sampleDataFolder).resolve(fileName);
             File sampleFile = sampleFilePath.toFile();
             Assertions.assertTrue(Files.exists(sampleFilePath));
+            HashMap<String, String> columnPhysicalDataTypes = new HashMap<>();
 
             ArrayList<ColumnType> columnTypesToDetect = new ArrayList<>() {{
 				add(ColumnType.INTEGER);
@@ -65,6 +69,7 @@ public class CsvSampleFilesObjectMother {
                     .separator(',')
                     .dateFormat(DateTimeFormatter.ISO_DATE)
                     .dateTimeFormat(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                    .missingValueIndicator("")
                     .build();
             Table loadedTable = Table.read().csv(csvReadOptions);
             String tableName = fileName.substring(0, fileName.indexOf(".csv"));
@@ -73,10 +78,25 @@ public class CsvSampleFilesObjectMother {
             for (Column<?> loadedColumn : loadedTable.columnArray()) {
                 String annotatedColumName = loadedColumn.name();
                 String[] nameTypeParts = annotatedColumName.split(":");
-                Assertions.assertEquals(2, nameTypeParts.length);
+                Assertions.assertTrue(nameTypeParts.length == 2 || nameTypeParts.length == 3);
                 String columnName = nameTypeParts[0];
                 String typeName = nameTypeParts[1];
+                String physicalDataType = nameTypeParts.length > 2 ? nameTypeParts[2] : null;
                 ColumnType columnType = ColumnType.valueOf(typeName);
+
+                if (!Strings.isNullOrEmpty(physicalDataType)) {
+                    columnPhysicalDataTypes.put(columnName, physicalDataType);
+                }
+
+                if (loadedColumn instanceof StringColumn) {
+                    StringColumn loadedStringColumn = (StringColumn) loadedColumn;
+                    loadedColumn = loadedStringColumn.set(loadedStringColumn.isEqualTo(""), (String)null);
+                }
+
+                if (loadedColumn instanceof TextColumn) {
+                    TextColumn loadedTextColumn = (TextColumn) loadedColumn;
+                    loadedColumn = loadedTextColumn.set(loadedTextColumn.isEqualTo(""), (String)null);
+                }
 
                 if (loadedColumn.type().equals(columnType)) {
                     Column<?> copiedColumn = loadedColumn.copy();
@@ -93,7 +113,7 @@ public class CsvSampleFilesObjectMother {
                 convertedTable.addColumns(convertedColumn);
             }
 
-            return convertedTable;
+            return new CsvSampleFileContent(convertedTable, columnPhysicalDataTypes);
         }
         catch (Exception ex) {
             throw new RuntimeException("Failed to read sample file " + fileName, ex);
@@ -110,10 +130,11 @@ public class CsvSampleFilesObjectMother {
             return tables.get(fileName);
         }
 
-        Table loadedTable = loadTableCsv(fileName);
+        CsvSampleFileContent csvSampleFileContent = loadTableCsv(fileName);
+        Table loadedTable = csvSampleFileContent.getTable();
         long tableHash = TableHashingHelper.hashTable(loadedTable);
         String hashedTableName = loadedTable.name() + "_" + tableHash;
-        SampleTableFromCsv sampleTable = new SampleTableFromCsv(loadedTable, hashedTableName, tableHash);
+        SampleTableFromCsv sampleTable = new SampleTableFromCsv(loadedTable, hashedTableName, tableHash, csvSampleFileContent.getColumnPhysicalDataTypes());
 		tables.put(fileName, sampleTable);
         return sampleTable;
     }

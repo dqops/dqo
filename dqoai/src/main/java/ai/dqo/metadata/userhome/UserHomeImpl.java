@@ -15,24 +15,28 @@
  */
 package ai.dqo.metadata.userhome;
 
+import ai.dqo.metadata.definitions.checks.CheckDefinitionListImpl;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionListImpl;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionListImpl;
 import ai.dqo.metadata.fileindices.FileIndexList;
 import ai.dqo.metadata.fileindices.FileIndexListImpl;
 import ai.dqo.metadata.id.*;
+import ai.dqo.metadata.settings.SettingsWrapper;
+import ai.dqo.metadata.settings.SettingsWrapperImpl;
 import ai.dqo.metadata.sources.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Root user home model for reading and managing the definitions in the user's home.
  */
-public class UserHomeImpl implements UserHome {
+public class UserHomeImpl implements UserHome, Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<UserHomeImpl> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(ChildHierarchyNodeFieldMap.empty()) {
         {
 			put("connections", o -> o.connections);
 			put("sensors", o -> o.sensors);
 			put("rules", o -> o.rules);
+            put("checks", o -> o.checks);
             put("settings", o -> o.settings);
             put("file_indices", o -> o.fileIndices);
         }
@@ -41,8 +45,9 @@ public class UserHomeImpl implements UserHome {
     @JsonIgnore
     private HierarchyId hierarchyId = HierarchyId.getRoot();
     private ConnectionListImpl connections;
-    private RuleDefinitionListImpl rules;
     private SensorDefinitionListImpl sensors;
+    private RuleDefinitionListImpl rules;
+    private CheckDefinitionListImpl checks;
     private SettingsWrapperImpl settings;
     private FileIndexList fileIndices;
     @JsonIgnore
@@ -55,6 +60,7 @@ public class UserHomeImpl implements UserHome {
 		this.setConnections(new ConnectionListImpl());
 		this.setSensors(new SensorDefinitionListImpl());
 		this.setRules(new RuleDefinitionListImpl());
+        this.setChecks(new CheckDefinitionListImpl());
         this.setSettings(new SettingsWrapperImpl());
         this.setFileIndices(new FileIndexListImpl());
     }
@@ -64,15 +70,20 @@ public class UserHomeImpl implements UserHome {
      * @param connections Collection of connections.
      * @param sensors Collection of sensor definitions.
      * @param rules Collection of custom rule definitions.
+     * @param checks Collection of custom check definitions.
+     * @param settings user local settings.
+     * @param fileIndices File synchronization indexes.
      */
     public UserHomeImpl(ConnectionListImpl connections,
                         SensorDefinitionListImpl sensors,
                         RuleDefinitionListImpl rules,
+                        CheckDefinitionListImpl checks,
                         SettingsWrapperImpl settings,
                         FileIndexListImpl fileIndices) {
 		this.setConnections(connections);
 		this.setSensors(sensors);
 		this.setRules(rules);
+        this.setChecks(checks);
         this.setSettings(settings);
         this.setFileIndices(fileIndices);
     }
@@ -142,6 +153,28 @@ public class UserHomeImpl implements UserHome {
     }
 
     /**
+     * Returns a collection of custom check definitions.
+     * @return Collection of custom check definitions.
+     */
+    @Override
+    public CheckDefinitionListImpl getChecks() {
+        return checks;
+    }
+
+    /**
+     * Changes the collection of custom check definitions.
+     * @param checks New collection of custom check definitions.
+     */
+    public void setChecks(CheckDefinitionListImpl checks) {
+        this.checks = checks;
+        if (checks != null) {
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "checks");
+            checks.setHierarchyId(childHierarchyId);
+            assert FIELDS.get("checks").apply(this).getHierarchyId().equals(childHierarchyId);
+        }
+    }
+
+    /**
      * Returns settings.
      * @return Settings.
      */
@@ -194,6 +227,7 @@ public class UserHomeImpl implements UserHome {
 		this.getConnections().flush();
 		this.getSensors().flush();
 		this.getRules().flush();
+        this.getChecks().flush();
         this.getSettings().flush();
         this.getFileIndices().flush();
 
@@ -292,7 +326,6 @@ public class UserHomeImpl implements UserHome {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
@@ -369,5 +402,40 @@ public class UserHomeImpl implements UserHome {
 
         ColumnSpec columnSpec = columnSpecMap.getExpectedChild(nestedHierarchyId.get(6), ColumnSpec.class);
         return columnSpec;
+    }
+
+    /**
+     * Performs a deep clone of the object.
+     *
+     * @return Deep clone of the object.
+     */
+    @Override
+    public UserHomeImpl deepClone() {
+        try {
+            UserHomeImpl cloned = (UserHomeImpl) super.clone();
+            if (cloned.sensors != null) {
+                cloned.sensors = (SensorDefinitionListImpl) cloned.sensors.deepClone();
+            }
+            if (cloned.rules != null) {
+                cloned.rules = (RuleDefinitionListImpl) cloned.rules.deepClone();
+            }
+            if (cloned.checks != null) {
+                cloned.checks = (CheckDefinitionListImpl) cloned.checks.deepClone();
+            }
+            if (cloned.connections != null) {
+                cloned.connections = (ConnectionListImpl) cloned.connections.deepClone();
+            }
+            if (cloned.settings != null) {
+                cloned.settings = (SettingsWrapperImpl) cloned.settings.deepClone();
+            }
+            // NOTE: the file index is not cloned... it has a different lifecycle
+
+            cloned.dirty = false;
+
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new UnsupportedOperationException("Cannot clone object", ex);
+        }
     }
 }

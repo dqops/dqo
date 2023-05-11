@@ -1,0 +1,102 @@
+import SvgIcon from "../SvgIcon";
+import React, { useState } from "react";
+import { DqoJobHistoryEntryModelStatusEnum, UICheckContainerModel } from "../../api";
+import { JobApiClient } from "../../services/apiClient";
+import { isEqual } from "lodash";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../redux/reducers";
+import DeleteOnlyDataDialog from "../CustomTree/DeleteOnlyDataDialog";
+import CategoryMenu from "./CategoryMenu";
+
+interface TableHeaderProps {
+  checksUI: UICheckContainerModel;
+}
+
+const TableHeader = ({ checksUI }: TableHeaderProps) => {
+  const { jobs } = useSelector((state: IRootState) => state.job);
+  const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
+
+  const job = jobs?.jobs?.find((item) =>
+    isEqual(
+      item.parameters?.runChecksParameters?.checkSearchFilters,
+      checksUI.run_checks_job_template
+    )
+  );
+
+  const onRunChecks = async () => {
+    await JobApiClient.runChecks({
+      checkSearchFilters: checksUI?.run_checks_job_template
+    });
+  };
+
+  return (
+    <thead>
+      <tr>
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400" />
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400" />
+        <td className="text-center whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400">
+          Passing check
+        </td>
+        <td
+          className="text-center whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400"
+          colSpan={2}
+        >
+          Failing check
+        </td>
+      </tr>
+      <tr>
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400">
+          <div className="flex space-x-1 items-center">
+            <span className="mr-1">Data quality check</span>
+            {(!job ||
+              job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+              job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
+              <CategoryMenu
+                onRunChecks={onRunChecks}
+                onDeleteChecks={() => setDeleteDataDialogOpened(true)}
+              />
+            )}
+            {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
+              <SvgIcon
+                name="hourglass"
+                className="text-gray-700 h-5 cursor-pointer"
+              />
+            )}
+            {(job?.status === DqoJobHistoryEntryModelStatusEnum.running ||
+              job?.status === DqoJobHistoryEntryModelStatusEnum.queued) && (
+              <SvgIcon
+                name="hourglass"
+                className="text-gray-700 h-5 cursor-pointer"
+              />
+            )}
+          </div>
+        </td>
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400">
+          Sensor parameters
+        </td>
+        <td className="text-center whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-yellow-100">
+          Warning threshold
+        </td>
+        <td className="text-center whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-orange-100">
+          Error threshold
+        </td>
+        <td className="text-center whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-red-100">
+          Fatal threshold
+        </td>
+      </tr>
+      <DeleteOnlyDataDialog
+        open={deleteDataDialogOpened}
+        onClose={() => setDeleteDataDialogOpened(false)}
+        onDelete={(params) => {
+          setDeleteDataDialogOpened(false);
+          JobApiClient.deleteStoredData({
+            ...checksUI.data_clean_job_template,
+            ...params,
+          });
+        }}
+      />
+    </thead>
+  );
+};
+
+export default TableHeader;

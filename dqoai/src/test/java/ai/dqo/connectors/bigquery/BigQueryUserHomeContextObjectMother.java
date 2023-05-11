@@ -81,7 +81,7 @@ public class BigQueryUserHomeContextObjectMother {
      */
     public static TableWrapper addTableToDefaultConnection(UserHomeContext homeContext, TableSpec tableSpec) {
         ConnectionWrapper defaultConnection = getDefaultConnection(homeContext);
-        TableWrapper tableWrapper = defaultConnection.getTables().createAndAddNew(tableSpec.getTarget().toPhysicalTableName());
+        TableWrapper tableWrapper = defaultConnection.getTables().createAndAddNew(tableSpec.getPhysicalTableName());
         tableWrapper.setSpec(tableSpec);
         return tableWrapper;
     }

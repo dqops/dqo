@@ -38,7 +38,7 @@ public class TableHashingHelper {
 
             for( int i = 0; i < rowCount; i++) {
                 Object cellValue = column.get(i);
-                int cellHash = cellValue != null ? cellValue.hashCode() : 0;
+                int cellHash = cellValue != null ? cellValue.hashCode() : -999;
                 hash = hash * 29 + cellHash;
             }
         }

@@ -17,7 +17,10 @@ package ai.dqo.connectors.jdbc;
 
 import ai.dqo.connectors.AbstractSqlSourceConnection;
 import ai.dqo.connectors.ConnectionProvider;
+import ai.dqo.core.jobqueue.JobCancellationListenerHandle;
+import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.core.secrets.SecretValueProvider;
+import ai.dqo.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import tech.tablesaw.api.Table;
@@ -74,6 +77,7 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
         try {
             HikariDataSource dataSource = this.jdbcConnectionPool.getDataSource(this.getConnectionSpec(), () -> createHikariConfig());
 			this.jdbcConnection = dataSource.getConnection();
+            this.jdbcConnection.setAutoCommit(true);
         }
         catch (Exception ex) {
             if (this.getConnectionSpec().getHierarchyId() != null) {
@@ -106,20 +110,28 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
      * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
      *
      * @param sqlQueryStatement SQL statement that returns a row set.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
      * @return Tabular result captured from the query.
      */
     @Override
-    public Table executeQuery(String sqlQueryStatement) {
+    public Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken) {
         try {
             try (Statement statement = this.jdbcConnection.createStatement()) {
-                try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
-                    Table resultTable = Table.read().db(results, "query_result");
-                    for (Column<?> column : resultTable.columns()) {
-                        if (column.name() != null) {
-                            column.setName(column.name().toLowerCase(Locale.ENGLISH));
+                try (JobCancellationListenerHandle cancellationListenerHandle =
+                             jobCancellationToken.registerCancellationListener(
+                                     cancellationToken -> RunSilently.run(statement::cancel))) {
+                    try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
+                        Table resultTable = Table.read().db(results, "query_result");
+                        for (Column<?> column : resultTable.columns()) {
+                            if (column.name() != null) {
+                                column.setName(column.name().toLowerCase(Locale.ROOT));
+                            }
                         }
+                        return resultTable;
                     }
-                    return resultTable;
+                }
+                finally {
+                    jobCancellationToken.throwIfCancelled();
                 }
             }
         }
@@ -128,6 +140,35 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
             throw new JdbcQueryFailedException(
                     String.format("SQL query failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlQueryStatement),
                     ex, sqlQueryStatement, connectionName);
+        }
+    }
+
+    /**
+     * Executes a provider specific SQL that runs a command DML/DDL command.
+     *
+     * @param sqlStatement SQL DDL or DML statement.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
+     */
+    @Override
+    public long executeCommand(String sqlStatement, JobCancellationToken jobCancellationToken) {
+        try {
+            try (Statement statement = this.jdbcConnection.createStatement()) {
+                try (JobCancellationListenerHandle cancellationListenerHandle =
+                             jobCancellationToken.registerCancellationListener(
+                                     cancellationToken -> RunSilently.run(statement::cancel))) {
+                    statement.execute(sqlStatement);
+                    return statement.getLargeUpdateCount();
+                }
+                finally {
+                    jobCancellationToken.throwIfCancelled();
+                }
+            }
+        }
+        catch (Exception ex) {
+            String connectionName = this.getConnectionSpec().getConnectionName();
+            throw new JdbcQueryFailedException(
+                    String.format("SQL statement failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlStatement),
+                    ex, sqlStatement, connectionName);
         }
     }
 }

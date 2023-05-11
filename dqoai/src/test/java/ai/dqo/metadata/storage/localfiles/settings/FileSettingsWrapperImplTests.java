@@ -18,7 +18,7 @@ package ai.dqo.metadata.storage.localfiles.settings;
 import ai.dqo.BaseTest;
 import ai.dqo.core.filesystem.virtual.FolderTreeNode;
 import ai.dqo.metadata.basespecs.InstanceStatus;
-import ai.dqo.metadata.sources.*;
+import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.utils.serialization.YamlSerializer;
@@ -35,16 +35,8 @@ public class FileSettingsWrapperImplTests extends BaseTest {
 	private FolderTreeNode settingsFolder;
 	private YamlSerializer yamlSerializer;
 
-	/**
-	 * Called before each test.
-	 * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-	 *
-	 * @throws Throwable
-	 */
-	@Override
 	@BeforeEach
-	protected void setUp() throws Throwable {
-		super.setUp();
+	void setUp() {
 		this.userHomeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
 		this.sut = (FileSettingsWrapperImpl) userHomeContext.getUserHome().getSettings();
 		this.settingsFolder = userHomeContext.getHomeRoot();

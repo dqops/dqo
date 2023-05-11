@@ -15,12 +15,15 @@
  */
 package ai.dqo.metadata.id;
 
+import ai.dqo.metadata.sources.PhysicalTableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -55,6 +58,31 @@ public class HierarchyId {
      */
     public static HierarchyId getRoot() {
         return ROOT;
+    }
+
+    /**
+     * Creates a child hierarchy id given a parent hierarchy id and a child object.
+     * @param parentHierarchyId Parent hierarchy id. Null value is accepted.
+     * @param childName Child name (child object).
+     * @return Child hierarchy id that is a copy of the parent path concatenated with the child name or null when the parent hierarchy id is null.
+     */
+    public static HierarchyId makeChildOrNull(HierarchyId parentHierarchyId, Object childName) {
+        if (parentHierarchyId == null) {
+            return null;
+        }
+
+        return new HierarchyId(parentHierarchyId, childName);
+    }
+
+    /**
+     * Creates a new hierarchy id for a table node.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @return Hierarchy id for a table.
+     */
+    public static HierarchyId makeHierarchyIdForTable(String connectionName, PhysicalTableName physicalTableName) {
+        HierarchyId hierarchyId = new HierarchyId("connections", connectionName, "tables", physicalTableName);
+        return hierarchyId;
     }
 
     /**
@@ -105,6 +133,26 @@ public class HierarchyId {
         return true;
     }
 
+    /**
+     * Finds all nodes on path following child node ids in the hierarchy ID, starting from the <code>rootNode</code> node.
+     * @param rootNode Root node (start node).
+     * @return Hierarchy nodes on the path.
+     */
+    public HierarchyNode[] getNodesOnPath(HierarchyNode rootNode) {
+        HierarchyNode[] nodesOnPath = new HierarchyNode[this.elements.length];
+        HierarchyNode currentNode = rootNode;
+        for (int i = 0; i < this.elements.length; i++) {
+            HierarchyNode childNode = currentNode.getChild(this.elements[i]);
+            if (childNode == null) {
+                throw new NoSuchElementException("Cannot find child named " + this.elements[i] + " on object " + currentNode);
+            }
+            nodesOnPath[i] = childNode;
+            currentNode = childNode;
+        }
+
+        return nodesOnPath;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -114,8 +162,8 @@ public class HierarchyId {
     }
 
     /**
-     * Returns a regular 32 bit hash. This has should be used only internally by Java collection classes, using also equals to avoid hash collisions.
-     * @return 32 bit hash.
+     * Returns a regular 32-bit hash. This has should be used only internally by Java collection classes, using also equals to avoid hash collisions.
+     * @return 32-bit hash.
      */
     @Override
     public int hashCode() {
@@ -123,8 +171,8 @@ public class HierarchyId {
     }
 
     /**
-     * Calculate a 64 bit hash of the path.
-     * @return 64 bit hash.
+     * Calculate a 64-bit hash of the path.
+     * @return 64-bit hash.
      */
     public long hashCode64() {
         List<HashCode> elementHashes = Arrays.stream(this.elements)
@@ -156,5 +204,80 @@ public class HierarchyId {
     @Override
     public HierarchyId clone() {
         return new HierarchyId(this.elements.clone());
+    }
+
+    /**
+     * Creates a hierarchy id model.
+     * @return Hierarchy ID model.
+     */
+    public HierarchyIdModel toHierarchyIdModel() {
+        return new HierarchyIdModel(this.elements);
+    }
+
+    /**
+     * Retrieves the connection name from a hierarchy id.
+     * @return Connection name or null when the hierarchy id is not within the connections hierarchy.
+     */
+    @JsonIgnore
+    public String getConnectionName() {
+        if (this.elements.length < 2) {
+            return null;
+        }
+
+        if (!Objects.equals(this.elements[0], "connections")) {
+            return null;
+        }
+
+        return (String)this.elements[1];
+    }
+
+    /**
+     * Retrieves the physical table name from a hierarchy id.
+     * @return Physical table name or null when the hierarchy id is not within the connections / [connection] / tables hierarchy.
+     */
+    @JsonIgnore
+    public PhysicalTableName getPhysicalTableName() {
+        if (this.elements.length < 4) {
+            return null;
+        }
+
+        if (!Objects.equals(this.elements[0], "connections")) {
+            return null;
+        }
+
+        if (!Objects.equals(this.elements[2], "tables")) {
+            return null;
+        }
+
+        return (PhysicalTableName)this.elements[3];
+    }
+
+    /**
+     * Retrieves the column name from a hierarchy id.
+     * @return PColumn name or null when the hierarchy id is not within the connections / [connection] / tables / [tablename] / columns / [here is the column name] hierarchy.
+     */
+    @JsonIgnore
+    public String getColumnName() {
+        if (this.elements.length < 7) {
+            return null;
+        }
+
+        if (!Objects.equals(this.elements[0], "connections")) {
+            return null;
+        }
+
+        if (!Objects.equals(this.elements[2], "tables")) {
+            return null;
+        }
+
+        if (!Objects.equals(this.elements[4], "spec")) {
+            return null;
+        }
+
+        if (!Objects.equals(this.elements[5], "columns")) {
+            return null;
+        }
+
+        return (String)this.elements[6];
     }
 }

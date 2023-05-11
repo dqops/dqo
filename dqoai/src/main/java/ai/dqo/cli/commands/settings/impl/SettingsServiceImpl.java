@@ -15,16 +15,25 @@
  */
 package ai.dqo.cli.commands.settings.impl;
 
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.CliOperationStatus;
+import ai.dqo.core.dqocloud.accesskey.DqoCloudAccessTokenCache;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyPayload;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import ai.dqo.core.dqocloud.apikey.DqoCloudLimit;
 import ai.dqo.metadata.basespecs.InstanceStatus;
-import ai.dqo.metadata.sources.SettingsSpec;
-import ai.dqo.metadata.sources.SettingsWrapper;
+import ai.dqo.metadata.settings.SettingsSpec;
+import ai.dqo.metadata.settings.SettingsWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.ZoneId;
+import java.util.Map;
 
 /**
  * Settings management service.
@@ -32,20 +41,28 @@ import org.springframework.stereotype.Component;
 @Component
 public class SettingsServiceImpl implements SettingsService {
 	private final UserHomeContextFactory userHomeContextFactory;
+	private final DefaultTimeZoneProvider defaultTimeZoneProvider;
+	private final DqoCloudAccessTokenCache dqoCloudAccessTokenCache;
+	private final DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
 
 	@Autowired
-	public SettingsServiceImpl(UserHomeContextFactory userHomeContextFactory) {
+	public SettingsServiceImpl(UserHomeContextFactory userHomeContextFactory,
+							   DefaultTimeZoneProvider defaultTimeZoneProvider,
+							   DqoCloudAccessTokenCache dqoCloudAccessTokenCache,
+							   DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
 		this.userHomeContextFactory = userHomeContextFactory;
+		this.defaultTimeZoneProvider = defaultTimeZoneProvider;
+		this.dqoCloudAccessTokenCache = dqoCloudAccessTokenCache;
+		this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
 	}
 
-	private void createEmptySettingFile() {
-		UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
-
+	private SettingsWrapper createEmptySettingFile(UserHome userHome) {
 		SettingsSpec settingsSpec = new SettingsSpec();
-		SettingsWrapper settings = userHomeContext.getUserHome().getSettings();
+		SettingsWrapper settings = userHome.getSettings();
 		settings.setSpec(settingsSpec);
 		settings.setStatus(InstanceStatus.ADDED);
-		userHomeContext.flush();
+
+		return settings;
 	}
 
 	/**
@@ -60,15 +77,20 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		if (userHome.getSettings() == null) {
-			createEmptySettingFile();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
 		}
-		SettingsSpec settings = userHome.getSettings().getSpec();
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		System.out.println(settings);
 
 		settings.setEditorName(editorName);
 		settings.setEditorPath(editorPath);
 		userHomeContext.flush();
-		cliOperationStatus.setSuccesMessage("Successfully set editor name");
+		cliOperationStatus.setSuccessMessage("Successfully set editor name");
 
 		return cliOperationStatus;
 	}
@@ -83,10 +105,13 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		if (userHome.getSettings() == null) {
-			createEmptySettingFile();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
 		}
-		SettingsSpec settings = userHome.getSettings().getSpec();
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
 
 		if (Strings.isNullOrEmpty(settings.getEditorName())) {
 			cliOperationStatus.setFailedMessage(String.format("Editor name is not set"));
@@ -96,7 +121,7 @@ public class SettingsServiceImpl implements SettingsService {
 		settings.setEditorName(null);
 		settings.setEditorPath(null);
 		userHomeContext.flush();
-		cliOperationStatus.setSuccesMessage("Successfully removed editor");
+		cliOperationStatus.setSuccessMessage("Successfully removed editor");
 
 		return cliOperationStatus;
 	}
@@ -111,10 +136,13 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
+		SettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
-			createEmptySettingFile();
+			settings = createEmptySettingFile(userHome).getSpec();
 		}
-		SettingsSpec settings = userHome.getSettings().getSpec();
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
 
 		String editorName = settings.getEditorName();
 		String editorPath = settings.getEditorPath();
@@ -122,7 +150,7 @@ public class SettingsServiceImpl implements SettingsService {
 			cliOperationStatus.setFailedMessage(String.format("Editor name is not set"));
 			return cliOperationStatus;
 		}
-		cliOperationStatus.setSuccesMessage(String.format("Set editor is: %s\nEditor path is: %s", editorName, editorPath));
+		cliOperationStatus.setSuccessMessage(String.format("Set editor is: %s\nEditor path is: %s", editorName, editorPath));
 
 		return cliOperationStatus;
 	}
@@ -150,7 +178,7 @@ public class SettingsServiceImpl implements SettingsService {
 		settings.setStatus(InstanceStatus.ADDED);
 		userHomeContext.flush();
 
-		cliOperationStatus.setSuccesMessage("Successfully initialized settings file");
+		cliOperationStatus.setSuccessMessage("Successfully initialized settings file");
 		return cliOperationStatus;
 	}
 
@@ -172,7 +200,7 @@ public class SettingsServiceImpl implements SettingsService {
 		settings.markForDeletion();
 		userHomeContext.flush();
 
-		cliOperationStatus.setSuccesMessage("Successfully removed settings file");
+		cliOperationStatus.setSuccessMessage("Successfully removed settings file");
 		return cliOperationStatus;
 	}
 
@@ -187,14 +215,19 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		if (userHome.getSettings() == null) {
-			createEmptySettingFile();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
 		}
-		SettingsSpec settings = userHome.getSettings().getSpec();
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
 
 		settings.setApiKey(key);
 		userHomeContext.flush();
-		cliOperationStatus.setSuccesMessage("Successfully set api key");
+		this.dqoCloudApiKeyProvider.invalidate();
+		this.dqoCloudAccessTokenCache.invalidate();
+		cliOperationStatus.setSuccessMessage("Successfully set api key");
 
 		return cliOperationStatus;
 	}
@@ -209,10 +242,13 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		if (userHome.getSettings() == null) {
-			createEmptySettingFile();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
 		}
-		SettingsSpec settings = userHome.getSettings().getSpec();
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
 
 		String key = settings.getApiKey();
 		if (Strings.isNullOrEmpty(key)) {
@@ -222,7 +258,9 @@ public class SettingsServiceImpl implements SettingsService {
 
 		settings.setApiKey(null);
 		userHomeContext.flush();
-		cliOperationStatus.setSuccesMessage("Successfully removed api key");
+		this.dqoCloudApiKeyProvider.invalidate();
+		this.dqoCloudAccessTokenCache.invalidate();
+		cliOperationStatus.setSuccessMessage("Successfully removed api key");
 
 		return cliOperationStatus;
 	}
@@ -237,18 +275,156 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		if (userHome.getSettings() == null) {
-			createEmptySettingFile();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
 		}
-		SettingsSpec settings = userHome.getSettings().getSpec();
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
 
-		String key = settings.getApiKey();
-		if (Strings.isNullOrEmpty(key)) {
+		String apiKeyString = settings.getApiKey();
+		if (Strings.isNullOrEmpty(apiKeyString)) {
 			cliOperationStatus.setFailedMessage(String.format("Api key is not set"));
 			return cliOperationStatus;
 		}
-		cliOperationStatus.setSuccesMessage(String.format("Set api key is: %s", key));
+
+		DqoCloudApiKey cloudApiKey = this.dqoCloudApiKeyProvider.decodeApiKey(apiKeyString);
+		DqoCloudApiKeyPayload apiKeyPayload = cloudApiKey.getApiKeyPayload();
+
+		StringBuilder textBuilder = new StringBuilder();
+		textBuilder.append(String.format("DQO Cloud API key is: %s\n", apiKeyString));
+		textBuilder.append(String.format("Tenant id: %s/%d\n", apiKeyPayload.getTenantId(), apiKeyPayload.getTenantGroup()));
+		textBuilder.append(String.format("License type: %s\n", apiKeyPayload.getLicenseType()));
+
+		for (Map.Entry<DqoCloudLimit, Integer> limitEntry : apiKeyPayload.getLimits().entrySet()) {
+			String limitEntryName = "";
+			switch (limitEntry.getKey()) {
+				case CONNECTIONS_LIMIT:
+					limitEntryName = "Maximum number of synchronized connections";
+					break;
+				case USERS_LIMIT:
+					limitEntryName = "Maximum number of DQO Cloud users";
+					break;
+				case TABLES_LIMIT:
+					limitEntryName = "Maximum number of synchronized tables";
+					break;
+				case CONNECTION_TABLES_LIMIT:
+					limitEntryName = "Maximum number of synchronized tables inside a single connection";
+					break;
+				case MONTHS_LIMIT:
+					limitEntryName = "Maximum number of synchronized months with data quality results, including the current month";
+					break;
+				case JOBS_LIMIT:
+					limitEntryName = "Maximum number of parallel data quality jobs";
+					break;
+				default:
+					limitEntryName = limitEntry.getKey().toString();
+					break;
+			}
+
+			textBuilder.append(String.format("%s: %d\n", limitEntryName, limitEntry.getValue()));
+		}
+
+		cliOperationStatus.setSuccessMessage(textBuilder.toString());
 		return cliOperationStatus;
 	}
 
+	/**
+	 * Sets a new IANA time zone.
+	 * @param timeZone Time zone name.
+	 * @return Cli operation status.
+	 */
+	@Override
+	public CliOperationStatus setTimeZone(String timeZone) {
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+
+		if (timeZone != null) {
+			try {
+				ZoneId validatedTimeZoneId = ZoneId.of(timeZone);
+			}
+			catch (Exception ex) {
+				cliOperationStatus.setFailedMessage("Invalid time zone, use IANA time zone names");
+				return cliOperationStatus;
+			}
+		}
+
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		UserHome userHome = userHomeContext.getUserHome();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
+		}
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		settings.setTimeZone(timeZone);
+		userHomeContext.flush();
+		this.defaultTimeZoneProvider.invalidate();
+
+		cliOperationStatus.setSuccessMessage("Successfully set the time zone");
+
+		return cliOperationStatus;
+	}
+
+	/**
+	 * Removes a time zone.
+	 * @return Cli operation status.
+	 */
+	@Override
+	public CliOperationStatus removeTimeZone() {
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		UserHome userHome = userHomeContext.getUserHome();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
+		}
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		String timeZone = settings.getTimeZone();
+		if (Strings.isNullOrEmpty(timeZone)) {
+			cliOperationStatus.setFailedMessage(String.format("Time zone is not set"));
+			return cliOperationStatus;
+		}
+
+		settings.setApiKey(null);
+		userHomeContext.flush();
+		this.defaultTimeZoneProvider.invalidate();
+
+		cliOperationStatus.setSuccessMessage("Successfully removed the time zone");
+
+		return cliOperationStatus;
+	}
+
+	/**
+	 * Shows a time zone.
+	 * @return Cli operation status.
+	 */
+	@Override
+	public CliOperationStatus showTimeZone() {
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		UserHome userHome = userHomeContext.getUserHome();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
+		}
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		String timeZone = settings.getTimeZone();
+		if (Strings.isNullOrEmpty(timeZone)) {
+			cliOperationStatus.setFailedMessage(String.format("Time zone is not set"));
+			return cliOperationStatus;
+		}
+		cliOperationStatus.setSuccessMessage(String.format("The default time zone is: %s", timeZone));
+		return cliOperationStatus;
+	}
 }

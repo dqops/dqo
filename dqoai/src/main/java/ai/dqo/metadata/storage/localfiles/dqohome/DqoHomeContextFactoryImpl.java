@@ -19,15 +19,19 @@ import ai.dqo.core.filesystem.localfiles.LocalFileSystemFactory;
 import ai.dqo.core.filesystem.localfiles.LocalFolderTreeNode;
 import ai.dqo.utils.serialization.YamlSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
  * Creates a DQO_HOME come context and loads the home model from the file system.
  */
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class DqoHomeContextFactoryImpl implements DqoHomeContextFactory {
     private final YamlSerializer yamlSerializer;
     private final LocalFileSystemFactory localFileSystemFactory;
+    private DqoHomeContext sharedDqoHomeContext;
 
     @Autowired
     public DqoHomeContextFactoryImpl(YamlSerializer yamlSerializer, LocalFileSystemFactory localFileSystemFactory) {
@@ -36,14 +40,25 @@ public class DqoHomeContextFactoryImpl implements DqoHomeContextFactory {
     }
 
     /**
-     * Opens a local home context, loads the files from the local file system.
+     * Opens and returns a shared DQO user home.
      * @return Dqo home context with an active DQO_HOME home model that is backed by the local home file system.
      */
     @Override
     public DqoHomeContext openLocalDqoHome() {
-        // TODO: consider caching a home context instance and returning a shared instance, we will need to preload it to avoid race conditions if multiple threads are loading definitions
-        // it is probably enough to preload a list of rules and a list of sensor definitions + their list of provider sensors, we can load specs later (on demand)
+        synchronized (this) {
+            if (this.sharedDqoHomeContext == null) {
+                this.sharedDqoHomeContext = loadNewLocalDqoHome();
+            }
 
+            return this.sharedDqoHomeContext;
+        }
+    }
+
+    /**
+     * Loads a new DQO user home context, accessing the files again.
+     * @return New instance of a DQO home context with an active DQO_HOME home model that is backed by the local home file system.
+     */
+    public DqoHomeContext loadNewLocalDqoHome() {
         LocalFolderTreeNode homeRoot = this.localFileSystemFactory.openLocalDqoHome();
         DqoHomeContext dqoHomeContext = new DqoHomeContext(homeRoot);
         FileDqoHomeImpl fileDqoHomeModel = FileDqoHomeImpl.create(dqoHomeContext, this.yamlSerializer);

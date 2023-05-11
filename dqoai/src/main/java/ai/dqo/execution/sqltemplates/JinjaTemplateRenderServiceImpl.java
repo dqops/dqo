@@ -15,12 +15,12 @@
  */
 package ai.dqo.execution.sqltemplates;
 
-import ai.dqo.core.configuration.DqoConfigurationProperties;
-import ai.dqo.execution.CheckExecutionContext;
-import ai.dqo.execution.checks.progress.BeforeSqlTemplateRenderEvent;
-import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
-import ai.dqo.execution.checks.progress.SqlTemplateRenderedRendered;
+import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
+import ai.dqo.execution.sensors.progress.BeforeSqlTemplateRenderEvent;
+import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
+import ai.dqo.execution.sensors.progress.SqlTemplateRenderedRenderedEvent;
 import ai.dqo.utils.python.PythonCallerService;
 import ai.dqo.utils.python.PythonExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,18 +34,18 @@ import java.nio.file.Path;
 @Component
 public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderService {
     private final PythonCallerService pythonCallerService;
-    private final DqoConfigurationProperties configurationProperties;
+    private final DqoPythonConfigurationProperties pythonConfigurationProperties;
 
     /**
      * Creates a jinja template rendering service.
      * @param pythonCallerService Python call service.
-     * @param configurationProperties Configuration properties. We need to find the python file that will run jinja2.
+     * @param pythonConfigurationProperties Python configuration properties. We need to find the python file that will run jinja2.
      */
     @Autowired
     public JinjaTemplateRenderServiceImpl(PythonCallerService pythonCallerService,
-										  DqoConfigurationProperties configurationProperties) {
+                                          DqoPythonConfigurationProperties pythonConfigurationProperties) {
         this.pythonCallerService = pythonCallerService;
-        this.configurationProperties = configurationProperties;
+        this.pythonConfigurationProperties = pythonConfigurationProperties;
     }
 
     /**
@@ -58,7 +58,7 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
         JinjaTemplateRenderInput inputDto = new JinjaTemplateRenderInput();
         inputDto.setTemplateText(templateText);
         inputDto.setParameters(templateRenderParameters);
-        String evaluateTemplatesModule = this.configurationProperties.getPython().getEvaluateTemplatesModule();
+        String evaluateTemplatesModule = this.pythonConfigurationProperties.getEvaluateTemplatesModule();
 
         JinjaTemplateRenderOutput output =
 				this.pythonCallerService.executePythonHomeScript(inputDto, evaluateTemplatesModule, JinjaTemplateRenderOutput.class);
@@ -72,17 +72,17 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
     /**
      * Render a template for a sensor definition that was found in the user home or dqo home. This method prefers to use disk based template loading.
      *
-     * @param checkExecutionContext    Check execution context with paths to the user home and dqo home.
+     * @param executionContext    Check execution context with paths to the user home and dqo home.
      * @param sensorFindResult         Sensor definition (template) find result.
      * @param templateRenderParameters Template rendering parameters that are passed to the jinja2 template file and are usable in the template code.
      * @param progressListener         Progress listener that receives information about rendered templates.
      * @return Rendered SQL template.
      */
     @Override
-    public String renderTemplate(CheckExecutionContext checkExecutionContext,
-								 SensorDefinitionFindResult sensorFindResult,
-								 JinjaTemplateRenderParameters templateRenderParameters,
-								 CheckExecutionProgressListener progressListener) {
+    public String renderTemplate(ExecutionContext executionContext,
+                                 SensorDefinitionFindResult sensorFindResult,
+                                 JinjaTemplateRenderParameters templateRenderParameters,
+                                 SensorExecutionProgressListener progressListener) {
         JinjaTemplateRenderInput inputDto = new JinjaTemplateRenderInput();
         inputDto.setTemplateText(sensorFindResult.getSqlTemplateText());
         inputDto.setHomeType(sensorFindResult.getHome());
@@ -90,7 +90,7 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
                 sensorFindResult.getTemplateFilePath().toString().replace('\\', '/')
                 : null;
         inputDto.setTemplateHomePath(relativePathToTemplate);
-        Path userHomePhysicalPath = checkExecutionContext.getUserHomeContext().getHomeRoot().getPhysicalAbsolutePath();
+        Path userHomePhysicalPath = executionContext.getUserHomeContext().getHomeRoot().getPhysicalAbsolutePath();
         if (userHomePhysicalPath != null) {
             inputDto.setUserHomePath(userHomePhysicalPath.toString().replace('\\', '/'));
         }
@@ -100,18 +100,18 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
 //        }
 
         inputDto.setParameters(templateRenderParameters);
-        String evaluateTemplatesModule = this.configurationProperties.getPython().getEvaluateTemplatesModule();
+        String evaluateTemplatesModule = this.pythonConfigurationProperties.getEvaluateTemplatesModule();
 
         progressListener.onBeforeSqlTemplateRender(new BeforeSqlTemplateRenderEvent(inputDto));
         JinjaTemplateRenderOutput output =
 				this.pythonCallerService.executePythonHomeScript(inputDto, evaluateTemplatesModule, JinjaTemplateRenderOutput.class);
 
         if (output.getError() != null) {
-            progressListener.onSqlTemplateRendered(new SqlTemplateRenderedRendered(inputDto, output));
+            progressListener.onSqlTemplateRendered(new SqlTemplateRenderedRenderedEvent(inputDto, output));
             throw new PythonExecutionException("Quality check template failed to render, error: " + output.getError() + ", template path in the home folder: " + relativePathToTemplate);
         }
 
-        progressListener.onSqlTemplateRendered(new SqlTemplateRenderedRendered(inputDto, output));
+        progressListener.onSqlTemplateRendered(new SqlTemplateRenderedRenderedEvent(inputDto, output));
         return output.getResult();
     }
 }

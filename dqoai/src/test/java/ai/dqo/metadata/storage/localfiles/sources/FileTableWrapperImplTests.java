@@ -34,16 +34,8 @@ public class FileTableWrapperImplTests extends BaseTest {
     private PhysicalTableName physicalTableName;
     private TableList tables;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.userHomeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
 		this.connectionList = (FileConnectionListImpl) userHomeContext.getUserHome().getConnections();
 		connection = (ConnectionWrapperImpl) this.connectionList.createAndAddNew("conn");
@@ -65,7 +57,7 @@ public class FileTableWrapperImplTests extends BaseTest {
         ConnectionWrapper conn2 = homeContext2.getUserHome().getConnections().getByObjectName("conn", true);
         TableList tables2 = conn2.getTables();
         TableWrapper sut2 = tables2.getByObjectName(physicalTableName, true);
-        Assertions.assertEquals(physicalTableName.getTableName(), sut2.getSpec().getTarget().getTableName());
+        Assertions.assertEquals(physicalTableName.getTableName(), sut2.getSpec().getPhysicalTableName().getTableName());
     }
 
     @Test

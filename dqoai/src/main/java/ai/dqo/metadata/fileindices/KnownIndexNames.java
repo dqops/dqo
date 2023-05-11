@@ -32,17 +32,22 @@ public class KnownIndexNames {
     public static final String RULES = BuiltInFolderNames.RULES;
 
     /**
+     * Custom checks index.
+     */
+    public static final String CHECKS = BuiltInFolderNames.CHECKS;
+
+    /**
      * Custom sensors index.
      */
     public static final String SENSORS = BuiltInFolderNames.SENSORS;
 
     /**
-     * Sensor readings data index.
+     * Sensor readouts data index.
      */
-    public static final String READINGS = "readings";
+    public static final String SENSOR_READOUTS = "sensor_readouts";
 
     /**
-     * Sensor alerts data index.
+     * Data quality rule results data index.
      */
-    public static final String ALERTS = "alerts";
+    public static final String RULE_RESULTS = "rule_results";
 }

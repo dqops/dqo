@@ -17,6 +17,9 @@ package ai.dqo.cli.terminal;
 
 import tech.tablesaw.api.Table;
 
+import java.time.Duration;
+import java.util.concurrent.CompletableFuture;
+
 /**
  * Terminal input reader that prompts the user to enter information from the terminal and the command line.
  */
@@ -43,11 +46,19 @@ public interface TerminalReader {
      * Asks the user to answer a Y/N question.
      * @param question Prompt (question)
      * @param defaultValue Default value that is returned when the answer is empty.
+     * @return User entered response.
+     */
+    Boolean promptBoolean(String question, boolean defaultValue);
+
+    /**
+     * Asks the user to answer a multiple choice question.
+     * @param question Prompt (question)
+     * @param defaultValue Default value that is returned when the answer is empty.
      * @param acceptNullDefault When true and the <code>defaultValue</code> is null then a null value is accepted.
      *                          When false and the <code>defaultValue</code> is null then asks the user again until a response is given.
      * @return User entered response.
      */
-    Boolean promptBoolean(String question, boolean defaultValue, boolean acceptNullDefault);
+    Character promptChar(String question, Character defaultValue, boolean acceptNullDefault);
 
     /**
      * Asks the user to pick a value from the enum list.
@@ -89,4 +100,26 @@ public interface TerminalReader {
      * @return Character that was read.
      */
     Character tryReadChar(long timeoutMillis);
+
+    /**
+     * Starts a background job that will wait for any input on the console.
+     * @param waitDuration Wait duration.
+     * @return Completable future that returns true when any input appeared on the console (the user clicked any key). False or cancelled when no input appeared.
+     */
+    CompletableFuture<Boolean> waitForConsoleInput(Duration waitDuration);
+
+    /**
+     * Hangs on waiting for the user to confirm that the application should exit.
+     * @param startMessage Message to show before waiting for the user to confirm the exit.
+     */
+    void waitForExit(String startMessage);
+
+    /**
+     * Hangs on waiting for the user to confirm that the application should exit.
+     * Waits for up to <code>waitDuration</code>.
+     * @param startMessage Message to show before waiting for the user to confirm the exit.
+     * @param waitDuration Wait duration. The method will return false when the timeout elapsed.
+     * @return True - the user intentionally clicked any button to exit the application, false - the timeout elapsed.
+     */
+    boolean waitForExitWithTimeLimit(String startMessage, Duration waitDuration);
 }

@@ -16,12 +16,17 @@
 package ai.dqo.metadata.userhome;
 
 import ai.dqo.metadata.basespecs.Flushable;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionList;
 import ai.dqo.metadata.fileindices.FileIndexList;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
-import ai.dqo.metadata.sources.*;
+import ai.dqo.metadata.settings.SettingsWrapper;
+import ai.dqo.metadata.sources.ColumnSpec;
+import ai.dqo.metadata.sources.ConnectionList;
+import ai.dqo.metadata.sources.ConnectionWrapper;
+import ai.dqo.metadata.sources.TableWrapper;
 
 /**
  * User home model. Provides access to the data in the user home. The actual implementation can use a local file system,
@@ -45,6 +50,12 @@ public interface UserHome extends Flushable, HierarchyNode {
      * @return Collection of custom rules.
      */
     RuleDefinitionList getRules();
+
+    /**
+     * Returns a list of custom check definitions.
+     * @return Collection of custom check definitions.
+     */
+    CheckDefinitionList getChecks();
 
     /**
      * Returns settings.

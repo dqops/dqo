@@ -16,9 +16,9 @@
 package ai.dqo.cli.commands.column;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.column.impl.ColumnService;
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.column.impl.ColumnCliService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
@@ -28,9 +28,8 @@ import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ColumnTypeSnapshotSpec;
-import ai.dqo.metadata.sources.PhysicalTableName;
-import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -39,20 +38,23 @@ import picocli.CommandLine;
  * Cli command to update a column.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "update", description = "Update column or columns which match filters")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "update", header = "Update the column(s) that match a given condition", description = "Update one or more columns in a table that match a specified condition.")
 public class ColumnUpdateCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
-	private final ColumnService columnService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private ColumnCliService columnCliService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public ColumnUpdateCliCommand() {
+	}
 
 	@Autowired
 	public ColumnUpdateCliCommand(TerminalReader terminalReader,
 							   TerminalWriter terminalWriter,
-							   ColumnService columnService) {
+							   ColumnCliService columnCliService) {
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
-		this.columnService = columnService;
+		this.columnCliService = columnCliService;
 	}
 
 	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name", required = false,
@@ -66,6 +68,9 @@ public class ColumnUpdateCliCommand extends BaseCommand implements ICommand, ICo
 	@CommandLine.Option(names = {"-C", "--column"}, description = "Column name", required = false,
 			completionCandidates = ColumnNameCompleter.class)
 	private String columnName;
+
+	@CommandLine.Option(names = {"-e", "--sql-expression"}, description = "SQL expression for a calculated column", required = false)
+	private String sqlExpression;
 
 	@CommandLine.Option(names = {"-d", "--dataType"}, description = "Data type", required = false)
 	private String dataType;
@@ -119,6 +124,22 @@ public class ColumnUpdateCliCommand extends BaseCommand implements ICommand, ICo
 	}
 
 	/**
+	 * Returns a sql expression for a calculated column.
+	 * @return Sql expression.
+	 */
+	public String getSqlExpression() {
+		return sqlExpression;
+	}
+
+	/**
+	 * Sets a sql expression for a calculated column.
+	 * @param sqlExpression SQL expression for a calculated column.
+	 */
+	public void setSqlExpression(String sqlExpression) {
+		this.sqlExpression = sqlExpression;
+	}
+
+	/**
 	 * Computes a result, or throws an exception if unable to do so.
 	 *
 	 * @return computed result
@@ -128,8 +149,9 @@ public class ColumnUpdateCliCommand extends BaseCommand implements ICommand, ICo
 	public Integer call() throws Exception {
 		ColumnTypeSnapshotSpec columnTypeSnapshotSpec = new ColumnTypeSnapshotSpec(dataType);
 		ColumnSpec columnSpec = new ColumnSpec(columnTypeSnapshotSpec);
+		columnSpec.setSqlExpression(this.sqlExpression);
 
-		CliOperationStatus cliOperationStatus = columnService.updateColumn(connectionName, fullTableName, columnName, columnSpec);
+		CliOperationStatus cliOperationStatus = columnCliService.updateColumn(connectionName, fullTableName, columnName, columnSpec);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

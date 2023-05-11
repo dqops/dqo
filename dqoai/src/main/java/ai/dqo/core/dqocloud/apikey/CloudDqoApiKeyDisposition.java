@@ -24,6 +24,9 @@ public enum CloudDqoApiKeyDisposition {
     @JsonProperty("all")
     ALL_PURPOSES,
 
+    @JsonProperty("ui")
+    UI,
+
     @JsonProperty("fl")
     FILE_EXCHANGE,
 

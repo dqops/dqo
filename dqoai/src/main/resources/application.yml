@@ -1,25 +1,40 @@
 spring:
   main:
-    web-application-type: NONE
-    allow-circular-references: true
     lazy-initialization: true
+  quartz:
+    wait-for-jobs-to-complete-on-shutdown: true
   autoconfigure:
     exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  application:
+    name: dqo
+  lifecycle:
+    timeout-per-shutdown-phase: 10s
+  mvc:
+    async:
+      request-timeout: 60000
   shell:
     interactive:
       enabled: false
+
+server:
+  port: ${port:8888}
+  shutdown: graceful
+  error:
+    include-stacktrace: always
 
 logging:
   level:
     root: WARN
     org:
       jline: ERROR
-      springframework: OFF
+      springframework: ERROR
       apache:
         hadoop:
           util: ERROR
     com:
       google: OFF
+    ai:
+      dqo: WARN
 
 picocli:
   ansi: true
@@ -28,20 +43,33 @@ https:
   # SSLv3,TLSv1.1,TLSv1.2
   protocols: TLSv1.2
 
+dfs:
+  permissions:
+    enabled: false
+
+# when adding new parameters, remember to add them to DqoRootCliCommand, so they are listed by running "dqo --help" and they are documented
+
 dqo:
   python:
-    interpreter: python
+    interpreter: python3,python3.exe,python,python.exe
     evaluate-templates-module: lib/evaluate_templates.py
     evaluate-rules-module: lib/evaluate_rules.py
     python-script-timeout-seconds: 120
   user:
     home: .
     has-local-home: true
+    initialize-user-home: false
+  logging:
+    enable-user-home-logging: true
+    max-history: 7
+    pattern: "%-12date{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%rootException%n"
+    total-size-cap: 10mb
   storage:
-    sensor-readings-storage-path: .data/readings
-    alerts-storage-path: .data/alerts
     gcp:
       upload-buffer-size: 5000000
+      http2: true
+      http2-max-concurrent-streams: 2000
+      parallel-delete-operations: 2000
   yaml-schema-server: https://cloud.dqo.ai/dqo-yaml-schema/
   cloud:
     ui-base-url: https://cloud.dqo.ai
@@ -49,9 +77,34 @@ dqo:
     #ui-base-url: http://localhost:3000
     #rest-api-base-url: http://localhost:8080
     api-key-request-url: ${dqo.cloud.ui-base-url}/requestapikey/
+    api-key-pickup-timeout-seconds: 600
+    api-key-pickup-retry-delay-millis: 1000
+    parallel-file-uploads: 500
+    parallel-file-downloads: 500
+    file-synchronization-time-limit-seconds: 1200
+    max-retries: 5
+    retry-backoff-millis: 10
   secrets:
     enable-gcp-secret-manager: true
     gcp-project-id: ${GOOGLE_CLOUD_PROJECT}
   core:
     print-stack-trace: true
-
+    lock-wait-timeout-seconds: 900
+  statistics:
+    truncated-strings-length: 50
+    viewed-statistics-age-months: 3
+  incidents:
+    count-open-incidents-days: 15
+  jdbc:
+    max-connection-in-pool: 1000
+    expire-after-access-seconds: 1800
+  queue:
+    keep-finished-jobs-history-seconds: 3600
+    keep-jobs-changes-history-seconds: 1200
+    get-job-changes-since-wait-seconds: 20
+  scheduler:
+    #start: true
+    synchronization-mode: silent
+    check-run-mode: silent
+    scan-metadata-cron-schedule: "*/10 * * * *"   # every 10 minutes
+    enable-cloud-sync: true

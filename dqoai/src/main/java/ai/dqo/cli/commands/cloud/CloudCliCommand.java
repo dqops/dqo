@@ -17,10 +17,7 @@ package ai.dqo.cli.commands.cloud;
 
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.cloud.sync.CloudSyncCliCommand;
-import ai.dqo.cli.commands.connection.ConnectionAddCliCommand;
-import ai.dqo.cli.commands.connection.ConnectionListCliCommand;
-import ai.dqo.cli.commands.connection.ConnectionRemoveCliCommand;
-import ai.dqo.cli.commands.connection.ConnectionUpdateCliCommand;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -29,7 +26,7 @@ import picocli.CommandLine;
  * "cloud" 1st level cli command to connect and synchronize with DQO Cloud
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "cloud", description = "Connect and synchronize the data with DQO Cloud",
         subcommands = {
         CloudLoginCliCommand.class,

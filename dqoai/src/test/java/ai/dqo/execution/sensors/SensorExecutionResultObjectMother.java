@@ -15,8 +15,8 @@
  */
 package ai.dqo.execution.sensors;
 
-import ai.dqo.data.readings.factory.SensorReadingTableFactoryObjectMother;
-import tech.tablesaw.api.*;
+import ai.dqo.data.readouts.factory.SensorReadoutTableFactoryObjectMother;
+import tech.tablesaw.api.Table;
 
 /**
  * Object mother for SensorExecutionResult.
@@ -27,7 +27,7 @@ public class SensorExecutionResultObjectMother {
      * @return Empty results table.
      */
     public static SensorExecutionResult createEmptyNormalizedResults() {
-        Table table = SensorReadingTableFactoryObjectMother.createEmptyNormalizedTable("normalized_results");
+        Table table = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("normalized_results");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createEmptyBigQuery();
         return new SensorExecutionResult(runParameters, table);
     }

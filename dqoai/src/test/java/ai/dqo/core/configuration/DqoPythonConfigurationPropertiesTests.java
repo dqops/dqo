@@ -26,22 +26,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class DqoPythonConfigurationPropertiesTests extends BaseTest {
     private DqoPythonConfigurationProperties sut;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = BeanFactoryObjectMother.getBeanFactory().getBean(DqoPythonConfigurationProperties.class);
     }
 
     @Test
-    void getInterpreter_whenRetrieved_defaultIsPython() {
-        Assertions.assertEquals("python", this.sut.getInterpreter());
+    void getInterpreter_whenRetrieved_thenReturnsAllExpectedPythonInterpreterNames() {
+        Assertions.assertEquals("python3,python3.exe,python,python.exe", this.sut.getInterpreter());
     }
 
     @Test

@@ -16,44 +16,21 @@
 package ai.dqo.core.configuration;
 
 import ai.dqo.BaseTest;
-import ai.dqo.core.filesystem.localfiles.LocalFolderTreeNodeObjectMother;
+import ai.dqo.utils.BeanFactoryObjectMother;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class DqoCoreConfigurationTests extends BaseTest {
-	@Autowired
 	private DqoCoreConfiguration sut;
+
+	@BeforeEach
+	void setUp() {
+		this.sut = BeanFactoryObjectMother.getBeanFactory().getBean(DqoCoreConfiguration.class);
+	}
 
 	@Test
 	void contextLoads_whenCalled_thenDoesNotThrowSpringExceptions() {
-	}
-
-	@Test
-	void dqo_whenRetrieved_returnsConfigurationForHomeFolder() {
-		assertNotNull(this.sut.getDqo());
-		String home = this.sut.getDqo().getHome();
-		String dqo_home = System.getenv("DQO_HOME");
-		assertNotNull(dqo_home);
-		assertNotNull(home);
-		assertTrue(Files.isDirectory(Path.of(home)));
-	}
-
-	@Test
-	void dqo_whenRetrieved_returnsConfigurationForUserHomeFolder() {
-		LocalFolderTreeNodeObjectMother.createDefaultUserHome(true);
-
-		assertNotNull(this.sut.getDqo());
-		assertNotNull(this.sut.getDqo().getUser());
-		String home = this.sut.getDqo().getUser().getHome();
-		assertNotNull(home);
-		assertTrue(Files.isDirectory(Path.of(home)), "Missing home folder: " + home);
 	}
 }

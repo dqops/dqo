@@ -16,7 +16,7 @@
 package ai.dqo.core.filesystem.localfiles;
 
 import ai.dqo.BaseTest;
-import ai.dqo.core.filesystem.*;
+import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.filesystem.virtual.FileContent;
 import ai.dqo.core.filesystem.virtual.FileTreeNode;
 import ai.dqo.core.filesystem.virtual.FileTreeNodeStatus;
@@ -32,10 +32,8 @@ import java.nio.file.Path;
 public class LocalFileTreeNodeTests extends BaseTest {
     private LocalFolderTreeNode folder;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.folder = LocalFolderTreeNodeObjectMother.createEmptyTemporaryUserHome(true);
     }
 

@@ -15,7 +15,9 @@
  */
 package ai.dqo.execution.sensors;
 
-import ai.dqo.execution.CheckExecutionContext;
+import ai.dqo.connectors.ConnectionQueryException;
+import ai.dqo.core.jobqueue.JobCancellationToken;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerStub;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -37,14 +39,19 @@ public class DataQualitySensorRunnerObjectMother {
 
     /**
      * Executes a sensor given the execution context (both the user home and dqo home) and the check run parameters.
-     * @param checkExecutionContext Check execution context (user home and dqo home).
+     * @param executionContext Check execution context (user home and dqo home).
      * @param sensorRunParameters Sensor run parameters.
      * @return Sensor execution result.
      */
-    public static SensorExecutionResult executeSensor(CheckExecutionContext checkExecutionContext, SensorExecutionRunParameters sensorRunParameters) {
+    public static SensorExecutionResult executeSensor(ExecutionContext executionContext, SensorExecutionRunParameters sensorRunParameters) {
         DataQualitySensorRunnerImpl sensorRunner = getDefault();
         CheckExecutionProgressListenerStub progressListener = new CheckExecutionProgressListenerStub();
-        return sensorRunner.executeSensor(checkExecutionContext, sensorRunParameters, progressListener, false);
+        SensorExecutionResult sensorExecutionResult = sensorRunner.executeSensor(executionContext, sensorRunParameters, progressListener, false,
+                JobCancellationToken.createDummyJobCancellationToken());
+        if (!sensorExecutionResult.isSuccess()) {
+            throw new ConnectionQueryException("Failed to execute a sensor: " + sensorExecutionResult.getException().getMessage(), sensorExecutionResult.getException());
+        }
+        return sensorExecutionResult;
     }
 
     /**
@@ -54,7 +61,11 @@ public class DataQualitySensorRunnerObjectMother {
      * @return Sensor execution result.
      */
     public static SensorExecutionResult executeSensor(UserHomeContext userHomeContext, SensorExecutionRunParameters sensorRunParameters) {
-        CheckExecutionContext checkExecutionContext = new CheckExecutionContext(userHomeContext, DqoHomeContextObjectMother.getRealDqoHomeContext());
-        return executeSensor(checkExecutionContext, sensorRunParameters);
+        ExecutionContext executionContext = new ExecutionContext(userHomeContext, DqoHomeContextObjectMother.getRealDqoHomeContext());
+        SensorExecutionResult sensorExecutionResult = executeSensor(executionContext, sensorRunParameters);
+        if (!sensorExecutionResult.isSuccess()) {
+            throw new ConnectionQueryException("Failed to execute a sensor: " + sensorExecutionResult.getException().getMessage(), sensorExecutionResult.getException());
+        }
+        return sensorExecutionResult;
     }
 }

@@ -16,9 +16,9 @@
 package ai.dqo.cli.commands.column;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.column.impl.ColumnService;
-import ai.dqo.cli.commands.status.CliOperationStatus;
+import ai.dqo.cli.commands.column.impl.ColumnCliService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
@@ -26,9 +26,9 @@ import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
-import ai.dqo.metadata.sources.PhysicalTableName;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -37,20 +37,23 @@ import picocli.CommandLine;
  * Cli command to rename a table.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "rename", description = "Rename column which match filters")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "rename", header = "Rename the column filtered by the given conditions", description = "Rename one or more columns in a table based on a specified condition.")
 public class ColumnRenameCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
-	private final ColumnService columnService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private ColumnCliService columnCliService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public ColumnRenameCliCommand() {
+	}
 
 	@Autowired
 	public ColumnRenameCliCommand(TerminalReader terminalReader,
 								  TerminalWriter terminalWriter,
-								  ColumnService columnService) {
+								  ColumnCliService columnCliService) {
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
-		this.columnService = columnService;
+		this.columnCliService = columnCliService;
 	}
 
 	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name", required = false,
@@ -152,7 +155,7 @@ public class ColumnRenameCliCommand extends BaseCommand implements ICommand, ICo
 			this.columnName = this.terminalReader.prompt("New column name (--newColumn)", null, false);
 		}
 
-		CliOperationStatus cliOperationStatus = columnService.renameColumn(connectionName, fullTableName, columnName, newColumnName);
+		CliOperationStatus cliOperationStatus = columnCliService.renameColumn(connectionName, fullTableName, columnName, newColumnName);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 

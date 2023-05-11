@@ -15,10 +15,12 @@
  */
 package ai.dqo.cli.completion.completers.cache;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception thrown when the CLI completer cache failed.
  */
-public class CliCompleterCacheException extends RuntimeException {
+public class CliCompleterCacheException extends DqoRuntimeException {
     public CliCompleterCacheException(String message, Throwable cause) {
         super(message, cause);
     }

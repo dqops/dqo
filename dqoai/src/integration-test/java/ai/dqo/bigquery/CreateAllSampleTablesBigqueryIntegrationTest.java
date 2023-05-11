@@ -15,31 +15,16 @@
  */
 package ai.dqo.bigquery;
 
-import ai.dqo.BaseIntegrationTest;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
+import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import ai.dqo.sampledata.SampleTableMetadata;
 
 @SpringBootTest
-public class CreateAllSampleTablesBigqueryIntegrationTest extends BaseIntegrationTest {
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-
-    @Override
-    @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
-    }
-
+public class CreateAllSampleTablesBigqueryIntegrationTest extends BaseBigQueryIntegrationTest {
     @Test
     void runTest_whenTestDataFileNamedContinuousDaysOneRowPerDayIsCreated_thenPutItInBigquery() {
 
@@ -93,6 +78,27 @@ public class CreateAllSampleTablesBigqueryIntegrationTest extends BaseIntegratio
     void runTest_whenTestDataFileNamedTestDataTimeSeriesIsCreated_thenPutItInBigquery() {
 
         SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_time_series, ProviderType.bigquery);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+    }
+
+    @Test
+    void runTest_whenTestDataFileNamedTest_string_test_data_IsCreated_thenPutItInBigquery() {
+
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.bigquery);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+    }
+
+    @Test
+    void runTest_whenTestDataFileNamedTest_value_match_left_table_IsCreated_thenPutItInPostgresql() {
+
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.bigquery);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+    }
+
+    @Test
+    void runTest_whenTestDataFileNamedTest_geographic_coordinate_system_test_IsCreated_thenPutItInPostgresql() {
+
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.geographic_coordinate_system_test, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
     }
 }

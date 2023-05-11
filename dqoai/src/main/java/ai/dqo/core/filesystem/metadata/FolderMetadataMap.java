@@ -18,8 +18,8 @@ package ai.dqo.core.filesystem.metadata;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
-import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -42,7 +42,7 @@ public class FolderMetadataMap extends AbstractCollection<FolderMetadata> {
      * {@code UnsupportedOperationException}.
      */
     @Override
-    public boolean add(FolderMetadata folderMetadata) {
+    public synchronized boolean add(FolderMetadata folderMetadata) {
         assert !frozen;
         String folderName = folderMetadata.getFolderName();
         this.folders.put(folderName, folderMetadata);
@@ -66,7 +66,7 @@ public class FolderMetadataMap extends AbstractCollection<FolderMetadata> {
      * method and this collection contains the specified object.
      */
     @Override
-    public boolean remove(Object o) {
+    public synchronized boolean remove(Object o) {
         FolderMetadata folderMetadata = (FolderMetadata)o;
         return this.folders.remove(folderMetadata.getFolderName()) != null;
     }
@@ -76,7 +76,7 @@ public class FolderMetadataMap extends AbstractCollection<FolderMetadata> {
      * @param folderName Folder name.
      * @return Folder metadata or null when not found.
      */
-    public FolderMetadata get(String folderName) {
+    public synchronized FolderMetadata get(String folderName) {
         return this.folders.get(folderName);
     }
 
@@ -95,14 +95,14 @@ public class FolderMetadataMap extends AbstractCollection<FolderMetadata> {
      * @return Number of subfolders.
      */
     @Override
-    public int size() {
+    public synchronized int size() {
         return this.folders.size();
     }
 
     /**
      * Freezes the current collection of children and makes it read only.
      */
-    public void freeze() {
+    public synchronized void freeze() {
         if (this.frozen) {
             return;
         }
@@ -129,7 +129,7 @@ public class FolderMetadataMap extends AbstractCollection<FolderMetadata> {
      * Folders inside the collection are still frozen and should be replaced when needed.
      * @return Cloned mutable copy of the collection.
      */
-    public FolderMetadataMap cloneUnfrozen() {
+    public synchronized FolderMetadataMap cloneUnfrozen() {
         FolderMetadataMap cloned = new FolderMetadataMap();
         cloned.folders.putAll(this.folders);
         return cloned;
@@ -140,7 +140,7 @@ public class FolderMetadataMap extends AbstractCollection<FolderMetadata> {
      * @param folderName Folder name.
      * @return Unfrozen folder metadata that could be mutated (files added, child folders added).
      */
-    public FolderMetadata getMutable(String folderName) {
+    public synchronized FolderMetadata getMutable(String folderName) {
         if (this.frozen) {
             throw new FileSystemMetadataFrozenException("Cannot retrieve a mutable folder from a frozen folder map");
         }
@@ -164,7 +164,7 @@ public class FolderMetadataMap extends AbstractCollection<FolderMetadata> {
      * Calculates a 64-bit hash of all the files.
      * @return 64-bit farm hash.
      */
-    public HashCode calculateHash64() {
+    public synchronized HashCode calculateHash64() {
         if (this.folders.size() == 0) {
             return HashCode.fromLong(1L);
         }
@@ -183,7 +183,7 @@ public class FolderMetadataMap extends AbstractCollection<FolderMetadata> {
      * @param folderName Folder name.
      * @return True when the file was found, false when the file is missing.
      */
-    public boolean containsFolderName(String folderName) {
+    public synchronized boolean containsFolderName(String folderName) {
         return this.folders.containsKey(folderName);
     }
 
@@ -192,7 +192,27 @@ public class FolderMetadataMap extends AbstractCollection<FolderMetadata> {
      * @param folderName Folder name.
      * @return True when the file was removed, false when it was not present.
      */
-    public boolean removeByFolderName(String folderName) {
+    public synchronized boolean removeByFolderName(String folderName) {
         return this.folders.remove(folderName) != null;
+    }
+
+    /**
+     * Drops outstanding child folders to match the limit. Outstanding folders are just detached.
+     * @param limit Limit of child folders to keep.
+     * @param isValidFolderName Lambda function used to filter the folder names.
+     * @param sortingOrder Sorting order for selecting the tables.
+     */
+    public void truncateToLimit(int limit, Function<String, Boolean> isValidFolderName, FolderTruncationMode sortingOrder) {
+        if (this.folders.size() <= limit) {
+            return;
+        }
+
+        List<String> foldersToDetach = this.folders.keySet().stream()
+                .filter(isValidFolderName::apply)
+                .sorted(sortingOrder == FolderTruncationMode.DESCENDING_SORTED_FIRST ? Comparator.naturalOrder() : Comparator.reverseOrder())
+                .limit(this.folders.size() - limit)
+                .collect(Collectors.toList());
+
+        foldersToDetach.forEach(folderName -> this.removeByFolderName(folderName));
     }
 }

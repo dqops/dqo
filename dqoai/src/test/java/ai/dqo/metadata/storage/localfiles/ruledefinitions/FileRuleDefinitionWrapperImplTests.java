@@ -30,6 +30,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashMap;
+
 @SpringBootTest
 public class FileRuleDefinitionWrapperImplTests extends BaseTest {
     private FileRuleDefinitionWrapperImpl sut;
@@ -38,10 +40,8 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
     private FolderTreeNode ruleFolder;
     private YamlSerializer yamlSerializer;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.userHomeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
 		this.fileRuleDefinitionList = (FileRuleDefinitionListImpl) userHomeContext.getUserHome().getRules();
 		this.ruleFolder = this.fileRuleDefinitionList.getRulesFolder().getOrAddDirectFolder("conn");
@@ -121,14 +121,16 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
 		this.sut.flush();
 		userHomeContext.flush();
 
-		this.sut.getSpec().getParams().put("p1", "val");
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("p1", "val");
+        this.sut.getSpec().setParameters(parameters);
 		this.sut.flush();
 		userHomeContext.flush();
 
         Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
         FileRuleDefinitionWrapperImpl sut2 = new FileRuleDefinitionWrapperImpl(ruleFolder,"rule", "rule", this.yamlSerializer);
         RuleDefinitionSpec spec2 = sut2.getSpec();
-        Assertions.assertEquals("val", spec2.getParams().get("p1"));
+        Assertions.assertEquals("val", spec2.getParameters().get("p1"));
     }
 
     @Test
@@ -182,7 +184,9 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
     @Test
     void flush_whenExistingWasMarkedForDeletion_thenDeletesRuleFromDisk() {
         RuleDefinitionSpec spec = new RuleDefinitionSpec();
-        spec.getParams().put("param1", "val1");
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("param1", "val1");
+        spec.setParameters(parameters);
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();
@@ -201,7 +205,9 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
     @Test
     void getSpec_whenSpecFilePresentInFolder_thenReturnsSpec() {
         RuleDefinitionSpec spec = new RuleDefinitionSpec();
-        spec.getParams().put("param1", "val1");
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("param1", "val1");
+        spec.setParameters(parameters);
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();
@@ -215,7 +221,9 @@ public class FileRuleDefinitionWrapperImplTests extends BaseTest {
     @Test
     void getSpec_whenCalledTwice_thenReturnsTheSameInstance() {
         RuleDefinitionSpec spec = new RuleDefinitionSpec();
-        spec.getParams().put("param1", "val1");
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("param1", "val1");
+        spec.setParameters(parameters);
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
 		this.sut.flush();

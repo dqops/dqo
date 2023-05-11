@@ -29,6 +29,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -37,16 +38,8 @@ public class FileRuleDefinitionListImplTests extends BaseTest {
     private FileRuleDefinitionListImpl sut;
     private UserHomeContext homeContext;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		homeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
 		this.sut = (FileRuleDefinitionListImpl) homeContext.getUserHome().getRules();
     }
@@ -73,14 +66,17 @@ public class FileRuleDefinitionListImplTests extends BaseTest {
     void createAndAddNew_whenNewRuleWithSpecAndNoPythonAddedAndFlushed_thenIsSaved() {
         RuleDefinitionWrapper wrapper = this.sut.createAndAddNew("src1");
         RuleDefinitionSpec model = wrapper.getSpec();
-        model.getParams().put("param1", "value");
+
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("param1", "value");
+        model.setParameters(parameters);
 		homeContext.flush();
 
         UserHomeContext homeContext2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
         RuleDefinitionList list2 = homeContext2.getUserHome().getRules();
         RuleDefinitionWrapper wrapper2 = list2.getByObjectName("src1", true);
         Assertions.assertNotEquals(null, wrapper2);
-        Assertions.assertEquals("value", wrapper2.getSpec().getParams().get("param1"));
+        Assertions.assertEquals("value", wrapper2.getSpec().getParameters().get("param1"));
         Assertions.assertNull(wrapper2.getRulePythonModuleContent().getTextContent());
     }
 
@@ -88,7 +84,9 @@ public class FileRuleDefinitionListImplTests extends BaseTest {
     void createAndAddNew_whenNewRuleWithSpecAndPythonFileAddedAndFlushed_thenIsSaved() {
         RuleDefinitionWrapper wrapper = this.sut.createAndAddNew("src1");
         RuleDefinitionSpec model = wrapper.getSpec();
-        model.getParams().put("param1", "value");
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("param1", "value");
+        model.setParameters(parameters);
         wrapper.setRulePythonModuleContent(new FileContent("def fun()"));
 		homeContext.flush();
 
@@ -96,7 +94,7 @@ public class FileRuleDefinitionListImplTests extends BaseTest {
         RuleDefinitionList list2 = homeContext2.getUserHome().getRules();
         RuleDefinitionWrapper wrapper2 = list2.getByObjectName("src1", true);
         Assertions.assertNotEquals(null, wrapper2);
-        Assertions.assertEquals("value", wrapper2.getSpec().getParams().get("param1"));
+        Assertions.assertEquals("value", wrapper2.getSpec().getParameters().get("param1"));
         Assertions.assertEquals("def fun()", wrapper2.getRulePythonModuleContent().getTextContent());
     }
 
@@ -112,14 +110,16 @@ public class FileRuleDefinitionListImplTests extends BaseTest {
         RuleDefinitionWrapper wrapper2 = list2.getByObjectName("dir/dir2/sample2", true);
         wrapper2.setRulePythonModuleContent(new FileContent("def fun()"));
         wrapper2.setSpec(spec2);
-        spec2.getParams().put("p1", "v");
+        HashMap<String, String> parameters = new HashMap<>();
+        parameters.put("p1", "v");
+        spec2.setParameters(parameters);
         homeContext2.flush();
 
         UserHomeContext homeContext3 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
         RuleDefinitionList list3 = homeContext3.getUserHome().getRules();
         RuleDefinitionWrapper wrapper3 = list3.getByObjectName("dir/dir2/sample2", true);
         Assertions.assertEquals(false, wrapper3.getSpec().isDirty());
-        Assertions.assertEquals("v", wrapper3.getSpec().getParams().get("p1"));
+        Assertions.assertEquals("v", wrapper3.getSpec().getParameters().get("p1"));
         Assertions.assertEquals("def fun()", wrapper2.getRulePythonModuleContent().getTextContent());
     }
 

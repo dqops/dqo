@@ -25,8 +25,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "dqo.core")
 @EqualsAndHashCode(callSuper = false)
-public class DqoCoreConfigurationProperties {
+public class DqoCoreConfigurationProperties implements Cloneable {
     private boolean printStackTrace;
+    private long lockWaitTimeoutSeconds = 15 * 60;
 
     /**
      * Prints the stack trace.
@@ -42,5 +43,36 @@ public class DqoCoreConfigurationProperties {
      */
     public void setPrintStackTrace(boolean printStackTrace) {
         this.printStackTrace = printStackTrace;
+    }
+
+    /**
+     * Returns the timeout in seconds to acquire a lock on shared resources.
+     * @return Timeout in seconds.
+     */
+    public long getLockWaitTimeoutSeconds() {
+        return lockWaitTimeoutSeconds;
+    }
+
+    /**
+     * Sets the timeout in seconds for waiting to acquire a shared read lock or an exclusive write lock.
+     * @param lockWaitTimeoutSeconds Timeout in seconds.
+     */
+    public void setLockWaitTimeoutSeconds(long lockWaitTimeoutSeconds) {
+        this.lockWaitTimeoutSeconds = lockWaitTimeoutSeconds;
+    }
+
+    /**
+     * Creates a clone of the object.
+     * @return Cloned instance.
+     */
+    @Override
+    public DqoCoreConfigurationProperties clone() {
+        try {
+            DqoCoreConfigurationProperties cloned = (DqoCoreConfigurationProperties) super.clone();
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new RuntimeException("Cannot clone object", ex);
+        }
     }
 }

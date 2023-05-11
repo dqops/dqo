@@ -33,7 +33,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableOwnerSpec extends AbstractSpec implements Cloneable {
+public class TableOwnerSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<TableOwnerSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -41,6 +41,7 @@ public class TableOwnerSpec extends AbstractSpec implements Cloneable {
 
     @JsonPropertyDescription("Data steward name")
     private String dataSteward;
+
     @JsonPropertyDescription("Business application name")
     private String application;
 
@@ -93,7 +94,6 @@ public class TableOwnerSpec extends AbstractSpec implements Cloneable {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
@@ -104,13 +104,8 @@ public class TableOwnerSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public TableOwnerSpec clone() {
-        try {
-            TableOwnerSpec cloned = (TableOwnerSpec) super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public TableOwnerSpec deepClone() {
+        TableOwnerSpec cloned = (TableOwnerSpec) super.deepClone();
+        return cloned;
     }
 }

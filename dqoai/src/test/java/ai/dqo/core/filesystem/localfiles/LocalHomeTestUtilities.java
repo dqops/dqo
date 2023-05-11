@@ -15,6 +15,9 @@
  */
 package ai.dqo.core.filesystem.localfiles;
 
+import ai.dqo.core.synchronization.status.SynchronizationStatusTrackerStub;
+import ai.dqo.core.locks.UserHomeLockManager;
+import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreatorObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageServiceImpl;
 import org.springframework.stereotype.Component;
@@ -27,14 +30,16 @@ public class LocalHomeTestUtilities {
     /**
      * Recreates the testable user home, cleaning it back to the default structure.
      */
-    public void recreateTestUserHome() throws Exception {
+    public void recreateTestUserHome() {
         try {
             HomeLocationFindServiceImpl homeLocationFindService = HomeLocationFindServiceObjectMother.getWithTestUserHome(true);
-            LocalUserHomeFileStorageServiceImpl localHomeStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService);
+            UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
+            LocalUserHomeFileStorageServiceImpl localHomeStorageService = new LocalUserHomeFileStorageServiceImpl(
+                    homeLocationFindService, newLockManager, new SynchronizationStatusTrackerStub());
             LocalUserHomeCreatorObjectMother.initializeDqoUserHomeAt(localHomeStorageService.getHomePath());
         }
         catch( Exception ex) {
-            throw ex;
+            throw new RuntimeException(ex);
         }
     }
 }

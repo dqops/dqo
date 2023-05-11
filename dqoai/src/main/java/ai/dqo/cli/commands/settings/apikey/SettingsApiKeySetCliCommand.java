@@ -16,38 +16,46 @@
 package ai.dqo.cli.commands.settings.apikey;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.settings.impl.SettingsService;
-import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * Cli command to set a api key to settings.
+ * Cli command to set a api key in settings.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "set", description = "Set api key")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "set", header = "Set API key", description = "Set the API key used for accessing external services. This key is used to authenticate requests to the service.")
 public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand {
-	private final SettingsService settingsService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private SettingsService settingsService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+	private DqoCloudApiKeyProvider apiKeyProvider;
+
+	public SettingsApiKeySetCliCommand() {
+	}
 
 	@Autowired
 	public SettingsApiKeySetCliCommand(SettingsService settingsService,
 									   TerminalReader terminalReader,
-									   TerminalWriter terminalWriter) {
+									   TerminalWriter terminalWriter,
+									   DqoCloudApiKeyProvider apiKeyProvider) {
 		this.settingsService = settingsService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
+		this.apiKeyProvider = apiKeyProvider;
 	}
 
-	@CommandLine.Parameters(index = "0", description = "Api key")
+	@CommandLine.Parameters(index = "0", description = "DQO Cloud Api key")
 	private String key;
 
 	public String getKey() {
@@ -66,8 +74,16 @@ public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand
 	@Override
 	public Integer call() throws Exception {
 		if (Strings.isNullOrEmpty(this.key)) {
-			throwRequiredParameterMissingIfHeadless("--key");
-			this.key = this.terminalReader.prompt("Api key (--key)", null, false);
+			throwRequiredParameterMissingIfHeadless("key");
+			this.key = this.terminalReader.prompt("Api key", null, false);
+		}
+
+		try {
+			this.apiKeyProvider.decodeApiKey(this.key);
+		}
+		catch (Exception ex) {
+			this.terminalWriter.writeLine("Invalid Cloud DQO API key: " + ex.getMessage());
+			return -1;
 		}
 
 		CliOperationStatus cliOperationStatus = this.settingsService.setApiKey(key);

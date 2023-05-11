@@ -18,43 +18,94 @@ package ai.dqo.cli.commands.cloud.sync;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.cloud.sync.impl.CloudSynchronizationService;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.cli.terminal.TerminalFactory;
+import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.core.dqocloud.accesskey.DqoCloudCredentialsException;
+import ai.dqo.core.jobqueue.exceptions.DqoQueueJobExecutionException;
+import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.fileexchange.FileSynchronizationDirection;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * 3st level CLI command "cloud sync data" to synchronize the "data" folder with sensor readings and alerts in the DQO user home.
+ * 3st level CLI command "cloud sync data" to synchronize the "data" folder with sensor readouts and rule results in the DQO user home.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "data", description = "Synchronize local \"data\" folder with sensor readings and alerts with DQO Cloud")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "data", header = "Synchronize local \"data\" folder with sensor readouts and rule results with DQO Cloud", description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"data\" folder.")
 public class CloudSyncDataCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
+    private TerminalFactory terminalFactory;
+
+    public CloudSyncDataCliCommand() {
+    }
 
     @Autowired
-    public CloudSyncDataCliCommand(CloudSynchronizationService cloudSynchronizationService) {
+    public CloudSyncDataCliCommand(CloudSynchronizationService cloudSynchronizationService,
+                                   TerminalFactory terminalFactory) {
         this.cloudSynchronizationService = cloudSynchronizationService;
+        this.terminalFactory = terminalFactory;
     }
 
-    @CommandLine.Option(names = {"-f", "--show-files"}, description = "Show progress for all files", defaultValue = "true", required = false)
-    private boolean showFiles = true;
+    @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, debug)", defaultValue = "summary")
+    private FileSystemSynchronizationReportingMode mode = FileSystemSynchronizationReportingMode.summary;
+
+    @CommandLine.Option(names = {"-d", "--direction"}, description = "File synchronization direction", defaultValue = "full")
+    private FileSynchronizationDirection direction = FileSynchronizationDirection.full;
+
+    @CommandLine.Option(names = {"-r", "--refresh-data-warehouse"}, description = "Force refresh a whole table in the data quality data warehouse", defaultValue = "false")
+    private boolean forceRefreshNativeTable;
 
     /**
-     * True when each file should be shown.
-     * @return Show files.
+     * Returns the synchronization logging mode.
+     * @return Logging mode.
      */
-    public boolean isShowFiles() {
-        return showFiles;
+    public FileSystemSynchronizationReportingMode getMode() {
+        return mode;
     }
 
     /**
-     * Sets the show files flag.
-     * @param showFiles Show files flag.
+     * Sets the reporting (logging) mode.
+     * @param mode Reporting mode.
      */
-    public void setShowFiles(boolean showFiles) {
-        this.showFiles = showFiles;
+    public void setMode(FileSystemSynchronizationReportingMode mode) {
+        this.mode = mode;
+    }
+
+    /**
+     * Returns the file synchronization direction.
+     * @return File synchronization direction.
+     */
+    public FileSynchronizationDirection getDirection() {
+        return direction;
+    }
+
+    /**
+     * Sets the file synchronization direction.
+     * @param direction File synchronization direction.
+     */
+    public void setDirection(FileSynchronizationDirection direction) {
+        this.direction = direction;
+    }
+
+    /**
+     * Returns true when the native table should be refreshed fully.
+     * @return True when the native table must be fully refreshed.
+     */
+    public boolean isForceRefreshNativeTable() {
+        return forceRefreshNativeTable;
+    }
+
+    /**
+     * Sets the flag to fully refresh a native table.
+     * @param forceRefreshNativeTable True when the native table should be fully refreshed.
+     */
+    public void setForceRefreshNativeTable(boolean forceRefreshNativeTable) {
+        this.forceRefreshNativeTable = forceRefreshNativeTable;
     }
 
     /**
@@ -65,11 +116,43 @@ public class CloudSyncDataCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
-        int synchronizeReadingsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_READINGS, this.showFiles, this.isHeadless());
-        if (synchronizeReadingsResult < 0) {
-            return synchronizeReadingsResult;
+        try {
+            int synchronizeReadoutsResult = this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.data_sensor_readouts, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+            if (synchronizeReadoutsResult < 0) {
+                return synchronizeReadoutsResult;
+            }
+            int synchronizeRuleResultsResult = this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.data_check_results, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+            if (synchronizeRuleResultsResult < 0) {
+                return synchronizeReadoutsResult;
+            }
+
+            int synchronizeErrorsResult = this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.data_errors, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+            if (synchronizeErrorsResult < 0) {
+                return synchronizeErrorsResult;
+            }
+
+            int synchronizeStatisticsResult = this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.data_statistics, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+            if (synchronizeStatisticsResult < 0) {
+                return synchronizeStatisticsResult;
+            }
+
+            int synchronizeIncidentsResult = this.cloudSynchronizationService.synchronizeRoot(
+                    DqoRoot.data_incidents, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true);
+
+            return synchronizeIncidentsResult;
         }
-        int synchronizeAlertsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.DATA_ALERTS, this.showFiles, this.isHeadless());
-        return synchronizeAlertsResult;
+        catch (DqoQueueJobExecutionException cex) {
+            if (cex.getRealCause() instanceof DqoCloudCredentialsException) {
+                TerminalWriter terminalWriter = this.terminalFactory.getWriter();
+                terminalWriter.writeLine("Invalid DQO Cloud credentials, please run \"cloud login\" to get a new DQO Cloud API Key.");
+                return -1;
+            }
+
+            throw cex;
+        }
     }
 }

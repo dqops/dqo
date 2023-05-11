@@ -15,16 +15,24 @@
  */
 package ai.dqo.metadata.sources;
 
-import ai.dqo.checks.column.ColumnCheckCategoriesSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
+import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
+import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
+import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnMonthlyRecurringCheckCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.statistics.column.ColumnStatisticsCollectorsRootCategoriesSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,7 +40,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.rits.cloning.Cloner;
 import lombok.EqualsAndHashCode;
 
 import java.util.Objects;
@@ -43,14 +50,15 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnSpec extends AbstractSpec implements Cloneable {
+public class ColumnSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<ColumnSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
 			put("type_snapshot", o -> o.typeSnapshot);
-			put("time_series_override", o -> o.timeSeriesOverride);
-			put("dimensions_override", o -> o.dimensionsOverride);
-			put("checks", o -> o.checks);
-			put("labels", o -> o.labels);
+			put("profiling_checks", o -> o.profilingChecks);
+            put("recurring_checks", o -> o.recurringChecks);
+            put("partitioned_checks", o -> o.partitionedChecks);
+            put("statistics", o -> o.statistics);
+            put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
         }
     };
@@ -59,24 +67,33 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
+    @JsonPropertyDescription("SQL expression used for calculated fields or when additional column value transformation is required before the column could be used analyzed in data quality checks (data type conversion, transformation). It should be an SQL expression using the SQL language of the analyzed database type. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name. An example to extract a value from a string column that stores a JSON in PostgreSQL: \"{column}::json->'address'->'zip'\".")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private String sqlExpression;
+
     @JsonPropertyDescription("Column data type that was retrieved when the table metadata was imported.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ColumnTypeSnapshotSpec typeSnapshot;
 
-    @JsonPropertyDescription("Time series source configuration for a table. When a time series configuration is assigned at a table level, it overrides any time series settings from the connection or table levels. Time series configuration chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
+    @JsonPropertyDescription("Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TimeSeriesConfigurationSpec timeSeriesOverride;
+    private ColumnProfilingCheckCategoriesSpec profilingChecks;
 
-    @JsonPropertyDescription("Data quality dimensions configuration. When a dimension configuration is assigned at a table level, it overrides any dimension settings from the connection or table levels. Dimensions are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
+    @JsonPropertyDescription("Configuration of column level recurring checks. Recurring are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A recurring stores only the most recent data quality check result for each period of time.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DimensionsConfigurationSpec dimensionsOverride;
+    private ColumnRecurringChecksRootSpec recurringChecks;
 
-    @JsonPropertyDescription("Configuration of data quality checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.")
+    @JsonPropertyDescription("Configuration of column level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnCheckCategoriesSpec checks;
+    private ColumnPartitionedChecksRootSpec partitionedChecks;
+
+    @JsonPropertyDescription("Custom configuration of a column level statistics collector (a basic profiler). Enables customization of the statistics collector settings when the collector is analysing this column.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnStatisticsCollectorsRootCategoriesSpec statistics;
 
     @JsonPropertyDescription("Custom labels that were assigned to the column. Labels are used for searching for columns when filtered data quality checks are executed.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -117,6 +134,23 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Returns an SQL expression for a calculated column.
+     * @return SQL expression.
+     */
+    public String getSqlExpression() {
+        return sqlExpression;
+    }
+
+    /**
+     * Sets an SQL expression used for a calculated column.
+     * @param sqlExpression SQL expression used for a calculated column.
+     */
+    public void setSqlExpression(String sqlExpression) {
+        this.setDirtyIf(!Objects.equals(this.sqlExpression, sqlExpression));
+        this.sqlExpression = sqlExpression;
+    }
+
+    /**
      * Returns the column type snapshot that was captured at the time of the table metadata import. The column type snapshot
      * may be used for quality checks.
      * @return Column type snapshot.
@@ -136,57 +170,75 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns the time series configuration for this column.
-     * @return Time series configuration.
-     */
-    public TimeSeriesConfigurationSpec getTimeSeriesOverride() {
-        return timeSeriesOverride;
-    }
-
-    /**
-     * Sets a new time series configuration for this column.
-     * @param timeSeriesOverride New time series configuration.
-     */
-    public void setTimeSeriesOverride(TimeSeriesConfigurationSpec timeSeriesOverride) {
-		setDirtyIf(!Objects.equals(this.timeSeriesOverride, timeSeriesOverride));
-        this.timeSeriesOverride = timeSeriesOverride;
-		propagateHierarchyIdToField(timeSeriesOverride, "time_series_override");
-    }
-
-    /**
-     * Returns the data quality measure dimensions configuration for the column.
-     * @return Dimension configuration.
-     */
-    public DimensionsConfigurationSpec getDimensionsOverride() {
-        return dimensionsOverride;
-    }
-
-    /**
-     * Returns the dimension configuration for the column.
-     * @param dimensionsOverride Dimension configuration.
-     */
-    public void setDimensionsOverride(DimensionsConfigurationSpec dimensionsOverride) {
-		setDirtyIf(!Objects.equals(this.dimensionsOverride, dimensionsOverride));
-        this.dimensionsOverride = dimensionsOverride;
-		propagateHierarchyIdToField(dimensionsOverride, "dimensions_override");
-    }
-
-    /**
      * Returns configuration of enabled column level data quality checks.
      * @return Column level data quality checks.
      */
-    public ColumnCheckCategoriesSpec getChecks() {
-        return checks;
+    public ColumnProfilingCheckCategoriesSpec getProfilingChecks() {
+        return profilingChecks;
     }
 
     /**
-     * Sets a new configuration of column level data quality checks.
-     * @param checks New checks configuration.
+     * Sets a new configuration of column level profiling data quality checks.
+     * @param profilingChecks New profiling checks configuration.
      */
-    public void setChecks(ColumnCheckCategoriesSpec checks) {
-		setDirtyIf(!Objects.equals(this.checks, checks));
-        this.checks = checks;
-		propagateHierarchyIdToField(checks, "checks");
+    public void setProfilingChecks(ColumnProfilingCheckCategoriesSpec profilingChecks) {
+		setDirtyIf(!Objects.equals(this.profilingChecks, profilingChecks));
+        this.profilingChecks = profilingChecks;
+		propagateHierarchyIdToField(profilingChecks, "profiling_checks");
+    }
+
+    /**
+     * Returns configuration of enabled column level recurring checks.
+     * @return Column level recurring.
+     */
+    public ColumnRecurringChecksRootSpec getRecurringChecks() {
+        return recurringChecks;
+    }
+
+    /**
+     * Sets a new configuration of column level data quality recurring checks.
+     * @param recurringChecks New recurring checks configuration.
+     */
+    public void setRecurringChecks(ColumnRecurringChecksRootSpec recurringChecks) {
+        setDirtyIf(!Objects.equals(this.recurringChecks, recurringChecks));
+        this.recurringChecks = recurringChecks;
+        propagateHierarchyIdToField(recurringChecks, "recurring_checks");
+    }
+
+    /**
+     * Returns configuration of enabled column level date/time partitioned checks.
+     * @return Column level date/time partitioned checks.
+     */
+    public ColumnPartitionedChecksRootSpec getPartitionedChecks() {
+        return partitionedChecks;
+    }
+
+    /**
+     * Sets a new configuration of column level date/time partitioned data quality checks.
+     * @param partitionedChecks New configuration of date/time partitioned checks.
+     */
+    public void setPartitionedChecks(ColumnPartitionedChecksRootSpec partitionedChecks) {
+        setDirtyIf(!Objects.equals(this.partitionedChecks, partitionedChecks));
+        this.partitionedChecks = partitionedChecks;
+        propagateHierarchyIdToField(partitionedChecks, "partitioned_checks");
+    }
+
+    /**
+     * Returns a custom configuration of a column level statistics collector for this column.
+     * @return Custom statistics collector instance or null when the default (built-in) configuration settings should be used.
+     */
+    public ColumnStatisticsCollectorsRootCategoriesSpec getStatistics() {
+        return statistics;
+    }
+
+    /**
+     * Sets a reference to a custom statistics collector configuration on a column level.
+     * @param statistics Custom statistics collector configuration.
+     */
+    public void setStatistics(ColumnStatisticsCollectorsRootCategoriesSpec statistics) {
+        setDirtyIf(!Objects.equals(this.statistics, statistics));
+        this.statistics = statistics;
+        propagateHierarchyIdToField(statistics, "statistics");
     }
 
     /**
@@ -226,6 +278,165 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Retrieves a non-null root check container for the requested category.
+     * Creates a new check root container object if there was no such object configured and referenced
+     * from the column specification.
+     *
+     * @param checkType            Check type.
+     * @param checkTimeScale       Time scale. Null value is accepted for profiling checks, for other time scale aware checks, the proper time scale is required.
+     * @param attachCheckContainer When the check container doesn't exist, should the newly created check container be attached to the column.
+     * @return Newly created container root.
+     */
+    public AbstractRootChecksContainerSpec getColumnCheckRootContainer(CheckType checkType,
+                                                                       CheckTimeScale checkTimeScale,
+                                                                       boolean attachCheckContainer) {
+        switch (checkType) {
+            case PROFILING: {
+                if (this.profilingChecks != null) {
+                    return this.profilingChecks;
+                }
+
+                ColumnProfilingCheckCategoriesSpec columnProfilingCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
+                columnProfilingCheckCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "profiling_checks"));
+                if (attachCheckContainer) {
+                    this.profilingChecks = columnProfilingCheckCategoriesSpec;
+                }
+                return columnProfilingCheckCategoriesSpec;
+            }
+
+            case RECURRING: {
+                ColumnRecurringChecksRootSpec recurringSpec = this.recurringChecks;
+                if (recurringSpec == null) {
+                    recurringSpec = new ColumnRecurringChecksRootSpec();
+                    recurringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "recurring_checks"));
+                    if (attachCheckContainer) {
+                        this.recurringChecks = recurringSpec;
+                    }
+                }
+
+                switch (checkTimeScale) {
+                    case daily: {
+                        if (recurringSpec.getDaily() != null) {
+                            return recurringSpec.getDaily();
+                        }
+
+                        ColumnDailyRecurringCheckCategoriesSpec dailyRecurringCategoriesSpec = new ColumnDailyRecurringCheckCategoriesSpec();
+                        dailyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "daily"));
+                        if (attachCheckContainer) {
+                            recurringSpec.setDaily(dailyRecurringCategoriesSpec);
+                        }
+                        return dailyRecurringCategoriesSpec;
+                    }
+                    case monthly: {
+                        if (recurringSpec.getMonthly() != null) {
+                            return recurringSpec.getMonthly();
+                        }
+
+                        ColumnMonthlyRecurringCheckCategoriesSpec monthlyRecurringCategoriesSpec = new ColumnMonthlyRecurringCheckCategoriesSpec();
+                        monthlyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "monthly"));
+                        if (attachCheckContainer) {
+                            recurringSpec.setMonthly(monthlyRecurringCategoriesSpec);
+                        }
+                        return monthlyRecurringCategoriesSpec;
+                    }
+                    default:
+                        throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
+                }
+            }
+
+            case PARTITIONED: {
+                ColumnPartitionedChecksRootSpec partitionedChecksSpec = this.partitionedChecks;
+                if (partitionedChecksSpec == null) {
+                    partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
+                    partitionedChecksSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "partitioned_checks"));
+                    if (attachCheckContainer) {
+                        this.partitionedChecks = partitionedChecksSpec;
+                    }
+                }
+
+                switch (checkTimeScale) {
+                    case daily: {
+                        if (partitionedChecksSpec.getDaily() != null) {
+                            return partitionedChecksSpec.getDaily();
+                        }
+
+                        ColumnDailyPartitionedCheckCategoriesSpec dailyPartitionedCategoriesSpec = new ColumnDailyPartitionedCheckCategoriesSpec();
+                        dailyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "daily"));
+                        if (attachCheckContainer) {
+                            partitionedChecksSpec.setDaily(dailyPartitionedCategoriesSpec);
+                        }
+                        return dailyPartitionedCategoriesSpec;
+                    }
+                    case monthly: {
+                        if (partitionedChecksSpec.getMonthly() != null) {
+                            return partitionedChecksSpec.getMonthly();
+                        }
+
+                        ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCategoriesSpec = new ColumnMonthlyPartitionedCheckCategoriesSpec();
+                        monthlyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "monthly"));
+                        if (attachCheckContainer) {
+                            partitionedChecksSpec.setMonthly(monthlyPartitionedCategoriesSpec);
+                        }
+                        return monthlyPartitionedCategoriesSpec;
+                    }
+                    default:
+                        throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
+                }
+            }
+
+            default: {
+                throw new IllegalArgumentException("Unsupported check type");
+            }
+        }
+    }
+
+    /**
+     * Sets the given container of checks at a proper level of the check hierarchy.
+     * The object could be a profiling check container, one of recurring containers or one of partitioned checks container.
+     * @param checkRootContainer Root check container to store.
+     */
+    @JsonIgnore
+    public void setColumnCheckRootContainer(AbstractRootChecksContainerSpec checkRootContainer) {
+        if (checkRootContainer == null) {
+            throw new NullPointerException("Root check container cannot be null");
+        }
+
+        if (checkRootContainer instanceof ColumnProfilingCheckCategoriesSpec) {
+            this.setProfilingChecks((ColumnProfilingCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof ColumnDailyRecurringCheckCategoriesSpec) {
+            if (this.recurringChecks == null) {
+                this.setRecurringChecks(new ColumnRecurringChecksRootSpec());
+            }
+
+            this.getRecurringChecks().setDaily((ColumnDailyRecurringCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof ColumnMonthlyRecurringCheckCategoriesSpec) {
+            if (this.recurringChecks == null) {
+                this.setRecurringChecks(new ColumnRecurringChecksRootSpec());
+            }
+
+            this.getRecurringChecks().setMonthly((ColumnMonthlyRecurringCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof ColumnDailyPartitionedCheckCategoriesSpec) {
+            if (this.partitionedChecks == null) {
+                this.setPartitionedChecks(new ColumnPartitionedChecksRootSpec());
+            }
+
+            this.getPartitionedChecks().setDaily((ColumnDailyPartitionedCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof ColumnMonthlyPartitionedCheckCategoriesSpec) {
+            if (this.partitionedChecks == null) {
+                this.setPartitionedChecks(new ColumnPartitionedChecksRootSpec());
+            }
+
+            this.getPartitionedChecks().setMonthly((ColumnMonthlyPartitionedCheckCategoriesSpec)checkRootContainer);
+        } else {
+            throw new IllegalArgumentException("Unsupported check root container type " + checkRootContainer.getClass().getCanonicalName());
+        }
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -240,7 +451,6 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
@@ -251,39 +461,9 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public ColumnSpec clone() {
-        try {
-            ColumnSpec cloned = (ColumnSpec) super.clone();
-            if (cloned.typeSnapshot != null) {
-                cloned.typeSnapshot = cloned.typeSnapshot.clone();
-            }
-
-            if (cloned.timeSeriesOverride != null) {
-                cloned.timeSeriesOverride = cloned.timeSeriesOverride.clone();
-            }
-
-            if (cloned.dimensionsOverride != null) {
-                cloned.dimensionsOverride = cloned.dimensionsOverride.clone();
-            }
-
-            if (cloned.labels != null) {
-                cloned.labels = cloned.labels.clone();
-            }
-
-            if (cloned.comments != null) {
-                cloned.comments = cloned.comments.clone();
-            }
-
-            if (cloned.checks != null) {
-                Cloner cloner = new Cloner();
-                cloned.checks = cloner.deepClone(cloned.checks);
-            }
-
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public ColumnSpec deepClone() {
+        ColumnSpec cloned = (ColumnSpec) super.deepClone();
+        return cloned;
     }
 
     /**
@@ -308,20 +488,15 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
      */
     public ColumnSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         try {
-            ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" clone, we are using an alternative clone concept
+            ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" deepClone, we are using an alternative clone concept
             cloned.comments = null;
-            cloned.checks = null;
+            cloned.profilingChecks = null;
+            cloned.recurringChecks = null;
+            cloned.partitionedChecks = null;
+            cloned.statistics = null;
+            cloned.labels = null;
             if (cloned.typeSnapshot != null) {
                 cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.timeSeriesOverride != null) {
-                cloned.timeSeriesOverride = cloned.timeSeriesOverride.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.dimensionsOverride != null) {
-                cloned.dimensionsOverride = cloned.dimensionsOverride.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.labels != null) {
-                cloned.labels = cloned.labels.clone();
             }
             return cloned;
         }
@@ -337,16 +512,60 @@ public class ColumnSpec extends AbstractSpec implements Cloneable {
      */
     public ColumnSpec trim() {
         try {
-            ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" clone, we are using an alternative clone concept
+            ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" deepClone, we are using an alternative clone concept
+            if (cloned.typeSnapshot != null) {
+                cloned.typeSnapshot = cloned.typeSnapshot.deepClone();
+            }
             cloned.comments = null;
-            cloned.checks = null;
-            cloned.timeSeriesOverride = null;
-            cloned.dimensionsOverride = null;
+            cloned.profilingChecks = null;
+            cloned.recurringChecks = null;
+            cloned.partitionedChecks = null;
             cloned.labels = null;
+            cloned.statistics = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
             return this;
         }
+    }
+
+    /**
+     * Inspects all check containers and verifies if any of them has any checks configured.
+     * @return True when the column has some column level checks, false when no column level checks were found.
+     */
+    public boolean hasAnyChecksConfigured() {
+        if (this.profilingChecks != null && this.profilingChecks.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        if (this.recurringChecks != null && this.recurringChecks.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        if (this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Inspects all check containers and verifies if any of them has any checks configured for a given check type.
+     * @param checkType Check type.
+     * @return True when the column has some column level checks, false when no column level checks were found.
+     */
+    public boolean hasAnyChecksConfigured(CheckType checkType) {
+        switch (checkType) {
+            case PROFILING:
+                return this.profilingChecks != null && this.profilingChecks.hasAnyConfiguredChecks();
+
+            case RECURRING:
+                return this.recurringChecks != null && this.recurringChecks.hasAnyConfiguredChecks();
+
+            case PARTITIONED:
+                return this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks();
+        }
+
+        return false;
     }
 }

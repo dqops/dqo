@@ -28,19 +28,19 @@ class HistoricDataPoint:
     timestamp_utc: datetime
     local_datetime: datetime
     back_periods_index: int
-    sensor_reading: float
+    sensor_readout: float
 
 
 class RuleTimeWindowSettingsSpec:
     prediction_time_window: int
-    min_periods_with_reading: int
+    min_periods_with_readouts: int
 
 
 class RuleExecutionRunParameters:
     actual_value: float
     parameters: any
     time_period_local: datetime
-    previous_readings: Sequence[HistoricDataPoint]
+    previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
 
 
@@ -96,7 +96,7 @@ class RuleRunner:
 
 def main():
     rule_runner = RuleRunner()
-    for request in streaming.stream_json_objects(sys.stdin):
+    for request, duration_millis in streaming.stream_json_objects(sys.stdin):
         response = rule_runner.process_rule_request(request)
         sys.stdout.write(json.dumps(response, cls=streaming.ObjectEncoder))
         sys.stdout.write("\n")

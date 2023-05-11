@@ -16,12 +16,12 @@
 package ai.dqo.execution.rules.runners.python;
 
 import ai.dqo.BaseTest;
-import ai.dqo.core.configuration.DqoConfigurationProperties;
-import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
+import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
+import ai.dqo.core.configuration.DqoPythonConfigurationPropertiesObjectMother;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceImpl;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceObjectMother;
-import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.CheckExecutionContextObjectMother;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.rules.RuleExecutionResult;
 import ai.dqo.execution.rules.RuleExecutionRunParameters;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
@@ -38,24 +38,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class PythonRuleRunnerTests extends BaseTest {
     private PythonRuleRunner sut;
     private PythonCallerService pythonCallerService;
-    private DqoConfigurationProperties dqoConfigurationProperties;
     private HomeLocationFindServiceImpl homeLocationFinder;
-    private CheckExecutionContext inMemoryCheckContext;
+    private ExecutionContext inMemoryCheckContext;
+    private DqoPythonConfigurationProperties pythonConfigurationProperties;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		pythonCallerService = PythonCallServiceObjectMother.getDefault();
-		dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
-		homeLocationFinder = HomeLocationFindServiceObjectMother.getWithTestUserHome(true);
-		this.sut = new PythonRuleRunner(pythonCallerService, dqoConfigurationProperties, homeLocationFinder);
+        pythonConfigurationProperties = DqoPythonConfigurationPropertiesObjectMother.getDefaultCloned();
+        homeLocationFinder = HomeLocationFindServiceObjectMother.getWithTestUserHome(true);
+		this.sut = new PythonRuleRunner(pythonCallerService, pythonConfigurationProperties, homeLocationFinder);
 		inMemoryCheckContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
     }
 
@@ -72,7 +64,7 @@ public class PythonRuleRunnerTests extends BaseTest {
 
         Assertions.assertNotNull(executionResult);
         Assertions.assertTrue(executionResult.isPassed());
-        Assertions.assertEquals(15.5, executionResult.getExpectedValue().doubleValue());
+        Assertions.assertNull(executionResult.getExpectedValue());
         Assertions.assertEquals(15.5, executionResult.getLowerBound().doubleValue());
         Assertions.assertNull(executionResult.getUpperBound());
     }

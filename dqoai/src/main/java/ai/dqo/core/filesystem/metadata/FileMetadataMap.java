@@ -16,11 +16,8 @@
 package ai.dqo.core.filesystem.metadata;
 
 import com.google.common.hash.HashCode;
-import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,7 +41,7 @@ public class FileMetadataMap extends AbstractCollection<FileMetadata> {
      * {@code UnsupportedOperationException}.
      */
     @Override
-    public boolean add(FileMetadata fileMetadata) {
+    public synchronized boolean add(FileMetadata fileMetadata) {
         assert !frozen;
         String fileName = fileMetadata.getFileName();
         this.files.put(fileName, fileMetadata);
@@ -68,7 +65,7 @@ public class FileMetadataMap extends AbstractCollection<FileMetadata> {
      * method and this collection contains the specified object.
      */
     @Override
-    public boolean remove(Object o) {
+    public synchronized boolean remove(Object o) {
         FileMetadata fileMetadata = (FileMetadata)o;
         return this.files.remove(fileMetadata.getFileName()) != null;
     }
@@ -78,7 +75,7 @@ public class FileMetadataMap extends AbstractCollection<FileMetadata> {
      * @param fileName File name.
      * @return File metadata or null when not found.
      */
-    public FileMetadata get(String fileName) {
+    public synchronized FileMetadata get(String fileName) {
         return this.files.get(fileName);
     }
 
@@ -97,14 +94,14 @@ public class FileMetadataMap extends AbstractCollection<FileMetadata> {
      * @return Number of subfolders.
      */
     @Override
-    public int size() {
+    public synchronized int size() {
         return this.files.size();
     }
 
     /**
      * Freezes the current collection of children and makes it read only.
      */
-    public void freeze() {
+    public synchronized void freeze() {
         if (this.frozen) {
             return;
         }
@@ -126,7 +123,7 @@ public class FileMetadataMap extends AbstractCollection<FileMetadata> {
      * Clones the current dictionary as an unfrozen copy.
      * @return Cloned mutable copy of the collection.
      */
-    public FileMetadataMap cloneUnfrozen() {
+    public synchronized FileMetadataMap cloneUnfrozen() {
         FileMetadataMap cloned = new FileMetadataMap();
         cloned.files.putAll(this.files);
         return cloned;
@@ -136,7 +133,7 @@ public class FileMetadataMap extends AbstractCollection<FileMetadata> {
      * Calculates a 64-bit hash of all the files.
      * @return 64-bit farm hash.
      */
-    public HashCode calculateHash64() {
+    public synchronized HashCode calculateHash64() {
         if (this.files.size() == 0) {
             return HashCode.fromLong(2L);
         }
@@ -155,7 +152,7 @@ public class FileMetadataMap extends AbstractCollection<FileMetadata> {
      * @param fileName File name.
      * @return True when the file was found, false when the file is missing.
      */
-    public boolean containsFileName(String fileName) {
+    public synchronized boolean containsFileName(String fileName) {
         return this.files.containsKey(fileName);
     }
 
@@ -164,7 +161,7 @@ public class FileMetadataMap extends AbstractCollection<FileMetadata> {
      * @param fileName File name.
      * @return True when the file was removed, false when it was not present.
      */
-    public boolean removeByFileName(String fileName) {
+    public synchronized boolean removeByFileName(String fileName) {
         return this.files.remove(fileName) != null;
     }
 }

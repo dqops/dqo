@@ -16,6 +16,7 @@
 package ai.dqo.cli.commands.cloud.sync;
 
 import ai.dqo.cli.commands.BaseCommand;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -24,12 +25,13 @@ import picocli.CommandLine;
  * "cloud sync" 2t level cli command to connect and synchronize with DQO Cloud
  */
 @Component
-@Scope("prototype")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "sync", description = "Synchronize local data with DQO Cloud", subcommands = {
         CloudSyncDataCliCommand.class,
         CloudSyncSourcesCliCommand.class,
         CloudSyncSensorsCliCommand.class,
         CloudSyncRulesCliCommand.class,
+        CloudSyncChecksCliCommand.class,
         CloudSyncAllCliCommand.class
 })
 public class CloudSyncCliCommand extends BaseCommand {

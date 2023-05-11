@@ -55,6 +55,11 @@ public final class SpecFileNames {
     public static final String CUSTOM_RULE_SPEC_FILE_EXT_YAML = ".dqorule.yaml";
 
     /**
+     * Custom check definition file extension.
+     */
+    public static final String CUSTOM_CHECK_SPEC_FILE_EXT_YAML = ".dqocheck.yaml";
+
+    /**
      * Custom module file extension (.py).
      */
     public static final String CUSTOM_RULE_PYTHON_MODULE_FILE_EXT_PY = ".py";
@@ -63,4 +68,10 @@ public final class SpecFileNames {
      * Custom settings file.
      */
     public static final String SETTINGS_SPEC_FILE_NAME_YAML = ".localsettings.dqosettings.yaml";
+
+    /**
+     * Data quality dashboards definitions file name.
+     */
+    public static final String DASHBOARDS_SPEC_FILE_NAME_YAML = "dashboardslist.dqodashboards.yaml";
+
 }

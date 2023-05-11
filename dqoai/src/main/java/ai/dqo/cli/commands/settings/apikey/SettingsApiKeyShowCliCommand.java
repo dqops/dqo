@@ -16,26 +16,30 @@
 package ai.dqo.cli.commands.settings.apikey;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.settings.impl.SettingsService;
-import ai.dqo.cli.commands.status.CliOperationStatus;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * Cli command to show a api key to settings.
+ * Cli command to show a api key in settings.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "show", description = "Show api key")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "show", header = "Show API key", description = "Display the current API key used for accessing external services.")
 public class SettingsApiKeyShowCliCommand extends BaseCommand implements ICommand {
-	private final SettingsService settingsService;
-	private final TerminalReader terminalReader;
-	private final TerminalWriter terminalWriter;
+	private SettingsService settingsService;
+	private TerminalReader terminalReader;
+	private TerminalWriter terminalWriter;
+
+	public SettingsApiKeyShowCliCommand() {
+	}
 
 	@Autowired
 	public SettingsApiKeyShowCliCommand(SettingsService settingsService,

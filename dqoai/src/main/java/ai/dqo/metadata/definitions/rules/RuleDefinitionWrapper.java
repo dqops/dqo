@@ -46,4 +46,10 @@ public interface RuleDefinitionWrapper extends ElementWrapper<RuleDefinitionSpec
      * @param rulePythonModuleContent Python rule implementation file content.
      */
     void setRulePythonModuleContent(FileContent rulePythonModuleContent);
+
+    /**
+     * Creates a deep clone of the object.
+     * @return Deeply cloned object.
+     */
+    RuleDefinitionWrapper clone();
 }

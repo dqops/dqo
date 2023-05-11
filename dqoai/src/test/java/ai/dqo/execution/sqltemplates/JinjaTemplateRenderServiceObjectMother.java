@@ -18,8 +18,8 @@ package ai.dqo.execution.sqltemplates;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.ProviderType;
-import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.CheckExecutionContextObjectMother;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerStub;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
@@ -47,16 +47,10 @@ public class JinjaTemplateRenderServiceObjectMother {
      * @return Rendered template.
      */
     public static String renderBuiltInTemplate(SensorExecutionRunParameters runParameters) {
-//        Assertions.assertNull(runParameters.getTable().getTimeSeries());
-//        Assertions.assertNull(runParameters.getTable().getDimensions());
-        Assertions.assertNull(runParameters.getConnection().getDefaultTimeSeries());
-        Assertions.assertNull(runParameters.getConnection().getDefaultDimensions());
-        if (runParameters.getColumn() != null) {
-            Assertions.assertNull(runParameters.getColumn().getTimeSeriesOverride());
-            Assertions.assertNull(runParameters.getColumn().getDimensionsOverride());
-        }
+//        Assertions.assertNull(runParameters.getConnection().getDefaultDataStreamMapping());
         JinjaTemplateRenderParameters renderParameters = JinjaTemplateRenderParametersObjectMother.createForRunParameters(runParameters);
-        return renderBuiltInTemplate(renderParameters);
+        String renderedSql = renderBuiltInTemplate(renderParameters);
+        return renderedSql;
     }
 
     /**
@@ -71,11 +65,11 @@ public class JinjaTemplateRenderServiceObjectMother {
         switch (providerType) {
             case bigquery:
                 return dialectForProvider.quoteIdentifier(runParameters.getConnection().getBigquery().getSourceProjectId()) + "." +
-                        dialectForProvider.quoteIdentifier(runParameters.getTable().getTarget().getSchemaName()) + "." +
-                        dialectForProvider.quoteIdentifier(runParameters.getTable().getTarget().getTableName());
+                        dialectForProvider.quoteIdentifier(runParameters.getTable().getPhysicalTableName().getSchemaName()) + "." +
+                        dialectForProvider.quoteIdentifier(runParameters.getTable().getPhysicalTableName().getTableName());
             case snowflake:
-                return dialectForProvider.quoteIdentifier(runParameters.getTable().getTarget().getSchemaName()) + "." +
-                        dialectForProvider.quoteIdentifier(runParameters.getTable().getTarget().getTableName());
+                return dialectForProvider.quoteIdentifier(runParameters.getTable().getPhysicalTableName().getSchemaName()) + "." +
+                        dialectForProvider.quoteIdentifier(runParameters.getTable().getPhysicalTableName().getTableName());
             default:
                 Assertions.fail("Missing provider, add a case statement to support a new provider.");
         }
@@ -94,10 +88,10 @@ public class JinjaTemplateRenderServiceObjectMother {
                         renderParameters.getConnection().getProviderType());
 
         JinjaTemplateRenderServiceImpl renderService = getDefault();
-        CheckExecutionContext checkExecutionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
+        ExecutionContext executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
 
         CheckExecutionProgressListenerStub progressListener = new CheckExecutionProgressListenerStub();
-        String renderedText = renderService.renderTemplate(checkExecutionContext, sensorDefinitions, renderParameters, progressListener);
+        String renderedText = renderService.renderTemplate(executionContext, sensorDefinitions, renderParameters, progressListener);
         return renderedText;
     }
 }

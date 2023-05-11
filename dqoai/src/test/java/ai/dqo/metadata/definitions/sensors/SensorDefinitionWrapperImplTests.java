@@ -16,6 +16,8 @@
 package ai.dqo.metadata.definitions.sensors;
 
 import ai.dqo.BaseTest;
+import ai.dqo.metadata.fields.ParameterDefinitionSpec;
+import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,16 +27,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class SensorDefinitionWrapperImplTests extends BaseTest {
     private SensorDefinitionWrapperImpl sut;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new SensorDefinitionWrapperImpl();
     }
 
@@ -49,5 +43,23 @@ public class SensorDefinitionWrapperImplTests extends BaseTest {
         ProviderSensorDefinitionListImpl providerCheckList = new ProviderSensorDefinitionListImpl();
 		this.sut.setProviderSensors(providerCheckList);
         Assertions.assertEquals(providerCheckList, this.sut.getProviderSensors());
+    }
+
+    @Test
+    void clone_whenCalled_thenListOfFieldsIsCloned() {
+        SensorDefinitionSpec sensorDefinitionSpec = new SensorDefinitionSpec();
+        ParameterDefinitionsListSpec fields = new ParameterDefinitionsListSpec();
+        sensorDefinitionSpec.setFields(fields);
+        fields.add(new ParameterDefinitionSpec() {{
+            setFieldName("field");
+        }});
+        sut.setSpec(sensorDefinitionSpec);
+
+        SensorDefinitionWrapper cloned = sut.clone();
+        Assertions.assertNotNull(cloned);
+        Assertions.assertNotSame(cloned, this.sut);
+        Assertions.assertNotSame(cloned.getSpec(), sensorDefinitionSpec);
+        Assertions.assertNotSame(cloned.getSpec().getFields(), fields);
+        Assertions.assertNotSame(cloned.getSpec().getFields().get(0), fields.get(0));
     }
 }

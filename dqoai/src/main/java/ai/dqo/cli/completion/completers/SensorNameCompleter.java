@@ -19,10 +19,11 @@ import ai.dqo.cli.completion.completers.cache.CliCompleterCacheKey;
 import ai.dqo.cli.completion.completers.cache.CliCompletionCache;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionList;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
+import ai.dqo.metadata.dqohome.DqoHome;
+import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextCache;
-import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.utils.StaticBeanFactory;
 import org.springframework.beans.factory.BeanFactory;
@@ -50,17 +51,24 @@ public class SensorNameCompleter implements Iterable<String> {
 					try {
 						BeanFactory beanFactory = StaticBeanFactory.getBeanFactory();
 						UserHomeContextCache userHomeContextCache = beanFactory.getBean(UserHomeContextCache.class);
-						DqoHomeContextFactory dqoHomeContextFactory = beanFactory.getBean(DqoHomeContextFactory.class);
 						UserHomeContext userHomeContext = userHomeContextCache.getCachedLocalUserHome();
 						UserHome userHome = userHomeContext.getUserHome();
+
+						DqoHomeContextFactory dqoHomeContextCache = beanFactory.getBean(DqoHomeContextFactory.class);
+						DqoHomeContext dqoHomeContext = dqoHomeContextCache.openLocalDqoHome();
+						DqoHome dqoHome = dqoHomeContext.getDqoHome();
+
 						SensorDefinitionList userHomeSensors = userHome.getSensors();
-						SensorDefinitionList localDqoSensors = userHome.getSensors();
+						SensorDefinitionList localDqoSensors = dqoHome.getSensors();
 						HashSet<String> sensorNames = new HashSet<>();
-						userHomeSensors.toList().addAll(localDqoSensors.toList());
 
 						for (SensorDefinitionWrapper sensor : userHomeSensors) {
 							sensorNames.add(sensor.getName());
 						}
+						for (SensorDefinitionWrapper sensor : localDqoSensors) {
+							sensorNames.add(sensor.getName());
+						}
+
 						ArrayList<String> sensors = new ArrayList<>();
 						for (String sensorName : sensorNames) {
 							sensors.add(sensorName);

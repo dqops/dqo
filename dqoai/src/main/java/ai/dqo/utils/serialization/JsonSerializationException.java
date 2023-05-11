@@ -15,10 +15,12 @@
  */
 package ai.dqo.utils.serialization;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * JSON serialization and deserialization exception thrown when the JSON file is invalid.
  */
-public class JsonSerializationException extends RuntimeException {
+public class JsonSerializationException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be

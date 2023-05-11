@@ -25,8 +25,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.google.common.base.Strings;
-import lombok.EqualsAndHashCode;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -34,7 +34,6 @@ import java.util.Objects;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@EqualsAndHashCode(callSuper = true)
 public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<ColumnTypeSnapshotSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
@@ -120,7 +119,7 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
         int indexOfClose = dataType.indexOf(')');
         if (indexOfOpen < 0 || indexOfClose != dataType.length() - 1) {
             // just a type name like "INT", we can use it as is
-            result.setColumnType(dataType);
+            result.setColumnType(dataType.toUpperCase(Locale.ROOT));
         } else {
             result.setColumnType(dataType.substring(0, indexOfOpen));
             String numbersSection = dataType.substring(indexOfOpen + 1, indexOfClose);
@@ -256,7 +255,6 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
@@ -267,14 +265,9 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public ColumnTypeSnapshotSpec clone() {
-        try {
-            ColumnTypeSnapshotSpec cloned = (ColumnTypeSnapshotSpec)super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
-        }
+    public ColumnTypeSnapshotSpec deepClone() {
+        ColumnTypeSnapshotSpec cloned = (ColumnTypeSnapshotSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -283,13 +276,21 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
      * @return Cloned and expanded copy of the object.
      */
     public ColumnTypeSnapshotSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            ColumnTypeSnapshotSpec cloned = (ColumnTypeSnapshotSpec)super.clone();
-            cloned.columnType = secretValueProvider.expandValue(cloned.columnType);
-            return cloned;
+        ColumnTypeSnapshotSpec cloned = this.deepClone();
+        if (cloned.columnType != null) {
+            cloned.columnType = cloned.columnType.toUpperCase(Locale.ROOT);
         }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Object cannot be cloned.");
+        cloned.columnType = secretValueProvider.expandValue(cloned.columnType);
+        return cloned;
+    }
+
+    @Override
+    public ColumnTypeSnapshotSpec clone() {
+        try {
+            ColumnTypeSnapshotSpec clone = (ColumnTypeSnapshotSpec) super.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
         }
     }
 }

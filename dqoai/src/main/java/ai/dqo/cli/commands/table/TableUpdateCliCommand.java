@@ -16,9 +16,9 @@
 package ai.dqo.cli.commands.table;
 
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.status.CliOperationStatus;
-import ai.dqo.cli.commands.table.impl.TableService;
+import ai.dqo.cli.commands.table.impl.TableCliService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
@@ -27,6 +27,7 @@ import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
@@ -35,17 +36,20 @@ import picocli.CommandLine;
  * Cli command to update table.
  */
 @Component
-@Scope("prototype")
-@CommandLine.Command(name = "update", description = "Update tables which match filters")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+@CommandLine.Command(name = "update", header = "Update tables that match a given condition", description = "Update the structure of one or more tables that match a given condition. It allows user to use various filters, such as table names  to narrow down the set of tables to update.")
 public class TableUpdateCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
-    private final TableService tableImportService;
-    private final TerminalReader terminalReader;
-    private final TerminalWriter terminalWriter;
+    private TableCliService tableImportService;
+    private TerminalReader terminalReader;
+    private TerminalWriter terminalWriter;
+
+    public TableUpdateCliCommand() {
+    }
 
     @Autowired
     public TableUpdateCliCommand(TerminalReader terminalReader,
 								 TerminalWriter terminalWriter,
-								 TableService tableImportService) {
+								 TableCliService tableImportService) {
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
         this.tableImportService = tableImportService;

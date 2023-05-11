@@ -15,10 +15,12 @@
  */
 package ai.dqo.metadata.storage.localfiles;
 
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+
 /**
  * Exception raised when the table file name does not match the physical table name that is defined inside the yaml spec file.
  */
-public class IncorrectFileNameException extends RuntimeException {
+public class IncorrectFileNameException extends DqoRuntimeException {
     /**
      * Constructs a new runtime exception with the specified detail message.
      * The cause is not initialized, and may subsequently be initialized by a

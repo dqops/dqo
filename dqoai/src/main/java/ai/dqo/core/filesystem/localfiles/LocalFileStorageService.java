@@ -22,7 +22,7 @@ import ai.dqo.core.filesystem.virtual.HomeFolderPath;
 import java.util.List;
 
 /**
- * Local folder access service, manages files in a given folder. Manages files in the on the disk in the given file system folder.
+ * Local folder access service, manages files in a given folder. Manages files on the disk in the given file system folder.
  */
 public interface LocalFileStorageService {
     /**
@@ -70,7 +70,7 @@ public interface LocalFileStorageService {
      * Lists direct subfolders inside a given folder.
      *
      * @param folderPath Path elements to the folder whose content will be listed.
-     * @return List of directory names inside the directory. Names are relative to their containing directory and are decoded (unsanitized).
+     * @return List of directory names inside the directory. Names are relative to their containing directory and are decoded (unsanitized). Null if directory doesn't exist.
      */
     List<HomeFolderPath> listFolders(HomeFolderPath folderPath);
 

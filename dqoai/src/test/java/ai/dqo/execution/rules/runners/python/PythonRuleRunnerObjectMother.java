@@ -15,18 +15,18 @@
  */
 package ai.dqo.execution.rules.runners.python;
 
-import ai.dqo.execution.CheckExecutionContext;
 import ai.dqo.execution.CheckExecutionContextObjectMother;
-import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
+import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.rules.HistoricDataPoint;
 import ai.dqo.execution.rules.RuleExecutionResult;
 import ai.dqo.execution.rules.RuleExecutionRunParameters;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResultObjectMother;
-import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.utils.BeanFactoryObjectMother;
+import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import org.springframework.beans.factory.BeanFactory;
 
 import java.time.LocalDateTime;
@@ -47,17 +47,19 @@ public class PythonRuleRunnerObjectMother {
     /**
      * Executes a built-in rule for a single value.
      * @param actualValue Actual sensor value.
+     * @param expectedValue Optional expected value.
      * @param ruleParameters Rule parameters, also used to find the rule definition.
      * @return Rule evaluation result.
      */
-    public static RuleExecutionResult executeBuiltInRule(double actualValue, AbstractRuleParametersSpec ruleParameters) {
+    public static RuleExecutionResult executeBuiltInRule(Double actualValue, Double expectedValue, AbstractRuleParametersSpec ruleParameters) {
         PythonRuleRunner ruleRunner = getDefault();
-        CheckExecutionContext checkExecutionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
-        LocalDateTime today = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimeSeriesGradient.DAY);
-        RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, ruleParameters, today, null, new RuleTimeWindowSettingsSpec());
+        ExecutionContext executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
+        LocalDateTime today = LocalDateTimeTruncateUtility.truncateTimePeriod(LocalDateTime.now(), TimePeriodGradient.day);
+        RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, expectedValue,
+                ruleParameters, today, null, new RuleTimeWindowSettingsSpec());
         RuleDefinitionFindResult ruleDefinitionFindResult = RuleDefinitionFindResultObjectMother.findDqoHomeRuleDefinition(ruleParameters.getRuleDefinitionName());
 
-        RuleExecutionResult ruleExecutionResult = ruleRunner.executeRule(checkExecutionContext, ruleRunParameters, ruleDefinitionFindResult);
+        RuleExecutionResult ruleExecutionResult = ruleRunner.executeRule(executionContext, ruleRunParameters, ruleDefinitionFindResult);
 
         return ruleExecutionResult;
     }
@@ -66,23 +68,53 @@ public class PythonRuleRunnerObjectMother {
      * Executes a built-in rule for a single value.
      * @param actualValue Actual sensor value.
      * @param ruleParameters Rule parameters, also used to find the rule definition.
-     * @param readingTimestamp Reading timestamp.
-     * @param previousReadings Array of previous readings.
+     * @return Rule evaluation result.
+     */
+    public static RuleExecutionResult executeBuiltInRule(Double actualValue,  AbstractRuleParametersSpec ruleParameters) {
+        return executeBuiltInRule(actualValue, null, ruleParameters);
+    }
+
+    /**
+     * Executes a built-in rule for a single value.
+     * @param actualValue Actual sensor value.
+     * @param expectedValue Optional expected value.
+     * @param ruleParameters Rule parameters, also used to find the rule definition.
+     * @param readoutTimestamp Reading timestamp.
+     * @param previousReadouts Array of previous readouts.
      * @param timeWindowSettingsSpec Time window settings.
      * @return Rule evaluation result.
      */
-    public static RuleExecutionResult executeBuiltInRule(double actualValue,
+    public static RuleExecutionResult executeBuiltInRule(Double actualValue,
+                                                         Double expectedValue,
 														 AbstractRuleParametersSpec ruleParameters,
-														 LocalDateTime readingTimestamp,
-														 HistoricDataPoint[] previousReadings,
+														 LocalDateTime readoutTimestamp,
+														 HistoricDataPoint[] previousReadouts,
 														 RuleTimeWindowSettingsSpec timeWindowSettingsSpec) {
         PythonRuleRunner ruleRunner = getDefault();
-        CheckExecutionContext checkExecutionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
-        RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, ruleParameters, readingTimestamp, previousReadings, timeWindowSettingsSpec);
+        ExecutionContext executionContext = CheckExecutionContextObjectMother.createWithInMemoryUserContext();
+        RuleExecutionRunParameters ruleRunParameters = new RuleExecutionRunParameters(actualValue, expectedValue,
+                ruleParameters, readoutTimestamp, previousReadouts, timeWindowSettingsSpec);
         RuleDefinitionFindResult ruleDefinitionFindResult = RuleDefinitionFindResultObjectMother.findDqoHomeRuleDefinition(ruleParameters.getRuleDefinitionName());
 
-        RuleExecutionResult ruleExecutionResult = ruleRunner.executeRule(checkExecutionContext, ruleRunParameters, ruleDefinitionFindResult);
+        RuleExecutionResult ruleExecutionResult = ruleRunner.executeRule(executionContext, ruleRunParameters, ruleDefinitionFindResult);
 
         return ruleExecutionResult;
+    }
+
+    /**
+     * Executes a built-in rule for a single value.
+     * @param actualValue Actual sensor value.
+     * @param ruleParameters Rule parameters, also used to find the rule definition.
+     * @param readoutTimestamp Reading timestamp.
+     * @param previousReadouts Array of previous readouts.
+     * @param timeWindowSettingsSpec Time window settings.
+     * @return Rule evaluation result.
+     */
+    public static RuleExecutionResult executeBuiltInRule(Double actualValue,
+                                                         AbstractRuleParametersSpec ruleParameters,
+                                                         LocalDateTime readoutTimestamp,
+                                                         HistoricDataPoint[] previousReadouts,
+                                                         RuleTimeWindowSettingsSpec timeWindowSettingsSpec) {
+        return executeBuiltInRule(actualValue, null, ruleParameters, readoutTimestamp, previousReadouts, timeWindowSettingsSpec);
     }
 }

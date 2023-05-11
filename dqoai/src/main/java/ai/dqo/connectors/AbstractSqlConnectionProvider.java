@@ -16,12 +16,14 @@
 package ai.dqo.connectors;
 
 import ai.dqo.metadata.sources.ColumnTypeSnapshotSpec;
+import ai.dqo.utils.string.StringCheckUtility;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 /**
  * Base class for connection providers that are using SQL.
@@ -96,5 +98,73 @@ public abstract class AbstractSqlConnectionProvider implements ConnectionProvide
         }
 
         return constant.toString();
+    }
+
+    /**
+     * Returns the best matching column type for the type snapshot (real column type returned by the database).
+     *
+     * @param columnTypeSnapshot Column type snapshot.
+     * @return Data type category.
+     */
+    @Override
+    public DataTypeCategory detectColumnType(ColumnTypeSnapshotSpec columnTypeSnapshot) {
+        if (columnTypeSnapshot == null || columnTypeSnapshot.getColumnType() == null) {
+            return null;
+        }
+
+        String columnType = columnTypeSnapshot.getColumnType().toLowerCase(Locale.ROOT);
+        if (StringCheckUtility.containsAny(columnType, "array")) {
+            return DataTypeCategory.array;
+        }
+
+        if (StringCheckUtility.containsAny(columnType, "struct", "record", "table")) {
+            return DataTypeCategory.other;
+        }
+
+        if (StringCheckUtility.containsAny(columnType, "int", "integer", "byte", "short", "long", "bigint", "smallint", "tinyint", "byteint")) {
+            return DataTypeCategory.numeric_integer;
+        }
+
+        if (StringCheckUtility.containsAny(columnType, "numeric", "decimal", "number")) {
+            return DataTypeCategory.numeric_decimal;
+        }
+
+        if (StringCheckUtility.containsAny(columnType, "float", "double", "real")) {
+            return DataTypeCategory.numeric_float;
+        }
+
+        if (StringCheckUtility.containsAny(columnType, "bool", "boolean", "bit")) {
+            return DataTypeCategory.bool;
+        }
+
+        if (StringCheckUtility.containsAny(columnType, "datetime", "timestamp_ntz")) {
+            return DataTypeCategory.datetime_datetime;
+        }
+
+        if (StringCheckUtility.containsAny(columnType, "date")) {
+            return DataTypeCategory.datetime_date;
+        }
+
+        if (StringCheckUtility.containsAny(columnType, "timestamp")) {
+            return DataTypeCategory.datetime_instant;
+        }
+
+        if (StringCheckUtility.containsAny(columnType, "varchar", "string", "nvarchar", "char", "nchar", "character")) {
+            return DataTypeCategory.string;
+        }
+
+        if (StringCheckUtility.containsAny(columnType, "text", "clob")) {
+            return DataTypeCategory.text;
+        }
+
+        if (StringCheckUtility.containsAny(columnType, "varbinary", "binary")) {
+            return DataTypeCategory.binary;
+        }
+
+        if (StringCheckUtility.containsAny(columnType, "json")) {
+            return DataTypeCategory.json;
+        }
+
+        return DataTypeCategory.other;
     }
 }

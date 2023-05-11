@@ -19,9 +19,15 @@ import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistryObjectMother;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryConnectionSpecObjectMother;
+import ai.dqo.connectors.mysql.MysqlConnectionSpecObjectMother;
+import ai.dqo.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
+import ai.dqo.connectors.redshift.RedshiftConnectionSpecObjectMother;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
+import ai.dqo.connectors.sqlserver.SqlServerConnectionSpecObjectMother;
 import ai.dqo.core.secrets.SecretValueProviderObjectMother;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.sources.*;
+import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.sampledata.files.CsvSampleFilesObjectMother;
 import ai.dqo.sampledata.files.SampleTableFromCsv;
 import org.junit.jupiter.api.Assertions;
@@ -44,6 +50,18 @@ public class SampleTableMetadataObjectMother {
 
             case snowflake:
                 return SnowflakeConnectionSpecObjectMother.create();
+
+            case postgresql:
+                return PostgresqlConnectionSpecObjectMother.create();
+
+            case redshift:
+                return RedshiftConnectionSpecObjectMother.create();
+
+            case sqlserver:
+                return SqlServerConnectionSpecObjectMother.create();
+
+            case mysql:
+                return MysqlConnectionSpecObjectMother.create();
         }
 
         Assertions.fail("Add a case statement for a target provider and define a connection spec object mother for " + providerType.name());
@@ -62,6 +80,18 @@ public class SampleTableMetadataObjectMother {
 
             case snowflake:
                 return SnowflakeConnectionSpecObjectMother.getSchemaName();
+
+            case postgresql:
+                return PostgresqlConnectionSpecObjectMother.getSchemaName();
+
+            case redshift:
+                return RedshiftConnectionSpecObjectMother.getSchemaName();
+
+            case sqlserver:
+                return SqlServerConnectionSpecObjectMother.getSchemaName();
+
+            case mysql:
+                return MysqlConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());
@@ -90,13 +120,23 @@ public class SampleTableMetadataObjectMother {
         ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance());
         String targetSchema = getSchemaForProvider(providerType);
         SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(csvFileName);
-        TableTargetSpec tableTargetSpec = new TableTargetSpec(targetSchema, sampleTable.getHashedTableName());
-        TableSpec tableSpec = new TableSpec(tableTargetSpec);
+        PhysicalTableName physicalTableName = new PhysicalTableName(targetSchema, sampleTable.getHashedTableName());
+        TableSpec tableSpec = new TableSpec(physicalTableName);
+        tableSpec.getDataStreams().setFirstDataStreamMapping(new DataStreamMappingSpec());
         ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(providerType);
 
         for (Column<?> dataColumn : sampleTable.getTable().columns()) {
-            ColumnTypeSnapshotSpec columnTypeSnapshotSpec = connectionProvider.proposePhysicalColumnType(dataColumn);
-            ColumnSpec columnSpec = new ColumnSpec(columnTypeSnapshotSpec);
+            ColumnSpec columnSpec = new ColumnSpec();
+            String userProposedDataType = sampleTable.getPhysicalColumnTypes().get(dataColumn.name());
+            if (userProposedDataType != null) {
+                ColumnTypeSnapshotSpec userProposedType = ColumnTypeSnapshotSpec.fromType(userProposedDataType);
+                columnSpec.setTypeSnapshot(userProposedType);
+            }
+            else {
+                ColumnTypeSnapshotSpec providerProposedTypeSnapshot = connectionProvider.proposePhysicalColumnType(dataColumn);
+                columnSpec.setTypeSnapshot(providerProposedTypeSnapshot);
+            }
+
             tableSpec.getColumns().put(dataColumn.name(), columnSpec);
         }
 

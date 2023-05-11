@@ -15,11 +15,14 @@
  */
 package ai.dqo.connectors.jdbc;
 
+import ai.dqo.core.configuration.DqoJdbcConnectionsConfigurationProperties;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -31,16 +34,25 @@ import java.util.concurrent.TimeUnit;
  * JDDB connection pool that supports multiple connections.
  */
 @Component
-@Scope("singleton")
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class JdbcConnectionPoolImpl implements JdbcConnectionPool {
     /**
      * Data sources cache.
      */
-    private final Cache<ConnectionSpec, HikariDataSource> dataSourceCache =
-            CacheBuilder.newBuilder()
-                    .maximumSize(5000)
-                    .expireAfterAccess(7, TimeUnit.DAYS)
-                    .build();
+    private Cache<ConnectionSpec, HikariDataSource> dataSourceCache;
+    private DqoJdbcConnectionsConfigurationProperties jdbcConnectionsConfigurationProperties;
+
+
+    @Autowired
+    public JdbcConnectionPoolImpl(DqoJdbcConnectionsConfigurationProperties jdbcConnectionsConfigurationProperties) {
+        this.jdbcConnectionsConfigurationProperties = jdbcConnectionsConfigurationProperties;
+
+        this. dataSourceCache =
+                CacheBuilder.newBuilder()
+                        .maximumSize(jdbcConnectionsConfigurationProperties.getMaxConnectionInPool())
+                        .expireAfterAccess(jdbcConnectionsConfigurationProperties.getExpireAfterAccessSeconds(), TimeUnit.SECONDS)
+                        .build();
+    }
 
     /**
      * Returns or creates a data source for the given connection specification.

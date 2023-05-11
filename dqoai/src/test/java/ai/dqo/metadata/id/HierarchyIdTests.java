@@ -16,6 +16,10 @@
 package ai.dqo.metadata.id;
 
 import ai.dqo.BaseTest;
+import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.metadata.sources.ConnectionWrapper;
+import ai.dqo.metadata.userhome.UserHomeImpl;
+import ai.dqo.metadata.userhome.UserHomeObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,16 +29,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class HierarchyIdTests extends BaseTest {
     private HierarchyId sut;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = new HierarchyId("first", "second", "third");
     }
 
@@ -159,5 +155,22 @@ public class HierarchyIdTests extends BaseTest {
     @Test
     void toString_whenCalledForMultipleElementHierarchyId_thenReturnsConcatenatedPath() {
         Assertions.assertEquals("first/second/third", this.sut.toString());
+    }
+
+    @Test
+    void getNodesOnPath_whenSearchingForConnection_thenReturnsAllNodesOnPath() {
+        UserHomeImpl userHome = UserHomeObjectMother.createBareUserHome();
+        ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
+        ConnectionSpec connectionSpec = new ConnectionSpec();
+        connectionWrapper.setSpec(connectionSpec);
+
+        HierarchyId sut = connectionSpec.getHierarchyId();
+        Assertions.assertNotNull(sut);
+
+        HierarchyNode[] nodesOnPath = sut.getNodesOnPath(userHome);
+        Assertions.assertEquals(3, nodesOnPath.length);
+        Assertions.assertSame(userHome.getConnections(), nodesOnPath[0]);
+        Assertions.assertSame(connectionWrapper, nodesOnPath[1]);
+        Assertions.assertSame(connectionSpec, nodesOnPath[2]);
     }
 }

@@ -18,7 +18,6 @@ package ai.dqo.core.filesystem.virtual;
 import ai.dqo.BaseTest;
 import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.filesystem.localfiles.LocalFileSystemException;
-import ai.dqo.core.filesystem.virtual.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -113,8 +112,22 @@ public class FolderTreeNodeTests extends BaseTest {
     @Test
     void deriveChildFolderKind_whenHomeFolderAndAskingForChecks_thenReturnsChecks() {
         FolderTreeNode sut = FolderTreeNode.createRootFolderNode();
-        FolderKind folderKind = sut.deriveChildFolderKind(FolderName.fromObjectName(BuiltInFolderNames.SENSORS));
+        FolderKind folderKind = sut.deriveChildFolderKind(FolderName.fromObjectName(BuiltInFolderNames.CHECKS));
         Assertions.assertEquals(FolderKind.CHECKS, folderKind);
+    }
+
+    @Test
+    void deriveChildFolderKind_whenHomeFolderAndAskingForSensors_thenReturnsSensors() {
+        FolderTreeNode sut = FolderTreeNode.createRootFolderNode();
+        FolderKind folderKind = sut.deriveChildFolderKind(FolderName.fromObjectName(BuiltInFolderNames.SENSORS));
+        Assertions.assertEquals(FolderKind.SENSORS, folderKind);
+    }
+
+    @Test
+    void deriveChildFolderKind_whenHomeFolderAndAskingForRules_thenReturnsRules() {
+        FolderTreeNode sut = FolderTreeNode.createRootFolderNode();
+        FolderKind folderKind = sut.deriveChildFolderKind(FolderName.fromObjectName(BuiltInFolderNames.RULES));
+        Assertions.assertEquals(FolderKind.RULES, folderKind);
     }
 
     @Test
@@ -276,13 +289,25 @@ public class FolderTreeNodeTests extends BaseTest {
     }
 
     @Test
-    void addChildFile_whenFilePresentAndAddingToRootFolder_thenThrowsException() {
+    void addChildFile_whenFilePresentAndAddingToRootFolder_thenReplacesContent() {
         FolderTreeNode sut = FolderTreeNode.createRootFolderNode();
         FileTreeNode first = sut.addChildFile("file.txt", new FileContent("content"));
 
-        Assertions.assertThrows(LocalFileSystemException.class, () -> {
-            FileTreeNode second = sut.addChildFile("file.txt", new FileContent("content"));
-        });
+        FileTreeNode second = sut.addChildFile("file.txt", new FileContent("content2"));
+        FileTreeNode found = sut.getChildFileByFileName("file.txt");
+        Assertions.assertEquals("content2", found.getContent().getTextContent());
+    }
+
+    @Test
+    void addChildFile_whenFileWasAddedAndDeletedAndAddingToRootFolderAgain_thenReplacesContent() {
+        FolderTreeNode sut = FolderTreeNode.createRootFolderNode();
+        FileTreeNode first = sut.addChildFile("file.txt", new FileContent("content"));
+        first.markForDeletion();
+
+        FileTreeNode second = sut.addChildFile("file.txt", new FileContent("content2"));
+        FileTreeNode found = sut.getChildFileByFileName("file.txt");
+        Assertions.assertEquals("content2", found.getContent().getTextContent());
+        Assertions.assertEquals(FileTreeNodeStatus.MODIFIED, found.getStatus());
     }
 
     @Test

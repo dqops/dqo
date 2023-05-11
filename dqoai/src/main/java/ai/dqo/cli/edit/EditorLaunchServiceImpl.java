@@ -15,12 +15,12 @@
  */
 package ai.dqo.cli.edit;
 
-import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.cli.terminal.TerminalFactory;
 import ai.dqo.core.filesystem.virtual.FileTreeNode;
 import ai.dqo.core.filesystem.virtual.FolderTreeNode;
 import ai.dqo.metadata.id.HierarchyId;
+import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.sources.ConnectionWrapper;
-import ai.dqo.metadata.sources.SettingsSpec;
 import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.storage.localfiles.SpecFileNames;
 import ai.dqo.metadata.storage.localfiles.sources.FileConnectionWrapperImpl;
@@ -43,18 +43,18 @@ import java.util.NoSuchElementException;
 @Service
 public class EditorLaunchServiceImpl implements EditorLaunchService {
     private final UserHomeContextFactory userHomeContextFactory;
-    private final TerminalWriter terminalWriter;
+    private final TerminalFactory terminalFactory;
 
     /**
      * User home context factory.
      * @param userHomeContextFactory User home context factory.
-     * @param terminalWriter Terminal writer.
+     * @param terminalFactory Terminal factory.
      */
     @Autowired
     public EditorLaunchServiceImpl(UserHomeContextFactory userHomeContextFactory,
-                                   TerminalWriter terminalWriter) {
+                                   TerminalFactory terminalFactory) {
         this.userHomeContextFactory = userHomeContextFactory;
-        this.terminalWriter = terminalWriter;
+        this.terminalFactory = terminalFactory;
     }
 
     /**
@@ -112,7 +112,7 @@ public class EditorLaunchServiceImpl implements EditorLaunchService {
     private void openFileInPyCharm(String filePath, String editorPath) {
         String myOS = System.getProperty("os.name").toLowerCase();
         Runtime runtime = Runtime.getRuntime();
-        this.terminalWriter.writeLine("Launching PyCharm");
+        this.terminalFactory.getWriter().writeLine("Launching PyCharm");
         try {
             if (myOS.contains("windows")) {
                 runtime.exec(new String[]{"cmd", "/c", "start", "\"" + editorPath + "/bin/pycharm64.exe\"", filePath});
@@ -130,7 +130,7 @@ public class EditorLaunchServiceImpl implements EditorLaunchService {
     private void openFileInIntelliJ(String filePath, String editorPath) {
         String myOS = System.getProperty("os.name").toLowerCase();
         Runtime runtime = Runtime.getRuntime();
-        this.terminalWriter.writeLine("Launching IntelliJ");
+        this.terminalFactory.getWriter().writeLine("Launching IntelliJ");
         try {
             if (myOS.contains("windows")) {
                 runtime.exec(new String[]{"cmd", "/c", editorPath + "bin/idea64.exe", filePath});
@@ -147,7 +147,7 @@ public class EditorLaunchServiceImpl implements EditorLaunchService {
     private void openFileInEclipse(String filePath, String editorPath) {
         String myOS = System.getProperty("os.name").toLowerCase();
         Runtime runtime = Runtime.getRuntime();
-        this.terminalWriter.writeLine("Launching Eclipse");
+        this.terminalFactory.getWriter().writeLine("Launching Eclipse");
         try {
             if (myOS.contains("windows")) {
                 runtime.exec(new String[]{"cmd", "/c", editorPath + "bin/eclipse.exe", filePath});
@@ -164,7 +164,7 @@ public class EditorLaunchServiceImpl implements EditorLaunchService {
     private void openFileInVSC(String filePath) {
         String myOS = System.getProperty("os.name").toLowerCase();
         Runtime runtime = Runtime.getRuntime();
-        this.terminalWriter.writeLine("Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin");
+        this.terminalFactory.getWriter().writeLine("Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin");
         try {
             if (myOS.contains("windows")) {
                 runtime.exec(new String[]{"cmd", "/c", "code.cmd", filePath});

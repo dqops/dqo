@@ -16,10 +16,15 @@
 package ai.dqo.execution.sensors;
 
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
+import ai.dqo.data.statistics.factory.StatisticsDataScope;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionSpec;
+import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 
 /**
  * Factory for {@link SensorExecutionRunParameters} objects. Expands all parameters in the form ${ENV_VAR} or ${sm://secret-name}
@@ -32,12 +37,41 @@ public interface SensorExecutionRunParametersFactory {
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
      * @param check Check specification.
+     * @param customCheckDefinition Optional custom check definition, required when the check is a custom check.
+     * @param checkType Check type (profiling, recurring, partitioned).
+     * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (profiling, recurring, partitioned).
+     * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
+     *                             When not provided, the defaults are copied from the table's incremental time window configuration for a matching partition time scale.
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
      */
     SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
                                                         TableSpec table,
                                                         ColumnSpec column,
-                                                        AbstractCheckSpec check,
+                                                        AbstractCheckSpec<?,?,?,?> check,
+                                                        CheckDefinitionSpec customCheckDefinition,
+                                                        CheckType checkType,
+                                                        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
+                                                        TimeWindowFilterParameters userTimeWindowFilters,
                                                         ProviderDialectSettings dialectSettings);
+
+    /**
+     * Creates a sensor parameters object for a statistics collector. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
+     * specifications for the target connection, table, column, check.
+     * @param connection Connection specification.
+     * @param table Table specification.
+     * @param column Optional column specification for column sensors.
+     * @param statisticsCollectorSpec Statistics collector specification.
+     * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
+     * @param statisticsDataScope Data scope (whole table or per data stream) for collecting statistics.
+     * @param dialectSettings Dialect settings.
+     * @return Sensor execution run parameters.
+     */
+    SensorExecutionRunParameters createStatisticsSensorParameters(ConnectionSpec connection,
+                                                                  TableSpec table,
+                                                                  ColumnSpec column,
+                                                                  AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec,
+                                                                  TimeWindowFilterParameters userTimeWindowFilters,
+                                                                  StatisticsDataScope statisticsDataScope,
+                                                                  ProviderDialectSettings dialectSettings);
 }

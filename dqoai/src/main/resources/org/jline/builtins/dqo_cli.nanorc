@@ -1,0 +1,2 @@
+color white ".*"
+color bright-yellow "(connection|check|table|column)"

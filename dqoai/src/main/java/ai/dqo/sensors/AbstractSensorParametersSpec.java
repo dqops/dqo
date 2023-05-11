@@ -15,21 +15,18 @@
  */
 package ai.dqo.sensors;
 
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
-import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
+import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
-import org.apache.parquet.Strings;
 
 import java.util.Objects;
 
@@ -39,31 +36,11 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractSensorParametersSpec extends AbstractSpec implements Cloneable {
+public abstract class AbstractSensorParametersSpec extends AbstractSpec {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
     };
-
-    @JsonPropertyDescription("Disables the data quality sensor. Only enabled sensors are executed. The sensor should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
-    private boolean disabled;
-
-    /**
-     * Checks if the sensor (and its parent check) is disabled.
-     * @return True when the check is disabled.
-     */
-    public boolean isDisabled() {
-        return disabled;
-    }
-
-    /**
-     * Sets the disabled flag on a check.
-     * @param disabled Disabled flag.
-     */
-    public void setDisabled(boolean disabled) {
-		this.setDirtyIf(this.disabled != disabled);
-        this.disabled = disabled;
-    }
 
     @JsonPropertyDescription("SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -90,14 +67,9 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec implemen
      * Creates and returns a copy of this object.
      */
     @Override
-    public AbstractSensorParametersSpec clone() {
-        try {
-            AbstractSensorParametersSpec cloned = (AbstractSensorParametersSpec)super.clone();
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Cannot clone the object.");
-        }
+    public AbstractSensorParametersSpec deepClone() {
+        AbstractSensorParametersSpec cloned = (AbstractSensorParametersSpec)super.deepClone();
+        return cloned;
     }
 
     /**
@@ -114,53 +86,20 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec implemen
      * @return Cloned and expanded copy of the object.
      */
     public AbstractSensorParametersSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        try {
-            AbstractSensorParametersSpec cloned = (AbstractSensorParametersSpec)super.clone();
-            cloned.filter = secretValueProvider.expandValue(cloned.filter);
-            return cloned;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new RuntimeException("Cannot clone the object.");
-        }
+        AbstractSensorParametersSpec cloned = (AbstractSensorParametersSpec)super.deepClone();
+        cloned.filter = secretValueProvider.expandValue(cloned.filter);
+        return cloned;
     }
 
     /**
-     * This method should be overriden in derived classes and should check if there are any simple fields (String, integer, double, etc)
-     * that are not HierarchyNodes (they are analyzed by the hierarchy tree engine).
-     * This method should return true if there is at least one field that must be serialized to YAML.
-     * It may return false only if:
-     * - the parameter specification class has no custom fields (parameters are not configurable)
-     * - there are some fields, but they are all nulls, so not a single field would be serialized.
-     * The purpose of this method is to avoid serialization of the parameters as just "parameters: " yaml, without nested
-     * fields because such a YAML is just invalid.
-     * @return True when the parameters spec must be serialized to YAML because it has some non-null simple fields,
-     *         false when serialization of the parameters may lead to writing an empty "parameters: " entry in YAML.
-     */
-    @JsonIgnore
-    public abstract boolean hasNonNullSimpleFields();
-
-    /**
-     * Checks if the object is a default value, so it would be rendered as an empty node. We want to skip it and not render it to YAML.
-     * The implementation of this interface method should check all object's fields to find if at least one of them has a non-default value or is not null, so it should be rendered.
+     * Calls a visitor (using a visitor design pattern) that returns a result.
      *
-     * @return true when the object has the default values only and should not be rendered to YAML, false when it should be rendered.
+     * @param visitor   Visitor instance.
+     * @param parameter Additional parameter that will be passed back to the visitor.
+     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
-    @JsonIgnore
-    public boolean isDefault() {
-        if (!Strings.isNullOrEmpty(this.filter) || this.disabled) {
-            return false;
-        }
-
-        boolean isDefault = super.isDefault();
-        if (!isDefault) {
-            return false;
-        }
-
-        if (hasNonNullSimpleFields()) {
-            return false;
-        }
-
-        return true;  // the parameters does not need to be serialized
+    public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
+        return visitor.accept(this, parameter);
     }
 }

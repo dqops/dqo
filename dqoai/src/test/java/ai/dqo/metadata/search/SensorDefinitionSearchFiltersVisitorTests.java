@@ -38,16 +38,8 @@ public class SensorDefinitionSearchFiltersVisitorTests extends BaseTest {
     UserHomeContext userHomeContext;
 	ArrayList<HierarchyNode> sensorDefinitionWrappers;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.userHomeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
 		this.sensorDefinitionSearchFilters = new SensorDefinitionSearchFilters();
 		this.sensorDefinitionSearchFilters.setSensorName("test");
@@ -61,13 +53,13 @@ public class SensorDefinitionSearchFiltersVisitorTests extends BaseTest {
     void acceptSensorDefinitionList_whenCalledForSensorDefinitionList_thenReturnsTraverseChildren() {
 		this.sensorDefinitionSearchFilters.setSensorName("test2");
 		this.sut = new SensorDefinitionSearchFiltersVisitor(this.sensorDefinitionSearchFilters);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.sensorDefinitionList, sensorDefinitionWrappers);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.sensorDefinitionList, new SearchParameterObject(sensorDefinitionWrappers, null, null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
 
     @Test
     void acceptSensorDefinitionList_whenCalledForSensorDefinitionListWithFilterObject_thenReturnNotTraverseChildren() {
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.sensorDefinitionList, sensorDefinitionWrappers);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.sensorDefinitionList, new SearchParameterObject(sensorDefinitionWrappers, null, null));
         Assertions.assertNotEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
 
@@ -75,13 +67,13 @@ public class SensorDefinitionSearchFiltersVisitorTests extends BaseTest {
     void acceptSensorDefinitionWrapper_whenCalledForSensorDefinitionWrapper_thenReturnsSkipChildren() {
 		this.sensorDefinitionSearchFilters.setSensorName("test2");
 		this.sut = new SensorDefinitionSearchFiltersVisitor(this.sensorDefinitionSearchFilters);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.sensorDefinitionWrapper, sensorDefinitionWrappers);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.sensorDefinitionWrapper, new SearchParameterObject(sensorDefinitionWrappers, null, null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
 
     @Test
     void acceptSensorDefinitionWrapper_whenCalledForSensorDefinitionWrapperWithFilterObject_thenReturnNotTraverseChildren() {
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.sensorDefinitionWrapper, sensorDefinitionWrappers);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.sensorDefinitionWrapper, new SearchParameterObject(sensorDefinitionWrappers, null, null));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
 }

@@ -19,14 +19,26 @@ import ai.dqo.cli.commands.check.CheckCliCommand;
 import ai.dqo.cli.commands.cloud.CloudCliCommand;
 import ai.dqo.cli.commands.column.ColumnCliCommand;
 import ai.dqo.cli.commands.connection.ConnectionCliCommand;
+import ai.dqo.cli.commands.data.DataCliCommand;
 import ai.dqo.cli.commands.impl.DqoShellRunnerService;
+import ai.dqo.cli.commands.rule.RuleCliCommand;
+import ai.dqo.cli.commands.run.RunCliCommand;
+import ai.dqo.cli.commands.scheduler.SchedulerCliCommand;
+import ai.dqo.cli.commands.sensor.SensorCliCommand;
 import ai.dqo.cli.commands.settings.SettingsCliCommand;
 import ai.dqo.cli.commands.table.TableCliCommand;
 import ai.dqo.cli.commands.utility.ClearScreenCliCommand;
+import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.core.configuration.DqoLoggingConfigurationProperties;
+import ai.dqo.core.scheduler.JobSchedulerService;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
+import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
+
+import java.util.List;
 
 /**
  * DQO root CLI command.
@@ -36,8 +48,8 @@ import picocli.CommandLine;
         name = "",
         description = {
                 "DQO Interactive Shell",
-                "Hit @|magenta <TAB>|@ to see available commands.",
-                "Hit @|magenta ALT-S|@ to toggle tailtips.",
+                "Hit @|yellow <TAB>|@ to see available commands.",
+                "Hit @|yellow ALT-S|@ to toggle tailtips.",
                 ""},
         footer = {"", "Press Ctrl-D to exit."},
         subcommands = {
@@ -48,14 +60,189 @@ import picocli.CommandLine;
             ColumnCliCommand.class,
             SettingsCliCommand.class,
             CloudCliCommand.class,
+            SensorCliCommand.class,
+            SchedulerCliCommand.class,
+            DataCliCommand.class,
+            RunCliCommand.class,
+            RuleCliCommand.class
         }
 )
 public class DqoRootCliCommand extends BaseCommand implements ICommand {
-    private final BeanFactory beanFactory;
+    private BeanFactory beanFactory;
+    private JobSchedulerService jobSchedulerService;
+    private TerminalWriter terminalWriter;
 
+    public DqoRootCliCommand() {
+    }
+
+    /**
+     * Creates a default root CLI command.
+     * @param beanFactory Bean factory - used to delay the creation of the shell runner.
+     * @param jobSchedulerService Job scheduler - stops the scheduler on exit.
+     * @param terminalWriter Terminal writer.
+     */
     @Autowired
-    public DqoRootCliCommand(BeanFactory beanFactory) {
+    public DqoRootCliCommand(BeanFactory beanFactory,
+                             JobSchedulerService jobSchedulerService,
+                             TerminalWriter terminalWriter) {
         this.beanFactory = beanFactory;
+        this.jobSchedulerService = jobSchedulerService;
+        this.terminalWriter = terminalWriter;
+    }
+
+    /**
+     * Add fake parameters here to support overriding configuration parameters from application.yaml.
+     * When user starts the application and passes a parameter that starts with "--" followed by a dot separated configuration property name,
+     * Spring Boot will override the given parameter. However, we want to show the list of these parameters when the user runs "dqo --help" and we also don't want
+     * picocli to fail because a parameter is unknown, so we make all these overridable parameters known to picocli.
+     */
+
+    @CommandLine.Option(names = {"--dqo.cloud.api-key"},
+            description = "DQO cloud api key. Log in to https://cloud.dqo.ai/ to get the key.")
+    private String dqoCloudApiKey;
+
+    @CommandLine.Option(names = {"--server.port"},
+            description = "Sets the web server port to host the DQO local web UI.", defaultValue = "8888")
+    private Integer serverPort;
+
+    @CommandLine.Option(names = {"--dqo.user.initialize-user-home"},
+            description = "Initializes an empty DQO user home (identified by the DQO_USER_HOME environment variable) without asking the user for confirmation.", defaultValue = "false")
+    private Boolean dqoUserInitializeUserHome;
+
+    @CommandLine.Option(names = {"--logging.level.root"},
+            description = "Default logging level at the root level of the logging hierarchy.", defaultValue = "WARN")
+    private org.slf4j.event.Level loggingLevelRoot;
+
+    @CommandLine.Option(names = {"--logging.level.ai.dqo"},
+            description = "Default logging level for the DQO runtime.", defaultValue = "WARN")
+    private org.slf4j.event.Level loggingLevelAiDqo;
+
+    @CommandLine.Option(names = {"--dqo.logging.enable-user-home-logging"},
+            description = "Enables file logging inside the DQO User Home's .logs folder.", defaultValue = "true")
+    private boolean dqoLoggingEnableUserHomeLogging;
+
+    @CommandLine.Option(names = {"--dqo.logging.max-history"},
+            description = "Sets the maximum number of log files that could be stored (archived) in the .logs folder.", defaultValue = "7")
+    private Integer maxHistory;
+
+    @CommandLine.Option(names = {"--dqo.logging.pattern"},
+            description = "Log entry pattern for logback used for writing log entries.", defaultValue = DqoLoggingConfigurationProperties.DEFAULT_PATTERN)
+    private String dqoLoggingPattern;
+
+    @CommandLine.Option(names = {"--dqo.logging.total-size-cap"},
+            description = "Total log file size cap.", defaultValue = DqoLoggingConfigurationProperties.DEFAULT_TOTAL_SIZE_CAP)
+    private String dqoLoggingTotalSizeCap;
+
+    @CommandLine.Option(names = {"--dqo.python.python-script-timeout-seconds"},
+            description = "Python script execution time limit in seconds for running jinja2 and rule evaluation scripts.", defaultValue = "120")
+    private Integer dqoPythonPythonScriptTimeoutSeconds;
+
+    @CommandLine.Option(names = {"--dqo.python.interpreter"},
+            description = "Python interpreter command line name, like 'python' or 'python3'.", defaultValue = "python3")
+    private String dqoPythonInterpreter;
+
+    @CommandLine.Option(names = {"--dqo.user.home"},
+            description = "Overrides the path to the DQO user home. The default user home is created in the current folder (.).", defaultValue = ".")
+    private String dqoUserHome;
+
+    @CommandLine.Option(names = {"--dqo.home"},
+            description = "Overrides the path to the DQO system home (DQO_HOME). The default DQO_HOME contains the definition of built-in data quality sensors, rules and libraries.")
+    private String dqoHome;
+
+    @CommandLine.Option(names = {"--dqo.default-time-zone"},
+            description = "Default time zone name used to convert the server's local dates to a local time in a time zone that is relevant for the user. Use official IANA time zone names. " +
+                    "When the parameter is not configured, DQO uses the local time zone of the host running the application. The time zone could be reconfigured at a user settings level.")
+    private String dqoDefaultTimeZone;
+
+    @CommandLine.Option(names = {"--dqo.incidents.count-open-incidents-days"},
+            description = "The number of days since today that are scanned for open incidents first seen in since this number of days.", defaultValue = "15")
+    private Integer dqoIncidentsCountOpenIncidentsDays;
+
+    @CommandLine.Option(names = {"--dqo.jdbc.max-connection-in-pool"},
+            description = "Sets the maximum number of connections in the JDBC connection pool, shared across all data sources using JDBC drivers.", defaultValue = "1000")
+    private Integer dqoJdbcMaxConnectionInPool;
+
+    @CommandLine.Option(names = {"--dqo.jdbc.expire-after-access-seconds"},
+            description = "Sets the number of seconds when a connection in a JDBC pool is expired after the last access.", defaultValue = "1800")
+    private Integer dqoJdbcExpireAfterAccessSeconds;
+
+    @CommandLine.Option(names = {"--dqo.secrets.enable-gcp-secret-manager"},
+            description = "Enables GCP secret manager to resolve parameters like ${sm:secret-name} in the yaml files.", defaultValue = "true")
+    private Boolean dqoSecretsEnableGcpSecretManager;
+
+    @CommandLine.Option(names = {"--dqo.secrets.gcp-project-id"},
+            description = "GCP project name with a GCP secret manager enabled to pull the secrets.", defaultValue = "true")
+    private Boolean dqoSecretsGcpProjectId;
+
+    @CommandLine.Option(names = {"--dqo.core.print-stack-trace"},
+            description = "Prints a full stack trace for errors on the console.", defaultValue = "true")
+    private Boolean dqoCorePrintStackTrace;
+
+    @CommandLine.Option(names = {"--dqo.core.lock-wait-timeout-seconds"},
+            description = "Sets the maximum wait timeout in seconds to obtain a lock to read or write files.", defaultValue = "900")
+    private Long dqoCoreLockWaitTimeoutSeconds;
+
+    @CommandLine.Option(names = {"--dqo.cloud.parallel-file-uploads"},
+            description = "The number of files that are uploaded to DQO Cloud in parallel using HTTP/2 multiplexing.", defaultValue = "500")
+    private Integer dqoCloudParallelFileUploads;
+
+    @CommandLine.Option(names = {"--dqo.cloud.parallel-file-downloads"},
+            description = "The number of files that are downloaded from DQO Cloud in parallel using HTTP/2 multiplexing.", defaultValue = "500")
+    private Integer dqoCloudParallelFileDownloads;
+
+    @CommandLine.Option(names = {"--dqo.queue.threads"},
+            description = "Sets the number of threads that the job queue creates for processing jobs (running data quality checks, importing metadata, etc.). ", defaultValue = "10")
+    private Long dqoQueueThreads;
+
+    @CommandLine.Option(names = {"--dqo.scheduler.start"},
+            description = "Starts the job scheduler on startup (true) or disables the job scheduler (false).")
+    private Boolean dqoSchedulerStart;
+
+    @CommandLine.Option(names = {"--dqo.scheduler.enable-cloud-sync"},
+            description = "Enable synchronization of metadata and results with DQO Cloud in the job scheduler.", defaultValue = "true")
+    private Boolean dqoSchedulerEnableCloudSync;
+
+    @CommandLine.Option(names = {"--dqo.scheduler.scan-metadata-cron-schedule"},
+            description = "Unix cron expression to configure how often the scheduler will synchronize the local copy of the metadata with DQO Cloud and detect new schedules.", defaultValue = "*/10 * * * *")
+    private String dqoSchedulerScanMetadataCronSchedule;
+
+    @CommandLine.Option(names = {"--dqo.scheduler.synchronization-mode"},
+            description = "Configures the console logging mode for the '\"cloud sync all\" operations performed by the job scheduler in the background.", defaultValue = "silent")
+    private FileSystemSynchronizationReportingMode dqoSchedulerSynchronizationMode;
+
+    @CommandLine.Option(names = {"--dqo.scheduler.check-run-mode"},
+            description = "Configures the console logging mode for the '\"check run\" jobs performed by the job scheduler in the background.", defaultValue = "silent")
+    private CheckRunReportingMode dqoSchedulerCheckRunMode;
+
+    @CommandLine.Option(names = {"--spring.config.location"},
+            description = "Sets a path to the folder that has the spring configuration files (application.properties or application.yml) or directly to an application.properties or application.yml file. " +
+                    "The format of this value is: --spring.config.location=file:./foldername/,file:./alternativeapplication.yml")
+    private String springConfigLocation;
+
+    /**
+     * This field will capture all remaining parameters that could be also in the form "--name" and should be captured by Spring to update the configuration parameters.
+     */
+    @CommandLine.Unmatched
+    private List<String> remainingUnmatchedArguments;
+
+    /**
+     * Analyses the argument list and detects those that do not look like "--paramname", so they will not be picked up by Spring Boot Externalized configuration
+     * to update the application configuration.
+     * @param arguments List of arguments.
+     * @return null when all arguments are valid, or the first invalid argument that was found
+     */
+    public String findFirstInvalidNonConfigurationArgument(List<String> arguments) {
+        if (arguments == null || arguments.size() == 0) {
+            return null;
+        }
+
+        for (String argument : arguments) {
+            if (!argument.startsWith("--") || argument.length() < 8) {
+                return argument;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -67,6 +254,18 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @Override
     public Integer call() throws Exception {
         DqoShellRunnerService shellRunnerService = this.beanFactory.getBean(DqoShellRunnerService.class);
-        return shellRunnerService.call();
+
+        String firstInvalidNonConfigurationArgument = findFirstInvalidNonConfigurationArgument(this.remainingUnmatchedArguments);
+        if (firstInvalidNonConfigurationArgument != null) {
+            this.terminalWriter.writeLine("Invalid argument found: " + firstInvalidNonConfigurationArgument);
+            return -1;
+        }
+
+        try {
+            return shellRunnerService.call();
+        }
+        finally {
+            this.jobSchedulerService.shutdown(); // shutdown the job scheduler in case that it was running
+        }
     }
 }

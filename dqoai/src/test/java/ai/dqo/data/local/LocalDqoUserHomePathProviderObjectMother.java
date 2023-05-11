@@ -15,7 +15,7 @@
  */
 package ai.dqo.data.local;
 
-import ai.dqo.core.configuration.DqoConfigurationProperties;
+import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 
 import java.nio.file.Path;
 
@@ -25,11 +25,11 @@ import java.nio.file.Path;
 public class LocalDqoUserHomePathProviderObjectMother {
     /**
      * Creates a local user home physical path provider that determines the home location from the configuration properties.
-     * @param dqoConfigurationProperties DQO configuration properties.
+     * @param dqoUserConfigurationProperties DQO user configuration properties.
      * @return DQO Configuration properties.
      */
-    public static LocalDqoUserHomePathProvider createLocalUserHomeProviderStub(DqoConfigurationProperties dqoConfigurationProperties) {
-        Path absolutePathToLocalUserHome = Path.of(dqoConfigurationProperties.getUser().getHome()).toAbsolutePath();
+    public static LocalDqoUserHomePathProvider createLocalUserHomeProviderStub(DqoUserConfigurationProperties dqoUserConfigurationProperties) {
+        Path absolutePathToLocalUserHome = Path.of(dqoUserConfigurationProperties.getHome()).toAbsolutePath();
         return new LocalDqoUserHomePathProviderStub(absolutePathToLocalUserHome);
     }
 }

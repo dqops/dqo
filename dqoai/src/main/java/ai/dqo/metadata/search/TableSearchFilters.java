@@ -15,13 +15,23 @@
  */
 package ai.dqo.metadata.search;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import lombok.EqualsAndHashCode;
+
 /**
  * Hierarchy node search filters.
  */
+@EqualsAndHashCode(callSuper = false)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public class TableSearchFilters {
     private String connectionName;
     private String schemaTableName;
     private Boolean enabled = true;
+    private String[] tags;
+    private String[] labels;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -80,4 +90,37 @@ public class TableSearchFilters {
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
+
+    /**
+     * Returns the data stream hierarchy tag name search patterns.
+     * @return data stream hierarchy tag search patterns.
+     */
+    public String[] getTags() {
+        return tags;
+    }
+
+    /**
+     * Sets the data stream hierarchy tag search patterns.
+     * @param tags data stream hierarchy tag search patterns.
+     */
+    public void setTags(String[] tags) {
+        this.tags = tags;
+    }
+
+    /**
+     * Returns the label search patterns.
+     * @return Label search patterns.
+     */
+    public String[] getLabels() {
+        return labels;
+    }
+
+    /**
+     * Sets the label search patterns.
+     * @param labels label search patterns.
+     */
+    public void setLabels(String[] labels) {
+        this.labels = labels;
+    }
+
 }

@@ -38,16 +38,8 @@ public class ConnectionSearchFiltersVisitorImplTests extends BaseTest {
     UserHomeContext userHomeContext;
 	ArrayList<HierarchyNode> connectionSpecs;
 
-    /**
-     * Called before each test.
-     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-     *
-     * @throws Throwable
-     */
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.userHomeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
 		this.connectionSearchFilters = new ConnectionSearchFilters();
 		connectionSearchFilters.setConnectionName("test");
@@ -61,13 +53,13 @@ public class ConnectionSearchFiltersVisitorImplTests extends BaseTest {
     void acceptConnectionList_whenCalledForConnectionList_thenReturnsTraverseChildren() {
 		this.connectionSearchFilters.setConnectionName("test2");
 		this.sut = new ConnectionSearchFiltersVisitor(this.connectionSearchFilters);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionList, connectionSpecs);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionList, new SearchParameterObject(connectionSpecs));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
 
     @Test
     void acceptConnectionList_whenCalledForConnectionListWithFilterObject_thenReturnNotTraverseChildren() {
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionList, connectionSpecs);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionList, new SearchParameterObject(connectionSpecs));
         Assertions.assertNotEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
     }
 
@@ -75,13 +67,13 @@ public class ConnectionSearchFiltersVisitorImplTests extends BaseTest {
     void acceptConnectionWrapper_whenCalledForConnectionWrapper_thenReturnsSkipChildren() {
 		this.connectionSearchFilters.setConnectionName("test2");
 		this.sut = new ConnectionSearchFiltersVisitor(this.connectionSearchFilters);
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionWrapper, connectionSpecs);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionWrapper, new SearchParameterObject(connectionSpecs));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
 
     @Test
     void acceptConnectionWrapper_whenCalledForConnectionWrapperWithFilterObject_thenReturnNotTraverseChildren() {
-        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionWrapper, connectionSpecs);
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionWrapper, new SearchParameterObject(connectionSpecs));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
     }
 

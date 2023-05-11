@@ -29,6 +29,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -37,7 +38,7 @@ import java.util.concurrent.TimeUnit;
  * Provider that returns secret values. It can retrieve values from environment variables or in the future, from Secret Managers, Vaults, etc.
  */
 @Component
-@Scope("singleton")
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class SecretValueProviderImpl implements SecretValueProvider {
     private static final Logger LOG = LoggerFactory.getLogger(SecretValueProviderImpl.class);
 
@@ -105,9 +106,13 @@ public class SecretValueProviderImpl implements SecretValueProvider {
      * @return Expanded properties.
      */
     @Override
-    public LinkedHashMap<String, String> expandProperties(LinkedHashMap<String, String> properties) {
+    public Map<String, String> expandProperties(Map<String, String> properties) {
         if (properties == null) {
             return null;
+        }
+
+        if (properties.size() == 0) {
+            return properties;
         }
 
         LinkedHashMap<String, String> expanded = new LinkedHashMap<>();
@@ -115,6 +120,6 @@ public class SecretValueProviderImpl implements SecretValueProvider {
             expanded.put(keyValuePair.getKey(), expandValue(keyValuePair.getValue()));
         }
 
-        return expanded;
+        return Collections.unmodifiableMap(expanded);
     }
 }

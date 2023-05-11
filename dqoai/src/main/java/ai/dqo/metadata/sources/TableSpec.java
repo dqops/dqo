@@ -15,22 +15,36 @@
  */
 package ai.dqo.metadata.sources;
 
-import ai.dqo.checks.table.TableCheckCategoriesSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
+import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
+import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
+import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.groupings.DimensionsConfigurationSpec;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpecMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
+import ai.dqo.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Map;
 import java.util.Objects;
@@ -41,15 +55,19 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableSpec extends AbstractSpec implements Cloneable {
+public class TableSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<TableSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
-			put("target", o -> o.target);
-			put("time_series", o -> o.timeSeries);
-			put("dimensions", o -> o.dimensions);
+            put("timestamp_columns", o -> o.timestampColumns);
+            put("incremental_time_window", o -> o.incrementalTimeWindow);
+			put("data_streams", o -> o.dataStreams);
 			put("owner", o -> o.owner);
 			put("columns", o -> o.columns);
-			put("checks", o -> o.checks);
+			put("profiling_checks", o -> o.profilingChecks);
+            put("recurring_checks", o -> o.recurringChecks);
+            put("partitioned_checks", o -> o.partitionedChecks);
+            put("statistics", o -> o.statistics);
+            put("schedules_override", o -> o.schedulesOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
         }
@@ -63,41 +81,71 @@ public class TableSpec extends AbstractSpec implements Cloneable {
 
     /**
      * Creates a table spec with a target table specification.
-     * @param target Target table specification.
+     * @param physicalTableName Target table specification.
      */
-    public TableSpec(TableTargetSpec target) {
-        this.target = target;
+    public TableSpec(PhysicalTableName physicalTableName) {
+        this.setPhysicalTableName(physicalTableName);
     }
-
-    @JsonPropertyDescription("Physical table details (a physical schema name and a physical table name)")
-    private TableTargetSpec target = new TableTargetSpec();
 
     @JsonPropertyDescription("Disables all data quality checks on the table. Data quality checks will not be executed.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
     @JsonPropertyDescription("Stage name.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String stage;
 
-    @JsonPropertyDescription("SQL WHERE clause added to the sensor queries.")
+    @JsonPropertyDescription("Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer priority;
+
+    @JsonPropertyDescription("SQL WHERE clause added to the sensor queries. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String filter;
 
-    @JsonPropertyDescription("Time series source configuration. Chooses the source for the time series. Time series of data quality sensor readings may be calculated from a timestamp column or a current time may be used. Also the time gradient (day, week) may be configured to analyse the data behavior at a correct scale.")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private TimeSeriesConfigurationSpec timeSeries = new TimeSeriesConfigurationSpec();
-
-    @JsonPropertyDescription("Data quality dimensions configuration. Dimensions are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
+    @JsonPropertyDescription("Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DimensionsConfigurationSpec dimensions = new DimensionsConfigurationSpec();
+    private TimestampColumnsSpec timestampColumns = new TimestampColumnsSpec();
+
+    @JsonPropertyDescription("Configuration of the time window for analyzing daily or monthly partitions. Specifies the number of recent days and recent months that are analyzed when the partitioned data quality checks are run in an incremental mode (the default mode).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private PartitionIncrementalTimeWindowSpec incrementalTimeWindow = new PartitionIncrementalTimeWindowSpec();
+
+    @JsonPropertyDescription("Data stream mappings list. Data streams are configured in two cases: (1) a tag is assigned to a table (within a data stream level hierarchy), when the data is segmented at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private DataStreamMappingSpecMap dataStreams = new DataStreamMappingSpecMap();
 
     @JsonPropertyDescription("Table owner information like the data steward name or the business application name.")
     private TableOwnerSpec owner;
 
-    @JsonPropertyDescription("Configuration of data quality checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.")
+    @JsonPropertyDescription("Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableCheckCategoriesSpec checks = new TableCheckCategoriesSpec();
+    private TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
+
+    @JsonPropertyDescription("Configuration of table level recurring checks. Recurring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A recurring check stores only the most recent data quality check result for each period of time.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableRecurringChecksSpec recurringChecks = new TableRecurringChecksSpec();
+
+    @JsonPropertyDescription("Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TablePartitionedChecksRootSpec partitionedChecks = new TablePartitionedChecksRootSpec();
+
+    @JsonPropertyDescription("Configuration of table level data statistics collector (a basic profiler). Configures which statistics collectors are enabled and how they are configured.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableStatisticsCollectorsRootCategoriesSpec statistics;
+
+    @JsonPropertyDescription("Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.")
+    @ToString.Exclude
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private RecurringSchedulesSpec schedulesOverride;
 
     @JsonPropertyDescription("Dictionary of columns, indexed by a physical column name. Column specification contains the expected column data type and a list of column level data quality checks that are enabled for a column.")
     private ColumnSpecMap columns = new ColumnSpecMap();
@@ -112,24 +160,6 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CommentsListSpec comments;
 
-
-    /**
-     * Target table that is covered by the data quality tests.
-     * @return Table target.
-     */
-    public TableTargetSpec getTarget() {
-        return target;
-    }
-
-    /**
-     * Changes the table target.
-     * @param target Table target.
-     */
-    public void setTarget(TableTargetSpec target) {
-		setDirtyIf(!Objects.equals(this.target, target));
-        this.target = target;
-		propagateHierarchyIdToField(target, "target");
-    }
 
     /**
      * Disable quality checks and prevent it from executing on this table and it's columns.
@@ -166,6 +196,23 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Returns the table priority level for grouping of data quality issues by the importance of tables.
+     * @return Table priority.
+     */
+    public Integer getPriority() {
+        return priority;
+    }
+
+    /**
+     * Sets the table priority used for grouping data quality issues per table priority.
+     * @param priority New table priority.
+     */
+    public void setPriority(Integer priority) {
+        setDirtyIf(!Objects.equals(this.priority, priority));
+        this.priority = priority;
+    }
+
+    /**
      * Returns the WHERE clause filter expression.
      * @return WHERE clause filtering expression.
      */
@@ -183,39 +230,57 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns the time series configuration for this table.
-     * @return Time series configuration.
+     * Returns the configuration of timestamp columns used for timeliness data quality checks and date/time partitioned checks.
+     * @return Configuration of timestamp columns.
      */
-    public TimeSeriesConfigurationSpec getTimeSeries() {
-        return timeSeries;
+    public TimestampColumnsSpec getTimestampColumns() {
+        return timestampColumns;
     }
 
     /**
-     * Sets a new time series configuration for this table.
-     * @param timeSeries New time series configuration.
+     * Sets the configuration of timestamp columns used for timeliness checks.
+     * @param timestampColumns Timestamp columns configuration.
      */
-    public void setTimeSeries(TimeSeriesConfigurationSpec timeSeries) {
-		setDirtyIf(!Objects.equals(this.timeSeries, timeSeries));
-        this.timeSeries = timeSeries;
-		propagateHierarchyIdToField(timeSeries, "time_series");
+    public void setTimestampColumns(TimestampColumnsSpec timestampColumns) {
+        setDirtyIf(!Objects.equals(this.timestampColumns, timestampColumns));
+        this.timestampColumns = timestampColumns;
+        propagateHierarchyIdToField(timestampColumns, "timestamp_columns");
     }
 
     /**
-     * Returns the data quality measure dimensions configuration for the table.
-     * @return Dimension configuration.
+     * Returns the configuration of incremental time window for running partitioned data quality checks in an incremental mode.
+     * @return Configuration of the incremental time window for partitioned checks.
      */
-    public DimensionsConfigurationSpec getDimensions() {
-        return dimensions;
+    public PartitionIncrementalTimeWindowSpec getIncrementalTimeWindow() {
+        return incrementalTimeWindow;
     }
 
     /**
-     * Returns the dimension configuration for the table.
-     * @param dimensions Dimension configuration.
+     * Sets the configuration of incremental time windows for running partitioned checks.
+     * @param incrementalTimeWindow New configuration of the incremental time windows.
      */
-    public void setDimensions(DimensionsConfigurationSpec dimensions) {
-		setDirtyIf(!Objects.equals(this.dimensions, dimensions));
-        this.dimensions = dimensions;
-		propagateHierarchyIdToField(dimensions, "dimensions");
+    public void setIncrementalTimeWindow(PartitionIncrementalTimeWindowSpec incrementalTimeWindow) {
+        setDirtyIf(!Objects.equals(this.incrementalTimeWindow, incrementalTimeWindow));
+        this.incrementalTimeWindow = incrementalTimeWindow;
+        propagateHierarchyIdToField(incrementalTimeWindow, "incremental_time_window");
+    }
+
+    /**
+     * Returns the data streams configurations for the table.
+     * @return Data streams configurations.
+     */
+    public DataStreamMappingSpecMap getDataStreams() {
+        return dataStreams;
+    }
+
+    /**
+     * Returns the data streams configuration for the table.
+     * @param dataStreams Data streams configuration.
+     */
+    public void setDataStreams(DataStreamMappingSpecMap dataStreams) {
+		setDirtyIf(!Objects.equals(this.dataStreams, dataStreams));
+        this.dataStreams = dataStreams;
+		propagateHierarchyIdToField(dataStreams, "data_streams");
     }
 
     /**
@@ -237,21 +302,93 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Returns configuration of enabled table level data quality checks.
-     * @return Table level data quality checks.
+     * Returns configuration of enabled table level profiling data quality checks.
+     * @return Table level profiling data quality checks.
      */
-    public TableCheckCategoriesSpec getChecks() {
-        return checks;
+    public TableProfilingCheckCategoriesSpec getProfilingChecks() {
+        return profilingChecks;
     }
 
     /**
-     * Sets a new configuration of table level data quality checks.
-     * @param checks New checks configuration.
+     * Sets a new configuration of table level profiling data quality checks.
+     * @param profilingChecks New profiling checks configuration.
      */
-    public void setChecks(TableCheckCategoriesSpec checks) {
-		setDirtyIf(!Objects.equals(this.checks, checks));
-        this.checks = checks;
-		propagateHierarchyIdToField(checks, "checks");
+    public void setProfilingChecks(TableProfilingCheckCategoriesSpec profilingChecks) {
+		setDirtyIf(!Objects.equals(this.profilingChecks, profilingChecks));
+        this.profilingChecks = profilingChecks;
+		propagateHierarchyIdToField(profilingChecks, "profiling_checks");
+    }
+
+    /**
+     * Returns configuration of enabled table level recurring.
+     * @return Table level recurring.
+     */
+    public TableRecurringChecksSpec getRecurringChecks() {
+        return recurringChecks;
+    }
+
+    /**
+     * Sets a new configuration of table level data quality recurring checks.
+     * @param recurringChecks New recurring checks configuration.
+     */
+    public void setRecurringChecks(TableRecurringChecksSpec recurringChecks) {
+        setDirtyIf(!Objects.equals(this.recurringChecks, recurringChecks));
+        this.recurringChecks = recurringChecks;
+        propagateHierarchyIdToField(recurringChecks, "recurring_checks");
+    }
+
+    /**
+     * Returns configuration of enabled table level date/time partitioned checks.
+     * @return Table level date/time partitioned checks.
+     */
+    public TablePartitionedChecksRootSpec getPartitionedChecks() {
+        return partitionedChecks;
+    }
+
+    /**
+     * Sets a new configuration of table level date/time partitioned data quality checks.
+     * @param partitionedChecks New configuration of date/time partitioned checks.
+     */
+    public void setPartitionedChecks(TablePartitionedChecksRootSpec partitionedChecks) {
+        setDirtyIf(!Objects.equals(this.partitionedChecks, partitionedChecks));
+        this.partitionedChecks = partitionedChecks;
+        propagateHierarchyIdToField(partitionedChecks, "partitioned_checks");
+    }
+
+    /**
+     * Returns a configuration of the table statistics collector (if any changes were applied).
+     * @return Configuration of the table level statistics collector.
+     */
+    public TableStatisticsCollectorsRootCategoriesSpec getStatistics() {
+        return statistics;
+    }
+
+    /**
+     * Sets a new configuration of a table level statistics collector.
+     * @param statistics Table level statistics collector.
+     */
+    public void setStatistics(TableStatisticsCollectorsRootCategoriesSpec statistics) {
+        setDirtyIf(!Objects.equals(this.statistics, statistics));
+        this.statistics = statistics;
+        propagateHierarchyIdToField(statistics, "statistics");
+    }
+
+    /**
+     * Returns the table specific configuration of schedules for each type of checks that have a separate schedule.
+     * @return Configuration of schedules for each type of schedules.
+     */
+    public RecurringSchedulesSpec getSchedulesOverride() {
+        return schedulesOverride;
+    }
+
+    /**
+     * Sets the table specific configuration of schedules for running checks.
+     * @param schedulesOverride Configuration of schedules for running checks.
+     */
+    public void setSchedulesOverride(RecurringSchedulesSpec schedulesOverride) {
+        setDirtyIf(!Objects.equals(this.schedulesOverride, schedulesOverride));
+        this.schedulesOverride = schedulesOverride;
+        propagateHierarchyIdToField(schedulesOverride, "schedules_override");
     }
 
     /**
@@ -325,6 +462,164 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Retrieves a non-null root check container for the requested category.
+     * Creates a new check root container object if there was no such object configured and referenced
+     * from the table specification.
+     * @param checkType Check type.
+     * @param checkTimeScale Time scale. Null value is accepted for profiling checks, for other time scale aware checks, the proper time scale is required.
+     * @param attachCheckContainer When the check container doesn't exist, should the newly created check container be attached to the table specification.
+     * @return Newly created container root.
+     */
+    public AbstractRootChecksContainerSpec getTableCheckRootContainer(CheckType checkType,
+                                                                      CheckTimeScale checkTimeScale,
+                                                                      boolean attachCheckContainer) {
+        switch (checkType) {
+            case PROFILING: {
+                if (this.profilingChecks != null) {
+                    return this.profilingChecks;
+                }
+
+                TableProfilingCheckCategoriesSpec tableProfilingCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
+                tableProfilingCheckCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "profiling_checks"));
+                if (attachCheckContainer) {
+                    this.profilingChecks = tableProfilingCheckCategoriesSpec;
+                }
+                return tableProfilingCheckCategoriesSpec;
+            }
+
+            case RECURRING: {
+                TableRecurringChecksSpec recurringSpec = this.recurringChecks;
+                if (recurringSpec == null) {
+                    recurringSpec = new TableRecurringChecksSpec();
+                    recurringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "recurring_checks"));
+                    if (attachCheckContainer) {
+                        this.recurringChecks = recurringSpec;
+                    }
+                }
+
+                switch (checkTimeScale) {
+                    case daily: {
+                        if (recurringSpec.getDaily() != null) {
+                            return recurringSpec.getDaily();
+                        }
+
+                        TableDailyRecurringCategoriesSpec dailyRecurringCategoriesSpec = new TableDailyRecurringCategoriesSpec();
+                        dailyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "daily"));
+                        if (attachCheckContainer) {
+                            recurringSpec.setDaily(dailyRecurringCategoriesSpec);
+                        }
+                        return dailyRecurringCategoriesSpec;
+                    }
+                    case monthly: {
+                        if (recurringSpec.getMonthly() != null) {
+                            return recurringSpec.getMonthly();
+                        }
+
+                        TableMonthlyRecurringCheckCategoriesSpec monthlyRecurringCategoriesSpec = new TableMonthlyRecurringCheckCategoriesSpec();
+                        monthlyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "monthly"));
+                        if (attachCheckContainer) {
+                            recurringSpec.setMonthly(monthlyRecurringCategoriesSpec);
+                        }
+                        return monthlyRecurringCategoriesSpec;
+                    }
+                    default:
+                        throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
+                }
+            }
+
+            case PARTITIONED: {
+                TablePartitionedChecksRootSpec partitionedChecksSpec = this.partitionedChecks;
+                if (partitionedChecksSpec == null) {
+                    partitionedChecksSpec = new TablePartitionedChecksRootSpec();
+                    partitionedChecksSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "partitioned_checks"));
+                    if (attachCheckContainer) {
+                        this.partitionedChecks = partitionedChecksSpec;
+                    }
+                }
+
+                switch (checkTimeScale) {
+                    case daily: {
+                        if (partitionedChecksSpec.getDaily() != null) {
+                            return partitionedChecksSpec.getDaily();
+                        }
+
+                        TableDailyPartitionedCheckCategoriesSpec dailyPartitionedCategoriesSpec = new TableDailyPartitionedCheckCategoriesSpec();
+                        dailyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "daily"));
+                        if (attachCheckContainer) {
+                            partitionedChecksSpec.setDaily(dailyPartitionedCategoriesSpec);
+                        }
+                        return dailyPartitionedCategoriesSpec;
+                    }
+                    case monthly: {
+                        if (partitionedChecksSpec.getMonthly() != null) {
+                            return partitionedChecksSpec.getMonthly();
+                        }
+
+                        TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCategoriesSpec = new TableMonthlyPartitionedCheckCategoriesSpec();
+                        monthlyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "monthly"));
+                        if (attachCheckContainer) {
+                            partitionedChecksSpec.setMonthly(monthlyPartitionedCategoriesSpec);
+                        }
+                        return monthlyPartitionedCategoriesSpec;
+                    }
+                    default:
+                        throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
+                }
+            }
+
+            default: {
+                throw new IllegalArgumentException("Unsupported check type");
+            }
+        }
+    }
+
+    /**
+     * Sets the given container of checks at a proper level of the check hierarchy.
+     * The object could be a profiling check container, one of recurring check containers or one of partitioned check containers.
+     * @param checkRootContainer Root check container to store.
+     */
+    @JsonIgnore
+    public void setTableCheckRootContainer(AbstractRootChecksContainerSpec checkRootContainer) {
+        if (checkRootContainer == null) {
+            throw new NullPointerException("Root check container cannot be null");
+        }
+
+        if (checkRootContainer instanceof TableProfilingCheckCategoriesSpec) {
+            this.setProfilingChecks((TableProfilingCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof TableDailyRecurringCategoriesSpec) {
+            if (this.recurringChecks == null) {
+                this.setRecurringChecks(new TableRecurringChecksSpec());
+            }
+
+            this.getRecurringChecks().setDaily((TableDailyRecurringCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof TableMonthlyRecurringCheckCategoriesSpec) {
+            if (this.recurringChecks == null) {
+                this.setRecurringChecks(new TableRecurringChecksSpec());
+            }
+
+            this.getRecurringChecks().setMonthly((TableMonthlyRecurringCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof TableDailyPartitionedCheckCategoriesSpec) {
+            if (this.partitionedChecks == null) {
+                this.setPartitionedChecks(new TablePartitionedChecksRootSpec());
+            }
+
+            this.getPartitionedChecks().setDaily((TableDailyPartitionedCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof TableMonthlyPartitionedCheckCategoriesSpec) {
+            if (this.partitionedChecks == null) {
+                this.setPartitionedChecks(new TablePartitionedChecksRootSpec());
+            }
+
+            this.getPartitionedChecks().setMonthly((TableMonthlyPartitionedCheckCategoriesSpec)checkRootContainer);
+        } else {
+            throw new IllegalArgumentException("Unsupported check root container type " + checkRootContainer.getClass().getCanonicalName());
+        }
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -339,11 +634,50 @@ public class TableSpec extends AbstractSpec implements Cloneable {
      *
      * @param visitor   Visitor instance.
      * @param parameter Additional parameter that will be passed back to the visitor.
-     * @return Result value returned by an "accept" method of the visitor.
      */
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
+    }
+
+    /**
+     * Inspects all check containers and verifies if any of them has any checks configured.
+     * @return True when the table has some table level checks (not column level), false when no table level checks were found.
+     */
+    public boolean hasAnyChecksConfigured() {
+        if (this.profilingChecks != null && this.profilingChecks.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        if (this.recurringChecks != null && this.recurringChecks.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        if (this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Inspects all check containers and verifies if any of them has any checks configured for a given check type.
+     * @param checkType Check type.
+     * @return True when the table has some table level checks (not column level), false when no table level checks were found.
+     */
+    public boolean hasAnyChecksConfigured(CheckType checkType) {
+        switch (checkType) {
+            case PROFILING:
+                return this.profilingChecks != null && this.profilingChecks.hasAnyConfiguredChecks();
+
+            case RECURRING:
+                return this.recurringChecks != null && this.recurringChecks.hasAnyConfiguredChecks();
+
+            case PARTITIONED:
+                return this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks();
+        }
+
+        return false;
     }
 
     /**
@@ -355,20 +689,21 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     public TableSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         try {
             TableSpec cloned = (TableSpec) this.clone();
-            cloned.checks = null;
+            cloned.profilingChecks = null;
+            cloned.recurringChecks = null;
+            cloned.partitionedChecks = null;
+            cloned.labels = null;
             cloned.owner = null;
             cloned.comments = null;
-            if (cloned.target != null) {
-                cloned.target = cloned.target.expandAndTrim(secretValueProvider);
+            cloned.statistics = null;
+            if (cloned.timestampColumns != null) {
+                cloned.timestampColumns = cloned.timestampColumns.expandAndTrim(secretValueProvider);
             }
-            if (cloned.timeSeries != null) {
-                cloned.timeSeries = cloned.timeSeries.expandAndTrim(secretValueProvider);
+            if (cloned.incrementalTimeWindow != null) {
+                cloned.incrementalTimeWindow = cloned.incrementalTimeWindow.deepClone();
             }
-            if (cloned.dimensions != null) {
-                cloned.dimensions = cloned.dimensions.expandAndTrim(secretValueProvider);
-            }
-            if (cloned.labels != null) {
-                cloned.labels = cloned.labels.clone(); // TODO: should we expand labels? probably that is too far...
+            if (cloned.dataStreams != null) {
+                cloned.dataStreams = cloned.dataStreams.expandAndTrim(secretValueProvider);
             }
             cloned.columns = this.columns.expandAndTrim(secretValueProvider);
             return cloned;
@@ -379,21 +714,87 @@ public class TableSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
-     * Creates a trimmed version of the object without unwanted properties.
+     * Creates a cloned and trimmed version of the object without unwanted properties. Only the "target" is preserved and deeply cloned.
      * A trimmed version is passed to a Jinja2 sql template as a context parameter.
      * @return Trimmed version of this object.
      */
     public TableSpec trim() {
         try {
             TableSpec cloned = (TableSpec) this.clone();
-            cloned.timeSeries = null;
-            cloned.dimensions = null;
+            if (cloned.timestampColumns != null) {
+                cloned.timestampColumns = cloned.timestampColumns.deepClone();
+            }
+            if (cloned.incrementalTimeWindow != null) {
+                cloned.incrementalTimeWindow = cloned.incrementalTimeWindow.deepClone();
+            }
+            cloned.profilingChecks = null;
+            cloned.recurringChecks = null;
+            cloned.partitionedChecks = null;
+            cloned.owner = null;
+            cloned.dataStreams = null;
+            cloned.labels = null;
             cloned.comments = null;
+            cloned.statistics = null;
             cloned.columns = this.columns.trim();
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
             throw new RuntimeException("Object cannot be cloned", ex);
         }
+    }
+
+    /**
+     * Creates a cloned copy that has no collection nodes like checks or columns.
+     * A bare clone is returned by the rest api.
+     * @return Bare clone of the object.
+     */
+    public TableSpec cloneBare() {
+        try {
+            TableSpec cloned = (TableSpec) this.clone();
+            cloned.profilingChecks = null;
+            cloned.recurringChecks = null;
+            cloned.partitionedChecks = null;
+            cloned.owner = null;
+            cloned.timestampColumns = null;
+            cloned.incrementalTimeWindow = null;
+            cloned.dataStreams = null;
+            cloned.labels = null;
+            cloned.comments = null;
+            cloned.columns = null;
+            cloned.statistics = null;
+            return cloned;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new RuntimeException("Object cannot be cloned", ex);
+        }
+    }
+
+    /**
+     * Retrieves the physical table name from the HierarchyId.
+     * @return Physical table name, retrieved from the hierarchy id.
+     */
+    @JsonIgnore
+    public PhysicalTableName getPhysicalTableName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+
+        return hierarchyId.getPhysicalTableName();
+    }
+
+    /**
+     * Stores a physical table name in a temporary hierarchy id, using a fake connection name.
+     * This method could be called only for a new table specification that is not yet attached to a parent node.
+     * @param physicalTableName Physical table name to store.
+     */
+    @JsonIgnore
+    public void setPhysicalTableName(PhysicalTableName physicalTableName) {
+        if (this.getHierarchyId() != null) {
+            throw new DqoRuntimeException("Cannot assign a temporary physical table name in the hierarchy id when the hierarchy ID was already created");
+        }
+
+        HierarchyId hierarchyId = HierarchyId.makeHierarchyIdForTable("unknown", physicalTableName);
+        this.setHierarchyId(hierarchyId);
     }
 }

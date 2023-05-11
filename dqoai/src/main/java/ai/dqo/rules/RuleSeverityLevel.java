@@ -16,12 +16,13 @@
 package ai.dqo.rules;
 
 /**
- * Rule severity levels. Matches the severity level name (fatal, error, warning, debug, info) with a numeric level.
+ * Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.
  */
 public enum RuleSeverityLevel {
-    LOW(1),
-    MEDIUM(2),
-    HIGH(3);
+    valid(0),
+    warning(1),
+    error(2),
+    fatal(3);
 
     /**
      * Numeric severity level.
@@ -30,5 +31,26 @@ public enum RuleSeverityLevel {
 
     RuleSeverityLevel(int level) {
         this.level = level;
+    }
+
+    /**
+     * Creates a rule severity level from a numeric severity level.
+     * @param severity Rule severity level.
+     * @return Severity level enum instance.
+     */
+    public static RuleSeverityLevel fromSeverityLevel(int severity) {
+        switch (severity) {
+            case 0:
+                return valid;
+            case 1:
+                return warning;
+            case 2:
+                return error;
+            case 3:
+                return fatal;
+
+            default:
+                throw new IllegalArgumentException("Invalid severity level: " + severity);
+        }
     }
 }

@@ -30,6 +30,14 @@ public interface TerminalWriter {
     void write(String text);
 
     /**
+     * Writes a URL to the terminal, formatted as a hyperlink if possible.
+     *
+     * @param url URL to be linked.
+     * @param text Text to be displayed if hyperlinked.
+     */
+    void writeUrl(String url, String text);
+
+    /**
      * Writes a line to the terminal followed by an end of line.
      * @param text Text to be written.
      */
@@ -46,11 +54,6 @@ public interface TerminalWriter {
      * @param command Command line object.
      */
     void writeCommandSynopsis(CommandLine command);
-
-    /**
-     * Clears the screen.
-     */
-    void clearScreen();
 
     /**
      * Renders a table model.
@@ -72,4 +75,21 @@ public interface TerminalWriter {
      * @param addBorder Adds a border to the table. When false, the table is rendered without any borders.
      */
     void writeTable(TableModel tableModel, boolean addBorder);
+
+    /**
+     * Clears the screen.
+     */
+    void clearScreen();
+
+    /**
+     * Gets terminal width.
+     * @return Terminal width.
+     */
+    Integer getTerminalWidth();
+
+    /**
+     * Gets terminal height.
+     * @return Terminal height.
+     */
+    Integer getTerminalHeight();
 }

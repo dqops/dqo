@@ -15,17 +15,14 @@
  */
 package ai.dqo.cli.commands;
 
+import ai.dqo.cli.ApplicationShutdownManager;
 import ai.dqo.cli.CliExitCodeGenerator;
 import ai.dqo.cli.CliInitializer;
-import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
-
-import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * Main command runner that parses the CLI command line arguments and executes a selected command.
@@ -35,15 +32,18 @@ import java.util.Objects;
 public class CliMainCommandRunner implements CommandLineRunner {
     private final CliExitCodeGenerator cliExitCodeGenerator;
     private CliInitializer cliInitializer;
+    private ApplicationShutdownManager applicationShutdownManager;
     private final CommandLine commandLine;
 
     @Autowired
     public CliMainCommandRunner(CommandLine commandLine,
                                 CliExitCodeGenerator cliExitCodeGenerator,
-                                CliInitializer cliInitializer) {
+                                CliInitializer cliInitializer,
+                                ApplicationShutdownManager applicationShutdownManager) {
         this.commandLine = commandLine;
         this.cliExitCodeGenerator = cliExitCodeGenerator;
         this.cliInitializer = cliInitializer;
+        this.applicationShutdownManager = applicationShutdownManager;
     }
 
     /**
@@ -58,6 +58,7 @@ public class CliMainCommandRunner implements CommandLineRunner {
         try {
             int errorCode = commandLine.execute(args);
 			this.cliExitCodeGenerator.setExitCode(errorCode);
+            this.applicationShutdownManager.initiateShutdown(errorCode); // to stop the web server
         }
         catch (Exception ex) {
 			this.cliExitCodeGenerator.setExitCode(1);

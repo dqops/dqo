@@ -30,10 +30,8 @@ import java.nio.file.Path;
 public class LocalFolderTreeNodeTests extends BaseTest {
     private LocalFolderTreeNode sut;
 
-    @Override
     @BeforeEach
-    protected void setUp() throws Throwable {
-        super.setUp();
+    void setUp() {
 		this.sut = LocalFolderTreeNodeObjectMother.createEmptyTemporaryUserHome(true);
     }
 
@@ -68,14 +66,14 @@ public class LocalFolderTreeNodeTests extends BaseTest {
     @Test
     void getSubFolders_whenCalledOnNewDirectory_thenReturnsLoadedFolders() {
         Assertions.assertNotNull(this.sut.getSubFolders());
-        Assertions.assertEquals(5, this.sut.getSubFolders().size());
+        Assertions.assertEquals(7, this.sut.getSubFolders().size());
     }
 
     @Test
     void loadChildFilesAndFolders_whenDefaultFilesAndFoldersPresent_thenReturnsThoseFiles() {
 		this.sut.loadChildFilesAndFolders();
         Assertions.assertEquals(2, this.sut.getFiles().size());
-        Assertions.assertEquals(5, this.sut.getSubFolders().size());
+        Assertions.assertEquals(7, this.sut.getSubFolders().size());
         Assertions.assertNotNull(this.sut.getChildFileByFileName(".gitignore"));
     }
 
@@ -127,12 +125,12 @@ public class LocalFolderTreeNodeTests extends BaseTest {
         subfolder.setDeleteOnFlush(true);
         Assertions.assertTrue(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath()));
         Assertions.assertSame(subfolder, sut.getChildFolder("subfolder"));
-        Assertions.assertEquals(6, sut.getSubFolders().size());
+        Assertions.assertEquals(8, sut.getSubFolders().size());
 
 		sut.flush();
 
         Assertions.assertFalse(this.sut.getContext().getStorageService().folderExists(subfolder.getFolderPath()));
         Assertions.assertTrue(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath()));
-        Assertions.assertEquals(5, sut.getSubFolders().size());
+        Assertions.assertEquals(7, sut.getSubFolders().size());
     }
 }

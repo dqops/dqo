@@ -27,13 +27,13 @@
 	</parent>
 	<groupId>ai.dqo</groupId>
 	<artifactId>dqo-dqoai</artifactId>
-	<version>0.1.0</version>
+	<version>0.2.0-alpha0</version>
 	<packaging>jar</packaging>
 	<name>dqo-dqoai</name>
-	<description>Dqo Data Quality Observer</description>
+	<description>DQO Data Quality Operations Center</description>
 	<properties>
 		<java.version>15</java.version>
-		<tablesaw.version>0.42.0</tablesaw.version>
+		<tablesaw.version>0.43.1</tablesaw.version>
 		<license.licenseName>apache_v2</license.licenseName>
 	</properties>
 
@@ -55,6 +55,245 @@
 
 	<profiles>
 		<profile>
+			<id>generate-docs</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>generate-mkdocs</id>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<mainClass>ai.dqo.utils.docs.GenerateDocumentationPostProcessor</mainClass>
+									<arguments>
+										<argument>${project.basedir}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>update-dqo-home-specs</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>update-dqo-home-specs</id>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<mainClass>ai.dqo.utils.specs.DqoHomeDefinitionFillPostProcessor</mainClass>
+									<arguments>
+										<argument>${project.basedir}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>run-npm</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.kongchen</groupId>
+						<artifactId>swagger-maven-plugin</artifactId>
+						<version>3.1.8</version>
+						<configuration>
+							<apiSources>
+								<apiSource>
+									<springmvc>true</springmvc>
+									<locations>ai.dqo.rest.controllers</locations>
+									<basePath>/</basePath>
+									<swaggerDirectory>${project.basedir}/target/swagger</swaggerDirectory>
+									<swaggerFileName>dqo-ui-swagger</swaggerFileName>
+									<outputFormats>JSON,YAML</outputFormats>
+									<info>
+										<title>DQO.ai</title>
+										<version>v1</version>
+										<description>DQO.AI REST API</description>
+										<termsOfService>https://dqo.ai/terms-of-service</termsOfService>
+										<contact>
+											<email>support@dqo.ai</email>
+											<name>DQO.ai Support</name>
+											<url>https://dqo.ai</url>
+										</contact>
+										<license>
+											<url>https://www.apache.org/licenses/LICENSE-2.0.html</url>
+											<name>Apache 2.0</name>
+										</license>
+									</info>
+									<securityDefinitions>
+										<securityDefinition>
+											<json>/securityDefinitions.json</json>
+										</securityDefinition>
+									</securityDefinitions>
+								</apiSource>
+							</apiSources>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>compile</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.openapitools</groupId>
+						<artifactId>openapi-generator-maven-plugin</artifactId>
+						<version>6.2.1</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<inputSpec>${project.build.directory}/swagger/dqo-ui-swagger.json</inputSpec>
+									<generatorName>typescript-axios</generatorName>
+									<output>${project.basedir}/src/main/frontend/src/api</output>
+									<configOptions>
+										<supportsES6>true</supportsES6>
+										<withInterfaces>true</withInterfaces>
+									</configOptions>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>rewrite-openapi-typescript-client</id>
+								<goals>
+									<goal>java</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<mainClass>ai.dqo.rest.server.openapi.OpenApiTypescriptGeneratorPostProcessor</mainClass>
+									<arguments>
+										<argument>${project.basedir}/src/main/frontend/src/api</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<version>1.12.1</version>
+						<configuration>
+							<workingDirectory>src/main/frontend</workingDirectory>
+							<nodeVersion>v18.16.0</nodeVersion>
+							<npmVersion>9.5.1</npmVersion>
+						</configuration>
+						<executions>
+							<execution>
+								<id>install node</id>
+								<goals>
+									<goal>install-node-and-npm</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>npm install</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<phase>generate-resources</phase>
+								<configuration>
+									<arguments>install --legacy-peer-deps</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>npm test</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<phase>test</phase>
+								<configuration>
+									<arguments>test</arguments>
+									<environmentVariables>
+										<CI>true</CI>
+									</environmentVariables>
+								</configuration>
+							</execution>
+							<execution>
+								<id>npm build</id>
+								<goals>
+									<goal>npm</goal>
+								</goals>
+								<phase>compile</phase>
+								<configuration>
+									<arguments>run-script build</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<version>3.1.0</version>
+						<executions>
+							<execution>
+								<id>copy-resources</id>
+								<phase>process-classes</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.basedir}/target/classes/static</outputDirectory>
+									<resources>
+										<resource>
+											<directory>src/main/frontend/build</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+							<execution>
+								<id>copy-swagger-json</id>
+								<phase>process-classes</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.basedir}/target/classes/static</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${project.basedir}/target/swagger</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
 			<id>integration-tests</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
@@ -62,6 +301,7 @@
 			<build>
 				<plugins>
 					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<version>2.22.2</version>
 						<executions>
@@ -95,7 +335,7 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>exec-maven-plugin</artifactId>
-						<version>3.0.0</version>
+						<version>3.1.0</version>
 						<configuration>
 							<executable>gsutil</executable>
 							<mainClass>none</mainClass>
@@ -140,7 +380,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-compiler-plugin</artifactId>
-						<version>3.8.1</version>
+						<version>3.10.1</version>
 						<executions>
 							<execution>
 								<id>default-testCompile</id>
@@ -159,47 +399,93 @@
 		</profile>
 	</profiles>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>ai.dqo</groupId>
+				<artifactId>dqo-data-quality-observer</artifactId>
+				<version>${project.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>testcontainers-bom</artifactId>
+				<version>1.17.6</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<!-- Exclude the Tomcat dependency -->
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-batch</artifactId>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.14.1</version>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>com.google.cloud</groupId>-->
-<!--			<artifactId>spring-cloud-gcp-starter-secretmanager</artifactId>-->
-<!--			<version>3.1.0</version>-->
-<!--		</dependency>-->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.14.1</version>
+		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.13.2</version>
+			<version>2.14.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.fasterxml.jackson.core</groupId>
+					<artifactId>jackson-annotations</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.dataformat</groupId>
 			<artifactId>jackson-dataformat-yaml</artifactId>
-			<version>2.13.2</version>
+			<version>2.14.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>
-			<version>2.13.2</version>
+			<version>2.14.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-blackbird</artifactId>
-			<version>2.13.2</version>
+			<version>2.14.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
+			<version>3.12.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -214,12 +500,12 @@
 		<dependency>
 			<groupId>info.picocli</groupId>
 			<artifactId>picocli-spring-boot-starter</artifactId>
-			<version>4.6.3</version>
+			<version>4.7.0</version>
 		</dependency>
 		<dependency>
 			<groupId>info.picocli</groupId>
 			<artifactId>picocli-shell-jline3</artifactId>
-			<version>4.6.3</version>
+			<version>4.7.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jline</groupId>
@@ -239,17 +525,17 @@
 		<dependency>
 			<groupId>org.springframework.shell</groupId>
 			<artifactId>spring-shell-starter</artifactId>
-			<version>2.0.1.RELEASE</version>
+			<version>2.1.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.shell</groupId>
 			<artifactId>spring-shell-table</artifactId>
-			<version>2.0.1.RELEASE</version>
+			<version>2.1.3</version>
 		</dependency>
 		<dependency>
 			<groupId>net.java.dev.jna</groupId>
 			<artifactId>jna</artifactId>
-			<version>5.10.0</version>
+			<version>5.12.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.fusesource.jansi</groupId>
@@ -257,19 +543,24 @@
 			<version>2.4.0</version>
 		</dependency>
 		<dependency>
+			<groupId>com.google.api</groupId>
+			<artifactId>gax</artifactId>
+			<version>2.20.1</version>
+		</dependency>
+		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-bigquery</artifactId>
-			<version>2.9.3</version>
+			<version>2.19.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-storage</artifactId>
-			<version>2.4.4</version>
+			<version>2.16.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-secretmanager</artifactId>
-			<version>2.1.3</version>
+			<version>2.7.0</version>
 		</dependency>
 		<dependency>
 			<groupId>tech.tablesaw</groupId>
@@ -279,12 +570,61 @@
 		<dependency>
 			<groupId>net.tlabs-data</groupId>
 			<artifactId>tablesaw_${tablesaw.version}-parquet</artifactId>
-			<version>0.9.0</version>
+			<version>0.10.1</version>
+			<!-- Exclusions used to limit some useless hadoop dependencies that take the space, following the documentation at: https://github.com/tlabs-data/tablesaw-parquet/blob/master/docs/hadoop_dependency.md -->
+			<exclusions>
+				<exclusion>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet.jsp</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.curator</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.zookeeper</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.kerby</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.google.protobuf</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.commons</groupId>
+					<artifactId>commons-text</artifactId>
+				</exclusion>
+
+				<!-- and additional exclusion -->
+				<exclusion>
+					<groupId>ch.qos.reload4j</groupId>
+					<artifactId>reload4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-reload4j</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.avro</groupId>
+					<artifactId>avro</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>com.github.victools</groupId>
 			<artifactId>jsonschema-module-jackson</artifactId>
-			<version>4.22.0</version>
+			<version>4.28.0</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.kostaskougios</groupId>
@@ -294,7 +634,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.22</version>
+			<version>1.18.24</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -303,87 +643,116 @@
 			<version>5.0.1</version>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.36</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>2.17.2</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.parquet</groupId>
 			<artifactId>parquet-common</artifactId>
-			<version>1.12.2</version>
+			<version>1.12.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.parquet</groupId>
 			<artifactId>parquet-encoding</artifactId>
-			<version>1.12.2</version>
+			<version>1.12.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.parquet</groupId>
 			<artifactId>parquet-column</artifactId>
-			<version>1.12.2</version>
+			<version>1.12.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.parquet</groupId>
 			<artifactId>parquet-hadoop</artifactId>
-			<version>1.12.2</version>
+			<version>1.12.3</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-1.2-api</artifactId>
-			<version>2.17.2</version>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro</artifactId>
+			<version>1.11.1</version>
 		</dependency>
 		<dependency>
 			<groupId>io.swagger</groupId>
 			<artifactId>swagger-annotations</artifactId>
-			<version>1.6.5</version>
+			<version>1.6.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.cronutils</groupId>
+			<artifactId>cron-utils</artifactId>
+			<version>9.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-text</artifactId>
+			<version>1.10.0</version>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-core</artifactId>
+			<version>3.4.24</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>swagger-ui-dist</artifactId>
+			<version>4.18.2</version> <!-- When upgrading the package version, remember to change the version number in SwaggerConfiguration class -->
+		</dependency>
+		<dependency>
+			<groupId>com.github.jknack</groupId>
+			<artifactId>handlebars</artifactId>
+			<version>4.3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.therapi</groupId>
+			<artifactId>therapi-runtime-javadoc-scribe</artifactId>
+			<version>0.15.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.therapi</groupId>
+			<artifactId>therapi-runtime-javadoc</artifactId>
+			<version>0.15.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.victools</groupId>
+			<artifactId>jsonschema-generator</artifactId>
+			<version>4.29.0</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- JDBC driver dependencies, make sure that they are the same as those in the lib/pom.xml file, because they are distributed in a separate folder -->
 		<dependency>
 			<groupId>com.ibm.db2</groupId>
 			<artifactId>jcc</artifactId>
-			<version>11.5.7.0</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.28</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mariadb.jdbc</groupId>
 			<artifactId>mariadb-java-client</artifactId>
-			<version>2.7.3</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			<version>42.3.3</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.amazon.redshift</groupId>
 			<artifactId>redshift-jdbc42</artifactId>
-			<version>2.1.0.4</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.microsoft.sqlserver</groupId>
-			<artifactId>mssql-jdbc</artifactId>
-			<version>10.2.0.jre11</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.snowflake</groupId>
 			<artifactId>snowflake-jdbc</artifactId>
-			<version>3.13.14</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -401,41 +770,89 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>4.2.0</version>
+			<version>4.10.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy</artifactId>
+			<version>1.12.20</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.projectreactor</groupId>
+			<artifactId>reactor-test</artifactId>
+			<version>3.4.24</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>mysql</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>mssqlserver</artifactId>
 			<scope>test</scope>
 		</dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
         </dependency>
-		<dependency>
-			<groupId>org.apache.parquet</groupId>
-			<artifactId>parquet-common</artifactId>
-			<version>1.12.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.google.api</groupId>
-			<artifactId>gax</artifactId>
-			<version>2.11.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
-		</dependency>
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.10.1</version>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>1.18.24</version>
+						</path>
+						<path>
+							<groupId>com.github.therapi</groupId>
+							<artifactId>therapi-runtime-javadoc-scribe</artifactId>
+							<version>0.15.0</version>
+						</path>
+					</annotationProcessorPaths>
+					<compilerArgs>
+						<arg>-Ajavadoc.packages=ai.dqo.sensors,ai.dqo.rules,ai.dqo.checks,ai.dqo.metadata</arg>
+					</compilerArgs>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>2.6.2</version>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.22.2</version>
 				<configuration>
+					<!-- If the "too many open files" error appears, download file-leak-detector-1.15-jar-with-dependencies.jar from https://github.com/jenkinsci/lib-file-leak-detector to the current folder and add "-javaagent:file-leak-detector-1.15-jar-with-dependencies.jar=http=19999" , then run tests and instantly open localhost:19999 in the browser to find another bug in Java. -->
 					<argLine>--add-opens java.base/java.nio=ALL-UNNAMED -XX:-MaxFDLimit</argLine>  <!-- Fixes an issue with snowflake on JDK 17, see: https://github.com/snowflakedb/snowflake-jdbc/issues/589#issuecomment-983944767 -->
 					<environmentVariables>
 						<!-- Remember to restart IntelliJ when any environment variables are modified, they are loaded only once -->
@@ -462,7 +879,7 @@
 							<goal>generate</goal>
 						</goals>
 						<configuration>
-							<inputSpec>https://cloud.dqo.ai/api-dqo-cloud-swagger.yaml</inputSpec>
+							<inputSpec>${basedir}/src/main/resources/api-dqo-cloud-swagger.yaml</inputSpec>
 							<language>java</language>
 							<library>resttemplate</library>
 							<apiPackage>ai.dqo.cloud.rest.api</apiPackage>
@@ -529,9 +946,31 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>copy-swagger-json</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${basedir}/target/classes/static</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/target/swagger</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>com.github.victools</groupId>
 				<artifactId>jsonschema-maven-plugin</artifactId>
-				<version>4.22.0</version>
+				<version>4.29.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -558,6 +997,9 @@
 							<options>
 								<option>FLATTENED_ENUMS_FROM_JSONPROPERTY</option>
 							</options>
+						</module>
+						<module>
+							<className>ai.dqo.utils.schema.AdditionalPropertiesYamlSchemaModule</className>
 						</module>
 					</modules>
 				</configuration>
