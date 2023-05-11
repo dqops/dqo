@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import IncidentsLayout from "../../components/IncidentsLayout";
 import SvgIcon from "../../components/SvgIcon";
 import { useHistory, useParams } from "react-router-dom";
@@ -13,6 +13,7 @@ import { Table } from "../../components/Table";
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import { Pagination } from "../../components/Pagination";
 import moment from "moment";
+import useDebounce from "../../hooks/useDebounce";
 
 const getDaysString = (value: string) => {
   const daysDiff = moment().diff(moment(value), 'day');
@@ -103,18 +104,31 @@ export const IncidentDetail = () => {
   const { incidents, filters = {} } = useSelector(getFirstLevelIncidentsState);
   const dispatch = useActionDispatch();
   const history = useHistory();
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
   useEffect(() => {
     dispatch(getIncidentsByConnection({
       connection,
-      ...filters
     }));
-  }, [connection, filters]);
+  }, [connection]);
+
+  useEffect(() => {
+    onChangeFilter({
+      optionalFilter: debouncedSearchTerm,
+      page: 1
+    })
+  }, [debouncedSearchTerm]);
 
   const onChangeFilter = (obj: any) => {
     dispatch(setIncidentsFilter({
       ...filters || {},
       ...obj
+    }));
+    dispatch(getIncidentsByConnection({
+      ...filters || {},
+      ...obj,
+      connection,
     }));
   };
 
@@ -142,8 +156,8 @@ export const IncidentDetail = () => {
         <div className="flex items-center p-4 gap-6 mb-4">
           <div className="grow">
             <Input
-              value={filters.optionalFilter || ""}
-              onChange={(e) => onChangeFilter({ optionalFilter: e.target.value, page: 1 })}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Filter incidents"
               className="!h-12"
             />
