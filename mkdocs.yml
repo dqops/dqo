@@ -1,6 +1,6 @@
 site_name: Documentation
 site_url: https://dqo.ai/docs/
-repo_url: https://github.com/dqoai/dqo
+repo_url: https://github.com/dqops/dqo
 edit_uri: edit/main/docs/
 
 # Docs navigation

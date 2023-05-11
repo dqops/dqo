@@ -119,7 +119,7 @@ const HomePage = () => {
               <p>
                 Check our progress on GitHub
               </p>
-              <a href="https://github.com/dqoai/dqo" className="mb-2">
+              <a href="https://github.com/dqops/dqo" className="mb-2">
                 <img src="/images/home/github.png" className="w-40" alt="" />
               </a>
               <p>
