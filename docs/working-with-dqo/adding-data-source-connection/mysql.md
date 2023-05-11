@@ -38,7 +38,7 @@ You need a MySQL account. Use the TCP/IP Properties (IP Addresses Tab) dialog bo
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
 
     For example:
-    ![Adding connection settings - environmental variables](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-mysql-envvar.jpg)
+    ![Adding connection settings - environmental variables](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-envvar.jpg)
 
     To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value
     can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.

@@ -19,7 +19,7 @@ to [Allowed IP Addresses in Redshift Network Policies](https://docs.aws.amazon.c
 
     ![Selecting Redshift database type](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connection-redshift.jpg)
 
- Add connection settings.
+3. Add connection settings.
 
     ![Adding connection settings](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-redshift.jpg)
 
@@ -38,7 +38,7 @@ to [Allowed IP Addresses in Redshift Network Policies](https://docs.aws.amazon.c
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
     
     For example:
-    ![Adding connection settings - environmental variables](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-redshift-envvar.jpg)
+    ![Adding connection settings - environmental variables](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-envvar.jpg)
     
     To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value
     can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
