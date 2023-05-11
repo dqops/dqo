@@ -6,8 +6,9 @@ spec:
   java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
-    prediction_time_window: 10
-    min_periods_with_readouts: 5
+    prediction_time_window: 30
+    min_periods_with_readouts: 10
+    historic_data_point_grouping: day
   fields:
   - field_name: multiply_stdev_above
     display_name: multiply_stdev_above

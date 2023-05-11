@@ -6,8 +6,9 @@ spec:
   java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
-    prediction_time_window: 10
-    min_periods_with_readouts: 5
+    prediction_time_window: 30
+    min_periods_with_readouts: 10
+    historic_data_point_grouping: day
   fields:
   - field_name: percentile_within
     display_name: percentile_within
@@ -15,7 +16,7 @@ spec:
       \ the mean according to the distribution of the previous values gathered within the time window.\
       \ In other words, the inter-quantile range around the mean of the estimated normal distribution.\
       \ Set the time window at the threshold level for all severity levels (warning, error, fatal) at once.\
-      \ The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist\
+      \ The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist\
       \ to run the calculation."
     data_type: double
     sample_values:
