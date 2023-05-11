@@ -21,7 +21,7 @@ import { CustomTreeNode, ITab } from '../shared/interfaces';
 import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
 import { findTreeNode } from '../utils/tree';
 import { CheckTypes, ROUTES } from "../shared/routes";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addFirstLevelTab } from "../redux/actions/source.actions";
 
@@ -71,6 +71,7 @@ function TreeProvider(props: any) {
   const history = useHistory();
   const dispatch = useDispatch();
   const [loadingNodes, setLoadingNodes] = useState<Record<string, boolean>>({});
+  const location = useLocation();
 
   const getConnections = async () => {
     const res: AxiosResponse<ConnectionBasicModel[]> =
@@ -1092,16 +1093,12 @@ function TreeProvider(props: any) {
   // }, [sourceRoute]);
 
   useLayoutEffect(() => {
-    const initialPathName = history.location.pathname;
+    const initialPathName = location.pathname;
     const activeSourceRoute = initialPathName.split('/')[1] ?? '';
-    setSourceRoute(activeSourceRoute);
-    const unlisten = history.listen((location) => {
-      const pathName = location.pathname;
-      const activeSourceRoute = pathName.split('/')[1] ?? '';
+    if ([CheckTypes.RECURRING, CheckTypes.SOURCES, CheckTypes.PROFILING, CheckTypes.PARTITIONED].includes(activeSourceRoute as CheckTypes)) {
       setSourceRoute(activeSourceRoute);
-    });
-    return unlisten;
-  }, [history]);
+    }
+  }, [location]);
 
   const deleteData = (identify: string) => {
     const newTabMaps = {...tabMaps};
