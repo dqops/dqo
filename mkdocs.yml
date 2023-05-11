@@ -30,17 +30,27 @@ nav:
     - Working with CLI: 'dqo-concepts/working-with-cli/working-with-cli.md'
   - Use cases:
     - 'examples/index.md'
-    - Percentage of false values: 'examples/bool-false-percent.md'
-    - Integrity check between columns in different tables: 'examples/integrity-foreign-key-match-percent.md'
-    - Nulls count: 'examples/nulls-count.md'
-    - Percentage of valid latitude and longitude: 'examples/numeric-valid-latitude-and-longitiude-percent.md'
-    - Percentage of values in range: 'examples/numeric-values-in-range-numeric-percent.md'
-    - Percentage of valid USA zipcodes: 'examples/pii-valid-usa-zipcode-percent.md'
-    - Percent of strings matching date regex: 'examples/string-match-date-regex-percent.md'
-    - A string not exceeding a set length: 'examples/string-max-length.md'
-    - Percentage of duplicates: 'examples/uniqueness-duplicate-percent.md'
-    - Valid email percent: 'examples/valid-email-percent.md'
-    - Running checks with a scheduler: '/examples/running-checks-with-a-scheduler.md'
+    - Data accuracy:
+        - Integrity check between columns in different tables: 'examples/data-accuracy/integrity-check-between-columns-in-different-tables.md'
+    - Data completeness:
+        - Number of rows in the table: 'examples/data-completeness/number-of-rows-in-the-table.md'
+        - Number of null values: 'examples/data-completeness/number-of-null-values.md'
+    - Data uniqueness:
+        - Percentage of duplicates: 'examples/data-uniqueness/percentage-of-duplicates.md'
+    - Data validity:
+        - Percentage of valid USA zipcodes: 'examples/data-validity/percentage-of-valid-usa-zipcodes.md'
+        - Percentage of valid emails: 'examples/data-validity/percentage-of-valid-emails.md'
+        - Percentage of valid latitude and longitude: 'examples/data-validity/percentage-of-valid-latitude-and-longitude.md'
+        - Percentage of valid IP4 address: 'examples/data-validity/percentage-of-valid-IP4-address.md'
+        - Percentage of strings matching date regex: 'examples/data-reasonability/percentage-of-strings-matching-date-regex.md'
+    - Data reasonability:
+        - Percentage of values in range: 'examples/data-reasonability/percentage-of-integer-values-in-range.md'
+        - A string not exceeding a set length: 'examples/data-reasonability/string-not-exceeding-a-set-length.md'
+        - Percentage of false values: 'examples/data-reasonability/percentage-of-false-values.md'
+    - Stability:
+       - Table availability: 'examples/stability/table-availability.md'
+    - Data quality monitoring:
+      - Running checks with a scheduler: '/examples/running-checks-with-a-scheduler.md'
   - Working with DQO:
     - Installation:
       - Install DQO from Git: 'working-with-dqo/install-dqo-from-git/install-dqo-from-git.md'
@@ -110,9 +120,9 @@ nav:
         - foreign key not match count: 'checks/column/integrity/foreign-key-not-match-count.md'
         - foreign key match percent: 'checks/column/integrity/foreign-key-match-percent.md'
       - nulls:
-        - nulls count: 'checks/column/nulls/nulls-count.md'
+        - nulls count: 'checks/column/nulls/number-of-null-values.md'
         - nulls percent: 'checks/column/nulls/nulls-percent.md'
-        - not nulls count: 'checks/column/nulls/not-nulls-count.md'
+        - not nulls count: 'checks/column/nulls/not-number-of-null-values.md'
         - not nulls percent: 'checks/column/nulls/not-nulls-percent.md'
       - numeric:
         - negative count: 'checks/column/numeric/negative-count.md'
@@ -145,7 +155,7 @@ nav:
         - contains usa phone percent: 'checks/column/pii/contains-usa-phone-percent.md'
         - valid usa zipcode percent: 'checks/column/pii/valid-usa-zipcode-percent.md'
         - contains usa zipcode percent: 'checks/column/pii/contains-usa-zipcode-percent.md'
-        - valid email percent: 'checks/column/pii/valid-email-percent.md'
+        - valid email percent: 'checks/column/pii/percentage-of-valid-emails.md'
         - contains email percent: 'checks/column/pii/contains-email-percent.md'
         - valid ip4 address percent: 'checks/column/pii/valid-ip4-address-percent.md'
         - contains ip4 percent: 'checks/column/pii/contains-ip4-percent.md'
@@ -156,7 +166,7 @@ nav:
         - sql condition failed count on column: 'checks/column/sql/sql-condition-failed-count-on-column.md'
         - sql aggregate expr column: 'checks/column/sql/sql-aggregate-expr-column.md'
       - strings:
-        - string max length: 'checks/column/strings/string-max-length.md'
+        - string max length: 'checks/column/strings/string-not-exceeding-a-set-length.md'
         - string min length: 'checks/column/strings/string-min-length.md'
         - string mean length: 'checks/column/strings/string-mean-length.md'
         - string length below min length count: 'checks/column/strings/string-length-below-min-length-count.md'
@@ -188,7 +198,7 @@ nav:
         - string not match regex count: 'checks/column/strings/string-not-match-regex-count.md'
         - string match regex percent: 'checks/column/strings/string-match-regex-percent.md'
         - string not match date regex count: 'checks/column/strings/string-not-match-date-regex-count.md'
-        - string match date regex percent: 'checks/column/strings/string-match-date-regex-percent.md'
+        - string match date regex percent: 'checks/column/strings/percentage-of-strings-matching-date-regex.md'
         - string match name regex percent: 'checks/column/strings/string-match-name-regex-percent.md'
         - string most popular values: 'checks/column/strings/string-most-popular-values.md'
         - string datatype detected: 'checks/column/strings/string-datatype-detected.md'
