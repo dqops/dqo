@@ -33,6 +33,10 @@ public class YamlObjectDocumentationModel {
      */
     private String classSimpleName;
     /**
+     * Object class simple name.
+     */
+    private String classDescription;
+    /**
      * Object class.
      */
     private Class<?> reflectedClass;
