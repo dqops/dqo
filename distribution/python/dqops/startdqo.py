@@ -18,18 +18,18 @@ import os
 import sys
 import subprocess
 
-from dqoai import install
+from dqops import install
 
 # ignore those, they are filled by importing version.py
-VERSION = "filled by dqoai/version.py"
-PIP_VERSION = "filled by dqoai/version.py"
-GITHUB_RELEASE = "filled by dqoai/version.py"
-JAVA_VERSION = "filled by dqoai/version.py"
+VERSION = "filled by dqops/version.py"
+PIP_VERSION = "filled by dqops/version.py"
+GITHUB_RELEASE = "filled by dqops/version.py"
+JAVA_VERSION = "filled by dqops/version.py"
 
 try:
     exec(open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'version.py')).read())
 except IOError:
-    print("Failed to load DQO.ai version file.", file=sys.stderr)
+    print("Failed to load DQO version file.", file=sys.stderr)
     sys.exit(-1)
 
 

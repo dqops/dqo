@@ -26,38 +26,38 @@ import importlib.util
 from setuptools.command.install import install
 from shutil import rmtree
 
-# ignore those, they are filled by importing dqoai/version.py
-VERSION = "filled by dqoai/version.py"
-PIP_VERSION = "filled by dqoai/version.py"
-GITHUB_RELEASE = "filled by dqoai/version.py"
-JAVA_VERSION = "filled by dqoai/version.py"
+# ignore those, they are filled by importing dqops/version.py
+VERSION = "filled by dqops/version.py"
+PIP_VERSION = "filled by dqops/version.py"
+GITHUB_RELEASE = "filled by dqops/version.py"
+JAVA_VERSION = "filled by dqops/version.py"
 
 
-HOME_PATH = "dqoai/home"
-JRE_PATH = "dqoai/jre"
+HOME_PATH = "dqops/home"
+JRE_PATH = "dqops/jre"
 DQO_REPO_HOME = os.path.abspath("../../")
 
 try:
-    exec(open('dqoai/version.py').read())
+    exec(open('dqops/version.py').read())
 except IOError:
-    print("Failed to load DQO.ai version file for packaging. You must be in dqoai's distribution/python dir.",
+    print("Failed to load DQO.ai version file for packaging. You must be in dqops' distribution/python dir.",
           file=sys.stderr)
     sys.exit(-1)
 
 try:
-    download_module_spec = importlib.util.spec_from_file_location("install", "dqoai/install.py")
+    download_module_spec = importlib.util.spec_from_file_location("install", "dqops/install.py")
     download_module = importlib.util.module_from_spec(download_module_spec)
     download_module_spec.loader.exec_module(download_module)
 except IOError:
-    print("Failed to load the download module (dqoai/install.py) which had to be packaged together.",
+    print("Failed to load the download module (dqops/install.py) which had to be packaged together.",
           file=sys.stderr)
     sys.exit(-1)
 
 # Provide guidance about how to use setup.py
 incorrect_invocation_message = """
-If you are installing dqoai from dqo.ai source, you must first build dqo.ai.
+If you are installing DQO from https://github.com/dqops/dqo source, you must first build DQO.
 
-    To build DQO.ai with maven, go to the https://github.com/dqoai/dqo root folder and run run:
+    To build DQO with maven, go to the https://github.com/dqops/dqo root folder and run run:
       ./mvnw -DskipTests clean package"""
 
 # Figure out where the distribution file is present
@@ -100,24 +100,24 @@ try:
     with open('README.md') as f:
         long_description = f.read()
 
-#    home_dirs = [root[len("dqoai/"):].replace('\\', '/') + "/*" for (root, dirs, files) in os.walk(HOME_PATH)]
+#    home_dirs = [root[len("dqops/"):].replace('\\', '/') + "/*" for (root, dirs, files) in os.walk(HOME_PATH)]
 
     setup(
-        name='dqoai',
+        name='dqops',
         version=PIP_VERSION,
-        description='DQO.ai Data Quality Observer',
+        description='DQO Data Quality Operations Center',
         long_description=long_description,
         long_description_content_type="text/markdown",
-        author='DQO.ai Developers',
+        author='DQO Developers',
         author_email='support@dqo.ai',
-        url='https://github.com/dqoai/dqo/tree/master/distribution/python',
-        packages=['dqoai'],
+        url='https://github.com/dqops/dqo/tree/master/distribution/python',
+        packages=['dqops'],
 #        include_package_data=True,
         package_dir={
-            'dqoai': 'dqoai'
+            'dqops': 'dqops'
         },
         # package_data={
-        #     'dqoai': home_dirs
+        #     'dqops': home_dirs
         # },
         license='http://www.apache.org/licenses/LICENSE-2.0',
         install_requires=['install-jdk==0.3.0'],
@@ -126,8 +126,6 @@ try:
 #            'Development Status :: 5 - Production/Stable',
             'Development Status :: 4 - Beta',
             'License :: OSI Approved :: Apache Software License',
-            'Programming Language :: Python :: 3.6',
-            'Programming Language :: Python :: 3.7',
             'Programming Language :: Python :: 3.8',
             'Programming Language :: Python :: 3.9',
             'Programming Language :: Python :: 3.10',
@@ -153,7 +151,7 @@ try:
         #     'install': InstallCommand,
         # },
         entry_points={
-            'console_scripts': ['dqo=dqoai.startdqo:main'],
+            'console_scripts': ['dqo=dqops.startdqo:main'],
         },
     )
 finally:

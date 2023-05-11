@@ -7,6 +7,7 @@
     <artifactId>dqo-data-quality-observer</artifactId>
     <version>0.2.0-alpha0</version>
     <packaging>pom</packaging>
+    <description>DQO Data Quality Operations Center</description>
 
     <modules>
         <module>lib</module>

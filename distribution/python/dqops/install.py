@@ -22,27 +22,27 @@ import urllib.request
 import jdk
 
 # ignore those, they are filled by importing version.py
-VERSION = "filled by dqoai/version.py"
-PIP_VERSION = "filled by dqoai/version.py"
-GITHUB_RELEASE = "filled by dqoai/version.py"
-JAVA_VERSION = "filled by dqoai/version.py"
+VERSION = "filled by dqops/version.py"
+PIP_VERSION = "filled by dqops/version.py"
+GITHUB_RELEASE = "filled by dqops/version.py"
+JAVA_VERSION = "filled by dqops/version.py"
 
 try:
     exec(open(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'version.py')).read())
 except IOError:
-    print("Failed to load DQO.ai version file.", file=sys.stderr)
+    print("Failed to load DQO version file.", file=sys.stderr)
     sys.exit(-1)
 
 
 def install_dqo(dest: str, dqo_tag: str, dqo_version: str):
     """
-    Downloads and installs DQO.ai agent locally.
+    Downloads and installs DQO agent locally.
     :param dest: Destination folder to download and extract the zip package.
     :param dqo_tag: GitHub release tag.
     :param dqo_version:  Dqo version.
     """
 
-    github_url = "https://github.com/dqoai/dqo/releases/download/%s/dqo-distribution-%s-bin.zip" % (dqo_tag, dqo_version)
+    github_url = "https://github.com/dqops/dqo/releases/download/%s/dqo-distribution-%s-bin.zip" % (dqo_tag, dqo_version)
     distribution_local_name = os.path.join(dest, "dqo-distribution-%s-bin.zip" % dqo_version)
     print("Trying to download DQO.ai version %s from %s" % (dqo_version, github_url))
 
