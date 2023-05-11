@@ -6,7 +6,7 @@ DQO comes with around 100 predefined data quality checks which helps you monitor
 ## Key features
 - Intuitive graphical interface and access via CLI
 - Support of a number of different data sources: BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server and MySQL
-- ~100 build-in table and column checks with easy customization
+- ~450 build-in table and column checks with easy customization
 - Table and column-level checks which allows writing your own SQL queries
 - Daily and monthly date partition testing
 - Data segmentation by up to 9 different data streams
@@ -22,20 +22,20 @@ To use DQO you need:
 - Installed JDK software (version 17) and set the JAVA_HOME environment variable.
 
 
-DQO is available on [PyPi repository](https://pypi.org/project/dqoai/).
+DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
 
 1. To install DQO via pip manager just run
 
    === "Windows"
    ```
-   py -m pip install dqoai
+   py -m pip install dqops
    ```
    === "MacOS/Linux"
    ```
-   pip install dqoai
+   pip install dqops
    ```
    
-    If you prefer to work with the source code, just clone our GitHub repository [https://github.com/dqoai/dqo](https://github.com/dqoai/dqo)
+    If you prefer to work with the source code, just clone our GitHub repository [https://github.com/dqops/dqo](https://github.com/dqops/dqo)
     and run
 
 2. Run dqo app to finalize the installation.
@@ -76,6 +76,6 @@ For full documentation with guides and use cases, visit https://dqo.ai/docs
 
 If you find any issues with the tool, just post it here:
 
-https://github.com/dqoai/dqo/issues
+https://github.com/dqops/dqo/issues
 
 or contact us via https://dqo.ai/
