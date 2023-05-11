@@ -41,7 +41,7 @@ To run the examples, follow the steps below.
     ```
 
 3. To run a specific example, go to the directory where it is located. For instance, you can navigate to 
-    `example/bigquery-column-bool-true-percent`.  
+    `examples/data-reasonability/percentage-of-false-values-bigquery`.  
     
     Run the command provided below. 
 
