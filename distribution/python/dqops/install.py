@@ -44,7 +44,7 @@ def install_dqo(dest: str, dqo_tag: str, dqo_version: str):
 
     github_url = "https://github.com/dqops/dqo/releases/download/%s/dqo-distribution-%s-bin.zip" % (dqo_tag, dqo_version)
     distribution_local_name = os.path.join(dest, "dqo-distribution-%s-bin.zip" % dqo_version)
-    print("Trying to download DQO.ai version %s from %s" % (dqo_version, github_url))
+    print("Trying to download DQO version %s from %s" % (dqo_version, github_url))
 
     os.makedirs(dest, exist_ok=True)
 

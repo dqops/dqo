@@ -120,8 +120,8 @@ try:
         #     'dqops': home_dirs
         # },
         license='http://www.apache.org/licenses/LICENSE-2.0',
-        install_requires=['install-jdk==0.3.0'],
-        python_requires='>=3.6',
+        install_requires=['install-jdk==1.0.4'],
+        python_requires='>=3.8',
         classifiers=[
 #            'Development Status :: 5 - Production/Stable',
             'Development Status :: 4 - Beta',
