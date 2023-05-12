@@ -51,15 +51,15 @@ const ConnectionActionGroup = ({
 
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
-      <Button
-        className="!h-10"
-        variant="outlined"
-        color="primary"
-        label="Add Schema"
-        onClick={() => setAddSchemaDialogOpen(true)}
-      />
       {isSourceScreen ? (
         <>
+          <Button
+            className="!h-10"
+            variant="outlined"
+            color="primary"
+            label="Add Schema"
+            onClick={() => setAddSchemaDialogOpen(true)}
+          />
           <Button
             className="!h-10"
             variant="outlined"
