@@ -48,6 +48,9 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
   }, [checkTypes]);
 
   const onChangeNavigation = async (item: NavigationMenu) => {
+    if (checkTypes === item.value) {
+      return;
+    }
 
     if (item.value === 'table') {
       dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
