@@ -11,7 +11,7 @@ To add BigQuery data source connection to DQO you need the following:
   - A service account key in JSON format for JSON key authentication. For details refer to [Create and delete service account keys](https://cloud.google.com/iam/docs/keys-create-delete)
   - A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials](./#using-google-application-credentials-authentication) authentication
 
-## Adding BigQuery connection using graphic interface
+## Adding BigQuery connection using the graphical interface
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 
@@ -25,13 +25,13 @@ To add BigQuery data source connection to DQO you need the following:
 
     ![Adding connection settings](https://dqo.ai/docs/images/working-with-dqo/adding-connections/connection-settings-bigquery.jpg)
 
-    | BigQuery connection settings            | Property name in YAML configuration file | Description                                                                                                                                                                                                                              | 
-    |-----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------|
-    | Connection name|                                         | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.   |
-    | Source GCP project ID                   | source_project_id                       | Name of the project that has datasets that will be imported.                                                                                                                                                                              |
-    | Billing GCP project ID                  | billing_project_id                      | Name of the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.                                                                                                        |
-    | Authentication mode to the Google Cloud | authentication_mode                     | Type of authentication mode to the Google Cloud. You can select from the 3 options:<br/>- Google Application Credentials,<br/>- JSON Key Content<br/> - JSON Key Path                                                                     |
-    | Quota GCP project ID                    | quota_project_id                        | The Google Cloud Platform project ID which is used for invocation.                                                                                                                                                                        |
+    | BigQuery connection settings            | Property name in YAML configuration file | Description                                                                                                                                                                                                                             | 
+    |-----------------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+    | Connection name                         |                                          | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
+    | Source GCP project ID                   | source_project_id                        | Name of the project that has datasets that will be imported.                                                                                                                                                                            |
+    | Billing GCP project ID                  | billing_project_id                       | Name of the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.                                                                                                      |
+    | Authentication mode to the Google Cloud | authentication_mode                      | Type of authentication mode to the Google Cloud. You can select from the 3 options:<br/>- Google Application Credentials,<br/>- JSON Key Content<br/> - JSON Key Path                                                                   |
+    | Quota GCP project ID                    | quota_project_id                         | The Google Cloud Platform project ID which is used for invocation.                                                                                                                                                                      |
 
     DQO allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.

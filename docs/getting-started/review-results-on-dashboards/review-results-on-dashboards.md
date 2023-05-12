@@ -58,4 +58,4 @@ You can find it in the Issue Details group.
 
 
 You have completed our quick tutorial and now know how to add connections, run data quality checks and view results in 
-DQO using the graphic interface.
+DQO using the graphical interface.

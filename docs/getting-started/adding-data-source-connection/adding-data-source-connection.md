@@ -1,7 +1,7 @@
 # Adding data source connection
 
 After [installation and starting DQO](../installation/installation.md), we describe how to add a connection to [BigQuery public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime) 
-using the graphic interface.
+using the graphical interface.
 
 For a full description of how to add a data source connection to other providers or add connection using CLI, see [Working with DQO section](../../working-with-dqo/adding-data-source-connection/index.md).
 
@@ -13,7 +13,7 @@ To add BigQuery data source connection to DQO you need the following:
 - A service account key in JSON format for JSON key authentication. For details refer to [Create and delete service account keys](https://cloud.google.com/iam/docs/keys-create-delete).
 - A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](./#using-google-application-credentials-authentication).
 
-## Adding BigQuery connection using the graphic interface
+## Adding BigQuery connection using the graphical interface
 
 1. In DQO User Interface Console go to the Data Sources section and click **+ Add connection** button in the upper left corner.
 
