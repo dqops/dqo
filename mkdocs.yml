@@ -62,6 +62,7 @@ nav:
       - PostgreSQL: 'working-with-dqo/adding-data-source-connection/postgresql.md'
       - SQL Server: 'working-with-dqo/adding-data-source-connection/sql-server.md'
       - MySQL: 'working-with-dqo/adding-data-source-connection/mysql.md'
+    - Run data quality checks: 'working-with-dqo/run-data-quality-checks/run-data-quality-checks.md'
     - Schedules:
       - 'working-with-dqo/schedules/index.md'
       - Configuring the schedules by modifying the YAML files: 'working-with-dqo/schedules/configuring-schedules-by-modifying-yaml-file.md'
