@@ -8,6 +8,7 @@ import { ReactComponent as BigQueryBigSvg } from './svg/bigquery-big.svg';
 import { ReactComponent as BigQuerySvg } from './svg/bigquery.svg';
 import { ReactComponent as ChartBarSvg } from './svg/chart-bar.svg';
 import { ReactComponent as CheckSvg } from './svg/check.svg';
+import { ReactComponent as CheckCircleSvg } from './svg/check-circle.svg';
 import { ReactComponent as ChevronDownSvg } from './svg/chevron-down.svg';
 import { ReactComponent as ChevronUpSvg } from './svg/chevron-up.svg';
 import { ReactComponent as ClockSvg } from './svg/clock.svg';
@@ -19,6 +20,7 @@ import { ReactComponent as FacebookSvg } from './svg/facebook.svg';
 import { ReactComponent as GoogleSvg } from './svg/google.svg';
 import { ReactComponent as GridSvg } from './svg/grid.svg';
 import { ReactComponent as InfoSvg } from './svg/info.svg';
+import { ReactComponent as InfoFilledSvg } from './svg/info-filled.svg';
 import { ReactComponent as LockSvg } from './svg/lock.svg';
 import { ReactComponent as MenuSvg } from './svg/menu.svg';
 import { ReactComponent as SearchSvg } from './svg/search.svg';
@@ -165,7 +167,9 @@ const iconsMap: any = {
   amazonrdsforsqlserver: AmazonRdsSvg,
   cloudsqlforpostgresql: CloudSqlSvg,
   cloudsqlforsqlserver: CloudSqlSvg,
-  yugabytedb: YugabyteDbSvg
+  yugabytedb: YugabyteDbSvg,
+  'check-circle': CheckCircleSvg,
+  'info-filled': InfoFilledSvg
 };
 
 interface SvgIconProps {
