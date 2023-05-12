@@ -24,6 +24,7 @@ import ai.dqo.metadata.incidents.IncidentGroupingSpec;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -34,7 +35,6 @@ import ai.dqo.rest.models.metadata.ConnectionModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.services.check.CheckService;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
-import ai.dqo.services.check.models.BulkCheckDisableParameters;
 import ai.dqo.services.metadata.ConnectionService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
@@ -741,19 +741,19 @@ public class ConnectionsController {
      * Allows for configuring the rules for particular alert levels.
      * @param connectionName        Connection name.
      * @param checkName             Check name.
-     * @param updatePatchParameters Check search filters and template model with the configurations.
+     * @param updatePatchParameters Check search filters and rules configuration.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/checks/{checkName}/bulkenable")
-    @ApiOperation(value = "bulkEnableConnectionChecks", notes = "Enables a named check on this connection in the locations specified by filter")
+    @PutMapping("/{connectionName}/checks/{checkName}/enable")
+    @ApiOperation(value = "enableConnectionChecks", notes = "Enables a named check on this connection in the locations specified by filter")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Checks enabled in bulk"),
+            @ApiResponse(code = 204, message = "Checks enabled"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> bulkEnableConnectionChecks(
+    public ResponseEntity<Mono<?>> enableConnectionChecks(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check name") @PathVariable String checkName,
             @ApiParam("Check search filters and rules configuration")
@@ -782,11 +782,11 @@ public class ConnectionsController {
      * Disables a named check on this connection in the locations specified by filter.
      * @param connectionName        Connection name.
      * @param checkName             Check name.
-     * @param bulkDisableParameters Check search filters and table/column selectors.
+     * @param checkSearchFilters    Optional search filters.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/checks/{checkName}/bulkdisable")
-    @ApiOperation(value = "bulkDisableConnectionChecks", notes = "Disables a named check on this connection in the locations specified by filter")
+    @PutMapping("/{connectionName}/checks/{checkName}/disable")
+    @ApiOperation(value = "disableConnectionChecks", notes = "Disables a named check on this connection in the locations specified by filter")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Checks disabled"),
@@ -794,11 +794,11 @@ public class ConnectionsController {
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> bulkDisableConnectionChecks(
+    public ResponseEntity<Mono<?>> disableConnectionChecks(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check name") @PathVariable String checkName,
-            @ApiParam("Check search filters and table/column selectors.")
-            @RequestBody BulkCheckDisableParameters bulkDisableParameters) {
+            @ApiParam("Optional check search filters")
+            @RequestBody Optional<CheckSearchFilters> checkSearchFilters) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -808,10 +808,11 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
         }
 
-        bulkDisableParameters.getCheckSearchFilters().setConnectionName(connectionName);
-        bulkDisableParameters.getCheckSearchFilters().setCheckName(checkName);
+        CheckSearchFilters filters = checkSearchFilters.orElseGet(CheckSearchFilters::new);
+        filters.setConnectionName(connectionName);
+        filters.setCheckName(checkName);
 
-        checkService.disableChecks(bulkDisableParameters);
+        checkService.disableChecks(filters);
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 

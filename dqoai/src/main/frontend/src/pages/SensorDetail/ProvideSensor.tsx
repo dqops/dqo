@@ -72,21 +72,11 @@ const ProvideSensor = ({
       )}
 
       <div className="flex gap-4 text-sm items-center mb-4">
-        <p className="w-60">Supports grouping by a data stream:</p>
+        <p className="w-60">Supports grouping:</p>
         <Checkbox
-          checked={providerSensor?.providerSensorDefinitionSpec?.supports_grouping_by_data_stream}
+          checked={providerSensor?.providerSensorDefinitionSpec?.supports_grouping}
           onChange={(checked) => handleChange({
-            supports_grouping_by_data_stream: checked
-          })}
-        />
-      </div>
-
-      <div className="flex gap-4 text-sm items-center mb-4">
-        <p className="w-60">Supports partitioned checks by grouping by the partition date:</p>
-        <Checkbox
-          checked={providerSensor?.providerSensorDefinitionSpec?.supports_partitioned_checks}
-          onChange={(checked) => handleChange({
-            supports_partitioned_checks: checked
+            supports_grouping: checked
           })}
         />
       </div>

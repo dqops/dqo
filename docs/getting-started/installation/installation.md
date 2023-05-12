@@ -4,7 +4,7 @@
 
 To use DQO you need:
 
-  - Python version 3.8 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
+  - Python version 3.6 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
 
     To confirm that you have Python installed run the following command
     ```
@@ -39,7 +39,7 @@ To use DQO you need:
 
 ## Install DQO with pip manager
 
-DQO is available on [PyPi repository](https://pypi.org/project/dqops/). 
+DQO is available on [PyPi repository](https://pypi.org/project/dqoai/). 
 
 If you want to install DQO directly from Git go to [this section](../../working-with-dqo/install-dqo-from-git/install-dqo-from-git.md).
 
@@ -47,34 +47,34 @@ If you want to install DQO directly from Git go to [this section](../../working-
 2. Open a terminal, navigate to the created directory, and create a [virtual environment](https://docs.python.org/3/library/venv.html) by running:
 
     === "Windows"
-        ```
+        ```python
         py -m venv myvenv
         ```
     === "MacOS/Linux"
-        ```
+        ``` python
         python -m venv myvenv
         ```
 
 3. Activate virtual environment by changing directory to `myvenv/Scripts` and run
 
     === "Windows"
-        ```
+        ```python
         activate.bat
         ```
     === "MacOS/Linux"
-        ```
+        ``` python
         activate
         ```
 
 4. Install DQO via pip manager
 
     === "Windows"
-        ```
-        py -m pip install dqops
+        ```python
+        py -m pip install dqoai
         ```
     === "MacOS/Linux"
-        ```
-        pip install dqops
+        ``` python
+        pip install dqoai
         ```
 
 ## Start DQO application
@@ -82,11 +82,11 @@ If you want to install DQO directly from Git go to [this section](../../working-
 1. Run dqo app to finalize the installation. 
 
     === "Windows"
-        ```
+        ```python
         dqo
         ```
     === "MacOS/Linux"
-        ```
+        ``` python
         ./dqo
         ```
 

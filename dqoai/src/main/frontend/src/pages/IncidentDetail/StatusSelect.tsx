@@ -4,18 +4,24 @@ import Checkbox from "../../components/Checkbox";
 import SvgIcon from "../../components/SvgIcon";
 import { useSelector } from "react-redux";
 import { getFirstLevelIncidentsState } from "../../redux/selectors";
+import { useActionDispatch } from "../../hooks/useActionDispatch";
+import { setIncidentsFilter } from "../../redux/actions/incidents.actions";
 import { IncidentFilter } from "../../redux/reducers/incidents.reducer";
 
-type StatusSelectProps = {
-  onChangeFilter: (obj: Partial<IncidentFilter>) => void;
-};
-
-const StatusSelect = ({ onChangeFilter }: StatusSelectProps) => {
+const StatusSelect = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { filters = { connection: '', openIncidents: true, acknowledgedIncidents: true, resolvedIncidents: true } }: { filters: IncidentFilter} = useSelector(getFirstLevelIncidentsState);
+  const { filters = { connection: '' } }: { filters: IncidentFilter} = useSelector(getFirstLevelIncidentsState);
+  const dispatch = useActionDispatch();
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
+  };
+
+  const onChangeFilter = (obj: Partial<IncidentFilter>) => {
+    dispatch(setIncidentsFilter({
+      ...filters || {},
+      ...obj
+    }));
   };
 
   const valueString = useMemo(() => {
@@ -23,7 +29,7 @@ const StatusSelect = ({ onChangeFilter }: StatusSelectProps) => {
     if (filters.openIncidents) {
       strArray.push('Open');
     }
-    if (filters.acknowledgedIncidents) {
+    if (filters.acknowledgeIncidents) {
       strArray.push('Acknowledged');
     }
     if (filters.resolvedIncidents) {
@@ -53,9 +59,9 @@ const StatusSelect = ({ onChangeFilter }: StatusSelectProps) => {
               onChange={(checked) => onChangeFilter({ openIncidents: checked })}
             />
             <Checkbox
-              checked={filters.acknowledgedIncidents}
+              checked={filters.acknowledgeIncidents}
               label="Acknowledged"
-              onChange={(checked) => onChangeFilter({ acknowledgedIncidents: checked })}
+              onChange={(checked) => onChangeFilter({ acknowledgeIncidents: checked })}
             />
             <Checkbox
               checked={filters.resolvedIncidents}

@@ -28,8 +28,6 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Rule model that is returned by the REST API. Describes a single unique rule name.
@@ -39,6 +37,7 @@ import java.util.Optional;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "RuleModel", description = "Rule model")
 public class RuleModel {
+
     @JsonPropertyDescription("Rule name")
     private String ruleName;
 
@@ -74,8 +73,7 @@ public class RuleModel {
     /**
      * Default constructor for RuleModel.
      */
-    public RuleModel() {
-    }
+    public RuleModel(){}
 
     /**
      * Constructor for RuleModel with a given {@link RuleDefinitionWrapper}, custom flag, and built-in flag.
@@ -97,42 +95,45 @@ public class RuleModel {
         this.builtIn = builtIn;
     }
 
+
     /**
      * Checks whether the RuleModel is equal to a given {@link RuleDefinitionWrapper}.
      * @param ruleDefinitionWrapper The RuleDefinitionWrapper to compare.
      * @return true if the RuleModel is equal to the RuleDefinitionWrapper, false otherwise.
      */
-    public boolean equalsBuiltInRule(RuleDefinitionWrapper ruleDefinitionWrapper) {
+    public boolean equalsRuleDqo(RuleDefinitionWrapper ruleDefinitionWrapper) {
         if (ruleDefinitionWrapper == null) {
             return false;
         }
 
-        if (!Objects.equals(Optional.of(ruleDefinitionWrapper.getRulePythonModuleContent()).orElse(new FileContent()).getTextContent(),
-                rulePythonModuleContent)) {
+        if (!ruleDefinitionWrapper.getRulePythonModuleContent().getTextContent().equals(rulePythonModuleContent)) {
             return false;
         }
 
-        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getType(), type)) {
+        if (!ruleDefinitionWrapper.getSpec().getType().equals(type)) {
             return false;
         }
 
-        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getJavaClassName(), javaClassName)) {
+        if (!ruleDefinitionWrapper.getSpec().getJavaClassName().equals(javaClassName)) {
             return false;
         }
 
-        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getMode(), mode)) {
+        if (!ruleDefinitionWrapper.getSpec().getMode().equals(mode)) {
             return false;
         }
 
-        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getParameters() == null, parameters)) {
+        if(ruleDefinitionWrapper.getSpec().getParameters() == null && parameters != null){
+            return false;
+        }
+        if(ruleDefinitionWrapper.getSpec().getParameters() != null && !ruleDefinitionWrapper.getSpec().getParameters().equals(parameters)){
             return false;
         }
 
-        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getFields(), fields)) {
+        if(!ruleDefinitionWrapper.getSpec().getFields().equals(fields)){
             return false;
         }
 
-        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getTimeWindow(), timeWindow)) {
+        if(!ruleDefinitionWrapper.getSpec().getTimeWindow().equals(timeWindow)){
             return false;
         }
 
@@ -143,7 +144,7 @@ public class RuleModel {
      * Returns the rule definition spec object.
      * @return the rule definition spec object.
      */
-    public RuleDefinitionSpec toRuleDefinitionSpec() {
+    public RuleDefinitionSpec withRuleDefinitionSpec() {
 
         RuleDefinitionSpec ruleDefinitionSpec = new RuleDefinitionSpec();
         ruleDefinitionSpec.setType(type);
@@ -160,7 +161,7 @@ public class RuleModel {
      * Returns the file content object with Python module content.
      * @return file content object with Python module content.
      */
-    public FileContent makePythonModuleFileContent() {
+    public FileContent withRuleDefinitionPythonModuleContent() {
         return new FileContent(rulePythonModuleContent);
     }
 }

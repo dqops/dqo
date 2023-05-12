@@ -50,17 +50,14 @@ Creates a new connection to the database with the specified details such as conn
 
 **Command-line synopsis**
 ```
-$ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
-                [--redshift-ssl] [--sqlserver-ssl]
+$ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
+                [--sqlserver-ssl]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
                 [--bigquery-json-key-content=<jsonKeyContent>]
                 [--bigquery-json-key-path=<jsonKeyPath>]
                 [--bigquery-quota-project-id=<quotaProjectId>]
-                [--bigquery-source-project-id=<sourceProjectId>]
-                [--mysql-database=<database>] [--mysql-host=<host>]
-                [--mysql-options=<options>] [--mysql-password=<password>]
-                [--mysql-port=<port>] [--mysql-user=<user>] [-n=<name>]
+                [--bigquery-source-project-id=<sourceProjectId>] [-n=<name>]
                 [-of=<outputFormat>] [--postgresql-database=<database>]
                 [--postgresql-host=<host>] [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
@@ -75,24 +72,21 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgres
                 [--sqlserver-options=<options>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
-                [-F=<String=String>]... [-M=<String=String>]...
-                [-P=<String=String>]... [-R=<String=String>]...
-                [-S=<String=String>]...
+                [-F=<String=String>]... [-P=<String=String>]...
+                [-R=<String=String>]...
+                [--sqlserver-properties=<String=String>]...
 
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
-                [--redshift-ssl] [--sqlserver-ssl]
+dqo.ai> connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
+                [--sqlserver-ssl]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
                 [--bigquery-json-key-content=<jsonKeyContent>]
                 [--bigquery-json-key-path=<jsonKeyPath>]
                 [--bigquery-quota-project-id=<quotaProjectId>]
-                [--bigquery-source-project-id=<sourceProjectId>]
-                [--mysql-database=<database>] [--mysql-host=<host>]
-                [--mysql-options=<options>] [--mysql-password=<password>]
-                [--mysql-port=<port>] [--mysql-user=<user>] [-n=<name>]
+                [--bigquery-source-project-id=<sourceProjectId>] [-n=<name>]
                 [-of=<outputFormat>] [--postgresql-database=<database>]
                 [--postgresql-host=<host>] [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
@@ -107,9 +101,9 @@ dqo.ai> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
                 [--sqlserver-options=<options>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
-                [-F=<String=String>]... [-M=<String=String>]...
-                [-P=<String=String>]... [-R=<String=String>]...
-                [-S=<String=String>]...
+                [-F=<String=String>]... [-P=<String=String>]...
+                [-R=<String=String>]...
+                [--sqlserver-properties=<String=String>]...
 
 ```
 
@@ -126,13 +120,6 @@ dqo.ai> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
-|`--mysql-database`<br/>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
-|`--mysql-host`<br/>|MySQL host name| ||
-|`--mysql-options`<br/>|MySQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|`--mysql-password`<br/>|MySQL database password. The value can be in the null format to use dynamic substitution.| ||
-|`--mysql-port`<br/>|MySQL port number| ||
-|`--mysql-ssl`<br/>|Connect to MySQL using SSL| ||
-|`--mysql-user`<br/>|MySQL user name. The value can be in the null format to use dynamic substitution.| ||
 |`-n`<br/>`--name`<br/>|Connection name| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`--postgresql-database`<br/>|PostgreSQL database name. The value can be in the null format to use dynamic substitution.| ||
@@ -142,7 +129,7 @@ dqo.ai> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
 |`--postgresql-port`<br/>|PostgreSQL port number| ||
 |`--postgresql-ssl`<br/>|Connect to PostgreSQL using SSL| ||
 |`--postgresql-user`<br/>|PostgreSQL user name. The value can be in the null format to use dynamic substitution.| ||
-|`-t`<br/>`--provider`<br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>mysql<br/>|
+|`-t`<br/>`--provider`<br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>|
 |`--redshift-database`<br/>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |`--redshift-host`<br/>|Redshift host name| ||
 |`--redshift-options`<br/>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
@@ -161,13 +148,12 @@ dqo.ai> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
 |`--sqlserver-options`<br/>|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |`--sqlserver-password`<br/>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |`--sqlserver-port`<br/>|SQL Server port number| ||
+|`--sqlserver-properties`<br/>|SQL Server additional properties that are added to the JDBC connection string| ||
 |`--sqlserver-ssl`<br/>|Connecting to SQL Server with SSL disabled| ||
 |`--sqlserver-user`<br/>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
 |`-F`<br/>|Snowflake additional properties that are added to the JDBC connection string| ||
-|`-M`<br/>|MySQL additional properties that are added to the JDBC connection string| ||
 |`-P`<br/>|PostgreSQL additional properties that are added to the JDBC connection string| ||
 |`-R`<br/>|Redshift additional properties that are added to the JDBC connection string| ||
-|`-S`<br/>|SQL Server additional properties that are added to the JDBC connection string| ||
 
 
 
@@ -218,17 +204,14 @@ Update the connection or connections that match the conditions specified in the 
 
 **Command-line synopsis**
 ```
-$ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
-                   [--redshift-ssl] [--sqlserver-ssl]
+$ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
+                   [--sqlserver-ssl]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
                    [--bigquery-json-key-content=<jsonKeyContent>]
                    [--bigquery-json-key-path=<jsonKeyPath>]
                    [--bigquery-quota-project-id=<quotaProjectId>]
-                   [--bigquery-source-project-id=<sourceProjectId>]
-                   [--mysql-database=<database>] [--mysql-host=<host>]
-                   [--mysql-options=<options>] [--mysql-password=<password>]
-                   [--mysql-port=<port>] [--mysql-user=<user>] [-n=<name>]
+                   [--bigquery-source-project-id=<sourceProjectId>] [-n=<name>]
                    [-of=<outputFormat>] [--postgresql-database=<database>]
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
@@ -245,23 +228,20 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postg
                    [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                    [--sqlserver-user=<user>] [-F=<String=String>]...
-                   [-M=<String=String>]... [-P=<String=String>]...
-                   [-R=<String=String>]... [-S=<String=String>]...
+                   [-P=<String=String>]... [-R=<String=String>]...
+                   [--sqlserver-properties=<String=String>]...
 
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
-                   [--redshift-ssl] [--sqlserver-ssl]
+dqo.ai> connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
+                   [--sqlserver-ssl]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
                    [--bigquery-json-key-content=<jsonKeyContent>]
                    [--bigquery-json-key-path=<jsonKeyPath>]
                    [--bigquery-quota-project-id=<quotaProjectId>]
-                   [--bigquery-source-project-id=<sourceProjectId>]
-                   [--mysql-database=<database>] [--mysql-host=<host>]
-                   [--mysql-options=<options>] [--mysql-password=<password>]
-                   [--mysql-port=<port>] [--mysql-user=<user>] [-n=<name>]
+                   [--bigquery-source-project-id=<sourceProjectId>] [-n=<name>]
                    [-of=<outputFormat>] [--postgresql-database=<database>]
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
@@ -278,8 +258,8 @@ dqo.ai> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
                    [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                    [--sqlserver-user=<user>] [-F=<String=String>]...
-                   [-M=<String=String>]... [-P=<String=String>]...
-                   [-R=<String=String>]... [-S=<String=String>]...
+                   [-P=<String=String>]... [-R=<String=String>]...
+                   [--sqlserver-properties=<String=String>]...
 
 ```
 
@@ -296,13 +276,6 @@ dqo.ai> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
-|`--mysql-database`<br/>|MySQL database name. The value can be in the null format to use dynamic substitution.| ||
-|`--mysql-host`<br/>|MySQL host name| ||
-|`--mysql-options`<br/>|MySQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|`--mysql-password`<br/>|MySQL database password. The value can be in the null format to use dynamic substitution.| ||
-|`--mysql-port`<br/>|MySQL port number| ||
-|`--mysql-ssl`<br/>|Connect to MySQL using SSL| ||
-|`--mysql-user`<br/>|MySQL user name. The value can be in the null format to use dynamic substitution.| ||
 |`-n`<br/>`--name`<br/>|Connection name, supports wildcards for changing multiple connections at once, i.e. &quot;conn*&quot;| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`--postgresql-database`<br/>|PostgreSQL database name. The value can be in the null format to use dynamic substitution.| ||
@@ -330,13 +303,12 @@ dqo.ai> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
 |`--sqlserver-options`<br/>|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |`--sqlserver-password`<br/>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |`--sqlserver-port`<br/>|SQL Server port number| ||
+|`--sqlserver-properties`<br/>|SQL Server additional properties that are added to the JDBC connection string| ||
 |`--sqlserver-ssl`<br/>|Connecting to SQL Server with SSL disabled| ||
 |`--sqlserver-user`<br/>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
 |`-F`<br/>|Snowflake additional properties that are added to the JDBC connection string| ||
-|`-M`<br/>|MySQL additional properties that are added to the JDBC connection string| ||
 |`-P`<br/>|PostgreSQL additional properties that are added to the JDBC connection string| ||
 |`-R`<br/>|Redshift additional properties that are added to the JDBC connection string| ||
-|`-S`<br/>|SQL Server additional properties that are added to the JDBC connection string| ||
 
 
 

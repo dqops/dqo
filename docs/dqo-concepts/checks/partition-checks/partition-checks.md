@@ -9,6 +9,7 @@ The daily partition checks store the most recent sensor readouts for each partit
 check was run. This means that if you run check several times a day only the most recent readout is stored. The previous readouts for
 that day will be overwritten.
 
+
 The daily recurring checks store the most recent sensor readouts for each day when the data quality check was run.
 This means that if you run a check several times a day only the most recent readout is stored. The previous readouts for
 that day will be overwritten.

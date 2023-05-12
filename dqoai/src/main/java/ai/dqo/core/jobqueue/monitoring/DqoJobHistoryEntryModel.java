@@ -92,14 +92,6 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
     }
 
     /**
-     * Changes the job parameters.
-     * @param parameters New job parameters.
-     */
-    public void setParameters(DqoJobEntryParametersModel parameters) {
-        this.parameters = parameters;
-    }
-
-    /**
      * Returns the current job status.
      * @return Job status.
      */

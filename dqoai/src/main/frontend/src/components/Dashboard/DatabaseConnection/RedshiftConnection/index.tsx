@@ -1,10 +1,11 @@
 import React from 'react';
 
 import SectionWrapper from '../../SectionWrapper';
-import { RedshiftParametersSpec } from '../../../../api';
-import JdbcPropertiesView from '../JdbcProperties';
-import Checkbox from '../../../Checkbox';
-import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import { RedshiftParametersSpec } from "../../../../api";
+import JdbcPropertiesView from "../JdbcProperties";
+import Checkbox from "../../../Checkbox";
+import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
+
 
 interface IRedshiftConnectionProps {
   redshift?: RedshiftParametersSpec;
@@ -15,6 +16,7 @@ const RedshiftConnection = ({
   redshift,
   onChange
 }: IRedshiftConnectionProps) => {
+
   const handleChange = (obj: Partial<RedshiftParametersSpec>) => {
     if (!onChange) return;
 

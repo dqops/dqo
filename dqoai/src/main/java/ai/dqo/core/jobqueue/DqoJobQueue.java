@@ -41,22 +41,12 @@ public interface DqoJobQueue {
     <T> PushJobResult<T> pushJob(DqoQueueJob<T> job);
 
     /**
-     * Pushes a job to the job queue without waiting, storing also a reference to the parent job.
-     *
-     * @param job Job to be pushed.
-     * @param parentJobId Parent job id.
-     * @return Started job summary and a future to await for finish.
-     */
-    <T> PushJobResult<T> pushJob(DqoQueueJob<T> job, DqoQueueJobId parentJobId);
-
-    /**
      * Pushes a collection of child jobs.
      * @param childJobs Collection of child jobs.
-     * @param parentJobId Parent job id.
      * @return Child jobs container that will track the completion of all child jobs.
      * @param <T> Child job result type.
      */
-    <T> ChildDqoQueueJobsContainer<T> pushChildJobs(Collection<DqoQueueJob<T>> childJobs, DqoQueueJobId parentJobId);
+    <T> ChildDqoQueueJobsContainer<T> pushChildJobs(Collection<DqoQueueJob<T>> childJobs);
 
     /**
      * Cancels a job given a job id.

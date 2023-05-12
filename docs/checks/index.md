@@ -23,7 +23,7 @@ Checks whether the table is accessible and available for use.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[table_availability](./table/availability/table-availability/#table-availability)|profiling|Verifies availability of the table in a database using a simple row count.|
+|[table_availability](./table/availability/table-availability/#table-availability)|profiling|Verifies availability on table in database using simple row count.|
 |[daily_table_availability](./table/availability/table-availability/#daily-table-availability)|recurring|Verifies availability on table in database using simple row count. Stores the most recent row count for each day when the data quality check was evaluated.|
 |[monthly_table_availability](./table/availability/table-availability/#monthly-table-availability)|recurring|Verifies availability on table in database using simple row count. Stores the most recent row count for each month when the data quality check was evaluated.|
 
@@ -87,8 +87,8 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 |[days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#days-since-most-recent-event)|profiling|Calculates the number of days since the most recent event timestamp (freshness)|
 |[daily_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#daily-days-since-most-recent-event)|recurring|Daily  calculating the number of days since the most recent event timestamp (freshness)|
 |[monthly_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#monthly-days-since-most-recent-event)|recurring|Monthly recurring calculating the number of days since the most recent event timestamp (freshness)|
-|[daily_partition_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#daily-partition-days-since-most-recent-event)|partitioned|Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)|
-|[monthly_partition_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#monthly-partition-days-since-most-recent-event)|partitioned|Monthly partitioned check calculating the number of days since the most recent event (freshness)|
+|[daily_partition_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#daily-partition-days-since-most-recent-event)|partitioned|Daily partition checkpoint calculating the number of days since the most recent event timestamp (freshness)|
+|[monthly_partition_days_since_most_recent_event](./table/timeliness/days-since-most-recent-event/#monthly-partition-days-since-most-recent-event)|partitioned|Monthly partition checkpoint calculating the number of days since the most recent event (freshness)|
 
 
 | Check name | Check type | Description |
@@ -96,8 +96,8 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 |[data_ingestion_delay](./table/timeliness/data-ingestion-delay/#data-ingestion-delay)|profiling|Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
 |[daily_data_ingestion_delay](./table/timeliness/data-ingestion-delay/#daily-data-ingestion-delay)|recurring|Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
 |[monthly_data_ingestion_delay](./table/timeliness/data-ingestion-delay/#monthly-data-ingestion-delay)|recurring|Monthly recurring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
-|[daily_partition_data_ingestion_delay](./table/timeliness/data-ingestion-delay/#daily-partition-data-ingestion-delay)|partitioned|Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
-|[monthly_partition_data_ingestion_delay](./table/timeliness/data-ingestion-delay/#monthly-partition-data-ingestion-delay)|partitioned|Monthly partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
+|[daily_partition_data_ingestion_delay](./table/timeliness/data-ingestion-delay/#daily-partition-data-ingestion-delay)|partitioned|Daily partition checkpoint calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
+|[monthly_partition_data_ingestion_delay](./table/timeliness/data-ingestion-delay/#monthly-partition-data-ingestion-delay)|partitioned|Monthly partition checkpoint calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|
 
 
 | Check name | Check type | Description |
@@ -105,14 +105,14 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 |[days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#days-since-most-recent-ingestion)|profiling|Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
 |[daily_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#daily-days-since-most-recent-ingestion)|recurring|Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
 |[monthly_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#monthly-days-since-most-recent-ingestion)|recurring|Monthly recurring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
-|[daily_partition_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#daily-partition-days-since-most-recent-ingestion)|partitioned|Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
-|[monthly_partition_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#monthly-partition-days-since-most-recent-ingestion)|partitioned|Monthly partitioned check calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)|
+|[daily_partition_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#daily-partition-days-since-most-recent-ingestion)|partitioned|Daily partition checkpoint calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|
+|[monthly_partition_days_since_most_recent_ingestion](./table/timeliness/days-since-most-recent-ingestion/#monthly-partition-days-since-most-recent-ingestion)|partitioned|Monthly partition checkpoint calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[daily_partition_reload_lag](./table/timeliness/daily-partition-reload-lag/#daily-partition-reload-lag)|partitioned|Daily partitioned check calculating the longest time a row waited to be load|
-|[monthly_partition_reload_lag](./table/timeliness/daily-partition-reload-lag/#monthly-partition-reload-lag)|partitioned|Monthly partitioned check calculating the longest time a row waited to be load|
+|[daily_partition_reload_lag](./table/timeliness/daily-partition-reload-lag/#daily-partition-reload-lag)|partitioned|Daily partition checkpoint calculating the longest time a row waited to be load|
+|[monthly_partition_reload_lag](./table/timeliness/daily-partition-reload-lag/#monthly-partition-reload-lag)|partitioned|Monthly partition checkpoint calculating the longest time a row waited to be load|
 
 
 
@@ -244,15 +244,6 @@ Calculates the percentage of data in a Boolean format.
 |[monthly_date_match_format_percent](./column/consistency/date-match-format-percent/#monthly-date-match-format-percent)|recurring|Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly recurring.|
 |[daily_partition_date_match_format_percent](./column/consistency/date-match-format-percent/#daily-partition-date-match-format-percent)|partitioned|Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
 |[monthly_partition_date_match_format_percent](./column/consistency/date-match-format-percent/#monthly-partition-date-match-format-percent)|partitioned|Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[string_datatype_changed](./column/consistency/string-datatype-changed/#string-datatype-changed)|profiling|Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.|
-|[daily_string_datatype_changed](./column/consistency/string-datatype-changed/#daily-string-datatype-changed)|recurring|Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_string_datatype_changed](./column/consistency/string-datatype-changed/#monthly-string-datatype-changed)|recurring|Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[daily_partition_string_datatype_changed](./column/consistency/string-datatype-changed/#daily-partition-string-datatype-changed)|partitioned|Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_string_datatype_changed](./column/consistency/string-datatype-changed/#monthly-partition-string-datatype-changed)|partitioned|Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 
@@ -1046,18 +1037,18 @@ Validates that the data in a string column match the expected format or pattern.
 |------------|------------|-------------|
 |[string_most_popular_values](./column/strings/string-most-popular-values/#string-most-popular-values)|profiling|Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.|
 |[daily_string_most_popular_values](./column/strings/string-most-popular-values/#daily-string-most-popular-values)|recurring|Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_string_most_popular_values](./column/strings/string-most-popular-values/#monthly-string-most-popular-values)|recurring|Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[monthly_string_most_popular_values](./column/strings/string-most-popular-values/#monthly-string-most-popular-values)|recurring|Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.|
 |[daily_partition_string_most_popular_values](./column/strings/string-most-popular-values/#daily-partition-string-most-popular-values)|partitioned|Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
 |[monthly_partition_string_most_popular_values](./column/strings/string-most-popular-values/#monthly-partition-string-most-popular-values)|partitioned|Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[string_datatype_detected](./column/strings/string-datatype-detected/#string-datatype-detected)|profiling|Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type.|
-|[daily_string_datatype_detected](./column/strings/string-datatype-detected/#daily-string-datatype-detected)|recurring|Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_string_datatype_detected](./column/strings/string-datatype-detected/#monthly-string-datatype-detected)|recurring|Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_string_datatype_detected](./column/strings/string-datatype-detected/#daily-partition-string-datatype-detected)|partitioned|Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_string_datatype_detected](./column/strings/string-datatype-detected/#monthly-partition-string-datatype-detected)|partitioned|Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[string_datatype_changed](./column/strings/string-datatype-changed/#string-datatype-changed)|profiling|Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype.|
+|[daily_string_datatype_changed](./column/strings/string-datatype-changed/#daily-string-datatype-changed)|recurring|Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_string_datatype_changed](./column/strings/string-datatype-changed/#monthly-string-datatype-changed)|recurring|Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[daily_partition_string_datatype_changed](./column/strings/string-datatype-changed/#daily-partition-string-datatype-changed)|partitioned|Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_string_datatype_changed](./column/strings/string-datatype-changed/#monthly-partition-string-datatype-changed)|partitioned|Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 

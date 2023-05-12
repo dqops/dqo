@@ -38,17 +38,10 @@ public class MaxCountRule15ParametersSpec extends AbstractRuleParametersSpec {
         }
     };
 
+    // TODO: Constructor setting maxCount, like in MinCountRuleParametersSpec
+
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
     private Long maxCount = 15L;
-
-    public MaxCountRule15ParametersSpec() {
-        super();
-    }
-
-    public MaxCountRule15ParametersSpec(Long maxCount) {
-        super();
-        this.maxCount = maxCount;
-    }
 
     /**
      * Returns a maximum value for a data quality check readout, for example a maximum row count.

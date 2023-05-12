@@ -18,9 +18,9 @@ package ai.dqo.metadata.sources;
 import ai.dqo.BaseTest;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
-import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.TableRecurringSpec;
 import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
-import ai.dqo.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableMonthlyRecurringCategoriesSpec;
 import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringSpec;
 import ai.dqo.checks.table.recurring.standard.TableStandardMonthlyRecurringSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
@@ -156,7 +156,7 @@ public class TableSpecTests extends BaseTest {
 
     @Test
     void hasAnyChecksConfigured_whenOneDailyRecurringCheckConfigured_thenReturnsTrue() {
-        TableRecurringChecksSpec recurring = new TableRecurringChecksSpec();
+        TableRecurringSpec recurring = new TableRecurringSpec();
         TableDailyRecurringCategoriesSpec daily = new TableDailyRecurringCategoriesSpec();
         TableStandardDailyRecurringSpec standard = new TableStandardDailyRecurringSpec();
         standard.setDailyRowCount(new TableRowCountCheckSpec());
@@ -168,8 +168,8 @@ public class TableSpecTests extends BaseTest {
 
     @Test
     void hasAnyChecksConfigured_whenOneMonthlyRecurringCheckConfigured_thenReturnsTrue() {
-        TableRecurringChecksSpec recurring = new TableRecurringChecksSpec();
-        TableMonthlyRecurringCheckCategoriesSpec daily = new TableMonthlyRecurringCheckCategoriesSpec();
+        TableRecurringSpec recurring = new TableRecurringSpec();
+        TableMonthlyRecurringCategoriesSpec daily = new TableMonthlyRecurringCategoriesSpec();
         TableStandardMonthlyRecurringSpec standard = new TableStandardMonthlyRecurringSpec();
         standard.setMonthlyRowCount(new TableRowCountCheckSpec());
         daily.setStandard(standard);

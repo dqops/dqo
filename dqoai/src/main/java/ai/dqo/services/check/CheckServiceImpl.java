@@ -23,24 +23,22 @@ import ai.dqo.execution.checks.jobs.RunChecksQueueJob;
 import ai.dqo.execution.checks.jobs.RunChecksQueueJobParameters;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
+import ai.dqo.metadata.fields.ParameterDataType;
+import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcherImpl;
-import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
 import ai.dqo.services.check.mapping.UIAllChecksPatchApplier;
+import ai.dqo.services.check.mapping.UIAllChecksPatchFactory;
 import ai.dqo.services.check.mapping.models.*;
-import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
-import ai.dqo.services.check.mapping.models.table.UIAllTableChecksModel;
-import ai.dqo.services.check.mapping.utils.UIAllChecksModelUtility;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
-import ai.dqo.services.check.models.BulkCheckDisableParameters;
+import ai.dqo.utils.conversion.StringTypeCaster;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,7 +52,7 @@ import java.util.stream.Stream;
  */
 @Service
 public class CheckServiceImpl implements CheckService {
-    private UIAllChecksModelFactory uiAllChecksModelFactory;
+    private UIAllChecksPatchFactory uiAllChecksPatchFactory;
     private UIAllChecksPatchApplier uiAllChecksPatchApplier;
     private DqoQueueJobFactory dqoQueueJobFactory;
     private ParentDqoJobQueue parentDqoJobQueue;
@@ -62,19 +60,19 @@ public class CheckServiceImpl implements CheckService {
 
     /**
      * Default injection constructor.
-     * @param uiAllChecksModelFactory UI all checks patch factory for creating patches to be updated.
+     * @param uiAllChecksPatchFactory UI all checks patch factory for creating patches to be updated.
      * @param uiAllChecksPatchApplier UI all checks patch applier for affecting the hierarchy tree with changes from the patch.
      * @param dqoQueueJobFactory Job factory used to create a new instance of a job.
      * @param parentDqoJobQueue DQO job queue to execute the operation.
      * @param userHomeContextFactory User home context factory.
      */
     @Autowired
-    public CheckServiceImpl(UIAllChecksModelFactory uiAllChecksModelFactory,
+    public CheckServiceImpl(UIAllChecksPatchFactory uiAllChecksPatchFactory,
                             UIAllChecksPatchApplier uiAllChecksPatchApplier,
                             DqoQueueJobFactory dqoQueueJobFactory,
                             ParentDqoJobQueue parentDqoJobQueue,
                             UserHomeContextFactory userHomeContextFactory) {
-        this.uiAllChecksModelFactory = uiAllChecksModelFactory;
+        this.uiAllChecksPatchFactory = uiAllChecksPatchFactory;
         this.uiAllChecksPatchApplier = uiAllChecksPatchApplier;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.parentDqoJobQueue = parentDqoJobQueue;
@@ -106,56 +104,19 @@ public class CheckServiceImpl implements CheckService {
     /**
      * Disable existing checks matching the provided filters.
      *
-     * @param parameters Bulk check disable parameters.
+     * @param filters Check search filters to find checks to disable.
      */
     @Override
-    public void disableChecks(BulkCheckDisableParameters parameters) {
+    public void disableChecks(CheckSearchFilters filters) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
         HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
-        Collection<AbstractCheckSpec<?,?,?,?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, parameters.getCheckSearchFilters());
-
-        if (parameters.getSelectedTablesToColumns() != null) {
-            Map<String, Set<String>> searchableTablesToColumns = getSearchableTableToColumnsMapping(parameters.getSelectedTablesToColumns());
-
-            checks = checks.stream()
-                    .filter(check -> {
-                        String tableName = userHome.findTableFor(check.getHierarchyId()).getPhysicalTableName().getTableName();
-
-                        // Column is null for table-level checks.
-                        ColumnSpec columnNullable = userHome.findColumnFor(check.getHierarchyId());
-                        String columnName = columnNullable != null
-                                ? columnNullable.getColumnName()
-                                : null;
-
-                        if (!searchableTablesToColumns.containsKey(tableName)) {
-                            return false;
-                        }
-
-                        Set<String> selectedColumns = searchableTablesToColumns.get(tableName);
-                        if (columnName != null && !selectedColumns.contains(columnName)) {
-                            return false;
-                        }
-
-                        return true;
-                    }).collect(Collectors.toList());
-        }
+        Collection<AbstractCheckSpec<?,?,?,?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, filters);
 
         for (AbstractCheckSpec<?,?,?,?> check: checks) {
             check.setDisabled(true);
         }
         userHomeContext.flush();
-    }
-
-    protected Map<String, Set<String>> getSearchableTableToColumnsMapping(Map<String, List<String>> tableToColumnsMapping) {
-        Map<String, Set<String>> searchableMap = new HashMap<>();
-        for (Map.Entry<String, List<String>> tableToColumns: tableToColumnsMapping.entrySet()) {
-            Set<String> columnsSet = tableToColumns.getValue() != null
-                    ? new HashSet<>(tableToColumns.getValue())
-                    : new HashSet<>();
-            searchableMap.put(tableToColumns.getKey(), columnsSet);
-        }
-        return searchableMap;
     }
 
     /**
@@ -174,47 +135,20 @@ public class CheckServiceImpl implements CheckService {
             return new ArrayList<>();
         }
 
-        List<UIAllChecksModel> patches = this.uiAllChecksModelFactory.fromCheckSearchFilters(parameters.getCheckSearchFilters());
-        if (parameters.getSelectedTablesToColumns() != null) {
-            for (UIAllChecksModel patch: patches) {
-                UIAllChecksModelUtility.pruneToConcreteTargets(parameters.getSelectedTablesToColumns(), patch);
-            }
+        List<UIAllChecksModel> patches = this.uiAllChecksPatchFactory.fromCheckSearchFilters(parameters.getCheckSearchFilters());
 
-            // Discard empty models after pruning.
-            patches = patches.stream()
-                    .filter(patch -> patch.getTableChecksModel() != null || patch.getColumnChecksModel() != null)
-                    .collect(Collectors.toList());
-        }
-
-        Stream<UICheckContainerModel> collectedCheckContainers = Stream.empty();
-
-        List<UIAllColumnChecksModel> allColumnChecksModels = patches.stream()
+        Stream<UICheckContainerModel> columnCheckContainers = patches.stream()
                 .map(UIAllChecksModel::getColumnChecksModel)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-
-        if (!allColumnChecksModels.isEmpty()) {
-            Stream<UICheckContainerModel> columnCheckContainers = allColumnChecksModels.stream()
-                    .flatMap(model -> model.getUiTableColumnChecksModels().stream())
-                    .flatMap(model -> model.getUiColumnChecksModels().stream())
-                    .flatMap(model -> model.getCheckContainers().values().stream());
-            collectedCheckContainers = Stream.concat(collectedCheckContainers, columnCheckContainers);
-        }
-
-        List<UIAllTableChecksModel> allTableChecksModels = patches.stream()
+                .flatMap(model -> model.getUiTableColumnChecksModels().stream())
+                .flatMap(model -> model.getUiColumnChecksModels().stream())
+                .flatMap(model -> model.getCheckContainers().values().stream());
+        Stream<UICheckContainerModel> tableCheckContainers = patches.stream()
                 .map(UIAllChecksModel::getTableChecksModel)
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .flatMap(model -> model.getUiSchemaTableChecksModels().stream())
+                .flatMap(model -> model.getUiTableChecksModels().stream())
+                .flatMap(model -> model.getCheckContainers().values().stream());
 
-        if (!allTableChecksModels.isEmpty()) {
-            Stream<UICheckContainerModel> tableCheckContainers = allTableChecksModels.stream()
-                    .flatMap(model -> model.getUiSchemaTableChecksModels().stream())
-                    .flatMap(model -> model.getUiTableChecksModels().stream())
-                    .flatMap(model -> model.getCheckContainers().values().stream());
-            collectedCheckContainers = Stream.concat(collectedCheckContainers, tableCheckContainers);
-        }
-
-        Iterable<UICheckModel> checks = collectedCheckContainers
+        Iterable<UICheckModel> checks = Stream.concat(columnCheckContainers, tableCheckContainers)
                 .flatMap(model -> model.getCategories().stream())
                 .flatMap(model -> model.getChecks().stream())
                 .collect(Collectors.toList());
@@ -248,15 +182,12 @@ public class CheckServiceImpl implements CheckService {
             ruleThresholdsModel = new UIRuleThresholdsModel();
             model.setRule(ruleThresholdsModel);
         }
+        patchRuleThresholdsModel(ruleThresholdsModel, parameters);
 
-        patchRuleThresholdsModel(ruleThresholdsModel,
-                parameters.getUiCheckModelPatch().getRule(),
-                parameters.isOverrideConflicts());
-
-        List<UIFieldModel> newSensorFields = getPatchedFields(model.getSensorParameters(),
-                parameters.getUiCheckModelPatch().getSensorParameters(),
-                parameters.isOverrideConflicts());
-        model.setSensorParameters(newSensorFields);
+        List<UIFieldModel> sensorParametersPatches = parameters.getSensorOptions() != null
+                ? optionMapToFields(parameters.getSensorOptions())
+                : new ArrayList<>();
+        patchSensorParametersInModel(model, sensorParametersPatches, parameters.isOverrideConflicts());
 
         model.setConfigured((ruleThresholdsModel.getWarning() != null && ruleThresholdsModel.getWarning().isConfigured())
                 || (ruleThresholdsModel.getError() != null && ruleThresholdsModel.getError().isConfigured())
@@ -267,40 +198,146 @@ public class CheckServiceImpl implements CheckService {
                 && (ruleThresholdsModel.getFatal() == null || ruleThresholdsModel.getFatal().isDisabled()));
     }
 
-    protected void patchRuleThresholdsModel(UIRuleThresholdsModel ruleThresholdsModel,
-                                            UIRuleThresholdsModel rulePatchModel,
-                                            boolean isOverride) {
-        if (ruleThresholdsModel.getWarning() == null || !ruleThresholdsModel.getWarning().isConfigured() || isOverride) {
-            ruleThresholdsModel.setWarning(rulePatchModel.getWarning());
+    protected void patchSensorParametersInModel(UICheckModel model,
+                                                List<UIFieldModel> sensorPatches,
+                                                boolean overrideConflicts) {
+        Map<String, UIFieldModel> modelSensorParamsByName = new HashMap<>();
+        for (UIFieldModel fieldModel: model.getSensorParameters()) {
+            modelSensorParamsByName.put(fieldModel.getDefinition().getDisplayName(), fieldModel);
         }
 
-        if (ruleThresholdsModel.getError() == null || !ruleThresholdsModel.getError().isConfigured() || isOverride) {
-            ruleThresholdsModel.setError(rulePatchModel.getError());
+        for (UIFieldModel patch: sensorPatches) {
+            String paramName = patch.getDefinition().getDisplayName();
+            if (!modelSensorParamsByName.containsKey(paramName)) {
+                throw new IllegalArgumentException(String.format("Check %s doesn't have field %s.", model.getCheckName(), paramName));
+            }
+            if (modelSensorParamsByName.get(paramName).getValue() == null || overrideConflicts) {
+                modelSensorParamsByName.put(paramName, patch);
+            }
         }
 
-        if (ruleThresholdsModel.getFatal() == null || !ruleThresholdsModel.getFatal().isConfigured() || isOverride) {
-            ruleThresholdsModel.setFatal(rulePatchModel.getFatal());
+        model.setSensorParameters(new ArrayList<>(modelSensorParamsByName.values()));
+    }
+
+    protected void patchRuleThresholdsModel(UIRuleThresholdsModel ruleThresholdsModel, UIAllChecksPatchParameters parameters) {
+        boolean isOverride = parameters.isOverrideConflicts();
+
+        if (parameters.getWarningLevelOptions() != null) {
+            Map<String, String> options = parameters.getWarningLevelOptions();
+            List<UIFieldModel> newParameterFields = this.optionMapToFields(options);
+
+            UIRuleParametersModel ruleParametersModel = ruleThresholdsModel.getWarning();
+            if (ruleParametersModel == null) {
+                ruleParametersModel = new UIRuleParametersModel();
+                ruleThresholdsModel.setWarning(ruleParametersModel);
+            }
+
+            this.patchRuleParameters(ruleParametersModel, newParameterFields, isOverride);
+        }
+        if (parameters.getErrorLevelOptions() != null) {
+            Map<String, String> options = parameters.getErrorLevelOptions();
+            List<UIFieldModel> newParameterFields = this.optionMapToFields(options);
+
+            UIRuleParametersModel ruleParametersModel = ruleThresholdsModel.getError();
+            if (ruleParametersModel == null) {
+                ruleParametersModel = new UIRuleParametersModel();
+                ruleThresholdsModel.setError(ruleParametersModel);
+            }
+
+            this.patchRuleParameters(ruleParametersModel, newParameterFields, isOverride);
+        }
+        if (parameters.getFatalLevelOptions() != null) {
+            Map<String, String> options = parameters.getFatalLevelOptions();
+            List<UIFieldModel> newParameterFields = this.optionMapToFields(options);
+
+            UIRuleParametersModel ruleParametersModel = ruleThresholdsModel.getFatal();
+            if (ruleParametersModel == null) {
+                ruleParametersModel = new UIRuleParametersModel();
+                ruleThresholdsModel.setFatal(ruleParametersModel);
+            }
+
+            this.patchRuleParameters(ruleParametersModel, newParameterFields, isOverride);
+        }
+
+        if (ruleThresholdsModel.getWarning() != null) {
+            ruleThresholdsModel.getWarning().setDisabled(parameters.isDisableWarningLevel());
+        }
+        if (ruleThresholdsModel.getError() != null) {
+            ruleThresholdsModel.getError().setDisabled(parameters.isDisableErrorLevel());
+        }
+        if (ruleThresholdsModel.getFatal() != null) {
+            ruleThresholdsModel.getFatal().setDisabled(parameters.isDisableFatalLevel());
         }
     }
 
-    protected List<UIFieldModel> getPatchedFields(List<UIFieldModel> sourceFields,
-                                                  List<UIFieldModel> patches,
-                                                  boolean overrideConflicts) {
-        Map<String, UIFieldModel> paramsByName = new HashMap<>();
-        for (UIFieldModel fieldModel: sourceFields) {
-            paramsByName.put(fieldModel.getDefinition().getDisplayName(), fieldModel);
+    protected void patchRuleParameters(UIRuleParametersModel ruleParametersModel,
+                                       List<UIFieldModel> patches,
+                                       boolean overrideConflicts) {
+        List<UIFieldModel> ruleParameterFields = ruleParametersModel.getRuleParameters();
+        if (ruleParameterFields == null) {
+            ruleParameterFields = new ArrayList<>();
+            ruleParametersModel.setRuleParameters(ruleParameterFields);
         }
 
         for (UIFieldModel patch: patches) {
-            String paramName = patch.getDefinition().getDisplayName();
-            if (!paramsByName.containsKey(paramName)) {
-                throw new IllegalArgumentException(String.format("Check doesn't have field %s.", paramName));
-            }
-            if (paramsByName.get(paramName).getValue() == null || overrideConflicts) {
-                paramsByName.put(paramName, patch);
+            String patchName = patch.getDefinition().getDisplayName();
+            Optional<UIFieldModel> shouldOverride = ruleParameterFields.stream()
+                    .filter(field -> field.getDefinition().getDisplayName().equals(patchName))
+                    .findAny();
+
+            if (shouldOverride.isPresent()) {
+                if (overrideConflicts) {
+                    UIFieldModel substitute = shouldOverride.get();
+                    substitute.setValue(patch.getValue());
+                }
+            } else {
+                ruleParameterFields.add(patch);
             }
         }
 
-        return new ArrayList<>(paramsByName.values());
+        ruleParametersModel.setConfigured(!ruleParameterFields.isEmpty());
     }
+
+    protected List<UIFieldModel> optionMapToFields(Map<String, String> options) {
+        List<UIFieldModel> result = new ArrayList<>();
+
+        for (Map.Entry<String, String> option: options.entrySet()) {
+            UIFieldModel uiFieldModel = new UIFieldModel();
+            ParameterDefinitionSpec parameterDefinition = new ParameterDefinitionSpec();
+            parameterDefinition.setDisplayName(option.getKey());
+            parameterDefinition.setFieldName(option.getKey());
+            uiFieldModel.setDefinition(parameterDefinition);
+
+            this.assignUiFieldModelValue(uiFieldModel, option.getValue());
+            result.add(uiFieldModel);
+        }
+        return result;
+    }
+
+    protected void assignUiFieldModelValue(UIFieldModel uiFieldModel, String value) {
+        Integer valInt = StringTypeCaster.tryParseInt(value);
+        if (valInt != null) {
+            uiFieldModel.setIntegerValue(valInt);
+            uiFieldModel.getDefinition().setDataType(ParameterDataType.integer_type);
+            return;
+        }
+
+        Long valLong = StringTypeCaster.tryParseLong(value);
+        if (valLong != null) {
+            uiFieldModel.setLongValue(valLong);
+            uiFieldModel.getDefinition().setDataType(ParameterDataType.long_type);
+            return;
+        }
+
+        Double valDouble = StringTypeCaster.tryParseDouble(value);
+        if (valDouble != null) {
+            uiFieldModel.setDoubleValue(valDouble);
+            uiFieldModel.getDefinition().setDataType(ParameterDataType.double_type);
+            return;
+        }
+
+        uiFieldModel.setStringValue(value);
+        uiFieldModel.getDefinition().setDataType(ParameterDataType.string_type);
+    }
+
 }

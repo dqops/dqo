@@ -34,10 +34,18 @@ const ColumnCommentsView = ({
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
-    dispatch(
-      getColumnComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
-    );
-  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, columnName, tableName]);
+    if (
+      !updatedComments?.length ||
+      columnBasic?.connection_name !== connectionName ||
+      columnBasic?.table?.schema_name !== schemaName ||
+      columnBasic?.table?.table_name !== tableName ||
+      columnBasic.column_name !== columnName
+    ) {
+      dispatch(
+        getColumnComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+      );
+    }
+  }, [connectionName, schemaName, columnName, tableName, columnBasic]);
 
   const onUpdate = async () => {
     await dispatch(

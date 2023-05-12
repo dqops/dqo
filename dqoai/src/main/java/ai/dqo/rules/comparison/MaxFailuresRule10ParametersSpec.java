@@ -27,7 +27,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if the number of executive failures (the sensor returned 0) is below the max_failures. The default maximum failures is 10 failures (the 11th failure is reported).
+ * Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -38,8 +38,9 @@ public class MaxFailuresRule10ParametersSpec extends AbstractRuleParametersSpec 
         }
     };
 
+    // TODO: Constructor setting maxCount, like in MinCountRuleParametersSpec
 
-    @JsonPropertyDescription("Maximum number of consecutive check failures, a check is failed when the sensor's query failed to execute due to a connection error, missing table or a corrupted table.")
+    @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
     private Long maxFailures = 10L;
 
     /**

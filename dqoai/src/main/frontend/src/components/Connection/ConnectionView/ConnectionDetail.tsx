@@ -47,8 +47,10 @@ const ConnectionDetail = () => {
   const [message, setMessage] = useState<string>();
 
   useEffect(() => {
-    dispatch(getConnectionBasic(checkTypes, activeTab, connection));
-  }, [checkTypes, activeTab, connection]);
+    if (connectionBasic?.connection_name !== connection) {
+      dispatch(getConnectionBasic(checkTypes, activeTab, connection));
+    }
+  }, [connection]);
 
   const onChange = (obj: any) => {
     dispatch(
@@ -69,7 +71,9 @@ const ConnectionDetail = () => {
       updateConnectionBasic(checkTypes, activeTab, connection, connectionBasic)
     );
 
-    dispatch(getConnectionBasic(checkTypes, activeTab, connection));
+    if (connectionBasic?.connection_name !== connection) {
+      dispatch(getConnectionBasic(checkTypes, activeTab, connection));
+    }
 
     dispatch(setIsUpdatedConnectionBasic(checkTypes, activeTab, false));
     setShowConfirm(false);
@@ -79,7 +83,6 @@ const ConnectionDetail = () => {
     if (!connectionBasic) {
       return;
     }
-
 
     setIsTesting(true);
     const testRes = await SourceConnectionApi.testConnection(false, connectionBasic);

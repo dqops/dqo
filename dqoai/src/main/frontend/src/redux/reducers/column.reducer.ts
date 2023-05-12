@@ -46,8 +46,8 @@ export interface IColumnState {
   isUpdatedMonthlyPartitionedChecks?: boolean;
   checksUIFilter?: UICheckContainerModel;
   isUpdatedChecksUIFilter?: boolean;
-  recurringChecksUIFilter?: UICheckContainerModel;
-  isUpdatedRecurringChecksUIFilter?: boolean;
+  recurringUIFilter?: UICheckContainerModel;
+  isUpdatedRecurringUIFilter?: boolean;
   partitionedChecksUIFilter?: UICheckContainerModel;
   isUpdatedPartitionedChecksUIFilter?: boolean;
 }
@@ -435,8 +435,8 @@ const columnReducer = (state = initialState, action: any) => {
       return {
         ...state,
         loading: false,
-        RecurringChecksUIFilter: action.data,
-        isUpdatedRecurringChecksUIFilter: false,
+        RecurringUIFilter: action.data,
+        isUpdatedRecurringUIFilter: false,
         error: null
       };
     case COLUMN_ACTION.GET_COLUMN_RECURRING_UI_FILTER_ERROR:
@@ -473,8 +473,8 @@ const columnReducer = (state = initialState, action: any) => {
     case COLUMN_ACTION.SET_UPDATED_RECURRING_UI_FILTER:
       return {
         ...state,
-        isUpdatedRecurringChecksUIFilter: true,
-        RecurringChecksUIFilter: action.data,
+        isUpdatedRecurringUIFilter: true,
+        RecurringUIFilter: action.data,
       };
     case COLUMN_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER:
       return {

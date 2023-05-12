@@ -24,9 +24,11 @@ const ConnectionDataStream = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
-    dispatch(getConnectionBasic(checkTypes, firstLevelActiveTab, connection));
-    dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection));
-  }, [connection, checkTypes, firstLevelActiveTab]);
+    if (connectionBasic?.connection_name !== connection) {
+      dispatch(getConnectionBasic(checkTypes, firstLevelActiveTab, connection));
+      dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection));
+    }
+  }, [connection, checkTypes, firstLevelActiveTab, connectionBasic]);
 
   useEffect(() => {
     if (!updatedDataStreamsMapping) {

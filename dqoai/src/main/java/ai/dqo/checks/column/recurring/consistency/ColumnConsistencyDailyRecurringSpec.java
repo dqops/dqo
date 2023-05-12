@@ -17,7 +17,6 @@ package ai.dqo.checks.column.recurring.consistency;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.consistency.ColumnConsistencyDateMatchFormatPercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.consistency.ColumnStringDatatypeChangedCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -29,7 +28,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of consistency data quality recurring checks on a column level that are checking at a daily level.
+ * Container of built-in preconfigured data quality check points on a column level that are checking at a daily level.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -38,15 +37,11 @@ public class ColumnConsistencyDailyRecurringSpec extends AbstractCheckCategorySp
     public static final ChildHierarchyNodeFieldMapImpl<ColumnConsistencyDailyRecurringSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_date_match_format_percent", o -> o.dailyDateMatchFormatPercent);
-            put("daily_string_datatype_changed", o -> o.dailyStringDatatypeChanged);
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily recurring.")
     private ColumnConsistencyDateMatchFormatPercentCheckSpec dailyDateMatchFormatPercent;
-
-    @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringDatatypeChangedCheckSpec dailyStringDatatypeChanged;
 
     /**
      * Returns a date match format percentage check.
@@ -64,24 +59,6 @@ public class ColumnConsistencyDailyRecurringSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.dailyDateMatchFormatPercent, dailyDateMatchFormatPercent));
         this.dailyDateMatchFormatPercent = dailyDateMatchFormatPercent;
         propagateHierarchyIdToField(dailyDateMatchFormatPercent, "daily_date_match_format_percent");
-    }
-
-    /**
-     * Returns a count of expected values in datatype changed check.
-     * @return Datatype changed check.
-     */
-    public ColumnStringDatatypeChangedCheckSpec getDailyStringDatatypeChanged() {
-        return dailyStringDatatypeChanged;
-    }
-
-    /**
-     * Sets a new definition of a datatype changed check.
-     * @param dailyStringDatatypeChanged Datatype changed check.
-     */
-    public void setDailyStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec dailyStringDatatypeChanged) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringDatatypeChanged, dailyStringDatatypeChanged));
-        this.dailyStringDatatypeChanged = dailyStringDatatypeChanged;
-        propagateHierarchyIdToField(dailyStringDatatypeChanged, "daily_string_datatype_changed");
     }
 
     /**

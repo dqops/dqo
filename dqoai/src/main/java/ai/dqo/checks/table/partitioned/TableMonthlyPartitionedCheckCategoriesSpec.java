@@ -42,7 +42,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of table level monthly partitioned checks. Contains categories of monthly partitioned checks.
+ * Container of table level monthly checkpoints. Contains categories of monthly checkpoints.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -68,13 +68,13 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableTimelinessMonthlyPartitionedChecksSpec timeliness;
 
-    @JsonPropertyDescription("Custom SQL monthly partitioned data quality checks that verify the quality of every month of data separately")
+    @JsonPropertyDescription("Custom SQL daily partitioned data quality checks that verify the quality of every month of data separately")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlMonthlyPartitionedSpec sql;
 
     /**
-     * Returns the container of monthly partitioned checks for standard data quality checks.
+     * Returns the container of daily partitioned checks for standard data quality checks.
      * @return Container of row standard data quality checks.
      */
     public TableStandardMonthlyPartitionedChecksSpec getStandard() {
@@ -92,16 +92,16 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     }
 
     /**
-     * Returns a container of table level timeliness partitioned checks.
-     * @return Custom timeliness partitioned checks.
+     * Returns a container of table level timeliness checkpoints.
+     * @return Custom timeliness checkpoints.
      */
     public TableTimelinessMonthlyPartitionedChecksSpec getTimeliness() {
         return timeliness;
     }
 
     /**
-     * Sets a reference to a container of timeliness partitioned checks.
-     * @param timeliness Custom timeliness partitioned checks.
+     * Sets a reference to a container of timeliness checkpoints.
+     * @param timeliness Custom timeliness checkpoints.
      */
     public void setTimeliness(TableTimelinessMonthlyPartitionedChecksSpec timeliness) {
         this.setDirtyIf(!Objects.equals(this.timeliness, timeliness));
@@ -154,7 +154,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     }
 
     /**
-     * Returns the type of checks (profiling, recurring, partitioned).
+     * Returns the type of checks (adhoc, checkpoint, partitioned).
      *
      * @return Check type.
      */
@@ -165,8 +165,8 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     }
 
     /**
-     * Returns the time range for recurring and partitioned checks (daily, monthly, etc.).
-     * Profiling checks do not have a time range and return null.
+     * Returns the time range for checkpoint and partitioned checks (daily, monthly, etc.).
+     * Adhoc checks do not have a time range and return null.
      *
      * @return Time range (daily, monthly, ...).
      */

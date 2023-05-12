@@ -24,7 +24,7 @@ export interface IncidentFilter {
   connection: string;
   numberOfMonth?: number;
   openIncidents?: boolean;
-  acknowledgedIncidents?: boolean;
+  acknowledgeIncidents?: boolean;
   resolvedIncidents?: boolean;
   mutedIncidents?: boolean;
   page?: number;

@@ -35,8 +35,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * REST api controller to manage the list of rules.
@@ -128,16 +128,16 @@ public class RuleController {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
-        RuleDefinitionList userRuleDefinitionList = userHome.getRules();
-        RuleDefinitionWrapper existingRuleDefinitionWrapper = userRuleDefinitionList.getByObjectName(fullRuleName, true);
+        RuleDefinitionList ruleDefinitionList = userHome.getRules();
+        RuleDefinitionWrapper existingRuleDefinitionWrapper = ruleDefinitionList.getByObjectName(fullRuleName, true);
 
         if (existingRuleDefinitionWrapper != null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
         }
 
-        RuleDefinitionWrapper ruleDefinitionWrapper = userRuleDefinitionList.createAndAddNew(ruleModel.getRuleName());
-        ruleDefinitionWrapper.setSpec(ruleModel.toRuleDefinitionSpec());
-        ruleDefinitionWrapper.setRulePythonModuleContent(ruleModel.makePythonModuleFileContent());
+        RuleDefinitionWrapper ruleDefinitionWrapper = ruleDefinitionList.createAndAddNew(ruleModel.getRuleName());
+        ruleDefinitionWrapper.setSpec(ruleModel.withRuleDefinitionSpec());
+        ruleDefinitionWrapper.setRulePythonModuleContent(ruleModel.withRuleDefinitionPythonModuleContent());
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
@@ -179,24 +179,14 @@ public class RuleController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
         }
 
-        if (ruleModel.equalsBuiltInRule(builtinRuleDefinitionWrapper)) {
-            if (existingUserRuleDefinitionWrapper != null) {
-                existingUserRuleDefinitionWrapper.markForDeletion(); // remove customization
-            }
-            else {
-                // ignore saving
-                return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
-            }
-        }
-
         if (existingUserRuleDefinitionWrapper == null) {
             RuleDefinitionWrapper ruleDefinitionWrapper = userRuleDefinitionList.createAndAddNew(fullRuleName);
-            ruleDefinitionWrapper.setSpec(ruleModel.toRuleDefinitionSpec());
-            ruleDefinitionWrapper.setRulePythonModuleContent(ruleModel.makePythonModuleFileContent());
+            ruleDefinitionWrapper.setSpec(ruleModel.withRuleDefinitionSpec());
+            ruleDefinitionWrapper.setRulePythonModuleContent(ruleModel.withRuleDefinitionPythonModuleContent());
         }
         else {
-            existingUserRuleDefinitionWrapper.setSpec(ruleModel.toRuleDefinitionSpec());
-            existingUserRuleDefinitionWrapper.setRulePythonModuleContent(ruleModel.makePythonModuleFileContent());
+            existingUserRuleDefinitionWrapper.setSpec(ruleModel.withRuleDefinitionSpec());
+            existingUserRuleDefinitionWrapper.setRulePythonModuleContent(ruleModel.withRuleDefinitionPythonModuleContent());
         }
 
         userHomeContext.flush();
@@ -257,28 +247,21 @@ public class RuleController {
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
-        List<RuleDefinitionWrapper> ruleDefinitionWrapperListDqoHome = new ArrayList<>(dqoHome.getRules().toList());
-        ruleDefinitionWrapperListDqoHome.sort(Comparator.comparing(rw -> rw.getRuleName()));
-        Set<String> builtInRuleNames = ruleDefinitionWrapperListDqoHome.stream().map(rw -> rw.getRuleName()).collect(Collectors.toSet());
-
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-        List<RuleDefinitionWrapper> ruleDefinitionWrapperListUserHome = new ArrayList<>(userHome.getRules().toList());
-        ruleDefinitionWrapperListUserHome.sort(Comparator.comparing(rw -> rw.getRuleName()));
-        Set<String> customRuleNames = ruleDefinitionWrapperListUserHome.stream().map(rw -> rw.getRuleName()).collect(Collectors.toSet());
-
-        for (RuleDefinitionWrapper ruleDefinitionWrapperUserHome : ruleDefinitionWrapperListUserHome) {
-            String ruleNameUserHome = ruleDefinitionWrapperUserHome.getRuleName();
-            ruleBasicFolderModel.addRule(ruleNameUserHome, true, builtInRuleNames.contains(ruleNameUserHome));
-        }
+        List<RuleDefinitionWrapper> ruleDefinitionWrapperListDqoHome = dqoHome.getRules().toList();
 
         for (RuleDefinitionWrapper ruleDefinitionWrapperDqoHome : ruleDefinitionWrapperListDqoHome) {
             String ruleNameDqoHome = ruleDefinitionWrapperDqoHome.getRuleName();
-            if (customRuleNames.contains(ruleNameDqoHome)) {
-                continue; // already added
-            }
+            ruleBasicFolderModel.addRule(ruleNameDqoHome, false);
+        }
 
-            ruleBasicFolderModel.addRule(ruleNameDqoHome, false, true);
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        List<RuleDefinitionWrapper> ruleDefinitionWrapperListUserHome = userHome.getRules().toList();
+
+        for (RuleDefinitionWrapper ruleDefinitionWrapperUserHome : ruleDefinitionWrapperListUserHome) {
+            String ruleNameUserHome = ruleDefinitionWrapperUserHome.getRuleName();
+            ruleBasicFolderModel.addRule(ruleNameUserHome, true);
         }
 
         return new ResponseEntity<>(Mono.just(ruleBasicFolderModel), HttpStatus.OK);

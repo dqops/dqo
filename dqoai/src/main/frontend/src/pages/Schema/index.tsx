@@ -6,8 +6,6 @@ import { useHistory, useParams } from "react-router-dom";
 import { ROUTES } from "../../shared/routes";
 import { TableBasicModel } from "../../api";
 import { TableApiClient } from "../../services/apiClient";
-import Button from "../../components/Button";
-import AddTableDialog from "../../components/CustomTree/AddTableDialog";
 
 const tabs = [
   {
@@ -19,7 +17,6 @@ const tabs = [
 const SchemaPage = () => {
   const { connection, schema, tab: activeTab, checkTypes }: { connection: string, schema: string, tab: string, checkTypes: string } = useParams();
   const [tables, setTables] = useState<TableBasicModel[]>([]);
-  const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
 
   const history = useHistory();
 
@@ -40,14 +37,6 @@ const SchemaPage = () => {
           <SvgIcon name="schema" className="w-5 h-5 shrink-0" />
           <div className="text-xl font-semibold truncate">{`${connection}.schema.${schema}`}</div>
         </div>
-
-        <Button
-          className="!h-10"
-          color="primary"
-          variant="outlined"
-          label="Add Table"
-          onClick={() => setAddTableDialogOpen(true)}
-        />
       </div>
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
@@ -77,10 +66,6 @@ const SchemaPage = () => {
           ))}
           </tbody>
         </table>
-        <AddTableDialog
-          open={addTableDialogOpen}
-          onClose={() => setAddTableDialogOpen(false)}
-        />
       </div>
     </ConnectionLayout>
   );

@@ -15,37 +15,22 @@
  */
 package ai.dqo.services.metadata;
 
-import ai.dqo.checks.CheckTarget;
-import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.CheckType;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
-import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.metadata.sources.ConnectionList;
-import ai.dqo.metadata.sources.ConnectionWrapper;
-import ai.dqo.metadata.sources.PhysicalTableName;
-import ai.dqo.metadata.sources.TableWrapper;
+import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.rest.models.check.CheckTemplate;
-import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
-import ai.dqo.services.check.mapping.models.UICheckContainerTypeModel;
-import ai.dqo.services.check.mapping.models.UICheckModel;
-import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -53,17 +38,14 @@ public class TableServiceImpl implements TableService {
     private final UserHomeContextFactory userHomeContextFactory;
     private final DqoQueueJobFactory dqoQueueJobFactory;
     private final DqoJobQueue dqoJobQueue;
-    private final UIAllChecksModelFactory uiAllChecksModelFactory;
 
     @Autowired
     public TableServiceImpl(UserHomeContextFactory userHomeContextFactory,
                             DqoQueueJobFactory dqoQueueJobFactory,
-                            DqoJobQueue dqoJobQueue,
-                            UIAllChecksModelFactory uiAllChecksModelFactory) {
+                            DqoJobQueue dqoJobQueue) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
-        this.uiAllChecksModelFactory = uiAllChecksModelFactory;
     }
 
     /**
@@ -82,72 +64,6 @@ public class TableServiceImpl implements TableService {
         }
 
         return connectionWrapper.getTables().getByObjectName(tableName, true);
-    }
-
-    /**
-     * Retrieves a list of column level check templates on the given table.
-     * @param connectionName Connection name.
-     * @param tableName      Table name.
-     * @param checkType      (Optional) Check type.
-     * @param checkTimeScale (Optional) Check time-scale.
-     * @param checkCategory  (Optional) Check category.
-     * @param checkName      (Optional) Check name.
-     * @return List of column level check templates on the requested table, matching the optional filters. Null if table doesn't exist.
-     */
-    @Override
-    public List<CheckTemplate> getCheckTemplates(String connectionName,
-                                                 PhysicalTableName tableName,
-                                                 CheckType checkType,
-                                                 CheckTimeScale checkTimeScale,
-                                                 String checkCategory,
-                                                 String checkName) {
-        if (Strings.isNullOrEmpty(connectionName)
-                || tableName == null
-                || checkType == null) {
-            // Connection name, table name and check type have to be provided.
-            return null;
-        }
-        if ((checkType == CheckType.PARTITIONED || checkType == CheckType.RECURRING) && checkTimeScale == null) {
-            // Time scale has to be provided for partitioned and recurring checks.
-            return null;
-        }
-
-        CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
-        checkSearchFilters.setConnectionName(connectionName);
-        checkSearchFilters.setSchemaTableName(tableName.toTableSearchFilter());
-        checkSearchFilters.setCheckType(checkType);
-        checkSearchFilters.setTimeScale(checkTimeScale);
-        // Filtering by checkTarget has to be done apart from these filters.
-        checkSearchFilters.setCheckCategory(checkCategory);
-        checkSearchFilters.setCheckName(checkName);
-
-        List<UIAllChecksModel> uiAllChecksModels = this.uiAllChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
-
-        UICheckContainerTypeModel uiCheckContainerTypeModel = new UICheckContainerTypeModel(checkType, checkTimeScale);
-
-        return uiAllChecksModels.stream()
-                // Get only column-level checks
-                .map(UIAllChecksModel::getColumnChecksModel)
-                .flatMap(model -> model.getUiTableColumnChecksModels().stream())
-                .flatMap(model -> model.getUiColumnChecksModels().stream())
-                .flatMap(model -> model.getCheckContainers().values().stream())
-                .flatMap(model -> model.getCategories().stream())
-                // For each category get check templates
-                .map(categoryModel -> {
-                    Map<String, UICheckModel> checkNameToExampleCheck = new HashMap<>();
-                    for (UICheckModel checkModel: categoryModel.getChecks()) {
-                        if (!checkNameToExampleCheck.containsKey(checkModel.getCheckName())) {
-                            checkNameToExampleCheck.put(checkModel.getCheckName(), checkModel);
-                        }
-                    }
-
-                    return checkNameToExampleCheck.values().stream()
-                            .map(uiCheckModel -> CheckTemplate.fromUiCheckModel(
-                                    uiCheckModel, categoryModel.getCategory(), uiCheckContainerTypeModel, CheckTarget.column)
-                            );
-                })
-                .reduce(Stream.empty(), Stream::concat)
-                .collect(Collectors.toList());
     }
 
     /**

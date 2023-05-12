@@ -19,9 +19,9 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MaxFailuresRule0ParametersSpec;
-import ai.dqo.rules.comparison.MaxFailuresRule5ParametersSpec;
 import ai.dqo.rules.comparison.MaxFailuresRule10ParametersSpec;
+import ai.dqo.rules.comparison.MaxFailuresRule1ParametersSpec;
+import ai.dqo.rules.comparison.MaxFailuresRule5ParametersSpec;
 import ai.dqo.sensors.table.availability.TableAvailabilitySensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,7 +39,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabilitySensorParametersSpec, MaxFailuresRule0ParametersSpec, MaxFailuresRule5ParametersSpec, MaxFailuresRule10ParametersSpec> {
+public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabilitySensorParametersSpec, MaxFailuresRule1ParametersSpec, MaxFailuresRule5ParametersSpec, MaxFailuresRule10ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableAvailabilityCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -53,7 +53,7 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxFailuresRule0ParametersSpec warning;
+    private MaxFailuresRule1ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -90,7 +90,7 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxFailuresRule0ParametersSpec getWarning() {
+    public MaxFailuresRule1ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -98,7 +98,7 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxFailuresRule0ParametersSpec warning) {
+    public void setWarning(MaxFailuresRule1ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");

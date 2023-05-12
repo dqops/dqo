@@ -19,8 +19,6 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.check.impl.CheckCliService;
-import ai.dqo.cli.commands.check.impl.models.UIAllChecksCliPatchParameters;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.*;
 import ai.dqo.cli.output.OutputFormatService;
@@ -29,6 +27,8 @@ import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.services.check.CheckService;
+import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import ai.dqo.utils.serialization.JsonSerializer;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +50,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWritter;
-    private CheckCliService checkService;
+    private CheckService checkService;
     private JsonSerializer jsonSerializer;
     private OutputFormatService outputFormatService;
     private FileWritter fileWritter;
@@ -62,7 +62,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
     public CheckEnableCliCommand(TerminalReader terminalReader,
                                  TerminalWriter terminalWriter,
                                  TerminalTableWritter terminalTableWritter,
-                                 CheckCliService checkService,
+                                 CheckService checkService,
                                  JsonSerializer jsonSerializer,
                                  OutputFormatService outputFormatService,
                                  FileWritter fileWritter) {
@@ -95,10 +95,10 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
             completionCandidates = SensorNameCompleter.class)
     private String sensor;
 
-    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (profiling, recurring, partitioned)")
+    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (adhoc, checkpoint, partitioned)")
     private CheckType checkType;
 
-    @CommandLine.Option(names = {"-ts", "--time-scale"}, description = "Time scale for recurring and partitioned checks (daily, monthly, etc.)")
+    @CommandLine.Option(names = {"-ts", "--time-scale"}, description = "Time scale for checkpoint and partitioned checks (daily, monthly, etc.)")
     private CheckTimeScale timeScale;
 
     @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (standard, nulls, numeric, etc.)")
@@ -222,7 +222,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
     }
 
     /**
-     * Gets the time scale filter for recurring and partitioned checks.
+     * Gets the time scale filter for checkpoint and partitioned checks.
      * @return Time scale filter.
      */
     public CheckTimeScale getTimeScale() {
@@ -230,7 +230,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
     }
 
     /**
-     * Sets the time scale filter for recurring and partitioned checks.
+     * Sets the time scale filter for checkpoint and partitioned checks.
      * @param timeScale Time scale filter.
      */
     public void setTimeScale(CheckTimeScale timeScale) {
@@ -347,7 +347,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
             this.fatalLevelOptions = new HashMap<>();
         }
 
-        UIAllChecksCliPatchParameters patchParameters = new UIAllChecksCliPatchParameters() {{
+        UIAllChecksPatchParameters patchParameters = new UIAllChecksPatchParameters() {{
             setCheckSearchFilters(filters);
             setSensorOptions(sensorParams);
             setOverrideConflicts(override);

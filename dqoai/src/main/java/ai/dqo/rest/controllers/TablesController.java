@@ -16,7 +16,6 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
-import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
@@ -24,8 +23,8 @@ import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpe
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
-import ai.dqo.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
-import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.TableMonthlyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableRecurringSpec;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
@@ -45,26 +44,16 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.rest.models.check.CheckTemplate;
-import ai.dqo.rest.models.metadata.TableBasicModel;
-import ai.dqo.rest.models.metadata.TableModel;
-import ai.dqo.rest.models.metadata.TablePartitioningModel;
-import ai.dqo.rest.models.metadata.TableStatisticsModel;
+import ai.dqo.rest.models.metadata.*;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
-import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
 import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
 import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
 import ai.dqo.services.check.mapping.models.UICheckContainerModel;
-import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
-import ai.dqo.services.check.mapping.models.column.UITableColumnChecksModel;
 import ai.dqo.services.metadata.TableService;
 import ai.dqo.statistics.StatisticsCollectorTarget;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -89,13 +78,11 @@ import java.util.stream.Stream;
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Tables", description = "Manages tables inside a connection/schema")
 public class TablesController {
-    private static final Logger LOG = LoggerFactory.getLogger(TablesController.class);
     private final TableService tableService;
     private UserHomeContextFactory userHomeContextFactory;
     private DqoHomeContextFactory dqoHomeContextFactory;
     private SpecToUiCheckMappingService specToUiCheckMappingService;
     private UiToSpecCheckMappingService uiToSpecCheckMappingService;
-    private final UIAllChecksModelFactory uiAllChecksModelFactory;
     private StatisticsDataService statisticsDataService;
 
     /**
@@ -105,7 +92,6 @@ public class TablesController {
      * @param dqoHomeContextFactory            DQO home context factory, used to retrieve the definition of built-in sensors.
      * @param specToUiCheckMappingService      Check mapper to convert the check specification to a UI model.
      * @param uiToSpecCheckMappingService      Check mapper to convert the check UI model to a check specification.
-     * @param uiAllChecksModelFactory          Factory for producing complex UI friendly views of check configurations.
      * @param statisticsDataService            Statistics data service, provides access to the statistics (basic profiling).
      */
     @Autowired
@@ -114,14 +100,12 @@ public class TablesController {
                             DqoHomeContextFactory dqoHomeContextFactory,
                             SpecToUiCheckMappingService specToUiCheckMappingService,
                             UiToSpecCheckMappingService uiToSpecCheckMappingService,
-                            UIAllChecksModelFactory uiAllChecksModelFactory,
                             StatisticsDataService statisticsDataService) {
         this.tableService = tableService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.specToUiCheckMappingService = specToUiCheckMappingService;
         this.uiToSpecCheckMappingService = uiToSpecCheckMappingService;
-        this.uiAllChecksModelFactory = uiAllChecksModelFactory;
         this.statisticsDataService = statisticsDataService;
     }
 
@@ -155,7 +139,7 @@ public class TablesController {
                 .stream()
                 .filter(tw -> Objects.equals(tw.getPhysicalTableName().getSchemaName(), schemaName))
                 .sorted(Comparator.comparing(tw -> tw.getPhysicalTableName().getTableName()))
-                .map(TableWrapper::getSpec)
+                .map(tw -> tw.getSpec())
                 .collect(Collectors.toList());
 
         Stream<TableBasicModel> modelStream = tableSpecs.stream()
@@ -463,7 +447,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Data quality checks on a requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks")
     @ApiOperation(value = "getTableProfilingChecks", notes = "Return the configuration of table level data quality checks on a table", response = TableProfilingCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -507,14 +491,14 @@ public class TablesController {
      * @return Daily data quality recurring on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/daily")
-    @ApiOperation(value = "getTableRecurringChecksDaily", notes = "Return the configuration of daily table level data quality recurring on a table", response = TableDailyRecurringCategoriesSpec.class)
+    @ApiOperation(value = "getTableRecurringDaily", notes = "Return the configuration of daily table level data quality recurring on a table", response = TableDailyRecurringCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of daily table level data quality recurring on a table returned", response = TableDailyRecurringCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableDailyRecurringCategoriesSpec>> getTableRecurringChecksDaily(
+    public ResponseEntity<Mono<TableDailyRecurringCategoriesSpec>> getTableRecurringDaily(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -550,14 +534,14 @@ public class TablesController {
      * @return Monthly data quality recurring on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/monthly")
-    @ApiOperation(value = "getTableRecurringChecksMonthly", notes = "Return the configuration of monthly table level data quality recurring on a table", response = TableMonthlyRecurringCheckCategoriesSpec.class)
+    @ApiOperation(value = "getTableRecurringMonthly", notes = "Return the configuration of monthly table level data quality recurring on a table", response = TableMonthlyRecurringCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of monthly table level data quality recurring on a table returned", response = TableMonthlyRecurringCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of monthly table level data quality recurring on a table returned", response = TableMonthlyRecurringCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableMonthlyRecurringCheckCategoriesSpec>> getTableRecurringChecksMonthly(
+    public ResponseEntity<Mono<TableMonthlyRecurringCategoriesSpec>> getTableRecurringMonthly(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -581,7 +565,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableMonthlyRecurringCheckCategoriesSpec monthlyRecurring = tableSpec.getRecurringChecks().getMonthly();
+        TableMonthlyRecurringCategoriesSpec monthlyRecurring = tableSpec.getRecurringChecks().getMonthly();
         return new ResponseEntity<>(Mono.justOrEmpty(monthlyRecurring), HttpStatus.OK); // 200
     }
     
@@ -592,7 +576,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Daily data quality partitioned checks on a requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/daily")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/daily")
     @ApiOperation(value = "getTablePartitionedChecksDaily", notes = "Return the configuration of daily table level data quality partitioned checks on a table", response = TableDailyPartitionedCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -624,8 +608,8 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableDailyPartitionedCheckCategoriesSpec dailyPartitioned = tableSpec.getPartitionedChecks().getDaily();
-        return new ResponseEntity<>(Mono.justOrEmpty(dailyPartitioned), HttpStatus.OK); // 200
+        TableDailyPartitionedCheckCategoriesSpec dailyPartitionedChecks = tableSpec.getPartitionedChecks().getDaily();
+        return new ResponseEntity<>(Mono.justOrEmpty(dailyPartitionedChecks), HttpStatus.OK); // 200
     }
 
     /**
@@ -635,7 +619,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Monthly data quality partitioned checks on a requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/monthly")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/monthly")
     @ApiOperation(value = "getTablePartitionedChecksMonthly", notes = "Return the configuration of monthly table level data quality partitioned checks on a table", response = TableMonthlyPartitionedCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -667,8 +651,8 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitioned = tableSpec.getPartitionedChecks().getMonthly();
-        return new ResponseEntity<>(Mono.justOrEmpty(monthlyPartitioned), HttpStatus.OK); // 200
+        TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedChecks = tableSpec.getPartitionedChecks().getMonthly();
+        return new ResponseEntity<>(Mono.justOrEmpty(monthlyPartitionedChecks), HttpStatus.OK); // 200
     }
 
     /**
@@ -678,7 +662,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return UI friendly data quality profiling check configuration list on a requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/ui")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui")
     @ApiOperation(value = "getTableProfilingChecksUI", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -698,7 +682,6 @@ public class TablesController {
         if (connectionWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
-
 
         TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
                 new PhysicalTableName(schemaName, tableName), true);
@@ -740,14 +723,14 @@ public class TablesController {
      * @return UI friendly data quality recurring configuration list on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/ui")
-    @ApiOperation(value = "getTableRecurringChecksUI", notes = "Return a UI friendly model of configurations for table level data quality recurring on a table for a given time scale", response = UICheckContainerModel.class)
+    @ApiOperation(value = "getTableRecurringUI", notes = "Return a UI friendly model of configurations for table level data quality recurring on a table for a given time scale", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality recurring on a table returned", response = UICheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UICheckContainerModel>> getTableRecurringChecksUI(
+    public ResponseEntity<Mono<UICheckContainerModel>> getTableRecurringUI(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -799,7 +782,7 @@ public class TablesController {
      * @param timeScale  Time scale.
      * @return UI friendly data quality partitioned check configuration list on a requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/ui")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/{timeScale}/ui")
     @ApiOperation(value = "getTablePartitionedChecksUI", notes = "Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -859,7 +842,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Simplistic UI friendly data quality profiling checks list on a requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/ui/basic")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui/basic")
     @ApiOperation(value = "getTableProfilingChecksUIBasic", notes = "Return a simplistic UI friendly model of all table level data quality profiling checks on a table", response = UICheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -909,14 +892,14 @@ public class TablesController {
      * @return Simplistic UI friendly data quality recurring list on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/ui/basic")
-    @ApiOperation(value = "getTableRecurringChecksUIBasic", notes = "Return a simplistic UI friendly model of table level data quality recurring on a table for a given time scale", response = UICheckContainerBasicModel.class)
+    @ApiOperation(value = "getTableRecurringUIBasic", notes = "Return a simplistic UI friendly model of table level data quality recurring on a table for a given time scale", response = UICheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of table level {timeScale} data quality recurring on a table returned", response = UICheckContainerBasicModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UICheckContainerBasicModel>> getTableRecurringChecksUIBasic(
+    public ResponseEntity<Mono<UICheckContainerBasicModel>> getTableRecurringUIBasic(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -958,7 +941,7 @@ public class TablesController {
      * @param timeScale  Time scale.
      * @return Simplistic UI friendly data quality partitioned checks list on a requested table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/ui/basic")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/{timeScale}/ui/basic")
     @ApiOperation(value = "getTablePartitionedChecksUIBasic", notes = "Return a simplistic UI friendly model of table level data quality partitioned checks on a table for a given time scale", response = UICheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1008,7 +991,7 @@ public class TablesController {
      * @param checkName      Check name.
      * @return UI friendly data quality profiling check configuration list on a requested table, filtered by category and check name.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/ui/filter/{checkCategory}/{checkName}")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui/filter/{checkCategory}/{checkName}")
     @ApiOperation(value = "getTableProfilingChecksUIFilter", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table passing a filter", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1076,14 +1059,14 @@ public class TablesController {
      * @return UI friendly data quality recurring configuration list on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/ui/filter/{checkCategory}/{checkName}")
-    @ApiOperation(value = "getTableRecurringChecksUIFilter", notes = "Return a UI friendly model of configurations for table level data quality recurring on a table for a given time scale, filtered by category and check name.", response = UICheckContainerModel.class)
+    @ApiOperation(value = "getTableRecurringUIFilter", notes = "Return a UI friendly model of configurations for table level data quality recurring on a table for a given time scale, filtered by category and check name.", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Configuration of table level {timeScale} data quality recurring on a table returned", response = UICheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UICheckContainerModel>> getTableRecurringChecksUIFilter(
+    public ResponseEntity<Mono<UICheckContainerModel>> getTableRecurringUIFilter(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1142,7 +1125,7 @@ public class TablesController {
      * @param checkName      Check name.
      * @return UI friendly data quality partitioned check configuration list on a requested table, filtered by category and check name.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/ui/filter/{checkCategory}/{checkName}")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/{timeScale}/ui/filter/{checkCategory}/{checkName}")
     @ApiOperation(value = "getTablePartitionedChecksUIFilter", notes = "Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale, filtered by category and check name.", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1261,350 +1244,6 @@ public class TablesController {
 
         return new ResponseEntity<>(Mono.just(resultModel), HttpStatus.OK);
     }
-
-    /**
-     * Retrieves a UI friendly data quality profiling check configuration list of column-level checks on a requested table.
-     * @param connectionName    Connection name.
-     * @param schemaName        Schema name.
-     * @param tableName         Table name.
-     * @param columnNamePattern (Optional) Column search pattern filter.
-     * @param columnDataType    (Optional) Filter on column data-type.
-     * @param checkCategory     (Optional) Filter on check category.
-     * @param checkName         (Optional) Filter on check name.
-     * @param checkEnabled      (Optional) Filter on check enabled status.
-     * @return UI friendly data quality profiling check configuration list on a requested schema.
-     */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/profiling/ui")
-    @ApiOperation(value = "getTableColumnsProfilingChecksUI", notes = "Return a UI friendly model of configurations for column-level data quality profiling checks on a table", response = UITableColumnChecksModel.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of data quality profiling checks on a schema returned", response = UITableColumnChecksModel.class),
-            @ApiResponse(code = 404, message = "Connection, schema or table not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<UITableColumnChecksModel>> getTableColumnsProfilingChecksUI(
-            @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam(value = "Column name pattern", required = false) @RequestParam(required = false)
-            Optional<String> columnNamePattern,
-            @ApiParam(value = "Column data-type", required = false) @RequestParam(required = false)
-            Optional<String> columnDataType,
-            @ApiParam(value = "Check category", required = false) @RequestParam(required = false)
-            Optional<String> checkCategory,
-            @ApiParam(value = "Check name", required = false) @RequestParam(required = false)
-            Optional<String> checkName,
-            @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
-            Optional<Boolean> checkEnabled) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-        
-        PhysicalTableName schemaTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, schemaTableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        CheckSearchFilters filters = new CheckSearchFilters();
-        filters.setCheckType(CheckType.PROFILING);
-        filters.setConnectionName(connectionName);
-        filters.setSchemaTableName(schemaTableName.toTableSearchFilter());
-        filters.setColumnName(columnNamePattern.orElse(null));
-        filters.setColumnDataType(columnDataType.orElse(null));
-        filters.setCheckCategory(checkCategory.orElse(null));
-        filters.setCheckName(checkName.orElse(null));
-        filters.setCheckTarget(CheckTarget.column);
-        filters.setEnabled(checkEnabled.orElse(null));
-
-        List<UIAllChecksModel> uiAllChecksModels = this.uiAllChecksModelFactory.fromCheckSearchFilters(filters);
-        if (uiAllChecksModels.size() != 1) {
-            LOG.warn("Unexpected result size in getTableColumnsProfilingChecksUI: " + uiAllChecksModels.size());
-        }
-        
-        UITableColumnChecksModel uiTableColumnChecksModel = this.getTableColumnChecksFromAllChecksModel(uiAllChecksModels.get(0));
-
-        return new ResponseEntity<>(Mono.justOrEmpty(uiTableColumnChecksModel), HttpStatus.OK); // 200
-    }
-
-    /**
-     * Retrieves a UI friendly data quality recurring check configuration list of column-level checks on a requested table.
-     * @param connectionName    Connection name.
-     * @param schemaName        Schema name.
-     * @param tableName         Table name.
-     * @param timeScale         Check time-scale.
-     * @param columnNamePattern (Optional) Column search pattern filter.
-     * @param columnDataType    (Optional) Filter on column data-type.
-     * @param checkCategory     (Optional) Filter on check category.
-     * @param checkName         (Optional) Filter on check name.
-     * @param checkEnabled      (Optional) Filter on check enabled status.
-     * @return UI friendly data quality recurring check configuration list on a requested schema.
-     */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/recurring/{timeScale}/ui")
-    @ApiOperation(value = "getTableColumnsRecurringChecksUI", notes = "Return a UI friendly model of configurations for column-level data quality recurring checks on a table", response = UITableColumnChecksModel.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of data quality recurring checks on a schema returned", response = UITableColumnChecksModel.class),
-            @ApiResponse(code = 404, message = "Connection, schema or table not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<UITableColumnChecksModel>> getTableColumnsRecurringChecksUI(
-            @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Check time-scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Column name pattern", required = false) @RequestParam(required = false)
-            Optional<String> columnNamePattern,
-            @ApiParam(value = "Column data-type", required = false) @RequestParam(required = false)
-            Optional<String> columnDataType,
-            @ApiParam(value = "Check category", required = false) @RequestParam(required = false)
-            Optional<String> checkCategory,
-            @ApiParam(value = "Check name", required = false) @RequestParam(required = false)
-            Optional<String> checkName,
-            @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
-            Optional<Boolean> checkEnabled) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        PhysicalTableName schemaTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, schemaTableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        CheckSearchFilters filters = new CheckSearchFilters();
-        filters.setCheckType(CheckType.RECURRING);
-        filters.setTimeScale(timeScale);
-        filters.setConnectionName(connectionName);
-        filters.setSchemaTableName(schemaTableName.toTableSearchFilter());
-        filters.setColumnName(columnNamePattern.orElse(null));
-        filters.setColumnDataType(columnDataType.orElse(null));
-        filters.setCheckCategory(checkCategory.orElse(null));
-        filters.setCheckName(checkName.orElse(null));
-        filters.setCheckTarget(CheckTarget.column);
-        filters.setEnabled(checkEnabled.orElse(null));
-
-        List<UIAllChecksModel> uiAllChecksModels = this.uiAllChecksModelFactory.fromCheckSearchFilters(filters);
-        if (uiAllChecksModels.size() != 1) {
-            LOG.warn("Unexpected result size in getTableColumnsRecurringChecksUI: " + uiAllChecksModels.size());
-        }
-
-        UITableColumnChecksModel uiTableColumnChecksModel = this.getTableColumnChecksFromAllChecksModel(uiAllChecksModels.get(0));
-
-        return new ResponseEntity<>(Mono.justOrEmpty(uiTableColumnChecksModel), HttpStatus.OK); // 200
-    }
-
-    /**
-     * Retrieves a UI friendly data quality partitioned check configuration list of column-level checks on a requested table.
-     * @param connectionName    Connection name.
-     * @param schemaName        Schema name.
-     * @param tableName         Table name.
-     * @param timeScale         Check time-scale.
-     * @param columnNamePattern (Optional) Column search pattern filter.
-     * @param columnDataType    (Optional) Filter on column data-type.
-     * @param checkCategory     (Optional) Filter on check category.
-     * @param checkName         (Optional) Filter on check name.
-     * @param checkEnabled      (Optional) Filter on check enabled status.
-     * @return UI friendly data quality partitioned check configuration list on a requested schema.
-     */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/partitioned/{timeScale}/ui")
-    @ApiOperation(value = "getTableColumnsPartitionedChecksUI", notes = "Return a UI friendly model of configurations for column-level data quality partitioned checks on a table", response = UITableColumnChecksModel.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of data quality partitioned checks on a schema returned", response = UITableColumnChecksModel.class),
-            @ApiResponse(code = 404, message = "Connection, schema or table not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<UITableColumnChecksModel>> getTableColumnsPartitionedChecksUI(
-            @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Check time-scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Column name pattern", required = false) @RequestParam(required = false)
-            Optional<String> columnNamePattern,
-            @ApiParam(value = "Column data-type", required = false) @RequestParam(required = false)
-            Optional<String> columnDataType,
-            @ApiParam(value = "Check category", required = false) @RequestParam(required = false)
-            Optional<String> checkCategory,
-            @ApiParam(value = "Check name", required = false) @RequestParam(required = false)
-            Optional<String> checkName,
-            @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
-            Optional<Boolean> checkEnabled) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        PhysicalTableName schemaTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, schemaTableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        CheckSearchFilters filters = new CheckSearchFilters();
-        filters.setCheckType(CheckType.PARTITIONED);
-        filters.setTimeScale(timeScale);
-        filters.setConnectionName(connectionName);
-        filters.setSchemaTableName(schemaTableName.toTableSearchFilter());
-        filters.setColumnName(columnNamePattern.orElse(null));
-        filters.setColumnDataType(columnDataType.orElse(null));
-        filters.setCheckCategory(checkCategory.orElse(null));
-        filters.setCheckName(checkName.orElse(null));
-        filters.setCheckTarget(CheckTarget.column);
-        filters.setEnabled(checkEnabled.orElse(null));
-
-        List<UIAllChecksModel> uiAllChecksModels = this.uiAllChecksModelFactory.fromCheckSearchFilters(filters);
-        if (uiAllChecksModels.size() != 1) {
-            LOG.warn("Unexpected result size in getTableColumnsPartitionedChecksUI: " + uiAllChecksModels.size());
-        }
-
-        UITableColumnChecksModel uiTableColumnChecksModel = this.getTableColumnChecksFromAllChecksModel(uiAllChecksModels.get(0));
-
-        return new ResponseEntity<>(Mono.justOrEmpty(uiTableColumnChecksModel), HttpStatus.OK); // 200
-    }
-
-    /**
-     * Gets a {@link UITableColumnChecksModel} from {@link UIAllChecksModel}. Additional assumptions apply and unexpected states are logged.
-     * 
-     * @param uiAllChecksModel All checks model with only column-level checks on a single table.
-     * @return Extracted checks model for the specific table.
-     */
-    protected UITableColumnChecksModel getTableColumnChecksFromAllChecksModel(UIAllChecksModel uiAllChecksModel) {
-        if (uiAllChecksModel.getTableChecksModel() != null) {
-            LOG.warn("Unexpected table checks where only column checks are permitted");
-        }
-
-        UIAllColumnChecksModel uiAllColumnChecksModel = uiAllChecksModel.getColumnChecksModel();
-        if (uiAllColumnChecksModel == null) {
-            return null;
-        }
-        
-        List<UITableColumnChecksModel> uiTableColumnChecksModels = uiAllColumnChecksModel.getUiTableColumnChecksModels();
-        if (uiTableColumnChecksModels.size() != 1) {
-            LOG.warn("Unexpected result size in getTableColumnChecksFromAllChecksModel: " + uiTableColumnChecksModels.size());
-        }
-        
-        return uiTableColumnChecksModels.get(0);
-    }
-
-    /**
-     * Retrieves the list of profiling checks templates on the given table.
-     * @param connectionName Connection name.
-     * @param schemaName     Schema name.
-     * @param tableName      Table name.
-     * @param checkCategory  (Optional) Filter on check category.
-     * @param checkName      (Optional) Filter on check name.
-     * @return Data quality checks templates on a requested table.
-     */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/profiling")
-    @ApiOperation(value = "getTableProfilingChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate.class),
-            @ApiResponse(code = 404, message = "Connection, schema or table not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Flux<CheckTemplate>> getTableProfilingChecksTemplates(
-            @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
-            @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        PhysicalTableName fullTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, fullTableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
-                connectionName, fullTableName, CheckType.PROFILING,
-                null, checkCategory.orElse(null), checkName.orElse(null));
-
-        return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
-    }
-
-    /**
-     * Retrieves the list of recurring checks templates on the given table.
-     * @param connectionName Connection name.
-     * @param schemaName     Schema name.
-     * @param tableName      Table name.
-     * @param timeScale      Check time scale.
-     * @param checkCategory  (Optional) Filter on check category.
-     * @param checkName      (Optional) Filter on check name.
-     * @return Data quality checks templates on a requested table.
-     */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/recurring/{timeScale}")
-    @ApiOperation(value = "getTableRecurringChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate.class),
-            @ApiResponse(code = 404, message = "Connection, schema or table not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Flux<CheckTemplate>> getTableRecurringChecksTemplates(
-            @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
-            @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        PhysicalTableName fullTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, fullTableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
-                connectionName, fullTableName, CheckType.RECURRING,
-                timeScale, checkCategory.orElse(null), checkName.orElse(null));
-
-        return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
-    }
-
-    /**
-     * Retrieves the list of partitioned checks templates on the given table.
-     * @param connectionName Connection name.
-     * @param schemaName     Schema name.
-     * @param tableName      Table name.
-     * @param timeScale      Check time scale.
-     * @param checkCategory  (Optional) Filter on check category.
-     * @param checkName      (Optional) Filter on check name.
-     * @return Data quality checks templates on a requested table.
-     */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/partitioned/{timeScale}")
-    @ApiOperation(value = "getTablePartitionedChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate.class),
-            @ApiResponse(code = 404, message = "Connection, schema or table not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Flux<CheckTemplate>> getTablePartitionedChecksTemplates(
-            @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam(value = "Check category", required = false) @RequestParam(required = false) Optional<String> checkCategory,
-            @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        PhysicalTableName fullTableName = new PhysicalTableName(schemaName, tableName);
-        TableWrapper tableWrapper = this.tableService.getTable(userHome, connectionName, fullTableName);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        List<CheckTemplate> checkTemplates = this.tableService.getCheckTemplates(
-                connectionName, fullTableName, CheckType.PARTITIONED,
-                timeScale, checkCategory.orElse(null), checkName.orElse(null));
-
-        return new ResponseEntity<>(Flux.fromIterable(checkTemplates), HttpStatus.OK); // 200
-    }
-
 
     /**
      * Creates (adds) a new table.
@@ -2118,7 +1757,7 @@ public class TablesController {
      * @param tableProfilingCheckCategoriesSpec New configuration of the data quality profiling checks on the table level.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks")
     @ApiOperation(value = "updateTableProfilingChecks", notes = "Updates the list of table level data quality profiling checks on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -2169,7 +1808,7 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/daily")
-    @ApiOperation(value = "updateTableRecurringChecksDaily", notes = "Updates the list of daily table level data quality recurring on an existing table.")
+    @ApiOperation(value = "updateTableRecurringDaily", notes = "Updates the list of daily table level data quality recurring on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Daily table level data quality recurring successfully updated"),
@@ -2178,7 +1817,7 @@ public class TablesController {
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableRecurringChecksDaily(
+    public ResponseEntity<Mono<?>> updateTableRecurringDaily(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -2192,8 +1831,8 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 spec -> {
-                    TableRecurringChecksSpec recurringSpec = spec.getRecurringChecks();
-
+                    TableRecurringSpec recurringSpec = spec.getRecurringChecks();
+                    
                     if (tableDailyRecurringSpec.isPresent()) {
                         recurringSpec.setDaily(tableDailyRecurringSpec.get());
                     } else {
@@ -2221,7 +1860,7 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/monthly")
-    @ApiOperation(value = "updateTableRecurringChecksMonthly", notes = "Updates the list of monthly table level data quality recurring on an existing table.")
+    @ApiOperation(value = "updateTableRecurringMonthly", notes = "Updates the list of monthly table level data quality recurring on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Monthly table level data quality recurring successfully updated"),
@@ -2230,12 +1869,12 @@ public class TablesController {
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableRecurringChecksMonthly(
+    public ResponseEntity<Mono<?>> updateTableRecurringMonthly(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Configuration of monthly table level data quality recurring to store or an empty object to remove all data quality recurring on the table level (column level recurring are preserved).")
-            @RequestBody Optional<TableMonthlyRecurringCheckCategoriesSpec> tableMonthlyRecurringSpec) {
+            @RequestBody Optional<TableMonthlyRecurringCategoriesSpec> tableMonthlyRecurringSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2244,7 +1883,7 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 spec -> {
-                    TableRecurringChecksSpec recurringSpec = spec.getRecurringChecks();
+                    TableRecurringSpec recurringSpec = spec.getRecurringChecks();
 
                     if (tableMonthlyRecurringSpec.isPresent()) {
                         recurringSpec.setMonthly(tableMonthlyRecurringSpec.get());
@@ -2269,10 +1908,10 @@ public class TablesController {
      * @param connectionName                  Connection name.
      * @param schemaName                      Schema name.
      * @param tableName                       Table name.
-     * @param tableDailyPartitionedSpec New configuration of the daily data quality partitioned checks on the table level.
+     * @param tableDailyPartitionedChecksSpec New configuration of the daily data quality partitioned checks on the table level.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/daily")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/daily")
     @ApiOperation(value = "updateTablePartitionedChecksDaily", notes = "Updates the list of daily table level data quality partitioned checks on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -2287,7 +1926,7 @@ public class TablesController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Configuration of daily table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).")
-            @RequestBody Optional<TableDailyPartitionedCheckCategoriesSpec> tableDailyPartitionedSpec) {
+            @RequestBody Optional<TableDailyPartitionedCheckCategoriesSpec> tableDailyPartitionedChecksSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2296,12 +1935,12 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 spec -> {
-                    TablePartitionedChecksRootSpec PartitionedSpec = spec.getPartitionedChecks();
+                    TablePartitionedChecksRootSpec partitionedChecksSpec = spec.getPartitionedChecks();
                     
-                    if (tableDailyPartitionedSpec.isPresent()) {
-                        PartitionedSpec.setDaily(tableDailyPartitionedSpec.get());
+                    if (tableDailyPartitionedChecksSpec.isPresent()) {
+                        partitionedChecksSpec.setDaily(tableDailyPartitionedChecksSpec.get());
                     } else {
-                        PartitionedSpec.setDaily(null);
+                        partitionedChecksSpec.setDaily(null);
                     }
                 },
                 connectionName,
@@ -2321,14 +1960,14 @@ public class TablesController {
      * @param connectionName                  Connection name.
      * @param schemaName                      Schema name.
      * @param tableName                       Table name.
-     * @param tableMonthlyPartitionedSpec New configuration of the monthly data quality partitioned checks on the table level.
+     * @param tableMonthlyPartitionedChecksSpec New configuration of the monthly data quality partitioned checks on the table level.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/monthly")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/monthly")
     @ApiOperation(value = "updateTablePartitionedChecksMonthly", notes = "Updates the list of monthly table level data quality partitioned checks on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Monthly table level data quality partitioned checks successfully updated"),
+            @ApiResponse(code = 204, message = "Monthly table level data quality recurring successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
@@ -2339,7 +1978,7 @@ public class TablesController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Configuration of monthly table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).")
-            @RequestBody Optional<TableMonthlyPartitionedCheckCategoriesSpec> tableMonthlyPartitionedSpec) {
+            @RequestBody Optional<TableMonthlyPartitionedCheckCategoriesSpec> tableMonthlyPartitionedChecksSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2348,12 +1987,12 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 spec -> {
-                    TablePartitionedChecksRootSpec PartitionedSpec = spec.getPartitionedChecks();
+                    TablePartitionedChecksRootSpec partitionedChecksSpec = spec.getPartitionedChecks();
 
-                    if (tableMonthlyPartitionedSpec.isPresent()) {
-                        PartitionedSpec.setMonthly(tableMonthlyPartitionedSpec.get());
+                    if (tableMonthlyPartitionedChecksSpec.isPresent()) {
+                        partitionedChecksSpec.setMonthly(tableMonthlyPartitionedChecksSpec.get());
                     } else {
-                        PartitionedSpec.setMonthly(null);
+                        partitionedChecksSpec.setMonthly(null);
                     }
                 },
                 connectionName,
@@ -2414,7 +2053,7 @@ public class TablesController {
      * @param uiCheckContainerModel    New configuration of the data quality checks on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those profiling checks that are present in the UI model are updated, the others are preserved without any changes.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/ui")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui")
     @ApiOperation(value = "updateTableProfilingChecksUI", notes = "Updates the data quality profiling checks from an UI model that contains a patch with changes.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -2462,7 +2101,7 @@ public class TablesController {
      * @return Empty response.
      */
     @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/ui")
-    @ApiOperation(value = "updateTableRecurringChecksUI", notes = "Updates the data quality recurring from an UI model that contains a patch with changes.")
+    @ApiOperation(value = "updateTableRecurringUI", notes = "Updates the data quality recurring from an UI model that contains a patch with changes.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Table level data quality recurring successfully updated"),
@@ -2471,7 +2110,7 @@ public class TablesController {
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableRecurringChecksUI(
+    public ResponseEntity<Mono<?>> updateTableRecurringUI(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -2509,7 +2148,7 @@ public class TablesController {
      * @param uiAllChecksModel         New configuration of the data quality partitioned checks on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those partitioned checks that are present in the UI model are updated, the others are preserved without any changes.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/ui")
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/{timeScale}/ui")
     @ApiOperation(value = "updateTablePartitionedChecksUI", notes = "Updates the data quality partitioned checks from an UI model that contains a patch with changes.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {

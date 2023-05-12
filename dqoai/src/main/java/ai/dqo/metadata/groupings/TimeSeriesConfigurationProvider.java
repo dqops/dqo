@@ -19,7 +19,7 @@ import ai.dqo.metadata.sources.TableSpec;
 
 /**
  * Interface implemented on specification nodes that are providing the value of a configured time series.
- * Recurring and partitioned check category roots (daily, weekly, ...) are special kind of roots.
+ * Checkpoint and partitioned check category roots (daily, weekly, ) are special kind of roots.
  */
 public interface TimeSeriesConfigurationProvider {
     /**

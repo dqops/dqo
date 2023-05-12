@@ -2549,7 +2549,7 @@ ___
 ## **monthly string most popular values**  
   
 **Check description**  
-Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
+Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

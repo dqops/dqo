@@ -38,6 +38,7 @@ const ColumnPartitionedChecksView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const {
+    columnBasic,
     dailyPartitionedChecks,
     monthlyPartitionedChecks,
     isUpdatedDailyPartitionedChecks,
@@ -55,27 +56,43 @@ const ColumnPartitionedChecksView = () => {
   };
 
   useEffect(() => {
-    dispatch(
-      getColumnDailyPartitionedChecks(
-        checkTypes,
-        firstLevelActiveTab,
-        connection,
-        schema,
-        table,
-        column
-      )
-    );
-    dispatch(
-      getColumnMonthlyPartitionedChecks(
-        checkTypes,
-        firstLevelActiveTab,
-        connection,
-        schema,
-        table,
-        column
-      )
-    );
-  }, [checkTypes, firstLevelActiveTab, connection, schema, column, table]);
+    if (
+      !dailyPartitionedChecks ||
+      columnBasic?.connection_name !== connection ||
+      columnBasic?.table?.schema_name !== schema ||
+      columnBasic?.table?.table_name !== table ||
+      columnBasic.column_name !== column
+    ) {
+      dispatch(
+        getColumnDailyPartitionedChecks(
+          checkTypes,
+          firstLevelActiveTab,
+          connection,
+          schema,
+          table,
+          column
+        )
+      );
+    }
+    if (
+      !monthlyPartitionedChecks ||
+      columnBasic?.connection_name !== connection ||
+      columnBasic?.table?.schema_name !== schema ||
+      columnBasic?.table?.table_name !== table ||
+      columnBasic.column_name !== column
+    ) {
+      dispatch(
+        getColumnMonthlyPartitionedChecks(
+          checkTypes,
+          firstLevelActiveTab,
+          connection,
+          schema,
+          table,
+          column
+        )
+      );
+    }
+  }, [checkTypes, firstLevelActiveTab, connection, schema, column, table, columnBasic]);
 
   const onUpdate = async () => {
     if (tab === 'daily') {

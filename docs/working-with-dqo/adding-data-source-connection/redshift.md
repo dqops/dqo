@@ -13,15 +13,15 @@ to [Allowed IP Addresses in Redshift Network Policies](https://docs.aws.amazon.c
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://dqo.ai/docs/images/working-with-dqo/adding-connection.jpg)
+    ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connection.jpg)
 
 2. Select Redshift database type.
 
-    ![Selecting Redshift database type](https://dqo.ai/docs/images/working-with-dqo/adding-connection-redshift.jpg)
+    ![Selecting Redshift database type](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connection-redshift.jpg)
 
-3. Add connection settings.
+ Add connection settings.
 
-    ![Adding connection settings](https://dqo.ai/docs/images/working-with-dqo/connection-settings-redshift.jpg)
+    ![Adding connection settings](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-redshift.jpg)
 
    | Redshift connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                             |
    |------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -38,13 +38,13 @@ to [Allowed IP Addresses in Redshift Network Policies](https://docs.aws.amazon.c
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
     
     For example:
-    ![Adding connection settings - environmental variables](https://dqo.ai/docs/images/working-with-dqo/connection-settings-envvar.jpg)
+    ![Adding connection settings - environmental variables](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-redshift-envvar.jpg)
     
     To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value
     can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
     
     For example:
-    ![Adding connection JDBC settings](https://dqo.ai/docs/images/working-with-dqo/connection-settings-JDBC-properties.jpg)
+    ![Adding connection JDBC settings](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-JDBC-properties.jpg)
     
     To remove the property click on the trash icon add the end of the input field.
     
@@ -54,11 +54,11 @@ to [Allowed IP Addresses in Redshift Network Policies](https://docs.aws.amazon.c
 6. Import the selected data resources (source schemas and tables) by clicking on the **Import Tables** button next to
     the name of the source schema from which you want to import tables.
 
-    ![Adding connection](https://dqo.ai/docs/images/working-with-dqo/importing-schemas.jpg)
+    ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/importing-schemas.jpg)
 
 7. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-    ![Adding connection](https://dqo.ai/docs/images/working-with-dqo/importing-tables.jpg)
+    ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/importing-tables.jpg)
 
 ## Adding Redshift connection using DQO Shell
 
@@ -77,13 +77,12 @@ Database provider type (--provider):
 [ 3] postgresql
 [ 4] redshift
 [ 5] sqlserver
-[ 6] mysql
 Please enter one of the [] values: 4
 Redshift host (--redshift-host)[${REDSHIFT_HOST}]: localhost
 Redshift port (--redshift-port) [${REDSHIFT_PORT}]: 5439
-Redshift database (--redshift-database) [${REDSHIFT_DATABASE}]: testing
-Redshift user name (--redshift-username) [${REDSHIFT_USER}]: testing
-Redshift password (--redshift-password) [${REDSHIFT_PASSWORD}]: xxx
+Redshift database (--redshift-database) [${REDSHIFT_DATABASE}]: TESTING
+Redshift user name (--redshift-username) [${REDSHIFT_USER}]: TESTING
+Redshift password (--redshift-password) [${REDSHIFT_PASSWORD}]: test
 Connection connecton1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -95,9 +94,9 @@ dqo.ai> connection add --name=connection1
 --provider=redshift
 --redshift-host=localhost
 --redshift-port=5439
---redshift-database=testing
+--redshift-database=TESTING
 --redshift-user=testing
---redshift-password=xxx
+--redshift-password=test
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
@@ -128,17 +127,14 @@ kind: source
 spec:
   provider_type: redshift
   redshift:
-    host: redshift-cluster-2.cds5vq1bzgx5.us-east-1.redshift.amazonaws.com
+    host: localhost
     port: 5439
     database: testing
-    user: testing
-    password: xxx
-    ssl: false
+    user: test
+    password: test
+  time_zone: UTC
     properties:
-      'connectTimeout': 15
-  incident_grouping:
-    grouping_level: table_dimension_category
-    minimum_severity: warning
-    max_incident_length_days: 60
-    mute_for_days: 60
+      loginTimeout: 55
+      queryTimeout: 20
+
 ```

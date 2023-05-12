@@ -81,8 +81,8 @@ export interface ITableState {
   isUpdatedMonthlyPartitionedChecks?: boolean;
   checksUIFilter?: UICheckContainerModel;
   isUpdatedChecksUIFilter?: boolean;
-  recurringChecksUIFilter?: UICheckContainerModel;
-  isUpdatedRecurringChecksUIFilter?: boolean;
+  recurringUIFilter?: UICheckContainerModel;
+  isUpdatedRecurringUIFilter?: boolean;
   partitionedChecksUIFilter?: UICheckContainerModel;
   isUpdatedPartitionedChecksUIFilter?: boolean;
   tablePartitioning?: TablePartitioningModel
@@ -523,8 +523,8 @@ const tableReducer = (state = initialState, action: any) => {
       return {
         ...state,
         loading: false,
-        RecurringChecksUIFilter: action.data,
-        isUpdatedRecurringChecksUIFilter: false,
+        RecurringUIFilter: action.data,
+        isUpdatedRecurringUIFilter: false,
         error: null
       };
     case TABLE_ACTION.GET_TABLE_RECURRING_UI_FILTER_ERROR:
@@ -654,8 +654,8 @@ const tableReducer = (state = initialState, action: any) => {
     case TABLE_ACTION.SET_UPDATED_RECURRING_UI_FILTER:
       return {
         ...state,
-        isUpdatedRecurringChecksUIFilter: true,
-        RecurringChecksUIFilter: action.data
+        isUpdatedRecurringUIFilter: true,
+        RecurringUIFilter: action.data
       }
     case TABLE_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER:
       return {

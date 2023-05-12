@@ -22,9 +22,9 @@ import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpe
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
-import ai.dqo.checks.column.recurring.ColumnMonthlyRecurringCheckCategoriesSpec;
-import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
+import ai.dqo.checks.column.recurring.ColumnDailyRecurringCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnMonthlyRecurringCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
@@ -67,10 +67,6 @@ public class ColumnSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
-    @JsonPropertyDescription("SQL expression used for calculated fields or when additional column value transformation is required before the column could be used analyzed in data quality checks (data type conversion, transformation). It should be an SQL expression using the SQL language of the analyzed database type. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name. An example to extract a value from a string column that stores a JSON in PostgreSQL: \"{column}::json->'address'->'zip'\".")
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private String sqlExpression;
-
     @JsonPropertyDescription("Column data type that was retrieved when the table metadata was imported.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ColumnTypeSnapshotSpec typeSnapshot;
@@ -83,7 +79,7 @@ public class ColumnSpec extends AbstractSpec {
     @JsonPropertyDescription("Configuration of column level recurring checks. Recurring are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A recurring stores only the most recent data quality check result for each period of time.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnRecurringChecksRootSpec recurringChecks;
+    private ColumnRecurringSpec recurringChecks;
 
     @JsonPropertyDescription("Configuration of column level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -134,23 +130,6 @@ public class ColumnSpec extends AbstractSpec {
     }
 
     /**
-     * Returns an SQL expression for a calculated column.
-     * @return SQL expression.
-     */
-    public String getSqlExpression() {
-        return sqlExpression;
-    }
-
-    /**
-     * Sets an SQL expression used for a calculated column.
-     * @param sqlExpression SQL expression used for a calculated column.
-     */
-    public void setSqlExpression(String sqlExpression) {
-        this.setDirtyIf(!Objects.equals(this.sqlExpression, sqlExpression));
-        this.sqlExpression = sqlExpression;
-    }
-
-    /**
      * Returns the column type snapshot that was captured at the time of the table metadata import. The column type snapshot
      * may be used for quality checks.
      * @return Column type snapshot.
@@ -178,8 +157,8 @@ public class ColumnSpec extends AbstractSpec {
     }
 
     /**
-     * Sets a new configuration of column level profiling data quality checks.
-     * @param profilingChecks New profiling checks configuration.
+     * Sets a new configuration of column level data quality checks.
+     * @param profilingChecks New checks configuration.
      */
     public void setProfilingChecks(ColumnProfilingCheckCategoriesSpec profilingChecks) {
 		setDirtyIf(!Objects.equals(this.profilingChecks, profilingChecks));
@@ -188,18 +167,18 @@ public class ColumnSpec extends AbstractSpec {
     }
 
     /**
-     * Returns configuration of enabled column level recurring checks.
+     * Returns configuration of enabled column level recurring.
      * @return Column level recurring.
      */
-    public ColumnRecurringChecksRootSpec getRecurringChecks() {
+    public ColumnRecurringSpec getRecurringChecks() {
         return recurringChecks;
     }
 
     /**
-     * Sets a new configuration of column level data quality recurring checks.
-     * @param recurringChecks New recurring checks configuration.
+     * Sets a new configuration of column level data quality recurring.
+     * @param recurringChecks New recurring configuration.
      */
-    public void setRecurringChecks(ColumnRecurringChecksRootSpec recurringChecks) {
+    public void setRecurringChecks(ColumnRecurringSpec recurringChecks) {
         setDirtyIf(!Objects.equals(this.recurringChecks, recurringChecks));
         this.recurringChecks = recurringChecks;
         propagateHierarchyIdToField(recurringChecks, "recurring_checks");
@@ -214,7 +193,7 @@ public class ColumnSpec extends AbstractSpec {
     }
 
     /**
-     * Sets a new configuration of column level date/time partitioned data quality checks.
+     * Sets a new configuration of column level date/time partitioned data quality recurring.
      * @param partitionedChecks New configuration of date/time partitioned checks.
      */
     public void setPartitionedChecks(ColumnPartitionedChecksRootSpec partitionedChecks) {
@@ -305,9 +284,9 @@ public class ColumnSpec extends AbstractSpec {
             }
 
             case RECURRING: {
-                ColumnRecurringChecksRootSpec recurringSpec = this.recurringChecks;
+                ColumnRecurringSpec recurringSpec = this.recurringChecks;
                 if (recurringSpec == null) {
-                    recurringSpec = new ColumnRecurringChecksRootSpec();
+                    recurringSpec = new ColumnRecurringSpec();
                     recurringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "recurring_checks"));
                     if (attachCheckContainer) {
                         this.recurringChecks = recurringSpec;
@@ -320,7 +299,7 @@ public class ColumnSpec extends AbstractSpec {
                             return recurringSpec.getDaily();
                         }
 
-                        ColumnDailyRecurringCheckCategoriesSpec dailyRecurringCategoriesSpec = new ColumnDailyRecurringCheckCategoriesSpec();
+                        ColumnDailyRecurringCategoriesSpec dailyRecurringCategoriesSpec = new ColumnDailyRecurringCategoriesSpec();
                         dailyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "daily"));
                         if (attachCheckContainer) {
                             recurringSpec.setDaily(dailyRecurringCategoriesSpec);
@@ -332,7 +311,7 @@ public class ColumnSpec extends AbstractSpec {
                             return recurringSpec.getMonthly();
                         }
 
-                        ColumnMonthlyRecurringCheckCategoriesSpec monthlyRecurringCategoriesSpec = new ColumnMonthlyRecurringCheckCategoriesSpec();
+                        ColumnMonthlyRecurringCategoriesSpec monthlyRecurringCategoriesSpec = new ColumnMonthlyRecurringCategoriesSpec();
                         monthlyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "monthly"));
                         if (attachCheckContainer) {
                             recurringSpec.setMonthly(monthlyRecurringCategoriesSpec);
@@ -404,19 +383,19 @@ public class ColumnSpec extends AbstractSpec {
         if (checkRootContainer instanceof ColumnProfilingCheckCategoriesSpec) {
             this.setProfilingChecks((ColumnProfilingCheckCategoriesSpec)checkRootContainer);
         }
-        else if (checkRootContainer instanceof ColumnDailyRecurringCheckCategoriesSpec) {
+        else if (checkRootContainer instanceof ColumnDailyRecurringCategoriesSpec) {
             if (this.recurringChecks == null) {
-                this.setRecurringChecks(new ColumnRecurringChecksRootSpec());
+                this.setRecurringChecks(new ColumnRecurringSpec());
             }
 
-            this.getRecurringChecks().setDaily((ColumnDailyRecurringCheckCategoriesSpec)checkRootContainer);
+            this.getRecurringChecks().setDaily((ColumnDailyRecurringCategoriesSpec)checkRootContainer);
         }
-        else if (checkRootContainer instanceof ColumnMonthlyRecurringCheckCategoriesSpec) {
+        else if (checkRootContainer instanceof ColumnMonthlyRecurringCategoriesSpec) {
             if (this.recurringChecks == null) {
-                this.setRecurringChecks(new ColumnRecurringChecksRootSpec());
+                this.setRecurringChecks(new ColumnRecurringSpec());
             }
 
-            this.getRecurringChecks().setMonthly((ColumnMonthlyRecurringCheckCategoriesSpec)checkRootContainer);
+            this.getRecurringChecks().setMonthly((ColumnMonthlyRecurringCategoriesSpec)checkRootContainer);
         }
         else if (checkRootContainer instanceof ColumnDailyPartitionedCheckCategoriesSpec) {
             if (this.partitionedChecks == null) {
@@ -498,6 +477,9 @@ public class ColumnSpec extends AbstractSpec {
             if (cloned.typeSnapshot != null) {
                 cloned.typeSnapshot = cloned.typeSnapshot.expandAndTrim(secretValueProvider);
             }
+//            if (cloned.labels != null) {
+//                cloned.labels = cloned.labels.deepClone();
+//            }
             return cloned;
         }
         catch (CloneNotSupportedException ex) {

@@ -13,15 +13,13 @@ Add a new column to a table with specific details. The new column is added to th
 **Command-line synopsis**
 ```
 $ dqo [dqo options...] column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
-            [-d=<dataType>] [-e=<sqlExpression>] [-of=<outputFormat>]
-            [-t=<fullTableName>]
+            [-d=<dataType>] [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
 **DQO Shell synopsis**
 ```
 dqo.ai> column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
-            [-d=<dataType>] [-e=<sqlExpression>] [-of=<outputFormat>]
-            [-t=<fullTableName>]
+            [-d=<dataType>] [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
 
@@ -36,7 +34,6 @@ dqo.ai> column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|`-e`<br/>`--sql-expression`<br/>|SQL expression for a calculated column| ||
 |`-t`<br/>`--table`<br/>|Table name| ||
 
 
@@ -93,15 +90,13 @@ Update one or more columns in a table that match a specified condition.
 **Command-line synopsis**
 ```
 $ dqo [dqo options...] column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
-               [-d=<dataType>] [-e=<sqlExpression>] [-of=<outputFormat>]
-               [-t=<fullTableName>]
+               [-d=<dataType>] [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
 **DQO Shell synopsis**
 ```
 dqo.ai> column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
-               [-d=<dataType>] [-e=<sqlExpression>] [-of=<outputFormat>]
-               [-t=<fullTableName>]
+               [-d=<dataType>] [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
 
@@ -116,7 +111,6 @@ dqo.ai> column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|`-e`<br/>`--sql-expression`<br/>|SQL expression for a calculated column| ||
 |`-t`<br/>`--table`<br/>|Table name| ||
 
 

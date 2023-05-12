@@ -46,9 +46,6 @@ public class ColumnBasicModel {
     @JsonPropertyDescription("Column name.")
     private String columnName;
 
-    @JsonPropertyDescription("SQL expression.")
-    private String sqlExpression;
-
     @JsonPropertyDescription("Column hash that identifies the column using a unique hash code.")
     private Long columnHash;
 
@@ -112,7 +109,6 @@ public class ColumnBasicModel {
             setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
             setTable(physicalTableName);
             setColumnName(columnName);
-            setSqlExpression(columnSpec.getSqlExpression());
             setDisabled(columnSpec.isDisabled());
             setTypeSnapshot(columnSpec.getTypeSnapshot());
             setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
@@ -191,7 +187,6 @@ public class ColumnBasicModel {
             setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
             setTable(physicalTableName);
             setColumnName(columnName);
-            setSqlExpression(columnSpec.getSqlExpression());
             setDisabled(columnSpec.isDisabled());
             setTypeSnapshot(columnSpec.getTypeSnapshot());
             setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
@@ -206,7 +201,6 @@ public class ColumnBasicModel {
      * @param targetColumnSpec Target column specification to update.
      */
     public void copyToColumnSpecification(ColumnSpec targetColumnSpec) {
-        targetColumnSpec.setSqlExpression(this.getSqlExpression());
         targetColumnSpec.setDisabled(this.isDisabled());
         targetColumnSpec.setTypeSnapshot(this.getTypeSnapshot());
     }

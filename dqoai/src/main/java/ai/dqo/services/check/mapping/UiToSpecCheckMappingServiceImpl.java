@@ -171,7 +171,7 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
     protected void updateSeveritySpec(UIRuleParametersModel ruleParametersModel,
                                       FieldInfo severityFieldInfo,
                                       AbstractCheckSpec<?,?,?,?> checkSpec) {
-        if (ruleParametersModel != null && ruleParametersModel.isConfigured()) {
+        if (ruleParametersModel.isConfigured()) {
             AbstractRuleParametersSpec ruleParametersSpec = (AbstractRuleParametersSpec)
                     severityFieldInfo.getFieldValueOrNewObject(checkSpec);
             List<UIFieldModel> ruleParameterModels = ruleParametersModel.getRuleParameters();

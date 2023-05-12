@@ -30,7 +30,7 @@
 	<version>0.2.0-alpha0</version>
 	<packaging>jar</packaging>
 	<name>dqo-dqoai</name>
-	<description>DQO Data Quality Operations Center</description>
+	<description>Dqo Data Quality Observer</description>
 	<properties>
 		<java.version>15</java.version>
 		<tablesaw.version>0.43.1</tablesaw.version>
