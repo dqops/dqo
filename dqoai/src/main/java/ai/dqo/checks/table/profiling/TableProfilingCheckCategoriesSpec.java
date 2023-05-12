@@ -199,7 +199,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     }
 
     /**
-     * Returns the type of checks (profiling, recurring, partitioned).
+     * Returns the type of checks (profiling, checkpoint, partitioned).
      *
      * @return Check type.
      */
@@ -210,7 +210,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     }
 
     /**
-     * Returns the time range for recurring and partitioned checks (daily, monthly, etc.).
+     * Returns the time range for checkpoint and partitioned checks (daily, monthly, etc.).
      * Profiling checks do not have a time range and return null.
      *
      * @return Time range (daily, monthly, ...).

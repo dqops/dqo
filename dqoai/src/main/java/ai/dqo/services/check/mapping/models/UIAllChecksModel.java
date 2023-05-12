@@ -16,26 +16,15 @@
 package ai.dqo.services.check.mapping.models;
 
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
-import ai.dqo.metadata.basespecs.AbstractSpec;
-import ai.dqo.metadata.fields.ParameterDataType;
-import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
 import ai.dqo.services.check.mapping.models.table.UIAllTableChecksModel;
-import ai.dqo.utils.reflection.ClassInfo;
-import ai.dqo.utils.reflection.FieldInfo;
-import ai.dqo.utils.reflection.ReflectionService;
-import ai.dqo.utils.reflection.ReflectionServiceSingleton;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.rits.cloning.Cloner;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * UI model that returns the model of selected information related to all checks on a connection level.

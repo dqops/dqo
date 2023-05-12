@@ -354,7 +354,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     }
 
     /**
-     * Returns the type of checks (profiling, recurring, partitioned).
+     * Returns the type of checks (adhoc, checkpoint, partitioned).
      *
      * @return Check type.
      */
@@ -365,8 +365,8 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     }
 
     /**
-     * Returns the time range for recurring and partitioned checks (daily, monthly, etc.).
-     * Profiling checks do not have a time range and return null.
+     * Returns the time range for checkpoint and partitioned checks (daily, monthly, etc.).
+     * Adhoc checks do not have a time range and return null.
      *
      * @return Time range (daily, monthly, ...).
      */

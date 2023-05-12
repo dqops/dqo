@@ -15,7 +15,6 @@
  */
 package ai.dqo.execution.statistics;
 
-import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.execution.ExecutionContext;
@@ -36,7 +35,6 @@ public interface StatisticsCollectorsExecutionService {
      * @param statisticsDataScope Collector data scope to analyze - the whole table or each data stream separately.
      * @param dummySensorExecution  When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all collectors without starting additional jobs.
-     * @param parentJobId Parent job id.
      * @param jobCancellationToken Job cancellation token, used to detect if the job should be cancelled.
      * @return Collector summary table with the count of executed and successful profile executions for each table.
      */
@@ -46,7 +44,6 @@ public interface StatisticsCollectorsExecutionService {
                                                                      StatisticsDataScope statisticsDataScope,
                                                                      boolean dummySensorExecution,
                                                                      boolean startChildJobsPerTable,
-                                                                     DqoQueueJobId parentJobId,
                                                                      JobCancellationToken jobCancellationToken);
 
     /**

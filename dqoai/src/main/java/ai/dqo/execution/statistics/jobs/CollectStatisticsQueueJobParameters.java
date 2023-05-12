@@ -16,19 +16,16 @@
 package ai.dqo.execution.statistics.jobs;
 
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
-import ai.dqo.execution.statistics.progress.SilentStatisticsCollectorExecutionProgressListener;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-import lombok.EqualsAndHashCode;
 
 /**
  * Parameters object for the run the statistics collection job.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@EqualsAndHashCode(callSuper = false)
 public class CollectStatisticsQueueJobParameters {
     /**
      * Statistics collectors search filters that identify the type of statistics collector to run.
@@ -46,8 +43,7 @@ public class CollectStatisticsQueueJobParameters {
      * Progress listener that will receive events during the statistics collection.
      */
     @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    private StatisticsCollectorExecutionProgressListener progressListener = new SilentStatisticsCollectorExecutionProgressListener();
+    private StatisticsCollectorExecutionProgressListener progressListener;
 
     /**
      * Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).

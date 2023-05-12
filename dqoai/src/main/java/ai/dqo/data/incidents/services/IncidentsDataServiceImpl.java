@@ -234,7 +234,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
         ConnectionList connectionList = userHomeContext.getUserHome().getConnections();
         List<ConnectionWrapper> connectionWrappers = connectionList.toList();
 
-        List<IncidentsPerConnectionModel> resultList = connectionWrappers.stream()
+         List<IncidentsPerConnectionModel> resultList = connectionWrappers.stream()
                 .map(connectionWrapper -> connectionWrapper.getName())
                 .sorted()
                 .map(connectionName -> loadConnectionStats(connectionName))

@@ -68,9 +68,6 @@ public class ColumnAddCliCommand extends BaseCommand implements ICommand, IConne
 	@CommandLine.Option(names = {"-C", "--column"}, description = "Column name", required = false)
 	private String columnName;
 
-	@CommandLine.Option(names = {"-e", "--sql-expression"}, description = "SQL expression for a calculated column", required = false)
-	private String sqlExpression;
-
 	@CommandLine.Option(names = {"-d", "--dataType"}, description = "Data type", required = false)
 	private String dataType;
 
@@ -124,22 +121,6 @@ public class ColumnAddCliCommand extends BaseCommand implements ICommand, IConne
 	}
 
 	/**
-	 * Returns a sql expression for a calculated column.
-	 * @return Sql expression.
-	 */
-	public String getSqlExpression() {
-		return sqlExpression;
-	}
-
-	/**
-	 * Sets a sql expression for a calculated column.
-	 * @param sqlExpression SQL expression for a calculated column.
-	 */
-	public void setSqlExpression(String sqlExpression) {
-		this.sqlExpression = sqlExpression;
-	}
-
-	/**
 	 * Computes a result, or throws an exception if unable to do so.
 	 *
 	 * @return computed result
@@ -181,7 +162,6 @@ public class ColumnAddCliCommand extends BaseCommand implements ICommand, IConne
 		ColumnTypeSnapshotSpec columnTypeSnapshotSpec = new ColumnTypeSnapshotSpec(dataType);
 		ColumnSpec columnSpec = new ColumnSpec(columnTypeSnapshotSpec);
 		columnSpec.setDisabled(false);
-		columnSpec.setSqlExpression(this.sqlExpression);
 
 		CliOperationStatus cliOperationStatus = columnCliService.addColumn(connectionName, fullTableName, columnName, columnSpec);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());

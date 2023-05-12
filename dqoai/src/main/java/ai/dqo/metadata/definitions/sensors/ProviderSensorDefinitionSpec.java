@@ -49,12 +49,8 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
     private String javaClassName = JinjaSqlTemplateSensorRunner.CLASS_NAME;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonPropertyDescription("The sensor supports grouping by the data stream, using the GROUP BY clause in SQL. Sensors that support a GROUP BY condition can capture separate data quality scores for each data stream. The default value is true, because most of the data quality sensor support grouping.")
-    private Boolean supportsGroupingByDataStream;
-
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonPropertyDescription("The sensor supports grouping by a partition date, using the GROUP BY clause in SQL. Sensors that support grouping by a partition_by_column could be used for partition checks, calculating separate data quality metrics for each daily/monthly partition. The default value is true, because most of the data quality sensor support partitioned checks.")
-    private Boolean supportsPartitionedChecks;
+    @JsonPropertyDescription("The sensor supports grouping (the GROUP BY clause in SQL), allowing to use the sensor for partition checks (to group each day of data and calculate a separate metric) or to use data streams segregation to group the results by additional columns. The default value is true, because most of the data quality sensor support grouping.")
+    private boolean supportsGrouping = true;
 
     @JsonPropertyDescription("Additional provider specific sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -112,37 +108,20 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
     }
 
     /**
-     * Returns true if the sensor supports grouping by the data stream.
-     * @return True when the sensor supports grouping by the data stream.
+     * Returns true if the sensor supports grouping.
+     * @return True when the sensor supports grouping.
      */
-    public Boolean isSupportsGroupingByDataStream() {
-        return supportsGroupingByDataStream;
+    public boolean isSupportsGrouping() {
+        return supportsGrouping;
     }
 
     /**
-     * Sets the flag if the sensor supports grouping by the data stream.
-     * @param supportsGroupingByDataStream True when the sensor supports grouping, false otherwise.
+     * Sets the flag if the sensor supports grouping.
+     * @param supportsGrouping True when the sensor supports grouping, false otherwise.
      */
-    public void setSupportsGroupingByDataStream(Boolean supportsGroupingByDataStream) {
-        this.setDirtyIf(!Objects.equals(this.supportsGroupingByDataStream, supportsGroupingByDataStream));
-        this.supportsGroupingByDataStream = supportsGroupingByDataStream;
-    }
-
-    /**
-     * Checks if the sensor supports grouping by the date column identified by the 'partition_by_column' parameter, that means the sensor can analyze daily and monthly partitioned data.
-     * @return True when the sensor supports partitioned checks.
-     */
-    public Boolean isSupportsPartitionedChecks() {
-        return supportsPartitionedChecks;
-    }
-
-    /**
-     * Sets the flag to enable/disable grouping by a partitioning column, enabling support for partitioned checks.
-     * @param supportsPartitionedChecks Supports partitioned checks.
-     */
-    public void setSupportsPartitionedChecks(Boolean supportsPartitionedChecks) {
-        this.setDirtyIf(!Objects.equals(this.supportsPartitionedChecks, supportsPartitionedChecks));
-        this.supportsPartitionedChecks = supportsPartitionedChecks;
+    public void setSupportsGrouping(boolean supportsGrouping) {
+        this.setDirtyIf(this.supportsGrouping != supportsGrouping);
+        this.supportsGrouping = supportsGrouping;
     }
 
     /**

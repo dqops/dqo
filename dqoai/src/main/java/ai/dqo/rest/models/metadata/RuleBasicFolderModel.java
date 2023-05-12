@@ -22,7 +22,10 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Rule basic folder model that is returned by the REST API.
@@ -34,25 +37,25 @@ import java.util.*;
 public class RuleBasicFolderModel {
     @JsonPropertyDescription("A map of folder-level children rules.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private LinkedHashMap<String, RuleBasicFolderModel> folders = new LinkedHashMap<>();
+    private Map<String, RuleBasicFolderModel> folders;
 
     @JsonPropertyDescription("Rule basic model list")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private List<RuleBasicModel> rules = new ArrayList<>();
+    private List<RuleBasicModel> rules;
 
     /**
      * Creates a new instance of RuleBasicFolderModel with empty lists.
      */
     public RuleBasicFolderModel() {
+        rules = new ArrayList<>();
+        folders = new HashMap<>();
     }
 
     /**
      * Adds a rule to this folder based on the given path.
      * @param fullRuleName the path of the rule
-     * @param isCustom The rule has a custom definition.
-     * @param isBuiltIn The rule is provided (built-in) with DQO.
      */
-    public void addRule(String fullRuleName, boolean isCustom, boolean isBuiltIn) {
+    public void addRule(String fullRuleName, boolean isCustom) {
 
         String[] ruleFolders = fullRuleName.split("/");
         String ruleName = ruleFolders[ruleFolders.length - 1];
@@ -68,14 +71,23 @@ public class RuleBasicFolderModel {
             folderModel = nextRuleFolder;
         }
 
-        boolean ruleExists = ruleExists = folderModel.rules.stream().anyMatch(r -> Objects.equals(r.getRuleName(), ruleName));
-
+        boolean ruleExists = false;
+        if (folderModel.rules != null) {
+            for (RuleBasicModel rule : folderModel.rules) {
+                if (rule.getRuleName().equals(ruleName)) {
+                    rule.setCustom(isCustom);
+                    ruleExists = true;
+                    break;
+                }
+            }
+        } else {
+            folderModel.rules = new ArrayList<>();
+        }
         if (!ruleExists) {
             RuleBasicModel ruleBasicModel = new RuleBasicModel();
             ruleBasicModel.setRuleName(ruleName);
             ruleBasicModel.setFullRuleName(fullRuleName);
             ruleBasicModel.setCustom(isCustom);
-            ruleBasicModel.setBuiltIn(isBuiltIn);
             folderModel.rules.add(ruleBasicModel);
         }
     }

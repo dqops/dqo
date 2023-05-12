@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ColumnApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
-import { ColumnStatisticsModel, TableColumnsStatisticsModel } from '../../api';
+import { ColumnStatisticsModel } from '../../api';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../components/SvgIcon';
 import ConfirmDialog from './ConfirmDialog';
@@ -17,15 +17,15 @@ const TableColumns = ({
   schemaName,
   tableName
 }: ITableColumnsProps) => {
-  const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
+  const [columns, setColumns] = useState<ColumnStatisticsModel[]>();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
 
   const fetchColumns = async () => {
     try {
-      const res: AxiosResponse<TableColumnsStatisticsModel> =
+      const res: AxiosResponse<ColumnStatisticsModel[]> =
         await ColumnApiClient.getColumnsStatistics(connectionName, schemaName, tableName);
-      setStatistics(res.data);
+      setColumns(res.data);
     } catch (err) {
       console.error(err);
     }
@@ -82,8 +82,8 @@ const TableColumns = ({
             Action
           </th>
         </thead>
-        {statistics &&
-          statistics?.column_statistics?.map((column, index) => (
+        {columns &&
+          columns?.map((column, index) => (
             <tr key={index}>
               <td className="border-b border-gray-100 text-left px-4 py-2">
                 {column.column_hash}

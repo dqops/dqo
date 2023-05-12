@@ -44,9 +44,6 @@ const TableNavigation = ({ defaultTab }: TableNavigationProps) => {
   }, [checkTypes]);
 
   const onChangeNavigation = async (item: NavigationMenu) => {
-    if (checkTypes === item.value) {
-      return;
-    }
     let url = ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail');
     let value = ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table);
 

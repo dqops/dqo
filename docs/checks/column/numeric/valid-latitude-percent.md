@@ -12,7 +12,7 @@ Verifies that the percentage of valid latitude values in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|valid_latitude_percent|profiling| |[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|valid_latitude_percent|profiling| |[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -42,11 +42,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=valid_la
         numeric:
           valid_latitude_percent:
             warning:
-              min_percent: 99.0
+              max_percent: 99.0
             error:
-              min_percent: 98.0
+              max_percent: 98.0
             fatal:
-              min_percent: 95.0
+              max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-21"
@@ -66,11 +66,11 @@ spec:
         numeric:
           valid_latitude_percent:
             warning:
-              min_percent: 99.0
+              max_percent: 99.0
             error:
-              min_percent: 98.0
+              max_percent: 98.0
             fatal:
-              min_percent: 95.0
+              max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -282,11 +282,11 @@ spec:
             numeric:
               valid_latitude_percent:
                 warning:
-                  min_percent: 99.0
+                  max_percent: 99.0
                 error:
-                  min_percent: 98.0
+                  max_percent: 98.0
                 fatal:
-                  min_percent: 95.0
+                  max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -502,7 +502,7 @@ Verifies that the percentage of valid latitude values in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_valid_latitude_percent|recurring|daily|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_valid_latitude_percent|recurring|daily|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -533,11 +533,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_va
           numeric:
             daily_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 99.0
               error:
-                min_percent: 98.0
+                max_percent: 98.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -558,11 +558,11 @@ spec:
           numeric:
             daily_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 99.0
               error:
-                min_percent: 98.0
+                max_percent: 98.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -775,11 +775,11 @@ spec:
               numeric:
                 daily_valid_latitude_percent:
                   warning:
-                    min_percent: 99.0
+                    max_percent: 99.0
                   error:
-                    min_percent: 98.0
+                    max_percent: 98.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -995,7 +995,7 @@ Verifies that the percentage of valid latitude values in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_valid_latitude_percent|recurring|monthly|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_valid_latitude_percent|recurring|monthly|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1026,11 +1026,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
           numeric:
             monthly_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 99.0
               error:
-                min_percent: 98.0
+                max_percent: 98.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1051,11 +1051,11 @@ spec:
           numeric:
             monthly_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 99.0
               error:
-                min_percent: 98.0
+                max_percent: 98.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1268,11 +1268,11 @@ spec:
               numeric:
                 monthly_valid_latitude_percent:
                   warning:
-                    min_percent: 99.0
+                    max_percent: 99.0
                   error:
-                    min_percent: 98.0
+                    max_percent: 98.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1488,7 +1488,7 @@ Verifies that the percentage of valid latitude values in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_valid_latitude_percent|partitioned|daily|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_valid_latitude_percent|partitioned|daily|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1519,11 +1519,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_pa
           numeric:
             daily_partition_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 99.0
               error:
-                min_percent: 98.0
+                max_percent: 98.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1544,11 +1544,11 @@ spec:
           numeric:
             daily_partition_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 99.0
               error:
-                min_percent: 98.0
+                max_percent: 98.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1765,11 +1765,11 @@ spec:
               numeric:
                 daily_partition_valid_latitude_percent:
                   warning:
-                    min_percent: 99.0
+                    max_percent: 99.0
                   error:
-                    min_percent: 98.0
+                    max_percent: 98.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1982,7 +1982,7 @@ Verifies that the percentage of valid latitude values in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_valid_latitude_percent|partitioned|monthly|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_valid_latitude_percent|partitioned|monthly|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -2013,11 +2013,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
           numeric:
             monthly_partition_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 99.0
               error:
-                min_percent: 98.0
+                max_percent: 98.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -2038,11 +2038,11 @@ spec:
           numeric:
             monthly_partition_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 99.0
               error:
-                min_percent: 98.0
+                max_percent: 98.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2259,11 +2259,11 @@ spec:
               numeric:
                 monthly_partition_valid_latitude_percent:
                   warning:
-                    min_percent: 99.0
+                    max_percent: 99.0
                   error:
-                    min_percent: 98.0
+                    max_percent: 98.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:

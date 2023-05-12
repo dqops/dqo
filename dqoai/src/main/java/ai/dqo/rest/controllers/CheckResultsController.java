@@ -69,7 +69,7 @@ public class CheckResultsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent check results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/results")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/results")
     @ApiOperation(value = "getTableProfilingChecksResults", notes = "Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -129,7 +129,7 @@ public class CheckResultsController {
      * @return View of the recent recurring results.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/results")
-    @ApiOperation(value = "getTableRecurringChecksResults", notes = "Returns the complete results of the most recent table level recurring executions for the recurring at a requested time scale",
+    @ApiOperation(value = "getTableRecurringResults", notes = "Returns the complete results of the most recent table level recurring executions for the recurring at a requested time scale",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -138,7 +138,7 @@ public class CheckResultsController {
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getTableRecurringChecksResults(
+    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getTableRecurringResults(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -188,7 +188,7 @@ public class CheckResultsController {
      * @param monthEnd       Month end boundary.
      * @return View of the most recent partitioned checks results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/results")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/{timeScale}/results")
     @ApiOperation(value = "getTablePartitionedChecksResults", notes = "Returns a complete view of the recent table level partitioned checks executions for a requested time scale", response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -248,7 +248,7 @@ public class CheckResultsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent check results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/results")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/results")
     @ApiOperation(value = "getColumnProfilingChecksResults", notes = "Returns an overview of the most recent check executions for all column level data quality profiling checks on a column",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -315,7 +315,7 @@ public class CheckResultsController {
      * @return View of the recent recurring results.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/results")
-    @ApiOperation(value = "getColumnRecurringChecksResults", notes = "Returns a complete view of the recent column level recurring executions for the recurring at a requested time scale",
+    @ApiOperation(value = "getColumnRecurringResults", notes = "Returns a complete view of the recent column level recurring executions for the recurring at a requested time scale",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -324,7 +324,7 @@ public class CheckResultsController {
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getColumnRecurringChecksResults(
+    public ResponseEntity<Flux<CheckResultsDetailedDataModel>> getColumnRecurringResults(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -381,7 +381,7 @@ public class CheckResultsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent partitioned checks results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/results")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timeScale}/results")
     @ApiOperation(value = "getColumnPartitionedChecksResults", notes = "Returns an overview of the most recent column level partitioned checks executions for a requested time scale",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)

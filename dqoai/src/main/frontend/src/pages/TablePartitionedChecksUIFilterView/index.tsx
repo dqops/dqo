@@ -37,7 +37,7 @@ const TablePartitionedChecksUIFilterView = () => {
 
   const onUpdate = async () => {
     setIsUpdating(true);
-    await TableApiClient.updateTableRecurringChecksUI(
+    await TableApiClient.updateTableRecurringUI(
       connectionName,
       schemaName,
       tableName,

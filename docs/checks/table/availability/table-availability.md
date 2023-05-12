@@ -8,7 +8,7 @@ ___
 ## **table availability**  
   
 **Check description**  
-Verifies availability of the table in a database using a simple row count.  
+Verifies availability on table in database using simple row count.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -42,7 +42,7 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=table_av
     availability:
       table_availability:
         warning:
-          max_failures: 0
+          max_failures: 1
         error:
           max_failures: 5
         fatal:
@@ -64,7 +64,7 @@ spec:
     availability:
       table_availability:
         warning:
-          max_failures: 0
+          max_failures: 1
         error:
           max_failures: 5
         fatal:
@@ -324,7 +324,7 @@ spec:
         availability:
           table_availability:
             warning:
-              max_failures: 0
+              max_failures: 1
             error:
               max_failures: 5
             fatal:
@@ -604,7 +604,7 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_ta
       availability:
         daily_table_availability:
           warning:
-            max_failures: 0
+            max_failures: 1
           error:
             max_failures: 5
           fatal:
@@ -627,7 +627,7 @@ spec:
       availability:
         daily_table_availability:
           warning:
-            max_failures: 0
+            max_failures: 1
           error:
             max_failures: 5
           fatal:
@@ -888,7 +888,7 @@ spec:
           availability:
             daily_table_availability:
               warning:
-                max_failures: 0
+                max_failures: 1
               error:
                 max_failures: 5
               fatal:
@@ -1168,7 +1168,7 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
       availability:
         monthly_table_availability:
           warning:
-            max_failures: 0
+            max_failures: 1
           error:
             max_failures: 5
           fatal:
@@ -1191,7 +1191,7 @@ spec:
       availability:
         monthly_table_availability:
           warning:
-            max_failures: 0
+            max_failures: 1
           error:
             max_failures: 5
           fatal:
@@ -1452,7 +1452,7 @@ spec:
           availability:
             monthly_table_availability:
               warning:
-                max_failures: 0
+                max_failures: 1
               error:
                 max_failures: 5
               fatal:

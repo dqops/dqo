@@ -19,7 +19,7 @@ package ai.dqo.rules;
  * Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.
  */
 public enum RuleSeverityLevel {
-    valid(0),
+    none(0),
     warning(1),
     error(2),
     fatal(3);
@@ -41,7 +41,7 @@ public enum RuleSeverityLevel {
     public static RuleSeverityLevel fromSeverityLevel(int severity) {
         switch (severity) {
             case 0:
-                return valid;
+                return none;
             case 1:
                 return warning;
             case 2:

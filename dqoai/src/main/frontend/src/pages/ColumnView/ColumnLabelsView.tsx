@@ -35,7 +35,7 @@ const ColumnLabelsView = ({
     dispatch(
       getColumnLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
     );
-  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, columnName, tableName]);
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, columnName, tableName, columnBasic]);
 
   const onUpdate = async () => {
     await dispatch(

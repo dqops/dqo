@@ -526,7 +526,7 @@ export const getTableDailyRecurring =
       dispatch(getTableDailyRecurringRequest(checkType, activeTab));
     }
     try {
-      const res = await TableApiClient.getTableRecurringChecksUI(
+      const res = await TableApiClient.getTableRecurringUI(
         connectionName,
         schemaName,
         tableName,
@@ -565,7 +565,7 @@ export const updateTableDailyRecurring =
   async (dispatch: Dispatch) => {
     dispatch(updateTableDailyRecurringRequest(checkType, activeTab));
     try {
-      await TableApiClient.updateTableRecurringChecksUI(
+      await TableApiClient.updateTableRecurringUI(
         connectionName,
         schemaName,
         tableName,
@@ -601,7 +601,7 @@ export const getTableMonthlyRecurring =
       dispatch(getTableMonthlyRecurringRequest(checkType, activeTab));
     }
     try {
-      const res = await TableApiClient.getTableRecurringChecksUI(
+      const res = await TableApiClient.getTableRecurringUI(
         connectionName,
         schemaName,
         tableName,
@@ -642,7 +642,7 @@ export const updateTableMonthlyRecurring =
   async (dispatch: Dispatch) => {
     dispatch(updateTableMonthlyRecurringRequest(checkType, activeTab));
     try {
-      await TableApiClient.updateTableRecurringChecksUI(
+      await TableApiClient.updateTableRecurringUI(
         connectionName,
         schemaName,
         tableName,
@@ -958,13 +958,13 @@ export const getTableProfilingChecksUIFilter =
       }
     };
 
-export const getTableRecurringChecksUIFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
+export const getTableRecurringUIFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
   type: SOURCE_ACTION.GET_TABLE_RECURRING_UI_FILTER,
   checkType,
   activeTab
 });
 
-export const getTableRecurringChecksUIFilterSuccess = (
+export const getTableRecurringUIFilterSuccess = (
   checkType: CheckTypes, activeTab: string, data: UICheckContainerModel
 ) => ({
   type: SOURCE_ACTION.GET_TABLE_RECURRING_UI_FILTER_SUCCESS,
@@ -973,19 +973,19 @@ export const getTableRecurringChecksUIFilterSuccess = (
   data
 });
 
-export const getTableRecurringChecksUIFilterFailed = (error: unknown) => ({
+export const getTableRecurringUIFilterFailed = (error: unknown) => ({
   type: SOURCE_ACTION.GET_TABLE_RECURRING_UI_FILTER_ERROR,
   error
 });
 
-export const getTableRecurringChecksUIFilter =
+export const getTableRecurringUIFilter =
   (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string, loading = true) =>
     async (dispatch: Dispatch) => {
       if (loading) {
-        dispatch(getTableRecurringChecksUIFilterRequest(checkType, activeTab));
+        dispatch(getTableRecurringUIFilterRequest(checkType, activeTab));
       }
       try {
-        const res = await TableApiClient.getTableRecurringChecksUIFilter(
+        const res = await TableApiClient.getTableRecurringUIFilter(
           connectionName,
           schemaName,
           tableName,
@@ -993,9 +993,9 @@ export const getTableRecurringChecksUIFilter =
           category,
           checkName
         );
-        dispatch(getTableRecurringChecksUIFilterSuccess(checkType, activeTab, res.data));
+        dispatch(getTableRecurringUIFilterSuccess(checkType, activeTab, res.data));
       } catch (err) {
-        dispatch(getTableRecurringChecksUIFilterFailed(err));
+        dispatch(getTableRecurringUIFilterFailed(err));
       }
     };
 
@@ -1047,7 +1047,7 @@ export const setTableUpdatedCheckUiFilter = (checkType: CheckTypes, activeTab: s
   data: ui
 });
 
-export const setTableUpdatedRecurringChecksUIFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
+export const setTableUpdatedRecurringUIFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
   type: SOURCE_ACTION.SET_UPDATED_RECURRING_UI_FILTER,
   checkType,
   activeTab,

@@ -20,7 +20,6 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.check.impl.CheckCliService;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.*;
 import ai.dqo.cli.output.OutputFormatService;
@@ -53,7 +52,7 @@ import picocli.CommandLine;
 public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITableNameCommand {
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWritter;
-    private CheckCliService checkService;
+    private CheckService checkService;
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private JsonSerializer jsonSerializer;
     private OutputFormatService outputFormatService;
@@ -71,7 +70,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @Autowired
     public CheckRunCliCommand(TerminalWriter terminalWriter,
                               TerminalTableWritter terminalTableWritter,
-                              CheckCliService checkService,
+                              CheckService checkService,
                               CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
                               JsonSerializer jsonSerializer,
                               OutputFormatService outputFormatService,
@@ -108,10 +107,10 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-e", "--enabled"}, description = "Runs only enabled or only disabled sensors, by default only enabled sensors are executed", defaultValue = "true")
     private Boolean enabled = true;
 
-    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (profiling, recurring, partitioned)")
+    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (adhoc, checkpoint, partitioned)")
     private CheckType checkType;
 
-    @CommandLine.Option(names = {"-ts", "--time-scale"}, description = "Time scale for recurring and partitioned checks (daily, monthly, etc.)")
+    @CommandLine.Option(names = {"-ts", "--time-scale"}, description = "Time scale for checkpoint and partitioned checks (daily, monthly, etc.)")
     private CheckTimeScale timeScale;
 
     @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (standard, nulls, numeric, etc.)")
@@ -249,7 +248,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     }
 
     /**
-     * Gets the time scale filter for recurring and partitioned checks.
+     * Gets the time scale filter for checkpoint and partitioned checks.
      * @return Time scale filter.
      */
     public CheckTimeScale getTimeScale() {
@@ -257,7 +256,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     }
 
     /**
-     * Sets the time scale filter for recurring and partitioned checks.
+     * Sets the time scale filter for checkpoint and partitioned checks.
      * @param timeScale Time scale filter.
      */
     public void setTimeScale(CheckTimeScale timeScale) {

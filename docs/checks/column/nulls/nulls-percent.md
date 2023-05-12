@@ -284,47 +284,6 @@ spec:
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN analyzed_table.`target_column` IS NULL THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
-    FROM `<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -587,48 +546,6 @@ spec:
             
         
             
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```
-        SELECT
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN analyzed_table.`target_column` IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2,
-            LOCALTIMESTAMP AS time_period,
-            CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -919,47 +836,6 @@ spec:
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN analyzed_table.`target_column` IS NULL THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value,
-        LOCALTIMESTAMP AS time_period,
-        CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
-    FROM `<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -1223,48 +1099,6 @@ spec:
             
         
             
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```
-        SELECT
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN analyzed_table.`target_column` IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2,
-            LOCALTIMESTAMP AS time_period,
-            CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -1555,47 +1389,6 @@ spec:
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
     ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN analyzed_table.`target_column` IS NULL THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value,
-        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-        CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
-    FROM `<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -1859,48 +1652,6 @@ spec:
             
         
             
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```
-        SELECT
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN analyzed_table.`target_column` IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2,
-            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-            CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -2195,47 +1946,6 @@ spec:
     
         
     ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN analyzed_table.`target_column` IS NULL THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value,
-        analyzed_table.`` AS time_period,
-        CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
-    FROM `<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -2496,48 +2206,6 @@ spec:
         ORDER BY level_1, level_2CAST([] AS date)
         
             
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```
-        SELECT
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN analyzed_table.`target_column` IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2,
-            analyzed_table.`` AS time_period,
-            CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -2832,47 +2500,6 @@ spec:
     
         
     ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN analyzed_table.`target_column` IS NULL THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value,
-        DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-        CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
-    FROM `<target_table>` AS analyzed_table
-    GROUP BY time_period, time_period_utc
-    ORDER BY time_period, time_period_utc
-    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -3133,48 +2760,6 @@ spec:
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             
-        ```
-    **MySQL**  
-      
-    === "Sensor template for MySQL"
-        ```
-        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-        SELECT
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() -}}
-        {{- lib.render_group_by() -}}
-        {{- lib.render_order_by() -}}
-        ```
-    === "Rendered SQL for MySQL"
-        ```
-        SELECT
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN analyzed_table.`target_column` IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value,
-            analyzed_table.`country` AS stream_level_1,
-            analyzed_table.`state` AS stream_level_2,
-            DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
-            CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
-        FROM `<target_table>` AS analyzed_table
-        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
-        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 

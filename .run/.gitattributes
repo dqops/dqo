@@ -1,1 +1,1 @@
-dqo run.run.xml text eol=lf
+dqo run.run.xml text eol=cr

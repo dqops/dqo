@@ -78,7 +78,7 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
 
             put("string_most_popular_values", o -> o.stringMostPopularValues);
 
-            put("string_datatype_detected", o -> o.stringDatatypeDetected);
+            put("string_datatype_changed", o -> o.stringDatatypeChanged);
         }
     };
 
@@ -187,8 +187,8 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
     private ColumnStringMostPopularValuesCheckSpec stringMostPopularValues;
 
-    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type.")
-    private ColumnStringDatatypeDetectedCheckSpec stringDatatypeDetected;
+    @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype.")
+    private ColumnStringDatatypeChangedCheckSpec stringDatatypeChanged;
 
     /**
      * Returns a maximum string length below check.
@@ -821,21 +821,21 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
     }
 
     /**
-     * Returns a count of expected values in datatype detected check.
-     * @return Datatype detected check.
+     * Returns a count of expected values in datatype changed check.
+     * @return Datatype changed check.
      */
-    public ColumnStringDatatypeDetectedCheckSpec getStringDatatypeDetected() {
-        return stringDatatypeDetected;
+    public ColumnStringDatatypeChangedCheckSpec getStringDatatypeChanged() {
+        return stringDatatypeChanged;
     }
 
     /**
-     * Sets a new definition of a datatype detected check.
-     * @param stringDatatypeDetected Datatype detected check.
+     * Sets a new definition of a datatype changed check.
+     * @param stringDatatypeChanged Datatype changed check.
      */
-    public void setStringDatatypeDetected(ColumnStringDatatypeDetectedCheckSpec stringDatatypeDetected) {
-        this.setDirtyIf(!Objects.equals(this.stringDatatypeDetected, stringDatatypeDetected));
-        this.stringDatatypeDetected = stringDatatypeDetected;
-        propagateHierarchyIdToField(stringDatatypeDetected, "string_datatype_detected");
+    public void setStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec stringDatatypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.stringDatatypeChanged, stringDatatypeChanged));
+        this.stringDatatypeChanged = stringDatatypeChanged;
+        propagateHierarchyIdToField(stringDatatypeChanged, "string_datatype_changed");
     }
 
     /**

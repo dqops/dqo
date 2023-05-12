@@ -54,6 +54,6 @@ public class ParentDqoJobQueueImpl extends BaseDqoJobQueueImpl implements Parent
      */
     @Override
     public <T> PushJobResult<T> pushJob(ParentDqoQueueJob<T> job) {
-        return super.pushJobCore(job, null);
+        return super.pushJobCore(job);
     }
 }

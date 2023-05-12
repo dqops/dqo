@@ -11,18 +11,18 @@ You need a SQL Server account. Use the TCP/IP Properties (IP Addresses Tab) dial
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 
-   ![Adding connection](https://dqo.ai/docs/images/working-with-dqo/adding-connection.jpg)
+   ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connection.jpg)
 
 2. Select SQL Server database type.
 
-   ![Selecting SQL Server database type](https://dqo.ai/docs/images/working-with-dqo/adding-connection-sql-server.jpg)
+   ![Selecting SQL Server database type](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connection-sql-server.jpg)
 
 3. Add connection settings.
 
-   ![Adding connection settings](https://dqo.ai/docs/images/working-with-dqo/connection-settings-sql-server.jpg)
+   ![Adding connection settings](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-sql-server.jpg)
 
     | SQL Server connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                      | 
-    |--------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+    |--------------------------------|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
     | Connection name                |                                          | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                                          |
     | Host                           | host                                     | SQL Server host name. Supports also a ${SQLSERVER_HOST} configuration with a custom environment variable.                                                                                                                                                                        |
     | Port                           | port                                     | SQL Server port name. The default port is 1433. Supports also a ${SQLSERVER_PORT} configuration with a custom environment variable.                                                                                                                                              |
@@ -30,20 +30,20 @@ You need a SQL Server account. Use the TCP/IP Properties (IP Addresses Tab) dial
     | User name                      | user                                     | SQL Server user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                                   |
     | Password                       | password                                 | SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                           |
     | Options                        | options                                  | SQL Server connection 'options' initialization parameter. For example, setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable. |
-    | Disable SSL                    | ssl                                      | Connecting to SQL Server with SSL disabled. The default value is true.                                                                                                                                                                                                           |
+    | Disable SSL                    | ssl                                      | Connecting to SQL Server with SSL disabled. The default value is false.                                                                                                                                                                                                          |
     | JDBC connection property       |                                          | Optional setting. DQO supports using JDBC driver to access SQL Server. [See the SQL Server documentation for JDBC connection parameter references.](https://learn.microsoft.com/en-us/sql/connect/jdbc/overview-of-the-jdbc-driver?view=sql-server-ver16).                       |
     
     DQO allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
 
     For example:
-    ![Adding connection settings - environmental variables](https://dqo.ai/docs/images/working-with-dqo/connection-settings-envvar.jpg)
+    ![Adding connection settings - environmental variables](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-sql-server-envvar.jpg)
 
     To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value
     can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
 
     For example:
-    ![Adding connection JDBC settings](https://dqo.ai/docs/images/working-with-dqo/connection-settings-JDBC-properties.jpg)
+    ![Adding connection JDBC settings](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-JDBC-properties.jpg)
 
     To remove the property click on the trash icon add the end of the input field.
 
@@ -52,11 +52,11 @@ You need a SQL Server account. Use the TCP/IP Properties (IP Addresses Tab) dial
 6. Import the selected data resources (source schemas and tables) by clicking on the **Import Tables** button next to
    the name of the source schema from which you want to import tables.
 
-    ![Adding connection](https://dqo.ai/docs/images/working-with-dqo/importing-schemas.jpg)
+    ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/importing-schemas.jpg)
 
 7. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-    ![Adding connection](https://dqo.ai/docs/images/working-with-dqo/importing-tables.jpg)
+    ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/importing-tables.jpg)
 
 ## Adding SQL Server connection using DQO Shell
 
@@ -75,13 +75,12 @@ Database provider type (--provider):
 [ 3] postgresql
 [ 4] redshift
 [ 5] sqlserver
-[ 6] mysql
 Please enter one of the [] values: 5
 SQL Server host (--sqlserver-host)[${SQLSERVER_HOST}]: localhost
 SQL Server port (--sqlserver-port) [${SQLSERVER_PORT}]: 1433
 SQL Server database name (--sqlserver-database) [${SQLSERVER_DATABASE}]: TESTING
-SQL Server user name (--sqlserver-user) [${SQLSERVER_USER}]: testing
-SQL Server password (--sqlserver-password) [${SQLSERVER_PASSWORD}]: xxx
+SQL Server user name (--sqlserver-user) [${SQLSERVER_USER}]: TESTING
+SQL Server password (--sqlserver-password) [${SQLSERVER_PASSWORD}]: test
 Connection connecton1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -95,7 +94,7 @@ dqo.ai> connection add --name=connection1
 --sqlserver-port=1433
 --sqlserver-database=TESTING
 --sqlserver-username=testing
---sqlserver-password=xxx
+--sqlserver-password=test
 
 !!!!!
 ```
@@ -130,15 +129,11 @@ spec:
   sqlserver:
     host: localhost
     port: 1433
-    database: TESTING
-    user: testing
-    password: xxx
-    ssl: true
+    database: testing
+    user: test
+    password: test
+  time_zone: UTC
     properties:
-      lastUpdateCount: "false"
-  incident_grouping:
-    grouping_level: table_dimension_category
-    minimum_severity: warning
-    max_incident_length_days: 60
-    mute_for_days: 60
+      loginTimeout: 55
+
 ```

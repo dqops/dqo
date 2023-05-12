@@ -15,7 +15,8 @@
  */
 package ai.dqo.utils.specs;
 
-import ai.dqo.metadata.definitions.sensors.*;
+import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
+import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
@@ -80,20 +81,6 @@ public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefin
             if (sensorDefinitionWrapper == null) {
                 System.err.println("Missing sensor definition for " + sensorDefinitionName);
                 continue;
-            }
-
-            ProviderSensorDefinitionList providerSensors = sensorDefinitionWrapper.getProviderSensors();
-            for (ProviderSensorDefinitionWrapper providerSensorWrapper : providerSensors) {
-                String sqlTemplate = providerSensorWrapper.getSqlTemplate();
-                if (sqlTemplate == null) {
-                    continue;
-                }
-
-                ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorWrapper.getSpec();
-                providerSensorDefinitionSpec.setSupportsGroupingByDataStream(
-                        sqlTemplate.contains("lib.render_data_stream_projections"));
-                providerSensorDefinitionSpec.setSupportsPartitionedChecks(
-                        sqlTemplate.contains("lib.render_time_dimension_projection") && !sensorDefinitionWrapper.getName().equals("table/availability/table_availability"));
             }
 
             SensorDefinitionSpec sensorDefinitionSpec = sensorDefinitionWrapper.getSpec();

@@ -60,7 +60,7 @@ public class SourceConnectionController {
     })
     public ResponseEntity<Mono<ConnectionTestModel>> testConnection(
             @ApiParam("Basic connection model") @RequestBody ConnectionBasicModel connectionBasicModel,
-            @ApiParam(name="verifyNameUniqueness", value = "Verify if the connection name is unique, the default value is true")
+            @ApiParam("Verify if the connection name is unique, the default value is true")
                 @RequestParam(required = false) Optional<Boolean> verifyNameUniqueness) {
 
         ConnectionTestModel connectionTestModel;

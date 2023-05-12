@@ -12,7 +12,7 @@ Verifies that the percentage of unique values in a column does not exceed the mi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|unique_percent|profiling| |[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|unique_percent|profiling| |[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -42,11 +42,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=unique_p
         uniqueness:
           unique_percent:
             warning:
-              min_percent: 99.0
+              max_percent: 1.0
             error:
-              min_percent: 98.0
+              max_percent: 2.0
             fatal:
-              min_percent: 95.0
+              max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-21"
@@ -66,11 +66,11 @@ spec:
         uniqueness:
           unique_percent:
             warning:
-              min_percent: 99.0
+              max_percent: 1.0
             error:
-              min_percent: 98.0
+              max_percent: 2.0
             fatal:
-              min_percent: 95.0
+              max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -272,11 +272,11 @@ spec:
             uniqueness:
               unique_percent:
                 warning:
-                  min_percent: 99.0
+                  max_percent: 1.0
                 error:
-                  min_percent: 98.0
+                  max_percent: 2.0
                 fatal:
-                  min_percent: 95.0
+                  max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -482,7 +482,7 @@ Verifies that the percentage of unique values in a column does not exceed the mi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_unique_percent|recurring|daily|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_unique_percent|recurring|daily|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -513,11 +513,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_un
           uniqueness:
             daily_unique_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 1.0
               error:
-                min_percent: 98.0
+                max_percent: 2.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -538,11 +538,11 @@ spec:
           uniqueness:
             daily_unique_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 1.0
               error:
-                min_percent: 98.0
+                max_percent: 2.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -745,11 +745,11 @@ spec:
               uniqueness:
                 daily_unique_percent:
                   warning:
-                    min_percent: 99.0
+                    max_percent: 1.0
                   error:
-                    min_percent: 98.0
+                    max_percent: 2.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -955,7 +955,7 @@ Verifies that the percentage of unique values in a column does not exceed the mi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_unique_percent|recurring|monthly|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_unique_percent|recurring|monthly|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -986,11 +986,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
           uniqueness:
             monthly_unique_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 1.0
               error:
-                min_percent: 98.0
+                max_percent: 2.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1011,11 +1011,11 @@ spec:
           uniqueness:
             monthly_unique_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 1.0
               error:
-                min_percent: 98.0
+                max_percent: 2.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1218,11 +1218,11 @@ spec:
               uniqueness:
                 monthly_unique_percent:
                   warning:
-                    min_percent: 99.0
+                    max_percent: 1.0
                   error:
-                    min_percent: 98.0
+                    max_percent: 2.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1428,7 +1428,7 @@ Verifies that the percentage of unique values in a column does not exceed the mi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_unique_percent|partitioned|daily|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_unique_percent|partitioned|daily|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1459,11 +1459,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_pa
           uniqueness:
             daily_partition_unique_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 1.0
               error:
-                min_percent: 98.0
+                max_percent: 2.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1484,11 +1484,11 @@ spec:
           uniqueness:
             daily_partition_unique_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 1.0
               error:
-                min_percent: 98.0
+                max_percent: 2.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1695,11 +1695,11 @@ spec:
               uniqueness:
                 daily_partition_unique_percent:
                   warning:
-                    min_percent: 99.0
+                    max_percent: 1.0
                   error:
-                    min_percent: 98.0
+                    max_percent: 2.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1902,7 +1902,7 @@ Verifies that the percentage of unique values in a column does not exceed the mi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_unique_percent|partitioned|monthly|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_unique_percent|partitioned|monthly|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1933,11 +1933,11 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
           uniqueness:
             monthly_partition_unique_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 1.0
               error:
-                min_percent: 98.0
+                max_percent: 2.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1958,11 +1958,11 @@ spec:
           uniqueness:
             monthly_partition_unique_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 1.0
               error:
-                min_percent: 98.0
+                max_percent: 2.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2169,11 +2169,11 @@ spec:
               uniqueness:
                 monthly_partition_unique_percent:
                   warning:
-                    min_percent: 99.0
+                    max_percent: 1.0
                   error:
-                    min_percent: 98.0
+                    max_percent: 2.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:

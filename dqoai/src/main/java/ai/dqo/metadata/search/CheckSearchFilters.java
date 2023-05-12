@@ -15,7 +15,6 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.metadata.id.HierarchyId;
@@ -43,7 +42,6 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     private String columnName;
     private String columnDataType;
     private Boolean columnNullable;
-    private CheckTarget checkTarget;
     private CheckType checkType;
     private CheckTimeScale timeScale;
     private String checkCategory;
@@ -142,7 +140,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     }
 
     /**
-     * Returns a check type (profiling, recurring, partitioned) filter.
+     * Returns a check type (profiling, checkpoint, partitioned) filter.
      * @return Check type filter.
      */
     public CheckType getCheckType() {
@@ -150,7 +148,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     }
 
     /**
-     * Sets a check type (profiling, recurring, partitioned) filter.
+     * Sets a check type (profiling, checkpoint, partitioned) filter.
      * @param checkType Check type filter.
      */
     public void setCheckType(CheckType checkType) {
@@ -158,23 +156,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     }
 
     /**
-     * Returns a check target (table, column) filter.
-     * @return Check target filter.
-     */
-    public CheckTarget getCheckTarget() {
-        return checkTarget;
-    }
-
-    /**
-     * Sets a check target (table, column) filter.
-     * @param checkTarget Check target filter.
-     */
-    public void setCheckTarget(CheckTarget checkTarget) {
-        this.checkTarget = checkTarget;
-    }
-
-    /**
-     * Returns a time scale filter for recurring and partitioned checks.
+     * Returns a time scale filter for checkpoints and partitioned checks.
      * @return Time scale filter.
      */
     public CheckTimeScale getTimeScale() {
@@ -182,7 +164,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     }
 
     /**
-     * Sets a time scale filter for recurring and partitioned checks.
+     * Sets a time scale filter for checkpoints and partitioned checks.
      * @param timeScale Time scale filter.
      */
     public void setTimeScale(CheckTimeScale timeScale) {

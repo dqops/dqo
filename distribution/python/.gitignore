@@ -1,4 +1,4 @@
 venv/
-dqops.egg-info/
+dqoai.egg-info/
 dist/
 deps/

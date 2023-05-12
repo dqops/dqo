@@ -16,7 +16,6 @@
 package ai.dqo.checks.column.recurring.strings;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.consistency.ColumnStringDatatypeChangedCheckSpec;
 import ai.dqo.checks.column.checkspecs.strings.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -29,7 +28,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of strings data quality recurring checks on a column level that are checking at a monthly level.
+ * Container of built-in preconfigured data quality check points on a column level that are checking at a monthly level.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -79,7 +78,7 @@ public class ColumnStringsMonthlyRecurringSpec extends AbstractCheckCategorySpec
 
             put("monthly_string_most_popular_values", o -> o.monthlyStringMostPopularValues);
 
-            put("monthly_string_datatype_detected", o -> o.monthlyStringDatatypeDetected);
+            put("monthly_string_datatype_changed", o -> o.monthlyStringDatatypeChanged);
         }
     };
 
@@ -185,11 +184,11 @@ public class ColumnStringsMonthlyRecurringSpec extends AbstractCheckCategorySpec
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name regex in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringMatchNameRegexPercentCheckSpec monthlyStringMatchNameRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
     private ColumnStringMostPopularValuesCheckSpec monthlyStringMostPopularValues;
 
-    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnStringDatatypeDetectedCheckSpec monthlyStringDatatypeDetected;
+    @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringDatatypeChangedCheckSpec monthlyStringDatatypeChanged;
 
     /**
      * Returns a maximum string length below check.
@@ -825,18 +824,18 @@ public class ColumnStringsMonthlyRecurringSpec extends AbstractCheckCategorySpec
      * Returns a count of expected values in datatype detect check.
      * @return Datatype detect check.
      */
-    public ColumnStringDatatypeDetectedCheckSpec getMonthlyStringDatatypeDetected() {
-        return monthlyStringDatatypeDetected;
+    public ColumnStringDatatypeChangedCheckSpec getMonthlyStringDatatypeChanged() {
+        return monthlyStringDatatypeChanged;
     }
 
     /**
      * Sets a new definition of a datatype detect check.
-     * @param monthlyStringDatatypeDetected Datatype detect check.
+     * @param monthlyStringDatatypeChanged Datatype detect check.
      */
-    public void setMonthlyStringDatatypeDetected(ColumnStringDatatypeDetectedCheckSpec monthlyStringDatatypeDetected) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringDatatypeDetected, monthlyStringDatatypeDetected));
-        this.monthlyStringDatatypeDetected = monthlyStringDatatypeDetected;
-        propagateHierarchyIdToField(monthlyStringDatatypeDetected, "monthly_string_datatype_detected");
+    public void setMonthlyStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec monthlyStringDatatypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.monthlyStringDatatypeChanged, monthlyStringDatatypeChanged));
+        this.monthlyStringDatatypeChanged = monthlyStringDatatypeChanged;
+        propagateHierarchyIdToField(monthlyStringDatatypeChanged, "monthly_string_datatype_changed");
     }
 
     /**

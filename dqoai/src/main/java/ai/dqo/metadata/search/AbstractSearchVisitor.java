@@ -19,11 +19,11 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
-import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
 import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import ai.dqo.checks.table.recurring.TableRecurringSpec;
 import ai.dqo.metadata.incidents.IncidentGroupingSpec;
-import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.metadata.comments.CommentSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.dashboards.*;
@@ -555,14 +555,14 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     }
 
     /**
-     * Accepts a container of table level recurring checks (daily, monthly, etc.)
+     * Accepts a container of table level checkpoints (daily, monthly, etc.)
      *
-     * @param tableRecurringChecksSpec Table level recurring checks container.
+     * @param tableRecurringSpec Table level checkpoints container.
      * @param parameter            Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableRecurringChecksSpec tableRecurringChecksSpec, T parameter) {
+    public TreeNodeTraversalResult accept(TableRecurringSpec tableRecurringSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
@@ -579,14 +579,14 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     }
 
     /**
-     * Accepts a container of column level recurring checks (daily, monthly, etc.)
+     * Accepts a container of column level checkpoints (daily, monthly, etc.)
      *
-     * @param columnRecurringChecksRootSpec Column level recurring checks container.
+     * @param columnRecurringSpec Column level checkpoints container.
      * @param parameter             Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(ColumnRecurringChecksRootSpec columnRecurringChecksRootSpec, T parameter) {
+    public TreeNodeTraversalResult accept(ColumnRecurringSpec columnRecurringSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 

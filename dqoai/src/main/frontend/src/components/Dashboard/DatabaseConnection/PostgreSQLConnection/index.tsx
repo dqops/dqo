@@ -1,10 +1,11 @@
 import React from 'react';
 
 import SectionWrapper from '../../SectionWrapper';
-import { PostgresqlParametersSpec } from '../../../../api';
-import JdbcPropertiesView from '../JdbcProperties';
-import Checkbox from '../../../Checkbox';
-import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import { PostgresqlParametersSpec } from "../../../../api";
+import JdbcPropertiesView from "../JdbcProperties";
+import Checkbox from "../../../Checkbox";
+import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
+
 
 interface IPostgreSQLConnectionProps {
   postgresql?: PostgresqlParametersSpec;
@@ -15,6 +16,7 @@ const PostgreSQLConnection = ({
   postgresql,
   onChange
 }: IPostgreSQLConnectionProps) => {
+
   const handleChange = (obj: Partial<PostgresqlParametersSpec>) => {
     if (!onChange) return;
 
@@ -37,12 +39,6 @@ const PostgreSQLConnection = ({
         className="mb-4"
         value={(postgresql?.port || 5432).toString()}
         onChange={(value) => handleChange({ port: value })}
-      />
-      <FieldTypeInput
-        label="Database"
-        className="mb-4"
-        value={postgresql?.database}
-        onChange={(value) => handleChange({ database: value })}
       />
       <FieldTypeInput
         label="User name"

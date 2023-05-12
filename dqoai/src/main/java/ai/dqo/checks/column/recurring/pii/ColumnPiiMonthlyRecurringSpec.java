@@ -28,7 +28,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of PII data quality recurring checks on a column level that are checking at a monthly level.
+ * Container of built-in preconfigured data quality check points on a column level that are checking at a monthly level.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

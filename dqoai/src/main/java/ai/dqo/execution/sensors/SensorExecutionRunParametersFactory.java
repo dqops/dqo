@@ -38,8 +38,8 @@ public interface SensorExecutionRunParametersFactory {
      * @param column Optional column specification for column sensors.
      * @param check Check specification.
      * @param customCheckDefinition Optional custom check definition, required when the check is a custom check.
-     * @param checkType Check type (profiling, recurring, partitioned).
-     * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (profiling, recurring, partitioned).
+     * @param checkType Check type (adhoc, checkpoint, partitioned).
+     * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (profiling, checkpoints, partitioned).
      * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
      *                             When not provided, the defaults are copied from the table's incremental time window configuration for a matching partition time scale.
      * @param dialectSettings Dialect settings.

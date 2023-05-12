@@ -7,7 +7,6 @@ import { useTree } from "../../../contexts/treeContext";
 import { getFirstLevelState } from "../../../redux/selectors";
 import { useParams } from "react-router-dom";
 import { CheckTypes } from "../../../shared/routes";
-import AddColumnDialog from '../../CustomTree/AddColumnDialog';
 
 interface ITableActionGroupProps {
   isDisabled?: boolean;
@@ -28,8 +27,6 @@ const TableActionGroup = ({
   const [isOpen, setIsOpen] = useState(false);
   const { tableBasic } = useSelector(getFirstLevelState(checkTypes));
   const { deleteData } = useTree();
-  const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
-  const isSourceScreen = checkTypes === CheckTypes.SOURCES;
 
   const removeTable = async () => {
     if (tableBasic) {
@@ -46,15 +43,6 @@ const TableActionGroup = ({
 
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
-      {isSourceScreen && (
-        <Button
-          className="!h-10"
-          color="primary"
-          variant="outlined"
-          label="Add Column"
-          onClick={() => setIsAddColumnDialogOpen(true)}
-        />
-      )}
       {shouldDelete && (
         <Button
           className="!h-10"
@@ -78,10 +66,6 @@ const TableActionGroup = ({
         onClose={() => setIsOpen(false)}
         table={tableBasic}
         onConfirm={removeTable}
-      />
-      <AddColumnDialog
-        open={isAddColumnDialogOpen}
-        onClose={() => setIsAddColumnDialogOpen(false)}
       />
     </div>
   );

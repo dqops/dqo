@@ -16,21 +16,18 @@
 package ai.dqo.execution.checks.jobs;
 
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
-import ai.dqo.execution.checks.progress.SilentCheckExecutionProgressListener;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.swagger.annotations.ApiModel;
-import lombok.EqualsAndHashCode;
 
 /**
  * Parameters object for the run checks job.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "RunChecksQueueJobParameters", description = "Run checks configuration, specifies the target checks that should be executed and an optional time window.")
-@EqualsAndHashCode(callSuper = false)
 public class RunChecksQueueJobParameters {
     /**
      * Target data quality checks filter.
@@ -48,20 +45,13 @@ public class RunChecksQueueJobParameters {
      * Job progress listener that will receive events showing the progress of execution.
      */
     @JsonIgnore
-    @EqualsAndHashCode.Exclude
-    private CheckExecutionProgressListener progressListener = new SilentCheckExecutionProgressListener();
+    private CheckExecutionProgressListener progressListener;
 
     /**
      * Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.
      */
     @JsonPropertyDescription("Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.")
     private boolean dummyExecution;
-
-    /**
-     * The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
-     */
-    @JsonPropertyDescription("The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.")
-    private volatile RunChecksQueueJobResult runChecksResult;
 
     /**
      * Default constructor.
@@ -148,21 +138,5 @@ public class RunChecksQueueJobParameters {
      */
     public void setDummyExecution(boolean dummyExecution) {
         this.dummyExecution = dummyExecution;
-    }
-
-    /**
-     * Returns the result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
-     * @return The job result object.
-     */
-    public RunChecksQueueJobResult getRunChecksResult() {
-        return runChecksResult;
-    }
-
-    /**
-     * Sets the result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
-     * @param runChecksResult The new job result object.
-     */
-    public void setRunChecksResult(RunChecksQueueJobResult runChecksResult) {
-        this.runChecksResult = runChecksResult;
     }
 }

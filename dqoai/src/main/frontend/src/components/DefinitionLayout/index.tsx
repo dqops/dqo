@@ -5,7 +5,7 @@ import DefinitionTree from "./DefinitionTree";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
 import PageTabs from "../PageTabs";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { closeFirstLevelTab, setActiveFirstLevelTab } from "../../redux/actions/sensor.actions";
 
 interface LayoutProps {
@@ -16,7 +16,6 @@ const DefinitionLayout = ({ children }: LayoutProps) => {
   const { tabs: pageTabs, activeTab } = useSelector((state: IRootState) => state.sensor);
   const dispatch= useDispatch();
   const history = useHistory();
-  const location = useLocation();
 
   const handleChange = (value: string) => {
     dispatch(setActiveFirstLevelTab(value));
@@ -35,7 +34,7 @@ const DefinitionLayout = ({ children }: LayoutProps) => {
   }, [pageTabs]);
 
   useEffect(() => {
-    if (activeTab && activeTab !== location.pathname) {
+    if (activeTab) {
       history.push(activeTab);
     }
   }, [activeTab])

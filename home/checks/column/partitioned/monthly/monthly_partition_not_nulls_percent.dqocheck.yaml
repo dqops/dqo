@@ -3,7 +3,7 @@ apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/nulls/not_null_percent
-  rule_name: comparison/min_percent
+  rule_name: comparison/max_percent
   help_text: Verifies that the percentage of not null values in a column does not
     exceed the set percentage. Creates a separate data quality check (and an alert)
     for each monthly partition.

@@ -28,7 +28,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of strings data quality partitioned checks on a column level that are checking at a daily level.
+ * Container of built-in preconfigured data quality check points on a column level that are checking at a daily level.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -78,7 +78,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
 
             put("daily_partition_string_most_popular_values", o -> o.dailyPartitionStringMostPopularValues);
 
-            put("daily_partition_string_datatype_detected", o -> o.dailyPartitionStringDatatypeDetected);
+            put("daily_partition_string_datatype_changed", o -> o.dailyPartitionStringDatatypeChanged);
 
         }
     };
@@ -188,8 +188,8 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMostPopularValuesCheckSpec dailyPartitionStringMostPopularValues;
 
-    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnStringDatatypeDetectedCheckSpec dailyPartitionStringDatatypeDetected;
+    @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnStringDatatypeChangedCheckSpec dailyPartitionStringDatatypeChanged;
 
     /**
      * Returns a maximum string length below  check.
@@ -826,18 +826,18 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
      * Returns a count of expected values in datatype changed check.
      * @return Datatype changed check.
      */
-    public ColumnStringDatatypeDetectedCheckSpec getDailyPartitionStringDatatypeDetected() {
-        return dailyPartitionStringDatatypeDetected;
+    public ColumnStringDatatypeChangedCheckSpec getDailyPartitionStringDatatypeChanged() {
+        return dailyPartitionStringDatatypeChanged;
     }
 
     /**
      * Sets a new definition of a datatype changed check.
-     * @param dailyPartitionStringDatatypeDetected Datatype changed check.
+     * @param dailyPartitionStringDatatypeChanged Datatype changed check.
      */
-    public void setDailyPartitionStringDatatypeDetected(ColumnStringDatatypeDetectedCheckSpec dailyPartitionStringDatatypeDetected) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringDatatypeDetected, dailyPartitionStringDatatypeDetected));
-        this.dailyPartitionStringDatatypeDetected = dailyPartitionStringDatatypeDetected;
-        propagateHierarchyIdToField(dailyPartitionStringDatatypeDetected, "daily_partition_string_datatype_detected");
+    public void setDailyPartitionStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec dailyPartitionStringDatatypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringDatatypeChanged, dailyPartitionStringDatatypeChanged));
+        this.dailyPartitionStringDatatypeChanged = dailyPartitionStringDatatypeChanged;
+        propagateHierarchyIdToField(dailyPartitionStringDatatypeChanged, "daily_partition_string_datatype_changed");
     }
 
     /**

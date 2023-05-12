@@ -29,8 +29,7 @@ public class DqoQueueConfigurationProperties implements Cloneable {
     private Integer maxNonBlockingCapacity;  // the default is null, which is unlimited
     private int keepFinishedJobsHistorySeconds = 3600;
     private int keepJobsChangesHistorySeconds = 300;
-    private int getJobChangesSinceWaitSeconds = 20;
-    private int publishBusyLoopingDurationSeconds = 30;
+    private int getJobChangesSinceWaitSeconds = 30;
 
     /**
      * Maximum queue capacity before pushing new jobs will become a blocing operation.
@@ -96,22 +95,6 @@ public class DqoQueueConfigurationProperties implements Cloneable {
      */
     public void setGetJobChangesSinceWaitSeconds(int getJobChangesSinceWaitSeconds) {
         this.getJobChangesSinceWaitSeconds = getJobChangesSinceWaitSeconds;
-    }
-
-    /**
-     * Returns the duration of busy looping to wait until the sink can accept a notification.
-     * @return Return the duration of busy looping to wait until the sink can accept a notification.
-     */
-    public int getPublishBusyLoopingDurationSeconds() {
-        return publishBusyLoopingDurationSeconds;
-    }
-
-    /**
-     * Sets the duration of busy looping to wait until the sink can accept a notification.
-     * @param publishBusyLoopingDurationSeconds The duration of busy looping to wait until the sink can accept a notification.
-     */
-    public void setPublishBusyLoopingDurationSeconds(int publishBusyLoopingDurationSeconds) {
-        this.publishBusyLoopingDurationSeconds = publishBusyLoopingDurationSeconds;
     }
 
     /**

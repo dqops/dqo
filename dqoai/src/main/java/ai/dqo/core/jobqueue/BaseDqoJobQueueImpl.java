@@ -269,10 +269,9 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
     /**
      * Pushes a job to the job queue without waiting.
      * @param job Job to be pushed.
-     * @param parentJobId Parent job id.
      * @return Started job summary and a future to await for finish.
      */
-    protected <T> PushJobResult<T> pushJobCore(DqoQueueJob<T> job, DqoQueueJobId parentJobId) {
+    protected <T> PushJobResult<T> pushJobCore(DqoQueueJob<T> job) {
         if (!this.started) {
             throw new IllegalStateException("Cannot publish a job because the job queue is not started yet.");
         }
@@ -284,7 +283,6 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
 
         try {
             DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
-            newJobId.setParentJobId(parentJobId);
             job.setJobId(newJobId);
             DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, newJobId);
             this.jobEntriesByJobId.put(newJobId, jobQueueEntry);

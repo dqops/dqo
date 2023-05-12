@@ -51,7 +51,7 @@ dqo.ai> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
-|`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, recurring, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
+|`-ct`<br/>`--check-type`<br/>|Data quality check type (adhoc, checkpoint, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
 |`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
 |`-c`<br/>`--connection`<br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
 |`--daily-partitioning-include-today`<br/>|Analyze also today and later days when running daily partitioned checks. By default, daily partitioned checks will not analyze today and future dates. Setting true will disable filtering the end dates.| ||
@@ -73,7 +73,7 @@ dqo.ai> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-s`<br/>`--sensor`<br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
 |`-t`<br/>`--table`<br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
-|`-ts`<br/>`--time-scale`<br/>|Time scale for recurring and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
+|`-ts`<br/>`--time-scale`<br/>|Time scale for checkpoint and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
 |`--to-date`<br/>|Analyze the data until the given date (exclusive, the given date and the following dates are not analyzed). The date should be an ISO 8601 date (YYYY-MM-DD). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date overrides the parameters to disable analyzing today or the current month.| ||
 |`--to-date-time`<br/>|Analyze the data until the given date and time (exclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date and time overrides the parameters to disable analyzing today or the current month.| ||
 |`--to-date-time-offset`<br/>|Analyze the data until the given date and time with a time zone offset (exclusive). The date and time should be an ISO 8601 date and time followed by a time zone offset (yyyy-MM-dd HH\:mm:ss). For example: 2023-02-20 14:10:00+02. The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date and time overrides the parameters to disable analyzing today or the current month.| ||
@@ -116,7 +116,7 @@ dqo.ai> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
-|`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, recurring, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
+|`-ct`<br/>`--check-type`<br/>|Data quality check type (adhoc, checkpoint, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
 |`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
 |`-c`<br/>`--connection`<br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
 |`-dt`<br/>`--data-type`<br/>|Datatype of columns on which to enable checks.| ||
@@ -140,7 +140,7 @@ Usage:
 	-S&lt;param_name&gt;&#x3D;&lt;param_value&gt;,
 	--sensor-param&#x3D;&lt;param_name&gt;&#x3D;&lt;param_value&gt;| ||
 |`-t`<br/>`--table`<br/>|Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;| ||
-|`-ts`<br/>`--time-scale`<br/>|Time scale for recurring and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
+|`-ts`<br/>`--time-scale`<br/>|Time scale for checkpoint and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
 |`-W`<br/>`--warning-rule`<br/>|Warning level rule options.
 Usage:
 	-W&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;,
@@ -180,7 +180,7 @@ dqo.ai> check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
-|`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, recurring, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
+|`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, checkpoint, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
 |`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
 |`-c`<br/>`--connection`<br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
 |`-dt`<br/>`--data-type`<br/>|Datatype of columns on which to disable checks.| ||
@@ -191,7 +191,7 @@ dqo.ai> check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-s`<br/>`--sensor`<br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
 |`-t`<br/>`--table`<br/>|Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;| ||
-|`-ts`<br/>`--time-scale`<br/>|Time scale for recurring and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
+|`-ts`<br/>`--time-scale`<br/>|Time scale for checkpoint and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
 
 
 

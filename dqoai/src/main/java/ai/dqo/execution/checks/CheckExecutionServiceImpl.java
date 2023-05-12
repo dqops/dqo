@@ -159,7 +159,6 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param startChildJobsPerTable True - starts parallel jobs per table, false - runs all checks without starting additional jobs.
-     * @param parentJobId Parent job id for the parent job.
      * @param jobCancellationToken Job cancellation token.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
@@ -170,7 +169,6 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                                CheckExecutionProgressListener progressListener,
                                                boolean dummySensorExecution,
                                                boolean startChildJobsPerTable,
-                                               DqoQueueJobId parentJobId,
                                                JobCancellationToken jobCancellationToken) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         Collection<TableWrapper> targetTables = listTargetTables(userHome, checkSearchFilters);
@@ -197,7 +195,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 childTableJobs.add(runChecksOnTableJob);
             }
 
-            ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId);
+            ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs);
             List<CheckExecutionSummary> checkExecutionSummaries = childTableJobsContainer.waitForChildResults(jobCancellationToken);
             checkExecutionSummaries.forEach(tableSummary -> checkExecutionSummary.append(tableSummary));
         }
@@ -220,15 +218,13 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param executionContext Check execution context with access to the user home and dqo home.
      * @param targetSchedule        Target schedule to match, when finding checks that should be executed.
      * @param progressListener      Progress listener that receives progress calls.
-     * @param parentJobId           Parent job id.
-     * @param jobCancellationToken  Job cancellation token.
+     * @param jobCancellationToken Job cancellation token.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     @Override
     public CheckExecutionSummary executeChecksForSchedule(ExecutionContext executionContext,
                                                           RecurringScheduleSpec targetSchedule,
                                                           CheckExecutionProgressListener progressListener,
-                                                          DqoQueueJobId parentJobId,
                                                           JobCancellationToken jobCancellationToken) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         ScheduledChecksCollection checksForSchedule = this.scheduledTargetChecksFindService.findChecksForSchedule(userHome, targetSchedule);
@@ -258,7 +254,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             childTableJobs.add(runChecksOnTableJob);
         }
 
-        ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId);
+        ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs);
         List<CheckExecutionSummary> checkExecutionSummaries = childTableJobsContainer.waitForChildResults(jobCancellationToken);
         checkExecutionSummaries.forEach(tableSummary -> checkExecutionSummary.append(tableSummary));
 
