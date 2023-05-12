@@ -130,30 +130,6 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                 {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
               </td>
             </tr>
-            {job.jobId?.parentJobId?.jobId === undefined ? (
-              <Accordion open={open2} className="min-w-100">
-                <AccordionHeader onClick={() => setOpen2(!open2)}>
-                  <div className=" flex justify-between items-center text-sm w-full text-gray-700">
-                    Tasks{' '}
-                  </div>
-                </AccordionHeader>
-                <AccordionBody>
-                  <div className="overflow-y-hidden max-h-100 py-4 px-4">
-                    {data.map((notification: any, index) => (
-                      <div key={index}>
-                        <JobChild
-                          job={notification.item}
-                          key={index}
-                          parentId={Number(job.jobId?.jobId)}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </AccordionBody>
-              </Accordion>
-            ) : (
-              ''
-            )}
 
             {job?.errorMessage && (
               <>
@@ -167,26 +143,24 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
               Object.entries(
                 job?.parameters?.runChecksParameters?.checkSearchFilters
               ).map(([key, value], index) => (
-                <tr key={index}>
-                  <td className="px-2 capitalize">{key}</td>
-                  <td className="px-2 max-w-76">{renderValue(value)}</td>
+                <tr key={index} className="flex justify-between">
+                  <td>{key}</td>
+                  <td>{renderValue(value)}</td>
                 </tr>
               ))}
             {job?.parameters?.importSchemaParameters && (
               <>
-                <tr>
-                  <td className="px-2 capitalize">Connection Name</td>
-                  <td className="px-2 max-w-76">
+                <tr className="flex justify-between">
+                  <td>Connection Name</td>
+                  <td>
                     {job?.parameters?.importSchemaParameters?.connectionName}
                   </td>
                 </tr>
-                <tr>
-                  <td className="px-2 capitalize">Schema Name</td>
-                  <td className="px-2 max-w-76">
-                    {job?.parameters?.importSchemaParameters?.schemaName}
-                  </td>
+                <tr className="flex justify-between">
+                  <td>Schema Name</td>
+                  <td>{job?.parameters?.importSchemaParameters?.schemaName}</td>
                 </tr>
-                <tr>
+                <tr className="flex justify-between">
                   <td className="px-2 capitalize align-top">Tables pattern</td>
                   <td className="px-2 max-w-76">
                     {job?.parameters?.importSchemaParameters?.tableNamePattern}
@@ -222,26 +196,24 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                 job?.parameters?.collectStatisticsParameters
                   ?.statisticsCollectorSearchFilters
               ).map(([key, value], index) => (
-                <tr key={index}>
-                  <td className="px-2 capitalize">{key}</td>
-                  <td className="px-2 max-w-76">{renderValue(value)}</td>
+                <tr key={index} className="flex justify-between">
+                  <td>{key}</td>
+                  <td>{renderValue(value)}</td>
                 </tr>
               ))}
             {job?.parameters?.importTableParameters && (
               <>
-                <tr>
-                  <td className="px-2 capitalize">Connection Name</td>
-                  <td className="px-2 max-w-76">
+                <tr className="flex justify-between">
+                  <td>Connection Name</td>
+                  <td>
                     {job?.parameters?.importTableParameters?.connectionName}
                   </td>
                 </tr>
-                <tr>
-                  <td className="px-2 capitalize">Schema Name</td>
-                  <td className="px-2 max-w-76">
-                    {job?.parameters?.importTableParameters?.schemaName}
-                  </td>
+                <tr className="flex justify-between">
+                  <td>Schema Name</td>
+                  <td>{job?.parameters?.importTableParameters?.schemaName}</td>
                 </tr>
-                <tr>
+                <tr className="flex justify-between">
                   <td className="px-2 capitalize align-top">Tables</td>
                   <td className="px-2 max-w-76">
                     {job?.parameters?.importTableParameters?.tableNames?.map(
@@ -252,6 +224,30 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                   </td>
                 </tr>
               </>
+            )}
+            {job.jobId?.parentJobId?.jobId === undefined ? (
+              <Accordion open={open2} className="min-w-100">
+                <AccordionHeader onClick={() => setOpen2(!open2)}>
+                  <div className=" flex justify-between items-center text-sm w-full text-gray-700">
+                    Tasks{' '}
+                  </div>
+                </AccordionHeader>
+                <AccordionBody>
+                  <div className="overflow-y-hidden max-h-100 py-4 px-4">
+                    {data.map((notification: any, index) => (
+                      <div key={index}>
+                        <JobChild
+                          job={notification.item}
+                          key={index}
+                          parentId={Number(job.jobId?.jobId)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </AccordionBody>
+              </Accordion>
+            ) : (
+              ''
             )}
           </tbody>
         </table>
