@@ -2,7 +2,7 @@ import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SvgIcon from '../../SvgIcon';
 import {
   Accordion,
@@ -10,30 +10,16 @@ import {
   AccordionHeader
 } from '@material-tailwind/react';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
-import { useError, IError } from '../../../contexts/errrorContext';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { toggleMenu } from '../../../redux/actions/job.actions';
-import { IRootState } from '../../../redux/reducers';
 
 const JobChild = ({
   job,
-  parentId
+  parentId,
+  succeededCounter
 }: {
   job: DqoJobHistoryEntryModel;
   parentId: number;
+  succeededCounter?: number;
 }) => {
-  const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
-  const dispatch = useActionDispatch();
-  const { errors } = useError();
-
-  const getNotificationDate = (notification: any) => {
-    if (notification.type === 'job') {
-      return notification.item.jobId?.createdAt;
-    }
-    return notification.item.date;
-  };
-
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
       return value ? 'Yes' : 'No';
@@ -43,29 +29,6 @@ const JobChild = ({
     }
     return value;
   };
-
-  const data = useMemo(() => {
-    const jobsData = jobs?.jobs
-      ? jobs?.jobs
-          .sort((a, b) => {
-            return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
-          })
-          .map((item) => ({ type: 'job', item }))
-      : [];
-
-    const errorData = errors.map((item: IError) => ({ type: 'error', item }));
-
-    const newData = jobsData.concat(errorData);
-
-    newData.sort((a, b) => {
-      const date1 = getNotificationDate(a);
-      const date2 = getNotificationDate(b);
-
-      return moment(date1).isBefore(moment(date2)) ? 1 : -1;
-    });
-
-    return newData;
-  }, [jobs, errors]);
 
   const [open, setOpen] = useState(false);
 
@@ -86,7 +49,7 @@ const JobChild = ({
       return <SvgIcon name="running" className="w-4 h-4 text-orange-700" />;
     }
   };
-  console.log(job.status);
+
   return (
     <Accordion open={open}>
       {job.jobId?.parentJobId?.jobId === parentId ? (
@@ -95,6 +58,7 @@ const JobChild = ({
             <div className="flex flex-wrap space-x-1 items-center">
               <div>
                 {job.jobType}
+
                 {/* {job.jobId?.parentJobId?.jobId} */}
               </div>
               {renderStatus()}

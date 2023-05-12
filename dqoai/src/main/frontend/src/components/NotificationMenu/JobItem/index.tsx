@@ -21,7 +21,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
   const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
   const dispatch = useActionDispatch();
   const { errors } = useError();
-  const [parrentId, setParrentId] = useState(0);
+
   // const data = jobs?.jobs
   //   ? jobs?.jobs.sort((a, b) => {
   //       return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
@@ -238,7 +238,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                       <div key={index}>
                         <JobChild
                           job={notification.item}
-                          key={index}
+                          succeededCounter={index}
                           parentId={Number(job.jobId?.jobId)}
                         />
                       </div>
