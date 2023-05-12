@@ -21,32 +21,32 @@ negatively impact our business, we want to monitor various data quality aspects 
 
 We will set six data quality recurring checks on `bigquery-public-data.thelook_ecommerce.users` dataset:
 
-1. [daily_table_availability](../checks/table/availability/table-availability.md) check on `users` table with max failures thresholds levels:
+1. [daily_table_availability](../../checks/table/availability/table-availability.md) check on `users` table with max failures thresholds levels:
     - warning: 1
     - error: 5
     - fatal: 10
 
-2. [daily_unique_percent](../checks/column/uniqueness/unique-percent.md) check on `id` column with minimum percent thresholds levels
+2. [daily_unique_percent](../../checks/column/uniqueness/unique-percent.md) check on `id` column with minimum percent thresholds levels
     - warning: 99.0%
     - error: 98.0%
     - fatal: 95.0%
 
-3. [daily_unique_percent](../checks/column/uniqueness/unique-percent.md) check on `email` column with minimum percent thresholds levels
+3. [daily_unique_percent](../../checks/column/uniqueness/unique-percent.md) check on `email` column with minimum percent thresholds levels
     - warning: 99.0%
     - error: 98.0%
     - fatal: 95.0%
 
-4. [daily_valid_email_percent](../checks/column/pii/valid-email-percent.md) check on `email` column with minimum percent thresholds levels
+4. [daily_valid_email_percent](../../checks/column/pii/valid-email-percent.md) check on `email` column with minimum percent thresholds levels
     - warning: 99.0%
     - error: 98.0%
     - fatal: 95.0%
 
-5.  [daily_string_in_set_percent](..checks/column/strings/string-in-set-percent.md) check on `gender` column with values parameters "F" and "M" and minimum percent thresholds levels
+5.  [daily_string_in_set_percent](../../checks/column/strings/string-in-set-percent.md) check on `gender` column with values parameters "F" and "M" and minimum percent thresholds levels
     - warning: 99.0%
     - error: 98.0%
     - fatal: 95.0%
 
-6. [daily_values_in_range_numeric_percent](docs/checks/column/numeric/values-in-range-numeric-percent.md) check on `age` column with values parameters "min_value=10" and "max_value=80" and minimum percent thresholds levels
+6. [daily_values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md) check on `age` column with values parameters "min_value=10" and "max_value=80" and minimum percent thresholds levels
     - warning: 99.0%
     - error: 98.0%
     - fatal: 95.0%
@@ -55,8 +55,8 @@ To set a schedule, we will create a connection level schedule that will apply to
 checks that require more frequent runs, we will set individual check-level schedules that will override the connection level settings.
 The schedule for the daily_values_in_range_numeric_percent check will be temporarily disabled.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../dqo-concepts/checks/index.md).
-You can read more about scheduling [here](../working-with-dqo/schedules/index.md). 
+If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+You can read more about scheduling [here](../../working-with-dqo/schedules/index.md). 
 
 **VALUE**
 
@@ -88,7 +88,7 @@ The YAML connection configuration file stores data source configurations and all
 In the YAML data source configuration file below, the highlighted sections indicate the area where the cron expression 
 for the schedule is set to run every day at 8:00 AM (0 8 * * *).
 
-If you want to learn more about cron formatting, please refer to the [Working with DQO section](../working-with-dqo/schedules/cron_formatting.md).
+If you want to learn more about cron formatting, please refer to the [Working with DQO section](../../working-with-dqo/schedules/cron-formatting.md).
 
 ```yaml hl_lines="9-11"
 
@@ -311,4 +311,4 @@ check run --mode=debug
 
 ## Next step
 Now that you have set up a schedule and get first results, you can evaluate them on dashboards. 
-You can find instructions on how to do this [here](../getting-started/review-results-on-dashboards/review-results-on-dashboards.md).
+You can find instructions on how to do this [here](../../getting-started/review-results-on-dashboards/review-results-on-dashboards.md).

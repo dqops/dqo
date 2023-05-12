@@ -79,7 +79,7 @@ To run the examples, follow the steps below.
     ```
     check run
     ```
-    You can also execute the checks using the graphic interface.
+    You can also execute the checks using the graphical interface.
 
 
 7. After executing the checks, synchronize the results with your DQO cloud account by running the following command.

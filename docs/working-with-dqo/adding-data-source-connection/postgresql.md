@@ -9,7 +9,7 @@ You need a PostgreSQL account. By default, PostgreSQL restricts connections to h
 pg_hba.conf file. In case of restrictions you need to add the IP address used by DQO to
 [Allowed IP Addresses in PostgreSQL Network Policies](https://www.postgresql.org/docs/9.1/auth-pg-hba-conf.html).
 
-## Adding PostgreSQL connection using graphic interface
+## Adding PostgreSQL connection using the graphical interface
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 
