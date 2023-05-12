@@ -72,27 +72,27 @@ const JobChild = ({
       return <SvgIcon name="running" className="w-4 h-4 text-orange-700" />;
     }
   };
-
+  console.log(job.jobId?.parentJobId?.jobId);
   return (
     <Accordion open={open}>
-      {job.jobId?.parentJobId?.jobId === parentId ? (
-        <AccordionHeader onClick={() => setOpen(!open)}>
-          <div className="flex justify-between items-center text-sm w-full text-gray-700">
-            <div className="flex space-x-1 items-center">
-              <div>
-                {job.jobType}
-                {/* {job.jobId?.parentJobId?.jobId} */}
-              </div>
-              {renderStatus()}
-            </div>
+      {/* {job.jobId?.parentJobId?.jobId === parentId ? ( */}
+      <AccordionHeader onClick={() => setOpen(!open)}>
+        <div className="flex justify-between items-center text-sm w-full text-gray-700">
+          <div className="flex space-x-1 items-center">
             <div>
-              {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+              {job.jobType}
+              {job.jobId?.parentJobId?.jobId}
             </div>
+            {renderStatus()}
           </div>
-        </AccordionHeader>
-      ) : (
+          <div>
+            {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+          </div>
+        </div>
+      </AccordionHeader>
+      {/* ) : (
         <div></div>
-      )}
+      )} */}
     </Accordion>
   );
 };
