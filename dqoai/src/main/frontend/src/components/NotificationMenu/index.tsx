@@ -84,7 +84,6 @@ const NotificationMenu = () => {
       <PopoverContent className="z-50 min-w-120 max-w-120 px-0 ">
         <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex items-center justify-between px-4">
           <div>Notifications</div>
-          <div className="text-red-600 border-solid">Clear</div>
         </div>
         <div className="overflow-auto max-h-100 py-4 px-4">
           {data.map((notification: any, index) =>

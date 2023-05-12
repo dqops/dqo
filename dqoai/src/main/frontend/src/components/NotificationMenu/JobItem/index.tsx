@@ -118,13 +118,13 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
         ''
       )}
       <AccordionBody>
-        <table className="text-gray-700 w-full">
+        <table className="text-gray-700 w-auto">
           <tbody>
-            <tr className="flex justify-between">
+            <tr className="flex justify-between w-108">
               <td>Status</td>
               <td>{job?.status}</td>
             </tr>
-            <tr className="flex justify-between">
+            <tr className="flex justify-between w-108">
               <td>Last Changed</td>
               <td>
                 {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
@@ -143,24 +143,24 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
               Object.entries(
                 job?.parameters?.runChecksParameters?.checkSearchFilters
               ).map(([key, value], index) => (
-                <tr key={index} className="flex justify-between">
+                <tr key={index} className="flex justify-between w-108">
                   <td>{key}</td>
                   <td>{renderValue(value)}</td>
                 </tr>
               ))}
             {job?.parameters?.importSchemaParameters && (
               <>
-                <tr className="flex justify-between">
+                <tr className="flex justify-between w-108">
                   <td>Connection Name</td>
                   <td>
                     {job?.parameters?.importSchemaParameters?.connectionName}
                   </td>
                 </tr>
-                <tr className="flex justify-between">
+                <tr className="flex justify-between w-108">
                   <td>Schema Name</td>
                   <td>{job?.parameters?.importSchemaParameters?.schemaName}</td>
                 </tr>
-                <tr className="flex justify-between">
+                <tr className="flex justify-between w-108">
                   <td className="px-2 capitalize align-top">Tables pattern</td>
                   <td className="px-2 max-w-76">
                     {job?.parameters?.importSchemaParameters?.tableNamePattern}
@@ -196,24 +196,24 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                 job?.parameters?.collectStatisticsParameters
                   ?.statisticsCollectorSearchFilters
               ).map(([key, value], index) => (
-                <tr key={index} className="flex justify-between">
+                <tr key={index} className="flex justify-between w-108">
                   <td>{key}</td>
                   <td>{renderValue(value)}</td>
                 </tr>
               ))}
             {job?.parameters?.importTableParameters && (
               <>
-                <tr className="flex justify-between">
+                <tr className="flex justify-between w-108">
                   <td>Connection Name</td>
                   <td>
                     {job?.parameters?.importTableParameters?.connectionName}
                   </td>
                 </tr>
-                <tr className="flex justify-between">
+                <tr className="flex justify-between w-108">
                   <td>Schema Name</td>
                   <td>{job?.parameters?.importTableParameters?.schemaName}</td>
                 </tr>
-                <tr className="flex justify-between">
+                <tr className="flex justify-between w-108">
                   <td className="px-2 capitalize align-top">Tables</td>
                   <td className="px-2 max-w-76">
                     {job?.parameters?.importTableParameters?.tableNames?.map(
@@ -233,7 +233,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                   </div>
                 </AccordionHeader>
                 <AccordionBody>
-                  <div className="overflow-y-hidden max-h-100 py-4 px-4">
+                  <div className="overflow-y-hidden py-4 px-4">
                     {data.map((notification: any, index) => (
                       <div key={index}>
                         <JobChild
