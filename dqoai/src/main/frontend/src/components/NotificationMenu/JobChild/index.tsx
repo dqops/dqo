@@ -75,24 +75,24 @@ const JobChild = ({
   console.log(job.jobId?.parentJobId?.jobId);
   return (
     <Accordion open={open}>
-      {/* {job.jobId?.parentJobId?.jobId === parentId ? ( */}
-      <AccordionHeader onClick={() => setOpen(!open)}>
-        <div className="flex justify-between items-center text-sm w-full text-gray-700">
-          <div className="flex space-x-1 items-center">
-            <div>
-              {job.jobType}
-              {job.jobId?.parentJobId?.jobId}
+      {job.jobId?.parentJobId?.jobId === parentId ? (
+        <AccordionHeader onClick={() => setOpen(!open)}>
+          <div className="flex justify-between items-center text-sm w-full text-gray-700">
+            <div className="flex space-x-1 items-center">
+              <div>
+                {job.jobType}
+                {/* {job.jobId?.parentJobId?.jobId} */}
+              </div>
+              {renderStatus()}
             </div>
-            {renderStatus()}
+            <div>
+              {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+            </div>
           </div>
-          <div>
-            {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
-          </div>
-        </div>
-      </AccordionHeader>
-      {/* ) : (
+        </AccordionHeader>
+      ) : (
         <div></div>
-      )} */}
+      )}
     </Accordion>
   );
 };

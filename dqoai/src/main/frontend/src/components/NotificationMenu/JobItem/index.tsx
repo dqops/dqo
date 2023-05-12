@@ -99,13 +99,13 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
 
   return (
     <Accordion open={open}>
-      {job.jobType !== 'synchronize folder' ? (
+      {job.jobId?.parentJobId?.jobId === undefined ? (
         <AccordionHeader onClick={() => setOpen(!open)}>
           <div className="flex justify-between items-center text-sm w-full text-gray-700">
             <div className="flex space-x-1 items-center">
               <div>
                 {job.jobType}
-                {job.jobId?.jobId}
+                {/* {job.jobId?.jobId} */}
               </div>
               {renderStatus()}
             </div>
@@ -118,27 +118,27 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
         ''
       )}
       <AccordionBody>
-        <table className="text-gray-700">
+        <table className="text-gray-700 w-full">
           <tbody>
-            <tr>
-              <td className="px-2 capitalize">Status</td>
-              <td className="px-2 max-w-76">{job?.status}</td>
+            <tr className="flex justify-between">
+              <td>Status</td>
+              <td>{job?.status}</td>
             </tr>
-            <tr>
-              <td className="px-2 capitalize">Last Changed</td>
-              <td className="px-2 max-w-76">
+            <tr className="flex justify-between">
+              <td>Last Changed</td>
+              <td>
                 {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
               </td>
             </tr>
-            {job.jobType === 'synchronize multiple folders' ? (
-              <Accordion open={open2}>
+            {job.jobId?.parentJobId?.jobId === undefined ? (
+              <Accordion open={open2} className="min-w-100">
                 <AccordionHeader onClick={() => setOpen2(!open2)}>
-                  <div className="px-2 flex justify-between items-center text-sm w-full text-gray-700">
+                  <div className=" flex justify-between items-center text-sm w-full text-gray-700">
                     Tasks{' '}
                   </div>
                 </AccordionHeader>
                 <AccordionBody>
-                  <div className="overflow-auto max-h-100 py-4 px-4">
+                  <div className="overflow-y-hidden max-h-100 py-4 px-4">
                     {data.map((notification: any, index) => (
                       <div key={index}>
                         <JobChild
