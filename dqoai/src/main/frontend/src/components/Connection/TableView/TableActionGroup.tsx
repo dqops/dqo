@@ -29,6 +29,7 @@ const TableActionGroup = ({
   const { tableBasic } = useSelector(getFirstLevelState(checkTypes));
   const { deleteData } = useTree();
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
+  const isSourceScreen = checkTypes === CheckTypes.SOURCES;
 
   const removeTable = async () => {
     if (tableBasic) {
@@ -45,13 +46,15 @@ const TableActionGroup = ({
 
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
-      <Button
-        className="!h-10"
-        color="primary"
-        variant="outlined"
-        label="Add Column"
-        onClick={() => setIsAddColumnDialogOpen(true)}
-      />
+      {isSourceScreen && (
+        <Button
+          className="!h-10"
+          color="primary"
+          variant="outlined"
+          label="Add Column"
+          onClick={() => setIsAddColumnDialogOpen(true)}
+        />
+      )}
       {shouldDelete && (
         <Button
           className="!h-10"
