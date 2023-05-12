@@ -26,33 +26,33 @@ DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
 
 1. To install DQO via pip manager just run
 
-   === "Windows"
-   ```
-   py -m pip install dqops
-   ```
-   === "MacOS/Linux"
-   ```
-   pip install dqops
-   ```
+    Windows
+    ```
+    py -m pip install dqops
+    ```
+    MacOS/Linux
+    ```
+    pip install dqops
+    ```
    
     If you prefer to work with the source code, just clone our GitHub repository [https://github.com/dqops/dqo](https://github.com/dqops/dqo)
     and run
 
 2. Run dqo app to finalize the installation.
 
-    === "Windows"
-        ```
-        dqo
-        ```
-    === "MacOS/Linux"
-        ```
-        ./dqo
-        ```
+    Windows
+    ```
+    dqo
+    ```
+    MacOS/Linux
+    ```
+    ./dqo
+    ```
 
-3. Create DQO `userhome` folder.
+3. Create DQO userhome folder.
 
-   After installation, you will be asked whether to initialize the DQO `userhome` folder in the default location. Type Y to create the folder.  
-   The `userhome` folder locally stores data such as sensor readouts and checkout results, as well as data source configurations. [You can learn more about data storage here](../../dqo-concepts/data-storage/data-storage.md).
+   After installation, you will be asked whether to initialize the DQO userhome folder in the default location. Type Y to create the folder.  
+   The userhome folder locally stores data such as sensor readouts and checkout results, as well as data source configurations. [You can learn more about data storage here](../../dqo-concepts/data-storage/data-storage.md).
 
 4. Login to DQO Cloud.
 

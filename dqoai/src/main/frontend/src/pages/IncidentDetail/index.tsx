@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import IncidentsLayout from "../../components/IncidentsLayout";
 import SvgIcon from "../../components/SvgIcon";
 import { useHistory, useParams } from "react-router-dom";
@@ -13,6 +13,13 @@ import { Table } from "../../components/Table";
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import { Pagination } from "../../components/Pagination";
 import moment from "moment";
+import useDebounce from "../../hooks/useDebounce";
+import { IncidentFilter } from "../../redux/reducers/incidents.reducer";
+import { IncidentModel, IncidentModelStatusEnum } from "../../api";
+import Select from "../../components/Select";
+import { IncidentsApi } from "../../services/apiClient";
+import { IconButton } from "@material-tailwind/react";
+import AddIssueUrlDialog from "./AddIssueUrlDialog";
 
 const getDaysString = (value: string) => {
   const daysDiff = moment().diff(moment(value), 'day');
@@ -37,64 +44,26 @@ const options = [
   }
 ];
 
-const columns = [
+const statusOptions = [
   {
-    label: 'Resolution status',
-    className: 'text-left py-2 px-4',
-    value: 'status',
-    render: (value: string) => {
-      return (
-        <div className="w-6 h-6 rounded-full flex items-center justify-center bg-primary">
-          <SvgIcon name="check" className="text-white" />
-          {value}
-        </div>
-      )
-    }
+    label: 'OPEN',
+    value: IncidentModelStatusEnum.open,
+    icon: <SvgIcon name="info-filled" className="text-red-900 w-6 h-6" />,
   },
   {
-    label: 'Failed checks count',
-    className: 'text-left py-2 px-4',
-    value: 'failedChecksCount'
+    label: 'ACKNOWLEDGED',
+    value: IncidentModelStatusEnum.acknowledged,
+    icon: <div className="w-5 h-5 rounded-full bg-black" />,
   },
   {
-    label: 'Schema',
-    className: 'text-left py-2 px-4',
-    value: 'schema'
+    label: 'RESOLVED',
+    value: IncidentModelStatusEnum.resolved,
+    icon: <SvgIcon name="check-circle" className="text-primary w-6 h-6" />,
   },
   {
-    label: 'Table',
-    className: 'text-left py-2 px-4',
-    value: 'table'
-  },
-  {
-    label: 'Checks',
-    className: 'text-left py-2 px-4',
-    value: 'checkName'
-  },
-  {
-    label: 'First seen',
-    className: 'text-left py-2 px-4',
-    value: 'firstSeen',
-    render: (value: string) => (
-      <div>
-        {getDaysString(value)}
-      </div>
-    )
-  },
-  {
-    label: 'Last seen',
-    className: 'text-left py-2 px-4',
-    value: 'lastSeen',
-    render: (value: string) => (
-      <div>
-        {getDaysString(value)}
-      </div>
-    )
-  },
-  {
-    label: 'Issue Link',
-    className: 'text-left py-2 px-4',
-    value: 'issueUrl'
+    label: 'MUTED',
+    value: IncidentModelStatusEnum.muted,
+    icon: <SvgIcon name="stop" className="w-6 h-6" />,
   }
 ];
 
@@ -103,18 +72,146 @@ export const IncidentDetail = () => {
   const { incidents, filters = {} } = useSelector(getFirstLevelIncidentsState);
   const dispatch = useActionDispatch();
   const history = useHistory();
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+  const [open, setOpen] = useState(false);
+  const [selectedIncident, setSelectedIncident] = useState<IncidentModel>();
+
+  const onChangeIncidentStatus = async (row: IncidentModel, status: IncidentModelStatusEnum) => {
+    await IncidentsApi.setIncidentStatus(row.connection || "", row.year || 0, row.month || 0, row.incidentId || "", status);
+    dispatch(getIncidentsByConnection({
+      ...filters || {},
+      connection,
+    }));
+  };
+
+  const handleAddIssueUrl = async (issueUrl: string) => {
+    await IncidentsApi.setIncidentIssueUrl(selectedIncident?.connection || "", selectedIncident?.year || 0, selectedIncident?.month || 0, selectedIncident?.incidentId || "", issueUrl);
+    dispatch(getIncidentsByConnection({
+      ...filters || {},
+      connection,
+    }));
+  };
+
+  const addIssueUrl = (row: IncidentModel) => {
+    setSelectedIncident(row);
+    setOpen(true);
+  };
+
+  const columns = [
+    {
+      label: 'Resolution status',
+      className: 'text-left py-2 px-4',
+      value: 'status',
+      render: (value: string, row: IncidentModel) => {
+        return (
+          <div className="flex items-center">
+            <Select
+              value={value}
+              options={statusOptions}
+              onChange={(status) => onChangeIncidentStatus(row, status)}
+            />
+          </div>
+        )
+      }
+    },
+    {
+      label: 'Failed checks count',
+      className: 'text-left text-sm py-2 px-4',
+      value: 'failedChecksCount'
+    },
+    {
+      label: 'Schema',
+      className: 'text-left text-sm py-2 px-4',
+      value: 'schema'
+    },
+    {
+      label: 'Table',
+      className: 'text-left text-sm py-2 px-4',
+      value: 'table'
+    },
+    {
+      label: 'Checks',
+      className: 'text-left py-2 px-4',
+      value: 'checkName',
+      render: (value: string, row: IncidentModel) => {
+        const values = [row.qualityDimension, row.checkCategory, row.checkType, row.checkName].filter((item) => !!item);
+
+        return (
+          <div className="text-sm">{values.join(", ")}</div>
+        )
+      }
+    },
+    {
+      label: 'First seen',
+      className: 'text-left py-2 px-4',
+      value: 'firstSeen',
+      render: (value: string) => (
+        <div className="text-sm">
+          <div>{moment(value).format("YYYY-MM-DD")}</div>
+          {getDaysString(value)}
+        </div>
+      )
+    },
+    {
+      label: 'Last seen',
+      className: 'text-left py-2 px-4',
+      value: 'lastSeen',
+      render: (value: string) => (
+        <div className="text-sm">
+          <div>{moment(value).format("YYYY-MM-DD")}</div>
+          {getDaysString(value)}
+        </div>
+      )
+    },
+    {
+      label: 'Issue Link',
+      className: 'text-left issueUrl py-2 px-4',
+      value: 'issueUrl',
+      render: (value: string, row: IncidentModel) => {
+        return (
+          <div>
+            {value ? (
+              <a href={value}>{value}</a>
+            ) : (
+              <IconButton
+                color="teal"
+                size="sm"
+                onClick={() => addIssueUrl(row)}
+                className="!shadow-none"
+              >
+                <SvgIcon name="add" className="w-4" />
+              </IconButton>
+            )}
+          </div>
+        )
+      }
+    }
+  ];
+
 
   useEffect(() => {
     dispatch(getIncidentsByConnection({
       connection,
-      ...filters
     }));
-  }, [connection, filters]);
+  }, [connection]);
 
-  const onChangeFilter = (obj: any) => {
+  useEffect(() => {
+    onChangeFilter({
+      optionalFilter: debouncedSearchTerm,
+      page: 1
+    })
+  }, [debouncedSearchTerm]);
+
+  const onChangeFilter = (obj: Partial<IncidentFilter>) => {
     dispatch(setIncidentsFilter({
       ...filters || {},
       ...obj
+    }));
+    dispatch(getIncidentsByConnection({
+      ...filters || {},
+      ...obj,
+      connection,
     }));
   };
 
@@ -130,7 +227,7 @@ export const IncidentDetail = () => {
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
             <div className="text-xl font-semibold truncate">Data quality incidents on {connection || ''}</div>
           </div>
-          <StatusSelect />
+          <StatusSelect onChangeFilter={onChangeFilter} />
 
           <Button
             onClick={goToConfigure}
@@ -142,8 +239,8 @@ export const IncidentDetail = () => {
         <div className="flex items-center p-4 gap-6 mb-4">
           <div className="grow">
             <Input
-              value={filters.optionalFilter || ""}
-              onChange={(e) => onChangeFilter({ optionalFilter: e.target.value, page: 1 })}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Filter incidents"
               className="!h-12"
             />
@@ -178,6 +275,12 @@ export const IncidentDetail = () => {
           />
         </div>
       </div>
+
+      <AddIssueUrlDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        onSubmit={handleAddIssueUrl}
+      />
     </IncidentsLayout>
   );
 };

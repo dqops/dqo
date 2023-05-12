@@ -27,6 +27,9 @@ import ai.dqo.metadata.storage.localfiles.sources.TableYaml;
 import ai.dqo.utils.reflection.ClassInfo;
 import ai.dqo.utils.reflection.FieldInfo;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
+import com.github.therapi.runtimejavadoc.ClassJavadoc;
+import com.github.therapi.runtimejavadoc.CommentFormatter;
+import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -40,6 +43,7 @@ import java.util.Map;
 public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModelFactory {
 
     private final ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
+    private static final CommentFormatter commentFormatter = new CommentFormatter();
 
     /**
      * Create a yaml documentation models.
@@ -90,6 +94,14 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
 
             YamlObjectDocumentationModel yamlObjectDocumentationModel = new YamlObjectDocumentationModel();
             List<YamlFieldsDocumentationModel> yamlFieldsDocumentationModels = new ArrayList<>();
+
+            ClassJavadoc classJavadoc = RuntimeJavadoc.getJavadoc(targetClass);
+            if (classJavadoc != null) {
+                if (classJavadoc.getComment() != null) {
+                    String formattedClassComment = commentFormatter.format(classJavadoc.getComment());
+                    yamlObjectDocumentationModel.setClassDescription(formattedClassComment);
+                }
+            }
 
             ClassInfo classInfo = reflectionService.getClassInfoForClass(targetClass);
             List<FieldInfo> infoFields = classInfo.getFields();

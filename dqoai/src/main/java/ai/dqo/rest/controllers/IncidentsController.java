@@ -22,6 +22,11 @@ import ai.dqo.core.incidents.IncidentStatusChangeParameters;
 import ai.dqo.data.incidents.factory.IncidentStatus;
 import ai.dqo.data.incidents.services.models.*;
 import ai.dqo.data.incidents.services.IncidentsDataService;
+import ai.dqo.metadata.sources.ConnectionList;
+import ai.dqo.metadata.sources.ConnectionWrapper;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.metadata.ConnectionModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import io.swagger.annotations.*;
@@ -45,17 +50,21 @@ import java.util.Optional;
 public class IncidentsController {
     private IncidentsDataService incidentsDataService;
     private IncidentImportQueueService incidentImportQueueService;
+    private UserHomeContextFactory userHomeContextFactory;
 
     /**
      * Creates an incident management service, given all used dependencies.
      * @param incidentsDataService Incident data service used to load incidents.
      * @param incidentImportQueueService Incident queued update service that updates the statuses of incidents.
+     * @param userHomeContextFactory User home factory.
      */
     @Autowired
     public IncidentsController(IncidentsDataService incidentsDataService,
-                               IncidentImportQueueService incidentImportQueueService) {
+                               IncidentImportQueueService incidentImportQueueService,
+                               UserHomeContextFactory userHomeContextFactory) {
         this.incidentsDataService = incidentsDataService;
         this.incidentImportQueueService = incidentImportQueueService;
+        this.userHomeContextFactory = userHomeContextFactory;
     }
 
     /**
@@ -91,7 +100,7 @@ public class IncidentsController {
     /**
      * Finds recent data quality incidents on a connection.
      * @param connectionName Connection name.
-     * @param recentMonths Optional number of months to look back.
+     * @param months Optional number of months to look back.
      * @param open Return open incidents.
      * @param acknowledged Return acknowledged incidents.
      * @param resolved Return resolved incidents.
@@ -113,28 +122,28 @@ public class IncidentsController {
     })
     public ResponseEntity<Flux<IncidentModel>> findRecentIncidentsOnConnection(
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam(name = "Number of recent months to load, the default is 3 months", required = false)
-                @PathVariable(required = false) Optional<Integer> recentMonths,
-            @ApiParam(name = "Returns open incidents, when the parameter is missing, the default value is true", required = false)
-                @PathVariable(required = false) Optional<Boolean> open,
-            @ApiParam(name = "Returns acknowledged incidents, when the parameter is missing, the default value is true", required = false)
-                @PathVariable(required = false) Optional<Boolean> acknowledged,
-            @ApiParam(name = "Returns resolved incidents, when the parameter is missing, the default value is false", required = false)
-                @PathVariable(required = false) Optional<Boolean> resolved,
-            @ApiParam(name = "Returns muted incidents, when the parameter is missing, the default value is false", required = false)
-                @PathVariable(required = false) Optional<Boolean> muted,
-            @ApiParam(name = "Page number, the first page is 1", required = false)
-                @PathVariable(required = false) Optional<Integer> page,
-            @ApiParam(name = "Page size, the default is 50 rows", required = false)
-                @PathVariable(required = false) Optional<Integer> limit,
-            @ApiParam(name = "Optional filter", required = false)
-                @PathVariable(required = false) Optional<String> filter,
-            @ApiParam(name = "Optional sort order, the default sort order is by the number of failed data quality checks", required = false)
-                @PathVariable(required = false) Optional<IncidentSortOrder> order,
-            @ApiParam(name = "Optional sort direction, the default sort direction is ascending", required = false)
-               @PathVariable(required = false) Optional<IncidentSortDirection> direction) {
+            @ApiParam(name = "months", value = "Number of recent months to load, the default is 3 months", required = false)
+                @RequestParam(required = false) Optional<Integer> months,
+            @ApiParam(name = "open", value = "Returns open incidents, when the parameter is missing, the default value is true", required = false)
+                @RequestParam(required = false) Optional<Boolean> open,
+            @ApiParam(name = "acknowledged", value = "Returns acknowledged incidents, when the parameter is missing, the default value is true", required = false)
+                @RequestParam(required = false) Optional<Boolean> acknowledged,
+            @ApiParam(name = "resolved", value = "Returns resolved incidents, when the parameter is missing, the default value is false", required = false)
+                @RequestParam(required = false) Optional<Boolean> resolved,
+            @ApiParam(name = "muted", value = "Returns muted incidents, when the parameter is missing, the default value is false", required = false)
+                @RequestParam(required = false) Optional<Boolean> muted,
+            @ApiParam(name = "page", value = "Page number, the first page is 1", required = false)
+                @RequestParam(required = false) Optional<Integer> page,
+            @ApiParam(name = "limit", value = "Page size, the default is 50 rows", required = false)
+                @RequestParam(required = false) Optional<Integer> limit,
+            @ApiParam(name = "filter", value = "Optional filter", required = false)
+                @RequestParam(required = false) Optional<String> filter,
+            @ApiParam(name = "order", value = "Optional sort order, the default sort order is by the number of failed data quality checks", required = false)
+                @RequestParam(required = false) Optional<IncidentSortOrder> order,
+            @ApiParam(name = "direction", value = "Optional sort direction, the default sort direction is ascending", required = false)
+               @RequestParam(required = false) Optional<IncidentSortDirection> direction) {
         IncidentListFilterParameters filterParameters = new IncidentListFilterParameters();
-        filterParameters.setRecentMonths(recentMonths.orElse(3));
+        filterParameters.setRecentMonths(months.orElse(3));
         filterParameters.setOpen(open.orElse(Boolean.TRUE));
         filterParameters.setAcknowledged(acknowledged.orElse(Boolean.TRUE));
         filterParameters.setResolved(resolved.orElse(Boolean.FALSE));
@@ -196,6 +205,7 @@ public class IncidentsController {
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Data quality incident's status successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
+            @ApiResponse(code = 404, message = "Connection was not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> setIncidentStatus(
@@ -203,9 +213,19 @@ public class IncidentsController {
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
             @ApiParam("Incident id") @PathVariable String incidentId,
-            @ApiParam(name = "New incident status, supported values: open, acknowledged, resolved, muted", required = true)
-                @PathVariable(required = true) IncidentStatus status) {
-        IncidentStatusChangeParameters incidentStatusChangeParameters = new IncidentStatusChangeParameters(connectionName, year, month, incidentId, status);
+            @ApiParam(name = "status", value = "New incident status, supported values: open, acknowledged, resolved, muted")
+                @RequestParam IncidentStatus status) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        IncidentStatusChangeParameters incidentStatusChangeParameters = new IncidentStatusChangeParameters(
+                connectionName, year, month, incidentId, status, connectionWrapper.getSpec().getIncidentGrouping());
         this.incidentImportQueueService.setIncidentStatus(incidentStatusChangeParameters); // operation performed in the background, no result is returned
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -233,8 +253,7 @@ public class IncidentsController {
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
             @ApiParam("Incident id") @PathVariable String incidentId,
-            @ApiParam(name = "New incident's issueUrl", required = true)
-            @PathVariable(required = true) String issueUrl) {
+            @ApiParam(name = "issueUrl", value = "New incident's issueUrl") @RequestParam String issueUrl) {
         IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters = new IncidentIssueUrlChangeParameters(connectionName, year, month, incidentId, issueUrl);
         this.incidentImportQueueService.setIncidentIssueUrl(incidentIssueUrlChangeParameters); // operation performed in the background, no result is returned
 

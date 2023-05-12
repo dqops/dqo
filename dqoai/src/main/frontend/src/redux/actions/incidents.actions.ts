@@ -81,7 +81,7 @@ export const getIncidentsByConnection = ({
   connection,
   numberOfMonth = 3,
   openIncidents = true,
-  acknowledgeIncidents = true,
+  acknowledgedIncidents = true,
   resolvedIncidents = true,
   mutedIncidents = false,
   page = 1,
@@ -93,7 +93,7 @@ export const getIncidentsByConnection = ({
   dispatch(getIncidentsByConnectionRequest());
   try {
     const res: AxiosResponse<Array<IncidentsPerConnectionModel>> =
-      await IncidentsApi.findRecentIncidentsOnConnection(connection, numberOfMonth, openIncidents, acknowledgeIncidents, resolvedIncidents, mutedIncidents, page, pageSize, optionalFilter, sortBy, sortDirection);
+      await IncidentsApi.findRecentIncidentsOnConnection(connection, numberOfMonth, openIncidents, acknowledgedIncidents, resolvedIncidents, mutedIncidents, page, pageSize, optionalFilter, sortBy, sortDirection);
     dispatch(getIncidentsByConnectionSuccess(res.data));
   } catch (err) {
     dispatch(getIncidentsByConnectionFailed(err));
