@@ -16,8 +16,8 @@
 package ai.dqo.execution.checks.jobs;
 
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
+import ai.dqo.execution.checks.progress.SilentCheckExecutionProgressListener;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
-import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -25,8 +25,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.swagger.annotations.ApiModel;
 import lombok.EqualsAndHashCode;
-
-import java.util.Set;
 
 /**
  * Parameters object for the run checks on a single table job.
@@ -71,7 +69,7 @@ public class RunChecksOnTableQueueJobParameters {
      */
     @JsonIgnore
     @EqualsAndHashCode.Exclude
-    private CheckExecutionProgressListener progressListener;
+    private CheckExecutionProgressListener progressListener = new SilentCheckExecutionProgressListener();
 
     /**
      * Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.
@@ -83,7 +81,7 @@ public class RunChecksOnTableQueueJobParameters {
      * The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
      */
     @JsonPropertyDescription("The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.")
-    private volatile RunChecksQueueJobResult result;
+    private volatile RunChecksQueueJobResult runChecksResult;
 
     /**
      * Default constructor.
@@ -233,15 +231,15 @@ public class RunChecksOnTableQueueJobParameters {
      * Returns the result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
      * @return The job result object.
      */
-    public RunChecksQueueJobResult getResult() {
-        return result;
+    public RunChecksQueueJobResult getRunChecksResult() {
+        return runChecksResult;
     }
 
     /**
      * Sets the result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
-     * @param result The new job result object.
+     * @param runChecksResult The new job result object.
      */
-    public void setResult(RunChecksQueueJobResult result) {
-        this.result = result;
+    public void setRunChecksResult(RunChecksQueueJobResult runChecksResult) {
+        this.runChecksResult = runChecksResult;
     }
 }

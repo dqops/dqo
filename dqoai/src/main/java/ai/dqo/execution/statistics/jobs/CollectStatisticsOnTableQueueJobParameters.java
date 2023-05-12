@@ -16,6 +16,7 @@
 package ai.dqo.execution.statistics.jobs;
 
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
+import ai.dqo.execution.statistics.progress.SilentStatisticsCollectorExecutionProgressListener;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -66,7 +67,7 @@ public class CollectStatisticsOnTableQueueJobParameters {
      */
     @JsonIgnore
     @EqualsAndHashCode.Exclude
-    private StatisticsCollectorExecutionProgressListener progressListener;
+    private StatisticsCollectorExecutionProgressListener progressListener = new SilentStatisticsCollectorExecutionProgressListener();
 
     /**
      * Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).

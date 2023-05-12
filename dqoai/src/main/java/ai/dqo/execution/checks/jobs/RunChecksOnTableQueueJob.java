@@ -90,7 +90,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
                 jobExecutionContext.getCancellationToken());
 
         RunChecksQueueJobResult jobResultSummary = RunChecksQueueJobResult.fromCheckExecutionSummary(checkExecutionSummary);
-        this.getParameters().setResult(jobResultSummary);
+        this.getParameters().setRunChecksResult(jobResultSummary);
 
         return checkExecutionSummary;
     }
