@@ -7,7 +7,7 @@ import { useActionDispatch } from "../../hooks/useActionDispatch";
 import { createSensor, getSensor, setUpdatedSensor } from "../../redux/actions/sensor.actions";
 import Tabs from "../../components/Tabs";
 import SensorDefinition from "./SensorDefinition";
-import { ProviderSensorModel } from "../../api";
+import { ProviderSensorModel, ProviderSensorModelProviderTypeEnum } from "../../api";
 import ProvideSensor from "./ProvideSensor";
 import Input from "../../components/Input";
 import { SensorActionGroup } from "../../components/Sensors/SensorActionGroup";
@@ -19,23 +19,23 @@ const tabs = [
   },
   {
     label: 'BigQuery',
-    value: 'bigquery'
+    value: ProviderSensorModelProviderTypeEnum.bigquery
   },
   {
     label: 'Snowflake',
-    value: 'snowflake'
+    value: ProviderSensorModelProviderTypeEnum.snowflake
   },
   {
     label: 'Postgresql',
-    value: 'postgresql'
+    value: ProviderSensorModelProviderTypeEnum.postgresql
   },
   {
     label: 'Redshift',
-    value: 'redshift'
+    value: ProviderSensorModelProviderTypeEnum.redshift
   },
   {
     label: 'SQL Server',
-    value: 'sqlServer'
+    value: ProviderSensorModelProviderTypeEnum.sqlserver
   }
 ];
 
@@ -55,8 +55,8 @@ export const SensorDetail = () => {
     const exist = sensorDetail?.provider_sensor_list?.find((item: ProviderSensorModel) => item.providerType === tab);
 
     const newProviderSensorList = exist
-      ? sensorDetail?.provider_sensor_list.map((item: ProviderSensorModel) => item.providerType === tab ? providerSensor : item)
-      : [...sensorDetail?.provider_sensor_list || [], providerSensor];
+      ? sensorDetail?.provider_sensor_list?.filter((item: ProviderSensorModel) => !!item.providerType).map((item: ProviderSensorModel) => item.providerType === tab ? providerSensor : item)
+      : [...sensorDetail?.provider_sensor_list?.filter((item: ProviderSensorModel) => !!item.providerType) || [], providerSensor];
 
     dispatch(setUpdatedSensor({
       ...sensorDetail,
@@ -120,7 +120,8 @@ export const SensorDetail = () => {
         {tabs.slice(1).map((tab, index: number) => tab.value === activeTab && (
           <ProvideSensor
             key={index}
-            providerSensor={sensorDetail?.provider_sensor_list?.find((item: ProviderSensorModel) => item.providerType === tab.value)}
+            providerType={tab.value as ProviderSensorModelProviderTypeEnum}
+            providerSensor={sensorDetail?.provider_sensor_list?.filter((item: ProviderSensorModel) => !!item.providerType)?.find((item: ProviderSensorModel) => item.providerType === tab.value)}
             onChange={(value) => handleChangeProvideSensor(tab.value, value)}
           />
         ))}

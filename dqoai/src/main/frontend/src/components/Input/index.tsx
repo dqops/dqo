@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import SvgIcon from '../SvgIcon';
 import { Tooltip } from '@material-tailwind/react';
 
-interface IInputProps {
+export interface IInputProps {
   type?: string;
   className?: string;
   label?: string;

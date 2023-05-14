@@ -2,7 +2,7 @@ import React from "react";
 import {
   ProviderSensorDefinitionSpec,
   ProviderSensorDefinitionSpecTypeEnum,
-  ProviderSensorModel,
+  ProviderSensorModel, ProviderSensorModelProviderTypeEnum,
 } from "../../api";
 import Select from "../../components/Select";
 import Input from "../../components/Input";
@@ -14,6 +14,7 @@ import Jinja2Code from "./Jinja2";
 type ProvideSensorProps = {
   providerSensor?: ProviderSensorModel;
   onChange?: (value: ProviderSensorModel) => void;
+  providerType?: ProviderSensorModelProviderTypeEnum;
 }
 
 const runnerTypeOptions = Object.values(ProviderSensorDefinitionSpecTypeEnum).map((item) => ({
@@ -23,7 +24,8 @@ const runnerTypeOptions = Object.values(ProviderSensorDefinitionSpecTypeEnum).ma
 
 const ProvideSensor = ({
   providerSensor,
-  onChange
+  onChange,
+  providerType
 }: ProvideSensorProps) => {
 
   const handleChange = (obj: Partial<ProviderSensorDefinitionSpec>) => {
@@ -32,7 +34,7 @@ const ProvideSensor = ({
     }
 
     onChange({
-      ...providerSensor || {},
+      ...providerSensor || { providerType },
       providerSensorDefinitionSpec: {
         ...providerSensor?.providerSensorDefinitionSpec || {},
         ...obj

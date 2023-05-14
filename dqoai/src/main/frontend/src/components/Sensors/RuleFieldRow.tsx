@@ -4,18 +4,18 @@ import {
   ParameterDefinitionSpecDataTypeEnum,
   ParameterDefinitionSpecDisplayHintEnum
 } from "../../api";
-import Input from "../Input";
-import TextArea from "../TextArea";
-import Select from "../Select";
 import Checkbox from "../Checkbox";
 import StringListField from "../StringListField";
 import { IconButton } from "@material-tailwind/react";
 import SvgIcon from "../SvgIcon";
+import { EditInput } from "../EditInput";
+import EditSelect from "../EditSelect";
 
 type RuleFieldRowProps = {
   field: ParameterDefinitionSpec;
   onChange: (obj: Partial<ParameterDefinitionSpec>) => void;
   onDelete: () => void;
+  isReadOnly?: boolean;
 }
 
 const emptyOption = {
@@ -39,11 +39,12 @@ const displayHintOptions = [
   }))
 ];
 
-const RuleFieldRow = ({ field, onChange, onDelete }: RuleFieldRowProps) => {
+const RuleFieldRow = ({ field, onChange, onDelete, isReadOnly }: RuleFieldRowProps) => {
   return (
     <tr>
       <td className="pr-4 py-2  align-top w-40">
-        <Input
+        <EditInput
+          isReadOnly={isReadOnly}
           value={field.field_name}
           onChange={(e) => onChange({
             field_name: e.target.value
@@ -52,7 +53,8 @@ const RuleFieldRow = ({ field, onChange, onDelete }: RuleFieldRowProps) => {
         />
       </td>
       <td className="px-4 py-2  align-top w-40">
-        <Input
+        <EditInput
+          isReadOnly={isReadOnly}
           value={field.display_name}
           onChange={(e) => onChange({
             display_name: e.target.value
@@ -61,7 +63,8 @@ const RuleFieldRow = ({ field, onChange, onDelete }: RuleFieldRowProps) => {
         />
       </td>
       <td className="px-4 py-2  align-top">
-        <TextArea
+        <EditInput
+          isReadOnly={isReadOnly}
           className="h-9 !py-1.5"
           value={field.help_text}
           onChange={(e) => onChange({
@@ -70,7 +73,8 @@ const RuleFieldRow = ({ field, onChange, onDelete }: RuleFieldRowProps) => {
         />
       </td>
       <td className="px-4 py-2  align-top w-40">
-        <Select
+        <EditSelect
+          isReadOnly={isReadOnly}
           value={field.data_type}
           onChange={(data_type) => onChange({ data_type })}
           options={dataTypeOptions}
@@ -78,7 +82,8 @@ const RuleFieldRow = ({ field, onChange, onDelete }: RuleFieldRowProps) => {
         />
       </td>
       <td className="px-4 py-2  align-top w-40">
-        <Select
+        <EditSelect
+          isReadOnly={isReadOnly}
           value={field.display_hint}
           onChange={(display_hint) => onChange({ display_hint })}
           options={displayHintOptions}
@@ -86,28 +91,38 @@ const RuleFieldRow = ({ field, onChange, onDelete }: RuleFieldRowProps) => {
       </td>
       <td className="px-4 py-2  align-top w-20">
         <div>
-          <Checkbox
-            onChange={(required) => onChange({ required })}
-            checked={field.required}
-          />
+          {isReadOnly ? (
+            <div>{field.required ? 'True' : 'False'}</div>
+          ) : (
+            <Checkbox
+              onChange={(required) => onChange({ required })}
+              checked={field.required}
+            />
+          )}
         </div>
       </td>
       <td className="w-60 px-4 py-2  align-top">
-        <StringListField
-          value={field.allowed_values || []}
-          onChange={(allowed_values) => onChange({ allowed_values })}
-        />
+        {isReadOnly ? (
+          <div>{field.allowed_values?.join(', ')}</div>
+        ) : (
+          <StringListField
+            value={field.allowed_values || []}
+            onChange={(allowed_values) => onChange({ allowed_values })}
+          />
+        )}
       </td>
-      <td className="px-4 py-2  align-top w-20">
-        <IconButton
-          color="teal"
-          size="sm"
-          onClick={onDelete}
-          className="!shadow-none"
-        >
-          <SvgIcon name="delete" className="w-4" />
-        </IconButton>
-      </td>
+      {!isReadOnly && (
+        <td className="px-4 py-2  align-top w-20">
+          <IconButton
+            color="teal"
+            size="sm"
+            onClick={onDelete}
+            className="!shadow-none"
+          >
+            <SvgIcon name="delete" className="w-4" />
+          </IconButton>
+        </td>
+      )}
     </tr>
   );
 };

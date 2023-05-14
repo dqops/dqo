@@ -10,11 +10,11 @@ type SensorActionGroupProps = {
 }
 
 export const SensorActionGroup = ({ onSave }: SensorActionGroupProps) => {
-  const { full_sensor_name, sensorDetail, isUpdatedSensorDetail, isUpdating } = useSelector(getFirstLevelSensorState);
+  const { full_sensor_name, sensorDetail, isUpdatedSensorDetail, isUpdating, type } = useSelector(getFirstLevelSensorState);
   const dispatch = useActionDispatch();
 
   const handleSave = () => {
-    if (onSave) {
+    if (type === 'create') {
       onSave();
       return;
     }
