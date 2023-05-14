@@ -52,7 +52,10 @@ const JobChild = ({
 
   return (
     <Accordion open={open}>
-      {job.jobId?.parentJobId?.jobId === parentId ? (
+      {(job.jobId?.parentJobId?.jobId === parentId &&
+        succeededCounter &&
+        succeededCounter < 30) ||
+      job.status !== 'succeeded' ? (
         <AccordionHeader onClick={() => setOpen(!open)}>
           <div className="flex flex-wrap justify-between items-center text-sm w-full text-gray-700">
             <div className="flex flex-wrap space-x-1 items-center">

@@ -2,7 +2,7 @@ import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import SvgIcon from '../../SvgIcon';
 import {
   Accordion,
@@ -17,10 +17,17 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { toggleMenu } from '../../../redux/actions/job.actions';
 import { IRootState } from '../../../redux/reducers';
 
-const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
+const JobItem = ({
+  job,
+  counter
+}: {
+  job: DqoJobHistoryEntryModel;
+  counter?: number;
+}) => {
   const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
   const dispatch = useActionDispatch();
   const { errors } = useError();
+  const [parentId2, setParentId2] = useState(0);
 
   // const data = jobs?.jobs
   //   ? jobs?.jobs.sort((a, b) => {
@@ -31,8 +38,6 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
   const toggleOpen = () => {
     dispatch(toggleMenu(!isOpen));
   };
-
-  let parentJobId = 0;
 
   // const badRequests = useMemo(() => {
   //   return errors.filter((item: any) => item.name === 'Bad Request');
@@ -98,7 +103,6 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
       return <SvgIcon name="running" className="w-4 h-4 text-orange-700" />;
     }
   };
-  console.log(parentJobId);
 
   return (
     <Accordion open={open}>
@@ -108,6 +112,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
             <div className="flex space-x-1 items-center">
               <div>
                 {job.jobType}
+                {counter}
                 {/* {job.jobId?.jobId} */}
               </div>
               {renderStatus()}
@@ -239,7 +244,6 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                   <div className="overflow-y-hidden py-4 px-4">
                     {data.map((notification: any, index) => (
                       <div key={index}>
-                        {(parentJobId = Number(job.jobId?.jobId))}
                         <JobChild
                           job={notification.item}
                           succeededCounter={index}

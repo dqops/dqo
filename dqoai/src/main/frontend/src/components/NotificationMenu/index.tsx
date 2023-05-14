@@ -90,7 +90,7 @@ const NotificationMenu = () => {
             notification.type === 'error' ? (
               <ErrorItem error={notification.item} key={index} />
             ) : (
-              <JobItem job={notification.item} key={index} />
+              <JobItem job={notification.item} key={index} counter={index} />
             )
           )}
         </div>
