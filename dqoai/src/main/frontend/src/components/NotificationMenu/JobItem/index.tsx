@@ -32,6 +32,8 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
     dispatch(toggleMenu(!isOpen));
   };
 
+  let parentJobId = 0;
+
   // const badRequests = useMemo(() => {
   //   return errors.filter((item: any) => item.name === 'Bad Request');
   // }, [errors]);
@@ -96,6 +98,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
       return <SvgIcon name="running" className="w-4 h-4 text-orange-700" />;
     }
   };
+  console.log(parentJobId);
 
   return (
     <Accordion open={open}>
@@ -236,6 +239,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                   <div className="overflow-y-hidden py-4 px-4">
                     {data.map((notification: any, index) => (
                       <div key={index}>
+                        {(parentJobId = Number(job.jobId?.jobId))}
                         <JobChild
                           job={notification.item}
                           succeededCounter={index}
