@@ -27,21 +27,10 @@ const JobItem = ({
   const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
   const dispatch = useActionDispatch();
   const { errors } = useError();
-  const [parentId2, setParentId2] = useState(0);
-
-  // const data = jobs?.jobs
-  //   ? jobs?.jobs.sort((a, b) => {
-  //       return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
-  //     })
-  //   : [];
 
   const toggleOpen = () => {
     dispatch(toggleMenu(!isOpen));
   };
-
-  // const badRequests = useMemo(() => {
-  //   return errors.filter((item: any) => item.name === 'Bad Request');
-  // }, [errors]);
 
   const getNotificationDate = (notification: any) => {
     if (notification.type === 'job') {
@@ -107,7 +96,7 @@ const JobItem = ({
   return (
     <Accordion open={open}>
       {job.jobId?.parentJobId?.jobId === undefined ? (
-        <AccordionHeader onClick={() => setOpen(!open)}>
+        <AccordionHeader className="!outline-none" onClick={() => setOpen(!open)}>
           <div className="flex justify-between items-center text-sm w-full text-gray-700">
             <div className="flex space-x-1 items-center">
               <div>
@@ -240,9 +229,9 @@ const JobItem = ({
                     Tasks{' '}
                   </div>
                 </AccordionHeader>
-                <AccordionBody>
-                  <div className="overflow-y-hidden py-4 px-4">
-                    {data.map((notification: any, index) => (
+                <AccordionBody className="py-0">
+                  <div className="overflow-y-hidden">
+                    {data.slice(0, 8).map((notification: any, index) => (
                       <div key={index}>
                         <JobChild
                           job={notification.item}

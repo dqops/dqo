@@ -2,7 +2,7 @@ import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import SvgIcon from '../../SvgIcon';
 import {
   Accordion,
@@ -61,8 +61,6 @@ const JobChild = ({
             <div className="flex flex-wrap space-x-1 items-center">
               <div>
                 {job.jobType}
-
-                {/* {job.jobId?.parentJobId?.jobId} */}
               </div>
               {renderStatus()}
             </div>
@@ -77,47 +75,45 @@ const JobChild = ({
       <AccordionBody>
         <table className="text-gray-700 w-full">
           <tbody>
-            <tr className="flex justify-between">
-              <td>Status</td>
-              <td>{job?.status}</td>
+            <tr>
+              <td className="px-2">Status</td>
+              <td className="px-2">{job?.status}</td>
             </tr>
-            <tr className="flex justify-between">
-              <td>Last Changed</td>
-              <td>
+            <tr>
+              <td className="px-2">Last Changed</td>
+              <td className="px-2">
                 {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
               </td>
             </tr>
 
             {job?.errorMessage && (
-              <>
-                <tr>
-                  <td className="px-2 capitalize">Error Message</td>
-                  <td className="px-2 max-w-76">{job?.errorMessage}</td>
-                </tr>
-              </>
+              <tr>
+                <td className="px-2 capitalize">Error Message</td>
+                <td className="px-2 max-w-76">{job?.errorMessage}</td>
+              </tr>
             )}
             {job?.parameters?.runChecksParameters?.checkSearchFilters &&
               Object.entries(
                 job?.parameters?.runChecksParameters?.checkSearchFilters
               ).map(([key, value], index) => (
-                <tr key={index} className="flex justify-between">
-                  <td>{key}</td>
-                  <td>{renderValue(value)}</td>
+                <tr key={index}>
+                  <td className="px-2">{key}</td>
+                  <td className="px-2">{renderValue(value)}</td>
                 </tr>
               ))}
             {job?.parameters?.importSchemaParameters && (
               <>
-                <tr className="flex justify-between">
-                  <td>Connection Name</td>
-                  <td>
+                <tr>
+                  <td className="px-2">Connection Name</td>
+                  <td className="px-2">
                     {job?.parameters?.importSchemaParameters?.connectionName}
                   </td>
                 </tr>
-                <tr className="flex justify-between">
-                  <td>Schema Name</td>
-                  <td>{job?.parameters?.importSchemaParameters?.schemaName}</td>
+                <tr>
+                  <td className="px-2">Schema Name</td>
+                  <td className="px-2">{job?.parameters?.importSchemaParameters?.schemaName}</td>
                 </tr>
-                <tr className="flex justify-between">
+                <tr>
                   <td className="px-2 capitalize align-top">Tables pattern</td>
                   <td className="px-2 max-w-76">
                     {job?.parameters?.importSchemaParameters?.tableNamePattern}
@@ -127,18 +123,18 @@ const JobChild = ({
             )}
             {job?.parameters?.synchronizeRootFolderParameters && (
               <>
-                <tr className="flex justify-between">
-                  <td>Synchronized folder</td>
-                  <td>
+                <tr>
+                  <td className="px-2">Synchronized folder</td>
+                  <td className="px-2">
                     {
                       job?.parameters?.synchronizeRootFolderParameters
                         ?.synchronizationParameter?.folder
                     }
                   </td>
                 </tr>
-                <tr className="flex justify-between">
-                  <td>Synchronization direction</td>
-                  <td>
+                <tr>
+                  <td className="px-2">Synchronization direction</td>
+                  <td className="px-2">
                     {
                       job?.parameters?.synchronizeRootFolderParameters
                         ?.synchronizationParameter?.direction
@@ -153,24 +149,24 @@ const JobChild = ({
                 job?.parameters?.collectStatisticsParameters
                   ?.statisticsCollectorSearchFilters
               ).map(([key, value], index) => (
-                <tr key={index} className="flex justify-between">
-                  <td>{key}</td>
-                  <td>{renderValue(value)}</td>
+                <tr key={index}>
+                  <td className="px-2">{key}</td>
+                  <td className="px-2">{renderValue(value)}</td>
                 </tr>
               ))}
             {job?.parameters?.importTableParameters && (
               <>
-                <tr className="flex justify-between">
-                  <td>Connection Name</td>
-                  <td>
+                <tr>
+                  <td className="px-2">Connection Name</td>
+                  <td className="px-2">
                     {job?.parameters?.importTableParameters?.connectionName}
                   </td>
                 </tr>
-                <tr className="flex justify-between">
-                  <td>Schema Name</td>
-                  <td>{job?.parameters?.importTableParameters?.schemaName}</td>
+                <tr>
+                  <td className="px-2">Schema Name</td>
+                  <td className="px-2">{job?.parameters?.importTableParameters?.schemaName}</td>
                 </tr>
-                <tr className="flex justify-between">
+                <tr>
                   <td className="px-2 capitalize align-top">Tables</td>
                   <td className="px-2 max-w-76">
                     {job?.parameters?.importTableParameters?.tableNames?.map(
