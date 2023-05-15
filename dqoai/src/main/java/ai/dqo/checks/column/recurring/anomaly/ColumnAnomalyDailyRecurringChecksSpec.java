@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.column.profiling;
+package ai.dqo.checks.column.recurring.anomaly;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.anomaly.*;
-import ai.dqo.checks.column.checkspecs.numeric.*;
+import ai.dqo.checks.column.checkspecs.anomaly.ColumnSumAnomaly30DaysCheckSpec;
+import ai.dqo.checks.column.checkspecs.anomaly.ColumnSumAnomaly60DaysCheckSpec;
+import ai.dqo.checks.column.checkspecs.anomaly.ColumnSumAnomaly7DaysCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -34,8 +35,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnProfilingAnomalyChecksSpec extends AbstractCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnProfilingAnomalyChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyDailyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("sum_anomaly_7d", o -> o.sumAnomaly7DaysCheckSpec);
             put("sum_anomaly_30d", o -> o.sumAnomaly30DaysCheckSpec);

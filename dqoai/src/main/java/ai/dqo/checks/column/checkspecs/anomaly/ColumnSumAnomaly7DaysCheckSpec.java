@@ -19,8 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.stdev.ChangeMultiplyMovingStdevWithin7DaysRuleParametersSpec;
-import ai.dqo.rules.stdev.ChangeMultiplyMovingStdevWithin7DaysRuleParametersSpec;
+import ai.dqo.rules.stdev.ChangePercentileMovingWithin7DaysRuleParametersSpec;
 import ai.dqo.sensors.column.numeric.ColumnNumericSumSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -33,14 +32,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the sum in a monitored column changes in a rate within a two-tailed span of standard deviations during last 7 days.
+ * Column level check that ensures that the sum in a monitored column changes in a rate within a two-tailed percentile during last 7 days.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnChangeInSumStddevWithin7DaysCheckSpec
-        extends AbstractCheckSpec<ColumnNumericSumSensorParametersSpec, ChangeMultiplyMovingStdevWithin7DaysRuleParametersSpec, ChangeMultiplyMovingStdevWithin7DaysRuleParametersSpec, ChangeMultiplyMovingStdevWithin7DaysRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnChangeInSumStddevWithin7DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnSumAnomaly7DaysCheckSpec
+        extends AbstractCheckSpec<ColumnNumericSumSensorParametersSpec, ChangePercentileMovingWithin7DaysRuleParametersSpec, ChangePercentileMovingWithin7DaysRuleParametersSpec, ChangePercentileMovingWithin7DaysRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnSumAnomaly7DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -53,17 +52,17 @@ public class ColumnChangeInSumStddevWithin7DaysCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangeMultiplyMovingStdevWithin7DaysRuleParametersSpec warning;
+    private ChangePercentileMovingWithin7DaysRuleParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangeMultiplyMovingStdevWithin7DaysRuleParametersSpec error;
+    private ChangePercentileMovingWithin7DaysRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangeMultiplyMovingStdevWithin7DaysRuleParametersSpec fatal;
+    private ChangePercentileMovingWithin7DaysRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -92,7 +91,7 @@ public class ColumnChangeInSumStddevWithin7DaysCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public ChangeMultiplyMovingStdevWithin7DaysRuleParametersSpec getWarning() {
+    public ChangePercentileMovingWithin7DaysRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -101,7 +100,7 @@ public class ColumnChangeInSumStddevWithin7DaysCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(ChangeMultiplyMovingStdevWithin7DaysRuleParametersSpec warning) {
+    public void setWarning(ChangePercentileMovingWithin7DaysRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -113,7 +112,7 @@ public class ColumnChangeInSumStddevWithin7DaysCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public ChangeMultiplyMovingStdevWithin7DaysRuleParametersSpec getError() {
+    public ChangePercentileMovingWithin7DaysRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -122,7 +121,7 @@ public class ColumnChangeInSumStddevWithin7DaysCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(ChangeMultiplyMovingStdevWithin7DaysRuleParametersSpec error) {
+    public void setError(ChangePercentileMovingWithin7DaysRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -134,7 +133,7 @@ public class ColumnChangeInSumStddevWithin7DaysCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public ChangeMultiplyMovingStdevWithin7DaysRuleParametersSpec getFatal() {
+    public ChangePercentileMovingWithin7DaysRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -143,7 +142,7 @@ public class ColumnChangeInSumStddevWithin7DaysCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(ChangeMultiplyMovingStdevWithin7DaysRuleParametersSpec fatal) {
+    public void setFatal(ChangePercentileMovingWithin7DaysRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
