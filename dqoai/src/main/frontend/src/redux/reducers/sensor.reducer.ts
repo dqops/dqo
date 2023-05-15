@@ -175,6 +175,11 @@ const sensorReducer = (state = initialState, action: any) => {
         isUpdatedSensorDetail: true,
       });
     }
+    case SENSOR_ACTION.CREATE_SENSOR_DETAIL_SUCCESS: {
+      return setActiveTabState(state, action, {
+        isUpdatedSensorDetail: false
+      });
+    }
     case SENSOR_ACTION.UPDATE_SENSOR_DETAIL: {
       return setActiveTabState(state, action, {
         isUpdating: true
