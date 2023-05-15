@@ -37,8 +37,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class MultiplyMovingStdev7DaysRuleParametersSpecTests extends BaseTest {
-    private MultiplyMovingStdev7DaysRuleParametersSpec sut;
+public class MultiplyMovingStdev30DaysRuleParametersSpecTests extends BaseTest {
+    private MultiplyMovingStdev30DaysRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -48,7 +48,7 @@ public class MultiplyMovingStdev7DaysRuleParametersSpecTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new MultiplyMovingStdev7DaysRuleParametersSpec();
+        this.sut = new MultiplyMovingStdev30DaysRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
@@ -74,9 +74,9 @@ public class MultiplyMovingStdev7DaysRuleParametersSpecTests extends BaseTest {
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(19.29, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(13.94, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(24.63, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(14.91, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(25.09, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test

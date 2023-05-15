@@ -76,9 +76,9 @@ public class PercentileMovingWithin7DaysRuleParametersSpecTests extends BaseTest
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(13.25, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(26.75, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(19.29, ruleExecutionResult.getExpectedValue(), 0.1);
+        Assertions.assertEquals(12.44, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(26.14, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test

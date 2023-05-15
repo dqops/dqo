@@ -73,9 +73,9 @@ public class MultiplyMovingStdevWithin7DaysRuleParametersSpecTests extends BaseT
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(14.72, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(25.27, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(19.29, ruleExecutionResult.getExpectedValue(), 0.1);
+        Assertions.assertEquals(13.94, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(24.63, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test

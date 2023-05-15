@@ -75,14 +75,14 @@ public class ChangeMultiplyMovingStdevWithin7DaysRuleParametersSpecTests extends
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
                 this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
-        Double actualValue = 55.0;
+        Double actualValue = 40.0;
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(55.87, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(52.53, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(59.22, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(42.22, ruleExecutionResult.getExpectedValue(), 0.1);
+        Assertions.assertEquals(38.11, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(46.34, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test

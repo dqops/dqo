@@ -74,14 +74,14 @@ public class ChangePercentileMovingWithin7DaysRuleParametersSpecTests extends Ba
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
                 this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
-        Double actualValue = 55.0;
+        Double actualValue = 40.0;
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(55.87, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(51.59, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(60.16, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(42.22, ruleExecutionResult.getExpectedValue(), 0.1);
+        Assertions.assertEquals(36.95, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(47.50, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test

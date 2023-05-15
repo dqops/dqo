@@ -37,8 +37,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class MultiplyMovingStdev7DaysRuleParametersSpecTests extends BaseTest {
-    private MultiplyMovingStdev7DaysRuleParametersSpec sut;
+public class MultiplyMovingStdevWithin60DaysRuleParametersSpecTests extends BaseTest {
+    private MultiplyMovingStdevWithin60DaysRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -48,7 +48,7 @@ public class MultiplyMovingStdev7DaysRuleParametersSpecTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new MultiplyMovingStdev7DaysRuleParametersSpec();
+        this.sut = new MultiplyMovingStdevWithin60DaysRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
@@ -58,8 +58,7 @@ public class MultiplyMovingStdev7DaysRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsPassed() {
-        this.sut.setMultiplyStdevAbove(1.0);
-        this.sut.setMultiplyStdevBelow(1.0);
+        this.sut.setMultiplyStdev(2.0);
 
         for (int i = 0; i < this.sensorReadouts.length; i++) {
             if(i % 2 == 0) {
@@ -74,9 +73,9 @@ public class MultiplyMovingStdev7DaysRuleParametersSpecTests extends BaseTest {
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(19.29, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(13.94, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(24.63, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(20.0, ruleExecutionResult.getExpectedValue());
+        Assertions.assertEquals(14.91, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(25.09, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test

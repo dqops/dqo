@@ -60,7 +60,7 @@ public class ChangeMultiplyMovingStdev7DaysRuleParametersSpecTests extends BaseT
     @Test
     void executeRule_whenActualValueIsBelowMaxValueAndAllPastValuesArePresentAndEqual_thenReturnsPassed() {
         this.sut.setMultiplyStdevAbove(0.5);
-        this.sut.setMultiplyStdevBelow(0.5);
+        this.sut.setMultiplyStdevBelow(0.7);
 
         Random random = new Random(0);
         Double increment = 5.0;
@@ -76,14 +76,14 @@ public class ChangeMultiplyMovingStdev7DaysRuleParametersSpecTests extends BaseT
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
                 this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
-        Double actualValue = 55.0;
+        Double actualValue = 40.0;
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(55.87, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(54.20, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(57.54, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(42.22, ruleExecutionResult.getExpectedValue(), 0.1);
+        Assertions.assertEquals(39.34, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(44.28, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
