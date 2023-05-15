@@ -69,6 +69,18 @@ import { ReactComponent as MSSqlServerSvg } from './svg/mssql-server.svg';
 import { ReactComponent as MySqlSvg } from './svg/mysql.svg';
 import { ReactComponent as SpinnerSvg } from './svg/spinner.svg';
 import { ReactComponent as SyncSvg } from './svg/sync.svg';
+import { ReactComponent as CloudSqlSvg } from './svg/cloud-sql.svg';
+import { ReactComponent as AmazonRdsSvg } from './svg/amazon-rds.svg';
+import { ReactComponent as AzurePostgreSqlSvg } from './svg/azure-database-postgresql.svg';
+import { ReactComponent as CockroachDbSvg } from './svg/cockroach-db.svg';
+import { ReactComponent as MariaSvg } from './svg/maria-db.svg';
+import { ReactComponent as AzureMySqlSvg } from './svg/azure-database-mysql.svg';
+import { ReactComponent as PerconaServerSvg } from './svg/percona-server.svg';
+import { ReactComponent as AzureSqlSvg } from './svg/azure-sql-database.svg';
+import { ReactComponent as AzureSqlManagedInstanceSvg } from './svg/azure-sql-managed-instance.svg';
+import { ReactComponent as AzureSynapseAnalyticsSvg } from './svg/azure-synapse-analytics.svg';
+import { ReactComponent as AlloyDbSvg } from './svg/alloy-db.svg';
+import { ReactComponent as YugabyteDbSvg } from './svg/yugabyte-db.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -140,6 +152,24 @@ const iconsMap: any = {
   sync: SyncSvg,
   'check-circle': CheckCircleSvg,
   'info-filled': InfoFilledSvg,
+  cloudsqlformysql: CloudSqlSvg,
+  amazonrds: AmazonRdsSvg,
+  azuredatabaseforpostgresql: AzurePostgreSqlSvg,
+  cockroachdb: CockroachDbSvg,
+  mariadb: MariaSvg,
+  azuredatabaseformysql: AzureMySqlSvg,
+  perconaserverformysql: PerconaServerSvg,
+  azuresqldatabase: AzureSqlSvg,
+  azuresqlmanagedinstance: AzureSqlManagedInstanceSvg,
+  azuresynapseanalytics: AzureSynapseAnalyticsSvg,
+  alloydb: AlloyDbSvg,
+  amazonaurora: AmazonRdsSvg,
+  amazonrdsformysql: AmazonRdsSvg,
+  amazonrdsforpostgresql: AmazonRdsSvg,
+  amazonrdsforsqlserver: AmazonRdsSvg,
+  cloudsqlforpostgresql: CloudSqlSvg,
+  cloudsqlforsqlserver: CloudSqlSvg,
+  yugabytedb: YugabyteDbSvg
 };
 
 interface SvgIconProps {
