@@ -46,7 +46,7 @@ import java.util.List;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "delete", header = "Deletes saved data that meets certain conditions. ", description = "Deletes saved data that meets certain conditions. Be careful when using this command, as it permanently deletes the selected data and cannot be undone.")
+@CommandLine.Command(name = "delete", header = "Deletes stored data that matches specified conditions ", description = "Deletes stored data that matches specified conditions. Be careful when using this command, as it permanently deletes the selected data and cannot be undone.")
 public class DataDeleteCliCommand extends BaseCommand implements ICommand {
     private DqoJobQueue dqoJobQueue;
     private DqoQueueJobFactory dqoQueueJobFactory;
