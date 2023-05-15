@@ -66,7 +66,7 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
     }
 
-    @CommandLine.Option(names = {"-er", "--errors"}, description = "Delete the errors")
+    @CommandLine.Option(names = {"-er", "--errors"}, description = "Delete the execution errors")
     private boolean deleteErrors = false;
 
     @CommandLine.Option(names = {"-st", "--statistics"}, description = "Delete the statistics")

@@ -56,7 +56,7 @@ public class DataRepairCliCommand extends BaseCommand implements ICommand {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
     }
 
-    @CommandLine.Option(names = {"-er", "--errors"}, description = "Repair the errors")
+    @CommandLine.Option(names = {"-er", "--errors"}, description = "Repair the execution errors")
     private boolean repairErrors = false;
 
     @CommandLine.Option(names = {"-st", "--statistics"}, description = "Repair the statistics")
