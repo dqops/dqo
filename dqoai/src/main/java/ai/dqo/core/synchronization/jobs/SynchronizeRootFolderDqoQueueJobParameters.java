@@ -16,17 +16,27 @@
 package ai.dqo.core.synchronization.jobs;
 
 import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationListener;
+import ai.dqo.core.synchronization.listeners.SilentFileSystemSynchronizationListener;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.EqualsAndHashCode;
 
 /**
  * Parameters object for a job that synchronizes one folder with DQO Cloud.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode(callSuper = false)
 public class SynchronizeRootFolderDqoQueueJobParameters {
     private SynchronizeRootFolderParameters synchronizationParameter;
     @JsonIgnore
-    private FileSystemSynchronizationListener fileSystemSynchronizationListener;
+    @EqualsAndHashCode.Exclude
+    private FileSystemSynchronizationListener fileSystemSynchronizationListener = new SilentFileSystemSynchronizationListener();
+
+    /**
+     * Default constructor.
+     */
+    public SynchronizeRootFolderDqoQueueJobParameters() {
+    }
 
     /**
      * Creates a new parameters object for a synchronize folder job.

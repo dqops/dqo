@@ -26,7 +26,7 @@ const TableDailyChecksView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getTableRecurringOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
+    CheckResultOverviewApi.getTableRecurringChecksOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
       setCheckResultsOverview(res.data);
     });
   };

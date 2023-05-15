@@ -196,11 +196,11 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
     }
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.recurring) {
       if (column) {
-        CheckResultApi.getColumnRecurringResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
+        CheckResultApi.getColumnRecurringChecksResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           dispatch(setCheckResults(checkTypes, check?.check_name ?? "", getCheckResult(res.data)))
         });
       } else {
-        CheckResultApi.getTableRecurringResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
+        CheckResultApi.getTableRecurringChecksResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           dispatch(setCheckResults(checkTypes, check?.check_name ?? "", getCheckResult(res.data)))
         });
       }

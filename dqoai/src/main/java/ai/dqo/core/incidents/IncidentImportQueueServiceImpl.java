@@ -263,7 +263,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                                 // sending notifications
                                 ArrayList<IncidentNotificationMessage> statusChangeNotificationMessages = Lists.newArrayList(changedIncidentsNotificationMessage);
                                 incidentNotificationService.sendNotifications(statusChangeNotificationMessages,
-                                        nextTableImportBatch.getConnection().getIncidentGrouping());
+                                        incidentStatusChangeParameters.getIncidentGrouping());
                             }
                         }
 

@@ -12,16 +12,11 @@ import {
 const CreateConnection = () => {
   const [step, setStep] = useState(0);
   const [database, setDatabase] = useState<ConnectionBasicModel>({});
-  const [nameofDB, setNameofDB] = useState<string>('');
 
-  const onSelect = (
-    db: ConnectionBasicModelProviderTypeEnum,
-    nameOfdatabase?: string
-  ) => {
+  const onSelect = (db: ConnectionBasicModelProviderTypeEnum) => {
     setDatabase({
       provider_type: db
     });
-    setNameofDB(nameOfdatabase ? nameOfdatabase : '');
     setStep(1);
   };
 
@@ -53,7 +48,6 @@ const CreateConnection = () => {
           onNext={onNext}
           database={database}
           onChange={setDatabase}
-          nameOfdatabase={nameofDB.length !== 0 ? nameofDB : ''}
         />
       )}
       {step === 2 && (

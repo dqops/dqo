@@ -9,7 +9,6 @@ The daily partition checks store the most recent sensor readouts for each partit
 check was run. This means that if you run check several times a day only the most recent readout is stored. The previous readouts for
 that day will be overwritten.
 
-
 The daily recurring checks store the most recent sensor readouts for each day when the data quality check was run.
 This means that if you run a check several times a day only the most recent readout is stored. The previous readouts for
 that day will be overwritten.
@@ -69,16 +68,10 @@ To run a partition check, you need to select a data column that is the time part
 ## Setting up date or datetime column name
 In order to enable time partition check, set a column that contains date, datetime or timestamp. 
 
-1. Go to the **Data Sources** section.
-
-2. Select the table of interest from the tree view.
-
-3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "DATE or DATETIME
-   column name for partition checks" input field.
-
-   ![Checking results](https://dqo.ai/docs/images/run-data-quality-checks/working-with-dqo/date-or-datetime-column-configuration-for-partion-checks.jpg)
-
-4. Click the Save button in the upper right corner.
+1. Go to Data Source section
+2. On a tree view select table of interest.
+3. Go to the **Date and Time Columns** tag
+4. In the dropdown menu under D**ATE or DATETIME column name for partition checks** select a column that contains date, datetime or timestamp.
 
 ## Checks configuration in the YAML file
 Partition data quality checks, like other data quality checks in DQO, are defined as YAML files.
@@ -154,6 +147,9 @@ nulls_percent.
           labels:
           - optional column that stores the timestamp when row was ingested
     ```
+
+## Analysis of incrementally partitioned data
+
 
 ## What's next
 

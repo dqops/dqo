@@ -17,6 +17,7 @@ package ai.dqo.checks.column.partitioned.consistency;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.consistency.ColumnConsistencyDateMatchFormatPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.consistency.ColumnStringDatatypeChangedCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -28,7 +29,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of built-in preconfigured data quality check points on a column level that are checking monthly partitions or rows for each month of data.
+ * Container of consistency data quality partitioned checks on a column level that are checking monthly partitions or rows for each month of data.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -37,11 +38,15 @@ public class ColumnConsistencyMonthlyPartitionedChecksSpec extends AbstractCheck
     public static final ChildHierarchyNodeFieldMapImpl<ColumnConsistencyMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_partition_date_match_format_percent", o -> o.monthlyPartitionDateMatchFormatPercent);
+            put("monthly_partition_string_datatype_changed", o -> o.monthlyPartitionStringDatatypeChanged);
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnConsistencyDateMatchFormatPercentCheckSpec monthlyPartitionDateMatchFormatPercent;
+
+    @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnStringDatatypeChangedCheckSpec monthlyPartitionStringDatatypeChanged;
 
     /**
      * Returns a date match format percentage check.
@@ -59,6 +64,24 @@ public class ColumnConsistencyMonthlyPartitionedChecksSpec extends AbstractCheck
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionDateMatchFormatPercent, monthlyPartitionDateMatchFormatPercent));
         this.monthlyPartitionDateMatchFormatPercent = monthlyPartitionDateMatchFormatPercent;
         propagateHierarchyIdToField(monthlyPartitionDateMatchFormatPercent, "monthly_partition_date_match_format_percent");
+    }
+
+    /**
+     * Returns a count of expected values in datatype changed check.
+     * @return Datatype changed check.
+     */
+    public ColumnStringDatatypeChangedCheckSpec getMonthlyPartitionStringDatatypeChanged() {
+        return monthlyPartitionStringDatatypeChanged;
+    }
+
+    /**
+     * Sets a new definition of a datatype changed check.
+     * @param monthlyPartitionStringDatatypeChanged Datatype changed check.
+     */
+    public void setMonthlyPartitionStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec monthlyPartitionStringDatatypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringDatatypeChanged, monthlyPartitionStringDatatypeChanged));
+        this.monthlyPartitionStringDatatypeChanged = monthlyPartitionStringDatatypeChanged;
+        propagateHierarchyIdToField(monthlyPartitionStringDatatypeChanged, "monthly_partition_string_datatype_changed");
     }
 
     /**

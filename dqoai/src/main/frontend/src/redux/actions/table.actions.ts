@@ -526,7 +526,7 @@ export const getTableDailyRecurring =
       dispatch(getTableDailyRecurringRequest(checkType, activeTab));
     }
     try {
-      const res = await TableApiClient.getTableRecurringUI(
+      const res = await TableApiClient.getTableRecurringChecksUI(
         connectionName,
         schemaName,
         tableName,
@@ -565,7 +565,7 @@ export const updateTableDailyRecurring =
   async (dispatch: Dispatch) => {
     dispatch(updateTableDailyRecurringRequest(checkType, activeTab));
     try {
-      await TableApiClient.updateTableRecurringUI(
+      await TableApiClient.updateTableRecurringChecksUI(
         connectionName,
         schemaName,
         tableName,
@@ -601,7 +601,7 @@ export const getTableMonthlyRecurring =
       dispatch(getTableMonthlyRecurringRequest(checkType, activeTab));
     }
     try {
-      const res = await TableApiClient.getTableRecurringUI(
+      const res = await TableApiClient.getTableRecurringChecksUI(
         connectionName,
         schemaName,
         tableName,
@@ -642,7 +642,7 @@ export const updateTableMonthlyRecurring =
   async (dispatch: Dispatch) => {
     dispatch(updateTableMonthlyRecurringRequest(checkType, activeTab));
     try {
-      await TableApiClient.updateTableRecurringUI(
+      await TableApiClient.updateTableRecurringChecksUI(
         connectionName,
         schemaName,
         tableName,
@@ -985,7 +985,7 @@ export const getTableRecurringChecksUIFilter =
         dispatch(getTableRecurringChecksUIFilterRequest(checkType, activeTab));
       }
       try {
-        const res = await TableApiClient.getTableRecurringUIFilter(
+        const res = await TableApiClient.getTableRecurringChecksUIFilter(
           connectionName,
           schemaName,
           tableName,

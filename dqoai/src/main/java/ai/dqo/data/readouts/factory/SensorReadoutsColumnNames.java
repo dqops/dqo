@@ -142,7 +142,7 @@ public class SensorReadoutsColumnNames {
     public static final String CHECK_DISPLAY_NAME_COLUMN_NAME = "check_display_name";
 
     /**
-     * Column name for a check type (adhoc, checkpoint, partitioned).
+     * Column name for a check type (profiling, recurring, partitioned).
      */
     public static final String CHECK_TYPE_COLUMN_NAME = "check_type";
 

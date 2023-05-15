@@ -125,13 +125,13 @@ const RecurringView = () => {
   }, [tab]);
 
   const getDailyCheckOverview = () => {
-    CheckResultOverviewApi.getTableRecurringOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
+    CheckResultOverviewApi.getTableRecurringChecksOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
       setDailyCheckResultsOverview(res.data);
     });
   };
   
   const getMonthlyCheckOverview = () => {
-    CheckResultOverviewApi.getTableRecurringOverview(connectionName, schemaName, tableName, 'monthly').then((res) => {
+    CheckResultOverviewApi.getTableRecurringChecksOverview(connectionName, schemaName, tableName, 'monthly').then((res) => {
       setMonthlyCheckResultsOverview(res.data);
     });
   };

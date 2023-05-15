@@ -3,7 +3,7 @@
 With DQO, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
-To set up schedule you can use the graphical interface as described below or manually modify the YAML configuration file as [described here.](./configuring-schedules-by-modifying-yaml-file.md)
+To set up schedule you can use the graphic interface as described below or manually modify the YAML configuration file as [described here.](./configuring_schedules_by_modifying_yaml_file.md)
 
 Different types of checks, such as Profiling, Recurring, and Partitioned, have their own schedules. For more information
 on these different check types, please refer to the [DQO Concepts section](../../dqo-concepts/checks/index.md).  
@@ -21,7 +21,7 @@ To set up a schedule for the entire connection, follow these steps:
     - Recurring Monthly
     - Partitioned Daily
     - Partitioned Monthly
-5. Specify the schedule using a [Unix cron expression](./cron-formatting.md) or select one of the options provided.
+5. Specify the schedule using a [Unix cron expression](./cron_formatting.md) or select one of the options provided.
 6. Once you have set the schedule, click on the **Save** button to save your changes.
 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across 

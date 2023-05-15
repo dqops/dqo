@@ -16,6 +16,7 @@
 package ai.dqo.core.jobqueue.jobs.table;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -23,6 +24,7 @@ import java.util.List;
  * Parameters for the {@link ImportTablesQueueJob} job that imports selected tables from the source database.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@EqualsAndHashCode(callSuper = false)
 public class ImportTablesQueueJobParameters {
     private String connectionName;
     private String schemaName;

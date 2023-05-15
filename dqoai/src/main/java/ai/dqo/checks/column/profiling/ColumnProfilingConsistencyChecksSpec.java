@@ -17,6 +17,7 @@ package ai.dqo.checks.column.profiling;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.consistency.ColumnConsistencyDateMatchFormatPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.consistency.ColumnStringDatatypeChangedCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,11 +38,16 @@ public class ColumnProfilingConsistencyChecksSpec extends AbstractCheckCategoryS
     public static final ChildHierarchyNodeFieldMapImpl<ColumnProfilingConsistencyChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("date_match_format_percent", o -> o.dateMatchFormatPercent);
+
+            put("string_datatype_changed", o -> o.stringDatatypeChanged);
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage.")
     private ColumnConsistencyDateMatchFormatPercentCheckSpec dateMatchFormatPercent;
+
+    @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.")
+    private ColumnStringDatatypeChangedCheckSpec stringDatatypeChanged;
 
     /**
      * Returns a date match format percentage check.
@@ -61,6 +67,23 @@ public class ColumnProfilingConsistencyChecksSpec extends AbstractCheckCategoryS
         propagateHierarchyIdToField(dateMatchFormatPercent, "date_match_format_percent");
     }
 
+    /**
+     * Returns a count of expected values in datatype changed check.
+     * @return Datatype changed check.
+     */
+    public ColumnStringDatatypeChangedCheckSpec getStringDatatypeChanged() {
+        return stringDatatypeChanged;
+    }
+
+    /**
+     * Sets a new definition of a datatype changed check.
+     * @param stringDatatypeChanged Datatype changed check.
+     */
+    public void setStringDatatypeChanged(ColumnStringDatatypeChangedCheckSpec stringDatatypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.stringDatatypeChanged, stringDatatypeChanged));
+        this.stringDatatypeChanged = stringDatatypeChanged;
+        propagateHierarchyIdToField(stringDatatypeChanged, "string_datatype_changed");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

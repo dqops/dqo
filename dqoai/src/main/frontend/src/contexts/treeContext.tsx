@@ -400,7 +400,7 @@ function TreeProvider(props: any) {
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
-    const res = await TableApiClient.getTableRecurringUIBasic(
+    const res = await TableApiClient.getTableRecurringChecksUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? '',
@@ -444,7 +444,7 @@ function TreeProvider(props: any) {
     const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-    const res = await ColumnApiClient.getColumnRecurringUIBasic(
+    const res = await ColumnApiClient.getColumnRecurringChecksUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? '',
@@ -724,7 +724,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
-      const res = await TableApiClient.getTableRecurringUI(
+      const res = await TableApiClient.getTableRecurringChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -736,7 +736,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
-      const res = await TableApiClient.getTableRecurringUI(
+      const res = await TableApiClient.getTableRecurringChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -785,7 +785,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
-      const res = await ColumnApiClient.getColumnRecurringUI(
+      const res = await ColumnApiClient.getColumnRecurringChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -798,7 +798,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
-      const res = await ColumnApiClient.getColumnRecurringUI(
+      const res = await ColumnApiClient.getColumnRecurringChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',

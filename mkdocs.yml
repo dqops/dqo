@@ -1,6 +1,6 @@
 site_name: Documentation
 site_url: https://dqo.ai/docs/
-repo_url: https://github.com/dqoai/dqo
+repo_url: https://github.com/dqops/dqo
 edit_uri: edit/main/docs/
 
 # Docs navigation
@@ -30,17 +30,27 @@ nav:
     - Working with CLI: 'dqo-concepts/working-with-cli/working-with-cli.md'
   - Use cases:
     - 'examples/index.md'
-    - Percentage of false values: 'examples/bool-false-percent.md'
-    - Integrity check between columns in different tables: 'examples/integrity-foreign-key-match-percent.md'
-    - Not nulls count: 'examples/nulls-not-nulls-count.md'
-    - Valid latitude percent: 'examples/numeric-valid-latitude-percent.md'
-    - Values in range integers percent: 'examples/numeric-values-in-range-integers-percent.md'
-    - Valid USA zipcode percent: 'examples/pii-valid-usa-zipcode-percent.md'
-    - String match date regex percent: 'examples/string-match-date-regex-percent.md'
-    - String max length: 'examples/string-max-length.md'
-    - Duplicate percent: 'examples/uniqueness-duplicate-percent.md'
-    - Valid email percent: 'examples/valid-email-percent.md'
-    - Running checks with a scheduler: '/examples/running-checks-with-a-scheduler.md'
+    - Data accuracy:
+        - Integrity check between columns in different tables: 'examples/data-accuracy/integrity-check-between-columns-in-different-tables.md'
+    - Data completeness:
+        - Number of rows in the table: 'examples/data-completeness/number-of-rows-in-the-table.md'
+        - Number of null values: 'examples/data-completeness/number-of-null-values.md'
+    - Data uniqueness:
+        - Percentage of duplicates: 'examples/data-uniqueness/percentage-of-duplicates.md'
+    - Data validity:
+        - Percentage of valid USA zipcodes: 'examples/data-validity/percentage-of-valid-usa-zipcodes.md'
+        - Percentage of valid emails: 'examples/data-validity/percentage-of-valid-emails.md'
+        - Percentage of valid latitude and longitude: 'examples/data-validity/percentage-of-valid-latitude-and-longitude.md'
+        - Percentage of valid IP4 address: 'examples/data-validity/percentage-of-valid-IP4-address.md'
+        - Percentage of strings matching date regex: 'examples/data-validity/percentage-of-strings-matching-date-regex.md'
+    - Data reasonability:
+        - Percentage of values in range: 'examples/data-reasonability/percentage-of-integer-values-in-range.md'
+        - A string not exceeding a set length: 'examples/data-reasonability/string-not-exceeding-a-set-length.md'
+        - Percentage of false values: 'examples/data-reasonability/percentage-of-false-values.md'
+    - Stability:
+       - Table availability: 'examples/stability/table-availability.md'
+    - Data quality monitoring:
+      - Running checks with a scheduler: 'examples/data-quality-monitoring/running-checks-with-a-scheduler.md'
   - Working with DQO:
     - Installation:
       - Install DQO from Git: 'working-with-dqo/install-dqo-from-git/install-dqo-from-git.md'
@@ -52,12 +62,11 @@ nav:
       - PostgreSQL: 'working-with-dqo/adding-data-source-connection/postgresql.md'
       - SQL Server: 'working-with-dqo/adding-data-source-connection/sql-server.md'
       - MySQL: 'working-with-dqo/adding-data-source-connection/mysql.md'
-    - Run data quality checks: 'working-with-dqo/run-data-quality-checks/run-data-quality-checks.md'
     - Schedules:
       - 'working-with-dqo/schedules/index.md'
-      - Configuring the schedules by modifying the YAML files: 'working-with-dqo/schedules/configuring-schedules-by-modifying-yaml-file.md'
-      - Time zone configuration: 'working-with-dqo/schedules/timezone-configuration.md'
-      - Cron formatting: 'working-with-dqo/schedules/cron-formatting.md'
+      - Configuring the schedules by modifying the YAML files: 'working-with-dqo/schedules/configuring_schedules_by_modifying_yaml_file.md'
+      - Time zone configuration: 'working-with-dqo/schedules/timezone_configuration.md'
+      - Cron formatting: 'working-with-dqo/schedules/cron_formatting.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
     - dqo: 'command-line-interface/dqo.md'
@@ -104,6 +113,7 @@ nav:
         - false percent: 'checks/column/bool/false-percent.md'
       - consistency:
         - date match format percent: 'checks/column/consistency/date-match-format-percent.md'
+        - string datatype changed: 'checks/column/consistency/string-datatype-changed.md'
       - datetime:
         - date values in future percent: 'checks/column/datetime/date-values-in-future-percent.md'
         - datetime value in range date percent: 'checks/column/datetime/datetime-value-in-range-date-percent.md'
@@ -192,7 +202,7 @@ nav:
         - string match date regex percent: 'checks/column/strings/string-match-date-regex-percent.md'
         - string match name regex percent: 'checks/column/strings/string-match-name-regex-percent.md'
         - string most popular values: 'checks/column/strings/string-most-popular-values.md'
-        - string datatype changed: 'checks/column/strings/string-datatype-changed.md'
+        - string datatype detected: 'checks/column/strings/string-datatype-detected.md'
       - uniqueness:
         - unique count: 'checks/column/uniqueness/unique-count.md'
         - unique percent: 'checks/column/uniqueness/unique-percent.md'

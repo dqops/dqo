@@ -48,22 +48,22 @@ public class TableTimelinessMonthlyPartitionedChecksSpec extends AbstractCheckCa
         }
     };
 
-    @JsonPropertyDescription("Monthly partition checkpoint calculating the number of days since the most recent event (freshness)")
+    @JsonPropertyDescription("Monthly partitioned check calculating the number of days since the most recent event (freshness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDaysSinceMostRecentEventCheckSpec monthlyPartitionDaysSinceMostRecentEvent;
 
-    @JsonPropertyDescription("Monthly partition checkpoint calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp")
+    @JsonPropertyDescription("Monthly partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDataIngestionDelayCheckSpec monthlyPartitionDataIngestionDelay;
 
-    @JsonPropertyDescription("Monthly partition checkpoint calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)")
+    @JsonPropertyDescription("Monthly partitioned check calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDaysSinceMostRecentIngestionCheckSpec monthlyPartitionDaysSinceMostRecentIngestion;
 
-    @JsonPropertyDescription("Monthly partition checkpoint calculating the longest time a row waited to be load")
+    @JsonPropertyDescription("Monthly partitioned check calculating the longest time a row waited to be load")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TablePartitionReloadLagCheckSpec monthlyPartitionReloadLag;

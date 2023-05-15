@@ -29,10 +29,10 @@ const AddColumnDialog = ({
       setLoading(true);
       if (node) {
         const args = node.id.toString().split('.');
-        await ColumnApiClient.createColumn(args[0], args[1], args[2], name);
+        await ColumnApiClient.createColumn(args[0], args[1], args[2], name, { sql_expression: sqlExpression });
         refreshNode(node);
       } else {
-        await ColumnApiClient.createColumn(connection, schema, table, name);
+        await ColumnApiClient.createColumn(connection, schema, table, name, { sql_expression: sqlExpression });
       }
       onClose();
     } finally {

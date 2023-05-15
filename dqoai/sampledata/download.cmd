@@ -89,3 +89,6 @@ curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.co
 
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/1VLTGDGo_9Qd503iSw93qDiuG0fCDXkjtm7cup78nS3I
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1VLTGDGo_9Qd503iSw93qDiuG0fCDXkjtm7cup78nS3I/export?exportFormat=csv" > detect_datatype_test.csv
+
+REM Spreadsheet: https://docs.google.com/spreadsheets/d/1o1CqrqCum9v16F2Gg2fKLzXuqyWraNDGVoJN1pETvsw
+curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1o1CqrqCum9v16F2Gg2fKLzXuqyWraNDGVoJN1pETvsw/export?exportFormat=csv" > json_fields_test.csv

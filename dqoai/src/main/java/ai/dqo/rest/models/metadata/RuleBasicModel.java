@@ -37,9 +37,12 @@ public class RuleBasicModel {
     @JsonPropertyDescription("Full rule name")
     private String fullRuleName;
 
-    @JsonPropertyDescription("This rule has is a built-in rule.")
+    @JsonPropertyDescription("This rule has is a custom rule or is customized by the user.")
     public boolean custom;
 
-    public RuleBasicModel(){}
+    @JsonPropertyDescription("This rule is provided with DQO as built-in rule.")
+    public boolean builtIn;
 
+    public RuleBasicModel() {
+    }
 }

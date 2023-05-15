@@ -7,6 +7,7 @@
     <artifactId>dqo-data-quality-observer</artifactId>
     <version>0.2.0-alpha0</version>
     <packaging>pom</packaging>
+    <description>DQO Data Quality Operations Center</description>
 
     <modules>
         <module>lib</module>
@@ -55,7 +56,7 @@
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>42.5.0</version>
+                <version>42.6.0</version>
             </dependency>
             <dependency>
                 <groupId>com.amazon.redshift</groupId>
@@ -70,7 +71,7 @@
             <dependency>
                 <groupId>net.snowflake</groupId>
                 <artifactId>snowflake-jdbc</artifactId>
-                <version>3.13.22</version>
+                <version>3.13.30</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
