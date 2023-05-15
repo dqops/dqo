@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import {
   CheckResultsOverviewDataModel,
-  UICheckContainerModel,
+  UICheckContainerModel, UICheckContainerModelEffectiveScheduleEnabledStatusEnum,
   UICheckModel,
   UIEffectiveScheduleModelScheduleLevelEnum
 } from '../../api';
@@ -83,28 +83,49 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
     }
   };
 
+  const goToConnectionSchedule = () => {
+    const url = `${ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'schedule')}?activeTab=${checksUI?.effective_schedule?.schedule_group}`;
+    dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
+      url,
+      value: ROUTES.CONNECTION_LEVEL_VALUE(CheckTypes.SOURCES, connection),
+      state: {},
+      label: connection
+    }))
+    history.push(url);
+    return;
+  };
+
+  const goToTableSchedule = () => {
+    dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
+      url: ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'schedule'),
+      value: ROUTES.TABLE_LEVEL_VALUE(CheckTypes.SOURCES, connection, schema, table),
+      state: {},
+      label: table
+    }))
+    history.push(`${ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'schedule')}?activeTab=${checksUI?.effective_schedule?.schedule_group}`);
+    return;
+  };
+
   const goToScheduleTab = () => {
     if (checksUI?.effective_schedule?.schedule_level === UIEffectiveScheduleModelScheduleLevelEnum.connection) {
-      const url = `${ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'schedule')}?activeTab=${checksUI?.effective_schedule?.schedule_group}`;
-      dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
-        url,
-        value: ROUTES.CONNECTION_LEVEL_VALUE(CheckTypes.SOURCES, connection),
-        state: {},
-        label: connection
-      }))
-      history.push(url);
-      return;
+      goToConnectionSchedule();
     }
     if (checksUI?.effective_schedule?.schedule_level === UIEffectiveScheduleModelScheduleLevelEnum.table_override) {
-      dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
-        url: ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'schedule'),
-        value: ROUTES.TABLE_LEVEL_VALUE(CheckTypes.SOURCES, connection, schema, table),
-        state: {},
-        label: table
-      }))
-      history.push(`${ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'schedule')}?activeTab=${checksUI?.effective_schedule?.schedule_group}`);
-      return;
+      goToTableSchedule();
     }
+  };
+
+
+
+  const goToTableTimestamps = () => {
+    const url = ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'timestamps');
+    dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
+      url,
+      value: ROUTES.TABLE_LEVEL_VALUE(CheckTypes.SOURCES, connection, schema, table),
+      state: {},
+      label: table
+    }))
+    history.push(url);
   };
 
   if (loading) {
@@ -124,10 +145,10 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
       className={clsx(className, 'p-4 overflow-auto')}
       style={{ maxWidth: `calc(100vw - ${sidebarWidth + 30}px` }}
     >
-      <div className="flex items-center text-3xs justify-between mb-3 gap-4">
+      <div className="flex items-center text-sm mb-3 gap-6">
         <div className="flex items-center space-x-1">
           <span>Scheduling status:</span>
-          <span>{checksUI?.effective_schedule_enabled_status}</span>
+          <span>{checksUI?.effective_schedule_enabled_status?.replaceAll('_', ' ').split(' ').map((item) => item.charAt(0).toUpperCase() + item.slice(1)).join(' ')}</span>
         </div>
         <div className="flex items-center space-x-1">
           <span>Scheduling configured at:</span>
@@ -140,18 +161,48 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
           <span>Effective cron expression:</span>
           <span>{checksUI?.effective_schedule?.cron_expression}</span>
         </div>
-        <div className="flex items-center space-x-1">
-          <span>Next execution at:</span>
-          <span>{moment(checksUI?.effective_schedule?.time_of_execution).format('MMM, DD YYYY')}</span>
-        </div>
-        <div className="flex items-center space-x-1">
+        {checksUI?.effective_schedule?.cron_expression && (
+          <div className="flex items-center space-x-1">
+            <span>Next execution at:</span>
+            <span>{moment(checksUI?.effective_schedule?.time_of_execution).format('MMM, DD YYYY')}</span>
+          </div>
+        )}
+        <div className="flex items-center space-x-5">
           <span>Configure at:</span>
           <a
             className="underline cursor-pointer"
             onClick={goToScheduleTab}
           >{checksUI?.effective_schedule?.schedule_group}</a>
+          {checksUI?.effective_schedule_enabled_status === UICheckContainerModelEffectiveScheduleEnabledStatusEnum.not_configured && (
+            <>
+              <a
+                className="underline cursor-pointer"
+                onClick={goToConnectionSchedule}
+              >Configure on connection</a>
+              <a
+                className="underline cursor-pointer"
+                onClick={goToTableSchedule}
+              >Configure on table</a>
+            </>
+          )}
         </div>
       </div>
+      {checkTypes === CheckTypes.PARTITIONED && (
+        <div className="flex items-center mb-3 gap-6">
+          <div className="text-xs">
+            <span className="mr-3">
+              The results are partitioned (grouped) by a timestamp column:
+            </span>
+            {checksUI.partition_by_column || 'Not configured'}
+          </div>
+          <span
+            className="text-primary underline text-xs cursor-pointer"
+            onClick={goToTableTimestamps}
+          >
+            Configure the partition by column
+          </span>
+        </div>
+      )}
       <table className="w-full">
         <TableHeader checksUI={checksUI} />
         <tbody>

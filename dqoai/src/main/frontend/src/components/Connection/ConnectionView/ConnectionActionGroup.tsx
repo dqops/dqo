@@ -7,6 +7,7 @@ import { ConnectionApiClient } from '../../../services/apiClient';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from "../../../shared/routes";
 import { useTree } from "../../../contexts/treeContext";
+import AddSchemaDialog from "../../CustomTree/AddSchemaDialog";
 
 interface IConnectionActionGroupProps {
   isDisabled?: boolean;
@@ -31,6 +32,7 @@ const ConnectionActionGroup = ({
   );
   const history = useHistory();
   const { sourceRoute } = useTree();
+  const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
 
   const removeConnection = async () => {
     if (connectionBasic) {
@@ -51,6 +53,13 @@ const ConnectionActionGroup = ({
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {isSourceScreen ? (
         <>
+          <Button
+            className="!h-10"
+            variant="outlined"
+            color="primary"
+            label="Add Schema"
+            onClick={() => setAddSchemaDialogOpen(true)}
+          />
           <Button
             className="!h-10"
             variant="outlined"
@@ -94,6 +103,10 @@ const ConnectionActionGroup = ({
         onClose={() => setIsOpen(false)}
         connection={connectionBasic}
         onConfirm={removeConnection}
+      />
+      <AddSchemaDialog
+        open={addSchemaDialogOpen}
+        onClose={() => setAddSchemaDialogOpen(false)}
       />
     </div>
   );
