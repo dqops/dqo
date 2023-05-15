@@ -689,7 +689,7 @@ const connectionReducer = (state = initialState, action: Action) => {
     case SOURCE_ACTION.GET_TABLE_RECURRING_UI_FILTER_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        RecurringUIFilter: action.data,
+        recurringUIFilter: action.data,
         isUpdatedRecurringUIFilter: false,
         error: null
       });
@@ -763,7 +763,7 @@ const connectionReducer = (state = initialState, action: Action) => {
     case SOURCE_ACTION.SET_UPDATED_RECURRING_UI_FILTER:
       return setActiveTabState(state, action, {
         isUpdatedRecurringUIFilter: true,
-        RecurringUIFilter: action.data
+        recurringUIFilter: action.data
       });
     case SOURCE_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER:
       return setActiveTabState(state, action, {
@@ -1078,7 +1078,7 @@ const connectionReducer = (state = initialState, action: Action) => {
     case SOURCE_ACTION.GET_COLUMN_RECURRING_UI_FILTER_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        RecurringUIFilter: action.data,
+        recurringUIFilter: action.data,
         isUpdatedRecurringUIFilter: false,
         error: null
       });

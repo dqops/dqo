@@ -48,7 +48,7 @@ public class ColumnSqlDailyPartitionedSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnSqlConditionPassedPercentCheckSpec dailyPartitionSqlConditionPassedPercentOnColumn;
 
-    @JsonPropertyDescription("Verifies that a maximum number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnSqlConditionFailedCountCheckSpec dailyPartitionSqlConditionFailedCountOnColumn;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")

@@ -2024,7 +2024,7 @@ ___
 ## **daily partition days since most recent event**  
   
 **Check description**  
-Daily partition checkpoint calculating the number of days since the most recent event timestamp (freshness)  
+Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2698,7 +2698,7 @@ ___
 ## **monthly partition days since most recent event**  
   
 **Check description**  
-Monthly partition checkpoint calculating the number of days since the most recent event (freshness)  
+Monthly partitioned check calculating the number of days since the most recent event (freshness)  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

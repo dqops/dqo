@@ -2030,7 +2030,7 @@ ___
 ## **daily partition days since most recent ingestion**  
   
 **Check description**  
-Daily partition checkpoint calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)  
+Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2706,7 +2706,7 @@ ___
 ## **monthly partition days since most recent ingestion**  
   
 **Check description**  
-Monthly partition checkpoint calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)  
+Monthly partitioned check calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

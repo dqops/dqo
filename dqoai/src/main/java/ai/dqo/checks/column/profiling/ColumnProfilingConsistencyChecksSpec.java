@@ -43,7 +43,7 @@ public class ColumnProfilingConsistencyChecksSpec extends AbstractCheckCategoryS
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a column does not exceed the minimum accepted percentage.")
     private ColumnConsistencyDateMatchFormatPercentCheckSpec dateMatchFormatPercent;
 
     @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.")

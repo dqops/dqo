@@ -48,22 +48,22 @@ public class TableTimelinessDailyPartitionedChecksSpec extends AbstractCheckCate
         }
     };
 
-    @JsonPropertyDescription("Daily partition checkpoint calculating the number of days since the most recent event timestamp (freshness)")
+    @JsonPropertyDescription("Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDaysSinceMostRecentEventCheckSpec dailyPartitionDaysSinceMostRecentEvent;
 
-    @JsonPropertyDescription("Daily partition checkpoint calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp")
+    @JsonPropertyDescription("Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDataIngestionDelayCheckSpec dailyPartitionDataIngestionDelay;
 
-    @JsonPropertyDescription("Daily partition checkpoint calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
+    @JsonPropertyDescription("Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableDaysSinceMostRecentIngestionCheckSpec dailyPartitionDaysSinceMostRecentIngestion;
 
-    @JsonPropertyDescription("Daily partition checkpoint calculating the longest time a row waited to be load")
+    @JsonPropertyDescription("Daily partitioned check calculating the longest time a row waited to be load")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TablePartitionReloadLagCheckSpec dailyPartitionReloadLag;

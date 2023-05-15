@@ -21,16 +21,29 @@ import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoJobQueueObjectMother;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.DqoQueueJobFactoryImpl;
+import ai.dqo.execution.ExecutionContextFactory;
+import ai.dqo.execution.ExecutionContextFactoryImpl;
+import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import ai.dqo.metadata.basespecs.InstanceStatus;
+import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
+import ai.dqo.metadata.search.HierarchyNodeTreeSearcherImpl;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableList;
 import ai.dqo.metadata.sources.TableWrapper;
+import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
+import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactoryObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
+import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
+import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
+import ai.dqo.services.check.mapping.UIAllChecksModelFactoryImpl;
 import ai.dqo.utils.BeanFactoryObjectMother;
+import ai.dqo.utils.reflection.ReflectionService;
+import ai.dqo.utils.reflection.ReflectionServiceSingleton;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -55,10 +68,19 @@ public class TableServiceImplTests extends BaseTest {
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
         this.dqoJobQueue = DqoJobQueueObjectMother.getDefaultJobQueue();
 
+        DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
+        ExecutionContextFactory executionContextFactory = new ExecutionContextFactoryImpl(userHomeContextFactory, dqoHomeContextFactory);
+        HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
+        ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
+
+        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(reflectionService, new SensorDefinitionFindServiceImpl());
+        UIAllChecksModelFactory uiAllChecksModelFactory = new UIAllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
+
         this.sut = new TableServiceImpl(
                 this.userHomeContextFactory,
                 dqoQueueJobFactory,
-                this.dqoJobQueue
+                this.dqoJobQueue,
+                uiAllChecksModelFactory
         );
     }
 

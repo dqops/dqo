@@ -53,10 +53,10 @@ public class ColumnProfilingNullsChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the percent of null values in a column does not exceed the maximum accepted percentage.")
     private ColumnNullsPercentCheckSpec nullsPercent;
 
-    @JsonPropertyDescription("Verifies that the number of not null values in a column does not exceed the maximum accepted count.")
+    @JsonPropertyDescription("Verifies that the number of not null values in a column does not exceed the minimum accepted count.")
     private ColumnNotNullsCountCheckSpec notNullsCount;
 
-    @JsonPropertyDescription("Verifies that the percent of not null values in a column does not exceed the maximum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percent of not null values in a column does not exceed the minimum accepted percentage.")
     private ColumnNotNullsPercentCheckSpec notNullsPercent;
 
     /**

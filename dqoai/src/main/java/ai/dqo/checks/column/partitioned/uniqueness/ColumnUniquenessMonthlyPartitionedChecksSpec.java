@@ -31,7 +31,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of built-in preconfigured data quality check points on a column level that are checking at a monthly level.
+ * Container of uniqueness data quality partitioned checks on a column level that are checking at a monthly level.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -46,10 +46,10 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the number of unique values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnUniqueCountCheckSpec monthlyPartitionUniqueCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not exceed the minimum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnUniquePercentCheckSpec monthlyPartitionUniquePercent;
 
     @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
