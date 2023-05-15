@@ -208,8 +208,8 @@
 						<version>1.12.1</version>
 						<configuration>
 							<workingDirectory>src/main/frontend</workingDirectory>
-							<nodeVersion>v18.16.0</nodeVersion>
-							<npmVersion>9.5.1</npmVersion>
+							<nodeVersion>v16.13.0</nodeVersion>
+							<npmVersion>8.19.2</npmVersion>
 						</configuration>
 						<executions>
 							<execution>

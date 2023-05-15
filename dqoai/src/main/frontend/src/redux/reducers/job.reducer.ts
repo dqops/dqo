@@ -29,12 +29,14 @@ export interface IJobsState {
   lastSequenceNumber?: number;
   isOpen: boolean;
   folderSynchronizationStatus?: CloudSynchronizationFoldersStatusModel;
+  isCleared: boolean;
 }
 
 const initialState: IJobsState = {
   loading: false,
   error: null,
   isOpen: false,
+  isCleared: false
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -57,6 +59,10 @@ const schemaReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         error: action.error
+      };
+    case JOB_ACTION.CLEAR_JOBS:
+      return {
+        ...state
       };
     case JOB_ACTION.GET_JOBS_CHANGES:
       return {

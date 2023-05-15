@@ -54,6 +54,11 @@ export const getJobsChangesRequest = () => ({
   type: JOB_ACTION.GET_JOBS_CHANGES
 });
 
+export const clearJobs = (isCleared: boolean) => ({
+  type: JOB_ACTION.CLEAR_JOBS,
+  isCleared
+});
+
 export const getJobsChangesSuccess = (
   data: DqoJobQueueIncrementalSnapshotModel
 ) => ({
