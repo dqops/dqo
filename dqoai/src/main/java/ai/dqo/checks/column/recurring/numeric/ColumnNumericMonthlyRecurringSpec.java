@@ -94,16 +94,16 @@ public class ColumnNumericMonthlyRecurringSpec extends AbstractCheckCategorySpec
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnValuesInRangeIntegersPercentCheckSpec monthlyValuesInRangeIntegersPercent;
 
-    @JsonPropertyDescription("The check counts values below those provided by the user in the column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnValueBelowMinValueCountCheckSpec monthlyValueBelowMinValueCount;
 
-    @JsonPropertyDescription("The check percentage values below those provided by the user in the column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnValueBelowMinValuePercentCheckSpec monthlyValueBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts values above those provided by the user in the column.. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnValueAboveMaxValueCountCheckSpec monthlyValueAboveMaxValueCount;
 
-    @JsonPropertyDescription("The check percentage values above those provided by the user in the column. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnValueAboveMaxValuePercentCheckSpec monthlyValueAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
@@ -151,13 +151,13 @@ public class ColumnNumericMonthlyRecurringSpec extends AbstractCheckCategorySpec
     @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnInvalidLatitudeCountCheckSpec monthlyInvalidLatitudeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnValidLatitudePercentCheckSpec monthlyValidLatitudePercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnInvalidLongitudeCountCheckSpec monthlyInvalidLongitudeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnValidLongitudePercentCheckSpec monthlyValidLongitudePercent;
 
     /**
