@@ -1,14 +1,8 @@
-<svg
-  width="16"
-  height="16"
-  viewBox="0 0 16 16"
-  fill="none"
-  xmlns="http://www.w3.org/2000/svg"
->
-  <path
-    fill-rule="evenodd"
-    clip-rule="evenodd"
-    d="M3.434 3.435a.8.8 0 0 1 1.132 0L8 6.869l3.434-3.434a.8.8 0 1 1 1.132 1.13L9.13 8l3.435 3.434a.8.8 0 1 1-1.132 1.132L8 9.132l-3.434 3.434a.8.8 0 0 1-1.132-1.132L6.87 8 3.434 4.566a.8.8 0 0 1 0-1.131z"
-    fill="currentColor"
-  />
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 15 15" style="enable-background:new 0 0 15 15;" xml:space="preserve" width="16" height="16">
+<path d="M8.6,7.5l6.2-6.2C15,1,15,0.6,14.7,0.3S14,0,13.7,0.3L7.5,6.4L1.3,0.3C1,0,0.6,0,0.3,0.3S0,1,0.3,1.3l6.2,6.2l-6.2,6.2
+	C0,14,0,14.4,0.3,14.7C0.4,14.9,0.6,15,0.8,15s0.4-0.1,0.5-0.2l6.2-6.2l6.2,6.2c0.1,0.1,0.3,0.2,0.5,0.2s0.4-0.1,0.5-0.2
+	c0.3-0.3,0.3-0.8,0-1.1L8.6,7.5z"/>
 </svg>
