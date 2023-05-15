@@ -42,16 +42,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * "data clean" 2nd level CLI command that deletes data selectively from the data.
+ * "data delete" 2nd level CLI command that selectively deletes stored data.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "clean", header = "Delete stored data that matches a given condition", description = "Delete stored data that matches certain conditions.It is important to use caution when using this command, as it will permanently delete the selected data and cannot be undone.")
-public class DataCleanCliCommand extends BaseCommand implements ICommand {
+@CommandLine.Command(name = "delete", header = "Deletes saved data that meets certain conditions. ", description = "Deletes saved data that meets certain conditions. Be careful when using this command, as it permanently deletes the selected data and cannot be undone.")
+public class DataDeleteCliCommand extends BaseCommand implements ICommand {
     private DqoJobQueue dqoJobQueue;
     private DqoQueueJobFactory dqoQueueJobFactory;
 
-    public DataCleanCliCommand() {
+    public DataDeleteCliCommand() {
     }
 
     /**
@@ -60,8 +60,8 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
      * @param dqoQueueJobFactory Job queue factory.
      */
     @Autowired
-    public DataCleanCliCommand(DqoJobQueue dqoJobQueue,
-                               DqoQueueJobFactory dqoQueueJobFactory) {
+    public DataDeleteCliCommand(DqoJobQueue dqoJobQueue,
+                                DqoQueueJobFactory dqoQueueJobFactory) {
         this.dqoJobQueue = dqoJobQueue;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
     }

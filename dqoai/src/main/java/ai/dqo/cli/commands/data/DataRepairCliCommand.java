@@ -36,7 +36,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "repair", header = "Verify integrity of stored data and repair corrupted files", description = "Verify integrity of parquet files present in the stored data and delete the corrupted ones. It is important to use caution when using this command, as it will permanently delete the selected data and cannot be undone.")
+@CommandLine.Command(name = "repair", header = "Verify integrity of parquet files used to store data and removes corrupted files", description = "Verify integrity of parquet files used to store data and removes corrupted files. Be careful when using this command, as it permanently deletes the selected data and cannot be undone.")
 public class DataRepairCliCommand extends BaseCommand implements ICommand {
     private DqoJobQueue dqoJobQueue;
     private DqoQueueJobFactory dqoQueueJobFactory;
