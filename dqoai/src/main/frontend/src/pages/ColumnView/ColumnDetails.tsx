@@ -55,17 +55,10 @@ const TableDetails = ({
   };
 
   useEffect(() => {
-    if (
-      columnBasic?.connection_name !== connectionName ||
-      columnBasic?.table?.schema_name !== schemaName ||
-      columnBasic?.table?.table_name !== tableName ||
-      columnBasic.column_name !== columnName
-    ) {
-      dispatch(
-        getColumnBasic(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
-      );
-    }
-  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, columnName, tableName, columnBasic]);
+    dispatch(
+      getColumnBasic(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+    );
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, columnName, tableName]);
 
   const onUpdate = async () => {
     if (!columnBasic) {
@@ -119,6 +112,17 @@ const TableDetails = ({
                   checked={columnBasic?.disabled}
                 />
               </div>
+            </td>
+          </tr>
+          <tr>
+            <td className="px-4 py-2">SQL Expression for a Calculated Column, use an {'{'}alias{'}'}. token to reference the table</td>
+            <td className="px-4 py-2">
+              <Input
+                value={columnBasic?.sql_expression}
+                onChange={(e) =>
+                  handleSnapTypeChange({ sql_expression: e.target.value })
+                }
+              />
             </td>
           </tr>
           <tr>

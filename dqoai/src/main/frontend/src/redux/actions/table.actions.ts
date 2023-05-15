@@ -958,13 +958,13 @@ export const getTableProfilingChecksUIFilter =
       }
     };
 
-export const getTableRecurringUIFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
+export const getTableRecurringChecksUIFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
   type: SOURCE_ACTION.GET_TABLE_RECURRING_UI_FILTER,
   checkType,
   activeTab
 });
 
-export const getTableRecurringUIFilterSuccess = (
+export const getTableRecurringChecksUIFilterSuccess = (
   checkType: CheckTypes, activeTab: string, data: UICheckContainerModel
 ) => ({
   type: SOURCE_ACTION.GET_TABLE_RECURRING_UI_FILTER_SUCCESS,
@@ -973,16 +973,16 @@ export const getTableRecurringUIFilterSuccess = (
   data
 });
 
-export const getTableRecurringUIFilterFailed = (error: unknown) => ({
+export const getTableRecurringChecksUIFilterFailed = (error: unknown) => ({
   type: SOURCE_ACTION.GET_TABLE_RECURRING_UI_FILTER_ERROR,
   error
 });
 
-export const getTableRecurringUIFilter =
+export const getTableRecurringChecksUIFilter =
   (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string, loading = true) =>
     async (dispatch: Dispatch) => {
       if (loading) {
-        dispatch(getTableRecurringUIFilterRequest(checkType, activeTab));
+        dispatch(getTableRecurringChecksUIFilterRequest(checkType, activeTab));
       }
       try {
         const res = await TableApiClient.getTableRecurringUIFilter(
@@ -993,9 +993,9 @@ export const getTableRecurringUIFilter =
           category,
           checkName
         );
-        dispatch(getTableRecurringUIFilterSuccess(checkType, activeTab, res.data));
+        dispatch(getTableRecurringChecksUIFilterSuccess(checkType, activeTab, res.data));
       } catch (err) {
-        dispatch(getTableRecurringUIFilterFailed(err));
+        dispatch(getTableRecurringChecksUIFilterFailed(err));
       }
     };
 
@@ -1047,7 +1047,7 @@ export const setTableUpdatedCheckUiFilter = (checkType: CheckTypes, activeTab: s
   data: ui
 });
 
-export const setTableUpdatedRecurringUIFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
+export const setTableUpdatedRecurringChecksUIFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
   type: SOURCE_ACTION.SET_UPDATED_RECURRING_UI_FILTER,
   checkType,
   activeTab,

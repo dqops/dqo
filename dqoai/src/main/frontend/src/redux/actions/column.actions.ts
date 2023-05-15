@@ -982,7 +982,7 @@ export const setColumnUpdatedCheckUiFilter = (checkType: CheckTypes, activeTab: 
   data: ui
 });
 
-export const setColumnUpdatedRecurringUIFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
+export const setColumnUpdatedRecurringChecksUIFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
   type: SOURCE_ACTION.SET_UPDATED_RECURRING_UI_FILTER,
   checkType,
   activeTab,
