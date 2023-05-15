@@ -8,7 +8,7 @@ ___
 ## **date match format percent**  
   
 **Check description**  
-Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage.  
+Verifies that the percentage of date values matching the given format in a column does not exceed the minimum accepted percentage.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

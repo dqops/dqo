@@ -1,7 +1,7 @@
 **days since most recent ingestion** checks  
 
 **Description**  
-Table level check that calculates the minimal number of days between event timestamp and ingestion timestamp. .
+Table level check that calculates the maximum number of days between event timestamp and ingestion timestamp.
 
 ___
 

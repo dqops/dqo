@@ -1,14 +1,14 @@
 **string length below min length percent** checks  
 
 **Description**  
-Column check that calculates percentage of strings with a length below the indicated by the user length in a column.
+Column level check that ensures that the percentage of strings in the monitored column with a length below the length defined by the user as a parameter does not fall below set thresholds.
 
 ___
 
 ## **string length below min length percent**  
   
 **Check description**  
-The check counts percentage those strings with length below those provided by the user in the column.  
+The check counts the percentage of strings in the column that is below the length defined by the user as a parameter.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -672,7 +672,7 @@ ___
 ## **daily string length below min length percent**  
   
 **Check description**  
-The check counts percentage those strings with length below those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.  
+The check counts the percentage of strings in the column that is below the length defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2006,7 +2006,7 @@ ___
 ## **daily partition string length below min length percent**  
   
 **Check description**  
-The check counts percentage those strings with length below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.  
+The check counts the percentage of strings in the column that is below the length defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2674,7 +2674,7 @@ ___
 ## **monthly partition string length below min length percent**  
   
 **Check description**  
-The check counts percentage those strings with length below those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.  
+The check counts the percentage of strings in the column that is below the length defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

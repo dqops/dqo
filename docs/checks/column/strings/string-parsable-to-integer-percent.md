@@ -1,14 +1,14 @@
 **string parsable to integer percent** checks  
 
 **Description**  
-Column level check that ensures that there are at least percentage of rows with parsable to integer strings in a monitored column.
+Column level check that ensures that the percentage of parsable to integer strings in the monitored column does not fall below set thresholds.
 
 ___
 
 ## **string parsable to integer percent**  
   
 **Check description**  
-Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage.  
+Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -502,7 +502,7 @@ ___
 ## **daily string parsable to integer percent**  
   
 **Check description**  
-Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1496,7 +1496,7 @@ ___
 ## **daily partition string parsable to integer percent**  
   
 **Check description**  
-Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.  
+Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1994,7 +1994,7 @@ ___
 ## **monthly partition string parsable to integer percent**  
   
 **Check description**  
-Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.  
+Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

@@ -612,7 +612,7 @@ Table sensor that runs a query calculating the time difference in days between t
 ___  
 
 ## TableDaysSinceMostRecentIngestionCheckSpec  
-Table level check that calculates the minimal number of days between event timestamp and ingestion timestamp. .  
+Table level check that calculates the maximum number of days between event timestamp and ingestion timestamp.  
   
 
 
