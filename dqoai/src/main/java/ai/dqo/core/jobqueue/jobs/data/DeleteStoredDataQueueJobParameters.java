@@ -84,8 +84,7 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
         return new DeleteStoredDataQueueJobParameters() {{
             setConnectionName(checkSearchFilters.getConnectionName());
             setSchemaTableName(checkSearchFilters.getSchemaTableName());
-            setColumnNames(new LinkedList<>(){{add(checkSearchFilters.getColumnName());}});
-
+            setColumnNames(checkSearchFilters.getColumnName() != null ? List.of(checkSearchFilters.getColumnName()) : null);
             setCheckType(checkSearchFilters.getCheckType() != null ? checkSearchFilters.getCheckType().getDisplayName() : null);
             setCheckName(checkSearchFilters.getCheckName());
             setSensorName(checkSearchFilters.getSensorName());
