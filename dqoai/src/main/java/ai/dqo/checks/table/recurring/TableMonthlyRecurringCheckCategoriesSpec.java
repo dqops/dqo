@@ -19,12 +19,11 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.recurring.accuracy.TableAccuracyDailyRecurringSpec;
-import ai.dqo.checks.table.recurring.accuracy.TableAccuracyMonthlyRecurringSpec;
-import ai.dqo.checks.table.recurring.availability.TableAvailabilityMonthlyRecurringSpec;
-import ai.dqo.checks.table.recurring.sql.TableSqlMonthlyRecurringSpec;
-import ai.dqo.checks.table.recurring.standard.TableStandardMonthlyRecurringSpec;
-import ai.dqo.checks.table.recurring.timeliness.TableTimelinessMonthlyRecurringSpec;
+import ai.dqo.checks.table.recurring.accuracy.TableAccuracyMonthlyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.availability.TableAvailabilityMonthlyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.sql.TableSqlMonthlyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.standard.TableStandardMonthlyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.timeliness.TableTimelinessMonthlyRecurringChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimePeriodGradient;
@@ -45,7 +44,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of table level monthly recurring. Contains categories of monthly recurring.
+ * Container of table level monthly recurring checks. Contains categories of monthly recurring checks.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -64,33 +63,33 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
     @JsonPropertyDescription("Monthly recurring of standard data quality checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardMonthlyRecurringSpec standard;
+    private TableStandardMonthlyRecurringChecksSpec standard;
 
     @JsonPropertyDescription("Monthly recurring of timeliness checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableTimelinessMonthlyRecurringSpec timeliness;
+    private TableTimelinessMonthlyRecurringChecksSpec timeliness;
 
     @JsonPropertyDescription("Monthly recurring accuracy checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableAccuracyMonthlyRecurringSpec accuracy;
+    private TableAccuracyMonthlyRecurringChecksSpec accuracy;
 
     @JsonPropertyDescription("Monthly recurring of custom SQL checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlMonthlyRecurringSpec sql;
+    private TableSqlMonthlyRecurringChecksSpec sql;
 
     @JsonPropertyDescription("Daily partitioned availability checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableAvailabilityMonthlyRecurringSpec availability;
+    private TableAvailabilityMonthlyRecurringChecksSpec availability;
 
     /**
      * Returns the container of recurring for standard data quality checks.
      * @return Container of row standard data quality recurring.
      */
-    public TableStandardMonthlyRecurringSpec getStandard() {
+    public TableStandardMonthlyRecurringChecksSpec getStandard() {
         return standard;
     }
 
@@ -98,7 +97,7 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
      * Sets the container of standard data quality checks (recurring).
      * @param standard New standard checks.
      */
-    public void setStandard(TableStandardMonthlyRecurringSpec standard) {
+    public void setStandard(TableStandardMonthlyRecurringChecksSpec standard) {
         this.setDirtyIf(!Objects.equals(this.standard, standard));
         this.standard = standard;
         this.propagateHierarchyIdToField(standard, "standard");
@@ -108,7 +107,7 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
      * Returns a container of table level timeliness recurring.
      * @return Custom timeliness recurring.
      */
-    public TableTimelinessMonthlyRecurringSpec getTimeliness() {
+    public TableTimelinessMonthlyRecurringChecksSpec getTimeliness() {
         return timeliness;
     }
 
@@ -116,7 +115,7 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
      * Sets a reference to a container of timeliness recurring.
      * @param timeliness Custom timeliness recurring.
      */
-    public void setTimeliness(TableTimelinessMonthlyRecurringSpec timeliness) {
+    public void setTimeliness(TableTimelinessMonthlyRecurringChecksSpec timeliness) {
         this.setDirtyIf(!Objects.equals(this.timeliness, timeliness));
         this.timeliness = timeliness;
         this.propagateHierarchyIdToField(timeliness, "timeliness");
@@ -126,7 +125,7 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
      * Returns a container of table level accuracy recurring checks.
      * @return Table level accuracy checks.
      */
-    public TableAccuracyMonthlyRecurringSpec getAccuracy() {
+    public TableAccuracyMonthlyRecurringChecksSpec getAccuracy() {
         return accuracy;
     }
 
@@ -134,7 +133,7 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
      * Sets a new container of monthly recurring accuracy checks.
      * @param accuracy New daily recurring accuracy checks.
      */
-    public void setAccuracy(TableAccuracyMonthlyRecurringSpec accuracy) {
+    public void setAccuracy(TableAccuracyMonthlyRecurringChecksSpec accuracy) {
         this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
         this.accuracy = accuracy;
         this.propagateHierarchyIdToField(accuracy, "accuracy");
@@ -144,7 +143,7 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
      * Returns a container of custom sql recurring.
      * @return Container of custom sql recurring.
      */
-    public TableSqlMonthlyRecurringSpec getSql() {
+    public TableSqlMonthlyRecurringChecksSpec getSql() {
         return sql;
     }
 
@@ -152,7 +151,7 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
      * Sets a reference to a container of custom sql recurring.
      * @param sql Custom sql recurring.
      */
-    public void setSql(TableSqlMonthlyRecurringSpec sql) {
+    public void setSql(TableSqlMonthlyRecurringChecksSpec sql) {
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
@@ -162,7 +161,7 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
      * Returns a container of custom sql checks.
      * @return Custom sql checks.
      */
-    public TableAvailabilityMonthlyRecurringSpec getAvailability() {
+    public TableAvailabilityMonthlyRecurringChecksSpec getAvailability() {
         return availability;
     }
 
@@ -170,7 +169,7 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
      * Sets a reference to a container of custom sql checks.
      * @param availability Container of custom sql checks.
      */
-    public void setAvailability(TableAvailabilityMonthlyRecurringSpec availability) {
+    public void setAvailability(TableAvailabilityMonthlyRecurringChecksSpec availability) {
         this.setDirtyIf(!Objects.equals(this.availability, availability));
         this.availability = availability;
         this.propagateHierarchyIdToField(availability, "availability");

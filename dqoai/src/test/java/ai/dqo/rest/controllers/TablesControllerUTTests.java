@@ -25,7 +25,7 @@ import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
 import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
-import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringSpec;
+import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringChecksSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoJobQueueObjectMother;
@@ -192,7 +192,7 @@ public class TablesControllerUTTests extends BaseTest {
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
         
-        TableStandardDailyRecurringSpec standardDailyRecurringSpec = new TableStandardDailyRecurringSpec();
+        TableStandardDailyRecurringChecksSpec standardDailyRecurringSpec = new TableStandardDailyRecurringChecksSpec();
         standardDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
         TableDailyRecurringCategoriesSpec dailyRecurring = new TableDailyRecurringCategoriesSpec();
         dailyRecurring.setStandard(standardDailyRecurringSpec);
@@ -374,7 +374,7 @@ public class TablesControllerUTTests extends BaseTest {
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
 
-        TableStandardDailyRecurringSpec standardDailyRecurringSpec = new TableStandardDailyRecurringSpec();
+        TableStandardDailyRecurringChecksSpec standardDailyRecurringSpec = new TableStandardDailyRecurringChecksSpec();
         standardDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
         TableDailyRecurringCategoriesSpec dailyRecurring = new TableDailyRecurringCategoriesSpec();
         dailyRecurring.setStandard(standardDailyRecurringSpec);

@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.partitioned.sql.TableSqlDailyPartitionedSpec;
+import ai.dqo.checks.table.partitioned.sql.TableSqlDailyPartitionedChecksSpec;
 import ai.dqo.checks.table.partitioned.standard.TableStandardDailyPartitionedChecksSpec;
 import ai.dqo.checks.table.partitioned.timeliness.TableTimelinessDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
@@ -71,7 +71,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     @JsonPropertyDescription("Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlDailyPartitionedSpec sql;
+    private TableSqlDailyPartitionedChecksSpec sql;
 
     /**
      * Returns the container of daily partitioned checks for standard data quality checks.
@@ -113,7 +113,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
      * Returns a container of custom sql checks.
      * @return Custom sql checks.
      */
-    public TableSqlDailyPartitionedSpec getSql() {
+    public TableSqlDailyPartitionedChecksSpec getSql() {
         return sql;
     }
 
@@ -121,7 +121,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
      * Sets a reference to a container of custom sql checks.
      * @param sql Container of custom sql checks.
      */
-    public void setSql(TableSqlDailyPartitionedSpec sql) {
+    public void setSql(TableSqlDailyPartitionedChecksSpec sql) {
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");

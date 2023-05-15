@@ -27,7 +27,7 @@ import ai.dqo.checks.column.partitioned.integrity.ColumnIntegrityDailyPartitione
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.pii.ColumnPiiDailyPartitionedChecksSpec;
-import ai.dqo.checks.column.partitioned.sql.ColumnSqlDailyPartitionedSpec;
+import ai.dqo.checks.column.partitioned.sql.ColumnSqlDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
@@ -105,7 +105,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonPropertyDescription("Daily partitioned checks using custom SQL expressions evaluated on the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnSqlDailyPartitionedSpec sql;
+    private ColumnSqlDailyPartitionedChecksSpec sql;
 
     @JsonPropertyDescription("Daily partitioned checks for booleans in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -239,7 +239,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
      * Returns a container of custom SQL checks on a column.
      * @return Custom SQL checks.
      */
-    public ColumnSqlDailyPartitionedSpec getSql() {
+    public ColumnSqlDailyPartitionedChecksSpec getSql() {
         return sql;
     }
 
@@ -247,7 +247,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
      * Sets a reference to a container of custom SQL checks.
      * @param sql Custom SQL checks.
      */
-    public void setSql(ColumnSqlDailyPartitionedSpec sql) {
+    public void setSql(ColumnSqlDailyPartitionedChecksSpec sql) {
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         propagateHierarchyIdToField(sql, "sql");

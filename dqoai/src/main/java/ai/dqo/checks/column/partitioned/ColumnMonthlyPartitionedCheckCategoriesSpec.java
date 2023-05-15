@@ -27,7 +27,7 @@ import ai.dqo.checks.column.partitioned.integrity.ColumnIntegrityMonthlyPartitio
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.pii.ColumnPiiMonthlyPartitionedChecksSpec;
-import ai.dqo.checks.column.partitioned.sql.ColumnSqlMonthlyPartitionedSpec;
+import ai.dqo.checks.column.partitioned.sql.ColumnSqlMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessMonthlyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
@@ -106,7 +106,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonPropertyDescription("Monthly partitioned checks using custom SQL expressions and conditions on the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnSqlMonthlyPartitionedSpec sql;
+    private ColumnSqlMonthlyPartitionedChecksSpec sql;
 
     @JsonPropertyDescription("Monthly partitioned checks for booleans in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -240,7 +240,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
      * Returns a container of custom SQL checks on a column.
      * @return Custom SQL checks.
      */
-    public ColumnSqlMonthlyPartitionedSpec getSql() {
+    public ColumnSqlMonthlyPartitionedChecksSpec getSql() {
         return sql;
     }
 
@@ -248,7 +248,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
      * Sets a reference to a container of custom SQL checks.
      * @param sql Custom SQL checks container.
      */
-    public void setSql(ColumnSqlMonthlyPartitionedSpec sql) {
+    public void setSql(ColumnSqlMonthlyPartitionedChecksSpec sql) {
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         propagateHierarchyIdToField(sql, "sql");
