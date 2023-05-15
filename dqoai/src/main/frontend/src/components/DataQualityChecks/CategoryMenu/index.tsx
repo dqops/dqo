@@ -35,7 +35,7 @@ const CategoryMenu = ({ onRunChecks, onDeleteChecks }: CategoryMenuProps) => {
         <Button
           onClick={onDeleteChecks}
           className="block text-gray-700 w-full !text-left !justify-start hover:bg-gray-100 rounded-none"
-          label={column ? "Delete all column checks" : "Delete all table checks"}
+          label={column ? "Delete data for all column checks" : "Delete data for all table checks"}
         />
       </PopoverContent>
     </Popover>

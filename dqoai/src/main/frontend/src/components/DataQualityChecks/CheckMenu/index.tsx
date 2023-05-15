@@ -29,12 +29,12 @@ const CheckMenu = ({ onRunChecks, onDeleteChecks }: CheckMenuProps) => {
         <Button
           onClick={onRunChecks}
           className="block text-gray-700 w-full !text-left !justify-start hover:bg-gray-100 rounded-none"
-          label="Run checks for category"
+          label="Run checks for the category"
         />
         <Button
           onClick={onDeleteChecks}
           className="block text-gray-700 w-full !text-left !justify-start hover:bg-gray-100 rounded-none"
-          label="Delete results for category"
+          label="Delete data for the category"
         />
       </PopoverContent>
     </Popover>
