@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum percentage of rows with a valid country code strings in a monitored column.
+ * Column level check that ensures that the percentage of valid country code strings in the monitored column does not fall below set thresholds.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

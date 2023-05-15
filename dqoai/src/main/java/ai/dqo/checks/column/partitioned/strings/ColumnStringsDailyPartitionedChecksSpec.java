@@ -86,22 +86,22 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMaxLengthCheckSpec dailyPartitionStringMaxLength;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the length of string in a column does not fall below the minimum accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMinLengthCheckSpec dailyPartitionStringMinLength;
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMeanLengthCheckSpec dailyPartitionStringMeanLength;
 
-    @JsonPropertyDescription("The check counts those strings with length below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts the number of strings in the column that is below the length defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthBelowMinLengthCountCheckSpec dailyPartitionStringLengthBelowMinLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage those strings with length below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts the percentage of strings in the column that is below the length defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthBelowMinLengthPercentCheckSpec dailyPartitionStringLengthBelowMinLengthPercent;
 
-    @JsonPropertyDescription("The check counts those strings with length above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts the number of strings in the column that is above the length defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthAboveMaxLengthCountCheckSpec dailyPartitionStringLengthAboveMaxLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts the percentage of strings in the column that is above the length defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec dailyPartitionStringLengthAboveMaxLengthPercent;
 
     @JsonPropertyDescription("The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
@@ -131,28 +131,28 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringNullPlaceholderPercentCheckSpec dailyPartitionStringNullPlaceholderPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringBooleanPlaceholderPercentCheckSpec dailyPartitionStringBooleanPlaceholderPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringParsableToIntegerPercentCheckSpec dailyPartitionStringParsableToIntegerPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringParsableToFloatPercentCheckSpec dailyPartitionStringParsableToFloatPercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the number of strings from set in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringInSetCountCheckSpec dailyPartitionStringInSetCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringInSetPercentCheckSpec dailyPartitionStringInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringValidDatesPercentCheckSpec dailyPartitionStringValidDatesPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringValidCountryCodePercentCheckSpec dailyPartitionStringValidCountryCodePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringValidCurrencyCodePercentCheckSpec dailyPartitionStringValidCurrencyCodePercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
@@ -161,7 +161,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringInvalidUuidCountCheckSpec dailyPartitionStringInvalidUuidCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid UUID in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of valid UUID in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringValidUuidPercentCheckSpec dailyPartitionValidUuidPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
@@ -173,19 +173,19 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringNotMatchRegexCountCheckSpec dailyPartitionStringNotMatchRegexCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMatchRegexPercentCheckSpec dailyPartitionStringMatchRegexPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringNotMatchDateRegexCountCheckSpec dailyPartitionStringNotMatchDateRegexCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the date format regex in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMatchDateRegexPercentCheckSpec dailyPartitionStringMatchDateRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings matching the name format regex in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the name format regex in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMatchNameRegexPercentCheckSpec dailyPartitionStringMatchNameRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringMostPopularValuesCheckSpec dailyPartitionStringMostPopularValues;
 
     @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each daily partition.")

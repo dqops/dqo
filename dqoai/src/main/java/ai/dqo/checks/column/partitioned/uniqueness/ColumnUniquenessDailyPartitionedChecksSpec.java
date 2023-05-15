@@ -46,10 +46,10 @@ public class ColumnUniquenessDailyPartitionedChecksSpec extends AbstractCheckCat
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the number of unique values in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnUniqueCountCheckSpec dailyPartitionUniqueCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not exceed the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnUniquePercentCheckSpec dailyPartitionUniquePercent;
 
     @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")

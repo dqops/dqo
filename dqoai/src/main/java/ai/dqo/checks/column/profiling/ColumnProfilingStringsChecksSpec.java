@@ -85,22 +85,22 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length.")
     private ColumnStringMaxLengthCheckSpec stringMaxLength;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length.")
+    @JsonPropertyDescription("Verifies that the length of string in a column does not fall below the minimum accepted length.")
     private ColumnStringMinLengthCheckSpec stringMinLength;
 
     @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length.")
     private ColumnStringMeanLengthCheckSpec stringMeanLength;
 
-    @JsonPropertyDescription("The check counts those strings with length below those provided by the user in the column.")
+    @JsonPropertyDescription("The check counts the number of strings in the column that is below the length defined by the user as a parameter.")
     private ColumnStringLengthBelowMinLengthCountCheckSpec stringLengthBelowMinLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage those strings with length below those provided by the user in the column.")
+    @JsonPropertyDescription("The check counts the percentage of strings in the column that is below the length defined by the user as a parameter.")
     private ColumnStringLengthBelowMinLengthPercentCheckSpec stringLengthBelowMinLengthPercent;
 
-    @JsonPropertyDescription("The check counts those strings with length above those provided by the user in the column. ")
+    @JsonPropertyDescription("The check counts the number of strings in the column that is above the length defined by the user as a parameter.")
     private ColumnStringLengthAboveMaxLengthCountCheckSpec stringLengthAboveMaxLengthCount;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length above those provided by the user in the column. ")
+    @JsonPropertyDescription("The check counts the percentage of strings in the column that is above the length defined by the user as a parameter.")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec stringLengthAboveMaxLengthPercent;
 
     @JsonPropertyDescription("The check counts the percentage of those strings with length in the range provided by the user in the column. ")
@@ -130,28 +130,28 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.")
     private ColumnStringNullPlaceholderPercentCheckSpec stringNullPlaceholderPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not fall below the minimum accepted percentage.")
     private ColumnStringBooleanPlaceholderPercentCheckSpec stringBooleanPlaceholderPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage.")
     private ColumnStringParsableToIntegerPercentCheckSpec stringParsableToIntegerPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not fall below the minimum accepted percentage.")
     private ColumnStringParsableToFloatPercentCheckSpec stringParsableToFloatPercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings from a set in a column does not exceed the minimum accepted count.")
+    @JsonPropertyDescription("Verifies that the number of strings from a set in a column does not fall below the minimum accepted count.")
     private ColumnStringInSetCountCheckSpec stringInSetCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings from a set in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of strings from a set in a column does not fall below the minimum accepted percentage.")
     private ColumnStringInSetPercentCheckSpec stringInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not fall below the minimum accepted percentage.")
     private ColumnStringValidDatesPercentCheckSpec stringValidDatesPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not fall below the minimum accepted percentage.")
     private ColumnStringValidCountryCodePercentCheckSpec stringValidCountryCodePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not fall below the minimum accepted percentage.")
     private ColumnStringValidCurrencyCodePercentCheckSpec stringValidCurrencyCodePercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted count.")
@@ -160,7 +160,7 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count.")
     private ColumnStringInvalidUuidCountCheckSpec stringInvalidUuidCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid UUID in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of valid UUID in a column does not fall below the minimum accepted percentage.")
     private ColumnStringValidUuidPercentCheckSpec stringValidUuidPercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count.")
@@ -172,19 +172,19 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count.")
     private ColumnStringNotMatchRegexCountCheckSpec stringNotMatchRegexCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not fall below the minimum accepted percentage.")
     private ColumnStringMatchRegexPercentCheckSpec stringMatchRegexPercent;
 
     @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted count.")
     private ColumnStringNotMatchDateRegexCountCheckSpec stringNotMatchDateRegexCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the date format regex in a column does not fall below the minimum accepted percentage.")
     private ColumnStringMatchDateRegexPercentCheckSpec stringMatchDateRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings matching the name regex in a column does not exceed the maximum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the name regex in a column does not fall below the minimum accepted percentage.")
     private ColumnStringMatchNameRegexPercentCheckSpec stringMatchNameRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
+    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not fall below the minimum accepted count.")
     private ColumnStringMostPopularValuesCheckSpec stringMostPopularValues;
 
     @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type.")

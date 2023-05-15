@@ -94,16 +94,16 @@ public class ColumnProfilingNumericChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
     private ColumnValuesInRangeIntegersPercentCheckSpec valuesInRangeIntegersPercent;
 
-    @JsonPropertyDescription("The check counts those values with value below the one provided by the user in a column.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter.")
     private ColumnValueBelowMinValueCountCheckSpec valueBelowMinValueCount;
 
-    @JsonPropertyDescription("The check percentage values below those provided by the user in the column.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter.")
     private ColumnValueBelowMinValuePercentCheckSpec valueBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts values above those provided by the user in the column.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter.")
     private ColumnValueAboveMaxValueCountCheckSpec valueAboveMaxValueCount;
 
-    @JsonPropertyDescription("The check percentage values above those provided by the user in the column.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter.")
     private ColumnValueAboveMaxValuePercentCheckSpec valueAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range.")
@@ -151,13 +151,13 @@ public class ColumnProfilingNumericChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count.")
     private ColumnInvalidLatitudeCountCheckSpec invalidLatitudeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage.")
     private ColumnValidLatitudePercentCheckSpec validLatitudePercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count.")
     private ColumnInvalidLongitudeCountCheckSpec invalidLongitudeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage.")
     private ColumnValidLongitudePercentCheckSpec validLongitudePercent;
 
     /**

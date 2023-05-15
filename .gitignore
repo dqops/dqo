@@ -63,3 +63,9 @@ venv/
 
 # Documentation site
 site/
+
+# DQO Examples
+.localsettings.dqosettings.yaml
+.data/
+.logs/
+.index/

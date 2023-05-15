@@ -49,34 +49,34 @@ public class ColumnProfilingPiiChecksSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of valid USA phone in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of valid USA phone values in a column does not fall below the minimum accepted percentage.")
     private ColumnPiiValidUsaPhonePercentCheckSpec validUsaPhonePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage.")
     private ColumnPiiContainsUsaPhonePercentCheckSpec containsUsaPhonePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of valid USA zip code values in a column does not fall below the minimum accepted percentage.")
     private ColumnPiiValidUsaZipcodePercentCheckSpec validUsaZipcodePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage.")
     private ColumnPiiContainsUsaZipcodePercentCheckSpec containsUsaZipcodePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid emails in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of valid emails values in a column does not fall below the minimum accepted percentage.")
     private ColumnPiiValidEmailPercentCheckSpec validEmailPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of rows that contains valid emails in a column does not exceed the minimum accepted percentage.")
     private ColumnPiiContainsEmailPercentCheckSpec containsEmailPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the maximum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of valid IP4 address values in a column does not fall below the minimum accepted percentage.")
     private ColumnPiiValidIp4AddressPercentCheckSpec validIp4AddressPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of rows that contains valid IP4 address in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains valid IP4 address values in a column does not fall below the minimum accepted percentage.")
     private ColumnPiiContainsIp4PercentCheckSpec containsIp4Percent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid IP6 address in a column does not exceed the maximum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of valid IP6 address values in a column does not fall below the minimum accepted percentage.")
     private ColumnPiiValidIp6AddressPercentCheckSpec validIp6AddressPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of rows that contains valid IP6 address in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage.")
     private ColumnPiiContainsIp6PercentCheckSpec containsIp6Percent;
 
 

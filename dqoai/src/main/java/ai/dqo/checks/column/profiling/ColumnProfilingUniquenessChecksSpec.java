@@ -46,10 +46,10 @@ public class ColumnProfilingUniquenessChecksSpec extends AbstractCheckCategorySp
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count.")
+    @JsonPropertyDescription("Verifies that the number of unique values in a column does not fall below the minimum accepted count.")
     private ColumnUniqueCountCheckSpec uniqueCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not exceed the minimum accepted percent.")
+    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent.")
     private ColumnUniquePercentCheckSpec uniquePercent;
 
     @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count.")

@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum number of values with a value below the indicated by the user value in a monitored column.
+ * Column level check that ensures that the number of values in the monitored column with a value below the value defined by the user as a parameter does not exceed set thresholds.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

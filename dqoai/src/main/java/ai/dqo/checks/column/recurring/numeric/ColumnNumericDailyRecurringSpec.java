@@ -94,16 +94,16 @@ public class ColumnNumericDailyRecurringSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValuesInRangeIntegersPercentCheckSpec dailyValuesInRangeIntegersPercent;
 
-    @JsonPropertyDescription("The check counts those values with value below the one provided by the user in a column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValueBelowMinValueCountCheckSpec dailyValueBelowMinValueCount;
 
-    @JsonPropertyDescription("The check percentage values below those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValueBelowMinValuePercentCheckSpec dailyValueBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts values below those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValueAboveMaxValueCountCheckSpec dailyValueAboveMaxValueCount;
 
-    @JsonPropertyDescription("The check percentage values above those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValueAboveMaxValuePercentCheckSpec dailyValueAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
@@ -151,13 +151,13 @@ public class ColumnNumericDailyRecurringSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnInvalidLatitudeCountCheckSpec dailyInvalidLatitudeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValidLatitudePercentCheckSpec dailyValidLatitudePercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnInvalidLongitudeCountCheckSpec dailyInvalidLongitudeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValidLongitudePercentCheckSpec dailyValidLongitudePercent;
 
     /**

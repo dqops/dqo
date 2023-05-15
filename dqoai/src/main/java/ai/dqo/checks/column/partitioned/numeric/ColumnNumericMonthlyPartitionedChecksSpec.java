@@ -94,16 +94,16 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValuesInRangeIntegersPercentCheckSpec monthlyPartitionValuesInRangeIntegersPercent;
 
-    @JsonPropertyDescription("The check counts values below those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValueBelowMinValueCountCheckSpec monthlyPartitionValueBelowMinValueCount;
 
-    @JsonPropertyDescription("The check percentage values below those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValueBelowMinValuePercentCheckSpec monthlyPartitionValueBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts values above those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValueAboveMaxValueCountCheckSpec monthlyPartitionValueAboveMaxValueCount;
 
-    @JsonPropertyDescription("The check percentage values above those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValueAboveMaxValuePercentCheckSpec monthlyPartitionValueAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
@@ -151,13 +151,13 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnInvalidLatitudeCountCheckSpec monthlyPartitionInvalidLatitudeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValidLatitudePercentCheckSpec monthlyPartitionValidLatitudePercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnInvalidLongitudeCountCheckSpec monthlyPartitionInvalidLongitudeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValidLongitudePercentCheckSpec monthlyPartitionValidLongitudePercent;
 
     /**
