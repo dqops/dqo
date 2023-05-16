@@ -4,5 +4,5 @@ kind: check
 spec:
   sensor_name: column/pii/valid_email_percent
   rule_name: comparison/min_percent
-  help_text: Verifies that the percentage of valid emails in a column does not exceed
-    the minimum accepted percentage.
+  help_text: Verifies that the percentage of valid emails values in a column does
+    not fall below the minimum accepted percentage.

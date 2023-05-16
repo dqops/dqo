@@ -4,6 +4,6 @@ kind: check
 spec:
   sensor_name: column/pii/contains_ip6_percent
   rule_name: comparison/min_percent
-  help_text: Verifies that the percentage of rows that contains IP6 address in a column
-    does not exceed the minimum accepted percentage. Stores the most recent row count
-    for each month when the data quality check was evaluated.
+  help_text: Verifies that the percentage of rows that contains valid IP6 address
+    values in a column does not fall below the minimum accepted percentage. Stores
+    the most recent row count for each month when the data quality check was evaluated.

@@ -5,5 +5,5 @@ spec:
   sensor_name: column/strings/string_match_regex_percent
   rule_name: comparison/min_percent
   help_text: Verifies that the percentage of strings matching the custom regex in
-    a column does not exceed the minimum accepted count. Stores the most recent row
-    count for each day when the data quality check was evaluated.
+    a column does not fall below the minimum accepted percentage. Stores the most
+    recent row count for each day when the data quality check was evaluated.
