@@ -201,8 +201,6 @@ const DatabaseConnection = ({
     }
   }, [database.provider_type]);
 
-  console.log(nameOfdatabase);
-
   return (
     <div>
       <div className="flex justify-between mb-4">

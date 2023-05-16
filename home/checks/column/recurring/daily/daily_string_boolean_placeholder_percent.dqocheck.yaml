@@ -5,5 +5,5 @@ spec:
   sensor_name: column/strings/string_boolean_placeholder_percent
   rule_name: comparison/min_percent
   help_text: Verifies that the percentage of boolean placeholder for strings in a
-    column does not exceed the minimum accepted percentage. Stores the most recent
+    column does not fall below the minimum accepted percentage. Stores the most recent
     row count for each day when the data quality check was evaluated.

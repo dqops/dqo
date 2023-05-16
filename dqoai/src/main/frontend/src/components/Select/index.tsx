@@ -17,7 +17,7 @@ interface Option {
   icon?: ReactNode;
 }
 
-interface SelectProps {
+export interface SelectProps {
   label?: string;
   options: Option[];
   placeholder?: string;

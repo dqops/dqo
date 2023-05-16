@@ -45,7 +45,7 @@ const AddColumnDialog = ({
       <Dialog open={open} handler={onClose}>
         <DialogBody className="pt-6 pb-2 px-8">
           <h1 className="text-center mb-4 text-gray-700 text-2xl">Add Column</h1>
-          <div>
+          <div className="mb-6">
             <Input
               label="Column Name"
               value={name}

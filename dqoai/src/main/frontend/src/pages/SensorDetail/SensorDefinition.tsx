@@ -65,6 +65,7 @@ export const SensorDefinition = ({ sensor }: SensorDefinitionProps) => {
 
       <SectionWrapper title="Sensor Fields">
         <RuleFields
+          isReadOnly={sensor?.built_in}
           fields={sensor?.sensor_definition_spec?.fields || []}
           onChange={(fields) => onChange({
             sensor_definition_spec: {

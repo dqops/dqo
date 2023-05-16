@@ -103,6 +103,7 @@ export const RuleDefinition = ({ rule }: RuleDefinitionProps) => {
               fields={rule.fields || []}
               onChange={(fields) => onChange({ fields })}
               onAdd={onAdd}
+              isReadOnly={rule?.built_in}
             />
           </SectionWrapper>
           <SectionWrapper className="mt-8" title="Rule Parameters">

@@ -7,9 +7,10 @@ type RuleFieldsProps = {
   fields: Array<ParameterDefinitionSpec>;
   onChange: (values: Array<ParameterDefinitionSpec>) => void;
   onAdd: (value: ParameterDefinitionSpec) => void;
+  isReadOnly?: boolean;
 }
 
-const RuleFields = ({ fields, onChange, onAdd }: RuleFieldsProps) => {
+const RuleFields = ({ fields, onChange, onAdd, isReadOnly }: RuleFieldsProps) => {
   const handleChange = (idx: number, values: Partial<ParameterDefinitionSpec>) => {
     onChange(fields.map((field, index) => index === idx ? ({
       ...field,
@@ -47,21 +48,26 @@ const RuleFields = ({ fields, onChange, onAdd }: RuleFieldsProps) => {
           <th className="px-4 py-2 text-left">
             Allowed Values
           </th>
-          <th className="px-4 py-2 text-left">
-            Action
-          </th>
+          {!isReadOnly && (
+            <th className="px-4 py-2 text-left">
+              Action
+            </th>
+          )}
         </tr>
         </thead>
         <tbody>
           {fields.map((field, index) => (
             <RuleFieldRow
+              isReadOnly={isReadOnly}
               key={index}
               field={field}
               onChange={(values) => handleChange(index, values)}
               onDelete={() => handleDelete(index)}
             />
           ))}
-          <RuleFieldAdd onAdd={onAdd} />
+          {!isReadOnly && (
+            <RuleFieldAdd onAdd={onAdd} />
+          )}
         </tbody>
       </table>
     </div>

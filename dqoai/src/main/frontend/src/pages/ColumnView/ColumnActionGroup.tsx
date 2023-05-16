@@ -7,6 +7,7 @@ import { getFirstLevelState } from "../../redux/selectors";
 import { useParams } from "react-router-dom";
 import { CheckTypes } from "../../shared/routes";
 import clsx from "clsx";
+import Loader from "../../components/Loader";
 
 interface IActionGroupProps {
   isDisabled?: boolean;
@@ -58,15 +59,19 @@ const ColumnActionGroup = ({
       )}
 
       {isStatistics ? (
-        <Button
-          color="primary"
-          variant="outlined"
-          label="Collect Statistics"
-          className={clsx("!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white")}
-          onClick={onCollectStatistics}
-          loading={runningStatistics}
-          disabled={runningStatistics}
-        />
+        <div className="flex items-center space-x-4">
+          {runningStatistics && (
+            <Loader isFull={false} className="w-8 h-8 !text-primary" />
+          )}
+          <Button
+            color="primary"
+            variant="outlined"
+            label="Collect Statistics"
+            className={clsx("!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap")}
+            onClick={onCollectStatistics}
+            disabled={runningStatistics}
+          />
+        </div>
       ) : (
         <Button
           color={isUpdated && !isDisabled ? 'primary' : 'secondary'}

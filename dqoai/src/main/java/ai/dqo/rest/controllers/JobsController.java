@@ -303,7 +303,7 @@ public class JobsController {
      */
     @PostMapping("/synchronize")
     @ApiOperation(value = "synchronizeFolders", notes = "Starts multiple file synchronization jobs that will synchronize files from selected DQO User home folders to the DQO Cloud. " +
-            "The the default synchronization mode is a full synchronization (upload local files, download new files from the cloud).", response = DqoQueueJobId.class)
+            "The default synchronization mode is a full synchronization (upload local files, download new files from the cloud).", response = DqoQueueJobId.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New jobs that will synchronize folders were added to the queue", response = DqoQueueJobId.class),

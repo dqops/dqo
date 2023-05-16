@@ -4,6 +4,6 @@ kind: check
 spec:
   sensor_name: column/uniqueness/unique_count
   rule_name: comparison/min_count
-  help_text: Verifies that the number of unique values in a column does not exceed
+  help_text: Verifies that the number of unique values in a column does not fall below
     the minimum accepted count. Creates a separate data quality check (and an alert)
     for each daily partition.
