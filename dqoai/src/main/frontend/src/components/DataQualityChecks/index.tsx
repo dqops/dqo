@@ -115,8 +115,6 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
     }
   };
 
-
-
   const goToTableTimestamps = () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'timestamps');
     dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
