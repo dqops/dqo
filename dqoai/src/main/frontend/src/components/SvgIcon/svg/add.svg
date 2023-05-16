@@ -1,7 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 26.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 15 15" style="enable-background:new 0 0 15 15;" xml:space="preserve" fill="white">
-<path d="M14.2,6.8h-6v-6C8.2,0.4,7.9,0,7.5,0S6.8,0.4,6.8,0.8v6h-6C0.4,6.8,0,7.1,0,7.5s0.3,0.8,0.8,0.8h6v6c0,0.4,0.3,0.8,0.8,0.8
-	s0.8-0.3,0.8-0.8v-6h6c0.4,0,0.8-0.3,0.8-0.8S14.6,6.8,14.2,6.8z"/>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="feather feather-plus"
+>
+  <line x1="12" y1="5" x2="12" y2="19"></line>
+  <line x1="5" y1="12" x2="19" y2="12"></line>
 </svg>
