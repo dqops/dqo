@@ -248,3 +248,4 @@ spec:
 ## What's next
 
 - [Learn about setting schedules](../schedules/index.md) to easily customize when checks are run.
+- [Learn how to delete data quality results](../delete-data-quality-results/delete-data-quality-results.md).
