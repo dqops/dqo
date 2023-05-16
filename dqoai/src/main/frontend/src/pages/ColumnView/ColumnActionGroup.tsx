@@ -60,7 +60,7 @@ const ColumnActionGroup = ({
 
       {isStatistics ? (
         <div className="flex items-center space-x-4">
-          {!runningStatistics && (
+          {runningStatistics && (
             <Loader isFull={false} className="w-8 h-8 !text-primary" />
           )}
           <Button
@@ -69,7 +69,7 @@ const ColumnActionGroup = ({
             label="Collect Statistics"
             className={clsx("!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap")}
             onClick={onCollectStatistics}
-            disabled={!runningStatistics}
+            disabled={runningStatistics}
           />
         </div>
       ) : (
