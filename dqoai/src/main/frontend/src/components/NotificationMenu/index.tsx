@@ -21,19 +21,9 @@ const NotificationMenu = () => {
   const dispatch = useActionDispatch();
   const { errors } = useError();
 
-  // const data = jobs?.jobs
-  //   ? jobs?.jobs.sort((a, b) => {
-  //       return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
-  //     })
-  //   : [];
-
   const toggleOpen = () => {
     dispatch(toggleMenu(!isOpen));
   };
-
-  // const badRequests = useMemo(() => {
-  //   return errors.filter((item: any) => item.name === 'Bad Request');
-  // }, [errors]);
 
   const getNotificationDate = (notification: any) => {
     if (notification.type === 'job') {

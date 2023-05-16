@@ -2,7 +2,7 @@ import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import SvgIcon from '../../SvgIcon';
 import {
   Accordion,
@@ -13,8 +13,6 @@ import moment from 'moment';
 import JobChild from '../JobChild';
 import { useSelector } from 'react-redux';
 import { useError, IError } from '../../../contexts/errrorContext';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { toggleMenu } from '../../../redux/actions/job.actions';
 import { IRootState } from '../../../redux/reducers';
 
 const JobItem = ({
@@ -24,13 +22,8 @@ const JobItem = ({
   job: DqoJobHistoryEntryModel;
   counter?: number;
 }) => {
-  const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
-  const dispatch = useActionDispatch();
+  const { jobs } = useSelector((state: IRootState) => state.job);
   const { errors } = useError();
-
-  const toggleOpen = () => {
-    dispatch(toggleMenu(!isOpen));
-  };
 
   const getNotificationDate = (notification: any) => {
     if (notification.type === 'job') {
@@ -231,7 +224,7 @@ const JobItem = ({
                 </AccordionHeader>
                 <AccordionBody className="py-0">
                   <div className="overflow-y-hidden">
-                    {data.slice(0, 8).map((notification: any, index) => (
+                    {data.map((notification: any, index) => (
                       <div key={index}>
                         <JobChild
                           job={notification.item}
