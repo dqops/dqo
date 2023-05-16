@@ -590,7 +590,7 @@ function TreeProvider(props: any) {
       CheckTypes.PARTITIONED,
     ].reduce((acc, cur) => ({
       ...acc,
-      [cur]: treeDataMaps[cur].filter((item) => item.id !== node.id)
+      [cur]: treeDataMaps[cur].filter((item) => !item.id.toString().startsWith(node.id.toString()))
     }), {});
 
     setTreeDataMaps(newTreeDataMaps);
@@ -601,7 +601,18 @@ function TreeProvider(props: any) {
       const newActiveNode = findTreeNode(treeData, newActiveTab);
       updateActiveTabMap(newActiveTab);
       setActiveNode(newActiveNode);
-      setTabs(tabs.filter((item) => item.value !== node.id));
+
+      const newTabsMaps = [
+        CheckTypes.RECURRING,
+        CheckTypes.SOURCES,
+        CheckTypes.PROFILING,
+        CheckTypes.PARTITIONED,
+      ].reduce((acc, cur) => ({
+        ...acc,
+        [cur]: (tabMaps[cur] || []).filter((item) => !item.value.toString().startsWith(node.id.toString()))
+      }), {});
+
+      setTabMaps(newTabsMaps);
     }
 
     if (node.level === TREE_LEVEL.DATABASE) {
@@ -1130,7 +1141,7 @@ function TreeProvider(props: any) {
       CheckTypes.PARTITIONED,
     ].reduce((acc, cur) => ({
       ...acc,
-      [cur]: treeDataMaps[cur].filter((item) => item.id !== identify)
+      [cur]: (treeDataMaps[cur] || []).filter((item) => item.id !== identify)
     }), {});
 
     setTreeDataMaps(newTreeDataMaps);
