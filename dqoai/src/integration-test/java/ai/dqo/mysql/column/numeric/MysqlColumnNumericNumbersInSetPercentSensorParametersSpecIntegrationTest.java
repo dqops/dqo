@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.postgresql.sensors.column.consistency;
+package ai.dqo.mysql.column.numeric;
 
-import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.consistency.ColumnConsistencyDateMatchFormatPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnNumbersInSetPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -25,42 +24,68 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.mysql.BaseMysqlIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.consistency.ColumnConsistencyDateMatchFormatPercentSensorParametersSpec;
-import ai.dqo.sensors.column.consistency.ConsistencyBuiltInDateFormats;
+import ai.dqo.sensors.column.numeric.ColumnNumericNumbersInSetPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootTest
-public class PostgresqlColumnDateMatchFormatPercentSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
-    private ColumnConsistencyDateMatchFormatPercentSensorParametersSpec sut;
+public class MysqlColumnNumericNumbersInSetPercentSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
+    private ColumnNumericNumbersInSetPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnConsistencyDateMatchFormatPercentCheckSpec checkSpec;
+    private ColumnNumbersInSetPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.postgresql);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.mysql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnConsistencyDateMatchFormatPercentSensorParametersSpec();
-        this.checkSpec = new ColumnConsistencyDateMatchFormatPercentCheckSpec();
+		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+		this.sut = new ColumnNumericNumbersInSetPercentSensorParametersSpec();
+		this.checkSpec = new ColumnNumbersInSetPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setDateFormats(ConsistencyBuiltInDateFormats.ISO8601);
+        List<Long> values = new ArrayList<>();
+        this.sut.setValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "date_text", this.checkSpec);
+                sampleTableMetadata, "length_int", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+        List<Long> values = new ArrayList<>();
+        values.add(123L);
+        values.add(1234L);
+        values.add(12345L);
+        values.add(123456L);
+        values.add(1234567L);
+        values.add(12345678L);
+        values.add(123456789L);
+        this.sut.setValues(values);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
+                sampleTableMetadata, "length_int", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -71,62 +96,71 @@ public class PostgresqlColumnDateMatchFormatPercentSensorParametersSpecIntegrati
     }
 
     @Test
-    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
-        this.sut.setDateFormats(ConsistencyBuiltInDateFormats.DaySlashMonthSlashYear);
-
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
-                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.daily);
-
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(1, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
-    }
-
-    @Test
     void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(ConsistencyBuiltInDateFormats.DaySlashMonthSlashYear);
+        List<Long> values = new ArrayList<>();
+        values.add(123L);
+        values.add(1234L);
+        values.add(12345L);
+        values.add(123456L);
+        values.add(1234567L);
+        values.add(12345678L);
+        values.add(123456789L);
+        this.sut.setValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
-                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "length_int", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setDateFormats(ConsistencyBuiltInDateFormats.DaySlashMonthSlashYear);
+        List<Long> values = new ArrayList<>();
+        values.add(123L);
+        values.add(1234L);
+        values.add(12345L);
+        values.add(123456L);
+        values.add(1234567L);
+        values.add(12345678L);
+        values.add(123456789L);
+        this.sut.setValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "length_int", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
+        Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(ConsistencyBuiltInDateFormats.DaySlashMonthSlashYear);
+        List<Long> values = new ArrayList<>();
+        values.add(123L);
+        values.add(1234L);
+        values.add(12345L);
+        values.add(123456L);
+        values.add(1234567L);
+        values.add(12345678L);
+        values.add(123456789L);
+        this.sut.setValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "length_int", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 }
