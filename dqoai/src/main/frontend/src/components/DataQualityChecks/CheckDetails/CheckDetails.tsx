@@ -260,12 +260,14 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
           <SvgIcon name="close" />
         </IconButton>
 
-        <IconButton
-          className="absolute right-16 top-4 bg-gray-50 hover:bg-gray-100 text-gray-700"
-          onClick={openDeleteDialog}
-        >
-          <SvgIcon name="delete" className="w-5" />
-        </IconButton>
+        {!!checkResults.length && (
+          <IconButton
+            className="absolute right-16 top-4 bg-gray-50 hover:bg-gray-100 text-gray-700"
+            onClick={openDeleteDialog}
+          >
+            <SvgIcon name="delete" className="w-5" />
+          </IconButton>
+        )}
 
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         {activeTab === 'check_results' && (
