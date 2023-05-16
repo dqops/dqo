@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import ColumnActionGroup from './ColumnActionGroup';
 import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
+import { CheckResultsOverviewDataModel, ColumnStatisticsModel, UICheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getColumnChecksUi,
   setUpdatedChecksUi,
   updateColumnCheckUI
 } from '../../redux/actions/column.actions';
-import { CheckResultOverviewApi, JobApiClient } from "../../services/apiClient";
+import { CheckResultOverviewApi, ColumnApiClient, JobApiClient } from "../../services/apiClient";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckTypes } from "../../shared/routes";
 import { useParams } from "react-router-dom";
@@ -41,18 +41,29 @@ const ColumnProfilingChecksView = ({
   columnName
 }: IProfilingViewProps) => {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
-  const { columnBasic, checksUI, isUpdating, isUpdatedChecksUi, loading } = useSelector(getFirstLevelState(checkTypes));
+  const { checksUI, isUpdating, isUpdatedChecksUi, loading } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [activeTab, setActiveTab] = useState("statistics");
   const [loadingJob, setLoadingJob] = useState(false);
+  const [statistics, setStatistics] = useState<ColumnStatisticsModel>();
 
   const getCheckOverview = () => {
     CheckResultOverviewApi.getColumnProfilingChecksOverview(connectionName, schemaName, tableName, columnName).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
+
+  const getColumnStatistics = () => {
+    ColumnApiClient.getColumnStatistics(connectionName, schemaName, tableName, columnName).then((res) => {
+      setStatistics(res.data);
+    });
+  }
+
+  useEffect(() => {
+    getColumnStatistics();
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, columnName, tableName]);
 
   useEffect(() => {
     dispatch(
@@ -87,7 +98,7 @@ const ColumnProfilingChecksView = ({
   const onCollectStatistics = async () => {
     try {
       setLoadingJob(true);
-      await JobApiClient.collectStatisticsOnTable(columnBasic?.collect_statistics_job_template);
+      await JobApiClient.collectStatisticsOnTable(statistics?.collect_column_statistics_job_template);
     } finally {
       setLoadingJob(false);
     }
