@@ -3,11 +3,12 @@ import Button from '../../components/Button';
 import ConfirmDialog from './ConfirmDialog';
 import { useSelector } from 'react-redux';
 import { ColumnApiClient } from '../../services/apiClient';
-import { getFirstLevelState } from "../../redux/selectors";
-import { useParams } from "react-router-dom";
-import { CheckTypes } from "../../shared/routes";
-import clsx from "clsx";
-import Loader from "../../components/Loader";
+import { getFirstLevelState } from '../../redux/selectors';
+import { useParams } from 'react-router-dom';
+import { CheckTypes } from '../../shared/routes';
+import clsx from 'clsx';
+import Loader from '../../components/Loader';
+import AddColumnDialog from '../../components/CustomTree/AddColumnDialog';
 
 interface IActionGroupProps {
   isDisabled?: boolean;
@@ -34,7 +35,8 @@ const ColumnActionGroup = ({
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const { columnBasic } = useSelector(getFirstLevelState(checkTypes));
-
+  const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
+  const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const removeColumn = async () => {
     if (columnBasic) {
       await ColumnApiClient.deleteColumn(
@@ -48,6 +50,15 @@ const ColumnActionGroup = ({
 
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
+      {isSourceScreen && (
+        <Button
+          className="!h-10"
+          color="primary"
+          variant="outlined"
+          label="Add Column"
+          onClick={() => setIsAddColumnDialogOpen(true)}
+        />
+      )}
       {shouldDelete && (
         <Button
           className="!h-10"
@@ -67,7 +78,9 @@ const ColumnActionGroup = ({
             color="primary"
             variant="outlined"
             label="Collect Statistics"
-            className={clsx("!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap")}
+            className={clsx(
+              '!h-10 disabled:bg-gray-500 disabled:border-none disabled:text-white whitespace-nowrap'
+            )}
             onClick={onCollectStatistics}
             disabled={runningStatistics}
           />
@@ -88,6 +101,10 @@ const ColumnActionGroup = ({
         onClose={() => setIsOpen(false)}
         column={columnBasic}
         onConfirm={removeColumn}
+      />
+      <AddColumnDialog
+        open={isAddColumnDialogOpen}
+        onClose={() => setIsAddColumnDialogOpen(false)}
       />
     </div>
   );
