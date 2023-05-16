@@ -72,7 +72,7 @@ export type Action = BasicAction & {
 };
 
 const setActiveTabState = (state: ISourceState, action: Action, data: Record<string, unknown>) => {
-  const newState = structuredClone(state);
+  const newState = state ? structuredClone(state) : state;
   const activeTab = action.activeTab || newState[action.checkType].activeTab;
 
   return {
