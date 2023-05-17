@@ -15,6 +15,7 @@
  */
 package ai.dqo.data.readouts.services;
 
+import ai.dqo.data.models.DataDeleteResult;
 import ai.dqo.data.readouts.models.SensorReadoutsFragmentFilter;
 
 /**
@@ -25,6 +26,7 @@ public interface SensorReadoutsDeleteService {
     /**
      * Deletes the readouts from a table, applying specific filters to get the fragment (if necessary).
      * @param filter Filter for the readouts fragment that is of interest.
+     * @return Data delete operation summary.
      */
-    void deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter);
+    DataDeleteResult deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter);
 }

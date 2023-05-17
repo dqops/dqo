@@ -142,10 +142,18 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
                 this.end
         );
 
-        deleteStoredDataJobParameters.setDeleteErrors(this.deleteErrors);
-        deleteStoredDataJobParameters.setDeleteStatistics(this.deleteStatistics);
-        deleteStoredDataJobParameters.setDeleteCheckResults(this.deleteCheckResults);
-        deleteStoredDataJobParameters.setDeleteSensorReadouts(this.deleteSensorReadouts);
+        if (!(this.deleteErrors || this.deleteStatistics || this.deleteSensorReadouts || this.deleteCheckResults)) {
+            deleteStoredDataJobParameters.setDeleteErrors(true);
+            deleteStoredDataJobParameters.setDeleteStatistics(true);
+            deleteStoredDataJobParameters.setDeleteCheckResults(true);
+            deleteStoredDataJobParameters.setDeleteSensorReadouts(true);
+        }
+        else {
+            deleteStoredDataJobParameters.setDeleteErrors(this.deleteErrors);
+            deleteStoredDataJobParameters.setDeleteStatistics(this.deleteStatistics);
+            deleteStoredDataJobParameters.setDeleteCheckResults(this.deleteCheckResults);
+            deleteStoredDataJobParameters.setDeleteSensorReadouts(this.deleteSensorReadouts);
+        }
 
         if (!Strings.isNullOrEmpty(this.checkCategory)) {
             deleteStoredDataJobParameters.setCheckCategory(this.checkCategory);

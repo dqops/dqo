@@ -155,6 +155,10 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
      */
     @Override
     public DeleteStoredDataQueueJobResult onExecute(DqoJobExecutionContext jobExecutionContext) {
+        if (this.deletionParameters.getConnectionName() == null) {
+            throw new IllegalArgumentException("Connection not specified for data delete job.");
+        }
+
         DeleteStoredDataQueueJobResult result = new DeleteStoredDataQueueJobResult();
 
         if (this.deletionParameters.isDeleteErrors()) {
