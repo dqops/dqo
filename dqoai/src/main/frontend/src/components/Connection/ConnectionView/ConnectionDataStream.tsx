@@ -60,7 +60,7 @@ const ConnectionDataStream = () => {
       <div className="pt-6 px-4">
         <p className="text-gray-700 italic text-base">
           The following data stream configuration will be copied to the data stream configuration of tables that will be imported in the future.
-          This configuration does not affect tables that are already imported.      </p>
+          This configuration does not affect tables that have already been imported.      </p>
       </div>
       <ConnectionActionGroup
         onUpdate={onUpdate}
