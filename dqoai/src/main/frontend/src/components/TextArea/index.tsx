@@ -67,7 +67,7 @@ const TextArea = ({
         placeholder={placeholder}
         className={clsx(
           error ? 'border border-red-500' : 'focus:border-green-400',
-          'placeholder-gray-500 py-2.5 px-3 bg-white text-gray-700 border border-gray-300 focus:outline-none block min-w-40 w-full shadow-sm sm:text-base rounded-md',
+          'placeholder-gray-500 py-2.5 px-3 bg-white text-gray-700 border border-gray-300 focus:outline-none block min-w-40 w-full shadow-sm text-sm rounded-md',
           className
         )}
         value={value}
