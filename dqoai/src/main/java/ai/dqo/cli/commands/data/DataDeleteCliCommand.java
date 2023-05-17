@@ -17,19 +17,19 @@ package ai.dqo.cli.commands.data;
 
 import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.cli.commands.data.impl.DataCliService;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
 import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthEnd;
 import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthStart;
+import ai.dqo.cli.terminal.TablesawDatasetTableModel;
 import ai.dqo.cli.terminal.TerminalReader;
-import ai.dqo.core.jobqueue.DqoJobQueue;
-import ai.dqo.core.jobqueue.DqoQueueJobFactory;
-import ai.dqo.core.jobqueue.PushJobResult;
-import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
+import ai.dqo.cli.terminal.TerminalTableWritter;
+import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
-import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.data.statistics.factory.StatisticsCollectorTarget;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +37,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
+import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -49,26 +50,30 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "delete", header = "Deletes stored data that matches the specified conditions", description = "Deletes stored data that matches specified conditions. Be careful when using this command, as it permanently deletes the selected data and cannot be undone.")
 public class DataDeleteCliCommand extends BaseCommand implements ICommand {
+    private DataCliService dataCliService;
     private TerminalReader terminalReader;
-    private DqoJobQueue dqoJobQueue;
-    private DqoQueueJobFactory dqoQueueJobFactory;
+    private TerminalWriter terminalWriter;
+    private TerminalTableWritter terminalTableWritter;
+
 
     public DataDeleteCliCommand() {
     }
 
     /**
      * Dependency injection constructor.
-     * @param terminalReader     Terminal reader.
-     * @param dqoJobQueue        Job queue.
-     * @param dqoQueueJobFactory Job queue factory.
+     *
+     * @param dataCliService       Data CLI service.
+     * @param terminalReader       Terminal reader.
+     * @param terminalWriter       Terminal writer.
+     * @param terminalTableWritter Terminal table writer.
      */
     @Autowired
-    public DataDeleteCliCommand(TerminalReader terminalReader,
-                                DqoJobQueue dqoJobQueue,
-                                DqoQueueJobFactory dqoQueueJobFactory) {
+    public DataDeleteCliCommand(DataCliService dataCliService,
+                                TerminalReader terminalReader, TerminalWriter terminalWriter, TerminalTableWritter terminalTableWritter) {
+        this.dataCliService = dataCliService;
         this.terminalReader = terminalReader;
-        this.dqoJobQueue = dqoJobQueue;
-        this.dqoQueueJobFactory = dqoQueueJobFactory;
+        this.terminalWriter = terminalWriter;
+        this.terminalTableWritter = terminalTableWritter;
     }
 
     @CommandLine.Option(names = {"-er", "--errors"}, description = "Delete the execution errors")
@@ -218,11 +223,15 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
         }
 
         DeleteStoredDataQueueJobParameters deletionParameters = this.createDeletionParameters();
+        CliOperationStatus cliOperationStatus = this.dataCliService.deleteStoredData(deletionParameters);
+        this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 
-        DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
-        deleteStoredDataJob.setDeletionParameters(deletionParameters);
-        PushJobResult<DeleteStoredDataQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob);
-        DeleteStoredDataQueueJobResult jobResult = pushJobResult.getFinishedFuture().get();
-        return 0;
+        Table cliOperationStatusTable = cliOperationStatus.getTable();
+        if (cliOperationStatusTable != null) {
+            TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(cliOperationStatus.getTable());
+            this.terminalTableWritter.writeTable(tablesawDatasetTableModel, true);
+        }
+
+        return cliOperationStatus.isSuccess() ? 0 : -1;
     }
 }
