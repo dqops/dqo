@@ -23,6 +23,7 @@ import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
 import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthEnd;
 import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthStart;
+import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.PushJobResult;
@@ -46,8 +47,9 @@ import java.util.List;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "delete", header = "Deletes stored data that matches specified conditions ", description = "Deletes stored data that matches specified conditions. Be careful when using this command, as it permanently deletes the selected data and cannot be undone.")
+@CommandLine.Command(name = "delete", header = "Deletes stored data that matches the specified conditions", description = "Deletes stored data that matches specified conditions. Be careful when using this command, as it permanently deletes the selected data and cannot be undone.")
 public class DataDeleteCliCommand extends BaseCommand implements ICommand {
+    private TerminalReader terminalReader;
     private DqoJobQueue dqoJobQueue;
     private DqoQueueJobFactory dqoQueueJobFactory;
 
@@ -56,12 +58,15 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
 
     /**
      * Dependency injection constructor.
-     * @param dqoJobQueue Job queue.
+     * @param terminalReader     Terminal reader.
+     * @param dqoJobQueue        Job queue.
      * @param dqoQueueJobFactory Job queue factory.
      */
     @Autowired
-    public DataDeleteCliCommand(DqoJobQueue dqoJobQueue,
+    public DataDeleteCliCommand(TerminalReader terminalReader,
+                                DqoJobQueue dqoJobQueue,
                                 DqoQueueJobFactory dqoQueueJobFactory) {
+        this.terminalReader = terminalReader;
         this.dqoJobQueue = dqoJobQueue;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
     }
@@ -79,21 +84,19 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
     private boolean deleteSensorReadouts = false;
 
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name",
-            completionCandidates = ConnectionNameCompleter.class,
-            required = true)
+            completionCandidates = ConnectionNameCompleter.class)
     private String connection;
 
     @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'",
-            completionCandidates = FullTableNameCompleter.class,
-            required = true)
+            completionCandidates = FullTableNameCompleter.class)
     private String table;
 
     @CommandLine.Option(names = {"-b", "--begin"}, description = "Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD",
-            required = true, converter = StringToLocalDateCliConverterMonthStart.class)
+            converter = StringToLocalDateCliConverterMonthStart.class)
     private LocalDate begin;
 
     @CommandLine.Option(names = {"-e", "--end"}, description = "End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD",
-            required = true, converter = StringToLocalDateCliConverterMonthEnd.class)
+            converter = StringToLocalDateCliConverterMonthEnd.class)
     private LocalDate end;
 
     @CommandLine.Option(names = {"-col", "--column"}, description = "Column name",
@@ -201,6 +204,11 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
+        if (Strings.isNullOrEmpty(this.connection)) {
+            throwRequiredParameterMissingIfHeadless("--connection");
+            this.connection = this.terminalReader.prompt("Connection name (--connection)", null, false);
+        }
+
         DeleteStoredDataQueueJobParameters deletionParameters = this.createDeletionParameters();
 
         DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
