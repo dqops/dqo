@@ -15,6 +15,7 @@
  */
 package ai.dqo.data.statistics.services;
 
+import ai.dqo.data.models.DataDeleteResult;
 import ai.dqo.data.statistics.models.StatisticsResultsFragmentFilter;
 
 /**
@@ -25,6 +26,7 @@ public interface StatisticsDeleteService {
     /**
      * Deletes the statistics results from a table, applying specific filters to get the fragment (if necessary).
      * @param filter Filter for the statistics results fragment that is of interest.
+     * @return Data delete operation summary.
      */
-    void deleteSelectedStatisticsResultsFragment(StatisticsResultsFragmentFilter filter);
+    DataDeleteResult deleteSelectedStatisticsResultsFragment(StatisticsResultsFragmentFilter filter);
 }
