@@ -17,6 +17,7 @@
 package ai.dqo.data.models;
 
 import ai.dqo.data.storage.ParquetPartitionId;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +28,28 @@ import java.util.Map;
 public class DataDeleteResult {
     private Map<ParquetPartitionId, DataDeleteResultPartition> partitionResults = new HashMap<>();
 
-    public Map<ParquetPartitionId, DataDeleteResultPartition> getConnectionResults() {
+    public Map<ParquetPartitionId, DataDeleteResultPartition> getPartitionResults() {
         return partitionResults;
+    }
+
+    /**
+     * Append results from other {@link DataDeleteResult} object into this one.
+     * @param other Other instance of this class, that doesn't have any PartitionId in common.
+     */
+    public void concat(DataDeleteResult other) {
+        if (other == null || other.getPartitionResults() == null) {
+            return;
+        }
+
+        for (Map.Entry<ParquetPartitionId, DataDeleteResultPartition> partitionEntry: other.partitionResults.entrySet()) {
+            ParquetPartitionId partitionId = partitionEntry.getKey();
+
+            if (partitionResults.containsKey(partitionId)) {
+                throw new NotImplementedException("No two entries with same PartitionIds should exist in separate DataDeleteResult objects.");
+            }
+            else {
+                partitionResults.put(partitionId, partitionEntry.getValue());
+            }
+        }
     }
 }

@@ -107,7 +107,7 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
                 boolean allRowsDeleted = deletedRows == loadedPartition.getData().rowCount();
                 DataDeleteResultPartition partitionResult = new DataDeleteResultPartition(deletedRows, allRowsDeleted);
 
-                dataDeleteResult.getConnectionResults().put(partitionId, partitionResult);
+                dataDeleteResult.getPartitionResults().put(partitionId, partitionResult);
             }
 
             currentSnapshot.save();
