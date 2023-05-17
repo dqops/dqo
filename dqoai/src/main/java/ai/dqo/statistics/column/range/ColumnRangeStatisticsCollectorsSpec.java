@@ -38,6 +38,7 @@ public class ColumnRangeStatisticsCollectorsSpec extends AbstractStatisticsColle
     public static final ChildHierarchyNodeFieldMapImpl<ColumnRangeStatisticsCollectorsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorCategorySpec.FIELDS) {
         {
             put("min_value", o -> o.minValue);
+            put("max_value", o -> o.maxValue);
         }
     };
 
