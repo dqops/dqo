@@ -33,6 +33,13 @@ public class SilentStatisticsCollectorExecutionProgressListener implements Stati
     protected final JsonSerializer jsonSerializer;
     private boolean showSummary = true;
 
+    /**
+     * Default constructor.
+     */
+    public SilentStatisticsCollectorExecutionProgressListener() {
+        this(null, null);
+    }
+
     @Autowired
     public SilentStatisticsCollectorExecutionProgressListener(TerminalWriter terminalWriter, JsonSerializer jsonSerializer) {
         this.terminalWriter = terminalWriter;

@@ -18,6 +18,7 @@ package ai.dqo.core.jobqueue.jobs.data;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -28,6 +29,7 @@ import java.util.List;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class DeleteStoredDataQueueJobParameters implements Cloneable {
     // @NotNull  // should be NotNull, but there are errors in TypeScript (CheckTableHeader.tsx)
     private String connectionName;
@@ -82,8 +84,7 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
         return new DeleteStoredDataQueueJobParameters() {{
             setConnectionName(checkSearchFilters.getConnectionName());
             setSchemaTableName(checkSearchFilters.getSchemaTableName());
-            setColumnNames(new LinkedList<>(){{add(checkSearchFilters.getColumnName());}});
-
+            setColumnNames(checkSearchFilters.getColumnName() != null ? List.of(checkSearchFilters.getColumnName()) : null);
             setCheckType(checkSearchFilters.getCheckType() != null ? checkSearchFilters.getCheckType().getDisplayName() : null);
             setCheckName(checkSearchFilters.getCheckName());
             setSensorName(checkSearchFilters.getSensorName());

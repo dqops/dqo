@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column check that calculates percentage of strings with a length above the indicated by the user length in a column.
+ * Column level check that ensures that the percentage of strings in the monitored column with a length above the length defined by the user as a parameter does not fall below set thresholds.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

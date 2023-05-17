@@ -2,7 +2,7 @@ import React from "react";
 import {
   ProviderSensorDefinitionSpec,
   ProviderSensorDefinitionSpecTypeEnum,
-  ProviderSensorModel,
+  ProviderSensorModel, ProviderSensorModelProviderTypeEnum,
 } from "../../api";
 import Select from "../../components/Select";
 import Input from "../../components/Input";
@@ -14,6 +14,7 @@ import Jinja2Code from "./Jinja2";
 type ProvideSensorProps = {
   providerSensor?: ProviderSensorModel;
   onChange?: (value: ProviderSensorModel) => void;
+  providerType?: ProviderSensorModelProviderTypeEnum;
 }
 
 const runnerTypeOptions = Object.values(ProviderSensorDefinitionSpecTypeEnum).map((item) => ({
@@ -23,7 +24,8 @@ const runnerTypeOptions = Object.values(ProviderSensorDefinitionSpecTypeEnum).ma
 
 const ProvideSensor = ({
   providerSensor,
-  onChange
+  onChange,
+  providerType
 }: ProvideSensorProps) => {
 
   const handleChange = (obj: Partial<ProviderSensorDefinitionSpec>) => {
@@ -32,7 +34,7 @@ const ProvideSensor = ({
     }
 
     onChange({
-      ...providerSensor || {},
+      ...providerSensor || { providerType },
       providerSensorDefinitionSpec: {
         ...providerSensor?.providerSensorDefinitionSpec || {},
         ...obj
@@ -72,11 +74,21 @@ const ProvideSensor = ({
       )}
 
       <div className="flex gap-4 text-sm items-center mb-4">
-        <p className="w-60">Supports grouping:</p>
+        <p className="w-60">Supports grouping by a data stream:</p>
         <Checkbox
-          checked={providerSensor?.providerSensorDefinitionSpec?.supports_grouping}
+          checked={providerSensor?.providerSensorDefinitionSpec?.supports_grouping_by_data_stream}
           onChange={(checked) => handleChange({
-            supports_grouping: checked
+            supports_grouping_by_data_stream: checked
+          })}
+        />
+      </div>
+
+      <div className="flex gap-4 text-sm items-center mb-4">
+        <p className="w-60">Supports partitioned checks by grouping by the partition date:</p>
+        <Checkbox
+          checked={providerSensor?.providerSensorDefinitionSpec?.supports_partitioned_checks}
+          onChange={(checked) => handleChange({
+            supports_partitioned_checks: checked
           })}
         />
       </div>

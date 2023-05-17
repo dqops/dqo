@@ -10,11 +10,11 @@ import { CustomTreeNode } from '../../shared/interfaces';
 import { TREE_LEVEL } from '../../shared/enums';
 import { useTree } from '../../contexts/treeContext';
 import { useHistory, useParams } from 'react-router-dom';
-import { ROUTES } from "../../shared/routes";
-import DeleteOnlyDataDialog from "./DeleteOnlyDataDialog";
-import AddColumnDialog from "./AddColumnDialog";
-import AddTableDialog from "./AddTableDialog";
-import AddSchemaDialog from "./AddSchemaDialog";
+import { ROUTES } from '../../shared/routes';
+import DeleteOnlyDataDialog from './DeleteOnlyDataDialog';
+import AddColumnDialog from './AddColumnDialog';
+import AddTableDialog from './AddTableDialog';
+import AddSchemaDialog from './AddSchemaDialog';
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -23,7 +23,8 @@ interface ContextMenuProps {
 
 const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
   const { checkTypes }: { checkTypes: any } = useParams();
-  const { refreshNode, runChecks, collectStatisticsOnTable, deleteStoredData } = useTree();
+  const { refreshNode, runChecks, collectStatisticsOnTable, deleteStoredData } =
+    useTree();
   const [open, setOpen] = useState(false);
   const history = useHistory();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
@@ -58,7 +59,13 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
   };
 
   const importMetaData = () => {
-    history.push(`${ROUTES.CONNECTION_DETAIL(checkTypes, node.label || '', 'schemas')}?import_schema=true`)
+    history.push(
+      `${ROUTES.CONNECTION_DETAIL(
+        checkTypes,
+        node.label || '',
+        'schemas'
+      )}?import_schema=true`
+    );
     setOpen(false);
   };
   const importTables = () => {
@@ -183,7 +190,8 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
               Add Table
             </div>
           )}
-          {node.level === TREE_LEVEL.TABLE && (
+          {(node.level === TREE_LEVEL.TABLE ||
+            node.level === TREE_LEVEL.COLUMN) && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
               onClick={() => setAddColumnDialogOpen(true)}
@@ -200,7 +208,7 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
                 onClick={() => setDeleteDataDialogOpened(true)}
               >
-                Delete results
+                Delete data
               </div>
               <DeleteOnlyDataDialog
                 open={deleteDataDialogOpened}

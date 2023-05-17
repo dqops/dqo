@@ -49,10 +49,10 @@ const ColumnView = () => {
   const isRecurringOnly = useMemo(() => checkTypes === CheckTypes.RECURRING, [checkTypes]);
   const isPartitionCheckOnly = useMemo(() => checkTypes === CheckTypes.PARTITIONED, [checkTypes]);
   const isProfilingCheckOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
-  const showAllSubTabs = useMemo(
-    () => !isRecurringOnly && !isPartitionCheckOnly && !isProfilingCheckOnly,
-    [isRecurringOnly]
-  ); // will update more in next tasks
+  const showAllSubTabs =(
+    () => !isRecurringOnly && !isPartitionCheckOnly && !isProfilingCheckOnly
+  );
+   // will update more in next tasks
   // useEffect(() => {
   //   if (tabMap[pageTab]) {
   //     setActiveTab(tabMap[pageTab]);
@@ -185,7 +185,7 @@ const ColumnView = () => {
             columnName={columnName}
           />
         )}
-        {showAllSubTabs && (
+        {showAllSubTabs() && (
           <>
             <div className="border-b border-gray-300">
               <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />

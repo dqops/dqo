@@ -1,8 +1,8 @@
 How to build on Windows:
 
-First, delete a local folder distribution\python\dqoai.egg-info
+First, delete a local folder distribution\python\dqops.egg-info
 this folder may contain a cached list of files to go into the distribution.
-Edit the dqoai\version.py file and update the version. The PIP_VERSION must be unique.
+Edit the dqops\version.py file and update the version. The PIP_VERSION must be unique.
 
 >>> Execute in the repository root:
 mvnw -DskipTests clean package
@@ -22,7 +22,7 @@ py -m twine upload --repository testpypi dist/*
 py -m twine upload dist/*
 
 Testing with a test instance of pypi:
-Run: pip install -i https://test.pypi.org/simple/ dqoai==0.1.0.1 --upgrade
+Run: pip install -i https://test.pypi.org/simple/ dqops==0.1.0.1 --upgrade
 where 0.1.0.1 is the version that was just published.
 
 

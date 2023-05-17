@@ -81,7 +81,7 @@ export interface ITableState {
   isUpdatedMonthlyPartitionedChecks?: boolean;
   checksUIFilter?: UICheckContainerModel;
   isUpdatedChecksUIFilter?: boolean;
-  recurringUIFilter?: UICheckContainerModel;
+  recurringChecksUIFilter?: UICheckContainerModel;
   isUpdatedRecurringChecksUIFilter?: boolean;
   partitionedChecksUIFilter?: UICheckContainerModel;
   isUpdatedPartitionedChecksUIFilter?: boolean;

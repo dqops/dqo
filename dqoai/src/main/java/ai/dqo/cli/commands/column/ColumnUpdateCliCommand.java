@@ -69,6 +69,9 @@ public class ColumnUpdateCliCommand extends BaseCommand implements ICommand, ICo
 			completionCandidates = ColumnNameCompleter.class)
 	private String columnName;
 
+	@CommandLine.Option(names = {"-e", "--sql-expression"}, description = "SQL expression for a calculated column", required = false)
+	private String sqlExpression;
+
 	@CommandLine.Option(names = {"-d", "--dataType"}, description = "Data type", required = false)
 	private String dataType;
 
@@ -121,6 +124,22 @@ public class ColumnUpdateCliCommand extends BaseCommand implements ICommand, ICo
 	}
 
 	/**
+	 * Returns a sql expression for a calculated column.
+	 * @return Sql expression.
+	 */
+	public String getSqlExpression() {
+		return sqlExpression;
+	}
+
+	/**
+	 * Sets a sql expression for a calculated column.
+	 * @param sqlExpression SQL expression for a calculated column.
+	 */
+	public void setSqlExpression(String sqlExpression) {
+		this.sqlExpression = sqlExpression;
+	}
+
+	/**
 	 * Computes a result, or throws an exception if unable to do so.
 	 *
 	 * @return computed result
@@ -130,6 +149,7 @@ public class ColumnUpdateCliCommand extends BaseCommand implements ICommand, ICo
 	public Integer call() throws Exception {
 		ColumnTypeSnapshotSpec columnTypeSnapshotSpec = new ColumnTypeSnapshotSpec(dataType);
 		ColumnSpec columnSpec = new ColumnSpec(columnTypeSnapshotSpec);
+		columnSpec.setSqlExpression(this.sqlExpression);
 
 		CliOperationStatus cliOperationStatus = columnCliService.updateColumn(connectionName, fullTableName, columnName, columnSpec);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());

@@ -150,6 +150,8 @@ const iconsMap: any = {
   mysql: MySqlSvg,
   spinner: SpinnerSvg,
   sync: SyncSvg,
+  'check-circle': CheckCircleSvg,
+  'info-filled': InfoFilledSvg,
   cloudsqlformysql: CloudSqlSvg,
   amazonrds: AmazonRdsSvg,
   azuredatabaseforpostgresql: AzurePostgreSqlSvg,
@@ -167,9 +169,7 @@ const iconsMap: any = {
   amazonrdsforsqlserver: AmazonRdsSvg,
   cloudsqlforpostgresql: CloudSqlSvg,
   cloudsqlforsqlserver: CloudSqlSvg,
-  yugabytedb: YugabyteDbSvg,
-  'check-circle': CheckCircleSvg,
-  'info-filled': InfoFilledSvg
+  yugabytedb: YugabyteDbSvg
 };
 
 interface SvgIconProps {

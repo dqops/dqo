@@ -21,6 +21,7 @@ import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.services.check.mapping.models.UIAllChecksModel;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
+import ai.dqo.services.check.models.BulkCheckDisableParameters;
 
 import java.util.List;
 
@@ -44,9 +45,9 @@ public interface CheckService {
     /**
      * Disable existing checks matching the provided filters.
      *
-     * @param filters Check search filters to find checks to disable.
+     * @param parameters Bulk check disable parameters.
      */
-    void disableChecks(CheckSearchFilters filters);
+    void disableChecks(BulkCheckDisableParameters parameters);
 
     /**
      * Update checks configuration based on provided parameters.

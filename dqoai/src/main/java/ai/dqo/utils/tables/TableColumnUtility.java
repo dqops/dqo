@@ -15,6 +15,7 @@
  */
 package ai.dqo.utils.tables;
 
+import ai.dqo.utils.conversion.NumericTypeConverter;
 import org.apache.commons.lang3.StringUtils;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
@@ -69,6 +70,82 @@ public final class TableColumnUtility {
                 if (!sourceColumn.isMissing(i)) {
                     targetColumn.set(i, sourceColumn.get(i).toString());
                 }
+            }
+        }
+
+        return targetColumn;
+    }
+
+    /**
+     * Creates (or casts) a given column to a {@link DoubleColumn}.
+     * @param sourceColumn Source column.
+     * @return DoubleColumn. It is a copy of the original column (with casting to a double) or the original column object instance if it is a DoubleColumn.
+     */
+    public static DoubleColumn convertToDoubleColumn(Column<?> sourceColumn) {
+        if (sourceColumn instanceof DoubleColumn) {
+            return (DoubleColumn) sourceColumn;
+        }
+
+        if (sourceColumn instanceof IntColumn) {
+            return ((IntColumn) sourceColumn).asDoubleColumn();
+        }
+
+        if (sourceColumn instanceof LongColumn) {
+            return ((LongColumn) sourceColumn).asDoubleColumn();
+        }
+
+        if (sourceColumn instanceof FloatColumn) {
+            return ((FloatColumn) sourceColumn).asDoubleColumn();
+        }
+
+        if (sourceColumn instanceof ShortColumn) {
+            return ((ShortColumn) sourceColumn).asDoubleColumn();
+        }
+
+        int size = sourceColumn.size();
+        DoubleColumn targetColumn = DoubleColumn.create(sourceColumn.name(), size);
+
+        for (int i = 0; i < size; i++) {
+            if (!sourceColumn.isMissing(i)) {
+                targetColumn.set(i, NumericTypeConverter.toDouble(sourceColumn.get(i)));
+            }
+        }
+
+        return targetColumn;
+    }
+
+    /**
+     * Creates (or casts) a given column to a {@link LongColumn}.
+     * @param sourceColumn Source column.
+     * @return LongColumn. It is a copy of the original column (with casting to a long) or the original column object instance if it is a LongColumn.
+     */
+    public static LongColumn convertToLongColumn(Column<?> sourceColumn) {
+        if (sourceColumn instanceof LongColumn) {
+            return (LongColumn) sourceColumn;
+        }
+
+        if (sourceColumn instanceof IntColumn) {
+            return ((IntColumn) sourceColumn).asLongColumn();
+        }
+
+        if (sourceColumn instanceof DoubleColumn) {
+            return ((DoubleColumn) sourceColumn).asLongColumn();
+        }
+
+        if (sourceColumn instanceof FloatColumn) {
+            return ((FloatColumn) sourceColumn).asLongColumn();
+        }
+
+        if (sourceColumn instanceof ShortColumn) {
+            return ((ShortColumn) sourceColumn).asLongColumn();
+        }
+
+        int size = sourceColumn.size();
+        LongColumn targetColumn = LongColumn.create(sourceColumn.name(), size);
+
+        for (int i = 0; i < size; i++) {
+            if (!sourceColumn.isMissing(i)) {
+                targetColumn.set(i, NumericTypeConverter.toLong(sourceColumn.get(i)));
             }
         }
 

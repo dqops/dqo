@@ -91,19 +91,16 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
             resultTypeColumn.setMissingTo(StatisticsResultDataType.STRING.getName());
         }
         else {
-            TextColumn resultStringColumn = TextColumn.create(StatisticsColumnNames.RESULT_STRING_COLUMN_NAME, resultRowCount);
-            normalizedResults.addColumns(resultStringColumn);
-        }
-
-        if (normalizedResultColumn instanceof StringColumn) {
-            normalizedResultColumn.setName(StatisticsColumnNames.RESULT_STRING_COLUMN_NAME);
-            TextColumn normalizedTextColumn = TableColumnUtility.convertToTextColumn(normalizedResultColumn);
-            normalizedResults.addColumns(normalizedTextColumn);
-            resultTypeColumn.setMissingTo(StatisticsResultDataType.STRING.getName());
-        }
-        else {
-            TextColumn resultStringColumn = TextColumn.create(StatisticsColumnNames.RESULT_STRING_COLUMN_NAME, resultRowCount);
-            normalizedResults.addColumns(resultStringColumn);
+            if (normalizedResultColumn instanceof StringColumn) {
+                TextColumn normalizedTextColumn = TableColumnUtility.convertToTextColumn(normalizedResultColumn);
+                normalizedTextColumn.setName(StatisticsColumnNames.RESULT_STRING_COLUMN_NAME);
+                normalizedResults.addColumns(normalizedTextColumn);
+                resultTypeColumn.setMissingTo(StatisticsResultDataType.STRING.getName());
+            }
+            else {
+                TextColumn resultStringColumn = TextColumn.create(StatisticsColumnNames.RESULT_STRING_COLUMN_NAME, resultRowCount);
+                normalizedResults.addColumns(resultStringColumn);
+            }
         }
 
         if (normalizedResultColumn instanceof LongColumn) {
@@ -112,8 +109,16 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
             resultTypeColumn.setMissingTo(StatisticsResultDataType.INTEGER.getName());
         }
         else {
-            LongColumn resultIntegerColumn = LongColumn.create(StatisticsColumnNames.RESULT_INTEGER_COLUMN_NAME, resultRowCount);
-            normalizedResults.addColumns(resultIntegerColumn);
+            if (normalizedResultColumn instanceof IntColumn || normalizedResultColumn instanceof ShortColumn) {
+                LongColumn normalizedLongColumn = TableColumnUtility.convertToLongColumn(normalizedResultColumn);
+                normalizedLongColumn.setName(StatisticsColumnNames.RESULT_INTEGER_COLUMN_NAME);
+                normalizedResults.addColumns(normalizedLongColumn);
+                resultTypeColumn.setMissingTo(StatisticsResultDataType.INTEGER.getName());
+            }
+            else {
+                LongColumn resultIntegerColumn = LongColumn.create(StatisticsColumnNames.RESULT_INTEGER_COLUMN_NAME, resultRowCount);
+                normalizedResults.addColumns(resultIntegerColumn);
+            }
         }
 
         if (normalizedResultColumn instanceof DoubleColumn) {
@@ -122,8 +127,16 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
             resultTypeColumn.setMissingTo(StatisticsResultDataType.FLOAT.getName());
         }
         else {
-            DoubleColumn resultFloatColumn = DoubleColumn.create(StatisticsColumnNames.RESULT_FLOAT_COLUMN_NAME, resultRowCount);
-            normalizedResults.addColumns(resultFloatColumn);
+            if (normalizedResultColumn instanceof FloatColumn) {
+                normalizedResultColumn.setName(StatisticsColumnNames.RESULT_FLOAT_COLUMN_NAME);
+                DoubleColumn normalizedDoubleColumn = TableColumnUtility.convertToDoubleColumn(normalizedResultColumn);
+                normalizedResults.addColumns(normalizedDoubleColumn);
+                resultTypeColumn.setMissingTo(StatisticsResultDataType.FLOAT.getName());
+            }
+            else {
+                DoubleColumn resultFloatColumn = DoubleColumn.create(StatisticsColumnNames.RESULT_FLOAT_COLUMN_NAME, resultRowCount);
+                normalizedResults.addColumns(resultFloatColumn);
+            }
         }
 
         if (normalizedResultColumn instanceof BooleanColumn) {

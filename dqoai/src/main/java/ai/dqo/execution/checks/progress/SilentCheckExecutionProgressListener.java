@@ -31,6 +31,13 @@ public class SilentCheckExecutionProgressListener implements CheckExecutionProgr
     private boolean showSummary = true;
 
     /**
+     * Default constructor.
+     */
+    public SilentCheckExecutionProgressListener() {
+        this(null, null);
+    }
+
+    /**
      * Creates a CLI progress listener using a terminal writer to print out the results.
      * @param terminalWriter Terminal writer.
      * @param jsonSerializer Json serializer.

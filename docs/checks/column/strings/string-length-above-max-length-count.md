@@ -1,14 +1,14 @@
 **string length above max length count** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a maximum number of strings with a length above the indicated by the user length in a monitored column.
+Column level check that ensures that the number of strings in the monitored column with a length above the length defined by the user as a parameter does not exceed set thresholds.
 
 ___
 
 ## **string length above max length count**  
   
 **Check description**  
-The check counts those strings with length above those provided by the user in the column.   
+The check counts the number of strings in the column that is above the length defined by the user as a parameter.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -612,7 +612,7 @@ ___
 ## **daily string length above max length count**  
   
 **Check description**  
-The check counts those strings with length above those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.  
+The check counts the number of strings in the column that is above the length defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1826,7 +1826,7 @@ ___
 ## **daily partition string length above max length count**  
   
 **Check description**  
-The check counts those strings with length above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.  
+The check counts the number of strings in the column that is above the length defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2434,7 +2434,7 @@ ___
 ## **monthly partition string length above max length count**  
   
 **Check description**  
-The check counts those strings with length above those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.  
+The check counts the number of strings in the column that is above the length defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

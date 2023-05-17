@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are at least percentage of rows with a boolean placeholder strings in a monitored column.
+ * Column level check that ensures that the percentage of boolean placeholder strings in the monitored column does not fall below set thresholds.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

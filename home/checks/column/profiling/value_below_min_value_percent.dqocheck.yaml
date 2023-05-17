@@ -4,4 +4,5 @@ kind: check
 spec:
   sensor_name: column/numeric/value_below_min_value_percent
   rule_name: comparison/min_percent
-  help_text: The check percentage values below those provided by the user in the column.
+  help_text: The check counts the percentage of values in the column that is below
+    the value defined by the user as a parameter.

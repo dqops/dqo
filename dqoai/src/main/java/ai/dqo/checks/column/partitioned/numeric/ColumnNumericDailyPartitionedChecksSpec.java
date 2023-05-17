@@ -28,7 +28,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of built-in preconfigured data quality check points on a column level that are checking at a daily level.
+ * Container of numeric data quality partitioned checks on a column level that are checking at a daily level.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -94,16 +94,16 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValuesInRangeIntegersPercentCheckSpec dailyPartitionValuesInRangeIntegersPercent;
 
-    @JsonPropertyDescription("The check counts values below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValueBelowMinValueCountCheckSpec dailyPartitionValueBelowMinValueCount;
 
-    @JsonPropertyDescription("The check percentage values below those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValueBelowMinValuePercentCheckSpec dailyPartitionValueBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts values above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValueAboveMaxValueCountCheckSpec dailyPartitionValueAboveMaxValueCount;
 
-    @JsonPropertyDescription("The check percentage values above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValueAboveMaxValuePercentCheckSpec dailyPartitionValueAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
@@ -151,13 +151,13 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnInvalidLatitudeCountCheckSpec dailyPartitionInvalidLatitudeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValidLatitudePercentCheckSpec dailyPartitionValidLatitudePercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnInvalidLongitudeCountCheckSpec dailyPartitionInvalidLongitudeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValidLongitudePercentCheckSpec dailyPartitionValidLongitudePercent;
 
 

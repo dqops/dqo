@@ -99,6 +99,28 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{lib.render_target_column('analyzed_table')}} LIKE '%[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]%'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 ___
 
 ## **contains ip4 percent**
@@ -201,6 +223,28 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[0-9]%.%[0-9]%.%[0-9]%.%[0-9]%'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 ___
 
 ## **contains ip6 percent**
@@ -295,6 +339,40 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
                     ELSE 0
                 END
             ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -417,6 +495,37 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '^%+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '^%[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '^%+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '^%[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '^%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '^%+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '^%+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '^%([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '^%(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '^%(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '^%1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 ___
 
 ## **contains usa zipcode percent**
@@ -513,6 +622,28 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
                     ELSE 0
                 END
             ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]%'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -623,6 +754,28 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{lib.render_target_column('analyzed_table')}} LIKE '%[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]%'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 ___
 
 ## **valid ip4 address percent**
@@ -725,6 +878,28 @@ Column level sensor that calculates the percentage of rows with a valid IP4 addr
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[0-9]%.%[0-9]%.%[0-9]%.%[0-9]%'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 ___
 
 ## **valid ip6 address percent**
@@ -819,6 +994,40 @@ Column level sensor that calculates the percentage of rows with a valid IP6 addr
                     ELSE 0
                 END
             ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%:%:%[0-9A-Fa-f]%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%:%[0-9A-Fa-f]%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%:%[0-9A-Fa-f]%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%:%'
+                        OR CAST({{ lib.render_target_column('analyzed_table') }} AS NVARCHAR(MAX)) LIKE '%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:[0-9A-Fa-f]%:%[0-9A-Fa-f]%:%:%[0-9A-Fa-f]%'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -941,6 +1150,37 @@ Column level sensor that calculates the percent of values that fit to a USA phon
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[0-9][0-9][0-9].[0-9][0-9][0-9].[0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%+1-[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9] [0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%+?1?-?[0-9][0-9][0-9]-?[0-9][0-9][0-9]-?[0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%+1([0-9][0-9][0-9])[0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%([0-9][0-9][0-9])[0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%(+1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%(1)%[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%1([0-9][0-9][0-9])-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]' THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 ___
 
 ## **valid usa zipcode percent**
@@ -1034,6 +1274,28 @@ Column level sensor that calculates the percent of values that fit to a USA ZIP 
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
                     THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '[0-9][0-9][0-9][0-9][0-9]%'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)

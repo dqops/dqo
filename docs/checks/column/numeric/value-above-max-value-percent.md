@@ -1,14 +1,14 @@
 **value above max value percent** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a maximum percent of values with a value above the indicated by the user value in a monitored column.
+Column level check that ensures that the percentage of values in the monitored column with a value above the value defined by the user as a parameter does not fall below set thresholds.
 
 ___
 
 ## **value above max value percent**  
   
 **Check description**  
-The check percentage values above those provided by the user in the column.  
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -518,7 +518,7 @@ ___
 ## **daily value above max value percent**  
   
 **Check description**  
-The check percentage values above those provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.  
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1031,7 +1031,7 @@ ___
 ## **monthly value above max value percent**  
   
 **Check description**  
-The check percentage values above those provided by the user in the column. Stores the most recent row count for each month when the data quality check was evaluated.  
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1544,7 +1544,7 @@ ___
 ## **daily partition value above max value percent**  
   
 **Check description**  
-The check percentage values above those provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.  
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2058,7 +2058,7 @@ ___
 ## **monthly partition value above max value percent**  
   
 **Check description**  
-The check percentage values above those provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.  
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

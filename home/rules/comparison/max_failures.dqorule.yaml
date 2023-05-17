@@ -12,6 +12,7 @@ spec:
   fields:
   - field_name: max_failures
     display_name: max_failures
-    help_text: Maximum accepted value for the actual_value returned by the sensor
-      (inclusive).
+    help_text: "Maximum number of consecutive check failures, a check is failed when\
+      \ the sensor's query failed to execute due to a connection error, missing table\
+      \ or a corrupted table."
     data_type: long

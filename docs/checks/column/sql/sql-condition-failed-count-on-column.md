@@ -8,7 +8,7 @@ ___
 ## **sql condition failed count on column**  
   
 **Check description**  
-Verifies that a maximum number of rows failed a custom SQL condition (expression).  
+Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -245,6 +245,44 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.[target_column] IS NOT NULL
+                AND NOT (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        SYSDATETIMEOFFSET() AS time_period,
+        CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -459,6 +497,52 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            SUM(
+                CASE
+                    WHEN analyzed_table.[target_column] IS NOT NULL
+                    AND NOT (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            SYSDATETIMEOFFSET() AS time_period,
+            CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+                , 
+            
+        ORDER BY level_1, level_2
+                , 
+            
+        
+            
+        ```
     
 
 
@@ -470,7 +554,7 @@ ___
 ## **daily sql condition failed count on column**  
   
 **Check description**  
-Verifies that a maximum number of rows failed a custom SQL condition (expression). Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -709,6 +793,44 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.[target_column] IS NOT NULL
+                AND NOT (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
+        CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -924,6 +1046,52 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            SUM(
+                CASE
+                    WHEN analyzed_table.[target_column] IS NOT NULL
+                    AND NOT (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
+            CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+                , 
+            
+        ORDER BY level_1, level_2
+                , 
+            
+        
+            
+        ```
     
 
 
@@ -935,7 +1103,7 @@ ___
 ## **monthly sql condition failed count on column**  
   
 **Check description**  
-Verifies that a maximum number of rows failed a custom SQL condition (expression). Stores the most recent row count for each month when the data quality check was evaluated.  
+Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1174,6 +1342,44 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.[target_column] IS NOT NULL
+                AND NOT (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+        CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -1389,6 +1595,52 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            SUM(
+                CASE
+                    WHEN analyzed_table.[target_column] IS NOT NULL
+                    AND NOT (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+            CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+                , 
+            
+        ORDER BY level_1, level_2
+                , 
+            
+        
+            
+        ```
     
 
 
@@ -1400,7 +1652,7 @@ ___
 ## **daily partition sql condition failed count on column**  
   
 **Check description**  
-Verifies that a maximum number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.  
+Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1639,6 +1891,48 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.[target_column] IS NOT NULL
+                AND NOT (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        CAST([] AS date) AS time_period,
+        CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    GROUP BY CAST([] AS date), CAST([] AS date)
+    ORDER BY CAST([] AS date)
+    
+        
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -1854,6 +2148,49 @@ spec:
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            SUM(
+                CASE
+                    WHEN analyzed_table.[target_column] IS NOT NULL
+                    AND NOT (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            CAST([] AS date) AS time_period,
+            CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+        GROUP BY CAST([] AS date), CAST([] AS date)
+        ORDER BY level_1, level_2CAST([] AS date)
+        
+            
+        ```
     
 
 
@@ -1865,7 +2202,7 @@ ___
 ## **monthly partition sql condition failed count on column**  
   
 **Check description**  
-Verifies that a maximum number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each monthly partition.  
+Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2104,6 +2441,48 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.[target_column] IS NOT NULL
+                AND NOT (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
+        CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+    ORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
+    
+        
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -2318,6 +2697,49 @@ spec:
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        SELECT
+            SUM(
+                CASE
+                    WHEN analyzed_table.[target_column] IS NOT NULL
+                    AND NOT (analyzed_table.[target_column] + col_tax = col_total_price_with_tax)
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
+            CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
+        
+            
         ```
     
 

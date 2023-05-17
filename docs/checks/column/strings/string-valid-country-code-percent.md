@@ -1,14 +1,14 @@
 **string valid country code percent** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a maximum percentage of rows with a valid country code strings in a monitored column.
+Column level check that ensures that the percentage of valid country code strings in the monitored column does not fall below set thresholds.
 
 ___
 
 ## **string valid country code percent**  
   
 **Check description**  
-Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage.  
+Verifies that the percentage of valid country code in a column does not fall below the minimum accepted percentage.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -578,7 +578,7 @@ ___
 ## **daily string valid country code percent**  
   
 **Check description**  
-Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the percentage of valid country code in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1724,7 +1724,7 @@ ___
 ## **daily partition string valid country code percent**  
   
 **Check description**  
-Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.  
+Verifies that the percentage of valid country code in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2298,7 +2298,7 @@ ___
 ## **monthly partition string valid country code percent**  
   
 **Check description**  
-Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.  
+Verifies that the percentage of valid country code in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

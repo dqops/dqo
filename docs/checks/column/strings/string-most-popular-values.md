@@ -1,14 +1,14 @@
 **string most popular values** checks  
 
 **Description**  
-Column level check that ensures that the number of top values from a set in a column does not exceed the minimum accepted count.
+Column level check that ensures that the number of top values from a set in a column does not fall below the minimum accepted count.
 
 ___
 
 ## **string most popular values**  
   
 **Check description**  
-Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.  
+Verifies that the number of top values from a set in a column does not fall below the minimum accepted count.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1277,7 +1277,7 @@ ___
 ## **daily string most popular values**  
   
 **Check description**  
-Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the number of top values from a set in a column does not fall below the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -2549,7 +2549,7 @@ ___
 ## **monthly string most popular values**  
   
 **Check description**  
-Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.  
+Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -3821,7 +3821,7 @@ ___
 ## **daily partition string most popular values**  
   
 **Check description**  
-Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.  
+Verifies that the number of top values from a set in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -5094,7 +5094,7 @@ ___
 ## **monthly partition string most popular values**  
   
 **Check description**  
-Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.  
+Verifies that the number of top values from a set in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

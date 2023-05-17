@@ -26,7 +26,7 @@ const TableMonthlyChecksView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getTableRecurringOverview(connectionName, schemaName, tableName, 'monthly').then((res) => {
+    CheckResultOverviewApi.getTableRecurringChecksOverview(connectionName, schemaName, tableName, 'monthly').then((res) => {
       setCheckResultsOverview(res.data);
     });
   };

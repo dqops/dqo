@@ -1,8 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import MainLayout from "../MainLayout";
 import PageTabs from "../PageTabs";
-import { useTree } from "../../contexts/treeContext";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import { CheckTypes } from "../../shared/routes";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
@@ -13,20 +12,20 @@ interface ConnectionLayoutProps {
 }
 
 const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
-  const { sourceRoute } = useTree();
+  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
 
-  const { tabs: pageTabs, activeTab } = useSelector((state: IRootState) => state.source[sourceRoute as CheckTypes || CheckTypes.SOURCES]);
+  const { tabs: pageTabs, activeTab } = useSelector((state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]);
   const dispatch= useDispatch();
   const history = useHistory();
   const location = useLocation();
 
   const handleChange = (value: string) => {
-    dispatch(setActiveFirstLevelTab(sourceRoute, value));
+    dispatch(setActiveFirstLevelTab(checkTypes, value));
     history.push(value);
   };
 
   const closeTab = (value: string) => {
-    dispatch(closeFirstLevelTab(sourceRoute, value))
+    dispatch(closeFirstLevelTab(checkTypes, value))
   };
 
   const tabOptions = useMemo(() => {

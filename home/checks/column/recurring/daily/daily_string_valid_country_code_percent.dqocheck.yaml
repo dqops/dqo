@@ -5,5 +5,5 @@ spec:
   sensor_name: column/strings/string_valid_country_code_percent
   rule_name: comparison/min_percent
   help_text: Verifies that the percentage of valid country code in a column does not
-    exceed the minimum accepted percentage. Stores the most recent row count for each
-    day when the data quality check was evaluated.
+    fall below the minimum accepted percentage. Stores the most recent row count for
+    each day when the data quality check was evaluated.

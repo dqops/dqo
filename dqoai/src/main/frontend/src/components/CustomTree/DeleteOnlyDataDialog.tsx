@@ -45,7 +45,7 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
 
   return (
     <Dialog open={open} handler={onClose} className="min-w-200 p-4">
-      <DialogHeader className="font-bold text-center justify-center">Delete all collected results for the time range:</DialogHeader>
+      <DialogHeader className="font-bold text-center justify-center">Delete data</DialogHeader>
       <DialogBody>
         <div className="flex flex-col">
           <div>
@@ -61,7 +61,7 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
             />
           </div>
           <div>
-            <div className="flex mt-4 items-center">
+            <div className="flex items-start text-gray-700">
               <Radio
                 id="part"
                 name="delete_mode"
@@ -70,43 +70,39 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
                 onChange={() => setMode('part')}
                 color="teal"
               />
-              <div className="flex space-x-6 items-center">
-                <DatePicker
-                  showIcon
-                  placeholderText='Select date start'
-                  onChange={setStartDate}
-                  selected={startDate}
-                  disabled={isDisabled}
-                />
-                <span>to</span>
-                <DatePicker
-                  showIcon
-                  placeholderText='Select date end'
-                  onChange={setEndDate}
-                  selected={endDate}
-                  disabled={isDisabled}
-                />
+              <div className="mt-2">
+                <p>For the time range:</p>
+                <div className="flex space-x-6 items-center">
+                  <DatePicker
+                    showIcon
+                    placeholderText='Select date start'
+                    onChange={setStartDate}
+                    selected={startDate}
+                    disabled={isDisabled}
+                  />
+                  <span>to</span>
+                  <DatePicker
+                    showIcon
+                    placeholderText='Select date end'
+                    onChange={setEndDate}
+                    selected={endDate}
+                    disabled={isDisabled}
+                  />
+                </div>
               </div>
             </div>
-            <div className="flex flex-col gap-4 px-4 my-4">
-              <Checkbox
-                checked={params.deleteErrors}
-                onChange={(deleteErrors) => onChangeParams({ deleteErrors })}
-                label="Error"
-                disabled={isDisabled}
-                checkClassName="bg-teal-500"
-              />
+            <div className="flex flex-col gap-4 px-4 my-4 text-gray-700">
               <Checkbox
                 checked={params.deleteProfilingResults}
                 onChange={(deleteProfilingResults) => onChangeParams({ deleteProfilingResults })}
-                label="Profiling Results"
+                label="Statistics Results"
                 disabled={isDisabled}
                 checkClassName="bg-teal-500"
               />
               <Checkbox
                 checked={params.deleteRuleResults}
                 onChange={(deleteRuleResults) => onChangeParams({ deleteRuleResults })}
-                label="Rule Results"
+                label="Check Results"
                 disabled={isDisabled}
                 checkClassName="bg-teal-500"
               />
@@ -114,6 +110,13 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
                 checked={params.deleteSensorReadouts}
                 onChange={(deleteSensorReadouts) => onChangeParams({ deleteSensorReadouts })}
                 label="Sensor Readouts"
+                disabled={isDisabled}
+                checkClassName="bg-teal-500"
+              />
+              <Checkbox
+                checked={params.deleteErrors}
+                onChange={(deleteErrors) => onChangeParams({ deleteErrors })}
+                label="Execution Errors"
                 disabled={isDisabled}
                 checkClassName="bg-teal-500"
               />

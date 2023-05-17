@@ -8,7 +8,7 @@ ___
 ## **date match format percent**  
   
 **Check description**  
-Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage.  
+Verifies that the percentage of date values matching the given format in a column does not exceed the minimum accepted percentage.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -311,6 +311,62 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_formats(date_formats) %}
+        {%- if date_formats == 'DD/MM/YYYY'-%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
+        {%- elif date_formats == 'DD-MM-YYYY' -%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
+        {%- elif date_formats == 'DD.MM.YYYY' -%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
+        {%- elif date_formats == 'YYYY-MM-DD' -%}
+            '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_formats(parameters.date_formats)}} ESCAPE '~'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    
+    
+    SELECT
+        CASE
+            WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        SYSDATETIMEOFFSET() AS time_period,
+        CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -590,6 +646,70 @@ spec:
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_formats(date_formats) %}
+            {%- if date_formats == 'DD/MM/YYYY'-%}
+                '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
+            {%- elif date_formats == 'DD-MM-YYYY' -%}
+                '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
+            {%- elif date_formats == 'DD.MM.YYYY' -%}
+                '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
+            {%- elif date_formats == 'YYYY-MM-DD' -%}
+                '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+            {%- endif -%}
+        {% endmacro %}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_formats(parameters.date_formats)}} ESCAPE '~'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        
+        
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            SYSDATETIMEOFFSET() AS time_period,
+            CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+                , 
+            
+        ORDER BY level_1, level_2
+                , 
+            
+        
+            
         ```
     
 
@@ -907,6 +1027,62 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_formats(date_formats) %}
+        {%- if date_formats == 'DD/MM/YYYY'-%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
+        {%- elif date_formats == 'DD-MM-YYYY' -%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
+        {%- elif date_formats == 'DD.MM.YYYY' -%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
+        {%- elif date_formats == 'YYYY-MM-DD' -%}
+            '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_formats(parameters.date_formats)}} ESCAPE '~'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    
+    
+    SELECT
+        CASE
+            WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
+        CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -1187,6 +1363,70 @@ spec:
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_formats(date_formats) %}
+            {%- if date_formats == 'DD/MM/YYYY'-%}
+                '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
+            {%- elif date_formats == 'DD-MM-YYYY' -%}
+                '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
+            {%- elif date_formats == 'DD.MM.YYYY' -%}
+                '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
+            {%- elif date_formats == 'YYYY-MM-DD' -%}
+                '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+            {%- endif -%}
+        {% endmacro %}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_formats(parameters.date_formats)}} ESCAPE '~'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        
+        
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
+            CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+                , 
+            
+        ORDER BY level_1, level_2
+                , 
+            
+        
+            
         ```
     
 
@@ -1504,6 +1744,62 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_formats(date_formats) %}
+        {%- if date_formats == 'DD/MM/YYYY'-%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
+        {%- elif date_formats == 'DD-MM-YYYY' -%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
+        {%- elif date_formats == 'DD.MM.YYYY' -%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
+        {%- elif date_formats == 'YYYY-MM-DD' -%}
+            '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_formats(parameters.date_formats)}} ESCAPE '~'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    
+    
+    SELECT
+        CASE
+            WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+        CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -1784,6 +2080,70 @@ spec:
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_formats(date_formats) %}
+            {%- if date_formats == 'DD/MM/YYYY'-%}
+                '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
+            {%- elif date_formats == 'DD-MM-YYYY' -%}
+                '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
+            {%- elif date_formats == 'DD.MM.YYYY' -%}
+                '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
+            {%- elif date_formats == 'YYYY-MM-DD' -%}
+                '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+            {%- endif -%}
+        {% endmacro %}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_formats(parameters.date_formats)}} ESCAPE '~'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        
+        
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+            CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+                , 
+            
+        ORDER BY level_1, level_2
+                , 
+            
+        
+            
         ```
     
 
@@ -2101,6 +2461,66 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_formats(date_formats) %}
+        {%- if date_formats == 'DD/MM/YYYY'-%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
+        {%- elif date_formats == 'DD-MM-YYYY' -%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
+        {%- elif date_formats == 'DD.MM.YYYY' -%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
+        {%- elif date_formats == 'YYYY-MM-DD' -%}
+            '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_formats(parameters.date_formats)}} ESCAPE '~'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    
+    
+    SELECT
+        CASE
+            WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        CAST([] AS date) AS time_period,
+        CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    GROUP BY CAST([] AS date), CAST([] AS date)
+    ORDER BY CAST([] AS date)
+    
+        
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -2381,6 +2801,67 @@ spec:
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_formats(date_formats) %}
+            {%- if date_formats == 'DD/MM/YYYY'-%}
+                '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
+            {%- elif date_formats == 'DD-MM-YYYY' -%}
+                '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
+            {%- elif date_formats == 'DD.MM.YYYY' -%}
+                '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
+            {%- elif date_formats == 'YYYY-MM-DD' -%}
+                '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+            {%- endif -%}
+        {% endmacro %}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_formats(parameters.date_formats)}} ESCAPE '~'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        
+        
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            CAST([] AS date) AS time_period,
+            CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+        GROUP BY CAST([] AS date), CAST([] AS date)
+        ORDER BY level_1, level_2CAST([] AS date)
+        
+            
         ```
     
 
@@ -2698,6 +3179,66 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### **SQL Server**
+=== "Sensor template for SQL Server"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_formats(date_formats) %}
+        {%- if date_formats == 'DD/MM/YYYY'-%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
+        {%- elif date_formats == 'DD-MM-YYYY' -%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
+        {%- elif date_formats == 'DD.MM.YYYY' -%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
+        {%- elif date_formats == 'YYYY-MM-DD' -%}
+            '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_formats(parameters.date_formats)}} ESCAPE '~'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for SQL Server"
+      
+    ```
+    
+    
+    SELECT
+        CASE
+            WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
+        CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
+    FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+    ORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
+    
+        
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
@@ -2978,6 +3519,67 @@ spec:
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    **SQL Server**  
+      
+    === "Sensor template for SQL Server"
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_formats(date_formats) %}
+            {%- if date_formats == 'DD/MM/YYYY'-%}
+                '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
+            {%- elif date_formats == 'DD-MM-YYYY' -%}
+                '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
+            {%- elif date_formats == 'DD.MM.YYYY' -%}
+                '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
+            {%- elif date_formats == 'YYYY-MM-DD' -%}
+                '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+            {%- endif -%}
+        {% endmacro %}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_formats(parameters.date_formats)}} ESCAPE '~'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for SQL Server"
+        ```
+        
+        
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN analyzed_table.[target_column] LIKE '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$' ESCAPE '~'
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
+            CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
+        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
+        
+            
         ```
     
 

@@ -1,3 +1,8 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/ProviderSensorYaml-schema.json
 apiVersion: dqo/v1
 kind: provider_sensor
-spec: {}
+spec:
+  type: sql_template
+  java_class_name: ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner
+  supports_grouping_by_data_stream: false
+  supports_partitioned_checks: false

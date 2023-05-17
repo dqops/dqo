@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum number of strings with a length below the indicated by the user length in a monitored column.
+ * Column level check that ensures that the number of strings in the monitored column with a length below the length defined by the user as a parameter does not exceed set thresholds.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

@@ -23,8 +23,8 @@ import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpe
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
-import ai.dqo.checks.table.recurring.TableMonthlyRecurringCategoriesSpec;
-import ai.dqo.checks.table.recurring.TableRecurringSpec;
+import ai.dqo.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
@@ -126,10 +126,10 @@ public class TableSpec extends AbstractSpec {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
 
-    @JsonPropertyDescription("Configuration of table level recurring checks. Recurring are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A checkpoint stores only the most recent data quality check result for each period of time.")
+    @JsonPropertyDescription("Configuration of table level recurring checks. Recurring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A recurring check stores only the most recent data quality check result for each period of time.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableRecurringSpec recurringChecks = new TableRecurringSpec();
+    private TableRecurringChecksSpec recurringChecks = new TableRecurringChecksSpec();
 
     @JsonPropertyDescription("Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -302,16 +302,16 @@ public class TableSpec extends AbstractSpec {
     }
 
     /**
-     * Returns configuration of enabled table level data quality checks.
-     * @return Table level data quality checks.
+     * Returns configuration of enabled table level profiling data quality checks.
+     * @return Table level profiling data quality checks.
      */
     public TableProfilingCheckCategoriesSpec getProfilingChecks() {
         return profilingChecks;
     }
 
     /**
-     * Sets a new configuration of table level data quality checks.
-     * @param profilingChecks New checks configuration.
+     * Sets a new configuration of table level profiling data quality checks.
+     * @param profilingChecks New profiling checks configuration.
      */
     public void setProfilingChecks(TableProfilingCheckCategoriesSpec profilingChecks) {
 		setDirtyIf(!Objects.equals(this.profilingChecks, profilingChecks));
@@ -323,15 +323,15 @@ public class TableSpec extends AbstractSpec {
      * Returns configuration of enabled table level recurring.
      * @return Table level recurring.
      */
-    public TableRecurringSpec getRecurringChecks() {
+    public TableRecurringChecksSpec getRecurringChecks() {
         return recurringChecks;
     }
 
     /**
-     * Sets a new configuration of table level data quality recurring.
-     * @param recurringChecks New recurring configuration.
+     * Sets a new configuration of table level data quality recurring checks.
+     * @param recurringChecks New recurring checks configuration.
      */
-    public void setRecurringChecks(TableRecurringSpec recurringChecks) {
+    public void setRecurringChecks(TableRecurringChecksSpec recurringChecks) {
         setDirtyIf(!Objects.equals(this.recurringChecks, recurringChecks));
         this.recurringChecks = recurringChecks;
         propagateHierarchyIdToField(recurringChecks, "recurring_checks");
@@ -346,7 +346,7 @@ public class TableSpec extends AbstractSpec {
     }
 
     /**
-     * Sets a new configuration of table level date/time partitioned data quality recurring.
+     * Sets a new configuration of table level date/time partitioned data quality checks.
      * @param partitionedChecks New configuration of date/time partitioned checks.
      */
     public void setPartitionedChecks(TablePartitionedChecksRootSpec partitionedChecks) {
@@ -488,9 +488,9 @@ public class TableSpec extends AbstractSpec {
             }
 
             case RECURRING: {
-                TableRecurringSpec recurringSpec = this.recurringChecks;
+                TableRecurringChecksSpec recurringSpec = this.recurringChecks;
                 if (recurringSpec == null) {
-                    recurringSpec = new TableRecurringSpec();
+                    recurringSpec = new TableRecurringChecksSpec();
                     recurringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "recurring_checks"));
                     if (attachCheckContainer) {
                         this.recurringChecks = recurringSpec;
@@ -515,7 +515,7 @@ public class TableSpec extends AbstractSpec {
                             return recurringSpec.getMonthly();
                         }
 
-                        TableMonthlyRecurringCategoriesSpec monthlyRecurringCategoriesSpec = new TableMonthlyRecurringCategoriesSpec();
+                        TableMonthlyRecurringCheckCategoriesSpec monthlyRecurringCategoriesSpec = new TableMonthlyRecurringCheckCategoriesSpec();
                         monthlyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "monthly"));
                         if (attachCheckContainer) {
                             recurringSpec.setMonthly(monthlyRecurringCategoriesSpec);
@@ -575,7 +575,7 @@ public class TableSpec extends AbstractSpec {
 
     /**
      * Sets the given container of checks at a proper level of the check hierarchy.
-     * The object could be an profiling check container, one of checkpoint containers or one of partitioned checks container.
+     * The object could be a profiling check container, one of recurring check containers or one of partitioned check containers.
      * @param checkRootContainer Root check container to store.
      */
     @JsonIgnore
@@ -589,17 +589,17 @@ public class TableSpec extends AbstractSpec {
         }
         else if (checkRootContainer instanceof TableDailyRecurringCategoriesSpec) {
             if (this.recurringChecks == null) {
-                this.setRecurringChecks(new TableRecurringSpec());
+                this.setRecurringChecks(new TableRecurringChecksSpec());
             }
 
             this.getRecurringChecks().setDaily((TableDailyRecurringCategoriesSpec)checkRootContainer);
         }
-        else if (checkRootContainer instanceof TableMonthlyRecurringCategoriesSpec) {
+        else if (checkRootContainer instanceof TableMonthlyRecurringCheckCategoriesSpec) {
             if (this.recurringChecks == null) {
-                this.setRecurringChecks(new TableRecurringSpec());
+                this.setRecurringChecks(new TableRecurringChecksSpec());
             }
 
-            this.getRecurringChecks().setMonthly((TableMonthlyRecurringCategoriesSpec)checkRootContainer);
+            this.getRecurringChecks().setMonthly((TableMonthlyRecurringCheckCategoriesSpec)checkRootContainer);
         }
         else if (checkRootContainer instanceof TableDailyPartitionedCheckCategoriesSpec) {
             if (this.partitionedChecks == null) {

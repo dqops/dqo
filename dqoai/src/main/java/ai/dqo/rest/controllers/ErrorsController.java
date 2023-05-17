@@ -69,7 +69,7 @@ public class ErrorsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent errors.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/errors")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/errors")
     @ApiOperation(value = "getTableProfilingErrors", notes = "Returns the errors related to the most recent check executions for all table level data quality profiling checks on a table",
             response = ErrorsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -188,7 +188,7 @@ public class ErrorsController {
      * @param monthEnd       Month end boundary.
      * @return View of the errors related to the recent partitioned checks results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitionedchecks/{timeScale}/errors")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/errors")
     @ApiOperation(value = "getTablePartitionedErrors", notes = "Returns errors related to the recent table level partitioned checks executions for a requested time scale", response = ErrorsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -225,14 +225,14 @@ public class ErrorsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec partitionedChecks = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
+        AbstractRootChecksContainerSpec Partitioned = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
         ErrorsDetailedDataModel[] errorsDetailedDataModels = this.errorsDataService.readErrorsDetailed(
-                partitionedChecks, loadParams);
+                Partitioned, loadParams);
         return new ResponseEntity<>(Flux.fromArray(errorsDetailedDataModels), HttpStatus.OK); // 200
     }
 
@@ -247,7 +247,7 @@ public class ErrorsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent errors.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/errors")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/errors")
     @ApiOperation(value = "getColumnProfilingErrors", notes = "Returns the errors related to the recent check executions for all column level data quality profiling checks on a column",
             response = ErrorsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -380,7 +380,7 @@ public class ErrorsController {
      * @param monthEnd       Month end boundary.
      * @return View of errors related to the recent partitioned checks results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitionedchecks/{timeScale}/errors")
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/errors")
     @ApiOperation(value = "getColumnPartitionedErrors", notes = "Returns the errors related to the recent column level partitioned checks executions for a requested time scale",
             response = ErrorsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -424,14 +424,14 @@ public class ErrorsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec partitionedChecks = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
+        AbstractRootChecksContainerSpec Partitioned = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
         ErrorsDetailedParameters loadParams = new ErrorsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
         ErrorsDetailedDataModel[] errorsDetailedDataModels = this.errorsDataService.readErrorsDetailed(
-                partitionedChecks, loadParams);
+                Partitioned, loadParams);
         return new ResponseEntity<>(Flux.fromArray(errorsDetailedDataModels), HttpStatus.OK); // 200
     }
 }

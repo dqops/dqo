@@ -22,8 +22,9 @@ import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
 import { findTreeNode } from '../utils/tree';
 import { CheckTypes, ROUTES } from "../shared/routes";
 import { useHistory, useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addFirstLevelTab } from "../redux/actions/source.actions";
+import { getFirstLevelActiveTab } from "../redux/selectors";
 
 const TreeContext = React.createContext({} as any);
 
@@ -43,7 +44,7 @@ const checkTypesToHasConfiguredCheckKey = {
 
 function TreeProvider(props: any) {
   const [treeDataMaps, setTreeDataMaps] = useState<Record<string, CustomTreeNode[]>>({});
-  const [sourceRoute, setSourceRoute] = useState('');
+  const [sourceRoute, setSourceRoute] = useState<CheckTypes>(CheckTypes.SOURCES);
   const treeData = useMemo(() => treeDataMaps[sourceRoute] ?? [], [treeDataMaps, sourceRoute]);
   const setTreeData = useCallback((_treeData: CustomTreeNode[]) => {
     setTreeDataMaps(prev => ({
@@ -72,6 +73,7 @@ function TreeProvider(props: any) {
   const dispatch = useDispatch();
   const [loadingNodes, setLoadingNodes] = useState<Record<string, boolean>>({});
   const location = useLocation();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(sourceRoute));
 
   const getConnections = async () => {
     const res: AxiosResponse<ConnectionBasicModel[]> =
@@ -400,7 +402,7 @@ function TreeProvider(props: any) {
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
-    const res = await TableApiClient.getTableRecurringUIBasic(
+    const res = await TableApiClient.getTableRecurringChecksUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? '',
@@ -444,7 +446,7 @@ function TreeProvider(props: any) {
     const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-    const res = await ColumnApiClient.getColumnRecurringUIBasic(
+    const res = await ColumnApiClient.getColumnRecurringChecksUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? '',
@@ -590,7 +592,7 @@ function TreeProvider(props: any) {
       CheckTypes.PARTITIONED,
     ].reduce((acc, cur) => ({
       ...acc,
-      [cur]: treeDataMaps[cur].filter((item) => item.id !== node.id)
+      [cur]: treeDataMaps[cur].filter((item) => !item.id.toString().startsWith(node.id.toString()))
     }), {});
 
     setTreeDataMaps(newTreeDataMaps);
@@ -601,7 +603,18 @@ function TreeProvider(props: any) {
       const newActiveNode = findTreeNode(treeData, newActiveTab);
       updateActiveTabMap(newActiveTab);
       setActiveNode(newActiveNode);
-      setTabs(tabs.filter((item) => item.value !== node.id));
+
+      const newTabsMaps = [
+        CheckTypes.RECURRING,
+        CheckTypes.SOURCES,
+        CheckTypes.PROFILING,
+        CheckTypes.PARTITIONED,
+      ].reduce((acc, cur) => ({
+        ...acc,
+        [cur]: (tabMaps[cur] || []).filter((item) => !item.value.toString().startsWith(node.id.toString()))
+      }), {});
+
+      setTabMaps(newTabsMaps);
     }
 
     if (node.level === TREE_LEVEL.DATABASE) {
@@ -724,7 +737,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
-      const res = await TableApiClient.getTableRecurringUI(
+      const res = await TableApiClient.getTableRecurringChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -736,7 +749,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
-      const res = await TableApiClient.getTableRecurringUI(
+      const res = await TableApiClient.getTableRecurringChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -785,7 +798,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
-      const res = await ColumnApiClient.getColumnRecurringUI(
+      const res = await ColumnApiClient.getColumnRecurringChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -798,7 +811,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
-      const res = await ColumnApiClient.getColumnRecurringUI(
+      const res = await ColumnApiClient.getColumnRecurringChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -887,18 +900,27 @@ function TreeProvider(props: any) {
     setSelectedTreeNode(node);
     const defaultConnectionTab = sourceRoute === CheckTypes.SOURCES ? 'detail' : 'schedule';
     if (node.level === TREE_LEVEL.DATABASE) {
+      const url = ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, defaultConnectionTab);
+      if (firstLevelActiveTab === url) {
+        return;
+      }
       dispatch(addFirstLevelTab(sourceRoute, {
-        url: ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, defaultConnectionTab),
+        url,
         value: ROUTES.CONNECTION_LEVEL_VALUE(sourceRoute, node.label),
         state: {},
         label: node.label
       }));
-      pushHistory(ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, defaultConnectionTab));
+      pushHistory(url);
     } else if (node.level === TREE_LEVEL.SCHEMA) {
       const connectionNode = findTreeNode(treeData, node.parentId ?? '');
+      const url = ROUTES.SCHEMA_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', node.label, 'tables');
+
+      if (firstLevelActiveTab === url) {
+        return;
+      }
 
       dispatch(addFirstLevelTab(sourceRoute, {
-        url: ROUTES.SCHEMA_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', node.label, 'tables'),
+        url,
         value: ROUTES.SCHEMA_LEVEL_VALUE(sourceRoute, connectionNode?.label ?? '', node.label),
         state: {},
         label: node.label
@@ -915,8 +937,14 @@ function TreeProvider(props: any) {
         tab = tab || 'detail'
       }
 
+      const url = ROUTES.TABLE_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', node.label, tab);
+
+      if (firstLevelActiveTab === url) {
+        return;
+      }
+
       dispatch(addFirstLevelTab(sourceRoute, {
-        url: ROUTES.TABLE_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', node.label, tab),
+        url,
         value: ROUTES.TABLE_LEVEL_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', node.label),
         state: {},
         label: node.label
@@ -947,6 +975,9 @@ function TreeProvider(props: any) {
         value = ROUTES.TABLE_PARTITIONED_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
       }
 
+      if (firstLevelActiveTab === url) {
+        return;
+      }
       dispatch(addFirstLevelTab(sourceRoute, {
         url: url,
         value,
@@ -980,8 +1011,12 @@ function TreeProvider(props: any) {
         value = ROUTES.COLUMN_PARTITIONED_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
       }
 
+      if (url === firstLevelActiveTab) {
+        return;
+      }
+
       dispatch(addFirstLevelTab(sourceRoute, {
-        url: url,
+        url,
         value,
         state: {},
         label: node.label
@@ -1010,8 +1045,11 @@ function TreeProvider(props: any) {
           url = ROUTES.TABLE_PARTITIONED_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly', node.category ?? '', node.label);
         }
 
+        if (firstLevelActiveTab === url) {
+          return;
+        }
         dispatch(addFirstLevelTab(sourceRoute, {
-          url: url,
+          url,
           value: url,
           state: {},
           label: node.label
@@ -1036,6 +1074,9 @@ function TreeProvider(props: any) {
         } else if (parentNode.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
           url = ROUTES.COLUMN_PARTITIONED_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly', node.category ?? '', node.label);
         }
+        if (firstLevelActiveTab === url) {
+          return;
+        }
         dispatch(addFirstLevelTab(sourceRoute, {
           url: url,
           value: url,
@@ -1050,6 +1091,9 @@ function TreeProvider(props: any) {
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
       const url = ROUTES.TABLE_COLUMNS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
+      if (firstLevelActiveTab === url) {
+        return;
+      }
       dispatch(addFirstLevelTab(sourceRoute, {
         url,
         value: url,
@@ -1070,8 +1114,13 @@ function TreeProvider(props: any) {
         tab = tab || 'detail'
       }
 
+      const url = ROUTES.COLUMN_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.label, tab);
+      if (url === firstLevelActiveTab) {
+        return;
+      }
+
       dispatch(addFirstLevelTab(sourceRoute, {
-        url: ROUTES.COLUMN_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.label, tab),
+        url,
         value: `/${sourceRoute}/connection/${connectionNode?.label ?? ''}/schema/${schemaNode?.label ?? ''}/table/${tableNode?.label ?? ''}/columns/${node.label}`,
         state: {},
         label: node.label
@@ -1096,7 +1145,7 @@ function TreeProvider(props: any) {
     const initialPathName = location.pathname;
     const activeSourceRoute = initialPathName.split('/')[1] ?? '';
     if ([CheckTypes.RECURRING, CheckTypes.SOURCES, CheckTypes.PROFILING, CheckTypes.PARTITIONED].includes(activeSourceRoute as CheckTypes)) {
-      setSourceRoute(activeSourceRoute);
+      setSourceRoute(activeSourceRoute as CheckTypes);
     }
   }, [location]);
 
@@ -1130,7 +1179,7 @@ function TreeProvider(props: any) {
       CheckTypes.PARTITIONED,
     ].reduce((acc, cur) => ({
       ...acc,
-      [cur]: treeDataMaps[cur].filter((item) => item.id !== identify)
+      [cur]: (treeDataMaps[cur] || []).filter((item) => item.id !== identify)
     }), {});
 
     setTreeDataMaps(newTreeDataMaps);

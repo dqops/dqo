@@ -49,7 +49,7 @@ const ColumnRecurringChecksView = () => {
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnRecurringOverview(connection, schema, table, column, tab).then((res) => {
+    CheckResultOverviewApi.getColumnRecurringChecksOverview(connection, schema, table, column, tab).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };

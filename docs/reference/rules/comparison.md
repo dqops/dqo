@@ -226,6 +226,106 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
+## **datatype equals**
+**Full rule name**
+```
+comparison/datatype_equals
+```
+**Description**  
+Data quality rule that verifies that a data quality check readout of a string_datatype_detect (the data type detection) matches an expected data type.
+ The supported values are in the range 1..7, which are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|expected_datatype|Expected data type code, the data type codes are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.|integer| ||
+
+
+
+**Example**
+```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  mode: current_value
+  fields:
+  - field_name: expected_datatype
+    display_name: expected_datatype
+    help_text: &quot;Expected data type code, the data type codes are: 1 - integers, 2\
+      \ - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed\
+      \ data types.&quot;
+    data_type: integer
+    sample_values:
+    - 1
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class EqualsRuleParametersSpec:
+    expected_datatype: int
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: EqualsRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    expected_value = rule_parameters.parameters.expected_datatype
+    lower_bound = expected_value
+    upper_bound = expected_value
+    passed = (expected_value == rule_parameters.actual_value)
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+```
+___
+
 ## **diff percent**
 **Full rule name**
 ```
@@ -728,13 +828,13 @@ ___
 comparison/max_failures
 ```
 **Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
+Data quality rule that verifies if the number of executive failures (the sensor returned 0) is below the max_failures. The default maximum failures is 0 failures (the first failure is reported).
 
 **Parameters**  
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
+|max_failures|Maximum number of consecutive check failures, a check is failed when the sensor&#x27;s query failed to execute due to a connection error, missing table or a corrupted table.|long| ||
 
 
 
@@ -754,8 +854,9 @@ spec:
   fields:
   - field_name: max_failures
     display_name: max_failures
-    help_text: Maximum accepted value for the actual_value returned by the sensor
-      (inclusive).
+    help_text: &quot;Maximum number of consecutive check failures, a check is failed when\
+      \ the sensor&#x27;s query failed to execute due to a connection error, missing table\
+      \ or a corrupted table.&quot;
     data_type: long
 ```
 

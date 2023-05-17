@@ -16,14 +16,14 @@ import { CheckTypes } from "../../shared/routes";
 
 const TableRecurringChecksUIFilterView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, timePartitioned, category, checkName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string } = useParams();
-  const { recurringUIFilter, isUpdatedRecurringChecksUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
+  const { recurringChecksUIFilter, isUpdatedRecurringChecksUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const [isUpdating, setIsUpdating] = useState(false);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getTableRecurringOverview(connectionName, schemaName, tableName, timePartitioned).then((res) => {
+    CheckResultOverviewApi.getTableRecurringChecksOverview(connectionName, schemaName, tableName, timePartitioned).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
@@ -36,12 +36,12 @@ const TableRecurringChecksUIFilterView = () => {
 
   const onUpdate = async () => {
     setIsUpdating(true);
-    await TableApiClient.updateTableRecurringUI(
+    await TableApiClient.updateTableRecurringChecksUI(
       connectionName,
       schemaName,
       tableName,
       timePartitioned,
-      recurringUIFilter
+      recurringChecksUIFilter
     );
 
     await dispatch(
@@ -74,7 +74,7 @@ const TableRecurringChecksUIFilterView = () => {
         <DataQualityChecks
           onUpdate={onUpdate}
           className="max-h-checks-1"
-          checksUI={recurringUIFilter}
+          checksUI={recurringChecksUIFilter}
           onChange={onChange}
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}

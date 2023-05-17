@@ -305,10 +305,14 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 				spec -> {
 					if (columnSpec.getTypeSnapshot() != null) {
 						spec.setTypeSnapshot(columnSpec.getTypeSnapshot());
-						userHomeContext.flush();
+					}
+					if (columnSpec.getSqlExpression() != null) {
+						spec.setSqlExpression(columnSpec.getSqlExpression());
 					}
 				}
 		);
+
+		userHomeContext.flush();
 
 		cliOperationStatus.setSuccessMessage(String.format("Successfully updated %d columns.", columnSpecs.size()));
 		return cliOperationStatus;
@@ -354,9 +358,9 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 					TableWrapper table = userHome.findTableFor(spec.getHierarchyId());
 					table.getSpec().getColumns().put(newColumnName, spec.deepClone());
 					table.getSpec().getColumns().remove(spec.getColumnName());
-					userHomeContext.flush();
 				}
 		);
+		userHomeContext.flush();
 
 		cliOperationStatus.setSuccessMessage(String.format("Successfully renamed column %s.", columnName));
 		return cliOperationStatus;
@@ -408,9 +412,9 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 
 		columnSpecs.forEach(spec -> {
 				spec.setDisabled(disable);
-				userHomeContext.flush();
 			}
 		);
+		userHomeContext.flush();
 
 		cliOperationStatus.setSuccessMessage(String.format("Successfully %s %d columns.",
 															disable ? "disabled" : "enabled", columnSpecs.size()));

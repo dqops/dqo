@@ -29,7 +29,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of column level checkpoints, divided by the time window (daily, monthly, etc.)
+ * Container of column level partitioned checks, divided by the time window (daily, monthly, etc.)
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -55,16 +55,16 @@ public class ColumnPartitionedChecksRootSpec extends AbstractSpec {
     // TODO: add other time periods that make sense (hourly, weekly, etc.)
 
     /**
-     * Returns daily checkpoints.
-     * @return Daily checkpoints.
+     * Returns daily partitioned checks.
+     * @return Daily partitioned checks.
      */
     public ColumnDailyPartitionedCheckCategoriesSpec getDaily() {
         return daily;
     }
 
     /**
-     * Sets the daily check points container.
-     * @param daily New daily check points container.
+     * Sets the daily partitioned checks container.
+     * @param daily New daily partitioned checks container.
      */
     public void setDaily(ColumnDailyPartitionedCheckCategoriesSpec daily) {
 		this.setDirtyIf(!Objects.equals(this.daily, daily));
@@ -73,16 +73,16 @@ public class ColumnPartitionedChecksRootSpec extends AbstractSpec {
     }
 
     /**
-     * Returns monthly checkpoints.
-     * @return Monthly checkpoints.
+     * Returns monthly partitioned checks.
+     * @return Monthly partitioned checks.
      */
     public ColumnMonthlyPartitionedCheckCategoriesSpec getMonthly() {
         return monthly;
     }
 
     /**
-     * Sets the monthly check points container.
-     * @param monthly New monthly check points container.
+     * Sets the monthly partitioned checks container.
+     * @param monthly New monthly partitioned checks container.
      */
     public void setMonthly(ColumnMonthlyPartitionedCheckCategoriesSpec monthly) {
         this.setDirtyIf(!Objects.equals(this.monthly, monthly));

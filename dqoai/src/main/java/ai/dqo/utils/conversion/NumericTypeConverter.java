@@ -60,4 +60,88 @@ public class NumericTypeConverter {
         String asString = obj.toString();
         return Integer.valueOf(asString);
     }
+
+    /**
+     * Converts a given object to a long (integer 64 bit) value.
+     * @param obj Object that could be of any numeric type or a string.
+     * @return Long value.
+     */
+    public static Long toLong(Object obj) {
+        if (obj == null) {
+            return null;
+        }
+
+        if (obj instanceof Long) {
+            return (Long) obj;
+        }
+
+        if (obj instanceof Integer) {
+            return ((Integer) obj).longValue();
+        }
+
+        if (obj instanceof Short) {
+            return ((Short) obj).longValue();
+        }
+
+        if (obj instanceof Byte) {
+            return ((Byte) obj).longValue();
+        }
+
+        if (obj instanceof Boolean) {
+            return ((Boolean) obj) ? 1L : 0L;
+        }
+
+        if (obj instanceof Double) {
+            return ((Double) obj).longValue();
+        }
+
+        if (obj instanceof Float) {
+            return ((Float) obj).longValue();
+        }
+
+        String asString = obj.toString();
+        return Long.valueOf(asString);
+    }
+
+    /**
+     * Converts a given object to a double value.
+     * @param obj Object that could be of any numeric type or a string.
+     * @return Double value.
+     */
+    public static Double toDouble(Object obj) {
+        if (obj == null) {
+            return null;
+        }
+
+        if (obj instanceof Double) {
+            return (Double) obj;
+        }
+
+        if (obj instanceof Integer) {
+            return ((Integer) obj).doubleValue();
+        }
+
+        if (obj instanceof Long) {
+            return ((Long) obj).doubleValue();
+        }
+
+        if (obj instanceof Short) {
+            return ((Short) obj).doubleValue();
+        }
+
+        if (obj instanceof Byte) {
+            return ((Byte) obj).doubleValue();
+        }
+
+        if (obj instanceof Boolean) {
+            return ((Boolean) obj) ? 1.0 : 0.0;
+        }
+
+        if (obj instanceof Float) {
+            return ((Float) obj).doubleValue();
+        }
+
+        String asString = obj.toString();
+        return Double.valueOf(asString);
+    }
 }
