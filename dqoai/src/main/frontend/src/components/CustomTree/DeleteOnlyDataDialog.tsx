@@ -80,6 +80,7 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
                     onChange={setStartDate}
                     selected={startDate}
                     disabled={isDisabled}
+                    dateFormat="yyyy-MM-dd"
                   />
                   <span>to</span>
                   <DatePicker
@@ -88,11 +89,12 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
                     onChange={setEndDate}
                     selected={endDate}
                     disabled={isDisabled}
+                    dateFormat="yyyy-MM-dd"
                   />
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-4 px-4 my-4 text-gray-700">
+            <div className="flex flex-col gap-4 px-4 my-4 text-gray-700 ml-7">
               <Checkbox
                 checked={params.deleteProfilingResults}
                 onChange={(deleteProfilingResults) => onChangeParams({ deleteProfilingResults })}
