@@ -2,7 +2,7 @@ import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import SvgIcon from '../../SvgIcon';
 import {
   Accordion,
@@ -14,6 +14,11 @@ import JobChild from '../JobChild';
 import { useSelector } from 'react-redux';
 import { useError, IError } from '../../../contexts/errrorContext';
 import { IRootState } from '../../../redux/reducers';
+import { reduceCounter } from '../../../redux/actions/job.actions';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { count } from 'console';
+
+
 
 const JobItem = ({
   job,
@@ -22,16 +27,23 @@ const JobItem = ({
   job: DqoJobHistoryEntryModel;
   counter?: number;
 }) => {
-  const { jobs } = useSelector((state: IRootState) => state.job);
+  const { jobs, wasOpen } = useSelector((state: IRootState) => state.job);
   const { errors } = useError();
-
+  const dispatch = useActionDispatch();
+  const [isClicked, setIsClicked] = useState<boolean>(false)
   const getNotificationDate = (notification: any) => {
     if (notification.type === 'job') {
       return notification.item.jobId?.createdAt;
     }
     return notification.item.date;
   };
+  
 
+  const reduceCount = () => {
+    dispatch(reduceCounter(!wasOpen));
+  };
+ 
+  
   const data = useMemo(() => {
     const jobsData = jobs?.jobs
       ? jobs?.jobs
@@ -85,7 +97,8 @@ const JobItem = ({
       return <SvgIcon name="running" className="w-4 h-4 text-orange-700" />;
     }
   };
-
+  
+  
   return (
     <Accordion open={open}>
       {job.jobId?.parentJobId?.jobId === undefined ? (
@@ -217,7 +230,7 @@ const JobItem = ({
             )}
             {job.jobId?.parentJobId?.jobId === undefined ? (
               <Accordion open={open2} className="min-w-100">
-                <AccordionHeader onClick={() => setOpen2(!open2)}>
+                <AccordionHeader onClick={() => {setOpen2(!open2), reduceCount()}}>
                   <div className=" flex justify-between items-center text-sm w-full text-gray-700">
                     Tasks{' '}
                   </div>
@@ -231,6 +244,7 @@ const JobItem = ({
                           succeededCounter={index}
                           parentId={Number(job.jobId?.jobId)}
                         />
+                        
                       </div>
                     ))}
                   </div>
@@ -245,5 +259,7 @@ const JobItem = ({
     </Accordion>
   );
 };
+
+
 
 export default JobItem;

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 
 import {
   Popover,
@@ -11,13 +11,15 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { toggleMenu } from '../../redux/actions/job.actions';
+import { reduceCounter } from '../../redux/actions/job.actions';
 import { useError, IError } from '../../contexts/errrorContext';
 import JobItem from './JobItem';
 import ErrorItem from './ErrorItem';
 import moment from 'moment';
 
 const NotificationMenu = () => {
-  const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
+  const { jobs, isOpen, wasOpen } = useSelector((state: IRootState) => state.job);
+  
   const dispatch = useActionDispatch();
   const { errors } = useError();
 
@@ -25,13 +27,14 @@ const NotificationMenu = () => {
     dispatch(toggleMenu(!isOpen));
   };
 
+
   const getNotificationDate = (notification: any) => {
     if (notification.type === 'job') {
       return notification.item.jobId?.createdAt;
     }
     return notification.item.date;
   };
-
+// console.log(isOpen)
   const data = useMemo(() => {
     const jobsData = jobs?.jobs
       ? jobs?.jobs
@@ -66,7 +69,7 @@ const NotificationMenu = () => {
           <div className="relative">
             <SvgIcon name="bell" className="w-5 h-5 text-gray-700" />
             <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-500 text-white px-1 py-0.5 text-xxs">
-              {data.length}
+              {reduceCounter(wasOpen? wasOpen : false) ? data.length-5 : data.length}
             </span>
           </div>
         </IconButton>
