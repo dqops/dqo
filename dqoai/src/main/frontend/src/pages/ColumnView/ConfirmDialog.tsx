@@ -1,19 +1,18 @@
 import React from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
-import { ColumnBasicModel } from '../../api';
 import Button from '../../components/Button';
 
 interface ConfirmDialogProps {
   open: boolean;
   onClose: () => void;
-  column?: ColumnBasicModel;
+  columnPath?: string;
   onConfirm: () => void;
 }
 
 const ConfirmDialog = ({
   open,
   onClose,
-  column,
+  columnPath,
   onConfirm
 }: ConfirmDialogProps) => {
   const handleSubmit = () => {
@@ -27,7 +26,7 @@ const ConfirmDialog = ({
         <DialogBody className="pt-10 pb-2 px-8">
           <div className="text-2xl text-gray-700 text-center whitespace-normal break-all">
             Are you sure you want to delete the column{' '}
-            {`${column?.connection_name}.${column?.table?.schema_name}.${column?.table?.table_name}.${column?.column_name}`}
+            {columnPath}
             ?
           </div>
         </DialogBody>

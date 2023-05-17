@@ -1,19 +1,18 @@
 import React from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
-import { TableBasicModel } from '../../../api';
 import Button from '../../Button';
 
 interface ConfirmDialogProps {
   open: boolean;
   onClose: () => void;
-  table?: TableBasicModel;
+  tablePath?: string;
   onConfirm: () => void;
 }
 
 const ConfirmDialog = ({
   open,
   onClose,
-  table,
+  tablePath,
   onConfirm
 }: ConfirmDialogProps) => {
   const handleSubmit = () => {
@@ -27,8 +26,7 @@ const ConfirmDialog = ({
         <DialogBody className="pt-10 pb-2 px-8">
           <div className="text-2xl text-gray-700 text-center whitespace-normal break-all">
             Are you sure you want to delete the table{' '}
-            {`${table?.connection_name}.${table?.target?.schema_name}.${table?.target?.table_name}`}
-            ?
+            {tablePath}?
           </div>
         </DialogBody>
         <DialogFooter className="justify-center space-x-6 pb-8">

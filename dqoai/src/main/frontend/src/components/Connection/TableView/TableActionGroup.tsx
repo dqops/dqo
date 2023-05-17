@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import Button from '../../Button';
 import ConfirmDialog from './ConfirmDialog';
-import { useSelector } from 'react-redux';
 import { TableApiClient } from '../../../services/apiClient';
 import { useTree } from "../../../contexts/treeContext";
-import { getFirstLevelState } from "../../../redux/selectors";
 import { useParams } from "react-router-dom";
 import { CheckTypes } from "../../../shared/routes";
 import AddColumnDialog from '../../CustomTree/AddColumnDialog';
@@ -24,24 +22,22 @@ const TableActionGroup = ({
   onUpdate,
   shouldDelete = true
 }: ITableActionGroupProps) => {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams()
+  const { checkTypes, connection, schema, table }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams()
   const [isOpen, setIsOpen] = useState(false);
-  const { tableBasic } = useSelector(getFirstLevelState(checkTypes));
   const { deleteData } = useTree();
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
 
-  const removeTable = async () => {
-    if (tableBasic) {
-      await TableApiClient.deleteTable(
-        tableBasic.connection_name ?? '',
-        tableBasic.target?.schema_name ?? '',
-        tableBasic.target?.table_name ?? ''
-      );
+  const fullPath = `${connection}.${schema}.${table}`;
 
-      const identify = `${tableBasic?.connection_name}.${tableBasic?.target?.schema_name}.${tableBasic?.target?.table_name}`;
-      deleteData(identify);
-    }
+  const removeTable = async () => {
+    await TableApiClient.deleteTable(
+      connection ?? '',
+      schema ?? '',
+      table ?? ''
+    );
+
+    deleteData(fullPath);
   };
 
   return (
@@ -76,7 +72,7 @@ const TableActionGroup = ({
       <ConfirmDialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        table={tableBasic}
+        tablePath={fullPath}
         onConfirm={removeTable}
       />
       <AddColumnDialog

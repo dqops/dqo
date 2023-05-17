@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../../components/Button';
 import ConfirmDialog from './ConfirmDialog';
-import { useSelector } from 'react-redux';
 import { ColumnApiClient } from '../../services/apiClient';
-import { getFirstLevelState } from '../../redux/selectors';
 import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../shared/routes';
 import clsx from 'clsx';
@@ -32,22 +30,20 @@ const ColumnActionGroup = ({
   onCollectStatistics,
   runningStatistics
 }: IActionGroupProps) => {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes, connection, schema, table, column }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
   const [isOpen, setIsOpen] = useState(false);
-  const { columnBasic } = useSelector(getFirstLevelState(checkTypes));
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const removeColumn = async () => {
-    if (columnBasic) {
-      await ColumnApiClient.deleteColumn(
-        columnBasic?.connection_name ?? '',
-        columnBasic?.table?.schema_name ?? '',
-        columnBasic.table?.table_name ?? '',
-        columnBasic.column_name ?? ''
-      );
-    }
+    await ColumnApiClient.deleteColumn(
+      connection ?? '',
+      schema ?? '',
+      table ?? '',
+      column ?? ''
+    );
   };
 
+  const columnPath = `${connection}.${schema}.${table}.${column}`
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {isSourceScreen && (
@@ -99,7 +95,7 @@ const ColumnActionGroup = ({
       <ConfirmDialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        column={columnBasic}
+        columnPath={columnPath}
         onConfirm={removeColumn}
       />
       <AddColumnDialog
