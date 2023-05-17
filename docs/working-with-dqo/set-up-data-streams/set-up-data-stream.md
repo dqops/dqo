@@ -54,7 +54,8 @@ To set up data stream at the table level:
 5. After adding new data stream you can set which one is the default one by clicking on the **Make Default** button.
 
     ![Setting default data stream](https://dqo.ai/docs/images/working-with-dqo/set-up-data-stream/setting-default-data-stream.jpg)
-
+    
+    On this screen you can also edit or delete data streams. 
 
 ## Set up data stream using the DQO Shell
 
@@ -64,7 +65,7 @@ The complete DQO YAML schema can be found [here](https://cloud.dqo.ai/dqo-yaml-s
 The YAML files in DQO support code completion in code editors such as Visual Studio Code. Remember to install YAML
 extension by RedHat and Better Jinja by Samuel Colvin
 
-To add data stream using the DQO Shell, follow the steps below.
+To set up a default data stream at the data source level, follow the steps below.
 
 1. Run the following command in DQO Shell to edit YAMl configuration file and define data stream.
 
@@ -126,4 +127,59 @@ To add data stream using the DQO Shell, follow the steps below.
         minimum_severity: warning
         max_incident_length_days: 60
         mute_for_days: 60
+    ```
+
+To set up a data stream at the table level
+
+1. Run the following command in DQO Shell to edit YAMl configuration file and define data stream.
+
+    ```
+    dqo.ai> table edit
+    ```
+
+2. Provide the connection name and full table name in a schema.table format.
+
+    ```
+    Connection name (--connection): testconnection
+    Full table name (schema.table), supports wildcard patterns 'sch*.tab*': austin_crime.crime
+    ```
+   After entering the above data, Visual Studio Code will be automatically launched.
+
+3. Add the data stream configuration to the YAML file using Visual Studio Code editor and save the file.
+
+    - Add the `data_streams:` parameter above the `column:` section.
+    - Add a name of the data stream
+    - Add the level of the datastream such as `level_1:`, and specify the `source:` as `tag` or `column_value`
+    - Add a name for the `tag:` or `column:` parameters.
+
+    Below is an examples of the YAML files showing a sample configuration of 2 data streams: 
+
+    - "Column data stream" with data stream set on description column
+    - "Tag data stream" with tag1 data stream.
+
+    ```yaml hl_lines="7-15"
+    apiVersion: dqo/v1
+    kind: table
+    spec:
+      incremental_time_window:
+        daily_partitioning_recent_days: 7
+        monthly_partitioning_recent_months: 1
+      data_streams:
+        Column data stream:
+          level_1:
+            source: column_value
+            column: description
+        Tag data stream:
+          level_1:
+            source: tag
+            tag: tag1
+      columns:
+        unique_key:
+          type_snapshot:
+            column_type: INT64
+            nullable: true
+        address:
+          type_snapshot:
+            column_type: STRING
+            nullable: true
     ```
