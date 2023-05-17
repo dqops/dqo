@@ -29,8 +29,8 @@ const JobChild = ({
     }
     return value;
   };
-  const saveCounter = succeededCounter 
-  console.log(saveCounter)
+  // const saveCounter = succeededCounter 
+  // console.log(saveCounter)
 
   const [open, setOpen] = useState(false);
 

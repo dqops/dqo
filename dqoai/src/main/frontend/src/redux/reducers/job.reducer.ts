@@ -32,6 +32,7 @@ export interface IJobsState {
   isCleared: boolean;
   wasOpen?: boolean;
   amounthOfElems?: number;
+  amounthOfElements: number
 }
 
 const initialState: IJobsState = {
@@ -39,7 +40,9 @@ const initialState: IJobsState = {
   error: null,
   isOpen: false,
   isCleared: false,
-  wasOpen: false
+  wasOpen: false,
+  amounthOfElements: 0
+  
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -126,6 +129,12 @@ const schemaReducer = (state = initialState, action: any) => {
         wasOpen: action.wasOpen
 
       };  
+    case JOB_ACTION.NOTIFICATION_NUMBER:
+        return{
+          ...state,
+          wasOpen: action.wasOpen
+  
+        };   
     default:
       return state;
   }

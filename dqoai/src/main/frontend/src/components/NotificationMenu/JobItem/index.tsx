@@ -22,10 +22,12 @@ import { count } from 'console';
 
 const JobItem = ({
   job,
-  counter
+  counter, 
+  notifnumber
 }: {
   job: DqoJobHistoryEntryModel;
   counter?: number;
+  notifnumber?: number
 }) => {
   const { jobs, wasOpen } = useSelector((state: IRootState) => state.job);
   const { errors } = useError();
@@ -39,11 +41,13 @@ const JobItem = ({
   };
   
 
+  const [sizeOfNot, setSizeOfNot] = useState<number | undefined>(notifnumber)
   const reduceCount = () => {
-    dispatch(reduceCounter(!wasOpen));
+    
+    dispatch(reduceCounter(true, sizeOfNot));
   };
- 
-  
+ //console.log(reduceCounter(true, sizeOfNot).amountOfElems)
+  console.log(sizeOfNot)
   const data = useMemo(() => {
     const jobsData = jobs?.jobs
       ? jobs?.jobs
@@ -231,7 +235,7 @@ const JobItem = ({
             {job.jobId?.parentJobId?.jobId === undefined ? (
               <Accordion open={open2} className="min-w-100">
                 <AccordionHeader onClick={() => {setOpen2(!open2), reduceCount()}}>
-                  <div className=" flex justify-between items-center text-sm w-full text-gray-700">
+                  <div className=" flex justify-between items-center text-sm w-full text-gray-700" onClick={() => setSizeOfNot(sizeOfNot && sizeOfNot-6)}>
                     Tasks{' '}
                   </div>
                 </AccordionHeader>

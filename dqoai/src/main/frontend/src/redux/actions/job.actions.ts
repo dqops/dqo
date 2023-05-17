@@ -95,5 +95,4 @@ export const reduceCounter = (wasOpen: boolean, amountOfElems?: number  ) =>({
   type: JOB_ACTION.REDUCE_COUNTER,
   wasOpen,
   amountOfElems
-
 })

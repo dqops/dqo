@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 
 import {
   Popover,
@@ -26,8 +26,8 @@ const NotificationMenu = () => {
   const toggleOpen = () => {
     dispatch(toggleMenu(!isOpen));
   };
-
-
+ 
+  
   const getNotificationDate = (notification: any) => {
     if (notification.type === 'job') {
       return notification.item.jobId?.createdAt;
@@ -57,8 +57,15 @@ const NotificationMenu = () => {
 
     return newData;
   }, [jobs, errors]);
+  const [sizeOfNot, setSizeOfNot] = useState<number>(data.length)
+//console.log(reduceCounter(wasOpen ? wasOpen : false).wasOpen)
 
-  return (
+  const eventHandler =async () =>{
+
+    setSizeOfNot(reduceCounter(wasOpen ? wasOpen : false).wasOpen ? sizeOfNot-5 : sizeOfNot)
+  }
+
+return (
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
       <PopoverHandler>
         <IconButton
@@ -69,7 +76,7 @@ const NotificationMenu = () => {
           <div className="relative">
             <SvgIcon name="bell" className="w-5 h-5 text-gray-700" />
             <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-500 text-white px-1 py-0.5 text-xxs">
-              {reduceCounter(wasOpen? wasOpen : false) ? data.length-5 : data.length}
+              {reduceCounter(wasOpen ? wasOpen : false).wasOpen ? data.length-5 : data.length}
             </span>
           </div>
         </IconButton>
@@ -83,7 +90,7 @@ const NotificationMenu = () => {
             notification.type === 'error' ? (
               <ErrorItem error={notification.item} key={index} />
             ) : (
-              <JobItem job={notification.item} key={index} counter={index} />
+              <JobItem job={notification.item} key={index} counter={index} notifnumber={data.length}/>
             )
           )}
         </div>
