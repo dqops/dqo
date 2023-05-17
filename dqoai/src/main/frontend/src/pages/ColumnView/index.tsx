@@ -51,7 +51,6 @@ const ColumnView = () => {
   const isProfilingCheckOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
   const showAllSubTabs =(
     () => !isRecurringOnly && !isPartitionCheckOnly && !isProfilingCheckOnly
-    
   );
    // will update more in next tasks
   // useEffect(() => {
