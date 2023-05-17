@@ -35,6 +35,7 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
   }
 
   const onChangeParams = (obj: { [key: string]: boolean }) => {
+    setMode('part');
     setParams({
       ...params,
       ...obj,
@@ -96,28 +97,24 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
                 checked={params.deleteProfilingResults}
                 onChange={(deleteProfilingResults) => onChangeParams({ deleteProfilingResults })}
                 label="Statistics Results"
-                disabled={isDisabled}
                 checkClassName="bg-teal-500"
               />
               <Checkbox
                 checked={params.deleteRuleResults}
                 onChange={(deleteRuleResults) => onChangeParams({ deleteRuleResults })}
                 label="Check Results"
-                disabled={isDisabled}
                 checkClassName="bg-teal-500"
               />
               <Checkbox
                 checked={params.deleteSensorReadouts}
                 onChange={(deleteSensorReadouts) => onChangeParams({ deleteSensorReadouts })}
                 label="Sensor Readouts"
-                disabled={isDisabled}
                 checkClassName="bg-teal-500"
               />
               <Checkbox
                 checked={params.deleteErrors}
                 onChange={(deleteErrors) => onChangeParams({ deleteErrors })}
                 label="Execution Errors"
-                disabled={isDisabled}
                 checkClassName="bg-teal-500"
               />
             </div>
