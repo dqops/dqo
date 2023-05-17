@@ -130,7 +130,7 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
               onClick={() => setAddSchemaDialogOpen(true)}
             >
-              Add Schema
+              Add schema
             </div>
           )}
           {node.level === TREE_LEVEL.SCHEMA && (
@@ -187,7 +187,7 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
               onClick={() => setAddTableDialogOpen(true)}
             >
-              Add Table
+              Add table
             </div>
           )}
           {(node.level === TREE_LEVEL.TABLE ||
@@ -196,7 +196,7 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
               onClick={() => setAddColumnDialogOpen(true)}
             >
-              Add Column
+              Add column
             </div>
           )}
           {(node.level === TREE_LEVEL.DATABASE ||
