@@ -305,8 +305,9 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
         }
 
         for (RecurringScheduleSpec scheduleToAdd : schedulesDelta.getSchedulesToAdd().getUniqueSchedules()) {
-            Trigger triggerToAdd = this.triggerFactory.createTrigger(scheduleToAdd, jobKey);
             try {
+                Trigger triggerToAdd = this.triggerFactory.createTrigger(scheduleToAdd, jobKey);
+
                 if (!this.scheduler.checkExists(triggerToAdd.getKey())) {
                     this.scheduler.scheduleJob(triggerToAdd);
                 }

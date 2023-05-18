@@ -23,6 +23,7 @@ import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -60,6 +61,10 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
 
         UniqueSchedulesCollection uniqueSchedulesCollection = new UniqueSchedulesCollection();
         for (RecurringScheduleSpec recurringSchedule : schedules) {
+            if (Strings.isNullOrEmpty(recurringSchedule.getCronExpression())) {
+                continue;
+            }
+
             ConnectionWrapper parentConnectionWrapper = userHome.findConnectionFor(recurringSchedule.getHierarchyId());
             assert parentConnectionWrapper != null;
 
