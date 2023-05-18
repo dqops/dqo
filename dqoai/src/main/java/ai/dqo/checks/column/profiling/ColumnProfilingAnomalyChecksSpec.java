@@ -39,6 +39,10 @@ public class ColumnProfilingAnomalyChecksSpec extends AbstractCheckCategorySpec 
             put("sum_anomaly_7d", o -> o.sumAnomaly7Days);
             put("sum_anomaly_30d", o -> o.sumAnomaly30Days);
             put("sum_anomaly_60d", o -> o.sumAnomaly60Days);
+
+            put("mean_anomaly_7d", o -> o.meanAnomaly7Days);
+            put("mean_anomaly_30d", o -> o.meanAnomaly30Days);
+            put("mean_anomaly_60d", o -> o.meanAnomaly60Days);
         }
     };
 
@@ -50,6 +54,15 @@ public class ColumnProfilingAnomalyChecksSpec extends AbstractCheckCategorySpec 
 
     @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during last 60 days.")
     private ColumnAnomalySumChange60DaysCheckSpec sumAnomaly60Days;
+
+    @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during last 7 days.")
+    private ColumnAnomalyMeanChange7DaysCheckSpec meanAnomaly7Days;
+
+    @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.")
+    private ColumnAnomalyMeanChange30DaysCheckSpec meanAnomaly30Days;
+
+    @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during last 60 days.")
+    private ColumnAnomalyMeanChange60DaysCheckSpec meanAnomaly60Days;
 
 
     /**
@@ -104,6 +117,52 @@ public class ColumnProfilingAnomalyChecksSpec extends AbstractCheckCategorySpec 
         this.setDirtyIf(!Objects.equals(this.sumAnomaly60Days, sumAnomaly60Days));
         this.sumAnomaly60Days = sumAnomaly60Days;
         propagateHierarchyIdToField(sumAnomaly60Days, "sum_anomaly_60d");
+    }
+
+    /**
+     * Sets a new specification of a mean value anomaly 7 days check.
+     * @param meanAnomaly7Days Mean value anomaly 7 days check specification.
+     */
+    public void setMeanAnomaly7Days(ColumnAnomalyMeanChange7DaysCheckSpec meanAnomaly7Days) {
+        this.setDirtyIf(!Objects.equals(this.meanAnomaly7Days, meanAnomaly7Days));
+        this.meanAnomaly7Days = meanAnomaly7Days;
+        propagateHierarchyIdToField(meanAnomaly7Days, "mean_anomaly_7d");
+    }
+
+    /**
+     * Returns a mean value anomaly 30 days check specification.
+     * @return Mean value anomaly 30 days check specification.
+     */
+    public ColumnAnomalyMeanChange30DaysCheckSpec getMeanAnomaly30Days() {
+        return meanAnomaly30Days;
+    }
+
+    /**
+     * Sets a new specification of a mean value anomaly 30 days check.
+     * @param meanAnomaly30Days Mean value anomaly 30 days check specification.
+     */
+    public void setMeanAnomaly30Days(ColumnAnomalyMeanChange30DaysCheckSpec meanAnomaly30Days) {
+        this.setDirtyIf(!Objects.equals(this.meanAnomaly30Days, meanAnomaly30Days));
+        this.meanAnomaly30Days = meanAnomaly30Days;
+        propagateHierarchyIdToField(meanAnomaly30Days, "mean_anomaly_30d");
+    }
+
+    /**
+     * Returns a mean value anomaly 60 days check specification.
+     * @return Mean value anomaly 60 days check specification.
+     */
+    public ColumnAnomalyMeanChange60DaysCheckSpec getMeanAnomaly60Days() {
+        return meanAnomaly60Days;
+    }
+
+    /**
+     * Sets a new specification of a mean value anomaly 60 days check.
+     * @param meanAnomaly60Days Mean value anomaly 60 days check specification.
+     */
+    public void setMeanAnomaly60Days(ColumnAnomalyMeanChange60DaysCheckSpec meanAnomaly60Days) {
+        this.setDirtyIf(!Objects.equals(this.meanAnomaly60Days, meanAnomaly60Days));
+        this.meanAnomaly60Days = meanAnomaly60Days;
+        propagateHierarchyIdToField(meanAnomaly60Days, "mean_anomaly_60d");
     }
 
     /**

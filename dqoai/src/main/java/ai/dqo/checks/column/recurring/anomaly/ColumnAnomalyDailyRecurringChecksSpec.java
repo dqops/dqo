@@ -16,9 +16,7 @@
 package ai.dqo.checks.column.recurring.anomaly;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.anomaly.ColumnAnomalySumChange30DaysCheckSpec;
-import ai.dqo.checks.column.checkspecs.anomaly.ColumnAnomalySumChange60DaysCheckSpec;
-import ai.dqo.checks.column.checkspecs.anomaly.ColumnAnomalySumChange7DaysCheckSpec;
+import ai.dqo.checks.column.checkspecs.anomaly.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -41,6 +39,10 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
             put("daily_sum_anomaly_7d", o -> o.dailySumAnomaly7Days);
             put("daily_sum_anomaly_30d", o -> o.dailySumAnomaly30Days);
             put("daily_sum_anomaly_60d", o -> o.dailySumAnomaly60Days);
+
+            put("daily_mean_anomaly_7d", o -> o.dailyMeanAnomaly7Days);
+            put("daily_mean_anomaly_30d", o -> o.dailyMeanAnomaly30Days);
+            put("daily_mean_anomaly_60d", o -> o.dailyMeanAnomaly60Days);
         }
     };
 
@@ -52,6 +54,15 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
 
     @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during last 60 days.")
     private ColumnAnomalySumChange60DaysCheckSpec dailySumAnomaly60Days;
+
+    @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during last 7 days.")
+    private ColumnAnomalyMeanChange7DaysCheckSpec dailyMeanAnomaly7Days;
+
+    @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.")
+    private ColumnAnomalyMeanChange30DaysCheckSpec dailyMeanAnomaly30Days;
+
+    @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during last 60 days.")
+    private ColumnAnomalyMeanChange60DaysCheckSpec dailyMeanAnomaly60Days;
 
 
     /**
@@ -69,7 +80,7 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
     public void setDailySumAnomaly7Days(ColumnAnomalySumChange7DaysCheckSpec dailySumAnomaly7Days) {
         this.setDirtyIf(!Objects.equals(this.dailySumAnomaly7Days, dailySumAnomaly7Days));
         this.dailySumAnomaly7Days = dailySumAnomaly7Days;
-        propagateHierarchyIdToField(dailySumAnomaly7Days, "sum_anomaly_7d");
+        propagateHierarchyIdToField(dailySumAnomaly7Days, "daily_sum_anomaly_7d");
     }
 
     /**
@@ -87,7 +98,7 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
     public void setDailySumAnomaly30Days(ColumnAnomalySumChange30DaysCheckSpec dailySumAnomaly30Days) {
         this.setDirtyIf(!Objects.equals(this.dailySumAnomaly30Days, dailySumAnomaly30Days));
         this.dailySumAnomaly30Days = dailySumAnomaly30Days;
-        propagateHierarchyIdToField(dailySumAnomaly30Days, "sum_anomaly_30d");
+        propagateHierarchyIdToField(dailySumAnomaly30Days, "daily_sum_anomaly_30d");
     }
 
     /**
@@ -105,7 +116,61 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
     public void setDailySumAnomaly60Days(ColumnAnomalySumChange60DaysCheckSpec dailySumAnomaly60Days) {
         this.setDirtyIf(!Objects.equals(this.dailySumAnomaly60Days, dailySumAnomaly60Days));
         this.dailySumAnomaly60Days = dailySumAnomaly60Days;
-        propagateHierarchyIdToField(dailySumAnomaly60Days, "sum_anomaly_60d");
+        propagateHierarchyIdToField(dailySumAnomaly60Days, "daily_sum_anomaly_60d");
+    }
+
+    /**
+     * Returns a mean value anomaly 7 days check specification.
+     * @return Mean value anomaly 7 days check specification.
+     */
+    public ColumnAnomalyMeanChange7DaysCheckSpec getDailyMeanAnomaly7Days() {
+        return dailyMeanAnomaly7Days;
+    }
+
+    /**
+     * Sets a new specification of a mean value anomaly 7 days check.
+     * @param dailyMeanAnomaly7Days Mean value anomaly 7 days check specification.
+     */
+    public void setDailyMeanAnomaly7Days(ColumnAnomalyMeanChange7DaysCheckSpec dailyMeanAnomaly7Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyMeanAnomaly7Days, dailyMeanAnomaly7Days));
+        this.dailyMeanAnomaly7Days = dailyMeanAnomaly7Days;
+        propagateHierarchyIdToField(dailyMeanAnomaly7Days, "daily_mean_anomaly_7d");
+    }
+
+    /**
+     * Returns a mean value anomaly 30 days check specification.
+     * @return Mean value anomaly 30 days check specification.
+     */
+    public ColumnAnomalyMeanChange30DaysCheckSpec getDailyMeanAnomaly30Days() {
+        return dailyMeanAnomaly30Days;
+    }
+
+    /**
+     * Sets a new specification of a mean value anomaly 30 days check.
+     * @param dailyMeanAnomaly30Days Mean value anomaly 30 days check specification.
+     */
+    public void setDailyMeanAnomaly30Days(ColumnAnomalyMeanChange30DaysCheckSpec dailyMeanAnomaly30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyMeanAnomaly30Days, dailyMeanAnomaly30Days));
+        this.dailyMeanAnomaly30Days = dailyMeanAnomaly30Days;
+        propagateHierarchyIdToField(dailyMeanAnomaly30Days, "daily_mean_anomaly_30d");
+    }
+
+    /**
+     * Returns a mean value anomaly 60 days check specification.
+     * @return Mean value anomaly 60 days check specification.
+     */
+    public ColumnAnomalyMeanChange60DaysCheckSpec getDailyMeanAnomaly60Days() {
+        return dailyMeanAnomaly60Days;
+    }
+
+    /**
+     * Sets a new specification of a mean value anomaly 60 days check.
+     * @param dailyMeanAnomaly60Days Mean value anomaly 60 days check specification.
+     */
+    public void setDailyMeanAnomaly60Days(ColumnAnomalyMeanChange60DaysCheckSpec dailyMeanAnomaly60Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyMeanAnomaly60Days, dailyMeanAnomaly60Days));
+        this.dailyMeanAnomaly60Days = dailyMeanAnomaly60Days;
+        propagateHierarchyIdToField(dailyMeanAnomaly60Days, "daily_mean_anomaly_60d");
     }
 
     /**

@@ -68,7 +68,7 @@ public class TableAnomalyDailyPartitionedChecksSpec extends AbstractCheckCategor
     public void setDailyPartitionRowCountAnomaly7Days(TableAnomalyRowCount7DaysCheckSpec dailyPartitionRowCountAnomaly7Days) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountAnomaly7Days, dailyPartitionRowCountAnomaly7Days));
         this.dailyPartitionRowCountAnomaly7Days = dailyPartitionRowCountAnomaly7Days;
-        propagateHierarchyIdToField(dailyPartitionRowCountAnomaly7Days, "row_count_anomaly_7d");
+        propagateHierarchyIdToField(dailyPartitionRowCountAnomaly7Days, "daily_partition_row_count_anomaly_7d");
     }
 
     /**
@@ -86,7 +86,7 @@ public class TableAnomalyDailyPartitionedChecksSpec extends AbstractCheckCategor
     public void setDailyPartitionRowCountAnomaly30Days(TableAnomalyRowCount30DaysCheckSpec dailyPartitionRowCountAnomaly30Days) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountAnomaly30Days, dailyPartitionRowCountAnomaly30Days));
         this.dailyPartitionRowCountAnomaly30Days = dailyPartitionRowCountAnomaly30Days;
-        propagateHierarchyIdToField(dailyPartitionRowCountAnomaly30Days, "row_count_anomaly_30d");
+        propagateHierarchyIdToField(dailyPartitionRowCountAnomaly30Days, "daily_partition_row_count_anomaly_30d");
     }
 
     /**
@@ -104,7 +104,7 @@ public class TableAnomalyDailyPartitionedChecksSpec extends AbstractCheckCategor
     public void setDailyPartitionRowCountAnomaly60Days(TableAnomalyRowCount60DaysCheckSpec dailyPartitionRowCountAnomaly60Days) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountAnomaly60Days, dailyPartitionRowCountAnomaly60Days));
         this.dailyPartitionRowCountAnomaly60Days = dailyPartitionRowCountAnomaly60Days;
-        propagateHierarchyIdToField(dailyPartitionRowCountAnomaly60Days, "row_count_anomaly_60d");
+        propagateHierarchyIdToField(dailyPartitionRowCountAnomaly60Days, "daily_partition_row_count_anomaly_60d");
     }
 
     /**

@@ -68,7 +68,7 @@ public class TableAnomalyDailyRecurringChecksSpec extends AbstractCheckCategoryS
     public void setDailyRowCountAnomaly7Days(TableAnomalyRowCountChange7DaysCheckSpec dailyRowCountAnomaly7Days) {
         this.setDirtyIf(!Objects.equals(this.dailyRowCountAnomaly7Days, dailyRowCountAnomaly7Days));
         this.dailyRowCountAnomaly7Days = dailyRowCountAnomaly7Days;
-        propagateHierarchyIdToField(dailyRowCountAnomaly7Days, "row_count_anomaly_7d");
+        propagateHierarchyIdToField(dailyRowCountAnomaly7Days, "daily_row_count_anomaly_7d");
     }
 
     /**
@@ -86,7 +86,7 @@ public class TableAnomalyDailyRecurringChecksSpec extends AbstractCheckCategoryS
     public void setDailyRowCountAnomaly30Days(TableAnomalyRowCountChange30DaysCheckSpec dailyRowCountAnomaly30Days) {
         this.setDirtyIf(!Objects.equals(this.dailyRowCountAnomaly30Days, dailyRowCountAnomaly30Days));
         this.dailyRowCountAnomaly30Days = dailyRowCountAnomaly30Days;
-        propagateHierarchyIdToField(dailyRowCountAnomaly30Days, "row_count_anomaly_30d");
+        propagateHierarchyIdToField(dailyRowCountAnomaly30Days, "daily_row_count_anomaly_30d");
     }
 
     /**
@@ -104,7 +104,7 @@ public class TableAnomalyDailyRecurringChecksSpec extends AbstractCheckCategoryS
     public void setDailyRowCountAnomaly60Days(TableAnomalyRowCountChange60DaysCheckSpec dailyRowCountAnomaly60Days) {
         this.setDirtyIf(!Objects.equals(this.dailyRowCountAnomaly60Days, dailyRowCountAnomaly60Days));
         this.dailyRowCountAnomaly60Days = dailyRowCountAnomaly60Days;
-        propagateHierarchyIdToField(dailyRowCountAnomaly60Days, "row_count_anomaly_60d");
+        propagateHierarchyIdToField(dailyRowCountAnomaly60Days, "daily_row_count_anomaly_60d");
     }
 
     /**
