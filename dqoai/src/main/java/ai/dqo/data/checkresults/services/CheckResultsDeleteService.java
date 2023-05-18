@@ -16,6 +16,7 @@
 package ai.dqo.data.checkresults.services;
 
 import ai.dqo.data.checkresults.models.CheckResultsFragmentFilter;
+import ai.dqo.data.models.DataDeleteResult;
 
 /**
  * Service that deletes outdated results of a check.
@@ -25,6 +26,7 @@ public interface CheckResultsDeleteService {
     /**
      * Deletes the results from a table, applying specific filters to get the fragment (if necessary).
      * @param filter Filter for the result fragment that is of interest.
+     * @return Data delete operation summary.
      */
-    void deleteSelectedCheckResultsFragment(CheckResultsFragmentFilter filter);
+    DataDeleteResult deleteSelectedCheckResultsFragment(CheckResultsFragmentFilter filter);
 }

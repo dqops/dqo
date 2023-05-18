@@ -15,10 +15,15 @@
  */
 package ai.dqo.data.readouts.services;
 
+import ai.dqo.data.models.DataDeleteResult;
+import ai.dqo.data.models.DataDeleteResultPartition;
+import ai.dqo.data.normalization.CommonColumnNames;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.models.SensorReadoutsFragmentFilter;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
+import ai.dqo.data.storage.LoadedMonthlyPartition;
+import ai.dqo.data.storage.ParquetPartitionId;
 import ai.dqo.data.storage.ParquetPartitionMetadataService;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +48,10 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
     /**
      * Deletes the readouts from a table, applying specific filters to get the fragment (if necessary).
      * @param filter Filter for the readouts fragment that is of interest.
+     * @return Data delete operation summary.
      */
     @Override
-    public void deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter) {
+    public DataDeleteResult deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
         Map<String, Set<String>> conditions = new HashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
@@ -57,6 +63,8 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
         if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
             conditions.put(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
         }
+
+        DataDeleteResult dataDeleteResult = new DataDeleteResult();
 
         Collection<PhysicalTableName> tablesToDelete;
         if (filter.getTableSearchFilters().getSchemaTableName() == null) {
@@ -71,7 +79,7 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
 
         if (tablesToDelete == null) {
             // No matching tables specified or found.
-            return;
+            return dataDeleteResult;
         }
 
         Collection<SensorReadoutsSnapshot> readoutsSnapshots = tablesToDelete.stream()
@@ -85,7 +93,26 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
             LocalDate endDeletionRange = filter.getDateEnd();
 
             currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
+            Set<String> deletedIds = currentSnapshot.getTableDataChanges().getDeletedIds();
+
+            for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry:
+                    currentSnapshot.getLoadedMonthlyPartitions().entrySet()) {
+                ParquetPartitionId partitionId = loadedPartitionEntry.getKey();
+                LoadedMonthlyPartition loadedPartition = loadedPartitionEntry.getValue();
+
+                int deletedRows = loadedPartition.getData()
+                        .textColumn(CommonColumnNames.ID_COLUMN_NAME)
+                        .isIn(deletedIds)
+                        .size();
+                boolean allRowsDeleted = deletedRows == loadedPartition.getData().rowCount();
+                DataDeleteResultPartition partitionResult = new DataDeleteResultPartition(deletedRows, allRowsDeleted);
+
+                dataDeleteResult.getPartitionResults().put(partitionId, partitionResult);
+            }
+
             currentSnapshot.save();
         }
+
+        return dataDeleteResult;
     }
 }

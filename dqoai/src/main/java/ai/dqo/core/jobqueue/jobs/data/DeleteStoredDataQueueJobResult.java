@@ -15,10 +15,13 @@
  */
 package ai.dqo.core.jobqueue.jobs.data;
 
+import ai.dqo.data.models.DataDeleteResult;
 import lombok.Data;
 
 /**
  * Result object from the {@link DeleteStoredDataQueueJob}.
  */
 @Data
-public class DeleteStoredDataQueueJobResult {}
+public class DeleteStoredDataQueueJobResult {
+    private DataDeleteResult operationResult;
+}

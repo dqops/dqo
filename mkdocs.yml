@@ -69,6 +69,7 @@ nav:
       - Configuring the schedules by modifying the YAML files: 'working-with-dqo/schedules/configuring-schedules-by-modifying-yaml-file.md'
       - Time zone configuration: 'working-with-dqo/schedules/timezone-configuration.md'
       - Cron formatting: 'working-with-dqo/schedules/cron-formatting.md'
+    - Set up data stream segmentation: 'working-with-dqo/set-up-data-streams/set-up-data-stream.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
     - dqo: 'command-line-interface/dqo.md'

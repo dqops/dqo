@@ -81,6 +81,13 @@ public class CollectStatisticsQueueJob extends ParentDqoQueueJob<StatisticsColle
                 true,
                 jobExecutionContext.getJobId(),
                 jobExecutionContext.getCancellationToken());
+
+        CollectStatisticsQueueJobResult collectStatisticsQueueJobResult =
+                CollectStatisticsQueueJobResult.fromStatisticsExecutionSummary(statisticsCollectionExecutionSummary);
+        CollectStatisticsQueueJobParameters clonedParameters = this.getParameters().clone();
+        clonedParameters.setCollectStatisticsResult(collectStatisticsQueueJobResult);
+        setParameters(clonedParameters);
+
         return statisticsCollectionExecutionSummary;
     }
 

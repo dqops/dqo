@@ -60,7 +60,7 @@ public class BigQueryColumnDateMatchFormatPercentSensorParametersSpecIntegration
         this.sut.setDateFormats(ConsistencyBuiltInDateFormats.ISO8601);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "date", this.checkSpec);
+                sampleTableMetadata, "date_text", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -75,7 +75,7 @@ public class BigQueryColumnDateMatchFormatPercentSensorParametersSpecIntegration
         this.sut.setDateFormats(ConsistencyBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -90,7 +90,7 @@ public class BigQueryColumnDateMatchFormatPercentSensorParametersSpecIntegration
         this.sut.setDateFormats(ConsistencyBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -105,7 +105,7 @@ public class BigQueryColumnDateMatchFormatPercentSensorParametersSpecIntegration
         this.sut.setDateFormats(ConsistencyBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -120,7 +120,7 @@ public class BigQueryColumnDateMatchFormatPercentSensorParametersSpecIntegration
         this.sut.setDateFormats(ConsistencyBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
