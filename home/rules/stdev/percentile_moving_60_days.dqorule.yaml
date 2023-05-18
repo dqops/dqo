@@ -13,22 +13,24 @@ spec:
   - field_name: percentile_above
     display_name: percentile_above
     help_text: "Probability that the current sensor readout will achieve values greater\
-      \ than it would be expected from the estimated distribution based on the previous values\
-      \ gathered within the time window. In other words, the upper quantile of the estimated\
-      \ normal distribution. Set the time window at the threshold level for all severity\
-      \ levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.)\
-      \ time window, but at least 7 readouts must exist to run the calculation."
+      \ than it would be expected from the estimated distribution based on the previous\
+      \ values gathered within the time window. In other words, the upper quantile\
+      \ of the estimated normal distribution. Set the time window at the threshold\
+      \ level for all severity levels (warning, error, fatal) at once. The default\
+      \ is a 60 time periods (days, etc.) time window, but at least 20 readouts must\
+      \ exist to run the calculation."
     data_type: double
     sample_values:
     - 5
   - field_name: percentile_below
     display_name: percentile_below
-    help_text: "Probability that the current sensor readout will achieve values lesser \
-      \ than it would be expected from the estimated distribution based on the previous values \
-      \ gathered within the time window. In other words, the lower quantile of the estimated \
-      \ normal distribution. Set the time window at the threshold level for all severity \
-      \ levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) \
-      \ time window, but at least 7 readouts must exist to run the calculation."
+    help_text: "Probability that the current sensor readout will achieve values lesser\
+      \ than it would be expected from the estimated distribution based on the previous\
+      \ values gathered within the time window. In other words, the lower quantile\
+      \ of the estimated normal distribution. Set the time window at the threshold\
+      \ level for all severity levels (warning, error, fatal) at once. The default\
+      \ is a 60 time periods (days, etc.) time window, but at least 20 readouts must\
+      \ exist to run the calculation."
     data_type: double
     sample_values:
     - 5

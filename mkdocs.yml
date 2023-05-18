@@ -91,6 +91,13 @@ nav:
     - table:
       - accuracy:
         - row count match percent: 'checks/table/accuracy/row-count-match-percent.md'
+      - anomaly:
+        - row count anomaly 7 days: 'checks/table/anomaly/row-count-anomaly-7-days.md'
+        - row count anomaly 30 days: 'checks/table/anomaly/row-count-anomaly-30-days.md'
+        - row count anomaly 60 days: 'checks/table/anomaly/row-count-anomaly-60-days.md'
+        - daily partition row count anomaly 7 days: 'checks/table/anomaly/daily-partition-row-count-anomaly-7-days.md'
+        - daily partition row count anomaly 30 days: 'checks/table/anomaly/daily-partition-row-count-anomaly-30-days.md'
+        - daily partition row count anomaly 60 days: 'checks/table/anomaly/daily-partition-row-count-anomaly-60-days.md'
       - availability:
         - table availability: 'checks/table/availability/table-availability.md'
       - sql:
@@ -111,6 +118,25 @@ nav:
         - max match percent: 'checks/column/accuracy/max-match-percent.md'
         - average match percent: 'checks/column/accuracy/average-match-percent.md'
         - not null count match percent: 'checks/column/accuracy/not-null-count-match-percent.md'
+      - anomaly:
+        - mean anomaly 7 days: 'checks/column/anomaly/mean-anomaly-7-days.md'
+        - mean anomaly 30 days: 'checks/column/anomaly/mean-anomaly-30-days.md'
+        - mean anomaly 60 days: 'checks/column/anomaly/mean-anomaly-60-days.md'
+        - median anomaly 7 days: 'checks/column/anomaly/median-anomaly-7-days.md'
+        - median anomaly 30 days: 'checks/column/anomaly/median-anomaly-30-days.md'
+        - median anomaly 60 days: 'checks/column/anomaly/median-anomaly-60-days.md'
+        - sum anomaly 7 days: 'checks/column/anomaly/sum-anomaly-7-days.md'
+        - sum anomaly 30 days: 'checks/column/anomaly/sum-anomaly-30-days.md'
+        - sum anomaly 60 days: 'checks/column/anomaly/sum-anomaly-60-days.md'
+        - daily partition mean anomaly 7 days: 'checks/column/anomaly/daily-partition-mean-anomaly-7-days.md'
+        - daily partition mean anomaly 30 days: 'checks/column/anomaly/daily-partition-mean-anomaly-30-days.md'
+        - daily partition mean anomaly 60 days: 'checks/column/anomaly/daily-partition-mean-anomaly-60-days.md'
+        - daily partition median anomaly 7 days: 'checks/column/anomaly/daily-partition-median-anomaly-7-days.md'
+        - daily partition median anomaly 30 days: 'checks/column/anomaly/daily-partition-median-anomaly-30-days.md'
+        - daily partition median anomaly 60 days: 'checks/column/anomaly/daily-partition-median-anomaly-60-days.md'
+        - daily partition sum anomaly 7 days: 'checks/column/anomaly/daily-partition-sum-anomaly-7-days.md'
+        - daily partition sum anomaly 30 days: 'checks/column/anomaly/daily-partition-sum-anomaly-30-days.md'
+        - daily partition sum anomaly 60 days: 'checks/column/anomaly/daily-partition-sum-anomaly-60-days.md'
       - bool:
         - true percent: 'checks/column/bool/true-percent.md'
         - false percent: 'checks/column/bool/false-percent.md'

@@ -1317,7 +1317,7 @@ Column level sensor that finds the median in a given column.
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|percentile_value|Median (50th percentile), must equals to 0.5|double| ||
+|percentile_value|Median (50th percentile), must equal 0.5|double| ||
 
 
 

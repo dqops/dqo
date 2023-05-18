@@ -18,7 +18,7 @@ package ai.dqo.statistics.column.range;
 import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.sensors.column.numeric.ColumnNumericSumInRangeSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericSumSensorParametersSpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,7 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnRangeSumValueStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnNumericSumInRangeSensorParametersSpec> {
+public class ColumnRangeSumValueStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnNumericSumSensorParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnRangeSumValueStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
@@ -45,14 +45,14 @@ public class ColumnRangeSumValueStatisticsCollectorSpec extends AbstractStatisti
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericSumInRangeSensorParametersSpec parameters = new ColumnNumericSumInRangeSensorParametersSpec();
+    private ColumnNumericSumSensorParametersSpec parameters = new ColumnNumericSumSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnNumericSumInRangeSensorParametersSpec getParameters() {
+    public ColumnNumericSumSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnRangeSumValueStatisticsCollectorSpec extends AbstractStatisti
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnNumericSumInRangeSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericSumSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
