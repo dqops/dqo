@@ -84,24 +84,22 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
     public String formatDashboardParameters(String refreshToken, Map<String, String> parameters) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{");
-        stringBuilder.append('"');
-        stringBuilder.append("ds0.token");
-        stringBuilder.append('"');
-        stringBuilder.append(':');
-        stringBuilder.append('"');
-        stringBuilder.append(refreshToken);
-        stringBuilder.append('"');
 
+        boolean isFirst = true;
         if (parameters != null && parameters.size() > 0) {
             for (Map.Entry<String, String> paramValuePair : parameters.entrySet()) {
-                stringBuilder.append(',');
+                if (!isFirst) {
+                    stringBuilder.append(',');
+                }
                 stringBuilder.append('"');
                 stringBuilder.append(paramValuePair.getKey());
                 stringBuilder.append('"');
                 stringBuilder.append(':');
                 stringBuilder.append('"');
-                stringBuilder.append(paramValuePair.getValue());
+                String parameterValue = paramValuePair.getValue().replace("%DQO_CLOUD_TOKEN%", refreshToken);
+                stringBuilder.append(parameterValue);
                 stringBuilder.append('"');
+                isFirst = false;
             }
         }
         

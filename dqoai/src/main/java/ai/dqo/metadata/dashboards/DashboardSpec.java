@@ -53,9 +53,6 @@ public class DashboardSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Dashboard height (px)")
     private Integer height;
 
-    @JsonPropertyDescription("The dashboard is a DQO Cloud dashboard (Looker Studio) that requires DQO Cloud credentials to access the private data quality data lake")
-    private boolean dqoCloudCredentials = true;
-
     @JsonPropertyDescription("Key/value dictionary of additional parameters to be passed to the dashboard")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> parameters;
@@ -126,23 +123,6 @@ public class DashboardSpec extends AbstractSpec implements Cloneable {
     public void setHeight(Integer height) {
         this.setDirtyIf(!Objects.equals(this.height, height));
         this.height = height;
-    }
-
-    /**
-     * Returns true if this is a Looker Studio dashboard that uses the private data lake.
-     * @return True when the dashboard uses a private data lake and requires the credentials.
-     */
-    public boolean isDqoCloudCredentials() {
-        return dqoCloudCredentials;
-    }
-
-    /**
-     * Sets the flag if this is a Looker Studio dashboard that uses the DQO Looker Studio connector.
-     * @param dqoCloudCredentials True when DQO Cloud credentials are required.
-     */
-    public void setDqoCloudCredentials(boolean dqoCloudCredentials) {
-        this.setDirtyIf(this.dqoCloudCredentials != dqoCloudCredentials);
-        this.dqoCloudCredentials = dqoCloudCredentials;
     }
 
     /**
