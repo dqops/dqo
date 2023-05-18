@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.statistics.column.nulls;
+package ai.dqo.statistics.column.range;
 
 import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.sensors.column.nulls.ColumnNullsNotNullsCountSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericSumInRangeSensorParametersSpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -31,13 +31,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column not null count profiler.
+ * Column profiler that finds the sum value in the column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNullsNotNullCountStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnNullsNotNullsCountSensorParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsNotNullCountStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
+public class ColumnRangeSumValueStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnNumericSumInRangeSensorParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnRangeSumValueStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
     };
@@ -45,14 +45,14 @@ public class ColumnNullsNotNullCountStatisticsCollectorSpec extends AbstractStat
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsNotNullsCountSensorParametersSpec parameters = new ColumnNullsNotNullsCountSensorParametersSpec();
+    private ColumnNumericSumInRangeSensorParametersSpec parameters = new ColumnNumericSumInRangeSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnNullsNotNullsCountSensorParametersSpec getParameters() {
+    public ColumnNumericSumInRangeSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnNullsNotNullCountStatisticsCollectorSpec extends AbstractStat
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnNullsNotNullsCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericSumInRangeSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -84,6 +84,6 @@ public class ColumnNullsNotNullCountStatisticsCollectorSpec extends AbstractStat
      */
     @Override
     public DataTypeCategory[] getSupportedDataTypes() {
-        return DataTypeCategory.ALL_KNOWN;
+        return DataTypeCategory.COMPARABLE;
     }
 }

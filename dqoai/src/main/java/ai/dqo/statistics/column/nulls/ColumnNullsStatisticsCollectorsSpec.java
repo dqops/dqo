@@ -38,31 +38,37 @@ public class ColumnNullsStatisticsCollectorsSpec extends AbstractStatisticsColle
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsStatisticsCollectorsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorCategorySpec.FIELDS) {
         {
             put("nulls_count", o -> o.nullsCount);
-            put("not_null_count", o -> o.notNullCount);
-            put("nulls_percentage", o -> o.nullsPercentage);
+            put("nulls_percent", o -> o.nullsPercent);
+            put("not_nulls_count", o -> o.notNullsCount);
+            put("not_nulls_percent", o -> o.notNullsPercent);
         }
     };
 
     @JsonPropertyDescription("Configuration of the profiler that counts null column values.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsNullCountStatisticsCollectorSpec nullsCount = new ColumnNullsNullCountStatisticsCollectorSpec();
-
-    @JsonPropertyDescription("Configuration of the profiler that counts not null column values.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsNotNullCountStatisticsCollectorSpec notNullCount = new ColumnNullsNotNullCountStatisticsCollectorSpec();
+    private ColumnNullsNullsCountStatisticsCollectorSpec nullsCount = new ColumnNullsNullsCountStatisticsCollectorSpec();
 
     @JsonPropertyDescription("Configuration of the profiler that measures the percentage of null values.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsNullPercentStatisticsCollectorSpec nullsPercentage = new ColumnNullsNullPercentStatisticsCollectorSpec();
+    private ColumnNullsNullsPercentStatisticsCollectorSpec nullsPercent = new ColumnNullsNullsPercentStatisticsCollectorSpec();
+
+    @JsonPropertyDescription("Configuration of the profiler that counts not null column values.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnNullsNotNullsCountStatisticsCollectorSpec notNullsCount = new ColumnNullsNotNullsCountStatisticsCollectorSpec();
+
+    @JsonPropertyDescription("Configuration of the profiler that measures the percentage of not null values.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnNullsNotNullsPercentStatisticsCollectorSpec notNullsPercent = new ColumnNullsNotNullsPercentStatisticsCollectorSpec();
 
     /**
      * Returns the nulls count profiler configuration.
      * @return Nulls count profiler configuration.
      */
-    public ColumnNullsNullCountStatisticsCollectorSpec getNullsCount() {
+    public ColumnNullsNullsCountStatisticsCollectorSpec getNullsCount() {
         return nullsCount;
     }
 
@@ -70,46 +76,64 @@ public class ColumnNullsStatisticsCollectorsSpec extends AbstractStatisticsColle
      * Sets the nulls count profiler configuration.
      * @param nullsCount Nulls count profiler configuration.
      */
-    public void setNullsCount(ColumnNullsNullCountStatisticsCollectorSpec nullsCount) {
+    public void setNullsCount(ColumnNullsNullsCountStatisticsCollectorSpec nullsCount) {
         this.setDirtyIf(!Objects.equals(this.nullsCount, nullsCount));
         this.nullsCount = nullsCount;
         this.propagateHierarchyIdToField(nullsCount, "nulls_count");
     }
 
     /**
-     * Returns the profiler that counts not null column values.
-     * @return Not null column value profiler.
-     */
-    public ColumnNullsNotNullCountStatisticsCollectorSpec getNotNullCount() {
-        return notNullCount;
-    }
-
-    /**
-     * Sets the profiler that counts not null values.
-     * @param notNullCount Not null count profiler.
-     */
-    public void setNotNullCount(ColumnNullsNotNullCountStatisticsCollectorSpec notNullCount) {
-        this.setDirtyIf(!Objects.equals(this.notNullCount, notNullCount));
-        this.notNullCount = notNullCount;
-        this.propagateHierarchyIdToField(notNullCount, "not_null_count");
-    }
-
-    /**
      * Returns the profiler that measures the percentage of null values in a column.
      * @return Nulls percentage profiler.
      */
-    public ColumnNullsNullPercentStatisticsCollectorSpec getNullsPercentage() {
-        return nullsPercentage;
+    public ColumnNullsNullsPercentStatisticsCollectorSpec getNullsPercent() {
+        return nullsPercent;
     }
 
     /**
      * Sets the reference to a nulls percentage profiler.
-     * @param nullsPercentage Nulls percentage profiler.
+     * @param nullsPercent Nulls percentage profiler.
      */
-    public void setNullsPercentage(ColumnNullsNullPercentStatisticsCollectorSpec nullsPercentage) {
-        this.setDirtyIf(!Objects.equals(this.nullsPercentage, nullsPercentage));
-        this.nullsPercentage = nullsPercentage;
-        this.propagateHierarchyIdToField(nullsPercentage, "nulls_percentage");
+    public void setNullsPercent(ColumnNullsNullsPercentStatisticsCollectorSpec nullsPercent) {
+        this.setDirtyIf(!Objects.equals(this.nullsPercent, nullsPercent));
+        this.nullsPercent = nullsPercent;
+        this.propagateHierarchyIdToField(nullsPercent, "nulls_percent");
+    }
+
+    /**
+     * Returns the profiler that counts not null column values.
+     * @return Not null column value profiler.
+     */
+    public ColumnNullsNotNullsCountStatisticsCollectorSpec getNotNullsCount() {
+        return notNullsCount;
+    }
+
+    /**
+     * Sets the profiler that counts not null values.
+     * @param notNullsCount Not null count profiler.
+     */
+    public void setNotNullsCount(ColumnNullsNotNullsCountStatisticsCollectorSpec notNullsCount) {
+        this.setDirtyIf(!Objects.equals(this.notNullsCount, notNullsCount));
+        this.notNullsCount = notNullsCount;
+        this.propagateHierarchyIdToField(notNullsCount, "not_null_count");
+    }
+
+    /**
+     * Returns the profiler that measures the percentage of not null values in a column.
+     * @return Not nulls percentage profiler.
+     */
+    public ColumnNullsNotNullsPercentStatisticsCollectorSpec getNotNullsPercent() {
+        return notNullsPercent;
+    }
+
+    /**
+     * Sets the reference to a not nulls percentage profiler.
+     * @param notNullsPercent Not nulls percentage profiler.
+     */
+    public void setNotNullsPercent(ColumnNullsNotNullsPercentStatisticsCollectorSpec notNullsPercent) {
+        this.setDirtyIf(!Objects.equals(this.notNullsPercent, notNullsPercent));
+        this.notNullsPercent = notNullsPercent;
+        this.propagateHierarchyIdToField(notNullsPercent, "not_nulls_percent");
     }
 
     /**

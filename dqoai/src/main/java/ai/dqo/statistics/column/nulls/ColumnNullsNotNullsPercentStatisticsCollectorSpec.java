@@ -18,7 +18,7 @@ package ai.dqo.statistics.column.nulls;
 import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.sensors.column.nulls.ColumnNullsNullsCountSensorParametersSpec;
+import ai.dqo.sensors.column.nulls.ColumnNullsNotNullsPercentSensorParametersSpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -31,13 +31,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column null count profiler.
+ * Column not null percent profiler.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNullsNullCountStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnNullsNullsCountSensorParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsNullCountStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
+public class ColumnNullsNotNullsPercentStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnNullsNotNullsPercentSensorParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsNotNullsPercentStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
     };
@@ -45,14 +45,14 @@ public class ColumnNullsNullCountStatisticsCollectorSpec extends AbstractStatist
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsNullsCountSensorParametersSpec parameters = new ColumnNullsNullsCountSensorParametersSpec();
+    private ColumnNullsNotNullsPercentSensorParametersSpec parameters = new ColumnNullsNotNullsPercentSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnNullsNullsCountSensorParametersSpec getParameters() {
+    public ColumnNullsNotNullsPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnNullsNullCountStatisticsCollectorSpec extends AbstractStatist
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnNullsNullsCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnNullsNotNullsPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

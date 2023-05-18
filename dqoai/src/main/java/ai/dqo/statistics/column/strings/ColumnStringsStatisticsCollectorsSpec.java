@@ -38,19 +38,37 @@ public class ColumnStringsStatisticsCollectorsSpec extends AbstractStatisticsCol
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStatisticsCollectorsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorCategorySpec.FIELDS) {
         {
             put("string_max_length", o -> o.stringMaxLength);
+            put("string_mean_length", o -> o.stringMeanLength);
+            put("string_min_length", o -> o.stringMinLength);
+            put("string_datatype_detect", o -> o.stringDatatypeDetect);
         }
     };
 
     @JsonPropertyDescription("Configuration of the profiler that finds the maximum string length.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsMaxLengthStatisticsCollectorSpec stringMaxLength = new ColumnStringsMaxLengthStatisticsCollectorSpec();
+    private ColumnStringsStringMaxLengthStatisticsCollectorSpec stringMaxLength = new ColumnStringsStringMaxLengthStatisticsCollectorSpec();
+
+    @JsonPropertyDescription("Configuration of the profiler that finds the mean string length.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnStringsStringMeanLengthStatisticsCollectorSpec stringMeanLength = new ColumnStringsStringMeanLengthStatisticsCollectorSpec();
+
+    @JsonPropertyDescription("Configuration of the profiler that finds the min string length.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnStringsStringMinLengthStatisticsCollectorSpec stringMinLength = new ColumnStringsStringMinLengthStatisticsCollectorSpec();
+
+    @JsonPropertyDescription("Configuration of the profiler that detects datatype.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnStringsStringDatatypeDetectStatisticsCollectorSpec stringDatatypeDetect = new ColumnStringsStringDatatypeDetectStatisticsCollectorSpec();
 
     /**
      * Returns the profiler configuration that finds the length of the longest string.
      * @return Profiler for the max length.
      */
-    public ColumnStringsMaxLengthStatisticsCollectorSpec getStringMaxLength() {
+    public ColumnStringsStringMaxLengthStatisticsCollectorSpec getStringMaxLength() {
         return stringMaxLength;
     }
 
@@ -58,10 +76,64 @@ public class ColumnStringsStatisticsCollectorsSpec extends AbstractStatisticsCol
      * Sets a reference to a max string length profiler.
      * @param stringMaxLength Max string length profiler.
      */
-    public void setStringMaxLength(ColumnStringsMaxLengthStatisticsCollectorSpec stringMaxLength) {
+    public void setStringMaxLength(ColumnStringsStringMaxLengthStatisticsCollectorSpec stringMaxLength) {
         this.setDirtyIf(!Objects.equals(this.stringMaxLength, stringMaxLength));
         this.stringMaxLength = stringMaxLength;
         this.propagateHierarchyIdToField(stringMaxLength, "string_max_length");
+    }
+
+    /**
+     * Returns the profiler configuration that finds the mean length of the string.
+     * @return Profiler for the mean length.
+     */
+    public ColumnStringsStringMeanLengthStatisticsCollectorSpec getStringMeanLength() {
+        return stringMeanLength;
+    }
+
+    /**
+     * Sets a reference to a mean string length profiler.
+     * @param stringMeanLength Mean string length profiler.
+     */
+    public void setStringMeanLength(ColumnStringsStringMeanLengthStatisticsCollectorSpec stringMeanLength) {
+        this.setDirtyIf(!Objects.equals(this.stringMeanLength, stringMeanLength));
+        this.stringMeanLength = stringMeanLength;
+        this.propagateHierarchyIdToField(stringMeanLength, "string_mean_length");
+    }
+
+    /**
+     * Returns the profiler configuration that finds the min length of the string.
+     * @return Profiler for the min length.
+     */
+    public ColumnStringsStringMinLengthStatisticsCollectorSpec getStringMinLength() {
+        return stringMinLength;
+    }
+
+    /**
+     * Sets a reference to a min string length profiler.
+     * @param stringMinLength Min string length profiler.
+     */
+    public void setStringMinLength(ColumnStringsStringMinLengthStatisticsCollectorSpec stringMinLength) {
+        this.setDirtyIf(!Objects.equals(this.stringMinLength, stringMinLength));
+        this.stringMinLength = stringMinLength;
+        this.propagateHierarchyIdToField(stringMinLength, "string_min_length");
+    }
+
+    /**
+     * Returns the profiler configuration that detect datatype.
+     * @return Profiler for the datatype detect.
+     */
+    public ColumnStringsStringDatatypeDetectStatisticsCollectorSpec getStringDatatypeDetect() {
+        return stringDatatypeDetect;
+    }
+
+    /**
+     * Sets a reference to a datatype detect profiler.
+     * @param stringDatatypeDetect Datatype detect profiler.
+     */
+    public void setStringDatatypeDetect(ColumnStringsStringDatatypeDetectStatisticsCollectorSpec stringDatatypeDetect) {
+        this.setDirtyIf(!Objects.equals(this.stringDatatypeDetect, stringDatatypeDetect));
+        this.stringDatatypeDetect = stringDatatypeDetect;
+        this.propagateHierarchyIdToField(stringDatatypeDetect, "string_datatype_detect");
     }
 
     /**
