@@ -24,7 +24,7 @@ import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
-import ai.dqo.checks.table.recurring.sql.TableSqlDailyRecurringSpec;
+import ai.dqo.checks.table.recurring.sql.TableSqlDailyRecurringChecksSpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.connectors.ConnectionProviderRegistryObjectMother;
@@ -98,7 +98,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
 
         tableSpec.setRecurringChecks(new TableRecurringChecksSpec());
         tableSpec.getRecurringChecks().setDaily(new TableDailyRecurringCategoriesSpec());
-        tableSpec.getRecurringChecks().getDaily().setSql(new TableSqlDailyRecurringSpec());
+        tableSpec.getRecurringChecks().getDaily().setSql(new TableSqlDailyRecurringChecksSpec());
         TableSqlConditionPassedPercentCheckSpec sqlCheckSpec = new TableSqlConditionPassedPercentCheckSpec();
         sqlCheckSpec.setError(new MinPercentRule99ParametersSpec(99.5));
         sqlCheckSpec.getParameters().setSqlCondition("nonexistent_column = 42");

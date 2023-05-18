@@ -20,7 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.BetweenFloatsRuleParametersSpec;
-import ai.dqo.sensors.column.numeric.ColumnNumericPopulationVarianceInRangeSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericPopulationVarianceSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -38,7 +38,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnPopulationVarianceInRangeCheckSpec
-        extends AbstractCheckSpec<ColumnNumericPopulationVarianceInRangeSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericPopulationVarianceSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPopulationVarianceInRangeCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -47,7 +47,7 @@ public class ColumnPopulationVarianceInRangeCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericPopulationVarianceInRangeSensorParametersSpec parameters = new ColumnNumericPopulationVarianceInRangeSensorParametersSpec();
+    private ColumnNumericPopulationVarianceSensorParametersSpec parameters = new ColumnNumericPopulationVarianceSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -69,7 +69,7 @@ public class ColumnPopulationVarianceInRangeCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNumericPopulationVarianceInRangeSensorParametersSpec getParameters() {
+    public ColumnNumericPopulationVarianceSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -77,7 +77,7 @@ public class ColumnPopulationVarianceInRangeCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNumericPopulationVarianceInRangeSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericPopulationVarianceSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

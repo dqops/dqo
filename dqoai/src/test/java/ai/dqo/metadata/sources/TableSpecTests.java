@@ -21,8 +21,8 @@ import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
 import ai.dqo.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
-import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringSpec;
-import ai.dqo.checks.table.recurring.standard.TableStandardMonthlyRecurringSpec;
+import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.standard.TableStandardMonthlyRecurringChecksSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.groupings.DataStreamLevelSpecObjectMother;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
@@ -158,7 +158,7 @@ public class TableSpecTests extends BaseTest {
     void hasAnyChecksConfigured_whenOneDailyRecurringCheckConfigured_thenReturnsTrue() {
         TableRecurringChecksSpec recurring = new TableRecurringChecksSpec();
         TableDailyRecurringCategoriesSpec daily = new TableDailyRecurringCategoriesSpec();
-        TableStandardDailyRecurringSpec standard = new TableStandardDailyRecurringSpec();
+        TableStandardDailyRecurringChecksSpec standard = new TableStandardDailyRecurringChecksSpec();
         standard.setDailyRowCount(new TableRowCountCheckSpec());
         daily.setStandard(standard);
         recurring.setDaily(daily);
@@ -170,7 +170,7 @@ public class TableSpecTests extends BaseTest {
     void hasAnyChecksConfigured_whenOneMonthlyRecurringCheckConfigured_thenReturnsTrue() {
         TableRecurringChecksSpec recurring = new TableRecurringChecksSpec();
         TableMonthlyRecurringCheckCategoriesSpec daily = new TableMonthlyRecurringCheckCategoriesSpec();
-        TableStandardMonthlyRecurringSpec standard = new TableStandardMonthlyRecurringSpec();
+        TableStandardMonthlyRecurringChecksSpec standard = new TableStandardMonthlyRecurringChecksSpec();
         standard.setMonthlyRowCount(new TableRowCountCheckSpec());
         daily.setStandard(standard);
         recurring.setMonthly(daily);

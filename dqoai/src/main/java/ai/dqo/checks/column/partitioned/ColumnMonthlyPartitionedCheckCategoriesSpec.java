@@ -20,6 +20,7 @@ import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.partitioned.accuracy.ColumnAccuracyMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.anomaly.ColumnAnomalyMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.bool.ColumnBoolMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.consistency.ColumnConsistencyMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeMonthlyPartitionedChecksSpec;
@@ -27,7 +28,7 @@ import ai.dqo.checks.column.partitioned.integrity.ColumnIntegrityMonthlyPartitio
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.pii.ColumnPiiMonthlyPartitionedChecksSpec;
-import ai.dqo.checks.column.partitioned.sql.ColumnSqlMonthlyPartitionedSpec;
+import ai.dqo.checks.column.partitioned.sql.ColumnSqlMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessMonthlyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
@@ -69,7 +70,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
             put("consistency", o -> o.consistency);
-
+            put("anomaly", o -> o.anomaly);
         }
     };
 
@@ -106,7 +107,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonPropertyDescription("Monthly partitioned checks using custom SQL expressions and conditions on the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnSqlMonthlyPartitionedSpec sql;
+    private ColumnSqlMonthlyPartitionedChecksSpec sql;
 
     @JsonPropertyDescription("Monthly partitioned checks for booleans in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -127,6 +128,11 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnConsistencyMonthlyPartitionedChecksSpec consistency;
+
+    @JsonPropertyDescription("Monthly partitioned checks for anomaly in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAnomalyMonthlyPartitionedChecksSpec anomaly;
 
     /**
      * Returns the container of monthly null data quality partitioned checks.
@@ -240,7 +246,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
      * Returns a container of custom SQL checks on a column.
      * @return Custom SQL checks.
      */
-    public ColumnSqlMonthlyPartitionedSpec getSql() {
+    public ColumnSqlMonthlyPartitionedChecksSpec getSql() {
         return sql;
     }
 
@@ -248,7 +254,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
      * Sets a reference to a container of custom SQL checks.
      * @param sql Custom SQL checks container.
      */
-    public void setSql(ColumnSqlMonthlyPartitionedSpec sql) {
+    public void setSql(ColumnSqlMonthlyPartitionedChecksSpec sql) {
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         propagateHierarchyIdToField(sql, "sql");
@@ -324,6 +330,24 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         this.setDirtyIf(!Objects.equals(this.consistency, consistency));
         this.consistency = consistency;
         propagateHierarchyIdToField(consistency, "consistency");
+    }
+
+    /**
+     * Returns a container of custom anomaly checks on a column.
+     * @return Custom anomaly checks.
+     */
+    public ColumnAnomalyMonthlyPartitionedChecksSpec getAnomaly() {
+        return anomaly;
+    }
+
+    /**
+     * Sets a reference to a container of custom anomaly checks.
+     * @param anomaly Custom anomaly checks.
+     */
+    public void setAnomaly(ColumnAnomalyMonthlyPartitionedChecksSpec anomaly) {
+        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
+        this.anomaly = anomaly;
+        propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
 

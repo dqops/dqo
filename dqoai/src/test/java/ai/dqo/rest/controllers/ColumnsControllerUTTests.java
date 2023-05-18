@@ -21,7 +21,7 @@ import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingNullsChecksSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
-import ai.dqo.checks.column.recurring.nulls.ColumnNullsDailyRecurringSpec;
+import ai.dqo.checks.column.recurring.nulls.ColumnNullsDailyRecurringChecksSpec;
 import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
@@ -161,7 +161,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(11, result.getCategories().size());
+        Assertions.assertEquals(12, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -179,7 +179,12 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(11, result.getCategories().size());
+
+        if (timePartition == CheckTimeScale.daily) {
+            Assertions.assertEquals(12, result.getCategories().size());
+        } else {
+            Assertions.assertEquals(11, result.getCategories().size());
+        }
     }
 
     @ParameterizedTest
@@ -197,7 +202,11 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(10, result.getCategories().size());
+        if (timePartition == CheckTimeScale.daily) {
+            Assertions.assertEquals(11, result.getCategories().size());
+        } else {
+            Assertions.assertEquals(10, result.getCategories().size());
+        }
     }
 
     @Test
@@ -213,7 +222,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(11, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(12, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -231,7 +240,11 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(11, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        if (timePartition == CheckTimeScale.daily) {
+            Assertions.assertEquals(12, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        } else {
+            Assertions.assertEquals(11, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        }
     }
 
     @ParameterizedTest
@@ -249,7 +262,11 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(10, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        if (timePartition == CheckTimeScale.daily) {
+            Assertions.assertEquals(11, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        } else {
+            Assertions.assertEquals(10, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        }
     }
 
     @Test
@@ -303,7 +320,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         nullsChecksSpec.setError(maxCountRule2);
         nullsChecksSpec.setFatal(maxCountRule3);
 
-        ColumnNullsDailyRecurringSpec nullDailyRecurring = new ColumnNullsDailyRecurringSpec();
+        ColumnNullsDailyRecurringChecksSpec nullDailyRecurring = new ColumnNullsDailyRecurringChecksSpec();
         nullDailyRecurring.setDailyNullsCount(nullsChecksSpec);
         ColumnDailyRecurringCheckCategoriesSpec dailyRecurring = new ColumnDailyRecurringCheckCategoriesSpec();
         dailyRecurring.setNulls(nullDailyRecurring);
