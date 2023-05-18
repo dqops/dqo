@@ -58,7 +58,7 @@ In this example, we have set three minimum percentage thresholds levels for the 
 - error: 98.0%
 - fatal: 95.0%
 
-The highlighted fragments in the YAML file below represent the segment where the profiling `source_date` check is configured.
+The highlighted fragments in the YAML file below represent the segment where the profiling `string_match_date_regex_percent` check is configured.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
