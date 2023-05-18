@@ -22,6 +22,7 @@ import ai.dqo.checks.table.checkspecs.anomaly.TableAnomalyRowCount7DaysCheckSpec
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -38,18 +39,21 @@ import java.util.Objects;
 public class TableAnomalyDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAnomalyDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_row_count_anomaly_7d", o -> o.dailyPartitionRowCountAnomaly7Days);
-            put("daily_partition_row_count_anomaly_30d", o -> o.dailyPartitionRowCountAnomaly30Days);
-            put("daily_partition_row_count_anomaly_60d", o -> o.dailyPartitionRowCountAnomaly60Days);
+            put("daily_partition_row_count_anomaly_7_days", o -> o.dailyPartitionRowCountAnomaly7Days);
+            put("daily_partition_row_count_anomaly_30_days", o -> o.dailyPartitionRowCountAnomaly30Days);
+            put("daily_partition_row_count_anomaly_60_days", o -> o.dailyPartitionRowCountAnomaly60Days);
         }
     };
 
+    @JsonProperty("daily_partition_row_count_anomaly_7_days")
     @JsonPropertyDescription("Verifies that the total row count of the tested table is within a percentile from measurements made during the last 7 days.")
     private TableAnomalyRowCount7DaysCheckSpec dailyPartitionRowCountAnomaly7Days;
 
+    @JsonProperty("daily_partition_row_count_anomaly_30_days")
     @JsonPropertyDescription("Verifies that the total row count of the tested table is within a percentile from measurements made during the last 30 days.")
     private TableAnomalyRowCount30DaysCheckSpec dailyPartitionRowCountAnomaly30Days;
 
+    @JsonProperty("daily_partition_row_count_anomaly_60_days")
     @JsonPropertyDescription("Verifies that the total row count of the tested table is within a percentile from measurements made during the last 60 days.")
     private TableAnomalyRowCount60DaysCheckSpec dailyPartitionRowCountAnomaly60Days;
 
@@ -68,7 +72,7 @@ public class TableAnomalyDailyPartitionedChecksSpec extends AbstractCheckCategor
     public void setDailyPartitionRowCountAnomaly7Days(TableAnomalyRowCount7DaysCheckSpec dailyPartitionRowCountAnomaly7Days) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountAnomaly7Days, dailyPartitionRowCountAnomaly7Days));
         this.dailyPartitionRowCountAnomaly7Days = dailyPartitionRowCountAnomaly7Days;
-        propagateHierarchyIdToField(dailyPartitionRowCountAnomaly7Days, "daily_partition_row_count_anomaly_7d");
+        propagateHierarchyIdToField(dailyPartitionRowCountAnomaly7Days, "daily_partition_row_count_anomaly_7_days");
     }
 
     /**
@@ -86,7 +90,7 @@ public class TableAnomalyDailyPartitionedChecksSpec extends AbstractCheckCategor
     public void setDailyPartitionRowCountAnomaly30Days(TableAnomalyRowCount30DaysCheckSpec dailyPartitionRowCountAnomaly30Days) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountAnomaly30Days, dailyPartitionRowCountAnomaly30Days));
         this.dailyPartitionRowCountAnomaly30Days = dailyPartitionRowCountAnomaly30Days;
-        propagateHierarchyIdToField(dailyPartitionRowCountAnomaly30Days, "daily_partition_row_count_anomaly_30d");
+        propagateHierarchyIdToField(dailyPartitionRowCountAnomaly30Days, "daily_partition_row_count_anomaly_30_days");
     }
 
     /**
@@ -104,7 +108,7 @@ public class TableAnomalyDailyPartitionedChecksSpec extends AbstractCheckCategor
     public void setDailyPartitionRowCountAnomaly60Days(TableAnomalyRowCount60DaysCheckSpec dailyPartitionRowCountAnomaly60Days) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountAnomaly60Days, dailyPartitionRowCountAnomaly60Days));
         this.dailyPartitionRowCountAnomaly60Days = dailyPartitionRowCountAnomaly60Days;
-        propagateHierarchyIdToField(dailyPartitionRowCountAnomaly60Days, "daily_partition_row_count_anomaly_60d");
+        propagateHierarchyIdToField(dailyPartitionRowCountAnomaly60Days, "daily_partition_row_count_anomaly_60_days");
     }
 
     /**

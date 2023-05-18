@@ -16,7 +16,7 @@
 package ai.dqo.mysql.column.numeric;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnPopulationVarianceInRangeCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnPercentile75InRangeCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericPopulationVarianceInRangeSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericPercentile75SensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,84 +38,89 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class MysqlColumnNumericPopulationVarianceInRangeSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
-    private ColumnNumericPopulationVarianceInRangeSensorParametersSpec sut;
+public class MysqlColumnNumericPercentile75SensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
+    private ColumnNumericPercentile75SensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnPopulationVarianceInRangeCheckSpec checkSpec;
+    private ColumnPercentile75InRangeCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.mysql);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.mysql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnNumericPopulationVarianceInRangeSensorParametersSpec();
-		this.checkSpec = new ColumnPopulationVarianceInRangeCheckSpec();
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        this.sut = new ColumnNumericPercentile75SensorParametersSpec();
+        this.checkSpec = new ColumnPercentile75InRangeCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "negative", this.checkSpec);
+                sampleTableMetadata, "value", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896f, resultTable.column(0).get(0));
+        Assertions.assertEquals(15.25, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
-                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896f, resultTable.column(0).get(0));
+        Assertions.assertEquals(15.25, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
-                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896f, resultTable.column(0).get(0));
+        Assertions.assertEquals(15.25, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(25, resultTable.rowCount());
+        Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(17.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "negative", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896f, resultTable.column(0).get(0));
+        Assertions.assertEquals(17.0, resultTable.column(0).get(0));
     }
 }

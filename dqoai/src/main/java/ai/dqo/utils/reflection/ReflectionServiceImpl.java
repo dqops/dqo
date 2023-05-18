@@ -127,8 +127,13 @@ public class ReflectionServiceImpl implements ReflectionService {
         String[] sampleValues = field.isAnnotationPresent(SampleValues.class) ?
                 field.getAnnotation(SampleValues.class).values() : null;
 
-        PropertyNamingStrategies.SnakeCaseStrategy snakeCaseStrategy = new PropertyNamingStrategies.SnakeCaseStrategy();
-        String yamlFieldName = snakeCaseStrategy.translate(fieldName);
+        String yamlFieldName;
+        if (field.isAnnotationPresent(JsonProperty.class)) {
+            yamlFieldName = field.getAnnotation(JsonProperty.class).value();
+        } else {
+            PropertyNamingStrategies.SnakeCaseStrategy snakeCaseStrategy = new PropertyNamingStrategies.SnakeCaseStrategy();
+            yamlFieldName = snakeCaseStrategy.translate(fieldName);
+        }
 
         FieldInfo fieldInfo = new FieldInfo() {{
             setClazz(fieldType);

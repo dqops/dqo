@@ -20,6 +20,7 @@ import ai.dqo.checks.column.checkspecs.anomaly.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -36,44 +37,53 @@ import java.util.Objects;
 public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyDailyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_mean_anomaly_7d", o -> o.dailyMeanAnomaly7Days);
-            put("daily_mean_anomaly_30d", o -> o.dailyMeanAnomaly30Days);
-            put("daily_mean_anomaly_60d", o -> o.dailyMeanAnomaly60Days);
+            put("daily_mean_anomaly_7_days", o -> o.dailyMeanAnomaly7Days);
+            put("daily_mean_anomaly_30_days", o -> o.dailyMeanAnomaly30Days);
+            put("daily_mean_anomaly_60_days", o -> o.dailyMeanAnomaly60Days);
             
-            put("daily_median_anomaly_7d", o -> o.dailyMedianAnomaly7Days);
-            put("daily_median_anomaly_30d", o -> o.dailyMedianAnomaly30Days);
-            put("daily_median_anomaly_60d", o -> o.dailyMedianAnomaly60Days);
+            put("daily_median_anomaly_7_days", o -> o.dailyMedianAnomaly7Days);
+            put("daily_median_anomaly_30_days", o -> o.dailyMedianAnomaly30Days);
+            put("daily_median_anomaly_60_days", o -> o.dailyMedianAnomaly60Days);
 
-            put("daily_sum_anomaly_7d", o -> o.dailySumAnomaly7Days);
-            put("daily_sum_anomaly_30d", o -> o.dailySumAnomaly30Days);
-            put("daily_sum_anomaly_60d", o -> o.dailySumAnomaly60Days);
+            put("daily_sum_anomaly_7_days", o -> o.dailySumAnomaly7Days);
+            put("daily_sum_anomaly_30_days", o -> o.dailySumAnomaly30Days);
+            put("daily_sum_anomaly_60_days", o -> o.dailySumAnomaly60Days);
         }
     };
 
+    @JsonProperty("daily_mean_anomaly_7_days")
     @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during last 7 days.")
     private ColumnAnomalyMeanChange7DaysCheckSpec dailyMeanAnomaly7Days;
 
+    @JsonProperty("daily_mean_anomaly_30_days")
     @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.")
     private ColumnAnomalyMeanChange30DaysCheckSpec dailyMeanAnomaly30Days;
 
+    @JsonProperty("daily_mean_anomaly_60_days")
     @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during last 60 days.")
     private ColumnAnomalyMeanChange60DaysCheckSpec dailyMeanAnomaly60Days;
-    
+
+    @JsonProperty("daily_median_anomaly_7_days")
     @JsonPropertyDescription("Verifies that the median in a column changes in a rate within a percentile boundary during last 7 days.")
     private ColumnAnomalyMedianChange7DaysCheckSpec dailyMedianAnomaly7Days;
 
+    @JsonProperty("daily_median_anomaly_30_days")
     @JsonPropertyDescription("Verifies that the median in a column changes in a rate within a percentile boundary during last 30 days.")
     private ColumnAnomalyMedianChange30DaysCheckSpec dailyMedianAnomaly30Days;
 
+    @JsonProperty("daily_median_anomaly_60_days")
     @JsonPropertyDescription("Verifies that the median in a column changes in a rate within a percentile boundary during last 60 days.")
     private ColumnAnomalyMedianChange60DaysCheckSpec dailyMedianAnomaly60Days;
 
+    @JsonProperty("daily_sum_anomaly_7_days")
     @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during last 7 days.")
     private ColumnAnomalySumChange7DaysCheckSpec dailySumAnomaly7Days;
 
+    @JsonProperty("daily_sum_anomaly_30_days")
     @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.")
     private ColumnAnomalySumChange30DaysCheckSpec dailySumAnomaly30Days;
 
+    @JsonProperty("daily_sum_anomaly_60_days")
     @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during last 60 days.")
     private ColumnAnomalySumChange60DaysCheckSpec dailySumAnomaly60Days;
 
@@ -92,7 +102,7 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
     public void setDailyMeanAnomaly7Days(ColumnAnomalyMeanChange7DaysCheckSpec dailyMeanAnomaly7Days) {
         this.setDirtyIf(!Objects.equals(this.dailyMeanAnomaly7Days, dailyMeanAnomaly7Days));
         this.dailyMeanAnomaly7Days = dailyMeanAnomaly7Days;
-        propagateHierarchyIdToField(dailyMeanAnomaly7Days, "daily_mean_anomaly_7d");
+        propagateHierarchyIdToField(dailyMeanAnomaly7Days, "daily_mean_anomaly_7_days");
     }
 
     /**
@@ -110,7 +120,7 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
     public void setDailyMeanAnomaly30Days(ColumnAnomalyMeanChange30DaysCheckSpec dailyMeanAnomaly30Days) {
         this.setDirtyIf(!Objects.equals(this.dailyMeanAnomaly30Days, dailyMeanAnomaly30Days));
         this.dailyMeanAnomaly30Days = dailyMeanAnomaly30Days;
-        propagateHierarchyIdToField(dailyMeanAnomaly30Days, "daily_mean_anomaly_30d");
+        propagateHierarchyIdToField(dailyMeanAnomaly30Days, "daily_mean_anomaly_30_days");
     }
 
     /**
@@ -128,7 +138,7 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
     public void setDailyMeanAnomaly60Days(ColumnAnomalyMeanChange60DaysCheckSpec dailyMeanAnomaly60Days) {
         this.setDirtyIf(!Objects.equals(this.dailyMeanAnomaly60Days, dailyMeanAnomaly60Days));
         this.dailyMeanAnomaly60Days = dailyMeanAnomaly60Days;
-        propagateHierarchyIdToField(dailyMeanAnomaly60Days, "daily_mean_anomaly_60d");
+        propagateHierarchyIdToField(dailyMeanAnomaly60Days, "daily_mean_anomaly_60_days");
     }
 
     /**
@@ -146,7 +156,7 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
     public void setDailyMedianAnomaly7Days(ColumnAnomalyMedianChange7DaysCheckSpec dailyMedianAnomaly7Days) {
         this.setDirtyIf(!Objects.equals(this.dailyMedianAnomaly7Days, dailyMedianAnomaly7Days));
         this.dailyMedianAnomaly7Days = dailyMedianAnomaly7Days;
-        propagateHierarchyIdToField(dailyMedianAnomaly7Days, "daily_median_anomaly_7d");
+        propagateHierarchyIdToField(dailyMedianAnomaly7Days, "daily_median_anomaly_7_days");
     }
 
     /**
@@ -164,7 +174,7 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
     public void setDailyMedianAnomaly30Days(ColumnAnomalyMedianChange30DaysCheckSpec dailyMedianAnomaly30Days) {
         this.setDirtyIf(!Objects.equals(this.dailyMedianAnomaly30Days, dailyMedianAnomaly30Days));
         this.dailyMedianAnomaly30Days = dailyMedianAnomaly30Days;
-        propagateHierarchyIdToField(dailyMedianAnomaly30Days, "daily_median_anomaly_30d");
+        propagateHierarchyIdToField(dailyMedianAnomaly30Days, "daily_median_anomaly_30_days");
     }
 
     /**
@@ -182,7 +192,7 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
     public void setDailyMedianAnomaly60Days(ColumnAnomalyMedianChange60DaysCheckSpec dailyMedianAnomaly60Days) {
         this.setDirtyIf(!Objects.equals(this.dailyMedianAnomaly60Days, dailyMedianAnomaly60Days));
         this.dailyMedianAnomaly60Days = dailyMedianAnomaly60Days;
-        propagateHierarchyIdToField(dailyMedianAnomaly60Days, "daily_median_anomaly_60d");
+        propagateHierarchyIdToField(dailyMedianAnomaly60Days, "daily_median_anomaly_60_days");
     }
 
     /**
@@ -200,7 +210,7 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
     public void setDailySumAnomaly7Days(ColumnAnomalySumChange7DaysCheckSpec dailySumAnomaly7Days) {
         this.setDirtyIf(!Objects.equals(this.dailySumAnomaly7Days, dailySumAnomaly7Days));
         this.dailySumAnomaly7Days = dailySumAnomaly7Days;
-        propagateHierarchyIdToField(dailySumAnomaly7Days, "daily_sum_anomaly_7d");
+        propagateHierarchyIdToField(dailySumAnomaly7Days, "daily_sum_anomaly_7_days");
     }
 
     /**
@@ -218,7 +228,7 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
     public void setDailySumAnomaly30Days(ColumnAnomalySumChange30DaysCheckSpec dailySumAnomaly30Days) {
         this.setDirtyIf(!Objects.equals(this.dailySumAnomaly30Days, dailySumAnomaly30Days));
         this.dailySumAnomaly30Days = dailySumAnomaly30Days;
-        propagateHierarchyIdToField(dailySumAnomaly30Days, "daily_sum_anomaly_30d");
+        propagateHierarchyIdToField(dailySumAnomaly30Days, "daily_sum_anomaly_30_days");
     }
 
     /**
@@ -236,7 +246,7 @@ public class ColumnAnomalyDailyRecurringChecksSpec extends AbstractCheckCategory
     public void setDailySumAnomaly60Days(ColumnAnomalySumChange60DaysCheckSpec dailySumAnomaly60Days) {
         this.setDirtyIf(!Objects.equals(this.dailySumAnomaly60Days, dailySumAnomaly60Days));
         this.dailySumAnomaly60Days = dailySumAnomaly60Days;
-        propagateHierarchyIdToField(dailySumAnomaly60Days, "daily_sum_anomaly_60d");
+        propagateHierarchyIdToField(dailySumAnomaly60Days, "daily_sum_anomaly_60_days");
     }
 
     /**

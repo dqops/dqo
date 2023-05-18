@@ -16,7 +16,7 @@
 package ai.dqo.mysql.column.numeric;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnPercentile25InRangeCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnPercentile10InRangeCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericPercentile25InRangeSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericPercentile10SensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class MysqlColumnNumericPercentile25InRangeSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
-    private ColumnNumericPercentile25InRangeSensorParametersSpec sut;
+public class MysqlColumnNumericPercentile10SensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
+    private ColumnNumericPercentile10SensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnPercentile25InRangeCheckSpec checkSpec;
+    private ColumnPercentile10InRangeCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,8 +49,8 @@ public class MysqlColumnNumericPercentile25InRangeSensorParametersSpecIntegratio
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.mysql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnNumericPercentile25InRangeSensorParametersSpec();
-        this.checkSpec = new ColumnPercentile25InRangeCheckSpec();
+        this.sut = new ColumnNumericPercentile10SensorParametersSpec();
+        this.checkSpec = new ColumnPercentile10InRangeCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -65,7 +65,7 @@ public class MysqlColumnNumericPercentile25InRangeSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5.75, resultTable.column(0).get(0));
+        Assertions.assertEquals(2.9, resultTable.column(0).get(0));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class MysqlColumnNumericPercentile25InRangeSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5.75, resultTable.column(0).get(0));
+        Assertions.assertEquals(2.9, resultTable.column(0).get(0));
     }
 
     @Test
@@ -93,7 +93,7 @@ public class MysqlColumnNumericPercentile25InRangeSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5.75, resultTable.column(0).get(0));
+        Assertions.assertEquals(2.9, resultTable.column(0).get(0));
     }
 
     @Test

@@ -16,7 +16,7 @@
 package ai.dqo.mysql.column.numeric;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnPercentile90InRangeCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnPercentileInRangeCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericPercentile90InRangeSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericPercentileSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class MysqlColumnNumericPercentile90InRangeSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
-    private ColumnNumericPercentile90InRangeSensorParametersSpec sut;
+public class MysqlColumnNumericPercentileSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
+    private ColumnNumericPercentileSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnPercentile90InRangeCheckSpec checkSpec;
+    private ColumnPercentileInRangeCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,13 +49,14 @@ public class MysqlColumnNumericPercentile90InRangeSensorParametersSpecIntegratio
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.mysql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnNumericPercentile90InRangeSensorParametersSpec();
-        this.checkSpec = new ColumnPercentile90InRangeCheckSpec();
+        this.sut = new ColumnNumericPercentileSensorParametersSpec();
+        this.checkSpec = new ColumnPercentileInRangeCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        this.sut.setPercentileValue(0.5);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "value", this.checkSpec);
@@ -65,11 +66,12 @@ public class MysqlColumnNumericPercentile90InRangeSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(18.1, resultTable.column(0).get(0));
+        Assertions.assertEquals(10.5, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+        this.sut.setPercentileValue(0.5);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily);
@@ -79,11 +81,12 @@ public class MysqlColumnNumericPercentile90InRangeSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(18.1, resultTable.column(0).get(0));
+        Assertions.assertEquals(10.5, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
+        this.sut.setPercentileValue(0.5);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.monthly);
@@ -93,11 +96,12 @@ public class MysqlColumnNumericPercentile90InRangeSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(18.1, resultTable.column(0).get(0));
+        Assertions.assertEquals(10.5, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+        this.sut.setPercentileValue(0.5);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.daily,"date");
@@ -112,6 +116,7 @@ public class MysqlColumnNumericPercentile90InRangeSensorParametersSpecIntegratio
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+        this.sut.setPercentileValue(0.5);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "value", this.checkSpec, CheckTimeScale.monthly,"date");

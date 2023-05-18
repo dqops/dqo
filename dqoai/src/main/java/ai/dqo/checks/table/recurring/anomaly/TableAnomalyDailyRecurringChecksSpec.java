@@ -22,6 +22,7 @@ import ai.dqo.checks.table.checkspecs.anomaly.TableAnomalyRowCountChange7DaysChe
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -38,18 +39,21 @@ import java.util.Objects;
 public class TableAnomalyDailyRecurringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableAnomalyDailyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_row_count_anomaly_7d", o -> o.dailyRowCountAnomaly7Days);
-            put("daily_row_count_anomaly_30d", o -> o.dailyRowCountAnomaly30Days);
-            put("daily_row_count_anomaly_60d", o -> o.dailyRowCountAnomaly60Days);
+            put("daily_row_count_anomaly_7_days", o -> o.dailyRowCountAnomaly7Days);
+            put("daily_row_count_anomaly_30_days", o -> o.dailyRowCountAnomaly30Days);
+            put("daily_row_count_anomaly_60_days", o -> o.dailyRowCountAnomaly60Days);
         }
     };
-    
+
+    @JsonProperty("daily_row_count_anomaly_7_days")
     @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 7 days.")
     private TableAnomalyRowCountChange7DaysCheckSpec dailyRowCountAnomaly7Days;
 
+    @JsonProperty("daily_row_count_anomaly_30_days")
     @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.")
     private TableAnomalyRowCountChange30DaysCheckSpec dailyRowCountAnomaly30Days;
 
+    @JsonProperty("daily_row_count_anomaly_60_days")
     @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 60 days.")
     private TableAnomalyRowCountChange60DaysCheckSpec dailyRowCountAnomaly60Days;
 
@@ -68,7 +72,7 @@ public class TableAnomalyDailyRecurringChecksSpec extends AbstractCheckCategoryS
     public void setDailyRowCountAnomaly7Days(TableAnomalyRowCountChange7DaysCheckSpec dailyRowCountAnomaly7Days) {
         this.setDirtyIf(!Objects.equals(this.dailyRowCountAnomaly7Days, dailyRowCountAnomaly7Days));
         this.dailyRowCountAnomaly7Days = dailyRowCountAnomaly7Days;
-        propagateHierarchyIdToField(dailyRowCountAnomaly7Days, "daily_row_count_anomaly_7d");
+        propagateHierarchyIdToField(dailyRowCountAnomaly7Days, "daily_row_count_anomaly_7_days");
     }
 
     /**
@@ -86,7 +90,7 @@ public class TableAnomalyDailyRecurringChecksSpec extends AbstractCheckCategoryS
     public void setDailyRowCountAnomaly30Days(TableAnomalyRowCountChange30DaysCheckSpec dailyRowCountAnomaly30Days) {
         this.setDirtyIf(!Objects.equals(this.dailyRowCountAnomaly30Days, dailyRowCountAnomaly30Days));
         this.dailyRowCountAnomaly30Days = dailyRowCountAnomaly30Days;
-        propagateHierarchyIdToField(dailyRowCountAnomaly30Days, "daily_row_count_anomaly_30d");
+        propagateHierarchyIdToField(dailyRowCountAnomaly30Days, "daily_row_count_anomaly_30_days");
     }
 
     /**
@@ -104,7 +108,7 @@ public class TableAnomalyDailyRecurringChecksSpec extends AbstractCheckCategoryS
     public void setDailyRowCountAnomaly60Days(TableAnomalyRowCountChange60DaysCheckSpec dailyRowCountAnomaly60Days) {
         this.setDirtyIf(!Objects.equals(this.dailyRowCountAnomaly60Days, dailyRowCountAnomaly60Days));
         this.dailyRowCountAnomaly60Days = dailyRowCountAnomaly60Days;
-        propagateHierarchyIdToField(dailyRowCountAnomaly60Days, "daily_row_count_anomaly_60d");
+        propagateHierarchyIdToField(dailyRowCountAnomaly60Days, "daily_row_count_anomaly_60_days");
     }
 
     /**

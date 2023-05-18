@@ -16,7 +16,7 @@
 package ai.dqo.mysql.column.numeric;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnPopulationStddevInRangeCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnPopulationVarianceInRangeCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericPopulationStddevInRangeSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericPopulationVarianceSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class MysqlColumnNumericPopulationStddevInRangeSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
-    private ColumnNumericPopulationStddevInRangeSensorParametersSpec sut;
+public class MysqlColumnNumericPopulationVarianceSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
+    private ColumnNumericPopulationVarianceSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnPopulationStddevInRangeCheckSpec checkSpec;
+    private ColumnPopulationVarianceInRangeCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,8 +49,8 @@ public class MysqlColumnNumericPopulationStddevInRangeSensorParametersSpecIntegr
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.mysql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnNumericPopulationStddevInRangeSensorParametersSpec();
-		this.checkSpec = new ColumnPopulationStddevInRangeCheckSpec();
+		this.sut = new ColumnNumericPopulationVarianceSensorParametersSpec();
+		this.checkSpec = new ColumnPopulationVarianceInRangeCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -64,7 +64,7 @@ public class MysqlColumnNumericPopulationStddevInRangeSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(106.84610240902566f, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.0896f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class MysqlColumnNumericPopulationStddevInRangeSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(106.84610240902566f, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.0896f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class MysqlColumnNumericPopulationStddevInRangeSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(106.84610240902566f, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.0896f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -116,6 +116,6 @@ public class MysqlColumnNumericPopulationStddevInRangeSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(106.84610240902566f, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.0896f, resultTable.column(0).get(0));
     }
 }

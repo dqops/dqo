@@ -16,7 +16,7 @@
 package ai.dqo.mysql.column.numeric;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnSumInRangeCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnSampleVarianceInRangeCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericSumInRangeSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericSampleVarianceSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class MysqlColumnNumericSumInRangeSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
-    private ColumnNumericSumInRangeSensorParametersSpec sut;
+public class MysqlColumnNumericSampleVarianceSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
+    private ColumnNumericSampleVarianceSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnSumInRangeCheckSpec checkSpec;
+    private ColumnSampleVarianceInRangeCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,8 +49,8 @@ public class MysqlColumnNumericSumInRangeSensorParametersSpecIntegrationTest ext
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.mysql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnNumericSumInRangeSensorParametersSpec();
-		this.checkSpec = new ColumnSumInRangeCheckSpec();
+		this.sut = new ColumnNumericSampleVarianceSensorParametersSpec();
+		this.checkSpec = new ColumnSampleVarianceInRangeCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -64,7 +64,7 @@ public class MysqlColumnNumericSumInRangeSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(962L, resultTable.column(0).get(0));
+        Assertions.assertEquals(11891.76, resultTable.column(0).get(0));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class MysqlColumnNumericSumInRangeSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(962L, resultTable.column(0).get(0));
+        Assertions.assertEquals(11891.76, resultTable.column(0).get(0));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class MysqlColumnNumericSumInRangeSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(962L, resultTable.column(0).get(0));
+        Assertions.assertEquals(11891.76, resultTable.column(0).get(0));
     }
 
     @Test
@@ -103,7 +103,7 @@ public class MysqlColumnNumericSumInRangeSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(3L, resultTable.column(0).get(0));
+        Assertions.assertEquals(null, resultTable.column(0).get(0));
     }
 
     @Test
@@ -116,6 +116,6 @@ public class MysqlColumnNumericSumInRangeSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(962L, resultTable.column(0).get(0));
+        Assertions.assertEquals(11891.76, resultTable.column(0).get(0));
     }
 }
