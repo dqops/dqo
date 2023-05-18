@@ -35,7 +35,22 @@ public class ProviderSensorBasicModel {
     @JsonPropertyDescription("Provider type.")
     private ProviderType providerType;
 
-    @JsonPropertyDescription("This provider has is a built-in sensor.")
+    @JsonPropertyDescription("This connection specific template is a custom sensor template or was customized by the user.")
     private boolean custom;
 
+    @JsonPropertyDescription("This connection specific template is provided with DQO as a built-in sensor.")
+    private boolean builtIn;
+
+    /**
+     * Sets the custom or builtIn flag to true to match the source of the sensor definition.
+     * @param sensorDefinitionSource Source sensor definition.
+     */
+    public void setSensorSource(SensorDefinitionSource sensorDefinitionSource) {
+        if (sensorDefinitionSource == SensorDefinitionSource.CUSTOM) {
+            this.setCustom(true);
+        }
+        else if (sensorDefinitionSource == SensorDefinitionSource.BUILT_IN) {
+            this.setBuiltIn(true);
+        }
+    }
 }

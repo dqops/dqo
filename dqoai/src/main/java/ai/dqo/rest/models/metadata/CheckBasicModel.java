@@ -23,26 +23,37 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Rule basic model that is returned by the REST API.
+ * Check basic model that is returned by the REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "RuleBasicModel", description = "Rule basic model")
-public class RuleBasicModel {
+@ApiModel(value = "CheckBasicModel", description = "Check basic model")
+public class CheckBasicModel {
+    /**
+     * Check name at the leaf level of the check tree.
+     */
+    @JsonPropertyDescription("Check name")
+    private String checkName;
 
-    @JsonPropertyDescription("Rule name")
-    private String ruleName;
+    /**
+     * Full check name.
+     */
+    @JsonPropertyDescription("Full check name")
+    private String fullCheckName;
 
-    @JsonPropertyDescription("Full rule name")
-    private String fullRuleName;
-
-    @JsonPropertyDescription("This rule has is a custom rule or was customized by the user.")
+    /**
+     * True when the check is a custom check or is customized by the user.
+     */
+    @JsonPropertyDescription("This check has is a custom check or was customized by the user.")
     public boolean custom;
 
-    @JsonPropertyDescription("This rule is provided with DQO as a built-in rule.")
+    /**
+     * True when this check is provided with DQO as a built-in check.
+     */
+    @JsonPropertyDescription("This check is provided with DQO as a built-in check.")
     public boolean builtIn;
 
-    public RuleBasicModel() {
+    public CheckBasicModel() {
     }
 }
