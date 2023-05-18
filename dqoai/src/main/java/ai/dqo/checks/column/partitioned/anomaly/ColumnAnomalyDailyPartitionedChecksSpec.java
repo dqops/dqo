@@ -36,24 +36,19 @@ import java.util.Objects;
 public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_sum_anomaly_7d", o -> o.dailyPartitionSumAnomaly7Days);
-            put("daily_partition_sum_anomaly_30d", o -> o.dailyPartitionSumAnomaly30Days);
-            put("daily_partition_sum_anomaly_60d", o -> o.dailyPartitionSumAnomaly60Days);
-
             put("daily_partition_mean_anomaly_7d", o -> o.dailyPartitionMeanAnomaly7Days);
             put("daily_partition_mean_anomaly_30d", o -> o.dailyPartitionMeanAnomaly30Days);
             put("daily_partition_mean_anomaly_60d", o -> o.dailyPartitionMeanAnomaly60Days);
+
+            put("daily_partition_median_anomaly_7d", o -> o.dailyPartitionMedianAnomaly7Days);
+            put("daily_partition_median_anomaly_30d", o -> o.dailyPartitionMedianAnomaly30Days);
+            put("daily_partition_median_anomaly_60d", o -> o.dailyPartitionMedianAnomaly60Days);
+
+            put("daily_partition_sum_anomaly_7d", o -> o.dailyPartitionSumAnomaly7Days);
+            put("daily_partition_sum_anomaly_30d", o -> o.dailyPartitionSumAnomaly30Days);
+            put("daily_partition_sum_anomaly_60d", o -> o.dailyPartitionSumAnomaly60Days);
         }
     };
-
-    @JsonPropertyDescription("Verifies that the sum in a column is within a percentile from measurements made during the last 7 days.")
-    private ColumnAnomalySum7DaysCheckSpec dailyPartitionSumAnomaly7Days;
-
-    @JsonPropertyDescription("Verifies that the sum in a column is within a percentile from measurements made during the last 30 days.")
-    private ColumnAnomalySum30DaysCheckSpec dailyPartitionSumAnomaly30Days;
-
-    @JsonPropertyDescription("Verifies that the sum in a column is within a percentile from measurements made during the last 60 days.")
-    private ColumnAnomalySum60DaysCheckSpec dailyPartitionSumAnomaly60Days;
 
     @JsonPropertyDescription("Verifies that the mean value in a column is within a percentile from measurements made during the last 7 days.")
     private ColumnAnomalyMean7DaysCheckSpec dailyPartitionMeanAnomaly7Days;
@@ -64,60 +59,24 @@ public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the mean value in a column is within a percentile from measurements made during the last 60 days.")
     private ColumnAnomalyMean60DaysCheckSpec dailyPartitionMeanAnomaly60Days;
 
+    @JsonPropertyDescription("Verifies that the median in a column is within a percentile from measurements made during the last 7 days.")
+    private ColumnAnomalyMedian7DaysCheckSpec dailyPartitionMedianAnomaly7Days;
 
-    /**
-     * Returns a sum anomaly 7 days check specification.
-     * @return Sum anomaly 7 days check specification.
-     */
-    public ColumnAnomalySum7DaysCheckSpec getDailyPartitionSumAnomaly7Days() {
-        return dailyPartitionSumAnomaly7Days;
-    }
+    @JsonPropertyDescription("Verifies that the median in a column is within a percentile from measurements made during the last 30 days.")
+    private ColumnAnomalyMedian30DaysCheckSpec dailyPartitionMedianAnomaly30Days;
 
-    /**
-     * Sets a new specification of a sum anomaly 7 days check.
-     * @param dailyPartitionSumAnomaly7Days Sum anomaly 7 days check specification.
-     */
-    public void setDailyPartitionSumAnomaly7Days(ColumnAnomalySum7DaysCheckSpec dailyPartitionSumAnomaly7Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionSumAnomaly7Days, dailyPartitionSumAnomaly7Days));
-        this.dailyPartitionSumAnomaly7Days = dailyPartitionSumAnomaly7Days;
-        propagateHierarchyIdToField(dailyPartitionSumAnomaly7Days, "daily_partition_sum_anomaly_7d");
-    }
+    @JsonPropertyDescription("Verifies that the median in a column is within a percentile from measurements made during the last 60 days.")
+    private ColumnAnomalyMedian60DaysCheckSpec dailyPartitionMedianAnomaly60Days;
 
-    /**
-     * Returns a sum anomaly 30 days check specification.
-     * @return Sum anomaly 30 days check specification.
-     */
-    public ColumnAnomalySum30DaysCheckSpec getDailyPartitionSumAnomaly30Days() {
-        return dailyPartitionSumAnomaly30Days;
-    }
+    @JsonPropertyDescription("Verifies that the sum in a column is within a percentile from measurements made during the last 7 days.")
+    private ColumnAnomalySum7DaysCheckSpec dailyPartitionSumAnomaly7Days;
 
-    /**
-     * Sets a new specification of a sum anomaly 30 days check.
-     * @param dailyPartitionSumAnomaly30Days Sum anomaly 30 days check specification.
-     */
-    public void setDailyPartitionSumAnomaly30Days(ColumnAnomalySum30DaysCheckSpec dailyPartitionSumAnomaly30Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionSumAnomaly30Days, dailyPartitionSumAnomaly30Days));
-        this.dailyPartitionSumAnomaly30Days = dailyPartitionSumAnomaly30Days;
-        propagateHierarchyIdToField(dailyPartitionSumAnomaly30Days, "daily_partition_sum_anomaly_30d");
-    }
+    @JsonPropertyDescription("Verifies that the sum in a column is within a percentile from measurements made during the last 30 days.")
+    private ColumnAnomalySum30DaysCheckSpec dailyPartitionSumAnomaly30Days;
 
-    /**
-     * Returns a sum anomaly 60 days check specification.
-     * @return Sum anomaly 60 days check specification.
-     */
-    public ColumnAnomalySum60DaysCheckSpec getDailyPartitionSumAnomaly60Days() {
-        return dailyPartitionSumAnomaly60Days;
-    }
-
-    /**
-     * Sets a new specification of a sum anomaly 60 days check.
-     * @param dailyPartitionSumAnomaly60Days Sum anomaly 60 days check specification.
-     */
-    public void setDailyPartitionSumAnomaly60Days(ColumnAnomalySum60DaysCheckSpec dailyPartitionSumAnomaly60Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionSumAnomaly60Days, dailyPartitionSumAnomaly60Days));
-        this.dailyPartitionSumAnomaly60Days = dailyPartitionSumAnomaly60Days;
-        propagateHierarchyIdToField(dailyPartitionSumAnomaly60Days, "daily_partition_sum_anomaly_60d");
-    }
+    @JsonPropertyDescription("Verifies that the sum in a column is within a percentile from measurements made during the last 60 days.")
+    private ColumnAnomalySum60DaysCheckSpec dailyPartitionSumAnomaly60Days;
+    
 
     /**
      * Returns a mean value anomaly 7 days check specification.
@@ -171,6 +130,114 @@ public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMeanAnomaly60Days, dailyPartitionMeanAnomaly60Days));
         this.dailyPartitionMeanAnomaly60Days = dailyPartitionMeanAnomaly60Days;
         propagateHierarchyIdToField(dailyPartitionMeanAnomaly60Days, "daily_partition_mean_anomaly_60d");
+    }
+
+    /**
+     * Returns a median anomaly 7 days check specification.
+     * @return Median anomaly 7 days check specification.
+     */
+    public ColumnAnomalyMedian7DaysCheckSpec getDailyPartitionMedianAnomaly7Days() {
+        return dailyPartitionMedianAnomaly7Days;
+    }
+
+    /**
+     * Sets a new specification of a median anomaly 7 days check.
+     * @param dailyPartitionMedianAnomaly7Days Median anomaly 7 days check specification.
+     */
+    public void setDailyPartitionMedianAnomaly7Days(ColumnAnomalyMedian7DaysCheckSpec dailyPartitionMedianAnomaly7Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMedianAnomaly7Days, dailyPartitionMedianAnomaly7Days));
+        this.dailyPartitionMedianAnomaly7Days = dailyPartitionMedianAnomaly7Days;
+        propagateHierarchyIdToField(dailyPartitionMedianAnomaly7Days, "daily_partition_median_anomaly_7d");
+    }
+
+    /**
+     * Returns a median anomaly 30 days check specification.
+     * @return Median anomaly 30 days check specification.
+     */
+    public ColumnAnomalyMedian30DaysCheckSpec getDailyPartitionMedianAnomaly30Days() {
+        return dailyPartitionMedianAnomaly30Days;
+    }
+
+    /**
+     * Sets a new specification of a median anomaly 30 days check.
+     * @param dailyPartitionMedianAnomaly30Days Median anomaly 30 days check specification.
+     */
+    public void setDailyPartitionMedianAnomaly30Days(ColumnAnomalyMedian30DaysCheckSpec dailyPartitionMedianAnomaly30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMedianAnomaly30Days, dailyPartitionMedianAnomaly30Days));
+        this.dailyPartitionMedianAnomaly30Days = dailyPartitionMedianAnomaly30Days;
+        propagateHierarchyIdToField(dailyPartitionMedianAnomaly30Days, "daily_partition_median_anomaly_30d");
+    }
+
+    /**
+     * Returns a median anomaly 60 days check specification.
+     * @return Median anomaly 60 days check specification.
+     */
+    public ColumnAnomalyMedian60DaysCheckSpec getDailyPartitionMedianAnomaly60Days() {
+        return dailyPartitionMedianAnomaly60Days;
+    }
+
+    /**
+     * Sets a new specification of a median anomaly 60 days check.
+     * @param dailyPartitionMedianAnomaly60Days Median anomaly 60 days check specification.
+     */
+    public void setDailyPartitionMedianAnomaly60Days(ColumnAnomalyMedian60DaysCheckSpec dailyPartitionMedianAnomaly60Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMedianAnomaly60Days, dailyPartitionMedianAnomaly60Days));
+        this.dailyPartitionMedianAnomaly60Days = dailyPartitionMedianAnomaly60Days;
+        propagateHierarchyIdToField(dailyPartitionMedianAnomaly60Days, "daily_partition_median_anomaly_60d");
+    }
+
+    /**
+     * Returns a sum anomaly 7 days check specification.
+     * @return Sum anomaly 7 days check specification.
+     */
+    public ColumnAnomalySum7DaysCheckSpec getDailyPartitionSumAnomaly7Days() {
+        return dailyPartitionSumAnomaly7Days;
+    }
+
+    /**
+     * Sets a new specification of a sum anomaly 7 days check.
+     * @param dailyPartitionSumAnomaly7Days Sum anomaly 7 days check specification.
+     */
+    public void setDailyPartitionSumAnomaly7Days(ColumnAnomalySum7DaysCheckSpec dailyPartitionSumAnomaly7Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSumAnomaly7Days, dailyPartitionSumAnomaly7Days));
+        this.dailyPartitionSumAnomaly7Days = dailyPartitionSumAnomaly7Days;
+        propagateHierarchyIdToField(dailyPartitionSumAnomaly7Days, "daily_partition_sum_anomaly_7d");
+    }
+
+    /**
+     * Returns a sum anomaly 30 days check specification.
+     * @return Sum anomaly 30 days check specification.
+     */
+    public ColumnAnomalySum30DaysCheckSpec getDailyPartitionSumAnomaly30Days() {
+        return dailyPartitionSumAnomaly30Days;
+    }
+
+    /**
+     * Sets a new specification of a sum anomaly 30 days check.
+     * @param dailyPartitionSumAnomaly30Days Sum anomaly 30 days check specification.
+     */
+    public void setDailyPartitionSumAnomaly30Days(ColumnAnomalySum30DaysCheckSpec dailyPartitionSumAnomaly30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSumAnomaly30Days, dailyPartitionSumAnomaly30Days));
+        this.dailyPartitionSumAnomaly30Days = dailyPartitionSumAnomaly30Days;
+        propagateHierarchyIdToField(dailyPartitionSumAnomaly30Days, "daily_partition_sum_anomaly_30d");
+    }
+
+    /**
+     * Returns a sum anomaly 60 days check specification.
+     * @return Sum anomaly 60 days check specification.
+     */
+    public ColumnAnomalySum60DaysCheckSpec getDailyPartitionSumAnomaly60Days() {
+        return dailyPartitionSumAnomaly60Days;
+    }
+
+    /**
+     * Sets a new specification of a sum anomaly 60 days check.
+     * @param dailyPartitionSumAnomaly60Days Sum anomaly 60 days check specification.
+     */
+    public void setDailyPartitionSumAnomaly60Days(ColumnAnomalySum60DaysCheckSpec dailyPartitionSumAnomaly60Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSumAnomaly60Days, dailyPartitionSumAnomaly60Days));
+        this.dailyPartitionSumAnomaly60Days = dailyPartitionSumAnomaly60Days;
+        propagateHierarchyIdToField(dailyPartitionSumAnomaly60Days, "daily_partition_sum_anomaly_60d");
     }
 
     /**

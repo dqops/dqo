@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.table.partitioned.anomaly.TableAnomalyMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.table.partitioned.sql.TableSqlMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.table.partitioned.standard.TableStandardMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.table.partitioned.timeliness.TableTimelinessMonthlyPartitionedChecksSpec;
@@ -53,6 +54,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
             put("standard", o -> o.standard);
             put("timeliness", o -> o.timeliness);
             put("sql", o -> o.sql);
+            put("anomaly", o -> o.anomaly);
 
             // accuracy checks are not supported on partitioned checks yet
         }
@@ -72,6 +74,12 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlMonthlyPartitionedChecksSpec sql;
+
+    @JsonPropertyDescription("Monthly partitioned anomaly checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableAnomalyMonthlyPartitionedChecksSpec anomaly;
+    
 
     /**
      * Returns the container of monthly partitioned checks for standard data quality checks.
@@ -125,6 +133,24 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
+    }
+
+    /**
+     * Returns a container of table level anomaly partitioned checks.
+     * @return Anomaly partitioned checks.
+     */
+    public TableAnomalyMonthlyPartitionedChecksSpec getAnomaly() {
+        return anomaly;
+    }
+
+    /**
+     * Sets a reference to a container of anomaly partitioned checks.
+     * @param anomaly Anomaly partitioned checks.
+     */
+    public void setAnomaly(TableAnomalyMonthlyPartitionedChecksSpec anomaly) {
+        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
+        this.anomaly = anomaly;
+        this.propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
     /**

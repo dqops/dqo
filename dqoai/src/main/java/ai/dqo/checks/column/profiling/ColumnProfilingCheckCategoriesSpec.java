@@ -59,6 +59,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
             put("consistency", o -> o.consistency);
+            put("anomaly", o -> o.anomaly);
         }
     };
 
@@ -116,6 +117,11 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnProfilingConsistencyChecksSpec consistency;
+
+    @JsonPropertyDescription("Configuration of anomaly checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnProfilingAnomalyChecksSpec anomaly;
 
     /**
      * Returns the nulls check configuration on a column level.
@@ -313,6 +319,24 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
         this.setDirtyIf(!Objects.equals(this.consistency, consistency));
         this.consistency = consistency;
         this.propagateHierarchyIdToField(consistency, "consistency");
+    }
+
+    /**
+     * Returns the anomaly check configuration on a column level.
+     * @return Anomaly check configuration.
+     */
+    public ColumnProfilingAnomalyChecksSpec getAnomaly() {
+        return anomaly;
+    }
+
+    /**
+     * Sets the anomaly check configuration on a column level.
+     * @param anomaly New anomaly checks configuration.
+     */
+    public void setAnomaly(ColumnProfilingAnomalyChecksSpec anomaly) {
+        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
+        this.anomaly = anomaly;
+        this.propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
     /**

@@ -20,6 +20,7 @@ import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.recurring.accuracy.TableAccuracyMonthlyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.anomaly.TableAnomalyMonthlyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.availability.TableAvailabilityMonthlyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.sql.TableSqlMonthlyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.standard.TableStandardMonthlyRecurringChecksSpec;
@@ -57,6 +58,7 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
             put("accuracy", o -> o.accuracy);
             put("sql", o -> o.sql);
             put("availability", o -> o.availability);
+            put("anomaly", o -> o.anomaly);
         }
     };
 
@@ -84,6 +86,11 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableAvailabilityMonthlyRecurringChecksSpec availability;
+
+    @JsonPropertyDescription("Daily partitioned anomaly checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableAnomalyMonthlyRecurringChecksSpec anomaly;
 
     /**
      * Returns the container of recurring for standard data quality checks.
@@ -173,6 +180,24 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
         this.setDirtyIf(!Objects.equals(this.availability, availability));
         this.availability = availability;
         this.propagateHierarchyIdToField(availability, "availability");
+    }
+
+    /**
+     * Returns a container of custom sql checks.
+     * @return Custom sql checks.
+     */
+    public TableAnomalyMonthlyRecurringChecksSpec getAnomaly() {
+        return anomaly;
+    }
+
+    /**
+     * Sets a reference to a container of custom sql checks.
+     * @param anomaly Container of custom sql checks.
+     */
+    public void setAnomaly(TableAnomalyMonthlyRecurringChecksSpec anomaly) {
+        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
+        this.anomaly = anomaly;
+        this.propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
     /**

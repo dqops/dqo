@@ -20,6 +20,7 @@ import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.recurring.accuracy.ColumnAccuracyMonthlyRecurringChecksSpec;
+import ai.dqo.checks.column.recurring.anomaly.ColumnAnomalyMonthlyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.bool.ColumnBoolMonthlyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.consistency.ColumnConsistencyMonthlyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.datetime.ColumnDatetimeMonthlyRecurringChecksSpec;
@@ -69,7 +70,7 @@ public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootCheck
            put("integrity", o -> o.integrity);
            put("accuracy", o -> o.accuracy);
            put("consistency", o -> o.consistency);
-
+           put("anomaly", o -> o.anomaly);
         }
     };
 
@@ -127,6 +128,11 @@ public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnConsistencyMonthlyRecurringChecksSpec consistency;
+
+    @JsonPropertyDescription("Monthly recurring of anomaly in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAnomalyMonthlyRecurringChecksSpec anomaly;
 
     /**
      * Returns the container of recurring for standard data quality checks.
@@ -324,6 +330,24 @@ public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.consistency, consistency));
         this.consistency = consistency;
         this.propagateHierarchyIdToField(consistency, "consistency");
+    }
+
+    /**
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
+     */
+    public ColumnAnomalyMonthlyRecurringChecksSpec getAnomaly() {
+        return anomaly;
+    }
+
+    /**
+     * Sets the container of anomaly data quality checks (recurring).
+     * @param anomaly New anomaly checks.
+     */
+    public void setAnomaly(ColumnAnomalyMonthlyRecurringChecksSpec anomaly) {
+        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
+        this.anomaly = anomaly;
+        this.propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
     /**

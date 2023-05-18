@@ -20,6 +20,7 @@ import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.recurring.accuracy.ColumnAccuracyDailyRecurringChecksSpec;
+import ai.dqo.checks.column.recurring.anomaly.ColumnAnomalyDailyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.bool.ColumnBoolDailyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.consistency.ColumnConsistencyDailyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.datetime.ColumnDatetimeDailyRecurringChecksSpec;
@@ -69,7 +70,7 @@ public class ColumnDailyRecurringCheckCategoriesSpec extends AbstractRootChecksC
            put("integrity", o -> o.integrity);
            put("accuracy", o -> o.accuracy);
            put("consistency", o -> o.consistency);
-
+           put("anomaly", o -> o.anomaly);
         }
     };
 
@@ -127,6 +128,11 @@ public class ColumnDailyRecurringCheckCategoriesSpec extends AbstractRootChecksC
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnConsistencyDailyRecurringChecksSpec consistency;
+
+    @JsonPropertyDescription("Daily recurring of anomaly in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAnomalyDailyRecurringChecksSpec anomaly;
 
     /**
      * Returns the container of recurring for standard data quality checks.
@@ -324,6 +330,24 @@ public class ColumnDailyRecurringCheckCategoriesSpec extends AbstractRootChecksC
         this.setDirtyIf(!Objects.equals(this.consistency, consistency));
         this.consistency = consistency;
         this.propagateHierarchyIdToField(consistency, "consistency");
+    }
+
+    /**
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
+     */
+    public ColumnAnomalyDailyRecurringChecksSpec getAnomaly() {
+        return anomaly;
+    }
+
+    /**
+     * Sets the container of anomaly data quality checks (recurring).
+     * @param anomaly New anomaly checks.
+     */
+    public void setAnomaly(ColumnAnomalyDailyRecurringChecksSpec anomaly) {
+        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
+        this.anomaly = anomaly;
+        this.propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
     /**
