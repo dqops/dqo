@@ -13,7 +13,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -35,7 +35,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -57,7 +57,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -79,7 +79,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -101,7 +101,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -137,7 +137,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -159,7 +159,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -181,7 +181,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -203,7 +203,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -225,7 +225,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -261,7 +261,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -283,7 +283,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -305,7 +305,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -327,7 +327,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -349,7 +349,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -397,7 +397,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -421,7 +421,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -443,7 +443,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -465,7 +465,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -497,7 +497,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -542,7 +542,7 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -566,7 +566,7 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -588,7 +588,7 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -610,7 +610,7 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -632,7 +632,7 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -668,7 +668,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -690,7 +690,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -712,7 +712,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -734,7 +734,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -756,7 +756,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -792,7 +792,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 addr
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -814,7 +814,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 addr
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -836,7 +836,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 addr
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -858,7 +858,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 addr
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -880,7 +880,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 addr
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -916,7 +916,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 addr
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -938,7 +938,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 addr
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -960,7 +960,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 addr
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -982,7 +982,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 addr
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1004,7 +1004,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 addr
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1052,7 +1052,7 @@ Column level sensor that calculates the percent of values that fit to a USA phon
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1076,7 +1076,7 @@ Column level sensor that calculates the percent of values that fit to a USA phon
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1098,7 +1098,7 @@ Column level sensor that calculates the percent of values that fit to a USA phon
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1120,7 +1120,7 @@ Column level sensor that calculates the percent of values that fit to a USA phon
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1152,7 +1152,7 @@ Column level sensor that calculates the percent of values that fit to a USA phon
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1197,7 +1197,7 @@ Column level sensor that calculates the percent of values that fit to a USA ZIP 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1221,7 +1221,7 @@ Column level sensor that calculates the percent of values that fit to a USA ZIP 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1243,7 +1243,7 @@ Column level sensor that calculates the percent of values that fit to a USA ZIP 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1265,7 +1265,7 @@ Column level sensor that calculates the percent of values that fit to a USA ZIP 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1287,7 +1287,7 @@ Column level sensor that calculates the percent of values that fit to a USA ZIP 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE

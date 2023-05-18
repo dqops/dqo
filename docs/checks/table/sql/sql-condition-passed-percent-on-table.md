@@ -85,7 +85,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -107,7 +107,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -127,7 +127,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -149,7 +149,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -169,7 +169,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -191,7 +191,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -211,7 +211,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -233,7 +233,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -253,7 +253,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -275,7 +275,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT_BIG(*) = 0 THEN 100.0
@@ -340,7 +340,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -361,7 +361,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -383,7 +383,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -404,7 +404,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -426,7 +426,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -447,7 +447,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -469,7 +469,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -490,7 +490,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -512,7 +512,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -533,7 +533,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT_BIG(*) = 0 THEN 100.0
@@ -665,7 +665,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -687,7 +687,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -707,7 +707,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -729,7 +729,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -749,7 +749,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -771,7 +771,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -791,7 +791,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -813,7 +813,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -833,7 +833,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -855,7 +855,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT_BIG(*) = 0 THEN 100.0
@@ -930,7 +930,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -951,7 +951,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -973,7 +973,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -994,7 +994,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -1016,7 +1016,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1037,7 +1037,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -1059,7 +1059,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1080,7 +1080,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -1102,7 +1102,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1123,7 +1123,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT_BIG(*) = 0 THEN 100.0
@@ -1255,7 +1255,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1277,7 +1277,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1297,7 +1297,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1319,7 +1319,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1339,7 +1339,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1361,7 +1361,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1381,7 +1381,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1403,7 +1403,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1423,7 +1423,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1445,7 +1445,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT_BIG(*) = 0 THEN 100.0
@@ -1520,7 +1520,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1541,7 +1541,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -1563,7 +1563,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1584,7 +1584,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -1606,7 +1606,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1627,7 +1627,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -1649,7 +1649,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1670,7 +1670,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -1692,7 +1692,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1713,7 +1713,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT_BIG(*) = 0 THEN 100.0
@@ -1845,7 +1845,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1867,7 +1867,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1887,7 +1887,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1909,7 +1909,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1929,7 +1929,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1951,7 +1951,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1971,7 +1971,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1993,7 +1993,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -2013,7 +2013,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2035,7 +2035,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT_BIG(*) = 0 THEN 100.0
@@ -2114,7 +2114,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -2135,7 +2135,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -2157,7 +2157,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -2178,7 +2178,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -2200,7 +2200,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -2221,7 +2221,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -2243,7 +2243,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -2264,7 +2264,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -2286,7 +2286,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -2307,7 +2307,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT_BIG(*) = 0 THEN 100.0
@@ -2436,7 +2436,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2458,7 +2458,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -2478,7 +2478,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2500,7 +2500,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -2520,7 +2520,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2542,7 +2542,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -2562,7 +2562,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2584,7 +2584,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -2604,7 +2604,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2626,7 +2626,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT_BIG(*) = 0 THEN 100.0
@@ -2705,7 +2705,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -2726,7 +2726,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -2748,7 +2748,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -2769,7 +2769,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -2791,7 +2791,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -2812,7 +2812,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -2834,7 +2834,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -2855,7 +2855,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -2877,7 +2877,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -2898,7 +2898,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT_BIG(*) = 0 THEN 100.0

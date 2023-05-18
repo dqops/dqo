@@ -84,7 +84,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -102,7 +102,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -119,7 +119,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -137,7 +137,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -154,7 +154,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -173,7 +173,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -191,7 +191,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -210,7 +210,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -228,7 +228,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -246,7 +246,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -257,6 +257,41 @@ spec:
         SYSDATETIMEOFFSET() AS time_period,
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` > 0 THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -309,7 +344,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -326,7 +361,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -345,7 +380,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -362,7 +397,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -381,7 +416,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -399,7 +434,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -419,7 +454,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -437,7 +472,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -457,7 +492,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -474,7 +509,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -494,6 +529,42 @@ spec:
             
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` > 0 THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            LOCALTIMESTAMP AS time_period,
+            CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -584,7 +655,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -602,7 +673,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -619,7 +690,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -637,7 +708,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -654,7 +725,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -673,7 +744,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -691,7 +762,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -710,7 +781,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -728,7 +799,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -746,7 +817,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -757,6 +828,41 @@ spec:
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` > 0 THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -810,7 +916,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -827,7 +933,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -846,7 +952,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -863,7 +969,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -882,7 +988,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -900,7 +1006,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -920,7 +1026,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -938,7 +1044,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -958,7 +1064,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -975,7 +1081,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -995,6 +1101,42 @@ spec:
             
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` > 0 THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            LOCALTIMESTAMP AS time_period,
+            CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -1085,7 +1227,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1103,7 +1245,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1120,7 +1262,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1138,7 +1280,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1155,7 +1297,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1174,7 +1316,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1192,7 +1334,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1211,7 +1353,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1229,7 +1371,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1247,7 +1389,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1258,6 +1400,41 @@ spec:
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` > 0 THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+        CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -1311,7 +1488,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1328,7 +1505,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1347,7 +1524,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1364,7 +1541,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1383,7 +1560,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1401,7 +1578,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1421,7 +1598,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1439,7 +1616,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1459,7 +1636,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1476,7 +1653,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1496,6 +1673,42 @@ spec:
             
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` > 0 THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+            CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -1586,7 +1799,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1604,7 +1817,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1621,7 +1834,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1639,7 +1852,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1656,7 +1869,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1675,7 +1888,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1693,7 +1906,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1712,7 +1925,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1730,7 +1943,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1748,7 +1961,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1763,6 +1976,41 @@ spec:
     ORDER BY CAST([] AS date)
     
         
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` > 0 THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table.`` AS time_period,
+        CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -1816,7 +2064,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1833,7 +2081,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1852,7 +2100,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1869,7 +2117,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1888,7 +2136,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1906,7 +2154,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1926,7 +2174,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1944,7 +2192,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1964,7 +2212,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1981,7 +2229,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1998,6 +2246,42 @@ spec:
         ORDER BY level_1, level_2CAST([] AS date)
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` > 0 THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            analyzed_table.`` AS time_period,
+            CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -2088,7 +2372,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2106,7 +2390,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2123,7 +2407,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2141,7 +2425,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2158,7 +2442,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2177,7 +2461,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2195,7 +2479,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2214,7 +2498,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2232,7 +2516,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2250,7 +2534,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2265,6 +2549,41 @@ spec:
     ORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
     
         
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` > 0 THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
+        CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -2318,7 +2637,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2335,7 +2654,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2354,7 +2673,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2371,7 +2690,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2390,7 +2709,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2408,7 +2727,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2428,7 +2747,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2446,7 +2765,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2466,7 +2785,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2483,7 +2802,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2500,6 +2819,42 @@ spec:
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` > 0 THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
+            CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 

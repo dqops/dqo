@@ -90,7 +90,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -112,7 +112,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(referenced_table.`customer_id`)
@@ -124,7 +124,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -146,7 +146,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
@@ -158,7 +158,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -180,7 +180,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
@@ -192,7 +192,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -214,7 +214,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
@@ -226,7 +226,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -248,7 +248,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(referenced_table.[customer_id])
@@ -256,6 +256,40 @@ spec:
         ) AS expected_value,
         COUNT(analyzed_table.[target_column]) AS actual_value
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        (SELECT
+            COUNT(referenced_table.`customer_id`)
+        FROM `dim_customer` AS referenced_table
+        ) AS expected_value,
+        COUNT(analyzed_table.`target_column`) AS actual_value
+    FROM `<target_table>` AS analyzed_table
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -311,7 +345,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -332,7 +366,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(referenced_table.`customer_id`)
@@ -344,7 +378,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -365,7 +399,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
@@ -377,7 +411,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -398,7 +432,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
@@ -410,7 +444,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -431,7 +465,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
@@ -443,7 +477,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -464,7 +498,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(referenced_table.[customer_id])
@@ -472,6 +506,39 @@ spec:
             ) AS expected_value,
             COUNT(analyzed_table.[target_column]) AS actual_value
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(referenced_table.`customer_id`)
+            FROM `dim_customer` AS referenced_table
+            ) AS expected_value,
+            COUNT(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_table>` AS analyzed_table
         ```
     
 
@@ -568,7 +635,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -590,7 +657,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(referenced_table.`customer_id`)
@@ -602,7 +669,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -624,7 +691,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
@@ -636,7 +703,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -658,7 +725,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
@@ -670,7 +737,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -692,7 +759,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
@@ -704,7 +771,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -726,7 +793,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(referenced_table.[customer_id])
@@ -734,6 +801,40 @@ spec:
         ) AS expected_value,
         COUNT(analyzed_table.[target_column]) AS actual_value
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        (SELECT
+            COUNT(referenced_table.`customer_id`)
+        FROM `dim_customer` AS referenced_table
+        ) AS expected_value,
+        COUNT(analyzed_table.`target_column`) AS actual_value
+    FROM `<target_table>` AS analyzed_table
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -790,7 +891,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -811,7 +912,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(referenced_table.`customer_id`)
@@ -823,7 +924,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -844,7 +945,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
@@ -856,7 +957,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -877,7 +978,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
@@ -889,7 +990,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -910,7 +1011,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
@@ -922,7 +1023,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -943,7 +1044,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(referenced_table.[customer_id])
@@ -951,6 +1052,39 @@ spec:
             ) AS expected_value,
             COUNT(analyzed_table.[target_column]) AS actual_value
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(referenced_table.`customer_id`)
+            FROM `dim_customer` AS referenced_table
+            ) AS expected_value,
+            COUNT(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_table>` AS analyzed_table
         ```
     
 
@@ -1047,7 +1181,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -1069,7 +1203,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(referenced_table.`customer_id`)
@@ -1081,7 +1215,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -1103,7 +1237,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
@@ -1115,7 +1249,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -1137,7 +1271,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
@@ -1149,7 +1283,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -1171,7 +1305,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(referenced_table."customer_id")
@@ -1183,7 +1317,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -1205,7 +1339,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(referenced_table.[customer_id])
@@ -1213,6 +1347,40 @@ spec:
         ) AS expected_value,
         COUNT(analyzed_table.[target_column]) AS actual_value
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        (SELECT
+            COUNT(referenced_table.`customer_id`)
+        FROM `dim_customer` AS referenced_table
+        ) AS expected_value,
+        COUNT(analyzed_table.`target_column`) AS actual_value
+    FROM `<target_table>` AS analyzed_table
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -1269,7 +1437,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -1290,7 +1458,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(referenced_table.`customer_id`)
@@ -1302,7 +1470,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -1323,7 +1491,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
@@ -1335,7 +1503,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -1356,7 +1524,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
@@ -1368,7 +1536,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -1389,7 +1557,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(referenced_table."customer_id")
@@ -1401,7 +1569,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -1422,7 +1590,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(referenced_table.[customer_id])
@@ -1430,6 +1598,39 @@ spec:
             ) AS expected_value,
             COUNT(analyzed_table.[target_column]) AS actual_value
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(referenced_table.`customer_id`)
+            FROM `dim_customer` AS referenced_table
+            ) AS expected_value,
+            COUNT(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_table>` AS analyzed_table
         ```
     
 
