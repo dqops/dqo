@@ -1237,7 +1237,7 @@ public class TablesController {
 
         StatisticsResultsForTableModel mostRecentStatisticsMetricsForTable =
                 this.statisticsDataService.getMostRecentStatisticsForTable(connectionName, physicalTableName,
-                        CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME, false);
+                        CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME, true);
 
         TableStatisticsModel resultModel = new TableStatisticsModel();
         resultModel.setConnectionName(connectionName);
