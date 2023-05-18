@@ -4,7 +4,6 @@ import ConfirmDialog from './ConfirmDialog';
 import { ConnectionApiClient } from '../../../services/apiClient';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from "../../../shared/routes";
-import { useTree } from "../../../contexts/treeContext";
 import AddSchemaDialog from "../../CustomTree/AddSchemaDialog";
 
 interface IConnectionActionGroupProps {
@@ -26,7 +25,6 @@ const ConnectionActionGroup = ({
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const [isOpen, setIsOpen] = useState(false);
   const history = useHistory();
-  const { sourceRoute } = useTree();
   const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
 
   const removeConnection = async () => {
@@ -35,7 +33,7 @@ const ConnectionActionGroup = ({
     );
   };
   const goToSchemas = (isImport = true) => {
-    history.push(`${ROUTES.CONNECTION_DETAIL(sourceRoute, connectionName, 'schemas')}${isImport ? '?import_schema=true' : ''}`)
+    history.push(`${ROUTES.CONNECTION_DETAIL(checkTypes, connectionName, 'schemas')}${isImport ? '?import_schema=true' : ''}`)
 
     if (onImport) {
       onImport();

@@ -1,17 +1,19 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../Button';
 import SvgIcon from '../SvgIcon';
 import { useTree } from '../../contexts/treeContext';
 import Tree from '../MainLayout/Tree';
+import { CheckTypes } from "../../shared/routes";
 
 const Sidebar = () => {
   const history = useHistory();
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
-  const { sidebarWidth, setSidebarWidth, sourceRoute } = useTree();
+  const { sidebarWidth, setSidebarWidth } = useTree();
+  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
 
   const startResizing = useCallback(() => {
     setIsResizing(true);
@@ -52,7 +54,7 @@ const Sidebar = () => {
       style={{ width: sidebarWidth, maxHeight: 'calc(100vh - 64px)' }}
     >
       <div className="px-4 flex mb-0">
-        {sourceRoute === 'sources' ? (
+        {checkTypes === 'sources' ? (
           <Button
             label="Add connection"
             color="primary"
