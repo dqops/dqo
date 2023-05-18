@@ -19,6 +19,7 @@ import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.execution.statistics.progress.SilentStatisticsCollectorExecutionProgressListener;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -29,7 +30,7 @@ import lombok.EqualsAndHashCode;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode(callSuper = false)
-public class CollectStatisticsQueueJobParameters {
+public class CollectStatisticsQueueJobParameters implements Cloneable {
     /**
      * Statistics collectors search filters that identify the type of statistics collector to run.
      */
@@ -54,6 +55,12 @@ public class CollectStatisticsQueueJobParameters {
      */
     @JsonPropertyDescription("Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).")
     private boolean dummySensorExecution;
+
+    /**
+     * The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.
+     */
+    @JsonPropertyDescription("The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.")
+    private CollectStatisticsQueueJobResult collectStatisticsResult;
 
     public CollectStatisticsQueueJobParameters() {
     }
@@ -105,5 +112,34 @@ public class CollectStatisticsQueueJobParameters {
      */
     public boolean isDummySensorExecution() {
         return dummySensorExecution;
+    }
+
+    /**
+     * Returns the results of a finished job with the count of statistics that were collected.
+     * @return The results of a finished job with the count of statistics that were collected.
+     */
+    public CollectStatisticsQueueJobResult getCollectStatisticsResult() {
+        return collectStatisticsResult;
+    }
+
+    /**
+     * Sets the summary result of the statistics collection job, this method is called by the job when it finished successfully.
+     * @param collectStatisticsResult The statistics collection result.
+     */
+    public void setCollectStatisticsResult(CollectStatisticsQueueJobResult collectStatisticsResult) {
+        this.collectStatisticsResult = collectStatisticsResult;
+    }
+
+    /**
+     * Creates and returns a copy of this object.
+     */
+    @Override
+    public CollectStatisticsQueueJobParameters clone() {
+        try {
+            return (CollectStatisticsQueueJobParameters)super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new DqoRuntimeException("Clone not supported", ex);
+        }
     }
 }
