@@ -84,7 +84,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -147,7 +147,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -166,7 +166,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -186,7 +186,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -205,7 +205,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -225,7 +225,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -244,7 +244,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -264,7 +264,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -283,7 +283,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -303,7 +303,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -368,7 +368,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -430,7 +430,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -451,7 +451,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -470,7 +470,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -491,7 +491,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -510,7 +510,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -531,7 +531,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -550,7 +550,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -571,7 +571,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -590,7 +590,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -702,7 +702,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -765,7 +765,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -784,7 +784,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -804,7 +804,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -823,7 +823,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -843,7 +843,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -862,7 +862,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -882,7 +882,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -901,7 +901,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -921,7 +921,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -987,7 +987,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -1049,7 +1049,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1070,7 +1070,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1089,7 +1089,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1110,7 +1110,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1129,7 +1129,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1150,7 +1150,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1169,7 +1169,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1190,7 +1190,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1209,7 +1209,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1321,7 +1321,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -1384,7 +1384,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1403,7 +1403,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1423,7 +1423,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1442,7 +1442,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1462,7 +1462,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1481,7 +1481,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1501,7 +1501,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1520,7 +1520,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1540,7 +1540,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1606,7 +1606,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -1668,7 +1668,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1689,7 +1689,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1708,7 +1708,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1729,7 +1729,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1748,7 +1748,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1769,7 +1769,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1788,7 +1788,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1809,7 +1809,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1828,7 +1828,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1940,7 +1940,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -2003,7 +2003,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2022,7 +2022,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2042,7 +2042,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2061,7 +2061,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2081,7 +2081,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2100,7 +2100,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2120,7 +2120,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2139,7 +2139,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2159,7 +2159,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2229,7 +2229,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -2291,7 +2291,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2312,7 +2312,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2331,7 +2331,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2352,7 +2352,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2371,7 +2371,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2392,7 +2392,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2411,7 +2411,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2432,7 +2432,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2451,7 +2451,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2560,7 +2560,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -2623,7 +2623,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2642,7 +2642,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2662,7 +2662,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2681,7 +2681,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2701,7 +2701,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2720,7 +2720,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2740,7 +2740,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2759,7 +2759,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2779,7 +2779,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2849,7 +2849,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -2911,7 +2911,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2932,7 +2932,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2951,7 +2951,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2972,7 +2972,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2991,7 +2991,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -3012,7 +3012,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -3031,7 +3031,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -3052,7 +3052,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -3071,7 +3071,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE

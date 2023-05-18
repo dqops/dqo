@@ -13,7 +13,7 @@ Table sensor that executes a row count query.
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         COUNT(*) AS actual_value
@@ -26,7 +26,7 @@ Table sensor that executes a row count query.
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         COUNT(*) AS actual_value
@@ -39,7 +39,7 @@ Table sensor that executes a row count query.
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         COUNT(*) AS actual_value
@@ -52,7 +52,7 @@ Table sensor that executes a row count query.
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         COUNT(*) AS actual_value
@@ -65,7 +65,7 @@ Table sensor that executes a row count query.
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         COUNT_BIG(*) AS actual_value

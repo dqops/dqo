@@ -28,7 +28,7 @@
 {{#each sqlTemplates~}}
 === "{{@key}}"
     {{#with "  "}}{{.}}{{/with}}
-    ```
+    ```sql+jinja
     {{#each this~}}
     {{{.}}}
     {{/each~}}

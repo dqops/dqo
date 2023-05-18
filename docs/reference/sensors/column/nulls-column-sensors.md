@@ -13,7 +13,7 @@ Column-level sensor that calculates the number of rows with not null values.
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -27,7 +27,7 @@ Column-level sensor that calculates the number of rows with not null values.
     ```
 === "mysql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -41,7 +41,7 @@ Column-level sensor that calculates the number of rows with not null values.
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
@@ -54,7 +54,7 @@ Column-level sensor that calculates the number of rows with not null values.
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
@@ -67,7 +67,7 @@ Column-level sensor that calculates the number of rows with not null values.
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -81,7 +81,7 @@ Column-level sensor that calculates the number of rows with not null values.
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) AS actual_value
@@ -108,7 +108,7 @@ Column level sensor that calculates the percentage of not null values in a colum
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -124,7 +124,7 @@ Column level sensor that calculates the percentage of not null values in a colum
     ```
 === "mysql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -140,7 +140,7 @@ Column level sensor that calculates the percentage of not null values in a colum
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -156,7 +156,7 @@ Column level sensor that calculates the percentage of not null values in a colum
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -172,7 +172,7 @@ Column level sensor that calculates the percentage of not null values in a colum
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -188,7 +188,7 @@ Column level sensor that calculates the percentage of not null values in a colum
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -218,7 +218,7 @@ Column-level sensor that calculates the number of rows with null values.
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -236,7 +236,7 @@ Column-level sensor that calculates the number of rows with null values.
     ```
 === "mysql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -254,7 +254,7 @@ Column-level sensor that calculates the number of rows with null values.
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -272,7 +272,7 @@ Column-level sensor that calculates the number of rows with null values.
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -290,7 +290,7 @@ Column-level sensor that calculates the number of rows with null values.
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -308,7 +308,7 @@ Column-level sensor that calculates the number of rows with null values.
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -340,7 +340,7 @@ Column-level sensor that calculates the percentage of rows with null values.
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -361,7 +361,7 @@ Column-level sensor that calculates the percentage of rows with null values.
     ```
 === "mysql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -382,7 +382,7 @@ Column-level sensor that calculates the percentage of rows with null values.
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -403,7 +403,7 @@ Column-level sensor that calculates the percentage of rows with null values.
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -424,7 +424,7 @@ Column-level sensor that calculates the percentage of rows with null values.
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -445,7 +445,7 @@ Column-level sensor that calculates the percentage of rows with null values.
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE

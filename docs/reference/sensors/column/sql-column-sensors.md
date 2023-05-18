@@ -19,7 +19,7 @@ Column level sensor that executes a given SQL expression on a column.
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -33,7 +33,7 @@ Column level sensor that executes a given SQL expression on a column.
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -47,7 +47,7 @@ Column level sensor that executes a given SQL expression on a column.
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -61,7 +61,7 @@ Column level sensor that executes a given SQL expression on a column.
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -75,7 +75,7 @@ Column level sensor that executes a given SQL expression on a column.
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -109,7 +109,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -130,7 +130,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -151,7 +151,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -172,7 +172,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -193,7 +193,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -234,7 +234,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -258,7 +258,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -282,7 +282,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -306,7 +306,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -330,7 +330,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -375,7 +375,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -396,7 +396,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -417,7 +417,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -438,7 +438,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -459,7 +459,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -500,7 +500,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -524,7 +524,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -548,7 +548,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -572,7 +572,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -596,7 +596,7 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE

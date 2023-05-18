@@ -85,7 +85,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -107,7 +107,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(*)
@@ -119,7 +119,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -141,7 +141,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(*)
@@ -153,7 +153,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -175,7 +175,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(*)
@@ -187,7 +187,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -209,7 +209,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(*)
@@ -221,7 +221,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -243,7 +243,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(*)
@@ -302,7 +302,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -323,7 +323,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(*)
@@ -335,7 +335,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -356,7 +356,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(*)
@@ -368,7 +368,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -389,7 +389,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(*)
@@ -401,7 +401,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -422,7 +422,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(*)
@@ -434,7 +434,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -455,7 +455,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(*)
@@ -554,7 +554,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -576,7 +576,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(*)
@@ -588,7 +588,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -610,7 +610,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(*)
@@ -622,7 +622,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -644,7 +644,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(*)
@@ -656,7 +656,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -678,7 +678,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(*)
@@ -690,7 +690,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -712,7 +712,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(*)
@@ -772,7 +772,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -793,7 +793,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(*)
@@ -805,7 +805,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -826,7 +826,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(*)
@@ -838,7 +838,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -859,7 +859,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(*)
@@ -871,7 +871,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -892,7 +892,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(*)
@@ -904,7 +904,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -925,7 +925,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(*)
@@ -1024,7 +1024,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -1046,7 +1046,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(*)
@@ -1058,7 +1058,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -1080,7 +1080,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(*)
@@ -1092,7 +1092,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -1114,7 +1114,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(*)
@@ -1126,7 +1126,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -1148,7 +1148,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(*)
@@ -1160,7 +1160,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -1182,7 +1182,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             COUNT(*)
@@ -1242,7 +1242,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -1263,7 +1263,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(*)
@@ -1275,7 +1275,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -1296,7 +1296,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(*)
@@ -1308,7 +1308,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -1329,7 +1329,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(*)
@@ -1341,7 +1341,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -1362,7 +1362,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(*)
@@ -1374,7 +1374,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -1395,7 +1395,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             (SELECT
                 COUNT(*)
