@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.statistics.column.uniqueness;
+package ai.dqo.statistics.column.nulls;
 
 import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniqueCountSensorParametersSpec;
+import ai.dqo.sensors.column.nulls.ColumnNullsNullsCountSensorParametersSpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -31,13 +31,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column profiler that counts distinct column values.
+ * Column null count profiler.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnUniquenessUniqueValuesCountStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnUniquenessUniqueCountSensorParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessUniqueValuesCountStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
+public class ColumnNullsNullsCountStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnNullsNullsCountSensorParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsNullsCountStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
     };
@@ -45,14 +45,14 @@ public class ColumnUniquenessUniqueValuesCountStatisticsCollectorSpec extends Ab
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessUniqueCountSensorParametersSpec parameters = new ColumnUniquenessUniqueCountSensorParametersSpec();
+    private ColumnNullsNullsCountSensorParametersSpec parameters = new ColumnNullsNullsCountSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnUniquenessUniqueCountSensorParametersSpec getParameters() {
+    public ColumnNullsNullsCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnUniquenessUniqueValuesCountStatisticsCollectorSpec extends Ab
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnUniquenessUniqueCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnNullsNullsCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -84,6 +84,6 @@ public class ColumnUniquenessUniqueValuesCountStatisticsCollectorSpec extends Ab
      */
     @Override
     public DataTypeCategory[] getSupportedDataTypes() {
-        return DataTypeCategory.COMPARABLE;
+        return DataTypeCategory.ALL_KNOWN;
     }
 }
