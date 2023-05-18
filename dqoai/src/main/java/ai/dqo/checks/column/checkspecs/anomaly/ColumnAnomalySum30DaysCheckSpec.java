@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.stdev.ChangePercentileMovingWithin30DaysRuleParametersSpec;
+import ai.dqo.rules.stdev.PercentileMovingWithin30DaysRuleParametersSpec;
 import ai.dqo.sensors.column.numeric.ColumnNumericSumSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,14 +32,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the sum in a monitored column changes in a rate within a two-tailed percentile during last 30 days.
+ * Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnSumAnomaly30DaysCheckSpec
-        extends AbstractCheckSpec<ColumnNumericSumSensorParametersSpec, ChangePercentileMovingWithin30DaysRuleParametersSpec, ChangePercentileMovingWithin30DaysRuleParametersSpec, ChangePercentileMovingWithin30DaysRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnSumAnomaly30DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnAnomalySum30DaysCheckSpec
+        extends AbstractCheckSpec<ColumnNumericSumSensorParametersSpec, PercentileMovingWithin30DaysRuleParametersSpec, PercentileMovingWithin30DaysRuleParametersSpec, PercentileMovingWithin30DaysRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalySum30DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -52,17 +52,17 @@ public class ColumnSumAnomaly30DaysCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangePercentileMovingWithin30DaysRuleParametersSpec warning;
+    private PercentileMovingWithin30DaysRuleParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangePercentileMovingWithin30DaysRuleParametersSpec error;
+    private PercentileMovingWithin30DaysRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangePercentileMovingWithin30DaysRuleParametersSpec fatal;
+    private PercentileMovingWithin30DaysRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -91,7 +91,7 @@ public class ColumnSumAnomaly30DaysCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public ChangePercentileMovingWithin30DaysRuleParametersSpec getWarning() {
+    public PercentileMovingWithin30DaysRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -100,7 +100,7 @@ public class ColumnSumAnomaly30DaysCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(ChangePercentileMovingWithin30DaysRuleParametersSpec warning) {
+    public void setWarning(PercentileMovingWithin30DaysRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -112,7 +112,7 @@ public class ColumnSumAnomaly30DaysCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public ChangePercentileMovingWithin30DaysRuleParametersSpec getError() {
+    public PercentileMovingWithin30DaysRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -121,7 +121,7 @@ public class ColumnSumAnomaly30DaysCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(ChangePercentileMovingWithin30DaysRuleParametersSpec error) {
+    public void setError(PercentileMovingWithin30DaysRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -133,7 +133,7 @@ public class ColumnSumAnomaly30DaysCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public ChangePercentileMovingWithin30DaysRuleParametersSpec getFatal() {
+    public PercentileMovingWithin30DaysRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -142,7 +142,7 @@ public class ColumnSumAnomaly30DaysCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(ChangePercentileMovingWithin30DaysRuleParametersSpec fatal) {
+    public void setFatal(PercentileMovingWithin30DaysRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

@@ -17,7 +17,6 @@ package ai.dqo.checks.column.profiling;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.anomaly.*;
-import ai.dqo.checks.column.checkspecs.numeric.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,74 +36,74 @@ import java.util.Objects;
 public class ColumnProfilingAnomalyChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnProfilingAnomalyChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("sum_anomaly_7d", o -> o.sumAnomaly7DaysCheckSpec);
-            put("sum_anomaly_30d", o -> o.sumAnomaly30DaysCheckSpec);
-            put("sum_anomaly_60d", o -> o.sumAnomaly60DaysCheckSpec);
+            put("sum_anomaly_7d", o -> o.sumAnomaly7Days);
+            put("sum_anomaly_30d", o -> o.sumAnomaly30Days);
+            put("sum_anomaly_60d", o -> o.sumAnomaly60Days);
         }
     };
 
     @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during last 7 days.")
-    private ColumnSumAnomaly7DaysCheckSpec sumAnomaly7DaysCheckSpec;
+    private ColumnAnomalySumChange7DaysCheckSpec sumAnomaly7Days;
 
     @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.")
-    private ColumnSumAnomaly30DaysCheckSpec sumAnomaly30DaysCheckSpec;
+    private ColumnAnomalySumChange30DaysCheckSpec sumAnomaly30Days;
 
     @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during last 60 days.")
-    private ColumnSumAnomaly60DaysCheckSpec sumAnomaly60DaysCheckSpec;
+    private ColumnAnomalySumChange60DaysCheckSpec sumAnomaly60Days;
 
 
     /**
      * Returns a sum anomaly 7 days check specification.
      * @return Sum anomaly 7 days check specification.
      */
-    public ColumnSumAnomaly7DaysCheckSpec getSumAnomaly7DaysCheckSpec() {
-        return sumAnomaly7DaysCheckSpec;
+    public ColumnAnomalySumChange7DaysCheckSpec getSumAnomaly7Days() {
+        return sumAnomaly7Days;
     }
 
     /**
      * Sets a new specification of a sum anomaly 7 days check.
-     * @param sumAnomaly7DaysCheckSpec Sum anomaly 7 days check specification.
+     * @param sumAnomaly7Days Sum anomaly 7 days check specification.
      */
-    public void setSumAnomaly7DaysCheckSpec(ColumnSumAnomaly7DaysCheckSpec sumAnomaly7DaysCheckSpec) {
-        this.setDirtyIf(!Objects.equals(this.sumAnomaly7DaysCheckSpec, sumAnomaly7DaysCheckSpec));
-        this.sumAnomaly7DaysCheckSpec = sumAnomaly7DaysCheckSpec;
-        propagateHierarchyIdToField(sumAnomaly7DaysCheckSpec, "sum_anomaly_7d");
+    public void setSumAnomaly7Days(ColumnAnomalySumChange7DaysCheckSpec sumAnomaly7Days) {
+        this.setDirtyIf(!Objects.equals(this.sumAnomaly7Days, sumAnomaly7Days));
+        this.sumAnomaly7Days = sumAnomaly7Days;
+        propagateHierarchyIdToField(sumAnomaly7Days, "sum_anomaly_7d");
     }
 
     /**
      * Returns a sum anomaly 30 days check specification.
      * @return Sum anomaly 30 days check specification.
      */
-    public ColumnSumAnomaly30DaysCheckSpec getSumAnomaly30DaysCheckSpec() {
-        return sumAnomaly30DaysCheckSpec;
+    public ColumnAnomalySumChange30DaysCheckSpec getSumAnomaly30Days() {
+        return sumAnomaly30Days;
     }
 
     /**
      * Sets a new specification of a sum anomaly 30 days check.
-     * @param sumAnomaly30DaysCheckSpec Sum anomaly 30 days check specification.
+     * @param sumAnomaly30Days Sum anomaly 30 days check specification.
      */
-    public void setSumAnomaly30DaysCheckSpec(ColumnSumAnomaly30DaysCheckSpec sumAnomaly30DaysCheckSpec) {
-        this.setDirtyIf(!Objects.equals(this.sumAnomaly30DaysCheckSpec, sumAnomaly30DaysCheckSpec));
-        this.sumAnomaly30DaysCheckSpec = sumAnomaly30DaysCheckSpec;
-        propagateHierarchyIdToField(sumAnomaly30DaysCheckSpec, "sum_anomaly_30d");
+    public void setSumAnomaly30Days(ColumnAnomalySumChange30DaysCheckSpec sumAnomaly30Days) {
+        this.setDirtyIf(!Objects.equals(this.sumAnomaly30Days, sumAnomaly30Days));
+        this.sumAnomaly30Days = sumAnomaly30Days;
+        propagateHierarchyIdToField(sumAnomaly30Days, "sum_anomaly_30d");
     }
 
     /**
      * Returns a sum anomaly 60 days check specification.
      * @return Sum anomaly 60 days check specification.
      */
-    public ColumnSumAnomaly60DaysCheckSpec getSumAnomaly60DaysCheckSpec() {
-        return sumAnomaly60DaysCheckSpec;
+    public ColumnAnomalySumChange60DaysCheckSpec getSumAnomaly60Days() {
+        return sumAnomaly60Days;
     }
 
     /**
      * Sets a new specification of a sum anomaly 60 days check.
-     * @param sumAnomaly60DaysCheckSpec Sum anomaly 60 days check specification.
+     * @param sumAnomaly60Days Sum anomaly 60 days check specification.
      */
-    public void setSumAnomaly60DaysCheckSpec(ColumnSumAnomaly60DaysCheckSpec sumAnomaly60DaysCheckSpec) {
-        this.setDirtyIf(!Objects.equals(this.sumAnomaly60DaysCheckSpec, sumAnomaly60DaysCheckSpec));
-        this.sumAnomaly60DaysCheckSpec = sumAnomaly60DaysCheckSpec;
-        propagateHierarchyIdToField(sumAnomaly60DaysCheckSpec, "sum_anomaly_60d");
+    public void setSumAnomaly60Days(ColumnAnomalySumChange60DaysCheckSpec sumAnomaly60Days) {
+        this.setDirtyIf(!Objects.equals(this.sumAnomaly60Days, sumAnomaly60Days));
+        this.sumAnomaly60Days = sumAnomaly60Days;
+        propagateHierarchyIdToField(sumAnomaly60Days, "sum_anomaly_60d");
     }
 
     /**
