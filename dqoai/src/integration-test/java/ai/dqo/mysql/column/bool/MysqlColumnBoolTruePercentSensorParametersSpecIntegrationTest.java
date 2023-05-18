@@ -16,7 +16,7 @@
 package ai.dqo.mysql.column.bool;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.bool.ColumnFalsePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.bool.ColumnTruePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.bool.ColumnBoolFalsePercentSensorParametersSpec;
+import ai.dqo.sensors.column.bool.ColumnBoolTruePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,10 +37,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class MysqlColumnBoolFalsePercentSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
-    private ColumnBoolFalsePercentSensorParametersSpec sut;
+public class MysqlColumnBoolTruePercentSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
+    private ColumnBoolTruePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnFalsePercentCheckSpec checkSpec;
+    private ColumnTruePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -48,8 +48,8 @@ public class MysqlColumnBoolFalsePercentSensorParametersSpecIntegrationTest exte
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.mysql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnBoolFalsePercentSensorParametersSpec();
-		this.checkSpec = new ColumnFalsePercentCheckSpec();
+		this.sut = new ColumnBoolTruePercentSensorParametersSpec();
+		this.checkSpec = new ColumnTruePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -63,7 +63,7 @@ public class MysqlColumnBoolFalsePercentSensorParametersSpecIntegrationTest exte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0),0.001);
+        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class MysqlColumnBoolFalsePercentSensorParametersSpecIntegrationTest exte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0),0.001);
+        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class MysqlColumnBoolFalsePercentSensorParametersSpecIntegrationTest exte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0),0.001);
+        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -102,7 +102,7 @@ public class MysqlColumnBoolFalsePercentSensorParametersSpecIntegrationTest exte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(16.666, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -115,6 +115,6 @@ public class MysqlColumnBoolFalsePercentSensorParametersSpecIntegrationTest exte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0),0.001);
+        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0), 0.001);
     }
 }
