@@ -36,6 +36,10 @@ const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataD
     await JobApiClient.runChecks({
       checkSearchFilters: category?.run_checks_job_template
     });
+
+    if (getCheckOverview) {
+      getCheckOverview();
+    }
   };
 
   return (
