@@ -6,18 +6,22 @@ import { useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
 import SvgIcon from "../SvgIcon";
 import clsx from "clsx";
-import { ConnectionBasicModel, IncidentsPerConnectionModel } from "../../api";
+import { IncidentsPerConnectionModel } from "../../api";
 import { ROUTES } from "../../shared/routes";
 
 const IncidentsTree = () => {
   const dispatch = useActionDispatch();
-  const { connections } = useSelector((state: IRootState) => state.incidents);
+  const { connections, activeTab } = useSelector((state: IRootState) => state.incidents);
+  const selectedConnection = activeTab ? activeTab.split('/')[2] : '';
 
   useEffect(() => {
     dispatch(getConnections());
   }, []);
 
   const openFirstLevelTab = (connection: IncidentsPerConnectionModel) => {
+    if (connection.connection === selectedConnection) {
+      return;
+    }
     dispatch(addFirstLevelTab({
       url: ROUTES.INCIDENT_DETAIL(connection?.connection ?? ""),
       value: ROUTES.INCIDENT_DETAIL_VALUE(connection?.connection ?? ""),
@@ -40,7 +44,7 @@ const IncidentsTree = () => {
         {connections.map((connection, index) => (
           <div
             key={index}
-            className="flex space-x-2 py-1 flex-1 w-full text-[13px] cursor-pointer"
+            className={clsx("flex space-x-2 py-1 px-2 flex-1 w-full text-[13px] cursor-pointer", selectedConnection === connection.connection ? 'bg-gray-100' : '')}
             onClick={() => openFirstLevelTab(connection)}
           >
             <SvgIcon
