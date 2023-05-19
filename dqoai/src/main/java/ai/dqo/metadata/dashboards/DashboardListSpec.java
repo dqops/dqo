@@ -67,7 +67,6 @@ public class DashboardListSpec extends AbstractDirtyTrackingSpecList<DashboardSp
             setUrl(url);
             setWidth(width);
             setHeight(height);
-            setDqoCloudCredentials(true);
         }};
         this.add(dashboardSpec);
 
