@@ -58,14 +58,15 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
     /**
      * Creates an authenticated URL for a looker studio dashboard.
      * @param dashboardSpec Dashboard specification.
+     * @param dqoWindowLocationOrigin URL to the DQO instance (the window.location.origin value).
      * @return Authenticated url to the dashboard with an appended short-lived refresh token.
      */
     @Override
-    public String makeAuthenticatedDashboardUrl(DashboardSpec dashboardSpec) {
+    public String makeAuthenticatedDashboardUrl(DashboardSpec dashboardSpec, String dqoWindowLocationOrigin) {
         String refreshToken = this.issueLookerStudioQueryApiKey();
 
         StringBuilder stringBuilder = new StringBuilder();
-        String jsonParameters = formatDashboardParameters(refreshToken, dashboardSpec.getParameters());
+        String jsonParameters = formatDashboardParameters(dashboardSpec.getParameters(), refreshToken, dqoWindowLocationOrigin);
         String urlEncodedLookerStudioParameters = URLEncoder.encode(jsonParameters, StandardCharsets.UTF_8);
         stringBuilder.append(dashboardSpec.getUrl());
         stringBuilder.append("?params=");
@@ -77,11 +78,12 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
 
     /**
      * Generates the Looker Studio JSON parameter string.
-     * @param refreshToken Refresh token.
      * @param parameters Optional dictionary of key/value parameter pairs.
+     * @param refreshToken Refresh token.
+     * @param dqoWindowLocationOrigin URL to the DQO instance (the window.location.origin value).
      * @return JSON string to be submitted as a parameter.
      */
-    public String formatDashboardParameters(String refreshToken, Map<String, String> parameters) {
+    public String formatDashboardParameters(Map<String, String> parameters, String refreshToken, String dqoWindowLocationOrigin) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{");
 
@@ -96,7 +98,9 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
                 stringBuilder.append('"');
                 stringBuilder.append(':');
                 stringBuilder.append('"');
-                String parameterValue = paramValuePair.getValue().replace("%DQO_CLOUD_TOKEN%", refreshToken);
+                String parameterValue = paramValuePair.getValue()
+                        .replace("%DQO_CLOUD_TOKEN%", refreshToken)
+                        .replace("%DQO_WINDOW_LOCATION_ORIGIN%", dqoWindowLocationOrigin);
                 stringBuilder.append(parameterValue);
                 stringBuilder.append('"');
                 isFirst = false;

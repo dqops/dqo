@@ -32,6 +32,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Optional;
+
 /**
  * Controller that provides access to data quality dashboards.
  */
@@ -80,6 +82,7 @@ public class DashboardsController {
      * Retrieves a model of a single dashboard in one level folder, generating also an authenticated url.
      * @param folder Folder name.
      * @param dashboardName Dashboard name.
+     * @param windowLocationOrigin The value of the window.location.origin
      * @return Dashboard model with the authenticated url.
      */
     @GetMapping("/{folder}/{dashboardName}")
@@ -92,7 +95,9 @@ public class DashboardsController {
     })
     public ResponseEntity<Mono<AuthenticatedDashboardModel>> getDashboardLevel1(
             @ApiParam("Root folder name") @PathVariable String folder,
-            @ApiParam("Dashboard name") @PathVariable String dashboardName) {
+            @ApiParam("Dashboard name") @PathVariable String dashboardName,
+            @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
+            @RequestParam(required = false) Optional<String> windowLocationOrigin) {
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
@@ -109,7 +114,8 @@ public class DashboardsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard);
+        String dqoUrlOrigin = windowLocationOrigin.orElse(null);
+        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
         AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(folder, dashboard, authenticatedDashboardUrl);
         return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
     }
@@ -119,6 +125,7 @@ public class DashboardsController {
      * @param folder1 Folder name.
      * @param folder2 Folder name.
      * @param dashboardName Dashboard name.
+     * @param windowLocationOrigin The value of the window.location.origin
      * @return Dashboard model with the authenticated url.
      */
     @GetMapping("/{folder1}/{folder2}/{dashboardName}")
@@ -132,7 +139,9 @@ public class DashboardsController {
     public ResponseEntity<Mono<AuthenticatedDashboardModel>> getDashboardLevel2(
             @ApiParam("Root folder name") @PathVariable String folder1,
             @ApiParam("Second level folder name") @PathVariable String folder2,
-            @ApiParam("Dashboard name") @PathVariable String dashboardName) {
+            @ApiParam("Dashboard name") @PathVariable String dashboardName,
+            @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
+            @RequestParam(required = false) Optional<String> windowLocationOrigin) {
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
 
@@ -153,7 +162,8 @@ public class DashboardsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard);
+        String dqoUrlOrigin = windowLocationOrigin.orElse(null);
+        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
         AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
                 folder1 + "/" + folder2, dashboard, authenticatedDashboardUrl);
         return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
@@ -165,6 +175,7 @@ public class DashboardsController {
      * @param folder2 Folder name.
      * @param folder3 Folder name.
      * @param dashboardName Dashboard name.
+     * @param windowLocationOrigin The value of the window.location.origin
      * @return Dashboard model with the authenticated url.
      */
     @GetMapping("/{folder1}/{folder2}/{folder3}/{dashboardName}")
@@ -179,7 +190,9 @@ public class DashboardsController {
             @ApiParam("Root folder name") @PathVariable String folder1,
             @ApiParam("Second level folder name") @PathVariable String folder2,
             @ApiParam("Third level folder name") @PathVariable String folder3,
-            @ApiParam("Dashboard name") @PathVariable String dashboardName) {
+            @ApiParam("Dashboard name") @PathVariable String dashboardName,
+            @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
+            @RequestParam(required = false) Optional<String> windowLocationOrigin) {
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
@@ -206,7 +219,8 @@ public class DashboardsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard);
+        String dqoUrlOrigin = windowLocationOrigin.orElse(null);
+        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
         AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
                 folder1 + "/" + folder2 + "/" + folder3, dashboard, authenticatedDashboardUrl);
         return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
@@ -218,6 +232,7 @@ public class DashboardsController {
      * @param folder2 Folder name.
      * @param folder3 Folder name.
      * @param folder4 Folder name.
+     * @param windowLocationOrigin The value of the window.location.origin
      * @param dashboardName Dashboard name.
      * @return Dashboard model with the authenticated url.
      */
@@ -234,7 +249,9 @@ public class DashboardsController {
             @ApiParam("Second level folder name") @PathVariable String folder2,
             @ApiParam("Third level folder name") @PathVariable String folder3,
             @ApiParam("Fourth level folder name") @PathVariable String folder4,
-            @ApiParam("Dashboard name") @PathVariable String dashboardName) {
+            @ApiParam("Dashboard name") @PathVariable String dashboardName,
+            @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
+            @RequestParam(required = false) Optional<String> windowLocationOrigin) {
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
@@ -266,7 +283,8 @@ public class DashboardsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard);
+        String dqoUrlOrigin = windowLocationOrigin.orElse(null);
+        String authenticatedDashboardUrl = this.lookerStudioUrlService.makeAuthenticatedDashboardUrl(dashboard, dqoUrlOrigin);
         AuthenticatedDashboardModel authenticatedDashboardModel = new AuthenticatedDashboardModel(
                 folder1 + "/" + folder2 + "/" + folder3 + "/" + folder4, dashboard, authenticatedDashboardUrl);
         return new ResponseEntity<>(Mono.just(authenticatedDashboardModel), HttpStatus.OK); // 200
