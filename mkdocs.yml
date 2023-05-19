@@ -43,6 +43,9 @@ nav:
         - Percentage of valid latitude and longitude: 'examples/data-validity/percentage-of-valid-latitude-and-longitude.md'
         - Percentage of valid IP4 address: 'examples/data-validity/percentage-of-valid-IP4-address.md'
         - Percentage of strings matching date regex: 'examples/data-validity/percentage-of-strings-matching-date-regex.md'
+        - Percentage of rows passing SQL condition: 'examples/data-validity/percentage-of-rows-passing-sql-condition.md'
+        - Percentage of valid currency codes: 'examples/data-validity/percentage-of-valid-currency-codes.md'
+        - Percentage of negative values: 'examples/data-validity/percentage-of-negative-values.md'
     - Data reasonability:
         - Percentage of values in range: 'examples/data-reasonability/percentage-of-integer-values-in-range.md'
         - A string not exceeding a set length: 'examples/data-reasonability/string-not-exceeding-a-set-length.md'

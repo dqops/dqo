@@ -32,30 +32,30 @@ The `valid_currency_code` column of interest contains valid and invalid currency
 
 | negative | usa_phone       | usa_zipcode | valid_country_code | valid_currency_code |
 |:---------|:----------------|:------------|:-------------------|:--------------------|
-| 91       | 17400986784222  | 22803       |                    | pound               |
-| 56       | (513)134987523  | 6641666416  | DM                 | koruna              |
-| -67      | 111111111111111 | 21541       | AR                 | KHR                 |
-| 156      | 19472348976???  | 8604486044  | CP                 | IRR                 |
-| -3       | =13261092976    | 30683       | CO                 | real                |
-| -22      | 13805414567iowa | 61914       | CW                 | euro                |
-| 3        | +1(231)4561289  | 21520       | AL                 | £                   |
-| 4        | (1)5175413241   | 21536       | BS                 | $                   |
-| 56       | 1(248)-541-0987 | 21531       | AQ                 | 533                 |
-| 3        | (+1)5671239999  | 66419       | GA                 | shilling            |
-| 93       | 16792345678     | 86024       |                    | €                   |
-| -1       | 9372346785      | 2280722807  | TZ                 | denar               |
-| 20       |                 | 3060130601  | TD                 | MZN                 |
-| -1       | 14195429807     | 61925       | CO                 | USD                 |
-| -4       | 16165240542     |             |                    | kr                  |
-| -83      | 13305410987     | 31803       | HR                 | ¥                   |
-| 78       |                 | 86435       | KY                 | KZT                 |
-| 2        | 13135678943     | 21522       | AB                 | PYG                 |
-| 1        | 18105234567     | 21561       | BD                 | zł                  |
-| 1        | (906)6259999    | 86045       | CM                 | dollar              |
-| -1       | 15864562433     | 21550       | IO                 | peso                |
-| 495      | (1)6141118766   | 22801       |                    | $                   |
-| 87       | (513)1349876    | 66552       | FR                 | ZWD                 |
-| -45      | 17345213489     | 215388888   |                    | CUP                 |
+| 91       | 17400986784222  | 22803       |                    | **pound**           |
+| 56       | (513)134987523  | 6641666416  | DM                 | **koruna**          |
+| -67      | 111111111111111 | 21541       | AR                 | **KHR**             |
+| 156      | 19472348976???  | 8604486044  | CP                 | **IRR**             |
+| -3       | =13261092976    | 30683       | CO                 | **real**            |
+| -22      | 13805414567iowa | 61914       | CW                 | **euro**            |
+| 3        | +1(231)4561289  | 21520       | AL                 | **£**               |
+| 4        | (1)5175413241   | 21536       | BS                 | **$**               |
+| 56       | 1(248)-541-0987 | 21531       | AQ                 | **533**             |
+| 3        | (+1)5671239999  | 66419       | GA                 | **shilling**        |
+| 93       | 16792345678     | 86024       |                    | **€**               |
+| -1       | 9372346785      | 2280722807  | TZ                 | **denar**           |
+| 20       |                 | 3060130601  | TD                 | **MZN**             |
+| -1       | 14195429807     | 61925       | CO                 | **USD**             |
+| -4       | 16165240542     |             |                    | **kr**              |
+| -83      | 13305410987     | 31803       | HR                 | **¥**               |
+| 78       |                 | 86435       | KY                 | **KZT**             |
+| 2        | 13135678943     | 21522       | AB                 | **PYG**             |
+| 1        | 18105234567     | 21561       | BD                 | **zł**              |
+| 1        | (906)6259999    | 86045       | CM                 | **dollar**          |
+| -1       | 15864562433     | 21550       | IO                 | **peso**            |
+| 495      | (1)6141118766   | 22801       |                    | **$**               |
+| 87       | (513)1349876    | 66552       | FR                 | **ZWD**             |
+| -45      | 17345213489     | 215388888   |                    | **CUP**             |
 
 
 ## YAML configuration file
@@ -72,7 +72,7 @@ The highlighted fragments in the YAML file below represent the segment where the
 
 If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
 
-```yaml hl_lines="16-28"
+```yaml hl_lines="20-38"
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -80,11 +80,15 @@ spec:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
   columns:
-    id:
+    usa_phone:
       type_snapshot:
-        column_type: INT64
+        column_type: STRING
         nullable: true
-    nulls:
+    usa_zipcode:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    valid_country_code:
       type_snapshot:
         column_type: STRING
         nullable: true
@@ -95,6 +99,12 @@ spec:
       profiling_checks:
         strings:
           string_valid_currency_code_percent:
+            comments:
+            - date: 2023-05-19T09:27:25.655+00:00
+              comment_by: user
+              comment: "\"In this example, values in \"valid_currency_code\" column\
+                \ are verified whether the percentage of valid currency codes does\
+                \ not fall below the indicated thresholds.\""
             warning:
               min_percent: 75.0
             error:

@@ -57,6 +57,12 @@ spec:
       profiling_checks:
         strings:
           string_valid_currency_code_percent:
+            comments:
+            - date: 2023-05-19T09:27:25.655+00:00
+              comment_by: user
+              comment: "\"In this example, values in \"valid_currency_code\" column\
+                \ are verified whether the percentage of valid currency codes does\
+                \ not fall below the indicated thresholds.\""
             warning:
               min_percent: 75.0
             error:
