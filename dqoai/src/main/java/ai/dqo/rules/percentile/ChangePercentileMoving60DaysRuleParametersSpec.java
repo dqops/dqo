@@ -1,11 +1,11 @@
 /*
- * Copyright © 2021 DQO.ai (support@dqo.ai)
+ * Copyright © 2023 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rules.stdev;
+package ai.dqo.rules.percentile;
 
 import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -29,13 +29,14 @@ import java.util.Objects;
 
 /**
  * Data quality rule that verifies if a data quality sensor readout value is probable under
- * the estimated normal distribution based on the previous values gathered within a time window.
+ * the estimated normal distribution based on the increments of previous values gathered
+ * within a time window.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class PercentileMoving60DaysRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<PercentileMoving60DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class ChangePercentileMoving60DaysRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<ChangePercentileMoving60DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -62,7 +63,7 @@ public class PercentileMoving60DaysRuleParametersSpec extends AbstractRuleParame
     /**
      * Default constructor.
      */
-    public PercentileMoving60DaysRuleParametersSpec() {
+    public ChangePercentileMoving60DaysRuleParametersSpec() {
         this.percentileBelow = null;
         this.percentileAbove = null;
     }
@@ -123,6 +124,6 @@ public class PercentileMoving60DaysRuleParametersSpec extends AbstractRuleParame
      */
     @Override
     public String getRuleDefinitionName() {
-        return "stdev/percentile_moving_60_days";
+        return "percentile/change_percentile_moving_60_days";
     }
 }

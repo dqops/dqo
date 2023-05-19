@@ -1,11 +1,11 @@
 /*
- * Copyright © 2021 DQO.ai (support@dqo.ai)
+ * Copyright © 2023 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rules.stdev;
+package ai.dqo.rules.percentile;
 
 import ai.dqo.BaseTest;
 import ai.dqo.connectors.ProviderType;
@@ -26,6 +26,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpecObjectMother;
+import ai.dqo.rules.percentile.ChangePercentileMovingWithin60DaysRuleParametersSpec;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -38,8 +39,8 @@ import java.time.LocalDateTime;
 import java.util.Random;
 
 @SpringBootTest
-public class ChangePercentileMovingWithin7DaysRuleParametersSpecTests extends BaseTest {
-    private ChangePercentileMovingWithin7DaysRuleParametersSpec sut;
+public class ChangePercentileMovingWithin60DaysRuleParametersSpecTests extends BaseTest {
+    private ChangePercentileMovingWithin60DaysRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -49,7 +50,7 @@ public class ChangePercentileMovingWithin7DaysRuleParametersSpecTests extends Ba
 
     @BeforeEach
     void setUp() {
-        this.sut = new ChangePercentileMovingWithin7DaysRuleParametersSpec();
+        this.sut = new ChangePercentileMovingWithin60DaysRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
@@ -74,14 +75,14 @@ public class ChangePercentileMovingWithin7DaysRuleParametersSpecTests extends Ba
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
                 this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
-        Double actualValue = 40.0;
+        Double actualValue = 310.0;
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(42.22, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(36.95, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(47.50, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(307.77, ruleExecutionResult.getExpectedValue(), 0.1);
+        Assertions.assertEquals(304.59, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(310.94, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test

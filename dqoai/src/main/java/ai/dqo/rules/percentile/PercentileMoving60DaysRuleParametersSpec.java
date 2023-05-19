@@ -1,11 +1,11 @@
 /*
- * Copyright © 2021 DQO.ai (support@dqo.ai)
+ * Copyright © 2023 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rules.stdev;
+package ai.dqo.rules.percentile;
 
 import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -34,8 +34,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class PercentileMoving7DaysRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<PercentileMoving7DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class PercentileMoving60DaysRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<PercentileMoving60DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -45,8 +45,8 @@ public class PercentileMoving7DaysRuleParametersSpec extends AbstractRuleParamet
             " than it would be expected from the estimated distribution based on the previous values" +
             " gathered within the time window. In other words, the upper quantile of the estimated" +
             " normal distribution. Set the time window at the threshold level for all severity" +
-            " levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.)" +
-            " time window, but at least 3 readouts must exist to run the calculation.")
+            " levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.)" +
+            " time window, but at least 20 readouts must exist to run the calculation.")
     @SampleValues(values = "5")
     private Double percentileAbove;
 
@@ -54,15 +54,15 @@ public class PercentileMoving7DaysRuleParametersSpec extends AbstractRuleParamet
             " than it would be expected from the estimated distribution based on the previous values" +
             " gathered within the time window. In other words, the lower quantile of the estimated" +
             " normal distribution. Set the time window at the threshold level for all severity" +
-            " levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.)" +
-            " time window, but at least 3 readouts must exist to run the calculation.")
+            " levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.)" +
+            " time window, but at least 20 readouts must exist to run the calculation.")
     @SampleValues(values = "5")
     private Double percentileBelow;
 
     /**
      * Default constructor.
      */
-    public PercentileMoving7DaysRuleParametersSpec() {
+    public PercentileMoving60DaysRuleParametersSpec() {
         this.percentileBelow = null;
         this.percentileAbove = null;
     }
@@ -123,6 +123,6 @@ public class PercentileMoving7DaysRuleParametersSpec extends AbstractRuleParamet
      */
     @Override
     public String getRuleDefinitionName() {
-        return "stdev/percentile_moving_7_days";
+        return "percentile/percentile_moving_60_days";
     }
 }

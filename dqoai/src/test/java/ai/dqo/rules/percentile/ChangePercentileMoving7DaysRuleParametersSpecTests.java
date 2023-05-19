@@ -1,11 +1,11 @@
 /*
- * Copyright © 2021 DQO.ai (support@dqo.ai)
+ * Copyright © 2023 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.rules.stdev;
+package ai.dqo.rules.percentile;
 
 import ai.dqo.BaseTest;
 import ai.dqo.connectors.ProviderType;
@@ -26,6 +26,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpecObjectMother;
+import ai.dqo.rules.percentile.ChangePercentileMoving7DaysRuleParametersSpec;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
@@ -38,8 +39,8 @@ import java.time.LocalDateTime;
 import java.util.Random;
 
 @SpringBootTest
-public class ChangePercentileMovingWithin30DaysRuleParametersSpecTests extends BaseTest {
-    private ChangePercentileMovingWithin30DaysRuleParametersSpec sut;
+public class ChangePercentileMoving7DaysRuleParametersSpecTests extends BaseTest {
+    private ChangePercentileMoving7DaysRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -49,7 +50,7 @@ public class ChangePercentileMovingWithin30DaysRuleParametersSpecTests extends B
 
     @BeforeEach
     void setUp() {
-        this.sut = new ChangePercentileMovingWithin30DaysRuleParametersSpec();
+        this.sut = new ChangePercentileMoving7DaysRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
@@ -59,7 +60,9 @@ public class ChangePercentileMovingWithin30DaysRuleParametersSpecTests extends B
 
     @Test
     void executeRule_whenActualValueIsBelowMaxValueAndPastValuesAreNormal_thenReturnsPassed() {
-        this.sut.setPercentileWithin(80.0);
+        this.sut.setPercentileBelow(5.0);
+        this.sut.setPercentileAbove(15.0);
+
         Random random = new Random(0);
         Double increment = 5.0;
 
@@ -74,19 +77,20 @@ public class ChangePercentileMovingWithin30DaysRuleParametersSpecTests extends B
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
                 this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
 
-        Double actualValue = 165.0;
+        Double actualValue = 40.0;
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(actualValue,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(165.01, ruleExecutionResult.getExpectedValue(), 0.1);
-        Assertions.assertEquals(162.02, ruleExecutionResult.getLowerBound(), 0.1);
-        Assertions.assertEquals(168.00, ruleExecutionResult.getUpperBound(), 0.1);
+        Assertions.assertEquals(42.22, ruleExecutionResult.getExpectedValue(), 0.1);
+        Assertions.assertEquals(35.45, ruleExecutionResult.getLowerBound(), 0.1);
+        Assertions.assertEquals(46.49, ruleExecutionResult.getUpperBound(), 0.1);
     }
 
     @Test
     void executeRule_whenActualValueIsWithinQuantileAndPastValuesAreSteady_thenReturnsPassed() {
-        this.sut.setPercentileWithin(80.0);
+        this.sut.setPercentileBelow(10.0);
+        this.sut.setPercentileAbove(20.0);
 
         Double increment = 7.0;
         this.sensorReadouts[0] = 0.0;
