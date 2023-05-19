@@ -28,6 +28,7 @@ import ai.dqo.data.storage.ParquetPartitionMetadataService;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -101,13 +102,16 @@ public class StatisticsDeleteServiceImpl implements StatisticsDeleteService {
             for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry:
                     currentSnapshot.getLoadedMonthlyPartitions().entrySet()) {
                 ParquetPartitionId partitionId = loadedPartitionEntry.getKey();
-                LoadedMonthlyPartition loadedPartition = loadedPartitionEntry.getValue();
+                Table loadedPartitionTable = loadedPartitionEntry.getValue().getData();
+                if (loadedPartitionTable == null) {
+                    continue;
+                }
 
-                int deletedRows = loadedPartition.getData()
+                int deletedRows = loadedPartitionTable
                         .textColumn(CommonColumnNames.ID_COLUMN_NAME)
                         .isIn(deletedIds)
                         .size();
-                boolean allRowsDeleted = deletedRows == loadedPartition.getData().rowCount();
+                boolean allRowsDeleted = deletedRows == loadedPartitionTable.rowCount();
                 DataDeleteResultPartition partitionResult = new DataDeleteResultPartition(deletedRows, allRowsDeleted);
 
                 dataDeleteResult.getPartitionResults().put(partitionId, partitionResult);

@@ -597,4 +597,45 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
+
+    @Test
+    void deleteSelectedSensorReadoutsFragment_whenFilterBySensorName_thenDeleteCapturedRows() {
+        String connectionName = "connection";
+        String tableName = "tab";
+        PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
+
+        LocalDate month = LocalDate.of(2023, 1, 1);
+        Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
+
+        ParquetPartitionId partitionId = new ParquetPartitionId(
+                this.sensorReadoutsStorageSettings.getTableType(),
+                connectionName,
+                physicalTableName,
+                month);
+
+        this.parquetPartitionStorageService.savePartition(
+                new LoadedMonthlyPartition(partitionId),
+                new TableDataChanges(table),
+                this.sensorReadoutsStorageSettings);
+
+        SensorReadoutsFragmentFilter filter = new SensorReadoutsFragmentFilter(){{
+            setTableSearchFilters(new TableSearchFilters(){{
+                setConnectionName(connectionName);
+                setSchemaTableName(physicalTableName.toTableSearchFilter());
+            }});
+            setSensorName("s1");
+        }};
+
+        this.sut.deleteSelectedSensorReadoutsFragment(filter);
+
+        LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
+                partitionId, this.sensorReadoutsStorageSettings, null);
+        Assertions.assertNotNull(partitionAfterDelete.getData());
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
+    }
 }
