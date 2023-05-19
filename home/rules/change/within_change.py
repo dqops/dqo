@@ -19,9 +19,8 @@ from typing import Sequence
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class BetweenPercentChangeRuleParametersSpec:
-    from_percent: float
-    to_percent: float
+class WithinChangeRuleParametersSpec:
+    max_within: float
 
 
 class HistoricDataPoint:
@@ -33,13 +32,13 @@ class HistoricDataPoint:
 
 class RuleTimeWindowSettingsSpec:
     prediction_time_window: int
-    min_periods_with_readouts: int
+    min_periods_with_readout: int
 
 
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: BetweenPercentChangeRuleParametersSpec
+    parameters: WithinChangeRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -68,10 +67,10 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
     previous_readout = filtered[0]
 
-    lower_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.from_percent / 100.0)
-    upper_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.to_percent / 100.0)
+    lower_bound = previous_readout - rule_parameters.parameters.max_within
+    upper_bound = previous_readout + rule_parameters.parameters.max_within
 
     passed = lower_bound <= rule_parameters.actual_value <= upper_bound
-    expected_value = (lower_bound + upper_bound) / 2
+    expected_value = previous_readout
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
