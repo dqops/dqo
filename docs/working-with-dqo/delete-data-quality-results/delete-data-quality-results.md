@@ -36,7 +36,7 @@ To delete the data quality results at the connection, table or column level foll
 
 ##  Delete data quality results using the DQO Shell
 
-To delete data quality results using the DQO Shell, use the [data delete command](https://dqo.ai/docs/command-line-interface/data/#dqo-data-delete). 
+To delete data quality results using the DQO Shell, use the [data delete command](../../command-line-interface/data.md). 
 
 Data delete command requires the following arguments:
 
@@ -49,7 +49,7 @@ For example toTo delete all data from May 2023 for the connection "testconnectio
 following command in DQO Shell:
 
 ```
- dqo.ai> data delete --connection=testconnection --table=austin_crime.crime --begin=2023.05 --end=2023.05
+ data delete --connection=testconnection --table=austin_crime.crime --begin=2023.05 --end=2023.05
 ```
    
-For a full description of the `data delete` command see the [Command-line interface section](https://dqo.ai/docs/command-line-interface/data/#dqo-data-delete).
+For a full description of the `data delete` command see the [Command-line interface section](../../command-line-interface/data.md).
