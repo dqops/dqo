@@ -112,7 +112,7 @@ To add and run data quality checks using the DQO Shell, follow the steps below.
     Connection name (--connection): testconnection
     Full table name (schema.table), supports wildcard patterns 'sch*.tab*': austin_crime.crime
     ```
-    After providing the above data Visual Studio Code will be automatically launched.
+    After entering the above data, Visual Studio Code will be automatically launched.
 
 3. Add the check to the YAML file using Visual Studio Code editor and save the file. 
 

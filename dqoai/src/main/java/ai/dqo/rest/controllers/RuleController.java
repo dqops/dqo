@@ -104,12 +104,12 @@ public class RuleController {
 
     /**
      * Creates (adds) a new custom rule given sensor information.
-     * @param ruleModel List of rule definitions.
+     * @param ruleModel Rule model.
      * @param fullRuleName Full rule name.
      * @return Empty response.
      */
     @PostMapping("/{fullRuleName}")
-    @ApiOperation(value = "createRule", notes = "Creates (adds) a new custom rule given sensor information.")
+    @ApiOperation(value = "createRule", notes = "Creates (adds) a new custom rule given the rule definition.")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New custom rule successfully created"),
@@ -120,7 +120,7 @@ public class RuleController {
     })
     public ResponseEntity<Mono<?>> createRule(
             @ApiParam("Full rule name") @PathVariable String fullRuleName,
-            @ApiParam("Rule basic model") @RequestBody RuleModel ruleModel) {
+            @ApiParam("Rule model") @RequestBody RuleModel ruleModel) {
         if (ruleModel == null || Strings.isNullOrEmpty(fullRuleName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
@@ -274,11 +274,7 @@ public class RuleController {
 
         for (RuleDefinitionWrapper ruleDefinitionWrapperDqoHome : ruleDefinitionWrapperListDqoHome) {
             String ruleNameDqoHome = ruleDefinitionWrapperDqoHome.getRuleName();
-            if (customRuleNames.contains(ruleNameDqoHome)) {
-                continue; // already added
-            }
-
-            ruleBasicFolderModel.addRule(ruleNameDqoHome, false, true);
+            ruleBasicFolderModel.addRule(ruleNameDqoHome, customRuleNames.contains(ruleNameDqoHome), true);
         }
 
         return new ResponseEntity<>(Mono.just(ruleBasicFolderModel), HttpStatus.OK);

@@ -25,7 +25,7 @@ import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
 import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
-import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringSpec;
+import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringChecksSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoJobQueueObjectMother;
@@ -177,7 +177,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(5, result.getCategories().size());
+        Assertions.assertEquals(6, result.getCategories().size());
     }
 
     @Test
@@ -192,7 +192,7 @@ public class TablesControllerUTTests extends BaseTest {
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
         
-        TableStandardDailyRecurringSpec standardDailyRecurringSpec = new TableStandardDailyRecurringSpec();
+        TableStandardDailyRecurringChecksSpec standardDailyRecurringSpec = new TableStandardDailyRecurringChecksSpec();
         standardDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
         TableDailyRecurringCategoriesSpec dailyRecurring = new TableDailyRecurringCategoriesSpec();
         dailyRecurring.setStandard(standardDailyRecurringSpec);
@@ -252,7 +252,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(5, result.getCategories().size());
+        Assertions.assertEquals(6, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -268,7 +268,12 @@ public class TablesControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(5, result.getCategories().size());
+
+        if (timePartition == CheckTimeScale.daily) {
+            Assertions.assertEquals(6, result.getCategories().size());
+        } else {
+            Assertions.assertEquals(5, result.getCategories().size());
+        }
     }
 
     @ParameterizedTest
@@ -284,7 +289,12 @@ public class TablesControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(3, result.getCategories().size());
+
+        if (timePartition == CheckTimeScale.daily) {
+            Assertions.assertEquals(4, result.getCategories().size());
+        } else {
+            Assertions.assertEquals(3, result.getCategories().size());
+        }
     }
 
     @Test
@@ -299,7 +309,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(5, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(6, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -315,7 +325,11 @@ public class TablesControllerUTTests extends BaseTest {
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(5, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        if (timePartition == CheckTimeScale.daily) {
+            Assertions.assertEquals(6, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        } else {
+            Assertions.assertEquals(5, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        }
     }
 
     @ParameterizedTest
@@ -331,7 +345,11 @@ public class TablesControllerUTTests extends BaseTest {
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(3, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        if (timePartition == CheckTimeScale.daily) {
+            Assertions.assertEquals(4, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        } else {
+            Assertions.assertEquals(3, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        }
     }
     
     @Test
@@ -374,7 +392,7 @@ public class TablesControllerUTTests extends BaseTest {
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
 
-        TableStandardDailyRecurringSpec standardDailyRecurringSpec = new TableStandardDailyRecurringSpec();
+        TableStandardDailyRecurringChecksSpec standardDailyRecurringSpec = new TableStandardDailyRecurringChecksSpec();
         standardDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
         TableDailyRecurringCategoriesSpec dailyRecurring = new TableDailyRecurringCategoriesSpec();
         dailyRecurring.setStandard(standardDailyRecurringSpec);

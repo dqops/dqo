@@ -19,7 +19,8 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.partitioned.sql.TableSqlMonthlyPartitionedSpec;
+import ai.dqo.checks.table.partitioned.anomaly.TableAnomalyMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.table.partitioned.sql.TableSqlMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.table.partitioned.standard.TableStandardMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.table.partitioned.timeliness.TableTimelinessMonthlyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
@@ -53,6 +54,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
             put("standard", o -> o.standard);
             put("timeliness", o -> o.timeliness);
             put("sql", o -> o.sql);
+            put("anomaly", o -> o.anomaly);
 
             // accuracy checks are not supported on partitioned checks yet
         }
@@ -71,7 +73,13 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @JsonPropertyDescription("Custom SQL monthly partitioned data quality checks that verify the quality of every month of data separately")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlMonthlyPartitionedSpec sql;
+    private TableSqlMonthlyPartitionedChecksSpec sql;
+
+    @JsonPropertyDescription("Monthly partitioned anomaly checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableAnomalyMonthlyPartitionedChecksSpec anomaly;
+    
 
     /**
      * Returns the container of monthly partitioned checks for standard data quality checks.
@@ -113,7 +121,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
      * Returns the container of custom SQL checks.
      * @return Custom sql checks.
      */
-    public TableSqlMonthlyPartitionedSpec getSql() {
+    public TableSqlMonthlyPartitionedChecksSpec getSql() {
         return sql;
     }
 
@@ -121,10 +129,28 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
      * Sets a reference to a container of custom SQL checks.
      * @param sql Container of custom SQL checks.
      */
-    public void setSql(TableSqlMonthlyPartitionedSpec sql) {
+    public void setSql(TableSqlMonthlyPartitionedChecksSpec sql) {
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
+    }
+
+    /**
+     * Returns a container of table level anomaly partitioned checks.
+     * @return Anomaly partitioned checks.
+     */
+    public TableAnomalyMonthlyPartitionedChecksSpec getAnomaly() {
+        return anomaly;
+    }
+
+    /**
+     * Sets a reference to a container of anomaly partitioned checks.
+     * @param anomaly Anomaly partitioned checks.
+     */
+    public void setAnomaly(TableAnomalyMonthlyPartitionedChecksSpec anomaly) {
+        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
+        this.anomaly = anomaly;
+        this.propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
     /**

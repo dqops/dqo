@@ -19,11 +19,12 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.recurring.accuracy.TableAccuracyDailyRecurringSpec;
-import ai.dqo.checks.table.recurring.availability.TableAvailabilityDailyRecurringSpec;
-import ai.dqo.checks.table.recurring.sql.TableSqlDailyRecurringSpec;
-import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringSpec;
-import ai.dqo.checks.table.recurring.timeliness.TableTimelinessDailyRecurringSpec;
+import ai.dqo.checks.table.recurring.accuracy.TableAccuracyDailyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.anomaly.TableAnomalyDailyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.availability.TableAvailabilityDailyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.sql.TableSqlDailyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.timeliness.TableTimelinessDailyRecurringChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimePeriodGradient;
@@ -57,39 +58,45 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
             put("accuracy", o -> o.accuracy);
             put("sql", o -> o.sql);
             put("availability", o -> o.availability);
+            put("anomaly", o -> o.anomaly);
         }
     };
 
     @JsonPropertyDescription("Daily recurring standard data quality checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardDailyRecurringSpec standard;
+    private TableStandardDailyRecurringChecksSpec standard;
 
     @JsonPropertyDescription("Daily recurring timeliness checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableTimelinessDailyRecurringSpec timeliness;
+    private TableTimelinessDailyRecurringChecksSpec timeliness;
 
     @JsonPropertyDescription("Daily recurring accuracy checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableAccuracyDailyRecurringSpec accuracy;
+    private TableAccuracyDailyRecurringChecksSpec accuracy;
 
     @JsonPropertyDescription("Daily recurring custom SQL checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlDailyRecurringSpec sql;
+    private TableSqlDailyRecurringChecksSpec sql;
 
     @JsonPropertyDescription("Daily recurring availability checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableAvailabilityDailyRecurringSpec availability;
+    private TableAvailabilityDailyRecurringChecksSpec availability;
+
+    @JsonPropertyDescription("Daily recurring anomaly checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableAnomalyDailyRecurringChecksSpec anomaly;
 
     /**
      * Returns the container of recurring for standard data quality checks.
      * @return Container of row standard data quality recurring.
      */
-    public TableStandardDailyRecurringSpec getStandard() {
+    public TableStandardDailyRecurringChecksSpec getStandard() {
         return standard;
     }
 
@@ -97,7 +104,7 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
      * Sets the container of standard data quality checks (recurring).
      * @param standard New standard checks.
      */
-    public void setStandard(TableStandardDailyRecurringSpec standard) {
+    public void setStandard(TableStandardDailyRecurringChecksSpec standard) {
 		this.setDirtyIf(!Objects.equals(this.standard, standard));
         this.standard = standard;
 		this.propagateHierarchyIdToField(standard, "standard");
@@ -107,7 +114,7 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
      * Returns a container of table level timeliness recurring.
      * @return Custom timeliness recurring.
      */
-    public TableTimelinessDailyRecurringSpec getTimeliness() {
+    public TableTimelinessDailyRecurringChecksSpec getTimeliness() {
         return timeliness;
     }
 
@@ -115,7 +122,7 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
      * Sets a reference to a container of timeliness recurring.
      * @param timeliness Custom timeliness recurring.
      */
-    public void setTimeliness(TableTimelinessDailyRecurringSpec timeliness) {
+    public void setTimeliness(TableTimelinessDailyRecurringChecksSpec timeliness) {
         this.setDirtyIf(!Objects.equals(this.timeliness, timeliness));
         this.timeliness = timeliness;
         this.propagateHierarchyIdToField(timeliness, "timeliness");
@@ -125,7 +132,7 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
      * Returns a container of table level accuracy recurring checks.
      * @return Table level accuracy checks.
      */
-    public TableAccuracyDailyRecurringSpec getAccuracy() {
+    public TableAccuracyDailyRecurringChecksSpec getAccuracy() {
         return accuracy;
     }
 
@@ -133,7 +140,7 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
      * Sets a new container of daily recurring accuracy checks.
      * @param accuracy New daily recurring accuracy checks.
      */
-    public void setAccuracy(TableAccuracyDailyRecurringSpec accuracy) {
+    public void setAccuracy(TableAccuracyDailyRecurringChecksSpec accuracy) {
         this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
         this.accuracy = accuracy;
         this.propagateHierarchyIdToField(accuracy, "accuracy");
@@ -143,7 +150,7 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
      * Returns a container of table level custom SQL recurring.
      * @return Custom sql recurring.
      */
-    public TableSqlDailyRecurringSpec getSql() {
+    public TableSqlDailyRecurringChecksSpec getSql() {
         return sql;
     }
 
@@ -151,7 +158,7 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
      * Sets a reference to a container of custom sql recurring.
      * @param sql Custom sql recurring.
      */
-    public void setSql(TableSqlDailyRecurringSpec sql) {
+    public void setSql(TableSqlDailyRecurringChecksSpec sql) {
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
@@ -161,7 +168,7 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
      * Returns a container of custom sql checks.
      * @return Custom sql checks.
      */
-    public TableAvailabilityDailyRecurringSpec getAvailability() {
+    public TableAvailabilityDailyRecurringChecksSpec getAvailability() {
         return availability;
     }
 
@@ -169,10 +176,28 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
      * Sets a reference to a container of custom sql checks.
      * @param availability Container of custom sql checks.
      */
-    public void setAvailability(TableAvailabilityDailyRecurringSpec availability) {
+    public void setAvailability(TableAvailabilityDailyRecurringChecksSpec availability) {
         this.setDirtyIf(!Objects.equals(this.availability, availability));
         this.availability = availability;
         this.propagateHierarchyIdToField(availability, "availability");
+    }
+
+    /**
+     * Returns a container of custom sql checks.
+     * @return Custom sql checks.
+     */
+    public TableAnomalyDailyRecurringChecksSpec getAnomaly() {
+        return anomaly;
+    }
+
+    /**
+     * Sets a reference to a container of custom sql checks.
+     * @param anomaly Container of custom sql checks.
+     */
+    public void setAnomaly(TableAnomalyDailyRecurringChecksSpec anomaly) {
+        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
+        this.anomaly = anomaly;
+        this.propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
     /**

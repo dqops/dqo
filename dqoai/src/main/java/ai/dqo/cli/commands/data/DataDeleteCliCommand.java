@@ -17,18 +17,19 @@ package ai.dqo.cli.commands.data;
 
 import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
+import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.cli.commands.data.impl.DataCliService;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
 import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthEnd;
 import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthStart;
-import ai.dqo.core.jobqueue.DqoJobQueue;
-import ai.dqo.core.jobqueue.DqoQueueJobFactory;
-import ai.dqo.core.jobqueue.PushJobResult;
-import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
+import ai.dqo.cli.terminal.TablesawDatasetTableModel;
+import ai.dqo.cli.terminal.TerminalReader;
+import ai.dqo.cli.terminal.TerminalTableWritter;
+import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
-import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.data.statistics.factory.StatisticsCollectorTarget;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
+import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -46,24 +48,32 @@ import java.util.List;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "delete", header = "Deletes stored data that matches specified conditions ", description = "Deletes stored data that matches specified conditions. Be careful when using this command, as it permanently deletes the selected data and cannot be undone.")
+@CommandLine.Command(name = "delete", header = "Deletes stored data that matches the specified conditions", description = "Deletes stored data that matches specified conditions. Be careful when using this command, as it permanently deletes the selected data and cannot be undone.")
 public class DataDeleteCliCommand extends BaseCommand implements ICommand {
-    private DqoJobQueue dqoJobQueue;
-    private DqoQueueJobFactory dqoQueueJobFactory;
+    private DataCliService dataCliService;
+    private TerminalReader terminalReader;
+    private TerminalWriter terminalWriter;
+    private TerminalTableWritter terminalTableWritter;
+
 
     public DataDeleteCliCommand() {
     }
 
     /**
      * Dependency injection constructor.
-     * @param dqoJobQueue Job queue.
-     * @param dqoQueueJobFactory Job queue factory.
+     *
+     * @param dataCliService       Data CLI service.
+     * @param terminalReader       Terminal reader.
+     * @param terminalWriter       Terminal writer.
+     * @param terminalTableWritter Terminal table writer.
      */
     @Autowired
-    public DataDeleteCliCommand(DqoJobQueue dqoJobQueue,
-                                DqoQueueJobFactory dqoQueueJobFactory) {
-        this.dqoJobQueue = dqoJobQueue;
-        this.dqoQueueJobFactory = dqoQueueJobFactory;
+    public DataDeleteCliCommand(DataCliService dataCliService,
+                                TerminalReader terminalReader, TerminalWriter terminalWriter, TerminalTableWritter terminalTableWritter) {
+        this.dataCliService = dataCliService;
+        this.terminalReader = terminalReader;
+        this.terminalWriter = terminalWriter;
+        this.terminalTableWritter = terminalTableWritter;
     }
 
     @CommandLine.Option(names = {"-er", "--errors"}, description = "Delete the execution errors")
@@ -79,21 +89,19 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
     private boolean deleteSensorReadouts = false;
 
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name",
-            completionCandidates = ConnectionNameCompleter.class,
-            required = true)
+            completionCandidates = ConnectionNameCompleter.class)
     private String connection;
 
     @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'",
-            completionCandidates = FullTableNameCompleter.class,
-            required = true)
+            completionCandidates = FullTableNameCompleter.class)
     private String table;
 
     @CommandLine.Option(names = {"-b", "--begin"}, description = "Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD",
-            required = true, converter = StringToLocalDateCliConverterMonthStart.class)
+            converter = StringToLocalDateCliConverterMonthStart.class)
     private LocalDate begin;
 
     @CommandLine.Option(names = {"-e", "--end"}, description = "End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD",
-            required = true, converter = StringToLocalDateCliConverterMonthEnd.class)
+            converter = StringToLocalDateCliConverterMonthEnd.class)
     private LocalDate end;
 
     @CommandLine.Option(names = {"-col", "--column"}, description = "Column name",
@@ -139,10 +147,18 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
                 this.end
         );
 
-        deleteStoredDataJobParameters.setDeleteErrors(this.deleteErrors);
-        deleteStoredDataJobParameters.setDeleteStatistics(this.deleteStatistics);
-        deleteStoredDataJobParameters.setDeleteCheckResults(this.deleteCheckResults);
-        deleteStoredDataJobParameters.setDeleteSensorReadouts(this.deleteSensorReadouts);
+        if (!(this.deleteErrors || this.deleteStatistics || this.deleteSensorReadouts || this.deleteCheckResults)) {
+            deleteStoredDataJobParameters.setDeleteErrors(true);
+            deleteStoredDataJobParameters.setDeleteStatistics(true);
+            deleteStoredDataJobParameters.setDeleteCheckResults(true);
+            deleteStoredDataJobParameters.setDeleteSensorReadouts(true);
+        }
+        else {
+            deleteStoredDataJobParameters.setDeleteErrors(this.deleteErrors);
+            deleteStoredDataJobParameters.setDeleteStatistics(this.deleteStatistics);
+            deleteStoredDataJobParameters.setDeleteCheckResults(this.deleteCheckResults);
+            deleteStoredDataJobParameters.setDeleteSensorReadouts(this.deleteSensorReadouts);
+        }
 
         if (!Strings.isNullOrEmpty(this.checkCategory)) {
             deleteStoredDataJobParameters.setCheckCategory(this.checkCategory);
@@ -201,12 +217,21 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
-        DeleteStoredDataQueueJobParameters deletionParameters = this.createDeletionParameters();
+        if (Strings.isNullOrEmpty(this.connection)) {
+            throwRequiredParameterMissingIfHeadless("--connection");
+            this.connection = this.terminalReader.prompt("Connection name (--connection)", null, false);
+        }
 
-        DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
-        deleteStoredDataJob.setDeletionParameters(deletionParameters);
-        PushJobResult<DeleteStoredDataQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob);
-        DeleteStoredDataQueueJobResult jobResult = pushJobResult.getFinishedFuture().get();
-        return 0;
+        DeleteStoredDataQueueJobParameters deletionParameters = this.createDeletionParameters();
+        CliOperationStatus cliOperationStatus = this.dataCliService.deleteStoredData(deletionParameters);
+        this.terminalWriter.writeLine(cliOperationStatus.getMessage());
+
+        Table cliOperationStatusTable = cliOperationStatus.getTable();
+        if (cliOperationStatusTable != null) {
+            TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(cliOperationStatus.getTable());
+            this.terminalTableWritter.writeTable(tablesawDatasetTableModel, true);
+        }
+
+        return cliOperationStatus.isSuccess() ? 0 : -1;
     }
 }

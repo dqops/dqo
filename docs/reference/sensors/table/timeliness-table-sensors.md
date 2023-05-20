@@ -13,7 +13,7 @@ Table sensor that runs a query calculating the time difference in days between t
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_ingestion_event_max_diff() -%}
@@ -62,7 +62,7 @@ Table sensor that runs a query calculating the time difference in days between t
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_ingestion_event_max_diff() -%}
@@ -97,7 +97,7 @@ Table sensor that runs a query calculating the time difference in days between t
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_ingestion_event_max_diff() -%}
@@ -132,7 +132,7 @@ Table sensor that runs a query calculating the time difference in days between t
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_ingestion_event_max_diff() -%}
@@ -176,7 +176,7 @@ Table sensor that runs a query calculating the time difference in days between t
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_ingestion_event_max_diff() -%}
@@ -231,7 +231,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -275,7 +275,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -307,7 +307,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -339,7 +339,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -382,7 +382,7 @@ Table sensor that runs a query calculating maximum days since the most recent ev
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -434,7 +434,7 @@ Table sensor that runs a query calculating the time difference in days between t
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_current_ingestion_diff() -%}
@@ -478,7 +478,7 @@ Table sensor that runs a query calculating the time difference in days between t
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_current_ingestion_diff() -%}
@@ -510,7 +510,7 @@ Table sensor that runs a query calculating the time difference in days between t
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_current_ingestion_diff() -%}
@@ -542,7 +542,7 @@ Table sensor that runs a query calculating the time difference in days between t
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_current_ingestion_diff() -%}
@@ -586,7 +586,7 @@ Table sensor that runs a query calculating the time difference in days between t
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_current_ingestion_diff() -%}
@@ -638,7 +638,7 @@ Table sensor that runs a query calculating maximum difference in days between in
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_ingestion_event_diff() -%}
@@ -691,7 +691,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_ingestion_event_diff() -%}
@@ -735,7 +735,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     {% macro render_ingestion_event_diff() -%}
         {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true'
@@ -777,7 +777,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_ingestion_event_diff() -%}
@@ -830,7 +830,7 @@ Table sensor that runs a query calculating maximum difference in days between in
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_ingestion_event_diff() -%}

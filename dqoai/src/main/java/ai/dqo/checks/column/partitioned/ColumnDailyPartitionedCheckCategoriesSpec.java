@@ -20,6 +20,7 @@ import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.partitioned.accuracy.ColumnAccuracyDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.anomaly.ColumnAnomalyDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.bool.ColumnBoolDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.consistency.ColumnConsistencyDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeDailyPartitionedChecksSpec;
@@ -27,7 +28,7 @@ import ai.dqo.checks.column.partitioned.integrity.ColumnIntegrityDailyPartitione
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.pii.ColumnPiiDailyPartitionedChecksSpec;
-import ai.dqo.checks.column.partitioned.sql.ColumnSqlDailyPartitionedSpec;
+import ai.dqo.checks.column.partitioned.sql.ColumnSqlDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
@@ -69,6 +70,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
             put("consistency", o -> o.consistency);
+            put("anomaly", o -> o.anomaly);
         }
     };
 
@@ -105,7 +107,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonPropertyDescription("Daily partitioned checks using custom SQL expressions evaluated on the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnSqlDailyPartitionedSpec sql;
+    private ColumnSqlDailyPartitionedChecksSpec sql;
 
     @JsonPropertyDescription("Daily partitioned checks for booleans in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -126,6 +128,11 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnConsistencyDailyPartitionedChecksSpec consistency;
+
+    @JsonPropertyDescription("Daily partitioned checks for anomaly in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAnomalyDailyPartitionedChecksSpec anomaly;
 
     /**
      * Returns the container of daily null data quality partitioned checks.
@@ -239,7 +246,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
      * Returns a container of custom SQL checks on a column.
      * @return Custom SQL checks.
      */
-    public ColumnSqlDailyPartitionedSpec getSql() {
+    public ColumnSqlDailyPartitionedChecksSpec getSql() {
         return sql;
     }
 
@@ -247,7 +254,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
      * Sets a reference to a container of custom SQL checks.
      * @param sql Custom SQL checks.
      */
-    public void setSql(ColumnSqlDailyPartitionedSpec sql) {
+    public void setSql(ColumnSqlDailyPartitionedChecksSpec sql) {
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         propagateHierarchyIdToField(sql, "sql");
@@ -323,6 +330,24 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.consistency, consistency));
         this.consistency = consistency;
         propagateHierarchyIdToField(consistency, "consistency");
+    }
+
+    /**
+     * Returns a container of custom accuracy checks on a column.
+     * @return Custom accuracy checks.
+     */
+    public ColumnAnomalyDailyPartitionedChecksSpec getAnomaly() {
+        return anomaly;
+    }
+
+    /**
+     * Sets a reference to a container of custom anomaly checks.
+     * @param anomaly Custom anomaly checks.
+     */
+    public void setAnomaly(ColumnAnomalyDailyPartitionedChecksSpec anomaly) {
+        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
+        this.anomaly = anomaly;
+        propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
     /**

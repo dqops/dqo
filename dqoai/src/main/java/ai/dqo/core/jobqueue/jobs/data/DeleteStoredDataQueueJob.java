@@ -24,6 +24,7 @@ import ai.dqo.data.checkresults.models.CheckResultsFragmentFilter;
 import ai.dqo.data.checkresults.services.CheckResultsDeleteService;
 import ai.dqo.data.errors.models.ErrorsFragmentFilter;
 import ai.dqo.data.errors.services.ErrorsDeleteService;
+import ai.dqo.data.models.DataDeleteResult;
 import ai.dqo.data.readouts.models.SensorReadoutsFragmentFilter;
 import ai.dqo.data.readouts.services.SensorReadoutsDeleteService;
 import ai.dqo.data.statistics.models.StatisticsResultsFragmentFilter;
@@ -155,19 +156,29 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
      */
     @Override
     public DeleteStoredDataQueueJobResult onExecute(DqoJobExecutionContext jobExecutionContext) {
+        if (this.deletionParameters.getConnectionName() == null) {
+            throw new IllegalArgumentException("Connection not specified for data delete job.");
+        }
+
         DeleteStoredDataQueueJobResult result = new DeleteStoredDataQueueJobResult();
+        DataDeleteResult operationResult = new DataDeleteResult();
+        result.setOperationResult(operationResult);
 
         if (this.deletionParameters.isDeleteErrors()) {
-            this.errorsDeleteService.deleteSelectedErrorsFragment(this.getErrorsFragmentFilter());
+            DataDeleteResult errorsResult = this.errorsDeleteService.deleteSelectedErrorsFragment(this.getErrorsFragmentFilter());
+            operationResult.concat(errorsResult);
         }
         if (this.deletionParameters.isDeleteStatistics()) {
-            this.statisticsDeleteService.deleteSelectedStatisticsResultsFragment(this.getStatisticsResultsFragmentFilter());
+            DataDeleteResult statisticsResult = this.statisticsDeleteService.deleteSelectedStatisticsResultsFragment(this.getStatisticsResultsFragmentFilter());
+            operationResult.concat(statisticsResult);
         }
         if (this.deletionParameters.isDeleteCheckResults()) {
-            this.checkResultsDeleteService.deleteSelectedCheckResultsFragment(this.getRuleResultsFragmentFilter());
+            DataDeleteResult checkResultsResult = this.checkResultsDeleteService.deleteSelectedCheckResultsFragment(this.getRuleResultsFragmentFilter());
+            operationResult.concat(checkResultsResult);
         }
         if (this.deletionParameters.isDeleteSensorReadouts()) {
-            this.sensorReadoutsDeleteService.deleteSelectedSensorReadoutsFragment(this.getSensorReadoutsFragmentFilter());
+            DataDeleteResult sensorReadoutsResult = this.sensorReadoutsDeleteService.deleteSelectedSensorReadoutsFragment(this.getSensorReadoutsFragmentFilter());
+            operationResult.concat(sensorReadoutsResult);
         }
 
         return result;

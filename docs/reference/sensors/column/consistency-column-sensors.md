@@ -19,7 +19,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -52,10 +52,10 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "mysql"
       
-    ```
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'DD/MM/YYYY'-%}
@@ -65,7 +65,41 @@ Column level sensor that calculates the percentage of values that does fit a giv
         {%- elif date_formats == 'DD.MM.YYYY' -%}
             '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
         {%- elif date_formats == 'YYYY-MM-DD' -%}
-            '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+            '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(CASE
+                  WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})
+                     THEN 1
+                  ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```sql+jinja
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_formats(date_formats) %}
+        {%- if date_formats == 'DD/MM/YYYY'-%}
+            '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
+        {%- elif date_formats == 'DD-MM-YYYY' -%}
+            '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
+        {%- elif date_formats == 'DD.MM.YYYY' -%}
+            '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
+        {%- elif date_formats == 'YYYY-MM-DD' -%}
+            '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
         {%- endif -%}
     {% endmacro -%}
     
@@ -74,7 +108,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SUBSTRING(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) FROM {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                    WHEN CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_formats(parameters.date_formats)}} IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -89,7 +123,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -125,7 +159,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -161,7 +195,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}

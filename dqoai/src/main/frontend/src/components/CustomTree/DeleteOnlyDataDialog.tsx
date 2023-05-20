@@ -35,6 +35,7 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
   }
 
   const onChangeParams = (obj: { [key: string]: boolean }) => {
+    setMode('part');
     setParams({
       ...params,
       ...obj,
@@ -79,6 +80,7 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
                     onChange={setStartDate}
                     selected={startDate}
                     disabled={isDisabled}
+                    dateFormat="yyyy-MM-dd"
                   />
                   <span>to</span>
                   <DatePicker
@@ -87,37 +89,34 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
                     onChange={setEndDate}
                     selected={endDate}
                     disabled={isDisabled}
+                    dateFormat="yyyy-MM-dd"
                   />
                 </div>
               </div>
             </div>
-            <div className="flex flex-col gap-4 px-4 my-4 text-gray-700">
+            <div className="flex flex-col gap-4 px-4 my-4 text-gray-700 ml-7">
               <Checkbox
                 checked={params.deleteProfilingResults}
                 onChange={(deleteProfilingResults) => onChangeParams({ deleteProfilingResults })}
                 label="Statistics Results"
-                disabled={isDisabled}
                 checkClassName="bg-teal-500"
               />
               <Checkbox
                 checked={params.deleteRuleResults}
                 onChange={(deleteRuleResults) => onChangeParams({ deleteRuleResults })}
                 label="Check Results"
-                disabled={isDisabled}
                 checkClassName="bg-teal-500"
               />
               <Checkbox
                 checked={params.deleteSensorReadouts}
                 onChange={(deleteSensorReadouts) => onChangeParams({ deleteSensorReadouts })}
                 label="Sensor Readouts"
-                disabled={isDisabled}
                 checkClassName="bg-teal-500"
               />
               <Checkbox
                 checked={params.deleteErrors}
                 onChange={(deleteErrors) => onChangeParams({ deleteErrors })}
                 label="Execution Errors"
-                disabled={isDisabled}
                 checkClassName="bg-teal-500"
               />
             </div>

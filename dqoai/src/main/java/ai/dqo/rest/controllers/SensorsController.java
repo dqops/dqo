@@ -25,11 +25,8 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.rest.models.metadata.ProviderSensorBasicModel;
-import ai.dqo.rest.models.metadata.SensorBasicFolderModel;
+import ai.dqo.rest.models.metadata.*;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
-import ai.dqo.rest.models.metadata.ProviderSensorModel;
-import ai.dqo.rest.models.metadata.SensorModel;
 import autovalue.shaded.com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -360,12 +357,12 @@ public class SensorsController {
                 if (providerSensorDefinitionWrapper != null) {
                     ProviderSensorBasicModel providerSensorBasicModel = new ProviderSensorBasicModel();
                     providerSensorBasicModel.setProviderType(providerType);
-                    providerSensorBasicModel.setCustom(false);
+                    providerSensorBasicModel.setSensorSource(SensorDefinitionSource.BUILT_IN);
                     providerSensorBasicModelList.add(providerSensorBasicModel);
 
                 }
             }
-            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, false);
+            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, SensorDefinitionSource.BUILT_IN);
         });
 
         userHome.getSensors().forEach(sensorDefinitionWrapper -> {
@@ -374,12 +371,12 @@ public class SensorsController {
                 ProviderSensorBasicModel providerSensorBasicModel = new ProviderSensorBasicModel();
                 if (providerSensorDefinitionWrapper != null) {
                     providerSensorBasicModel.setProviderType(providerSensorDefinitionWrapper.getProvider());
-                    providerSensorBasicModel.setCustom(true);
+                    providerSensorBasicModel.setSensorSource(SensorDefinitionSource.CUSTOM);
                 }
                 providerSensorBasicModelList.add(providerSensorBasicModel);
             });
 
-            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, true);
+            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, SensorDefinitionSource.CUSTOM);
         });
 
         return new ResponseEntity<>(Mono.just(sensorFolderModel), HttpStatus.OK);

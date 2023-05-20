@@ -265,15 +265,15 @@ Configuration of the data stream that is used for a table.
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[level1](#datastreamlevelspec)|Data stream level 1 configuration.|object| | | |
-|[level2](#datastreamlevelspec)|Data stream level 2 configuration.|object| | | |
-|[level3](#datastreamlevelspec)|Data stream level 3 configuration.|object| | | |
-|[level4](#datastreamlevelspec)|Data stream level 4 configuration.|object| | | |
-|[level5](#datastreamlevelspec)|Data stream level 5 configuration.|object| | | |
-|[level6](#datastreamlevelspec)|Data stream level 6 configuration.|object| | | |
-|[level7](#datastreamlevelspec)|Data stream level 7 configuration.|object| | | |
-|[level8](#datastreamlevelspec)|Data stream level 8 configuration.|object| | | |
-|[level9](#datastreamlevelspec)|Data stream level 9 configuration.|object| | | |
+|[level_1](#datastreamlevelspec)|Data stream level 1 configuration.|object| | | |
+|[level_2](#datastreamlevelspec)|Data stream level 2 configuration.|object| | | |
+|[level_3](#datastreamlevelspec)|Data stream level 3 configuration.|object| | | |
+|[level_4](#datastreamlevelspec)|Data stream level 4 configuration.|object| | | |
+|[level_5](#datastreamlevelspec)|Data stream level 5 configuration.|object| | | |
+|[level_6](#datastreamlevelspec)|Data stream level 6 configuration.|object| | | |
+|[level_7](#datastreamlevelspec)|Data stream level 7 configuration.|object| | | |
+|[level_8](#datastreamlevelspec)|Data stream level 8 configuration.|object| | | |
+|[level_9](#datastreamlevelspec)|Data stream level 9 configuration.|object| | | |
 
 
 

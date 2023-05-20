@@ -13,15 +13,20 @@ on these different check types, please refer to the [DQO Concepts section](../..
 To set up a schedule for the entire connection, follow these steps:
 
 1. Navigate to the **Data Source** section.
+
 2. Choose the connection you want to schedule from the tree view on the left.
+
 3. Click on the **Schedule** tab.
+
 4. Select the check type:
     - Profiling
     - Recurring Daily
     - Recurring Monthly
     - Partitioned Daily
     - Partitioned Monthly
+   
 5. Specify the schedule using a [Unix cron expression](./cron-formatting.md) or select one of the options provided.
+
 6. Once you have set the schedule, click on the **Save** button to save your changes.
 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across 
@@ -37,9 +42,13 @@ Please note that any changes made to the schedule on the table level will overri
 To set up a schedule for a specific check, follow these steps:
 
 1. Navigate to the section with a check type of interest (Profiling, Recurring Checks or Partition Checks).
+
 2. Choose table or column of interest from the tree view on the left.
+
 3. Enable the check of interest then click the "Setting" button and go to the "**Schedule Override**" tab.
+
 4. Specify the schedule using a Unix cron expression or select one of the options provided.
+
 6. Once you have set the schedule, click the **Save** button to save your changes.
 
 Please note that any changes made to the schedule at the check level will override the schedule set for the entire 

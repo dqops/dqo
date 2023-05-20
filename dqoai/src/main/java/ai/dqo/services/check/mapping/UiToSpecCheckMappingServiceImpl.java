@@ -18,7 +18,6 @@ package ai.dqo.services.check.mapping;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
-import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.services.check.mapping.models.*;

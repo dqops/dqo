@@ -43,6 +43,9 @@ nav:
         - Percentage of valid latitude and longitude: 'examples/data-validity/percentage-of-valid-latitude-and-longitude.md'
         - Percentage of valid IP4 address: 'examples/data-validity/percentage-of-valid-IP4-address.md'
         - Percentage of strings matching date regex: 'examples/data-validity/percentage-of-strings-matching-date-regex.md'
+        - Percentage of rows passing SQL condition: 'examples/data-validity/percentage-of-rows-passing-sql-condition.md'
+        - Percentage of valid currency codes: 'examples/data-validity/percentage-of-valid-currency-codes.md'
+        - Percentage of negative values: 'examples/data-validity/percentage-of-negative-values.md'
     - Data reasonability:
         - Percentage of values in range: 'examples/data-reasonability/percentage-of-integer-values-in-range.md'
         - A string not exceeding a set length: 'examples/data-reasonability/string-not-exceeding-a-set-length.md'
@@ -69,6 +72,7 @@ nav:
       - Configuring the schedules by modifying the YAML files: 'working-with-dqo/schedules/configuring-schedules-by-modifying-yaml-file.md'
       - Time zone configuration: 'working-with-dqo/schedules/timezone-configuration.md'
       - Cron formatting: 'working-with-dqo/schedules/cron-formatting.md'
+    - Set up data stream segmentation: 'working-with-dqo/set-up-data-streams/set-up-data-stream.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
     - dqo: 'command-line-interface/dqo.md'
@@ -90,6 +94,13 @@ nav:
     - table:
       - accuracy:
         - row count match percent: 'checks/table/accuracy/row-count-match-percent.md'
+      - anomaly:
+        - row count anomaly 7 days: 'checks/table/anomaly/row-count-anomaly-7-days.md'
+        - row count anomaly 30 days: 'checks/table/anomaly/row-count-anomaly-30-days.md'
+        - row count anomaly 60 days: 'checks/table/anomaly/row-count-anomaly-60-days.md'
+        - daily partition row count anomaly 7 days: 'checks/table/anomaly/daily-partition-row-count-anomaly-7-days.md'
+        - daily partition row count anomaly 30 days: 'checks/table/anomaly/daily-partition-row-count-anomaly-30-days.md'
+        - daily partition row count anomaly 60 days: 'checks/table/anomaly/daily-partition-row-count-anomaly-60-days.md'
       - availability:
         - table availability: 'checks/table/availability/table-availability.md'
       - sql:
@@ -110,6 +121,25 @@ nav:
         - max match percent: 'checks/column/accuracy/max-match-percent.md'
         - average match percent: 'checks/column/accuracy/average-match-percent.md'
         - not null count match percent: 'checks/column/accuracy/not-null-count-match-percent.md'
+      - anomaly:
+        - mean anomaly 7 days: 'checks/column/anomaly/mean-anomaly-7-days.md'
+        - mean anomaly 30 days: 'checks/column/anomaly/mean-anomaly-30-days.md'
+        - mean anomaly 60 days: 'checks/column/anomaly/mean-anomaly-60-days.md'
+        - median anomaly 7 days: 'checks/column/anomaly/median-anomaly-7-days.md'
+        - median anomaly 30 days: 'checks/column/anomaly/median-anomaly-30-days.md'
+        - median anomaly 60 days: 'checks/column/anomaly/median-anomaly-60-days.md'
+        - sum anomaly 7 days: 'checks/column/anomaly/sum-anomaly-7-days.md'
+        - sum anomaly 30 days: 'checks/column/anomaly/sum-anomaly-30-days.md'
+        - sum anomaly 60 days: 'checks/column/anomaly/sum-anomaly-60-days.md'
+        - daily partition mean anomaly 7 days: 'checks/column/anomaly/daily-partition-mean-anomaly-7-days.md'
+        - daily partition mean anomaly 30 days: 'checks/column/anomaly/daily-partition-mean-anomaly-30-days.md'
+        - daily partition mean anomaly 60 days: 'checks/column/anomaly/daily-partition-mean-anomaly-60-days.md'
+        - daily partition median anomaly 7 days: 'checks/column/anomaly/daily-partition-median-anomaly-7-days.md'
+        - daily partition median anomaly 30 days: 'checks/column/anomaly/daily-partition-median-anomaly-30-days.md'
+        - daily partition median anomaly 60 days: 'checks/column/anomaly/daily-partition-median-anomaly-60-days.md'
+        - daily partition sum anomaly 7 days: 'checks/column/anomaly/daily-partition-sum-anomaly-7-days.md'
+        - daily partition sum anomaly 30 days: 'checks/column/anomaly/daily-partition-sum-anomaly-30-days.md'
+        - daily partition sum anomaly 60 days: 'checks/column/anomaly/daily-partition-sum-anomaly-60-days.md'
       - bool:
         - true percent: 'checks/column/bool/true-percent.md'
         - false percent: 'checks/column/bool/false-percent.md'

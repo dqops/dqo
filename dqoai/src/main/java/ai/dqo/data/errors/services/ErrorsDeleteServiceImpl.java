@@ -19,10 +19,16 @@ import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import ai.dqo.data.errors.models.ErrorsFragmentFilter;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactory;
+import ai.dqo.data.models.DataDeleteResult;
+import ai.dqo.data.models.DataDeleteResultPartition;
+import ai.dqo.data.normalization.CommonColumnNames;
+import ai.dqo.data.storage.LoadedMonthlyPartition;
+import ai.dqo.data.storage.ParquetPartitionId;
 import ai.dqo.data.storage.ParquetPartitionMetadataService;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -43,9 +49,10 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
     /**
      * Deletes the errors from a table, applying specific filters to get the fragment (if necessary).
      * @param filter Filter for the errors fragment that is of interest.
+     * @return Data delete operation summary.
      */
     @Override
-    public void deleteSelectedErrorsFragment(ErrorsFragmentFilter filter) {
+    public DataDeleteResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
         Map<String, Set<String>> conditions = new HashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
@@ -57,6 +64,8 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
         if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
             conditions.put(ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
         }
+
+        DataDeleteResult dataDeleteResult = new DataDeleteResult();
 
         Collection<PhysicalTableName> tablesToDelete;
         if (filter.getTableSearchFilters().getSchemaTableName() == null) {
@@ -71,7 +80,7 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
 
         if (tablesToDelete == null) {
             // No matching tables specified or found.
-            return;
+            return dataDeleteResult;
         }
 
         Collection<ErrorsSnapshot> errorsSnapshots = tablesToDelete.stream()
@@ -85,7 +94,29 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
             LocalDate endDeletionRange = filter.getDateEnd();
 
             currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
+            Set<String> deletedIds = currentSnapshot.getTableDataChanges().getDeletedIds();
+
+            for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry:
+                    currentSnapshot.getLoadedMonthlyPartitions().entrySet()) {
+                ParquetPartitionId partitionId = loadedPartitionEntry.getKey();
+                Table loadedPartitionTable = loadedPartitionEntry.getValue().getData();
+                if (loadedPartitionTable == null) {
+                    continue;
+                }
+
+                int deletedRows = loadedPartitionTable
+                        .textColumn(CommonColumnNames.ID_COLUMN_NAME)
+                        .isIn(deletedIds)
+                        .size();
+                boolean allRowsDeleted = deletedRows == loadedPartitionTable.rowCount();
+                DataDeleteResultPartition partitionResult = new DataDeleteResultPartition(deletedRows, allRowsDeleted);
+
+                dataDeleteResult.getPartitionResults().put(partitionId, partitionResult);
+            }
+
             currentSnapshot.save();
         }
+
+        return dataDeleteResult;
     }
 }

@@ -16,6 +16,7 @@
 package ai.dqo.data.errors.services;
 
 import ai.dqo.data.errors.models.ErrorsFragmentFilter;
+import ai.dqo.data.models.DataDeleteResult;
 
 /**
  * Service that deletes outdated errors of a check run.
@@ -25,6 +26,7 @@ public interface ErrorsDeleteService {
     /**
      * Deletes the errors from a table, applying specific filters to get the fragment (if necessary).
      * @param filter Filter for the errors fragment that is of interest.
+     * @return Data delete operation summary.
      */
-    void deleteSelectedErrorsFragment(ErrorsFragmentFilter filter);
+    DataDeleteResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter);
 }

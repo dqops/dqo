@@ -90,7 +90,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -103,7 +103,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table.`target_column`) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
@@ -115,7 +115,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -128,7 +128,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table."target_column") AS actual_value,
         TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
@@ -140,7 +140,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -153,7 +153,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table."target_column") AS actual_value,
         LOCALTIMESTAMP AS time_period,
@@ -165,7 +165,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -178,7 +178,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table."target_column") AS actual_value,
         LOCALTIMESTAMP AS time_period,
@@ -190,7 +190,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -203,7 +203,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table.[target_column]) AS actual_value,
         SYSDATETIMEOFFSET() AS time_period,
@@ -264,7 +264,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -276,7 +276,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table.`target_column`) AS actual_value,
             analyzed_table.`country` AS stream_level_1,
@@ -290,7 +290,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -302,7 +302,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -316,7 +316,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -328,7 +328,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -342,7 +342,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -354,7 +354,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -368,7 +368,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -380,7 +380,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table.[target_column]) AS actual_value,
             analyzed_table.[country] AS stream_level_1,
@@ -491,7 +491,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -504,7 +504,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table.`target_column`) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
@@ -516,7 +516,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -529,7 +529,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table."target_column") AS actual_value,
         CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
@@ -541,7 +541,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -554,7 +554,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table."target_column") AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -566,7 +566,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -579,7 +579,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table."target_column") AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -591,7 +591,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -604,7 +604,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table.[target_column]) AS actual_value,
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
@@ -666,7 +666,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -678,7 +678,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table.`target_column`) AS actual_value,
             analyzed_table.`country` AS stream_level_1,
@@ -692,7 +692,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -704,7 +704,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -718,7 +718,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -730,7 +730,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -744,7 +744,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -756,7 +756,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -770,7 +770,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -782,7 +782,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table.[target_column]) AS actual_value,
             analyzed_table.[country] AS stream_level_1,
@@ -893,7 +893,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -906,7 +906,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table.`target_column`) AS actual_value,
         DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
@@ -918,7 +918,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -931,7 +931,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table."target_column") AS actual_value,
         DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
@@ -943,7 +943,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -956,7 +956,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table."target_column") AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -968,7 +968,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -981,7 +981,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table."target_column") AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -993,7 +993,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1006,7 +1006,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table.[target_column]) AS actual_value,
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
@@ -1068,7 +1068,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1080,7 +1080,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table.`target_column`) AS actual_value,
             analyzed_table.`country` AS stream_level_1,
@@ -1094,7 +1094,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1106,7 +1106,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1120,7 +1120,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1132,7 +1132,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1146,7 +1146,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1158,7 +1158,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1172,7 +1172,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1184,7 +1184,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table.[target_column]) AS actual_value,
             analyzed_table.[country] AS stream_level_1,
@@ -1295,7 +1295,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1308,7 +1308,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table.`target_column`) AS actual_value,
         CAST(analyzed_table.`` AS DATE) AS time_period,
@@ -1320,7 +1320,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1333,7 +1333,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table."target_column") AS actual_value,
         CAST(analyzed_table."" AS date) AS time_period,
@@ -1345,7 +1345,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1358,7 +1358,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table."target_column") AS actual_value,
         CAST(analyzed_table."" AS date) AS time_period,
@@ -1370,7 +1370,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1383,7 +1383,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table."target_column") AS actual_value,
         CAST(analyzed_table."" AS date) AS time_period,
@@ -1395,7 +1395,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1408,7 +1408,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table.[target_column]) AS actual_value,
         CAST([] AS date) AS time_period,
@@ -1474,7 +1474,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1486,7 +1486,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table.`target_column`) AS actual_value,
             analyzed_table.`country` AS stream_level_1,
@@ -1500,7 +1500,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1512,7 +1512,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1526,7 +1526,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1538,7 +1538,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1552,7 +1552,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1564,7 +1564,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1578,7 +1578,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1590,7 +1590,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table.[target_column]) AS actual_value,
             analyzed_table.[country] AS stream_level_1,
@@ -1698,7 +1698,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1711,7 +1711,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table.`target_column`) AS actual_value,
         DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
@@ -1723,7 +1723,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1736,7 +1736,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table."target_column") AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
@@ -1748,7 +1748,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1761,7 +1761,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table."target_column") AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
@@ -1773,7 +1773,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1786,7 +1786,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table."target_column") AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
@@ -1798,7 +1798,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1811,7 +1811,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         MIN(analyzed_table.[target_column]) AS actual_value,
         DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
@@ -1877,7 +1877,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1889,7 +1889,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table.`target_column`) AS actual_value,
             analyzed_table.`country` AS stream_level_1,
@@ -1903,7 +1903,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1915,7 +1915,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1929,7 +1929,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1941,7 +1941,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1955,7 +1955,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1967,7 +1967,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table."target_column") AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1981,7 +1981,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -1993,7 +1993,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             MIN(analyzed_table.[target_column]) AS actual_value,
             analyzed_table.[country] AS stream_level_1,

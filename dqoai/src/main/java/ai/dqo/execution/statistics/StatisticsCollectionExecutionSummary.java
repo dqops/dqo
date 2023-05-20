@@ -159,4 +159,44 @@ public class StatisticsCollectionExecutionSummary {
     public void append(StatisticsCollectionExecutionSummary otherExecutionSummary) {
         this.summaryTable.append(otherExecutionSummary.getSummaryTable());
     }
+
+    /**
+     * Returns the number of executed collectors.
+     * @return Number of executed collectors.
+     */
+    public int getTotalCollectorsExecuted() {
+        return (int)this.collectorsExecutedColumn.sum();
+    }
+
+    /**
+     * Returns the count of columns for which DQO executed a collector and tried to read the statistics.
+     * @return The count of columns for which DQO executed a collector and tried to read the statistics.
+     */
+    public int getColumnsAnalyzedCount() {
+        return (int)this.collectorsColumnsColumn.sum();
+    }
+
+    /**
+     * Returns the number of columns for which DQO managed to obtain statistics.
+     * @return Number of columns that were analyzed successfully.
+     */
+    public int getColumnsSuccessfullyAnalyzed() {
+        return (int)this.collectorsColumnsSuccessfullyColumn.sum();
+    }
+
+    /**
+     * Returns the count of statistics collectors that failed to execute.
+     * @return The count of statistics collectors that failed to execute.
+     */
+    public int getTotalCollectorsFailed() {
+        return (int)this.collectorsFailedColumn.sum();
+    }
+
+    /**
+     * Returns the total number of results that were collected.
+     * @return The total number of results that were collected.
+     */
+    public int getTotalCollectedResults() {
+        return (int)this.collectorsResultsColumn.sum();
+    }
 }
