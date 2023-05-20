@@ -2,7 +2,7 @@ import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import SvgIcon from '../../SvgIcon';
 import {
   Accordion,
@@ -16,23 +16,21 @@ import { useError, IError } from '../../../contexts/errrorContext';
 import { IRootState } from '../../../redux/reducers';
 import { reduceCounter } from '../../../redux/actions/job.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { count } from 'console';
+
 
 
 
 const JobItem = ({
   job,
-  counter, 
   notifnumber
 }: {
   job: DqoJobHistoryEntryModel;
-  counter?: number;
   notifnumber?: number
 }) => {
-  const { jobs, wasOpen } = useSelector((state: IRootState) => state.job);
+  const { jobs} = useSelector((state: IRootState) => state.job);
   const { errors } = useError();
   const dispatch = useActionDispatch();
-  const [isClicked, setIsClicked] = useState<boolean>(false)
+ 
   const getNotificationDate = (notification: any) => {
     if (notification.type === 'job') {
       return notification.item.jobId?.createdAt;
@@ -47,7 +45,7 @@ const JobItem = ({
     dispatch(reduceCounter(true, sizeOfNot));
   };
  //console.log(reduceCounter(true, sizeOfNot).amountOfElems)
-  console.log(sizeOfNot)
+  //console.log(sizeOfNot)
   const data = useMemo(() => {
     const jobsData = jobs?.jobs
       ? jobs?.jobs
@@ -111,8 +109,6 @@ const JobItem = ({
             <div className="flex space-x-1 items-center">
               <div>
                 {job.jobType}
-                {counter}
-                {/* {job.jobId?.jobId} */}
               </div>
               {renderStatus()}
             </div>
