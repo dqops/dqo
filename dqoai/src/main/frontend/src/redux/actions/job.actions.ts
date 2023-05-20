@@ -91,3 +91,8 @@ export const toggleMenu = (isOpen: boolean) => ({
   type: JOB_ACTION.TOGGLE_MENU,
   isOpen
 });
+export const reduceCounter = (wasOpen: boolean, amountOfElems?: number  ) =>({
+  type: JOB_ACTION.REDUCE_COUNTER,
+  wasOpen,
+  amountOfElems
+})
