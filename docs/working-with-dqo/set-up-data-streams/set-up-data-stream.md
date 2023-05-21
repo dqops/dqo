@@ -24,12 +24,12 @@ To set up a data stream at the data source level, follow the steps below.
 1. In DQO graphical interface, go to the **Data Source** section, select the data source of interest in the tree view on the left
     side, and select **Default Data Stream Template** tab.
 
-    ![Default data stream template tag](https://dqo.ai/docs/images/working-with-dqo/set-up-data-stream/default-data-stream-template.jpg)
+    ![Default data stream template tag](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/default-data-stream-template.jpg)
 
 2. In the **Default Data Stream Template** tab, write a tag for a data source or select the discriminator column that would
     identify the data source. You can configure up to 9 different data streams.
 
-   ![Adding data stream](https://dqo.ai/docs/images/working-with-dqo/set-up-data-stream/adding-data-stream.jpg)
+   ![Adding data stream](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/adding-data-stream.jpg)
 
 3. Once you have set the data stream, click on the **Save** button to save your changes.
 
@@ -41,19 +41,19 @@ To set up data stream at the table level:
 1.  In DQO graphical interface, go to the **Data Source** section, select the table of interest in the tree view on the left
     side, and select **Data Streams** tab.
 
-    ![Adding table-level data stream](https://dqo.ai/docs/images/working-with-dqo/set-up-data-stream/adding-table-level-data-stream.jpg)
+    ![Adding table-level data stream](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/adding-table-level-data-stream.jpg)
 
 2. Click on the **New data stream configuration** button.
 
 3. Write a **Data stream name** and select a tag for a data stream or select the discriminator column that would identify the data source.
 
-   ![Table-level data stream configuration](https://dqo.ai/docs/images/working-with-dqo/set-up-data-stream/table-level-data-stream-configuration.jpg)
+   ![Table-level data stream configuration](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/table-level-data-stream-configuration.jpg)
 
 4. Once you have set the data stream, click on the **Save** button to save your changes.
 
 5. After adding new data stream you can set which one is the default one by clicking on the **Make Default** button.
 
-    ![Setting default data stream](https://dqo.ai/docs/images/working-with-dqo/set-up-data-stream/setting-default-data-stream.jpg)
+    ![Setting default data stream](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/setting-default-data-stream.jpg)
     
     On this screen you can also edit or delete data streams. 
 

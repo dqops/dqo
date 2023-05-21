@@ -27,7 +27,7 @@ You can use DQO with the most popular databases. [Learn here how to connect a da
 
 Want to learn more about data quality? 
 
-Check out eBook ["A step-by-step guide to improve data quality"](https://dqo.ai/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
+Check out eBook ["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
 created by the DQO Team based on their experience in data cleansing and data quality monitoring.
 
 ![A step-by-step guide to improve data quality](./images/ebook.png "A step-by-step guide to improve data quality")

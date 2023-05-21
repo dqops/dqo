@@ -11,15 +11,15 @@ You need a SQL Server account. Use the TCP/IP Properties (IP Addresses Tab) dial
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 
-   ![Adding connection](https://dqo.ai/docs/images/working-with-dqo/adding-connection.jpg)
+   ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connection.jpg)
 
 2. Select SQL Server database type.
 
-   ![Selecting SQL Server database type](https://dqo.ai/docs/images/working-with-dqo/adding-connection-sql-server.jpg)
+   ![Selecting SQL Server database type](https://dqops.com/docs/images/working-with-dqo/adding-connection-sql-server.jpg)
 
 3. Add connection settings.
 
-   ![Adding connection settings](https://dqo.ai/docs/images/working-with-dqo/connection-settings-sql-server.jpg)
+   ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/connection-settings-sql-server.jpg)
 
     | SQL Server connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                      | 
     |--------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -37,13 +37,13 @@ You need a SQL Server account. Use the TCP/IP Properties (IP Addresses Tab) dial
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
 
     For example:
-    ![Adding connection settings - environmental variables](https://dqo.ai/docs/images/working-with-dqo/connection-settings-envvar.jpg)
+    ![Adding connection settings - environmental variables](https://dqops.com/docs/images/working-with-dqo/connection-settings-envvar.jpg)
 
     To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value
     can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
 
     For example:
-    ![Adding connection JDBC settings](https://dqo.ai/docs/images/working-with-dqo/connection-settings-JDBC-properties.jpg)
+    ![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/connection-settings-JDBC-properties.jpg)
 
     To remove the property click on the trash icon add the end of the input field.
 
@@ -52,11 +52,11 @@ You need a SQL Server account. Use the TCP/IP Properties (IP Addresses Tab) dial
 6. Import the selected data resources (source schemas and tables) by clicking on the **Import Tables** button next to
    the name of the source schema from which you want to import tables.
 
-    ![Adding connection](https://dqo.ai/docs/images/working-with-dqo/importing-schemas.jpg)
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/importing-schemas.jpg)
 
 7. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-    ![Adding connection](https://dqo.ai/docs/images/working-with-dqo/importing-tables.jpg)
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/importing-tables.jpg)
 
 ## Adding SQL Server connection using DQO Shell
 

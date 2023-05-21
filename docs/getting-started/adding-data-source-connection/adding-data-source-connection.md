@@ -17,15 +17,15 @@ To add BigQuery data source connection to DQO you need the following:
 
 1. In DQO User Interface Console go to the Data Sources section and click **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://dqo.ai/docs/images/getting-started/adding-test-connection-test-connection.jpg)
+    ![Adding connection](https://dqops.com/docs/images/getting-started/adding-test-connection-test-connection.jpg)
    
 2. Select BiqQuery database type.
 
-    ![Selecting BigQuery database type](https://dqo.ai/docs/images/working-with-dqo/adding-connections/adding-connection-bigquery.jpg)
+    ![Selecting BigQuery database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-bigquery.jpg)
 
 3. Add connection settings.
 
-    ![Adding connection settings](https://dqo.ai/docs/images/getting-started/adding-test-connection-parameters.jpg)
+    ![Adding connection settings](https://dqops.com/docs/images/getting-started/adding-test-connection-parameters.jpg)
 
     | BigQuery connection settings            | Description                                                                                                                                                                                                                                                                                      | 
     |--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -41,15 +41,15 @@ To add BigQuery data source connection to DQO you need the following:
 
 6. Import the "austin_crime" schema by clicking on the **Import Tables** button.
 
-    ![Importing schemas](https://dqo.ai/docs/images/getting-started/importing-schema-austin-crime.jpg)
+    ![Importing schemas](https://dqops.com/docs/images/getting-started/importing-schema-austin-crime.jpg)
 
 7. There is only one table in the dataset. Import the table by clicking **Import all tables** buttons in the upper right corner.
 
-    ![Importing tables](https://dqo.ai/docs/images/getting-started/importing-tables-austin-crime.jpg)
+    ![Importing tables](https://dqops.com/docs/images/getting-started/importing-tables-austin-crime.jpg)
 
 8. You can check the details of the imported table by expanding the tree view on the left and selecting the "crime" table.
         
-     ![Viewing table details](https://dqo.ai/docs/images/getting-started/austin-crime-table-view.jpg)
+     ![Viewing table details](https://dqops.com/docs/images/getting-started/austin-crime-table-view.jpg)
  
     There are several tabs to explore:
 

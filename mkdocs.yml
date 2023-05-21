@@ -1,5 +1,5 @@
 site_name: Documentation
-site_url: https://dqo.ai/docs/
+site_url: https://dqops.com/docs/
 repo_url: https://github.com/dqops/dqo
 edit_uri: edit/main/docs/
 
@@ -338,7 +338,7 @@ markdown_extensions:
 extra:
   analytics:
     provider: google
-    property: G-NEE8HWT90Y
+    property: G-9W3BYMXFK5
   consent:
     title: Cookie consent
     description: >-

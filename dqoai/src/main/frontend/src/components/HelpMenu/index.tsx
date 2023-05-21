@@ -22,7 +22,7 @@ const HelpMenu = () => {
       <PopoverContent className="z-50 px-0">
         <div className="px-4">
           <a
-            href="https://dqo.ai/support/"
+            href="https://dqops.com/support/"
             target="_blank"
             rel="noreferrer"
             className="block mb-3 text-gray-700"
@@ -30,7 +30,7 @@ const HelpMenu = () => {
             Get support
           </a>
           <a
-            href="https://docs.dqo.ai/latest"
+            href="https://dqops.com/docs/"
             target="_blank"
             rel="noreferrer"
             className="block mb-3 text-gray-700"

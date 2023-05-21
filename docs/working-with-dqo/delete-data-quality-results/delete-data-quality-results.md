@@ -21,15 +21,15 @@ To delete the data quality results at the connection, table or column level foll
 
 1. In DQO graphical interface, click on the three-dot icon next to the name of a connection, table or column in the tree view.
 
-    ![Click three-dot icon](https://dqo.ai/docs/images/working-with-dqo/delete-data-quality-results/click-three-dot-icon.jpg)
+    ![Click three-dot icon](https://dqops.com/docs/images/working-with-dqo/delete-data-quality-results/click-three-dot-icon.jpg)
 
 2. From the drop-down menu select the **Delete data** command.
 
-    ![Select Delete data command](https://dqo.ai/docs/images/working-with-dqo/delete-data-quality-results/delete-data-command.jpg)
+    ![Select Delete data command](https://dqops.com/docs/images/working-with-dqo/delete-data-quality-results/delete-data-command.jpg)
    
 3. In the modal window, you can specify whether you want to delete all data, data for a specific time range or a specific category.
 
-    ![Delete data modal window](https://dqo.ai/docs/images/working-with-dqo/delete-data-quality-results/delete-data-modal-window.jpg)
+    ![Delete data modal window](https://dqops.com/docs/images/working-with-dqo/delete-data-quality-results/delete-data-modal-window.jpg)
 
 4. Click the **Delete** button to delete the selected data.
 
