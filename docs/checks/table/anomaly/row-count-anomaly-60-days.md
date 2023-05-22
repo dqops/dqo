@@ -12,7 +12,7 @@ Verifies that the total row count of the tested table changes in a rate within a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|row_count_anomaly_60_days|profiling| |[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[change_percentile_moving_within_60_days](../../../../reference/rules/stdev/#change-percentile-moving-within-60-days)|
+|row_count_anomaly_60_days|profiling| |[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percentile_moving_within_60_days](../../../../reference/rules/stdev/#change-percentile-moving-within-60-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -396,7 +396,7 @@ Verifies that the total row count of the tested table changes in a rate within a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_row_count_anomaly_60_days|recurring|daily|[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[change_percentile_moving_within_60_days](../../../../reference/rules/stdev/#change-percentile-moving-within-60-days)|
+|daily_row_count_anomaly_60_days|recurring|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percentile_moving_within_60_days](../../../../reference/rules/stdev/#change-percentile-moving-within-60-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)

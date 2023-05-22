@@ -129,7 +129,7 @@ To add and run data quality checks using the DQO Shell, follow the steps below.
           daily_partitioning_recent_days: 7
           monthly_partitioning_recent_months: 1
        profiling_checks:
-          standard:
+          volume:
              row_count:
                 error:
                    min_count: 0

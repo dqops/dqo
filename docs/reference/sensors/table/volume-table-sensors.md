@@ -2,7 +2,7 @@
 ## **row count**
 **Full sensor name**
 ```
-table/standard/row_count
+table/volume/row_count
 ```
 **Description**  
 Table sensor that executes a row count query.

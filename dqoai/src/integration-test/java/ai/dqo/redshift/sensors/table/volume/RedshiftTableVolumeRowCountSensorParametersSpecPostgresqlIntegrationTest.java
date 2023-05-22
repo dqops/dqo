@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.redshift.sensors.table.standard;
+package ai.dqo.redshift.sensors.table.volume;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
+import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
+import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -30,7 +30,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
+import ai.dqo.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,8 +38,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class RedshiftTableStandardRowCountSensorParametersSpecPostgresqlIntegrationTest extends BaseRedshiftIntegrationTest {
-    private TableStandardRowCountSensorParametersSpec sut;
+public class RedshiftTableVolumeRowCountSensorParametersSpecPostgresqlIntegrationTest extends BaseRedshiftIntegrationTest {
+    private TableVolumeRowCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TableRowCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
@@ -49,11 +49,11 @@ public class RedshiftTableStandardRowCountSensorParametersSpecPostgresqlIntegrat
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.redshift);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new TableStandardRowCountSensorParametersSpec();
+        this.sut = new TableVolumeRowCountSensorParametersSpec();
         this.checkSpec = new TableRowCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        TableProfilingStandardChecksSpec category = new TableProfilingStandardChecksSpec();
-        this.sampleTableMetadata.getTableSpec().getProfilingChecks().setStandard(category);
+        TableProfilingVolumeChecksSpec category = new TableProfilingVolumeChecksSpec();
+        this.sampleTableMetadata.getTableSpec().getProfilingChecks().setVolume(category);
         category.setRowCount(this.checkSpec);
     }
 

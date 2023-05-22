@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.table.recurring.standard;
+package ai.dqo.checks.table.partitioned.volume;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -30,39 +30,39 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of table level daily recurring for standard data quality checks.
+ * Container of table level date partitioned volume data quality checks.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableStandardDailyRecurringChecksSpec extends AbstractCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableStandardDailyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+public class TableVolumeDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableVolumeDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-           put("daily_row_count", o -> o.dailyRowCount);
+           put("daily_partition_row_count", o -> o.dailyPartitionRowCount);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of rows in a table does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of rows in a table does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableRowCountCheckSpec dailyRowCount;
+    private TableRowCountCheckSpec dailyPartitionRowCount;
 
     /**
      * Returns the row count check configuration.
      * @return Row count check specification.
      */
-    public TableRowCountCheckSpec getDailyRowCount() {
-        return dailyRowCount;
+    public TableRowCountCheckSpec getDailyPartitionRowCount() {
+        return dailyPartitionRowCount;
     }
 
     /**
-     * Sets the row count check.
-     * @param dailyRowCount New row count check.
+     * Sets the row count.
+     * @param dailyPartitionRowCount New row count check.
      */
-    public void setDailyRowCount(TableRowCountCheckSpec dailyRowCount) {
-		this.setDirtyIf(!Objects.equals(this.dailyRowCount, dailyRowCount));
-        this.dailyRowCount = dailyRowCount;
-		this.propagateHierarchyIdToField(dailyRowCount, "daily_row_count");
+    public void setDailyPartitionRowCount(TableRowCountCheckSpec dailyPartitionRowCount) {
+		this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCount, dailyPartitionRowCount));
+        this.dailyPartitionRowCount = dailyPartitionRowCount;
+		this.propagateHierarchyIdToField(dailyPartitionRowCount, "daily_partition_row_count");
     }
 
     /**

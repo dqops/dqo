@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.statistics.table.standard;
+package ai.dqo.statistics.table.volume;
 
 import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
+import ai.dqo.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,8 +36,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableStandardRowCountStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<TableStandardRowCountSensorParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableStandardRowCountStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
+public class TableVolumeRowCountStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<TableVolumeRowCountSensorParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableVolumeRowCountStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
     };
@@ -45,14 +45,14 @@ public class TableStandardRowCountStatisticsCollectorSpec extends AbstractStatis
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardRowCountSensorParametersSpec parameters = new TableStandardRowCountSensorParametersSpec();
+    private TableVolumeRowCountSensorParametersSpec parameters = new TableVolumeRowCountSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public TableStandardRowCountSensorParametersSpec getParameters() {
+    public TableVolumeRowCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class TableStandardRowCountStatisticsCollectorSpec extends AbstractStatis
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(TableStandardRowCountSensorParametersSpec parameters) {
+    public void setParameters(TableVolumeRowCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

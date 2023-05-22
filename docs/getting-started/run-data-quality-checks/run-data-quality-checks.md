@@ -3,7 +3,7 @@
 After [adding your first connection in the previous step](../adding-data-source-connection/adding-data-source-connection.md),
 we describe how to run first checks. 
 
-In our example on BigQuery public dataset Austin Crime Data you will enable and run a table-level [row_count](../../checks/table/standard/row-count.md)
+In our example on BigQuery public dataset Austin Crime Data you will enable and run a table-level [row_count](../../checks/table/volume/row-count.md)
 and column-level [nulls_percent](../../checks/column/nulls/not-nulls-percent.md) checks using the graphical interface.
 
 For more information about checks, see [DQO concepts section](../../dqo-concepts/checks/index.md). 
@@ -18,7 +18,7 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
 
     ![Navigating to profiling section](https://dqops.com/docs/images/getting-started/austin-crime-table-view-link-to-profiling.jpg)
 
-2. Enable [row_count](../../checks/table/standard/row-count.md) table-level data quality check on "crime" table.
+2. Enable [row_count](../../checks/table/volume/row-count.md) table-level data quality check on "crime" table.
 
     Row_count check verifies that the number of rows in the table does not exceed the minimum accepted count set as the threshold level.
    
@@ -28,7 +28,7 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
 
     ![Enable row_count data quality check](https://dqops.com/docs/images/getting-started/austin-crime-run-row_count-check.jpg)
 
-3. Run [row_count](../../checks/table/standard/row-count.md) data quality check by clicking the Run Check icon
+3. Run [row_count](../../checks/table/volume/row-count.md) data quality check by clicking the Run Check icon
 
     ![Running check](https://dqops.com/docs/images/getting-started/austin-crime-run-row_count-check.jpg)
     

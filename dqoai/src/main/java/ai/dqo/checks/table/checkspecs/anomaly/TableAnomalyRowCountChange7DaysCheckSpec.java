@@ -20,9 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.stdev.ChangePercentileMovingWithin7DaysRuleParametersSpec;
-import ai.dqo.rules.stdev.PercentileMovingWithin7DaysRuleParametersSpec;
-import ai.dqo.sensors.column.numeric.ColumnNumericSumSensorParametersSpec;
-import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
+import ai.dqo.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -40,7 +38,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class TableAnomalyRowCountChange7DaysCheckSpec
-        extends AbstractCheckSpec<TableStandardRowCountSensorParametersSpec, ChangePercentileMovingWithin7DaysRuleParametersSpec, ChangePercentileMovingWithin7DaysRuleParametersSpec, ChangePercentileMovingWithin7DaysRuleParametersSpec> {
+        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, ChangePercentileMovingWithin7DaysRuleParametersSpec, ChangePercentileMovingWithin7DaysRuleParametersSpec, ChangePercentileMovingWithin7DaysRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableAnomalyRowCountChange7DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -49,7 +47,7 @@ public class TableAnomalyRowCountChange7DaysCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardRowCountSensorParametersSpec parameters = new TableStandardRowCountSensorParametersSpec();
+    private TableVolumeRowCountSensorParametersSpec parameters = new TableVolumeRowCountSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -72,7 +70,7 @@ public class TableAnomalyRowCountChange7DaysCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public TableStandardRowCountSensorParametersSpec getParameters() {
+    public TableVolumeRowCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -81,7 +79,7 @@ public class TableAnomalyRowCountChange7DaysCheckSpec
      *
      * @param parameters Row count parameters.
      */
-    public void setParameters(TableStandardRowCountSensorParametersSpec parameters) {
+    public void setParameters(TableVolumeRowCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

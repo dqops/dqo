@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.statistics.table.standard;
+package ai.dqo.statistics.table.volume;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -29,13 +29,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Category of standard table level statistics collector (basic profiler).
+ * Category of volume table level statistics collector (basic profiler).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableStandardStatisticsCollectorsSpec extends AbstractStatisticsCollectorCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableStandardStatisticsCollectorsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorCategorySpec.FIELDS) {
+public class TableVolumeStatisticsCollectorsSpec extends AbstractStatisticsCollectorCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableVolumeStatisticsCollectorsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorCategorySpec.FIELDS) {
         {
             put("row_count", o -> o.rowCount);
         }
@@ -44,13 +44,13 @@ public class TableStandardStatisticsCollectorsSpec extends AbstractStatisticsCol
     @JsonPropertyDescription("Configuration of the row count profiler.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardRowCountStatisticsCollectorSpec rowCount = new TableStandardRowCountStatisticsCollectorSpec();
+    private TableVolumeRowCountStatisticsCollectorSpec rowCount = new TableVolumeRowCountStatisticsCollectorSpec();
 
     /**
      * Returns the row count profiler specification.
      * @return Row count profiler.
      */
-    public TableStandardRowCountStatisticsCollectorSpec getRowCount() {
+    public TableVolumeRowCountStatisticsCollectorSpec getRowCount() {
         return rowCount;
     }
 
@@ -58,7 +58,7 @@ public class TableStandardStatisticsCollectorsSpec extends AbstractStatisticsCol
      * Sets a reference to a row count profiler.
      * @param rowCount Row count profiler.
      */
-    public void setRowCount(TableStandardRowCountStatisticsCollectorSpec rowCount) {
+    public void setRowCount(TableVolumeRowCountStatisticsCollectorSpec rowCount) {
         this.setDirtyIf(!Objects.equals(this.rowCount, rowCount));
         this.rowCount = rowCount;
         this.propagateHierarchyIdToField(rowCount, "row_count");

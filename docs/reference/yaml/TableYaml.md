@@ -177,12 +177,12 @@ Container of table level checks that are activated on a table level.
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[standard](#tableprofilingstandardchecksspec)|Configuration of standard data quality checks on a table level.|object| | | |
+|[volume](#tableprofilingvolumechecksspec)|Configuration of volume data quality checks on a table level.|object| | | |
 |[timeliness](#tableprofilingtimelinesschecksspec)|Configuration of timeliness checks on a table level. Timeliness checks detect anomalies like rapid row count changes.|object| | | |
 |[accuracy](#tableprofilingaccuracychecksspec)|Configuration of accuracy checks on a table level. Accuracy checks compare the tested table with another reference table.|object| | | |
 |[sql](#tableprofilingsqlchecksspec)|Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.|object| | | |
-|[availability](#tableprofilingavailabilitychecksspec)|Configuration of standard data quality checks on a table level.|object| | | |
-|[anomaly](#tableprofilinganomalychecksspec)|Configuration of standard data quality checks on a table level.|object| | | |
+|[availability](#tableprofilingavailabilitychecksspec)|Configuration of volume data quality checks on a table level.|object| | | |
+|[anomaly](#tableprofilinganomalychecksspec)|Configuration of volume data quality checks on a table level.|object| | | |
 |[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|object| | | |
 
 
@@ -194,8 +194,8 @@ Container of table level checks that are activated on a table level.
 
 ___  
 
-## TableProfilingStandardChecksSpec  
-Container of built-in preconfigured standard data quality checks on a table level.  
+## TableProfilingVolumeChecksSpec  
+Container of built-in preconfigured volume data quality checks on a table level.  
   
 
 
@@ -233,7 +233,7 @@ Row count (select count(*) from ...) test that runs a row_count check, obtains a
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#tablestandardrowcountsensorparametersspec)|Row count sensor parameters|object| | | |
+|[parameters](#tablevolumerowcountsensorparametersspec)|Row count sensor parameters|object| | | |
 |[warning](#mincountrulewarningparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|object| | | |
 |[error](#mincountrule0parametersspec)|Default alerting threshold for a row count that raises a data quality error (alert)|object| | | |
 |[fatal](#mincountrulefatalparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|object| | | |
@@ -255,7 +255,7 @@ Row count (select count(*) from ...) test that runs a row_count check, obtains a
 
 ___  
 
-## TableStandardRowCountSensorParametersSpec  
+## TableVolumeRowCountSensorParametersSpec  
 Table sensor that executes a row count query.  
   
 
@@ -1224,7 +1224,7 @@ Data quality rule that verifies if a data quality check readout is less or equal
 ___  
 
 ## TableProfilingAvailabilityChecksSpec  
-Container of built-in preconfigured standard data quality checks on a table level.  
+Container of built-in preconfigured volume data quality checks on a table level.  
   
 
 
@@ -1425,7 +1425,7 @@ Table level check that ensures that the row count changes in a rate within a two
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#tablestandardrowcountsensorparametersspec)|Data quality check parameters|object| | | |
+|[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|object| | | |
 |[warning](#changepercentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|object| | | |
 |[error](#changepercentilemovingwithin7daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|object| | | |
 |[fatal](#changepercentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|object| | | |
@@ -1488,7 +1488,7 @@ Table level check that ensures that the row count changes in a rate within a two
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#tablestandardrowcountsensorparametersspec)|Data quality check parameters|object| | | |
+|[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|object| | | |
 |[warning](#changepercentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|object| | | |
 |[error](#changepercentilemovingwithin30daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|object| | | |
 |[fatal](#changepercentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|object| | | |
@@ -1551,7 +1551,7 @@ Table level check that ensures that the row count changes in a rate within a two
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#tablestandardrowcountsensorparametersspec)|Data quality check parameters|object| | | |
+|[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|object| | | |
 |[warning](#changepercentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|object| | | |
 |[error](#changepercentilemovingwithin60daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|object| | | |
 |[fatal](#changepercentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|object| | | |
@@ -1657,7 +1657,7 @@ Container of table level daily recurring. Contains categories of daily recurring
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[standard](#tablestandarddailyrecurringchecksspec)|Daily recurring standard data quality checks|object| | | |
+|[volume](#tablevolumedailyrecurringchecksspec)|Daily recurring volume data quality checks|object| | | |
 |[timeliness](#tabletimelinessdailyrecurringchecksspec)|Daily recurring timeliness checks|object| | | |
 |[accuracy](#tableaccuracydailyrecurringchecksspec)|Daily recurring accuracy checks|object| | | |
 |[sql](#tablesqldailyrecurringchecksspec)|Daily recurring custom SQL checks|object| | | |
@@ -1674,8 +1674,8 @@ Container of table level daily recurring. Contains categories of daily recurring
 
 ___  
 
-## TableStandardDailyRecurringChecksSpec  
-Container of table level daily recurring for standard data quality checks.  
+## TableVolumeDailyRecurringChecksSpec  
+Container of table level daily recurring for volume data quality checks.  
   
 
 
@@ -1844,7 +1844,7 @@ Container of table level monthly recurring checks. Contains categories of monthl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[standard](#tablestandardmonthlyrecurringchecksspec)|Monthly recurring of standard data quality checks|object| | | |
+|[volume](#tablevolumemonthlyrecurringchecksspec)|Monthly recurring of volume data quality checks|object| | | |
 |[timeliness](#tabletimelinessmonthlyrecurringchecksspec)|Monthly recurring of timeliness checks|object| | | |
 |[accuracy](#tableaccuracymonthlyrecurringchecksspec)|Monthly recurring accuracy checks|object| | | |
 |[sql](#tablesqlmonthlyrecurringchecksspec)|Monthly recurring of custom SQL checks|object| | | |
@@ -1861,8 +1861,8 @@ Container of table level monthly recurring checks. Contains categories of monthl
 
 ___  
 
-## TableStandardMonthlyRecurringChecksSpec  
-Container of table level monthly recurring for standard data quality checks  
+## TableVolumeMonthlyRecurringChecksSpec  
+Container of table level monthly recurring for volume data quality checks  
   
 
 
@@ -2054,7 +2054,7 @@ Container of table level daily partitioned checks. Contains categories of daily 
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[standard](#tablestandarddailypartitionedchecksspec)|Standard daily partitioned data quality checks that verify the quality of every day of data separately|object| | | |
+|[volume](#tablevolumedailypartitionedchecksspec)|Volume daily partitioned data quality checks that verify the quality of every day of data separately|object| | | |
 |[timeliness](#tabletimelinessdailypartitionedchecksspec)|Daily partitioned timeliness checks|object| | | |
 |[sql](#tablesqldailypartitionedchecksspec)|Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately|object| | | |
 |[anomaly](#tableanomalydailypartitionedchecksspec)|Daily partitioned anomaly checks|object| | | |
@@ -2069,8 +2069,8 @@ Container of table level daily partitioned checks. Contains categories of daily 
 
 ___  
 
-## TableStandardDailyPartitionedChecksSpec  
-Container of table level date partitioned standard data quality checks.  
+## TableVolumeDailyPartitionedChecksSpec  
+Container of table level date partitioned volume data quality checks.  
   
 
 
@@ -2251,7 +2251,7 @@ Table level check that ensures that the row count is within a two-tailed percent
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#tablestandardrowcountsensorparametersspec)|Data quality check parameters|object| | | |
+|[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|object| | | |
 |[warning](#percentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|object| | | |
 |[error](#percentilemovingwithin7daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|object| | | |
 |[fatal](#percentilemovingwithin7daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|object| | | |
@@ -2313,7 +2313,7 @@ Table level check that ensures that the row count is within a two-tailed percent
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#tablestandardrowcountsensorparametersspec)|Data quality check parameters|object| | | |
+|[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|object| | | |
 |[warning](#percentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|object| | | |
 |[error](#percentilemovingwithin30daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|object| | | |
 |[fatal](#percentilemovingwithin30daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|object| | | |
@@ -2375,7 +2375,7 @@ Table level check that ensures that the row count is within a two-tailed percent
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#tablestandardrowcountsensorparametersspec)|Data quality check parameters|object| | | |
+|[parameters](#tablevolumerowcountsensorparametersspec)|Data quality check parameters|object| | | |
 |[warning](#percentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|object| | | |
 |[error](#percentilemovingwithin60daysruleparametersspec)|Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert|object| | | |
 |[fatal](#percentilemovingwithin60daysruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|object| | | |
@@ -2437,7 +2437,7 @@ Container of table level monthly partitioned checks. Contains categories of mont
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[standard](#tablestandardmonthlypartitionedchecksspec)|Standard monthly partitioned data quality checks that verify the quality of every month of data separately|object| | | |
+|[volume](#tablevolumemonthlypartitionedchecksspec)|Volume monthly partitioned data quality checks that verify the quality of every month of data separately|object| | | |
 |[timeliness](#tabletimelinessmonthlypartitionedchecksspec)|Monthly partitioned timeliness checks|object| | | |
 |[sql](#tablesqlmonthlypartitionedchecksspec)|Custom SQL monthly partitioned data quality checks that verify the quality of every month of data separately|object| | | |
 |[anomaly](#tableanomalymonthlypartitionedchecksspec)|Monthly partitioned anomaly checks|object| | | |
@@ -2452,8 +2452,8 @@ Container of table level monthly partitioned checks. Contains categories of mont
 
 ___  
 
-## TableStandardMonthlyPartitionedChecksSpec  
-Container of table level monthly partitioned standard data quality checks.  
+## TableVolumeMonthlyPartitionedChecksSpec  
+Container of table level monthly partitioned volume data quality checks.  
   
 
 
@@ -2570,7 +2570,7 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[standard](#tablestandardstatisticscollectorsspec)|Configuration of standard statistics collectors on a table level.|object| | | |
+|[volume](#tablevolumestatisticscollectorsspec)|Configuration of volume statistics collectors on a table level.|object| | | |
 
 
 
@@ -2581,7 +2581,7 @@ ___
 
 ___  
 
-## TableStandardStatisticsCollectorsSpec  
+## TableVolumeStatisticsCollectorsSpec  
   
   
 
@@ -2595,7 +2595,7 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[row_count](#tablestandardrowcountstatisticscollectorspec)|Configuration of the row count profiler.|object| | | |
+|[row_count](#tablevolumerowcountstatisticscollectorspec)|Configuration of the row count profiler.|object| | | |
 
 
 
@@ -2606,7 +2606,7 @@ ___
 
 ___  
 
-## TableStandardRowCountStatisticsCollectorSpec  
+## TableVolumeRowCountStatisticsCollectorSpec  
   
   
 
@@ -2620,7 +2620,7 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#tablestandardrowcountsensorparametersspec)|Profiler parameters|object| | | |
+|[parameters](#tablevolumerowcountsensorparametersspec)|Profiler parameters|object| | | |
 |disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
 
 
