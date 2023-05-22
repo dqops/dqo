@@ -51,10 +51,6 @@ const initCheckTabs = [
     label: 'Schedule',
     value: 'schedule'
   },
-  {
-    label: 'Schemas',
-    value: 'schemas'
-  }
 ];
 
 const ConnectionPage = () => {
