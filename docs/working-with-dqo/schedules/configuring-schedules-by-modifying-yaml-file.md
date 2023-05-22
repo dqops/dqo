@@ -112,7 +112,7 @@ the YAML files will look like the ones provided below:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
       profiling_checks:
-        standard:
+        volume:
           row_count:
             schedule_override:
               cron_expression: 0 9 * * *

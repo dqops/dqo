@@ -21,7 +21,7 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.partitioned.anomaly.TableAnomalyDailyPartitionedChecksSpec;
 import ai.dqo.checks.table.partitioned.sql.TableSqlDailyPartitionedChecksSpec;
-import ai.dqo.checks.table.partitioned.standard.TableStandardDailyPartitionedChecksSpec;
+import ai.dqo.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
 import ai.dqo.checks.table.partitioned.timeliness.TableTimelinessDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -51,7 +51,7 @@ import java.util.Objects;
 public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<TableDailyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-            put("standard", o -> o.standard);
+            put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
             put("sql", o -> o.sql);
             put("anomaly", o -> o.anomaly);
@@ -60,10 +60,10 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
         }
     };
 
-    @JsonPropertyDescription("Standard daily partitioned data quality checks that verify the quality of every day of data separately")
+    @JsonPropertyDescription("Volume daily partitioned data quality checks that verify the quality of every day of data separately")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardDailyPartitionedChecksSpec standard;
+    private TableVolumeDailyPartitionedChecksSpec volume;
 
     @JsonPropertyDescription("Daily partitioned timeliness checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -81,21 +81,21 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     private TableAnomalyDailyPartitionedChecksSpec anomaly;
 
     /**
-     * Returns the container of daily partitioned checks for standard data quality checks.
-     * @return Container of row standard data quality checks.
+     * Returns the container of daily partitioned checks for volume data quality checks.
+     * @return Container of row volume data quality checks.
      */
-    public TableStandardDailyPartitionedChecksSpec getStandard() {
-        return standard;
+    public TableVolumeDailyPartitionedChecksSpec getVolume() {
+        return volume;
     }
 
     /**
-     * Sets the container of standard data quality checks.
-     * @param standard New standard checks.
+     * Sets the container of volume data quality checks.
+     * @param volume New volume checks.
      */
-    public void setStandard(TableStandardDailyPartitionedChecksSpec standard) {
-        this.setDirtyIf(!Objects.equals(this.standard, standard));
-        this.standard = standard;
-        this.propagateHierarchyIdToField(standard, "standard");
+    public void setVolume(TableVolumeDailyPartitionedChecksSpec volume) {
+        this.setDirtyIf(!Objects.equals(this.volume, volume));
+        this.volume = volume;
+        this.propagateHierarchyIdToField(volume, "volume");
     }
 
     /**

@@ -114,7 +114,7 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (profiling, recurring, partitioned)")
     private CheckType checkType;
 
-    @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (standard, nulls, numeric, etc.)")
+    @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (volume, nulls, numeric, etc.)")
     private String checkCategory;
 
     @CommandLine.Option(names = {"-sc", "--statistics-collector"}, description = "Data quality statistics collector name")
@@ -123,7 +123,7 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-stt", "--statistics-target"}, description = "Data quality statistics target (table, column)")
     private StatisticsCollectorTarget statisticsTarget;
 
-    @CommandLine.Option(names = {"-stc", "--statistics-category"}, description = "Statistics category name (standard, nulls, numeric, etc.)")
+    @CommandLine.Option(names = {"-stc", "--statistics-category"}, description = "Statistics category name (volume, nulls, numeric, etc.)")
     private String statisticsCategory;
 
     @CommandLine.Option(names = {"-s", "--sensor"}, description = "Data quality sensor name (sensor definition or sensor name)")

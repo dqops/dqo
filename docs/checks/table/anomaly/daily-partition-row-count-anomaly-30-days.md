@@ -12,7 +12,7 @@ Verifies that the total row count of the tested table is within a percentile fro
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_row_count_anomaly_30_days|partitioned|daily|[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[percentile_moving_within_30_days](../../../../reference/rules/stdev/#percentile-moving-within-30-days)|
+|daily_partition_row_count_anomaly_30_days|partitioned|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[percentile_moving_within_30_days](../../../../reference/rules/stdev/#percentile-moving-within-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)

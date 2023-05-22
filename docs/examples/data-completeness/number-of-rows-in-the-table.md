@@ -17,7 +17,7 @@ We want to verify that the number of rows in a table does not exceed the minimum
 
 **SOLUTION**
 
-We will verify the data using profiling [row_count](../../checks/table/standard/row-count.md) table check.
+We will verify the data using profiling [row_count](../../checks/table/volume/row-count.md) table check.
 Our goal is to verify if number of rows does not fall below setup thresholds.
 
 In this example, we will set three minimum count thresholds levels for the check:
@@ -70,7 +70,7 @@ spec:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
   profiling_checks:
-    standard:
+    volume:
       row_count:
         comments:
         - date: 2023-05-05T12:19:34.814+00:00
@@ -146,7 +146,7 @@ You can also see the results returned by the sensor. The actual value of rows in
 threshold level set in the warning (692).
 ```
 **************************************************
-Finished executing a sensor for a check row_count on the table america_health_rankings.ahr using a sensor definition table/standard/row_count, sensor result count: 1
+Finished executing a sensor for a check row_count on the table america_health_rankings.ahr using a sensor definition table/volume/row_count, sensor result count: 1
 
 Results returned by the sensor:
 +------------+------------------------+------------------------+

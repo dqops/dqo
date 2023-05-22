@@ -17,7 +17,7 @@ package ai.dqo.utils.reflection;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import org.junit.jupiter.api.Assertions;
@@ -110,12 +110,12 @@ public class FieldInfoTests extends BaseTest {
 
     @Test
     void getFieldValueOrNewObject_whenFieldValueIsSpecObjectAndIsFilled_thenReturnsExistingValue() throws Exception {
-        Field field = TableProfilingCheckCategoriesSpec.class.getDeclaredField("standard");
+        Field field = TableProfilingCheckCategoriesSpec.class.getDeclaredField("volume");
         FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
         TableProfilingCheckCategoriesSpec target = new TableProfilingCheckCategoriesSpec();
-        TableProfilingStandardChecksSpec expected = new TableProfilingStandardChecksSpec();
-        target.setStandard(expected);
+        TableProfilingVolumeChecksSpec expected = new TableProfilingVolumeChecksSpec();
+        target.setVolume(expected);
 
         Object result = sut.getFieldValueOrNewObject(target);
         Assertions.assertNotNull(result);
@@ -124,15 +124,15 @@ public class FieldInfoTests extends BaseTest {
 
     @Test
     void getFieldValueOrNewObject_whenFieldValueIsSpecObjectAndIsNull_thenCreatesNewObjectThatIsNotStored() throws Exception {
-        Field field = TableProfilingCheckCategoriesSpec.class.getDeclaredField("standard");
+        Field field = TableProfilingCheckCategoriesSpec.class.getDeclaredField("volume");
         FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
         TableProfilingCheckCategoriesSpec target = new TableProfilingCheckCategoriesSpec();
-        target.setStandard(null);
-        TableProfilingStandardChecksSpec result = (TableProfilingStandardChecksSpec)sut.getFieldValueOrNewObject(target);
+        target.setVolume(null);
+        TableProfilingVolumeChecksSpec result = (TableProfilingVolumeChecksSpec)sut.getFieldValueOrNewObject(target);
         Assertions.assertNotNull(result);
 
-        TableProfilingStandardChecksSpec result2 = (TableProfilingStandardChecksSpec)sut.getFieldValueOrNewObject(target);
+        TableProfilingVolumeChecksSpec result2 = (TableProfilingVolumeChecksSpec)sut.getFieldValueOrNewObject(target);
         Assertions.assertNotNull(result2);
         Assertions.assertNotSame(result, result2);
     }

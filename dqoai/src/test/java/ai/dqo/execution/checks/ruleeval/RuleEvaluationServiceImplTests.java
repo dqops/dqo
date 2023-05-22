@@ -17,8 +17,8 @@ package ai.dqo.execution.checks.ruleeval;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
+import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
+import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.data.normalization.CommonTableNormalizationServiceImpl;
@@ -87,8 +87,8 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab1"));
 		tableSpec = tableWrapper.getSpec();
 		checkSpec = new TableRowCountCheckSpec();
-        tableSpec.getProfilingChecks().setStandard(new TableProfilingStandardChecksSpec());
-		tableSpec.getProfilingChecks().getStandard().setRowCount(this.checkSpec);
+        tableSpec.getProfilingChecks().setVolume(new TableProfilingVolumeChecksSpec());
+		tableSpec.getProfilingChecks().getVolume().setRowCount(this.checkSpec);
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
                 null,

@@ -23,7 +23,7 @@ import ai.dqo.checks.table.recurring.accuracy.TableAccuracyDailyRecurringChecksS
 import ai.dqo.checks.table.recurring.anomaly.TableAnomalyDailyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.availability.TableAvailabilityDailyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.sql.TableSqlDailyRecurringChecksSpec;
-import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.volume.TableVolumeDailyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.timeliness.TableTimelinessDailyRecurringChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -53,7 +53,7 @@ import java.util.Objects;
 public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<TableDailyRecurringCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-            put("standard", o -> o.standard);
+            put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
             put("accuracy", o -> o.accuracy);
             put("sql", o -> o.sql);
@@ -62,10 +62,10 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
         }
     };
 
-    @JsonPropertyDescription("Daily recurring standard data quality checks")
+    @JsonPropertyDescription("Daily recurring volume data quality checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardDailyRecurringChecksSpec standard;
+    private TableVolumeDailyRecurringChecksSpec volume;
 
     @JsonPropertyDescription("Daily recurring timeliness checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -93,21 +93,21 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
     private TableAnomalyDailyRecurringChecksSpec anomaly;
 
     /**
-     * Returns the container of recurring for standard data quality checks.
-     * @return Container of row standard data quality recurring.
+     * Returns the container of recurring for volume data quality checks.
+     * @return Container of row volume data quality recurring.
      */
-    public TableStandardDailyRecurringChecksSpec getStandard() {
-        return standard;
+    public TableVolumeDailyRecurringChecksSpec getVolume() {
+        return volume;
     }
 
     /**
-     * Sets the container of standard data quality checks (recurring).
-     * @param standard New standard checks.
+     * Sets the container of volume data quality checks (recurring).
+     * @param volume New volume checks.
      */
-    public void setStandard(TableStandardDailyRecurringChecksSpec standard) {
-		this.setDirtyIf(!Objects.equals(this.standard, standard));
-        this.standard = standard;
-		this.propagateHierarchyIdToField(standard, "standard");
+    public void setVolume(TableVolumeDailyRecurringChecksSpec volume) {
+		this.setDirtyIf(!Objects.equals(this.volume, volume));
+        this.volume = volume;
+		this.propagateHierarchyIdToField(volume, "volume");
     }
 
     /**
