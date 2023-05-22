@@ -18,7 +18,7 @@ import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selec
 const ConnectionDataStream = () => {
   const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
   const dispatch = useActionDispatch();
-  const { connectionBasic, isUpdating, updatedDataStreamsMapping, isUpdatedDataStreamsMapping } =
+  const { isUpdating, updatedDataStreamsMapping, isUpdatedDataStreamsMapping } =
     useSelector(getFirstLevelState(checkTypes));
 
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
