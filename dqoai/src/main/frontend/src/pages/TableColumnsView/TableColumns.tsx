@@ -56,24 +56,15 @@ const TableColumns = ({
       await fetchColumns();
     }
   };
-  const collectStatistics = async () => {
+  const collectStatistics = async (index : number) => {
     try {
       setLoadingJob(true);
-      await JobApiClient.collectStatisticsOnDataStreams(statistics?.collect_column_statistics_job_template);
+      await JobApiClient.collectStatisticsOnDataStreams(statistics?.column_statistics?.at(index)?.collect_column_statistics_job_template);
     } finally {
       setLoadingJob(false);
     }
   };
-  const onCollectStatistics =async (column: ColumnStatisticsModel) => {
-    setIsOpen(true);
-    setSelectedColumn(column);
-    try {
-      setLoadingJob(true);
-      await JobApiClient.collectStatisticsOnDataStreams(statistics?.collect_column_statistics_job_template);
-    } finally {
-      setLoadingJob(false);
-    }
-  };
+
 
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
@@ -183,9 +174,9 @@ const TableColumns = ({
                 <IconButton
                   size="sm"
                   className="bg-teal-500"
-                  onClick={() => collectStatistics()}
+                  onClick={() => collectStatistics(index)}
                   >
-                  <SvgIcon name="delete" className="w-4" />
+                  <SvgIcon name="boxplot" className="w-4" />
                 </IconButton>
                 <IconButton
                   size="sm"
