@@ -62,6 +62,17 @@ const TableColumns = ({
     return value;
   };
 
+  const datatype_detected = ({numberForFile}:{numberForFile: number}) => {
+    if(numberForFile === 1){ return 'INTEGER'}
+    if(numberForFile === 2){ return 'FLOAT'}
+    if(numberForFile === 3){ return 'DATETIME'}
+    if(numberForFile === 4){ return 'TIMESTAMP'}
+    if(numberForFile === 5){ return 'BOOLEAN'}
+    if(numberForFile === 6){ return 'STRING'}
+    if(numberForFile === 7){ return 'Mixed data type'}
+  }
+
+
   return (
     <div className="p-4">
       <table className="mb-6 mt-4 w-full">
@@ -70,19 +81,28 @@ const TableColumns = ({
           <th className="border-b border-gray-100 text-left px-4 py-2">Name</th>
           <th className="border-b border-gray-100 text-left px-4 py-2">Type</th>
           <th className="border-b border-gray-100 text-left px-4 py-2">
+            Detected datatype
+          </th>
+          <th className="border-b border-gray-100 text-left px-4 py-2">
             Length
           </th>
           <th className="border-b border-gray-100 text-left px-4 py-2">
             Scale
           </th>
           <th className="border-b border-gray-100 text-left px-4 py-2">
-            Statistics
+            Null count
+          </th>
+          <th className="border-b border-gray-100 text-left px-4 py-2">
+            Null percent
+          </th>
+          <th className="border-b border-gray-100 text-left px-4 py-2">
+            Unique count
           </th>
           <th className="border-b border-gray-100 text-left px-4 py-2">
             Action
           </th>
         </thead>
-        {statistics &&
+        0{statistics &&
           statistics?.column_statistics?.map((column, index) => (
             <tr key={index}>
               <td className="border-b border-gray-100 text-left px-4 py-2">
@@ -93,6 +113,9 @@ const TableColumns = ({
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
                 {column.type_snapshot?.column_type}
+              </td>
+              <td className="border-b border-gray-100 text-left px-4 py-2">
+              
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
                 {column.type_snapshot?.length}
