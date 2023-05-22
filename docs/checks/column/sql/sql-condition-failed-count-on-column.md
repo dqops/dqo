@@ -17,24 +17,24 @@ Verifies that a number of rows failed a custom SQL condition(expression) does no
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=sql_condition_failed_count_on_column
+dqo> check enable -c=connection_name -ch=sql_condition_failed_count_on_column
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=sql_condition_failed_count_on_column
+dqo> check run -ch=sql_condition_failed_count_on_column
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=sql_condition_failed_count_on_column
+dqo> check run -c=connection_name -ch=sql_condition_failed_count_on_column
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=sql_condition_failed_count_on_column
+dqo> check run -c=connection_name -t=table_name -ch=sql_condition_failed_count_on_column
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=sql_condition_failed_count_on_column
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=sql_condition_failed_count_on_column
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -563,24 +563,24 @@ Verifies that a number of rows failed a custom SQL condition(expression) does no
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_sql_condition_failed_count_on_column
+dqo> check enable -c=connection_name -ch=daily_sql_condition_failed_count_on_column
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_sql_condition_failed_count_on_column
+dqo> check run -ch=daily_sql_condition_failed_count_on_column
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_sql_condition_failed_count_on_column
+dqo> check run -c=connection_name -ch=daily_sql_condition_failed_count_on_column
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_sql_condition_failed_count_on_column
+dqo> check run -c=connection_name -t=table_name -ch=daily_sql_condition_failed_count_on_column
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sql_condition_failed_count_on_column
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sql_condition_failed_count_on_column
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1112,24 +1112,24 @@ Verifies that a number of rows failed a custom SQL condition(expression) does no
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_sql_condition_failed_count_on_column
+dqo> check enable -c=connection_name -ch=monthly_sql_condition_failed_count_on_column
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_sql_condition_failed_count_on_column
+dqo> check run -ch=monthly_sql_condition_failed_count_on_column
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_sql_condition_failed_count_on_column
+dqo> check run -c=connection_name -ch=monthly_sql_condition_failed_count_on_column
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_sql_condition_failed_count_on_column
+dqo> check run -c=connection_name -t=table_name -ch=monthly_sql_condition_failed_count_on_column
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_sql_condition_failed_count_on_column
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_sql_condition_failed_count_on_column
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1661,24 +1661,24 @@ Verifies that a number of rows failed a custom SQL condition(expression) does no
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_sql_condition_failed_count_on_column
+dqo> check enable -c=connection_name -ch=daily_partition_sql_condition_failed_count_on_column
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_sql_condition_failed_count_on_column
+dqo> check run -ch=daily_partition_sql_condition_failed_count_on_column
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_sql_condition_failed_count_on_column
+dqo> check run -c=connection_name -ch=daily_partition_sql_condition_failed_count_on_column
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_sql_condition_failed_count_on_column
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_sql_condition_failed_count_on_column
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_sql_condition_failed_count_on_column
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_sql_condition_failed_count_on_column
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2211,24 +2211,24 @@ Verifies that a number of rows failed a custom SQL condition(expression) does no
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_sql_condition_failed_count_on_column
+dqo> check enable -c=connection_name -ch=monthly_partition_sql_condition_failed_count_on_column
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_sql_condition_failed_count_on_column
+dqo> check run -ch=monthly_partition_sql_condition_failed_count_on_column
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_sql_condition_failed_count_on_column
+dqo> check run -c=connection_name -ch=monthly_partition_sql_condition_failed_count_on_column
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_sql_condition_failed_count_on_column
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_sql_condition_failed_count_on_column
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_sql_condition_failed_count_on_column
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_sql_condition_failed_count_on_column
 ```
 **Check structure (Yaml)**
 ```yaml

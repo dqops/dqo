@@ -17,24 +17,24 @@ Verifies that the number of top values from a set in a column does not fall belo
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=string_most_popular_values
+dqo> check enable -c=connection_name -ch=string_most_popular_values
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=string_most_popular_values
+dqo> check run -ch=string_most_popular_values
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=string_most_popular_values
+dqo> check run -c=connection_name -ch=string_most_popular_values
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=string_most_popular_values
+dqo> check run -c=connection_name -t=table_name -ch=string_most_popular_values
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_most_popular_values
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=string_most_popular_values
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1286,24 +1286,24 @@ Verifies that the number of top values from a set in a column does not fall belo
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_string_most_popular_values
+dqo> check enable -c=connection_name -ch=daily_string_most_popular_values
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_string_most_popular_values
+dqo> check run -ch=daily_string_most_popular_values
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_string_most_popular_values
+dqo> check run -c=connection_name -ch=daily_string_most_popular_values
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_string_most_popular_values
+dqo> check run -c=connection_name -t=table_name -ch=daily_string_most_popular_values
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_string_most_popular_values
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_string_most_popular_values
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2558,24 +2558,24 @@ Verifies that the number of top values from a set in a column does not exceed th
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_string_most_popular_values
+dqo> check enable -c=connection_name -ch=monthly_string_most_popular_values
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_string_most_popular_values
+dqo> check run -ch=monthly_string_most_popular_values
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_string_most_popular_values
+dqo> check run -c=connection_name -ch=monthly_string_most_popular_values
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_string_most_popular_values
+dqo> check run -c=connection_name -t=table_name -ch=monthly_string_most_popular_values
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_string_most_popular_values
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_string_most_popular_values
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -3830,24 +3830,24 @@ Verifies that the number of top values from a set in a column does not fall belo
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_string_most_popular_values
+dqo> check enable -c=connection_name -ch=daily_partition_string_most_popular_values
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_string_most_popular_values
+dqo> check run -ch=daily_partition_string_most_popular_values
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_string_most_popular_values
+dqo> check run -c=connection_name -ch=daily_partition_string_most_popular_values
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_string_most_popular_values
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_string_most_popular_values
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_most_popular_values
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_most_popular_values
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -5103,24 +5103,24 @@ Verifies that the number of top values from a set in a column does not fall belo
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_most_popular_values
+dqo> check enable -c=connection_name -ch=monthly_partition_string_most_popular_values
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_string_most_popular_values
+dqo> check run -ch=monthly_partition_string_most_popular_values
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_string_most_popular_values
+dqo> check run -c=connection_name -ch=monthly_partition_string_most_popular_values
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_string_most_popular_values
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_string_most_popular_values
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_most_popular_values
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_most_popular_values
 ```
 **Check structure (Yaml)**
 ```yaml

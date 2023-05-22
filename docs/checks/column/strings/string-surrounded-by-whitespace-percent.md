@@ -17,24 +17,24 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=string_surrounded_by_whitespace_percent
+dqo> check enable -c=connection_name -ch=string_surrounded_by_whitespace_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=string_surrounded_by_whitespace_percent
+dqo> check run -ch=string_surrounded_by_whitespace_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=string_surrounded_by_whitespace_percent
+dqo> check run -c=connection_name -ch=string_surrounded_by_whitespace_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=string_surrounded_by_whitespace_percent
+dqo> check run -c=connection_name -t=table_name -ch=string_surrounded_by_whitespace_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_surrounded_by_whitespace_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=string_surrounded_by_whitespace_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -717,24 +717,24 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_string_surrounded_by_whitespace_percent
+dqo> check enable -c=connection_name -ch=daily_string_surrounded_by_whitespace_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_string_surrounded_by_whitespace_percent
+dqo> check run -ch=daily_string_surrounded_by_whitespace_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_string_surrounded_by_whitespace_percent
+dqo> check run -c=connection_name -ch=daily_string_surrounded_by_whitespace_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_string_surrounded_by_whitespace_percent
+dqo> check run -c=connection_name -t=table_name -ch=daily_string_surrounded_by_whitespace_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_string_surrounded_by_whitespace_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_string_surrounded_by_whitespace_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1420,24 +1420,24 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_string_surrounded_by_whitespace_percent
+dqo> check enable -c=connection_name -ch=monthly_string_surrounded_by_whitespace_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_string_surrounded_by_whitespace_percent
+dqo> check run -ch=monthly_string_surrounded_by_whitespace_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_string_surrounded_by_whitespace_percent
+dqo> check run -c=connection_name -ch=monthly_string_surrounded_by_whitespace_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_string_surrounded_by_whitespace_percent
+dqo> check run -c=connection_name -t=table_name -ch=monthly_string_surrounded_by_whitespace_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_string_surrounded_by_whitespace_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_string_surrounded_by_whitespace_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2123,24 +2123,24 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_string_surrounded_by_whitespace_percent
+dqo> check enable -c=connection_name -ch=daily_partition_string_surrounded_by_whitespace_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_string_surrounded_by_whitespace_percent
+dqo> check run -ch=daily_partition_string_surrounded_by_whitespace_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_string_surrounded_by_whitespace_percent
+dqo> check run -c=connection_name -ch=daily_partition_string_surrounded_by_whitespace_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_string_surrounded_by_whitespace_percent
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_string_surrounded_by_whitespace_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_surrounded_by_whitespace_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_surrounded_by_whitespace_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2827,24 +2827,24 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_surrounded_by_whitespace_percent
+dqo> check enable -c=connection_name -ch=monthly_partition_string_surrounded_by_whitespace_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_string_surrounded_by_whitespace_percent
+dqo> check run -ch=monthly_partition_string_surrounded_by_whitespace_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_string_surrounded_by_whitespace_percent
+dqo> check run -c=connection_name -ch=monthly_partition_string_surrounded_by_whitespace_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_string_surrounded_by_whitespace_percent
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_string_surrounded_by_whitespace_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_surrounded_by_whitespace_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_surrounded_by_whitespace_percent
 ```
 **Check structure (Yaml)**
 ```yaml

@@ -17,24 +17,24 @@ Verifies that the length of string in a column does not exceed the mean accepted
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=string_mean_length
+dqo> check enable -c=connection_name -ch=string_mean_length
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=string_mean_length
+dqo> check run -ch=string_mean_length
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=string_mean_length
+dqo> check run -c=connection_name -ch=string_mean_length
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=string_mean_length
+dqo> check run -c=connection_name -t=table_name -ch=string_mean_length
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_mean_length
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=string_mean_length
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -542,24 +542,24 @@ Verifies that the length of string in a column does not exceed the mean accepted
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_string_mean_length
+dqo> check enable -c=connection_name -ch=daily_string_mean_length
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_string_mean_length
+dqo> check run -ch=daily_string_mean_length
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_string_mean_length
+dqo> check run -c=connection_name -ch=daily_string_mean_length
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_string_mean_length
+dqo> check run -c=connection_name -t=table_name -ch=daily_string_mean_length
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_string_mean_length
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_string_mean_length
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1070,24 +1070,24 @@ Verifies that the length of string in a column does not exceed the mean accepted
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_string_mean_length
+dqo> check enable -c=connection_name -ch=monthly_string_mean_length
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_string_mean_length
+dqo> check run -ch=monthly_string_mean_length
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_string_mean_length
+dqo> check run -c=connection_name -ch=monthly_string_mean_length
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_string_mean_length
+dqo> check run -c=connection_name -t=table_name -ch=monthly_string_mean_length
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_string_mean_length
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_string_mean_length
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1598,24 +1598,24 @@ Verifies that the length of string in a column does not exceed the mean accepted
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_string_mean_length
+dqo> check enable -c=connection_name -ch=daily_partition_string_mean_length
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_string_mean_length
+dqo> check run -ch=daily_partition_string_mean_length
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_string_mean_length
+dqo> check run -c=connection_name -ch=daily_partition_string_mean_length
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_string_mean_length
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_string_mean_length
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_mean_length
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_mean_length
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2127,24 +2127,24 @@ Verifies that the length of string in a column does not exceed the mean accepted
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_mean_length
+dqo> check enable -c=connection_name -ch=monthly_partition_string_mean_length
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_string_mean_length
+dqo> check run -ch=monthly_partition_string_mean_length
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_string_mean_length
+dqo> check run -c=connection_name -ch=monthly_partition_string_mean_length
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_string_mean_length
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_string_mean_length
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_mean_length
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_mean_length
 ```
 **Check structure (Yaml)**
 ```yaml

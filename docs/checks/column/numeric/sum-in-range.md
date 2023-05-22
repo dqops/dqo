@@ -17,24 +17,24 @@ Verifies that the sum of all values in a column is not outside the set range.
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=sum_in_range
+dqo> check enable -c=connection_name -ch=sum_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=sum_in_range
+dqo> check run -ch=sum_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=sum_in_range
+dqo> check run -c=connection_name -ch=sum_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=sum_in_range
+dqo> check run -c=connection_name -t=table_name -ch=sum_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=sum_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=sum_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -467,24 +467,24 @@ Verifies that the sum of all values in a column is not outside the set range. St
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_sum_in_range
+dqo> check enable -c=connection_name -ch=daily_sum_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_sum_in_range
+dqo> check run -ch=daily_sum_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_sum_in_range
+dqo> check run -c=connection_name -ch=daily_sum_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_sum_in_range
+dqo> check run -c=connection_name -t=table_name -ch=daily_sum_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sum_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sum_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -920,24 +920,24 @@ Verifies that the sum of all values in a column does not exceed the set range. S
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_sum_in_range
+dqo> check enable -c=connection_name -ch=monthly_sum_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_sum_in_range
+dqo> check run -ch=monthly_sum_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_sum_in_range
+dqo> check run -c=connection_name -ch=monthly_sum_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_sum_in_range
+dqo> check run -c=connection_name -t=table_name -ch=monthly_sum_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_sum_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_sum_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1373,24 +1373,24 @@ Verifies that the sum of all values in a column is not outside the set range. Cr
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_sum_in_range
+dqo> check enable -c=connection_name -ch=daily_partition_sum_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_sum_in_range
+dqo> check run -ch=daily_partition_sum_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_sum_in_range
+dqo> check run -c=connection_name -ch=daily_partition_sum_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_sum_in_range
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_sum_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_sum_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_sum_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1827,24 +1827,24 @@ Verifies that the sum of all values in a column is not outside the set range. Cr
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_sum_in_range
+dqo> check enable -c=connection_name -ch=monthly_partition_sum_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_sum_in_range
+dqo> check run -ch=monthly_partition_sum_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_sum_in_range
+dqo> check run -c=connection_name -ch=monthly_partition_sum_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_sum_in_range
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_sum_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_sum_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_sum_in_range
 ```
 **Check structure (Yaml)**
 ```yaml

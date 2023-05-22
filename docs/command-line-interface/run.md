@@ -18,7 +18,7 @@ $ dqo [dqo options...] run [-h] [-fw] [-hl] [-m=<checkRunMode>] [-of=<outputForm
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> run [-h] [-fw] [-hl] [-m=<checkRunMode>] [-of=<outputFormat>]
+dqo> run [-h] [-fw] [-hl] [-m=<checkRunMode>] [-of=<outputFormat>]
      [-s=<synchronizationMode>] [-t=<timeLimit>]
 
 ```

@@ -18,7 +18,7 @@ $ dqo [dqo options...] connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<output
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
+dqo> connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                  [-d=<dimensions>]... [-l=<labels>]...
 
 ```
@@ -82,7 +82,7 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgres
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
+dqo> connection add [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
                 [--redshift-ssl] [--sqlserver-ssl]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
@@ -189,7 +189,7 @@ $ dqo [dqo options...] connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outp
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
+dqo> connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 ```
 
@@ -251,7 +251,7 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postg
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
+dqo> connection update [-h] [-fw] [-hl] [--mysql-ssl] [--postgresql-ssl]
                    [--redshift-ssl] [--sqlserver-ssl]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
@@ -359,7 +359,7 @@ $ dqo [dqo options...] connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
+dqo> connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                         [-d=<dimensions>]... [-l=<labels>]...
 
 ```
@@ -398,7 +398,7 @@ $ dqo [dqo options...] connection table list [-h] [-fw] [-hl] [-c=<connection>] 
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
+dqo> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-s=<schema>] [-t=<table>] [-d=<dimensions>]...
                        [-l=<labels>]...
 
@@ -439,7 +439,7 @@ $ dqo [dqo options...] connection table show [-h] [-fw] [-hl] [-c=<connection>] 
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
+dqo> connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-t=<table>]
 
 ```
@@ -475,7 +475,7 @@ $ dqo [dqo options...] connection edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> connection edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
+dqo> connection edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
 
 ```
 
