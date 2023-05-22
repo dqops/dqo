@@ -62,14 +62,14 @@ const TableColumns = ({
     return value;
   };
 
-  const datatype_detected = ({numberForFile}:{numberForFile: number}) => {
-    if(numberForFile === 1){ return 'INTEGER'}
-    if(numberForFile === 2){ return 'FLOAT'}
-    if(numberForFile === 3){ return 'DATETIME'}
-    if(numberForFile === 4){ return 'TIMESTAMP'}
-    if(numberForFile === 5){ return 'BOOLEAN'}
-    if(numberForFile === 6){ return 'STRING'}
-    if(numberForFile === 7){ return 'Mixed data type'}
+  const datatype_detected = (numberForFile : any) => {
+    if(Number(numberForFile) === 1){ return 'INTEGER'}
+    if(Number(numberForFile) === 2){ return 'FLOAT'}
+    if(Number(numberForFile) === 3){ return 'DATETIME'}
+    if(Number(numberForFile) === 4){ return 'TIMESTAMP'}
+    if(Number(numberForFile) === 5){ return 'BOOLEAN'}
+    if(Number(numberForFile) === 6){ return 'STRING'}
+    if(Number(numberForFile) === 7){ return 'Mixed data type'}
   }
 
 
@@ -102,7 +102,7 @@ const TableColumns = ({
             Action
           </th>
         </thead>
-        0{statistics &&
+        {statistics &&
           statistics?.column_statistics?.map((column, index) => (
             <tr key={index}>
               <td className="border-b border-gray-100 text-left px-4 py-2">
@@ -115,7 +115,13 @@ const TableColumns = ({
                 {column.type_snapshot?.column_type}
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
-              
+              {column?.statistics?.map((metric, index) => (
+                        metric.collector === 'string_datatype_detect' ? 
+                        <td key={index} className="px-2 truncate">
+                        {metric.result ?  datatype_detected(metric.result) : ""}
+                        </td>
+                        : ""
+                        ))}
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
                 {column.type_snapshot?.length}
@@ -124,19 +130,31 @@ const TableColumns = ({
                 {column.type_snapshot?.scale}
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
-                {column?.statistics && (
-                  <table>
-                    <tbody>
-                      {column?.statistics?.map((metric, index) => (
-                        <tr key={index}>
-                          <td className="px-2">{metric.category}</td>
-                          <td className="px-2">{metric.collector}</td>
-                          <td className="px-2 truncate">{renderValue(metric.result)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
+              {column?.statistics?.map((metric, index) => (
+                        metric.collector === 'nulls_count' ? 
+                        <td key={index} className="px-2 truncate">
+                        {metric.result ?  renderValue(metric.result) : ""}
+                        </td>
+                        : ""
+                        ))}
+              </td>
+              <td className="border-b border-gray-100 text-left px-4 py-2">
+              {column?.statistics?.map((metric, index) => (
+                        metric.collector === 'nulls_percent' ? 
+                        <td key={index} className="px-2 truncate">
+                        {metric.result ?  renderValue(metric.result) : ""}
+                        </td>
+                        : ""
+                        ))}
+              </td>
+              <td className="border-b border-gray-100 text-left px-4 py-2">
+              {column?.statistics?.map((metric, index) => (
+                        metric.collector === 'unique_count' ? 
+                        <td key={index} className="px-2 truncate">
+                        {metric.result ?  renderValue(metric.result) : ""}
+                        </td>
+                        : ""
+                        ))}
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
                 <IconButton
