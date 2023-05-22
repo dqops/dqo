@@ -18,7 +18,7 @@ $ dqo [dqo options...] scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputFormat>]
+dqo> scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputFormat>]
                  [-sm=<synchronizationMode>]
 
 ```
@@ -54,7 +54,7 @@ $ dqo [dqo options...] scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo> scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 

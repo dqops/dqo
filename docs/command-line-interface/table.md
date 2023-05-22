@@ -18,7 +18,7 @@ $ dqo [dqo options...] table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<out
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
+dqo> table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
               [-s=<schema>] [-t=<table>]
 
 ```
@@ -55,7 +55,7 @@ $ dqo [dqo options...] table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outpu
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<table>]
+dqo> table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<table>]
 
 ```
 
@@ -91,7 +91,7 @@ $ dqo [dqo options...] table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<ou
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
+dqo> table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
            [-t=<fullTableName>]
 
 ```
@@ -128,7 +128,7 @@ $ dqo [dqo options...] table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
+dqo> table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
               [-t=<fullTableName>]
 
 ```
@@ -165,7 +165,7 @@ $ dqo [dqo options...] table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
+dqo> table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
               [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
@@ -203,7 +203,7 @@ $ dqo [dqo options...] table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<o
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
+dqo> table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
             [-t=<tableName>] [-d=<dimensions>]... [-l=<labels>]...
 
 ```

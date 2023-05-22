@@ -17,7 +17,7 @@ $ dqo [dqo options...] rule edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> rule edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-r=<name>]
+dqo> rule edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-r=<name>]
 
 ```
 

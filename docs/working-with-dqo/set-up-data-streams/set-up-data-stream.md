@@ -70,7 +70,7 @@ To set up a default data stream at the data source level, follow the steps below
 1. Run the following command in DQO Shell to edit YAMl configuration file and define data stream.
 
     ```
-    dqo.ai> connection edit
+    dqo> connection edit
     ```
 
 2. Provide the connection name.
@@ -134,7 +134,7 @@ To set up a data stream at the table level
 1. Run the following command in DQO Shell to edit YAMl configuration file and define data stream.
 
     ```
-    dqo.ai> table edit
+    dqo> table edit
     ```
 
 2. Provide the connection name and full table name in a schema.table format.

@@ -17,24 +17,24 @@ Verifies that a set percentage of rows passed a custom SQL condition (expression
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=sql_condition_passed_percent_on_table
+dqo> check enable -c=connection_name -ch=sql_condition_passed_percent_on_table
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=sql_condition_passed_percent_on_table
+dqo> check run -ch=sql_condition_passed_percent_on_table
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=sql_condition_passed_percent_on_table
+dqo> check run -c=connection_name -ch=sql_condition_passed_percent_on_table
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=sql_condition_passed_percent_on_table
+dqo> check run -c=connection_name -t=table_name -ch=sql_condition_passed_percent_on_table
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=sql_condition_passed_percent_on_table
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=sql_condition_passed_percent_on_table
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -577,24 +577,24 @@ Verifies that a set percentage of rows passed a custom SQL condition (expression
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_sql_condition_passed_percent_on_table
+dqo> check enable -c=connection_name -ch=daily_sql_condition_passed_percent_on_table
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_sql_condition_passed_percent_on_table
+dqo> check run -ch=daily_sql_condition_passed_percent_on_table
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_sql_condition_passed_percent_on_table
+dqo> check run -c=connection_name -ch=daily_sql_condition_passed_percent_on_table
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_sql_condition_passed_percent_on_table
+dqo> check run -c=connection_name -t=table_name -ch=daily_sql_condition_passed_percent_on_table
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sql_condition_passed_percent_on_table
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sql_condition_passed_percent_on_table
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1167,24 +1167,24 @@ Verifies that a set percentage of rows passed a custom SQL condition (expression
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_sql_condition_passed_percent_on_table
+dqo> check enable -c=connection_name -ch=monthly_sql_condition_passed_percent_on_table
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_sql_condition_passed_percent_on_table
+dqo> check run -ch=monthly_sql_condition_passed_percent_on_table
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_sql_condition_passed_percent_on_table
+dqo> check run -c=connection_name -ch=monthly_sql_condition_passed_percent_on_table
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_sql_condition_passed_percent_on_table
+dqo> check run -c=connection_name -t=table_name -ch=monthly_sql_condition_passed_percent_on_table
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_sql_condition_passed_percent_on_table
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_sql_condition_passed_percent_on_table
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1757,24 +1757,24 @@ Verifies that a set percentage of rows passed a custom SQL condition (expression
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_sql_condition_passed_percent_on_table
+dqo> check enable -c=connection_name -ch=daily_partition_sql_condition_passed_percent_on_table
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_sql_condition_passed_percent_on_table
+dqo> check run -ch=daily_partition_sql_condition_passed_percent_on_table
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_sql_condition_passed_percent_on_table
+dqo> check run -c=connection_name -ch=daily_partition_sql_condition_passed_percent_on_table
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_sql_condition_passed_percent_on_table
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_sql_condition_passed_percent_on_table
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_sql_condition_passed_percent_on_table
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_sql_condition_passed_percent_on_table
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2348,24 +2348,24 @@ Verifies that a set percentage of rows passed a custom SQL condition (expression
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_sql_condition_passed_percent_on_table
+dqo> check enable -c=connection_name -ch=monthly_partition_sql_condition_passed_percent_on_table
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_sql_condition_passed_percent_on_table
+dqo> check run -ch=monthly_partition_sql_condition_passed_percent_on_table
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_sql_condition_passed_percent_on_table
+dqo> check run -c=connection_name -ch=monthly_partition_sql_condition_passed_percent_on_table
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_sql_condition_passed_percent_on_table
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_sql_condition_passed_percent_on_table
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_sql_condition_passed_percent_on_table
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_sql_condition_passed_percent_on_table
 ```
 **Check structure (Yaml)**
 ```yaml

@@ -17,24 +17,24 @@ Calculates the number of days since the most recent event timestamp (freshness)
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=days_since_most_recent_event
+dqo> check enable -c=connection_name -ch=days_since_most_recent_event
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=days_since_most_recent_event
+dqo> check run -ch=days_since_most_recent_event
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=days_since_most_recent_event
+dqo> check run -c=connection_name -ch=days_since_most_recent_event
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -ch=days_since_most_recent_event
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=days_since_most_recent_event
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -687,24 +687,24 @@ Daily  calculating the number of days since the most recent event timestamp (fre
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_days_since_most_recent_event
+dqo> check enable -c=connection_name -ch=daily_days_since_most_recent_event
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_days_since_most_recent_event
+dqo> check run -ch=daily_days_since_most_recent_event
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_days_since_most_recent_event
+dqo> check run -c=connection_name -ch=daily_days_since_most_recent_event
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -ch=daily_days_since_most_recent_event
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_days_since_most_recent_event
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1360,24 +1360,24 @@ Monthly recurring calculating the number of days since the most recent event tim
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_days_since_most_recent_event
+dqo> check enable -c=connection_name -ch=monthly_days_since_most_recent_event
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_days_since_most_recent_event
+dqo> check run -ch=monthly_days_since_most_recent_event
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_days_since_most_recent_event
+dqo> check run -c=connection_name -ch=monthly_days_since_most_recent_event
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -ch=monthly_days_since_most_recent_event
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_days_since_most_recent_event
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2033,24 +2033,24 @@ Daily partitioned check calculating the number of days since the most recent eve
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_days_since_most_recent_event
+dqo> check enable -c=connection_name -ch=daily_partition_days_since_most_recent_event
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_days_since_most_recent_event
+dqo> check run -ch=daily_partition_days_since_most_recent_event
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_days_since_most_recent_event
+dqo> check run -c=connection_name -ch=daily_partition_days_since_most_recent_event
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_days_since_most_recent_event
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_days_since_most_recent_event
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2707,24 +2707,24 @@ Monthly partitioned check calculating the number of days since the most recent e
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_days_since_most_recent_event
+dqo> check enable -c=connection_name -ch=monthly_partition_days_since_most_recent_event
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_days_since_most_recent_event
+dqo> check run -ch=monthly_partition_days_since_most_recent_event
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_days_since_most_recent_event
+dqo> check run -c=connection_name -ch=monthly_partition_days_since_most_recent_event
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_days_since_most_recent_event
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_days_since_most_recent_event
 ```
 **Check structure (Yaml)**
 ```yaml

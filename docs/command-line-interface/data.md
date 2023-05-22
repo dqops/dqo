@@ -22,7 +22,7 @@ $ dqo [dqo options...] data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
+dqo> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
              [-c=<connection>] [-cat=<checkCategory>] [-ch=<check>]
              [-col=<column>] [-ct=<checkType>] [-ds=<dataStream>] [-e=<end>]
              [-of=<outputFormat>] [-qd=<qualityDimension>] [-s=<sensor>]
@@ -80,7 +80,7 @@ $ dqo [dqo options...] data repair [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] -c=<
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> data repair [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] -c=<connection>
+dqo> data repair [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] -c=<connection>
              [-of=<outputFormat>] [-t=<table>]
 
 ```

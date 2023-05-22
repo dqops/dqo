@@ -54,7 +54,7 @@ To add BigQuery data source connection to DQO you need the following:
 
 To add a connection run the following command in DQO Shell.
 ```
-dqo.ai> connection add
+dqo> connection add
 ```
 
 Fill in the data you will be asked for.
@@ -84,7 +84,7 @@ Run 'table import -c=connection1' to import tables.
 You can also run the command with parameters to add a connection in just a single step.
 
 ```
-dqo.ai> connection add --name=connection1 
+dqo> connection add --name=connection1 
 --provider=bigquery
 --bigquery-source-project-id=bigquery-public-data 
 --bigquery-billing-project-id=dqo-ai-testing
@@ -99,7 +99,7 @@ DQO will ask you to select the schema from which the tables will be imported.
 You can also add the schema and table name as a parameter to import tables in just a single step.
 
 ```
-dqo.ai> table import --connection={connection name} 
+dqo> table import --connection={connection name} 
 --schema={schema name}
 --table={table name}
 ```

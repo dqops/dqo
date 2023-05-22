@@ -21,7 +21,7 @@ the two modes for the `check run` command that run all enabled checks.
 === "DQO Shell"
 
     ```
-    dqo.ai> check run [options or parameters]
+    dqo> check run [options or parameters]
     ```
 
 ## Getting help
@@ -32,7 +32,7 @@ For example, the following command in DQO Shell displays description and all par
 all enabled checks.
 
 ```
-dqo.ai> check run --help
+dqo> check run --help
 ```
 
 ## List of commands

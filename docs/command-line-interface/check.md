@@ -29,7 +29,7 @@ $ dqo [dqo options...] check run [-deh] [--daily-partitioning-include-today] [-f
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
+dqo> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
            [--monthly-partitioning-include-current-month] [-c=<connection>]
            [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
            [-ct=<checkType>]
@@ -101,7 +101,7 @@ $ dqo [dqo options...] check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+dqo> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
               [-ch=<check>] [-col=<column>] [-ct=<checkType>]
               [-dt=<datatypeFilter>] [-of=<outputFormat>] [-sn=<sensor>]
               [-t=<table>] [-ts=<timeScale>] [-E=<String=String>]...
@@ -167,7 +167,7 @@ $ dqo [dqo options...] check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+dqo> check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
                [-ch=<check>] [-col=<column>] [-ct=<checkType>]
                [-dt=<datatypeFilter>] [-of=<outputFormat>] [-s=<sensor>]
                [-t=<table>] [-ts=<timeScale>]

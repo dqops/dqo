@@ -103,7 +103,7 @@ To add and run data quality checks using the DQO Shell, follow the steps below.
 
 1. Run the following command in DQO Shell to edit YAMl configuration file and define data quality checks.
     ```
-    dqo.ai> table edit
+    dqo> table edit
     ```
    
 2. Provide the connection name and full table name in a schema.table format.
@@ -155,7 +155,7 @@ To add and run data quality checks using the DQO Shell, follow the steps below.
 4. To execute the check, run the following command in DQO Shell:
 
     ```
-    dqo.ai> check run
+    dqo> check run
     ```
    
     You can execute the check run for the whole connection, table or specyfic check type using additional parameters. 
