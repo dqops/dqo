@@ -14,14 +14,14 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const dispatch = useActionDispatch();
-  const { lastSequenceNumber } = useSelector((state: IRootState) => state.job);
+  const { lastSequenceNumber, loading } = useSelector((state: IRootState) => state.job);
 
   useEffect(() => {
     dispatch(getAllJobs());
   }, []);
 
   useEffect(() => {
-    if (!lastSequenceNumber) return;
+    if (!lastSequenceNumber || loading) return;
 
     dispatch(getJobsChanges(lastSequenceNumber));
   }, [lastSequenceNumber]);
