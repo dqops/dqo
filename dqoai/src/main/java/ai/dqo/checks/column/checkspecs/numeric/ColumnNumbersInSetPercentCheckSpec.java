@@ -162,6 +162,6 @@ public class ColumnNumbersInSetPercentCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Completeness;
+        return DefaultDataQualityDimensions.Consistency;
     }
 }
