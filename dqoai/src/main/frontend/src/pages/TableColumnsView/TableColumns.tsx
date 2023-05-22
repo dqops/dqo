@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import { ColumnApiClient } from '../../services/apiClient';
+import { ColumnApiClient, JobApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
 import { ColumnStatisticsModel, TableColumnsStatisticsModel } from '../../api';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../components/SvgIcon';
 import ConfirmDialog from './ConfirmDialog';
+import ColumnActionGroup from '../ColumnView/ColumnActionGroup';
 
 interface ITableColumnsProps {
   connectionName: string;
   schemaName: string;
   tableName: string;
 }
-
+interface connectStats{
+  onConnectStats: () =>void
+}
 const TableColumns = ({
   connectionName,
   schemaName,
   tableName
-}: ITableColumnsProps) => {
+}: ITableColumnsProps, onConnectStats: connectStats) => {
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
-
+  const [loadingJob, setLoadingJob] = useState(false);
   const fetchColumns = async () => {
     try {
       const res: AxiosResponse<TableColumnsStatisticsModel> =
@@ -40,6 +43,8 @@ const TableColumns = ({
     setSelectedColumn(column);
   };
 
+  
+
   const removeColumn = async () => {
     if (selectedColumn?.column_name) {
       await ColumnApiClient.deleteColumn(
@@ -49,6 +54,24 @@ const TableColumns = ({
         selectedColumn?.column_name
       );
       await fetchColumns();
+    }
+  };
+  const collectStatistics = async () => {
+    try {
+      setLoadingJob(true);
+      await JobApiClient.collectStatisticsOnDataStreams(statistics?.collect_column_statistics_job_template);
+    } finally {
+      setLoadingJob(false);
+    }
+  };
+  const onCollectStatistics =async (column: ColumnStatisticsModel) => {
+    setIsOpen(true);
+    setSelectedColumn(column);
+    try {
+      setLoadingJob(true);
+      await JobApiClient.collectStatisticsOnDataStreams(statistics?.collect_column_statistics_job_template);
+    } finally {
+      setLoadingJob(false);
     }
   };
 
@@ -142,7 +165,7 @@ const TableColumns = ({
               {column?.statistics?.map((metric, index) => (
                         metric.collector === 'nulls_percent' ? 
                         <td key={index} className="px-2 truncate">
-                        {metric.result ?  renderValue(metric.result) : ""}
+                        {metric.result ?  renderValue(metric.result).toFixed(2) : ""}
                         </td>
                         : ""
                         ))}
@@ -156,15 +179,23 @@ const TableColumns = ({
                         : ""
                         ))}
               </td>
-              <td className="border-b border-gray-100 text-left px-4 py-2">
+              <td className="border-b border-gray-100 text-left px-4 py-2 ">
+                <IconButton
+                  size="sm"
+                  className="bg-teal-500"
+                  onClick={() => collectStatistics()}
+                  >
+                  <SvgIcon name="delete" className="w-4" />
+                </IconButton>
                 <IconButton
                   size="sm"
                   className="bg-teal-500"
                   onClick={() => onRemoveColumn(column)}
-                >
+                  >
                   <SvgIcon name="delete" className="w-4" />
                 </IconButton>
-              </td>
+                  </td>
+              
             </tr>
           ))}
       </table>
