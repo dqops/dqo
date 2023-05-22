@@ -36,14 +36,14 @@ function DashboardProvider(props: any) {
     setActiveTab(newTab.value);
   };
 
-  const changeActiveTab = async (dashboard: DashboardSpec, folder: string, folders: DashboardsFolderSpec[], isNew = false) => {
-    const existTab = tabs.find((item) => item.value === dashboard.dashboard_name);
+  const changeActiveTab = async (dashboard: DashboardSpec, folder: string, folders: DashboardsFolderSpec[], key: string, isNew = false) => {
+    const existTab = tabs.find((item) => item.value === key);
     if (existTab) {
-      setActiveTab(dashboard.dashboard_name);
+      setActiveTab(key);
     } else {
       const newTab = {
         label: dashboard.dashboard_name ?? '',
-        value: dashboard.dashboard_name ?? '',
+        value: key ?? '',
       };
 
       if (activeTab) {
@@ -62,7 +62,7 @@ function DashboardProvider(props: any) {
       } else {
         setTabs([newTab]);
       }
-      setActiveTab(dashboard.dashboard_name);
+      setActiveTab(key);
 
       let res: any;
       if (folders.length === 0) {
