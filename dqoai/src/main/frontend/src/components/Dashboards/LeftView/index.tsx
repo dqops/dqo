@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
-import SvgIcon from '../../SvgIcon';
-import { useDashboard } from '../../../contexts/dashboardContext';
-import { DashboardsFolderSpec } from '../../../api';
+import React, { useEffect, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import { IRootState } from "../../../redux/reducers";
+import SvgIcon from "../../SvgIcon";
+import { useDashboard } from "../../../contexts/dashboardContext";
+import { DashboardsFolderSpec } from "../../../api";
 
 interface FolderLevelProps {
   folder: DashboardsFolderSpec;
@@ -25,6 +25,7 @@ const LeftView = () => {
   const FolderLevel = ({ folder, parents }: FolderLevelProps) => {
     const { changeActiveTab, dashboardStatus, toggleDashboardFolder } =
       useDashboard();
+
     const key = useMemo(
       () => [...parents, folder].map((item) => item.folder_name).join('-'),
       [folder, parents]
@@ -57,15 +58,15 @@ const LeftView = () => {
               <div
                 key={jIndex}
                 className={
-                  selected === dashboard.dashboard_name
+                  selected === [key, dashboard.dashboard_name].join('-')
                     ? 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 bg-gray-300 hover:bg-gray-300'
                     : 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300'
                 }
                 onClick={() => {
-                  changeActiveTab(dashboard, folder.folder_name, parents, true),
-                    setSelected(
-                      dashboard.dashboard_name ? dashboard.dashboard_name : ''
-                    );
+                  changeActiveTab(dashboard, folder.folder_name, parents, [key, dashboard.dashboard_name ? dashboard.dashboard_name : ''].join('-'), true);
+                  setSelected(
+                    [key, dashboard.dashboard_name ? dashboard.dashboard_name : ''].join('-')
+                  );
                 }}
               >
                 <SvgIcon name="grid" className="w-4 h-4 min-w-4 shrink-0" />
