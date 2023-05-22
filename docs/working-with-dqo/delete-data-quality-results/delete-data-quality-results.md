@@ -38,18 +38,32 @@ To delete the data quality results at the connection, table or column level foll
 
 To delete data quality results using the DQO Shell, use the [data delete command](../../command-line-interface/data.md). 
 
-Data delete command requires the following arguments:
-
-- Connection name `--connection=<connection>`
-- Full table name (schema.table), supports wildcard patterns 'sch*.tab*' `--table=<table>`
-- Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD `--begin=<begin>`
-- End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD `--end=<en`
-
-For example toTo delete all data from May 2023 for the connection "testconnection", table "austin_crime.crime" run the 
-following command in DQO Shell:
+To delete all the data for a connection run the following command
 
 ```
- data delete --connection=testconnection --table=austin_crime.crime --begin=2023.05 --end=2023.05
+date delete
 ```
-   
-For a full description of the `data delete` command see the [Command-line interface section](../../command-line-interface/data.md).
+
+Type the name of the connection you want to delete e.g. 
+
+```
+Connection name (--connection): **testconnection**
+```
+
+A summary of deleted data similar to the following table will be displayed.
+
+```
+3 affected partitions.
++--------------------+--------------+------------------+----------+-------------+-----------------+
+|Data type           |Connection    |Table             |Month     |Affected rows|Partition deleted|
++--------------------+--------------+------------------+----------+-------------+-----------------+
+|data_sensor_readouts|testconnection|austin_crime.crime|2023-05-01|2            |true             |
++--------------------+--------------+------------------+----------+-------------+-----------------+
+|data_check_results  |testconnection|austin_crime.crime|2023-05-01|2            |true             |
++--------------------+--------------+------------------+----------+-------------+-----------------+
+|data_statistics     |testconnection|austin_crime.crime|2023-05-01|131          |true             |
++--------------------+--------------+------------------+----------+-------------+-----------------+
+```
+
+Using various parameters, you can limit the data that will be deleted to a specific table, column, time period, data type,
+check name, check category type, and more. For a full description of the `data delete` command and its parameters, see the [Command-line interface section](../../command-line-interface/data.md).
