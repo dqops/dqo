@@ -5,12 +5,21 @@ import { ColumnStatisticsModel, TableColumnsStatisticsModel } from '../../api';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../components/SvgIcon';
 import ConfirmDialog from './ConfirmDialog';
-import ColumnActionGroup from '../ColumnView/ColumnActionGroup';
+import { COLUMN_LEVEL_TABS, CONNECTION_LEVEL_TABS, PageTab, TABLE_LEVEL_TABS } from "../../shared/constants";
+import { CheckTypes, ROUTES } from "../../shared/routes";
+import path from 'path';
+import { useDispatch } from 'react-redux/es/hooks/useDispatch';
+import { useParams, useHistory } from 'react-router-dom';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
 
 interface ITableColumnsProps {
   connectionName: string;
   schemaName: string;
   tableName: string;
+}
+type NavigationMenu = {
+  label: string;
+  value: CheckTypes;
 }
 interface connectStats{
   onConnectStats: () =>void
@@ -23,7 +32,11 @@ const TableColumns = ({
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
+  const [selectColumn, setSelectColumn] = useState("")
   const [loadingJob, setLoadingJob] = useState(false);
+  const dispatch = useDispatch();
+  const { connection, schema, table, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, tab: string, checkTypes: CheckTypes } = useParams();
+  const history = useHistory();
   const fetchColumns = async () => {
     try {
       const res: AxiosResponse<TableColumnsStatisticsModel> =
@@ -32,6 +45,20 @@ const TableColumns = ({
     } catch (err) {
       console.error(err);
     }
+  };
+  const onChangeNavigation = async (column: string, item: NavigationMenu) => {
+    const value = ROUTES.TABLE_LEVEL_VALUE("sources", connection, schema, table);
+    const url = (column: string)=> ROUTES.COLUMN_LEVEL_PAGE("sources", connectionName, schemaName, tableName, column, 'detail');
+
+
+    dispatch(addFirstLevelTab(item.value, {
+      url,
+      value,
+      state: {},
+      label: table
+    }))
+
+    history.push(url(column));
   };
 
   useEffect(() => {
@@ -43,6 +70,21 @@ const TableColumns = ({
     setSelectedColumn(column);
   };
 
+  const navigate = (column: string) =>{
+    const url =  ROUTES.COLUMN_LEVEL_PAGE("sources", connectionName, schemaName, tableName, column, 'detail');
+    const value = ROUTES.COLUMN_LEVEL_VALUE("sources", connection, schema, table, column)
+    dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
+      url,
+      value,
+      state: {},
+      label: table
+    }))
+   
+   
+    history.push(url)
+    
+  }
+ 
   
 
   const removeColumn = async () => {
@@ -122,8 +164,10 @@ const TableColumns = ({
               <td className="border-b border-gray-100 text-left px-4 py-2">
                 {column.column_hash}
               </td>
-              <td className="border-b border-gray-100 text-left px-4 py-2">
+              <td className="border-b border-gray-100 text-left px-4 py-2 underline" onClick={() => navigate(column.column_name ? column.column_name : "" )}>
+                {/* <a href={ROUTES.COLUMN_LEVEL_PAGE("profiling", connectionName, schemaName, tableName, column.column_name ? column.column_name : "", "detail")}> */}
                 {column.column_name}
+                {/* </a> */}
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
                 {column.type_snapshot?.column_type}
@@ -186,7 +230,7 @@ const TableColumns = ({
                   <SvgIcon name="delete" className="w-4" />
                 </IconButton>
                   </td>
-              
+            
             </tr>
           ))}
       </table>
