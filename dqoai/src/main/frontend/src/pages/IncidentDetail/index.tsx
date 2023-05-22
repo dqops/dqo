@@ -172,7 +172,17 @@ export const IncidentDetail = () => {
         return (
           <div>
             {value ? (
-              <a href={value}>{value}</a>
+              <div className="flex items-center space-x-2">
+                <a href={value} target="_blank" rel="noreferrer">{value}</a>
+                <IconButton
+                  color="teal"
+                  size="sm"
+                  onClick={() => addIssueUrl(row)}
+                  className="!shadow-none"
+                >
+                  <SvgIcon name="edit" className="w-4" />
+                </IconButton>
+              </div>
             ) : (
               <IconButton
                 color="teal"
@@ -280,6 +290,7 @@ export const IncidentDetail = () => {
         open={open}
         onClose={() => setOpen(false)}
         onSubmit={handleAddIssueUrl}
+        incident={selectedIncident}
       />
     </IncidentsLayout>
   );

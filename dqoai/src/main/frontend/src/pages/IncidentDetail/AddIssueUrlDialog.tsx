@@ -1,25 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
+import { IncidentModel } from "../../api";
 
 interface AddIssueUrlDialogProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (value: string) => void;
+  incident?: IncidentModel;
 }
 
 const AddIssueUrlDialog = ({
   open,
   onClose,
   onSubmit,
+  incident
 }: AddIssueUrlDialogProps) => {
-  const [name, setName] = useState("");
+  const [url, setUrl] = useState("");
 
   const handleSubmit = async () => {
-    onSubmit(name);
+    onSubmit(url);
     onClose();
   };
+
+  useEffect(() => {
+    setUrl(incident?.issueUrl || "");
+  }, [incident]);
 
   return (
     <div>
@@ -29,8 +36,8 @@ const AddIssueUrlDialog = ({
           <div>
             <Input
               label="Issue URL"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
             />
           </div>
         </DialogBody>
