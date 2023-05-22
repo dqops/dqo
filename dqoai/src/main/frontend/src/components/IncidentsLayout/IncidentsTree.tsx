@@ -18,6 +18,10 @@ const IncidentsTree = () => {
     dispatch(getConnections());
   }, []);
 
+  const onRefresh = () => {
+    dispatch(getConnections());
+  };
+
   const openFirstLevelTab = (connection: IncidentsPerConnectionModel) => {
     if (connection.connection === selectedConnection) {
       return;
@@ -38,6 +42,7 @@ const IncidentsTree = () => {
         label="Refresh"
         variant="outlined"
         color="primary"
+        onClick={onRefresh}
       />
 
       <div>
