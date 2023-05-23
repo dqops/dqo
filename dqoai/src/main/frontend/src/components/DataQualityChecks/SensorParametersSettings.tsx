@@ -1,10 +1,10 @@
 import React from 'react';
-import { TableStandardRowCountSensorParametersSpec } from '../../api';
+import { TableVolumeRowCountSensorParametersSpec } from '../../api';
 import Checkbox from '../Checkbox';
 import TextArea from '../TextArea';
 
 interface ISensorParametersSettingsProps {
-  parameters?: TableStandardRowCountSensorParametersSpec;
+  parameters?: TableVolumeRowCountSensorParametersSpec;
 }
 
 const SensorParametersSettings = ({

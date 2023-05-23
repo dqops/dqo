@@ -17,24 +17,24 @@ Calculates the time difference in days between the current date and the most rec
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=days_since_most_recent_ingestion
+dqo> check enable -c=connection_name -ch=days_since_most_recent_ingestion
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=days_since_most_recent_ingestion
+dqo> check run -ch=days_since_most_recent_ingestion
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=days_since_most_recent_ingestion
+dqo> check run -c=connection_name -ch=days_since_most_recent_ingestion
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -ch=days_since_most_recent_ingestion
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=days_since_most_recent_ingestion
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -689,24 +689,24 @@ Daily  calculating the time difference in days between the current date and the 
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_days_since_most_recent_ingestion
+dqo> check enable -c=connection_name -ch=daily_days_since_most_recent_ingestion
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_days_since_most_recent_ingestion
+dqo> check run -ch=daily_days_since_most_recent_ingestion
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -ch=daily_days_since_most_recent_ingestion
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -ch=daily_days_since_most_recent_ingestion
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_days_since_most_recent_ingestion
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1364,24 +1364,24 @@ Monthly recurring calculating the time difference in days between the current da
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_days_since_most_recent_ingestion
+dqo> check enable -c=connection_name -ch=monthly_days_since_most_recent_ingestion
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_days_since_most_recent_ingestion
+dqo> check run -ch=monthly_days_since_most_recent_ingestion
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -ch=monthly_days_since_most_recent_ingestion
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -ch=monthly_days_since_most_recent_ingestion
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_days_since_most_recent_ingestion
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2039,24 +2039,24 @@ Daily partitioned check calculating the time difference in days between the curr
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_days_since_most_recent_ingestion
+dqo> check enable -c=connection_name -ch=daily_partition_days_since_most_recent_ingestion
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_days_since_most_recent_ingestion
+dqo> check run -ch=daily_partition_days_since_most_recent_ingestion
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -ch=daily_partition_days_since_most_recent_ingestion
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_days_since_most_recent_ingestion
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_days_since_most_recent_ingestion
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2715,24 +2715,24 @@ Monthly partitioned check calculating the time difference in days between the cu
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_days_since_most_recent_ingestion
+dqo> check enable -c=connection_name -ch=monthly_partition_days_since_most_recent_ingestion
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_days_since_most_recent_ingestion
+dqo> check run -ch=monthly_partition_days_since_most_recent_ingestion
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -ch=monthly_partition_days_since_most_recent_ingestion
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_days_since_most_recent_ingestion
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_days_since_most_recent_ingestion
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_days_since_most_recent_ingestion
 ```
 **Check structure (Yaml)**
 ```yaml

@@ -37,7 +37,7 @@ public class DqoShellRunnerServiceImpl implements DqoShellRunnerService {
     /**
      * Prompt string shown in the shell.
      */
-    public static final String DQO_PROMPT = "dqo.ai> ";
+    public static final String DQO_PROMPT = "dqo> ";
 
     private final SystemRegistry systemRegistry;
     private final LineReader cliLineReader;

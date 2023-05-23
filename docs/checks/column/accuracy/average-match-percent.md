@@ -17,24 +17,24 @@ Verifies that the percentage of difference in average of a column in a table and
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=average_match_percent
+dqo> check enable -c=connection_name -ch=average_match_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=average_match_percent
+dqo> check run -ch=average_match_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=average_match_percent
+dqo> check run -c=connection_name -ch=average_match_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=average_match_percent
+dqo> check run -c=connection_name -t=table_name -ch=average_match_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=average_match_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=average_match_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -566,24 +566,24 @@ Verifies that the percentage of difference in average of a column in a table and
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_average_match_percent
+dqo> check enable -c=connection_name -ch=daily_average_match_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_average_match_percent
+dqo> check run -ch=daily_average_match_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_average_match_percent
+dqo> check run -c=connection_name -ch=daily_average_match_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_average_match_percent
+dqo> check run -c=connection_name -t=table_name -ch=daily_average_match_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_average_match_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_average_match_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1118,24 +1118,24 @@ Verifies that the percentage of difference in average of a column in a table and
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_average_match_percent
+dqo> check enable -c=connection_name -ch=monthly_average_match_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_average_match_percent
+dqo> check run -ch=monthly_average_match_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_average_match_percent
+dqo> check run -c=connection_name -ch=monthly_average_match_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_average_match_percent
+dqo> check run -c=connection_name -t=table_name -ch=monthly_average_match_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_average_match_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_average_match_percent
 ```
 **Check structure (Yaml)**
 ```yaml

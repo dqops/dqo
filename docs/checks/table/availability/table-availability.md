@@ -17,24 +17,24 @@ Verifies availability of the table in a database using a simple row count.
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=table_availability
+dqo> check enable -c=connection_name -ch=table_availability
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=table_availability
+dqo> check run -ch=table_availability
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=table_availability
+dqo> check run -c=connection_name -ch=table_availability
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=table_availability
+dqo> check run -c=connection_name -t=table_name -ch=table_availability
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=table_availability
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=table_availability
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -578,24 +578,24 @@ Verifies availability on table in database using simple row count. Stores the mo
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_table_availability
+dqo> check enable -c=connection_name -ch=daily_table_availability
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_table_availability
+dqo> check run -ch=daily_table_availability
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_table_availability
+dqo> check run -c=connection_name -ch=daily_table_availability
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_table_availability
+dqo> check run -c=connection_name -t=table_name -ch=daily_table_availability
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_table_availability
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_table_availability
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1142,24 +1142,24 @@ Verifies availability on table in database using simple row count. Stores the mo
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_table_availability
+dqo> check enable -c=connection_name -ch=monthly_table_availability
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_table_availability
+dqo> check run -ch=monthly_table_availability
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_table_availability
+dqo> check run -c=connection_name -ch=monthly_table_availability
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_table_availability
+dqo> check run -c=connection_name -t=table_name -ch=monthly_table_availability
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_table_availability
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_table_availability
 ```
 **Check structure (Yaml)**
 ```yaml

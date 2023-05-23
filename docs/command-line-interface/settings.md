@@ -18,7 +18,7 @@ $ dqo [dqo options...] settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-of=<outputFormat>]
+dqo> settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-of=<outputFormat>]
                      [-p=<editorPath>]
 
 ```
@@ -54,7 +54,7 @@ $ dqo [dqo options...] settings editor remove [-h] [-fw] [-hl] [-of=<outputForma
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> settings editor remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo> settings editor remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
@@ -87,7 +87,7 @@ $ dqo [dqo options...] settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo> settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
@@ -120,7 +120,7 @@ $ dqo [dqo options...] settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo> settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
@@ -153,7 +153,7 @@ $ dqo [dqo options...] settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo> settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
@@ -186,7 +186,7 @@ $ dqo [dqo options...] settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>]
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>] <key>
+dqo> settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>] <key>
 
 ```
 
@@ -219,7 +219,7 @@ $ dqo [dqo options...] settings apikey remove [-h] [-fw] [-hl] [-of=<outputForma
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> settings apikey remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo> settings apikey remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
@@ -252,7 +252,7 @@ $ dqo [dqo options...] settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo> settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
@@ -285,7 +285,7 @@ $ dqo [dqo options...] settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat>] <timeZone>
+dqo> settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat>] <timeZone>
 
 ```
 
@@ -318,7 +318,7 @@ $ dqo [dqo options...] settings timezone remove [-h] [-fw] [-hl] [-of=<outputFor
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> settings timezone remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo> settings timezone remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
@@ -351,7 +351,7 @@ $ dqo [dqo options...] settings timezone show [-h] [-fw] [-hl] [-of=<outputForma
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> settings timezone show [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo> settings timezone show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 

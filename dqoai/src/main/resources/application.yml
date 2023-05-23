@@ -9,6 +9,8 @@ spring:
     name: dqo
   lifecycle:
     timeout-per-shutdown-phase: 10s
+  codec:
+    max-in-memory-size: 50MB
   mvc:
     async:
       request-timeout: 60000
@@ -21,6 +23,10 @@ server:
   shutdown: graceful
   error:
     include-stacktrace: always
+  compression:
+     enabled: true
+     mime-types: application/json,application/xml,text/html,image/jpeg,image/x-png,image/svg+xm
+
 
 logging:
   level:

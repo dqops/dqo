@@ -17,24 +17,24 @@ Verifies that the median in a column changes in a rate within a percentile bound
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=median_anomaly_7_days
+dqo> check enable -c=connection_name -ch=median_anomaly_7_days
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=median_anomaly_7_days
+dqo> check run -ch=median_anomaly_7_days
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=median_anomaly_7_days
+dqo> check run -c=connection_name -ch=median_anomaly_7_days
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=median_anomaly_7_days
+dqo> check run -c=connection_name -t=table_name -ch=median_anomaly_7_days
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=median_anomaly_7_days
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=median_anomaly_7_days
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -675,24 +675,24 @@ Verifies that the median in a column changes in a rate within a percentile bound
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_median_anomaly_7_days
+dqo> check enable -c=connection_name -ch=daily_median_anomaly_7_days
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_median_anomaly_7_days
+dqo> check run -ch=daily_median_anomaly_7_days
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_median_anomaly_7_days
+dqo> check run -c=connection_name -ch=daily_median_anomaly_7_days
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_median_anomaly_7_days
+dqo> check run -c=connection_name -t=table_name -ch=daily_median_anomaly_7_days
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_median_anomaly_7_days
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_median_anomaly_7_days
 ```
 **Check structure (Yaml)**
 ```yaml

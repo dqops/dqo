@@ -12,34 +12,34 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|row_count|profiling| |[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|row_count|profiling| |[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=row_count
+dqo> check enable -c=connection_name -ch=row_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=row_count
+dqo> check run -ch=row_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=row_count
+dqo> check run -c=connection_name -ch=row_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=row_count
+dqo> check run -c=connection_name -t=table_name -ch=row_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=row_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=row_count
 ```
 **Check structure (Yaml)**
 ```yaml
   profiling_checks:
-    standard:
+    volume:
       row_count:
         warning:
           min_count: 0
@@ -61,7 +61,7 @@ spec:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
   profiling_checks:
-    standard:
+    volume:
       row_count:
         warning:
           min_count: 0
@@ -224,7 +224,7 @@ spec:
             source: column_value
             column: state
       profiling_checks:
-        standard:
+        volume:
           row_count:
             warning:
               min_count: 0
@@ -396,35 +396,35 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_row_count|recurring|daily|[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|daily_row_count|recurring|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_row_count
+dqo> check enable -c=connection_name -ch=daily_row_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_row_count
+dqo> check run -ch=daily_row_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_row_count
+dqo> check run -c=connection_name -ch=daily_row_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_row_count
+dqo> check run -c=connection_name -t=table_name -ch=daily_row_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_count
 ```
 **Check structure (Yaml)**
 ```yaml
   recurring_checks:
     daily:
-      standard:
+      volume:
         daily_row_count:
           warning:
             min_count: 0
@@ -447,7 +447,7 @@ spec:
     monthly_partitioning_recent_months: 1
   recurring_checks:
     daily:
-      standard:
+      volume:
         daily_row_count:
           warning:
             min_count: 0
@@ -611,7 +611,7 @@ spec:
             column: state
       recurring_checks:
         daily:
-          standard:
+          volume:
             daily_row_count:
               warning:
                 min_count: 0
@@ -783,35 +783,35 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_row_count|recurring|monthly|[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|monthly_row_count|recurring|monthly|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_row_count
+dqo> check enable -c=connection_name -ch=monthly_row_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_row_count
+dqo> check run -ch=monthly_row_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_row_count
+dqo> check run -c=connection_name -ch=monthly_row_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_row_count
+dqo> check run -c=connection_name -t=table_name -ch=monthly_row_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_row_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_row_count
 ```
 **Check structure (Yaml)**
 ```yaml
   recurring_checks:
     monthly:
-      standard:
+      volume:
         monthly_row_count:
           warning:
             min_count: 0
@@ -834,7 +834,7 @@ spec:
     monthly_partitioning_recent_months: 1
   recurring_checks:
     monthly:
-      standard:
+      volume:
         monthly_row_count:
           warning:
             min_count: 0
@@ -998,7 +998,7 @@ spec:
             column: state
       recurring_checks:
         monthly:
-          standard:
+          volume:
             monthly_row_count:
               warning:
                 min_count: 0
@@ -1170,35 +1170,35 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_row_count|partitioned|daily|[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|daily_partition_row_count|partitioned|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_row_count
+dqo> check enable -c=connection_name -ch=daily_partition_row_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_row_count
+dqo> check run -ch=daily_partition_row_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_row_count
+dqo> check run -c=connection_name -ch=daily_partition_row_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_row_count
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_row_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_row_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_row_count
 ```
 **Check structure (Yaml)**
 ```yaml
   partitioned_checks:
     daily:
-      standard:
+      volume:
         daily_partition_row_count:
           warning:
             min_count: 0
@@ -1221,7 +1221,7 @@ spec:
     monthly_partitioning_recent_months: 1
   partitioned_checks:
     daily:
-      standard:
+      volume:
         daily_partition_row_count:
           warning:
             min_count: 0
@@ -1389,7 +1389,7 @@ spec:
             column: state
       partitioned_checks:
         daily:
-          standard:
+          volume:
             daily_partition_row_count:
               warning:
                 min_count: 0
@@ -1558,35 +1558,35 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_min_row_count|partitioned|monthly|[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|monthly_partition_min_row_count|partitioned|monthly|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_min_row_count
+dqo> check enable -c=connection_name -ch=monthly_partition_min_row_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_min_row_count
+dqo> check run -ch=monthly_partition_min_row_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_min_row_count
+dqo> check run -c=connection_name -ch=monthly_partition_min_row_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_min_row_count
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_min_row_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_min_row_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_min_row_count
 ```
 **Check structure (Yaml)**
 ```yaml
   partitioned_checks:
     monthly:
-      standard:
+      volume:
         monthly_partition_min_row_count:
           warning:
             min_count: 0
@@ -1609,7 +1609,7 @@ spec:
     monthly_partitioning_recent_months: 1
   partitioned_checks:
     monthly:
-      standard:
+      volume:
         monthly_partition_min_row_count:
           warning:
             min_count: 0
@@ -1777,7 +1777,7 @@ spec:
             column: state
       partitioned_checks:
         monthly:
-          standard:
+          volume:
             monthly_partition_min_row_count:
               warning:
                 min_count: 0

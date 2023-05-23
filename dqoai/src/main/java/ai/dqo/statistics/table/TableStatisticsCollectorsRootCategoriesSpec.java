@@ -19,7 +19,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.statistics.AbstractRootStatisticsCollectorsContainerSpec;
 import ai.dqo.statistics.StatisticsCollectorTarget;
-import ai.dqo.statistics.table.standard.TableStandardStatisticsCollectorsSpec;
+import ai.dqo.statistics.table.volume.TableVolumeStatisticsCollectorsSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -39,31 +39,31 @@ import java.util.Objects;
 public class TableStatisticsCollectorsRootCategoriesSpec extends AbstractRootStatisticsCollectorsContainerSpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableStatisticsCollectorsRootCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootStatisticsCollectorsContainerSpec.FIELDS) {
         {
-            put("standard", o -> o.standard);
+            put("volume", o -> o.volume);
         }
     };
 
-    @JsonPropertyDescription("Configuration of standard statistics collectors on a table level.")
+    @JsonPropertyDescription("Configuration of volume statistics collectors on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardStatisticsCollectorsSpec standard = new TableStandardStatisticsCollectorsSpec();
+    private TableVolumeStatisticsCollectorsSpec volume = new TableVolumeStatisticsCollectorsSpec();
 
     /**
-     * Returns the configuration of standard profilers on a table level.
-     * @return Configuration of standard profilers.
+     * Returns the configuration of volume profilers on a table level.
+     * @return Configuration of volume profilers.
      */
-    public TableStandardStatisticsCollectorsSpec getStandard() {
-        return standard;
+    public TableVolumeStatisticsCollectorsSpec getVolume() {
+        return volume;
     }
 
     /**
-     * Sets a configuration of standard profilers on a table level.
-     * @param standard Standard profilers.
+     * Sets a configuration of volume profilers on a table level.
+     * @param volume Volume profilers.
      */
-    public void setStandard(TableStandardStatisticsCollectorsSpec standard) {
-        this.setDirtyIf(!Objects.equals(this.standard, standard));
-        this.standard = standard;
-        this.propagateHierarchyIdToField(standard, "standard");
+    public void setVolume(TableVolumeStatisticsCollectorsSpec volume) {
+        this.setDirtyIf(!Objects.equals(this.volume, volume));
+        this.volume = volume;
+        this.propagateHierarchyIdToField(volume, "volume");
     }
 
     /**

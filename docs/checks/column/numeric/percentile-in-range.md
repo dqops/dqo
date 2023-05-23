@@ -17,24 +17,24 @@ Verifies that the percentile of all values in a column is not outside the set ra
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=percentile_in_range
+dqo> check enable -c=connection_name -ch=percentile_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=percentile_in_range
+dqo> check run -ch=percentile_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=percentile_in_range
+dqo> check run -c=connection_name -ch=percentile_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=percentile_in_range
+dqo> check run -c=connection_name -t=table_name -ch=percentile_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=percentile_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=percentile_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -678,24 +678,24 @@ Verifies that the median of all values in a column is not outside the set range.
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=median_in_range
+dqo> check enable -c=connection_name -ch=median_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=median_in_range
+dqo> check run -ch=median_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=median_in_range
+dqo> check run -c=connection_name -ch=median_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=median_in_range
+dqo> check run -c=connection_name -t=table_name -ch=median_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=median_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=median_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1345,24 +1345,24 @@ Verifies that the percentile 10 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=percentile_10_in_range
+dqo> check enable -c=connection_name -ch=percentile_10_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=percentile_10_in_range
+dqo> check run -ch=percentile_10_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=percentile_10_in_range
+dqo> check run -c=connection_name -ch=percentile_10_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=percentile_10_in_range
+dqo> check run -c=connection_name -t=table_name -ch=percentile_10_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=percentile_10_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=percentile_10_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2012,24 +2012,24 @@ Verifies that the percentile 25 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=percentile_25_in_range
+dqo> check enable -c=connection_name -ch=percentile_25_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=percentile_25_in_range
+dqo> check run -ch=percentile_25_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=percentile_25_in_range
+dqo> check run -c=connection_name -ch=percentile_25_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=percentile_25_in_range
+dqo> check run -c=connection_name -t=table_name -ch=percentile_25_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=percentile_25_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=percentile_25_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2679,24 +2679,24 @@ Verifies that the percentile 75 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=percentile_75_in_range
+dqo> check enable -c=connection_name -ch=percentile_75_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=percentile_75_in_range
+dqo> check run -ch=percentile_75_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=percentile_75_in_range
+dqo> check run -c=connection_name -ch=percentile_75_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=percentile_75_in_range
+dqo> check run -c=connection_name -t=table_name -ch=percentile_75_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=percentile_75_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=percentile_75_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -3346,24 +3346,24 @@ Verifies that the percentile 90 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=percentile_90_in_range
+dqo> check enable -c=connection_name -ch=percentile_90_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=percentile_90_in_range
+dqo> check run -ch=percentile_90_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=percentile_90_in_range
+dqo> check run -c=connection_name -ch=percentile_90_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=percentile_90_in_range
+dqo> check run -c=connection_name -t=table_name -ch=percentile_90_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=percentile_90_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=percentile_90_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -4013,24 +4013,24 @@ Verifies that the percentile of all values in a column is not outside the set ra
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_percentile_in_range
+dqo> check enable -c=connection_name -ch=daily_percentile_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_percentile_in_range
+dqo> check run -ch=daily_percentile_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_percentile_in_range
+dqo> check run -c=connection_name -ch=daily_percentile_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_percentile_in_range
+dqo> check run -c=connection_name -t=table_name -ch=daily_percentile_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_percentile_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_percentile_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -4677,24 +4677,24 @@ Verifies that the median of all values in a column is not outside the set range.
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_median_in_range
+dqo> check enable -c=connection_name -ch=daily_median_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_median_in_range
+dqo> check run -ch=daily_median_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_median_in_range
+dqo> check run -c=connection_name -ch=daily_median_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_median_in_range
+dqo> check run -c=connection_name -t=table_name -ch=daily_median_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_median_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_median_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -5347,24 +5347,24 @@ Verifies that the percentile 10 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_percentile_10_in_range
+dqo> check enable -c=connection_name -ch=daily_percentile_10_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_percentile_10_in_range
+dqo> check run -ch=daily_percentile_10_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_percentile_10_in_range
+dqo> check run -c=connection_name -ch=daily_percentile_10_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_percentile_10_in_range
+dqo> check run -c=connection_name -t=table_name -ch=daily_percentile_10_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_percentile_10_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_percentile_10_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -6017,24 +6017,24 @@ Verifies that the percentile 25 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_percentile_25_in_range
+dqo> check enable -c=connection_name -ch=daily_percentile_25_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_percentile_25_in_range
+dqo> check run -ch=daily_percentile_25_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_percentile_25_in_range
+dqo> check run -c=connection_name -ch=daily_percentile_25_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_percentile_25_in_range
+dqo> check run -c=connection_name -t=table_name -ch=daily_percentile_25_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_percentile_25_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_percentile_25_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -6687,24 +6687,24 @@ Verifies that the percentile 75 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_percentile_75_in_range
+dqo> check enable -c=connection_name -ch=daily_percentile_75_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_percentile_75_in_range
+dqo> check run -ch=daily_percentile_75_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_percentile_75_in_range
+dqo> check run -c=connection_name -ch=daily_percentile_75_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_percentile_75_in_range
+dqo> check run -c=connection_name -t=table_name -ch=daily_percentile_75_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_percentile_75_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_percentile_75_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -7357,24 +7357,24 @@ Verifies that the percentile 90 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_percentile_90_in_range
+dqo> check enable -c=connection_name -ch=daily_percentile_90_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_percentile_90_in_range
+dqo> check run -ch=daily_percentile_90_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_percentile_90_in_range
+dqo> check run -c=connection_name -ch=daily_percentile_90_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_percentile_90_in_range
+dqo> check run -c=connection_name -t=table_name -ch=daily_percentile_90_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_percentile_90_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_percentile_90_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -8027,24 +8027,24 @@ Verifies that the percentile of all values in a column is not outside the set ra
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_percentile_in_range
+dqo> check enable -c=connection_name -ch=monthly_percentile_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_percentile_in_range
+dqo> check run -ch=monthly_percentile_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_percentile_in_range
+dqo> check run -c=connection_name -ch=monthly_percentile_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_percentile_in_range
+dqo> check run -c=connection_name -t=table_name -ch=monthly_percentile_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_percentile_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_percentile_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -8691,24 +8691,24 @@ Verifies that the median of all values in a column is not outside the set range.
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_median_in_range
+dqo> check enable -c=connection_name -ch=monthly_median_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_median_in_range
+dqo> check run -ch=monthly_median_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_median_in_range
+dqo> check run -c=connection_name -ch=monthly_median_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_median_in_range
+dqo> check run -c=connection_name -t=table_name -ch=monthly_median_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_median_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_median_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -9361,24 +9361,24 @@ Verifies that the percentile 10 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_percentile_10_in_range
+dqo> check enable -c=connection_name -ch=monthly_percentile_10_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_percentile_10_in_range
+dqo> check run -ch=monthly_percentile_10_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_percentile_10_in_range
+dqo> check run -c=connection_name -ch=monthly_percentile_10_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_percentile_10_in_range
+dqo> check run -c=connection_name -t=table_name -ch=monthly_percentile_10_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_percentile_10_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_percentile_10_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -10031,24 +10031,24 @@ Verifies that the percentile 25 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_percentile_25_in_range
+dqo> check enable -c=connection_name -ch=monthly_percentile_25_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_percentile_25_in_range
+dqo> check run -ch=monthly_percentile_25_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_percentile_25_in_range
+dqo> check run -c=connection_name -ch=monthly_percentile_25_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_percentile_25_in_range
+dqo> check run -c=connection_name -t=table_name -ch=monthly_percentile_25_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_percentile_25_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_percentile_25_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -10701,24 +10701,24 @@ Verifies that the percentile 75 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_percentile_75_in_range
+dqo> check enable -c=connection_name -ch=monthly_percentile_75_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_percentile_75_in_range
+dqo> check run -ch=monthly_percentile_75_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_percentile_75_in_range
+dqo> check run -c=connection_name -ch=monthly_percentile_75_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_percentile_75_in_range
+dqo> check run -c=connection_name -t=table_name -ch=monthly_percentile_75_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_percentile_75_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_percentile_75_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -11371,24 +11371,24 @@ Verifies that the percentile 90 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_percentile_90_in_range
+dqo> check enable -c=connection_name -ch=monthly_percentile_90_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_percentile_90_in_range
+dqo> check run -ch=monthly_percentile_90_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_percentile_90_in_range
+dqo> check run -c=connection_name -ch=monthly_percentile_90_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_percentile_90_in_range
+dqo> check run -c=connection_name -t=table_name -ch=monthly_percentile_90_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_percentile_90_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_percentile_90_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -12041,24 +12041,24 @@ Verifies that the percentile of all values in a column is not outside the set ra
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_percentile_in_range
+dqo> check enable -c=connection_name -ch=daily_partition_percentile_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_percentile_in_range
+dqo> check run -ch=daily_partition_percentile_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_percentile_in_range
+dqo> check run -c=connection_name -ch=daily_partition_percentile_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_percentile_in_range
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_percentile_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -12705,24 +12705,24 @@ Verifies that the median of all values in a column is not outside the set range.
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_median_in_range
+dqo> check enable -c=connection_name -ch=daily_partition_median_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_median_in_range
+dqo> check run -ch=daily_partition_median_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_median_in_range
+dqo> check run -c=connection_name -ch=daily_partition_median_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_median_in_range
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_median_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_median_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_median_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -13375,24 +13375,24 @@ Verifies that the percentile 10 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_percentile_10_in_range
+dqo> check enable -c=connection_name -ch=daily_partition_percentile_10_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_percentile_10_in_range
+dqo> check run -ch=daily_partition_percentile_10_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_percentile_10_in_range
+dqo> check run -c=connection_name -ch=daily_partition_percentile_10_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_percentile_10_in_range
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_percentile_10_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile_10_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile_10_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -14045,24 +14045,24 @@ Verifies that the percentile 25 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_percentile_25_in_range
+dqo> check enable -c=connection_name -ch=daily_partition_percentile_25_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_percentile_25_in_range
+dqo> check run -ch=daily_partition_percentile_25_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_percentile_25_in_range
+dqo> check run -c=connection_name -ch=daily_partition_percentile_25_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_percentile_25_in_range
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_percentile_25_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile_25_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile_25_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -14715,24 +14715,24 @@ Verifies that the percentile 75 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_percentile_75_in_range
+dqo> check enable -c=connection_name -ch=daily_partition_percentile_75_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_percentile_75_in_range
+dqo> check run -ch=daily_partition_percentile_75_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_percentile_75_in_range
+dqo> check run -c=connection_name -ch=daily_partition_percentile_75_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_percentile_75_in_range
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_percentile_75_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile_75_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile_75_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -15385,24 +15385,24 @@ Verifies that the percentile 90 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_percentile_90_in_range
+dqo> check enable -c=connection_name -ch=daily_partition_percentile_90_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_percentile_90_in_range
+dqo> check run -ch=daily_partition_percentile_90_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_percentile_90_in_range
+dqo> check run -c=connection_name -ch=daily_partition_percentile_90_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_percentile_90_in_range
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_percentile_90_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile_90_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile_90_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -16055,24 +16055,24 @@ Verifies that the percentile of all values in a column is not outside the set ra
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_percentile_in_range
+dqo> check enable -c=connection_name -ch=monthly_partition_percentile_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_percentile_in_range
+dqo> check run -ch=monthly_partition_percentile_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_percentile_in_range
+dqo> check run -c=connection_name -ch=monthly_partition_percentile_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile_in_range
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -16719,24 +16719,24 @@ Verifies that the median of all values in a column is not outside the set range.
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_median_in_range
+dqo> check enable -c=connection_name -ch=monthly_partition_median_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_median_in_range
+dqo> check run -ch=monthly_partition_median_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_median_in_range
+dqo> check run -c=connection_name -ch=monthly_partition_median_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_median_in_range
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_median_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_median_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_median_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -17389,24 +17389,24 @@ Verifies that the percentile 10 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_percentile_10_in_range
+dqo> check enable -c=connection_name -ch=monthly_partition_percentile_10_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_percentile_10_in_range
+dqo> check run -ch=monthly_partition_percentile_10_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_percentile_10_in_range
+dqo> check run -c=connection_name -ch=monthly_partition_percentile_10_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile_10_in_range
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile_10_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile_10_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile_10_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -18059,24 +18059,24 @@ Verifies that the percentile 25 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_percentile_25_in_range
+dqo> check enable -c=connection_name -ch=monthly_partition_percentile_25_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_percentile_25_in_range
+dqo> check run -ch=monthly_partition_percentile_25_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_percentile_25_in_range
+dqo> check run -c=connection_name -ch=monthly_partition_percentile_25_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile_25_in_range
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile_25_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile_25_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile_25_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -18729,24 +18729,24 @@ Verifies that the percentile 75 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_percentile_75_in_range
+dqo> check enable -c=connection_name -ch=monthly_partition_percentile_75_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_percentile_75_in_range
+dqo> check run -ch=monthly_partition_percentile_75_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_percentile_75_in_range
+dqo> check run -c=connection_name -ch=monthly_partition_percentile_75_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile_75_in_range
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile_75_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile_75_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile_75_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -19399,24 +19399,24 @@ Verifies that the percentile 90 of all values in a column is not outside the set
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_percentile_90_in_range
+dqo> check enable -c=connection_name -ch=monthly_partition_percentile_90_in_range
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_percentile_90_in_range
+dqo> check run -ch=monthly_partition_percentile_90_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_percentile_90_in_range
+dqo> check run -c=connection_name -ch=monthly_partition_percentile_90_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile_90_in_range
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile_90_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile_90_in_range
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile_90_in_range
 ```
 **Check structure (Yaml)**
 ```yaml

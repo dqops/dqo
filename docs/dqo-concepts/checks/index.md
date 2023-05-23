@@ -32,12 +32,12 @@ You can access the full lists of available checks with detailed descriptions by 
 
 ### **Table checks**
 
-| Subcategory       | Description                                                                                                                                                                                                                                 |
-|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Standard          | Evaluates the overall quality of the table by verifying the number of rows.                                                                                                                                                                 |
-| Timeliness        | Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.                                                                                                                          |
-| SQL               | Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range. |
-| Availability      | Checks whether the table is accessible and available for use.                                                                                                                                                                               |                                                                                                                                                                                                                                            |
+| Subcategory  | Description                                                                                                                                                                                                                                 |
+|--------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Volume       | Evaluates the overall quality of the table by verifying the number of rows.                                                                                                                                                                 |
+| Timeliness   | Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.                                                                                                                          |
+| SQL          | Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range. |
+| Availability | Checks whether the table is accessible and available for use.                                                                                                                                                                               |                                                                                                                                                                                                                                            |
 
 ### **Column checks**
 

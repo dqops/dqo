@@ -13,53 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.table.profiling;
+package ai.dqo.sensors.table.volume;
 
-import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-import java.util.Objects;
-
 /**
- * Container of built-in preconfigured standard data quality checks on a table level.
+ * Table sensor that executes a row count query.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableProfilingStandardChecksSpec extends AbstractCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableProfilingStandardChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+public class TableVolumeRowCountSensorParametersSpec extends AbstractSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableVolumeRowCountSensorParametersSpec> FIELDS =
+            new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
-            put("row_count", o -> o.rowCount);
         }
     };
-
-    @JsonPropertyDescription("Verifies that the number of rows in a table does not exceed the minimum accepted count.")
-    private TableRowCountCheckSpec rowCount;
-
-    /**
-     * Returns a row count check.
-     * @return Row count check.
-     */
-    public TableRowCountCheckSpec getRowCount() {
-        return rowCount;
-    }
-
-    /**
-     * Sets a new definition of a row count check.
-     * @param rowCount Row count check.
-     */
-    public void setRowCount(TableRowCountCheckSpec rowCount) {
-        this.setDirtyIf(!Objects.equals(this.rowCount, rowCount));
-        this.rowCount = rowCount;
-        propagateHierarchyIdToField(rowCount, "row_count");
-    }
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -69,5 +44,15 @@ public class TableProfilingStandardChecksSpec extends AbstractCheckCategorySpec 
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns the sensor definition name. This is the folder name that keeps the sensor definition files.
+     *
+     * @return Sensor definition name.
+     */
+    @Override
+    public String getSensorDefinitionName() {
+        return "table/volume/row_count";
     }
 }
