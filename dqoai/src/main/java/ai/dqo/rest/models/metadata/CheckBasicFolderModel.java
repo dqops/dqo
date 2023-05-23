@@ -86,4 +86,17 @@ public class CheckBasicFolderModel {
             }
         }
     }
+
+    /**
+     * Collects all checks from all tree levels.
+     * @return A list of all checks.
+     */
+    public List<CheckBasicModel> getAllChecks() {
+        List<CheckBasicModel> allChecks = new ArrayList<>(this.getChecks());
+        for (CheckBasicFolderModel folder : this.folders.values()) {
+            allChecks.addAll(folder.getAllChecks());
+        }
+
+        return allChecks;
+    }
 }

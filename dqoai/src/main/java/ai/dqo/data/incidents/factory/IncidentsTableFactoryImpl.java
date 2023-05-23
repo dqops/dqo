@@ -43,6 +43,7 @@ public class IncidentsTableFactoryImpl implements IncidentsTableFactory {
                 TextColumn.create(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME),
                 TextColumn.create(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME),
                 IntColumn.create(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME),
+                IntColumn.create(IncidentsColumnNames.MIN_SEVERITY_COLUMN_NAME),
                 InstantColumn.create(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME),
                 InstantColumn.create(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME),
                 InstantColumn.create(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME),

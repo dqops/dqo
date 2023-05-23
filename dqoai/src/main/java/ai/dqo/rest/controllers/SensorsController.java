@@ -29,10 +29,12 @@ import ai.dqo.rest.models.metadata.*;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import autovalue.shaded.com.google.common.base.Strings;
 import io.swagger.annotations.*;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
@@ -42,7 +44,7 @@ import java.util.stream.Collectors;
  * REST api controller to manage the list of sensors.
  */
 @RestController
-@RequestMapping("/api/sensors")
+@RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Sensors", description = "Sensors definition Management")
 public class SensorsController {
@@ -69,7 +71,7 @@ public class SensorsController {
      * @param fullSensorName Full sensor name.
      * @return Model of the sensor with specific sensor name.
      */
-    @GetMapping("/{fullSensorName}")
+    @GetMapping("/sensors/{fullSensorName}")
     @ApiOperation(value = "getSensor", notes = "Returns a sensor model", response = SensorModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -142,7 +144,7 @@ public class SensorsController {
      * @param fullSensorName Full sensor name
      * @param sensorModel sensor model
      */
-    @PostMapping("/{fullSensorName}")
+    @PostMapping("/sensors/{fullSensorName}")
     @ApiOperation(value = "createSensor", notes = "Creates (adds) a new sensor given sensor information.")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -190,7 +192,7 @@ public class SensorsController {
      * or removes sensor if custom definition is same as Dqo Home sensor
      * @param sensorModel sensor model
      */
-    @PutMapping("/{fullSensorName}")
+    @PutMapping("/sensors/{fullSensorName}")
     @ApiOperation(value = "updateSensor", notes = "Updates an existing sensor, making a custom sensor definition if it is not present. \n" +
             "Removes sensor if custom definition is same as Dqo Home sensor")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -291,7 +293,7 @@ public class SensorsController {
      * @param fullSensorName  Full sensor name.
      * @return Empty response.
      */
-    @DeleteMapping("/{fullSensorName}")
+    @DeleteMapping("/sensors/{fullSensorName}")
     @ApiOperation(value = "deleteSensor", notes = "Deletes a custom sensor definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -326,7 +328,7 @@ public class SensorsController {
      * Returns all combined sensor folder model.
      * @return sensor basic folder model.
      */
-    @GetMapping
+    @GetMapping("/definitions/sensors")
     @ApiOperation(value = "getSensorFolderTree", notes = "Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
             response = SensorBasicFolderModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -335,7 +337,17 @@ public class SensorsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     public ResponseEntity<Mono<SensorBasicFolderModel>> getSensorFolderTree() {
+        SensorBasicFolderModel sensorFolderModel = createSensorTreeModel();
 
+        return new ResponseEntity<>(Mono.just(sensorFolderModel), HttpStatus.OK);
+    }
+
+    /**
+     * Creates a tree with all defined sensors.
+     * @return A tree with all defined sensors.
+     */
+    @NotNull
+    private SensorBasicFolderModel createSensorTreeModel() {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -378,7 +390,25 @@ public class SensorsController {
 
             sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorBasicModelList, SensorDefinitionSource.CUSTOM);
         });
+        return sensorFolderModel;
+    }
 
-        return new ResponseEntity<>(Mono.just(sensorFolderModel), HttpStatus.OK);
+    /**
+     * Returns a flat list of all sensors.
+     * @return List of all sensors.
+     */
+    @GetMapping("/sensors")
+    @ApiOperation(value = "getAllSensors", notes = "Returns a flat list of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
+            response = SensorBasicModel[].class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = SensorBasicModel[].class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    public ResponseEntity<Flux<SensorBasicModel>> getAllSensors() {
+        SensorBasicFolderModel sensorBasicFolderModel = createSensorTreeModel();
+        List<SensorBasicModel> allSensors = sensorBasicFolderModel.getAllSensors();
+
+        return new ResponseEntity<>(Flux.fromStream(allSensors.stream()), HttpStatus.OK);
     }
 }

@@ -17,12 +17,17 @@ package ai.dqo.data.checkresults.factory;
 
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.stream.Stream;
+
 /**
  * Class with constants - the column names in the check_results parquet table.
  */
 public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
     /**
-     * Rule severity (0, 1, 2, 3) for none, low, medium and high alerts.
+     * Check (rule) severity (0, 1, 2, 3) for none, warning, error and fatal severity failed data quality checks.
      */
     public static final String SEVERITY_COLUMN_NAME = "severity";
 
@@ -126,4 +131,14 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
             QUALITY_DIMENSION_COLUMN_NAME,
             SENSOR_NAME_COLUMN_NAME
     };
+
+    /**
+     * List of column names that should be loaded from the parquet files when the list of failed check results related to an incident are needed.
+     */
+    public static final String[] COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS =
+            Stream.concat(
+                Arrays.stream(COLUMN_NAMES_FOR_RESULTS_DETAILED),
+                Arrays.stream(new String[] {
+                    INCIDENT_HASH_COLUMN_NAME,
+                })).toArray(String[]::new);
 }
