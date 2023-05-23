@@ -1,1 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="10px" height="10px" overflow="hidden"><defs><clipPath id="a"><path d="M1491 608h163v388h-163z"/></clipPath></defs><g clip-path="url(#a)" transform="translate(-1491 -608)"><path fill-rule="evenodd" d="M1647.27 996h-149.54v-13.483h68.04v-61.421h-68.04a6.73 6.73 0 0 1-6.73-6.741v-224.71a6.73 6.73 0 0 1 6.73-6.741h68.04v-61.421h-68.04V608h149.54v13.483h-68.04v61.421h68.04a6.73 6.73 0 0 1 6.73 6.741v224.71a6.73 6.73 0 0 1-6.73 6.741h-68.04v61.403h68.04Zm-142.81-88.386h136.08v-98.873h-136.08Zm0-112.355h136.08v-98.873h-136.08Z"/></g></svg>
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 15 15" style="enable-background:new 0 0 15 15;" xml:space="preserve" fill="currentColor">
+<path d="M10.3,2.8H7.9V0.8h2.6V0H4.5v0.8h2.6v2.1H4.7c-0.1,0-0.2,0-0.3,0.1C4.3,3,4.3,3.1,4.3,3.2v8.5c0,0.2,0.2,0.4,0.4,0.4h2.5
+	v2.1H4.5V15h5.9v-0.8H7.9v-2.1h2.5c0.2,0,0.4-0.2,0.4-0.4V3.2C10.7,3,10.6,2.8,10.3,2.8z M10,3.6v3.5H5V3.6H10z M10,7.9v3.5H5V7.9
+	H10z"/>
+</svg>

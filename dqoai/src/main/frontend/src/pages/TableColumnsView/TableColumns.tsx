@@ -5,9 +5,7 @@ import { ColumnStatisticsModel, TableColumnsStatisticsModel } from '../../api';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../components/SvgIcon';
 import ConfirmDialog from './ConfirmDialog';
-import { COLUMN_LEVEL_TABS, CONNECTION_LEVEL_TABS, PageTab, TABLE_LEVEL_TABS } from "../../shared/constants";
 import { CheckTypes, ROUTES } from "../../shared/routes";
-import path from 'path';
 import { useDispatch } from 'react-redux/es/hooks/useDispatch';
 import { useParams, useHistory } from 'react-router-dom';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
@@ -17,26 +15,20 @@ interface ITableColumnsProps {
   schemaName: string;
   tableName: string;
 }
-type NavigationMenu = {
-  label: string;
-  value: CheckTypes;
-}
-interface connectStats{
-  onConnectStats: () =>void
-}
+
 const TableColumns = ({
   connectionName,
   schemaName,
   tableName
-}: ITableColumnsProps, onConnectStats: connectStats) => {
+}: ITableColumnsProps) => {
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
-  const [selectColumn, setSelectColumn] = useState("")
   const [loadingJob, setLoadingJob] = useState(false);
   const dispatch = useDispatch();
-  const { connection, schema, table, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, tab: string, checkTypes: CheckTypes } = useParams();
+  const { connection, schema, table }: { connection: string, schema: string, table: string, tab: string, checkTypes: CheckTypes } = useParams();
   const history = useHistory();
+  
   const fetchColumns = async () => {
     try {
       const res: AxiosResponse<TableColumnsStatisticsModel> =
@@ -45,20 +37,6 @@ const TableColumns = ({
     } catch (err) {
       console.error(err);
     }
-  };
-  const onChangeNavigation = async (column: string, item: NavigationMenu) => {
-    const value = ROUTES.TABLE_LEVEL_VALUE("sources", connection, schema, table);
-    const url = (column: string)=> ROUTES.COLUMN_LEVEL_PAGE("sources", connectionName, schemaName, tableName, column, 'detail');
-
-
-    dispatch(addFirstLevelTab(item.value, {
-      url,
-      value,
-      state: {},
-      label: table
-    }))
-
-    history.push(url(column));
   };
 
   useEffect(() => {
@@ -79,14 +57,9 @@ const TableColumns = ({
       state: {},
       label: table
     }))
-   
-   
     history.push(url)
-    
   }
  
-  
-
   const removeColumn = async () => {
     if (selectedColumn?.column_name) {
       await ColumnApiClient.deleteColumn(
@@ -98,6 +71,7 @@ const TableColumns = ({
       await fetchColumns();
     }
   };
+
   const collectStatistics = async (index : number) => {
     try {
       setLoadingJob(true);
@@ -106,7 +80,6 @@ const TableColumns = ({
       setLoadingJob(false);
     }
   };
-
 
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
@@ -128,7 +101,6 @@ const TableColumns = ({
     if(Number(numberForFile) === 7){ return 'Mixed data type'}
   }
 
-
   return (
     <div className="p-4">
       <table className="mb-6 mt-4 w-full">
@@ -139,22 +111,22 @@ const TableColumns = ({
           <th className="border-b border-gray-100 text-left px-4 py-2">
             Detected datatype
           </th>
-          <th className="border-b border-gray-100 text-left px-4 py-2">
+          <th className="border-b border-gray-100 text-right px-4 py-2">
             Length
           </th>
-          <th className="border-b border-gray-100 text-left px-4 py-2">
+          <th className="border-b border-gray-100 text-right px-4 py-2">
             Scale
           </th>
-          <th className="border-b border-gray-100 text-left px-4 py-2">
+          <th className="border-b border-gray-100 text-right px-4 py-2">
             Null count
           </th>
-          <th className="border-b border-gray-100 text-left px-4 py-2">
+          <th className="border-b border-gray-100 text-right px-4 py-2">
             Null percent
           </th>
-          <th className="border-b border-gray-100 text-left px-4 py-2">
+          <th className="border-b border-gray-100 text-right px-4 py-2">
             Unique count
           </th>
-          <th className="border-b border-gray-100 text-left px-4 py-2">
+          <th className="border-b border-gray-100 text-right px-7.5 py-2">
             Action
           </th>
         </thead>
@@ -164,43 +136,49 @@ const TableColumns = ({
               <td className="border-b border-gray-100 text-left px-4 py-2">
                 {column.column_hash}
               </td>
-              <td className="border-b border-gray-100 text-left px-4 py-2 underline" onClick={() => navigate(column.column_name ? column.column_name : "" )}>
-                {/* <a href={ROUTES.COLUMN_LEVEL_PAGE("profiling", connectionName, schemaName, tableName, column.column_name ? column.column_name : "", "detail")}> */}
+              <td className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer" 
+              onClick={() => navigate(column.column_name ? column.column_name : "" )}>
                 {column.column_name}
-                {/* </a> */}
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
                 {column.type_snapshot?.column_type}
               </td>
-              <td className="border-b border-gray-100 text-left px-4 py-2">
+              <td className="border-b border-gray-100 text-right px-4 py-2">
               {column?.statistics?.map((metric, index) => (
                         metric.collector === 'string_datatype_detect' ? 
-                        <td key={index} className="px-2 truncate">
+                        <td key={index} className="truncate">
                         {metric.result ?  datatype_detected(metric.result) : ""}
                         </td>
                         : ""
                         ))}
               </td>
-              <td className="border-b border-gray-100 text-left px-4 py-2">
+              <td className="border-b border-gray-100 text-right px-4 py-2">
+                <th className='float-right'>
                 {column.type_snapshot?.length}
+                </th>
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
+                
+              <th className='float-right'>
                 {column.type_snapshot?.scale}
+                </th>
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
               {column?.statistics?.map((metric, index) => (
                         metric.collector === 'nulls_count' ? 
-                        <td key={index} className="px-2 truncate">
-                        {metric.result ?  renderValue(metric.result) : ""}
+                        <td key={index} className="text-right float-right">
+                        {metric.result ?  renderValue(metric.result) : "0"}
                         </td>
                         : ""
                         ))}
               </td>
-              <td className="border-b border-gray-100 text-left px-4 py-2">
+              <td className="border-b border-gray-100 text-right px-4 py-2">
               {column?.statistics?.map((metric, index) => (
                         metric.collector === 'nulls_percent' ? 
-                        <td key={index} className="px-2 truncate">
-                        {metric.result ?  renderValue(metric.result).toFixed(2) : ""}
+                        <td key={index} className="truncate float-right" >
+                        {metric.result ? (renderValue(metric.result) ==="0" ? "0%" 
+                        : renderValue(metric.result).toFixed(2))+"%"
+                        : "0%"}
                         </td>
                         : ""
                         ))}
@@ -208,23 +186,23 @@ const TableColumns = ({
               <td className="border-b border-gray-100 text-left px-4 py-2">
               {column?.statistics?.map((metric, index) => (
                         metric.collector === 'unique_count' ? 
-                        <td key={index} className="px-2 truncate">
+                        <td key={index} className="truncate float-right">
                         {metric.result ?  renderValue(metric.result) : ""}
                         </td>
                         : ""
                         ))}
               </td>
-              <td className="border-b border-gray-100 text-left px-4 py-2 ">
+              <td className="border-b border-gray-100 text-right px-4 py-2 ">
                 <IconButton
                   size="sm"
-                  className="bg-teal-500"
+                  className="bg-teal-500 ml-1.5"
                   onClick={() => collectStatistics(index)}
                   >
-                  <SvgIcon name="boxplot" className="w-4" />
+                  <SvgIcon name="boxplot" className="w-4 white" />
                 </IconButton>
                 <IconButton
                   size="sm"
-                  className="bg-teal-500"
+                  className="bg-teal-500 ml-3"
                   onClick={() => onRemoveColumn(column)}
                   >
                   <SvgIcon name="delete" className="w-4" />
