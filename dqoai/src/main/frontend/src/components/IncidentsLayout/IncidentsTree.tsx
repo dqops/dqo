@@ -30,6 +30,11 @@ const IncidentsTree = () => {
       url: ROUTES.INCIDENT_DETAIL(connection?.connection ?? ""),
       value: ROUTES.INCIDENT_DETAIL_VALUE(connection?.connection ?? ""),
       state: {
+        filters: {
+          openIncidents: true,
+          acknowledgedIncidents: true,
+          resolvedIncidents: true,
+        }
       },
       label: connection?.connection ?? ""
     }))
