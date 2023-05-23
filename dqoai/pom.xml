@@ -216,7 +216,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
-						<version>2.22.2</version>
+						<version>3.1.0</version>
 						<executions>
 							<execution>
 								<phase>integration-test</phase>
@@ -285,7 +285,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
-						<version>2.22.2</version>
+						<version>3.1.0</version>
 						<configuration>
 							<skipTests>true</skipTests>
 						</configuration>
@@ -293,7 +293,7 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-compiler-plugin</artifactId>
-						<version>3.10.1</version>
+						<version>3.11.0</version>
 						<executions>
 							<execution>
 								<id>default-testCompile</id>
@@ -324,7 +324,7 @@
 			<dependency>
 				<groupId>org.testcontainers</groupId>
 				<artifactId>testcontainers-bom</artifactId>
-				<version>1.17.6</version>
+				<version>1.18.1</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -458,22 +458,22 @@
 		<dependency>
 			<groupId>com.google.api</groupId>
 			<artifactId>gax</artifactId>
-			<version>2.20.1</version>
+			<version>2.23.3</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-bigquery</artifactId>
-			<version>2.19.1</version>
+			<version>2.23.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-storage</artifactId>
-			<version>2.16.0</version>
+			<version>2.20.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.cloud</groupId>
 			<artifactId>google-cloud-secretmanager</artifactId>
-			<version>2.7.0</version>
+			<version>2.12.0</version>
 		</dependency>
 		<dependency>
 			<groupId>tech.tablesaw</groupId>
@@ -537,7 +537,7 @@
 		<dependency>
 			<groupId>com.github.victools</groupId>
 			<artifactId>jsonschema-module-jackson</artifactId>
-			<version>4.28.0</version>
+			<version>4.29.0</version>
 		</dependency>
 		<dependency>
 			<groupId>io.github.kostaskougios</groupId>
@@ -547,7 +547,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.24</version>
+			<version>1.18.26</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -635,6 +635,11 @@
 			<artifactId>jsonschema-generator</artifactId>
 			<version>4.29.0</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jetbrains</groupId>
+			<artifactId>annotations</artifactId>
+			<version>24.0.1</version>
 		</dependency>
 
 		<!-- JDBC driver dependencies, make sure that they are the same as those in the lib/pom.xml file, because they are distributed in a separate folder -->
@@ -729,7 +734,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.10.1</version>
+				<version>3.11.0</version>
 				<configuration>
 					<annotationProcessorPaths>
 						<path>
@@ -762,14 +767,14 @@
 							<swaggerFileName>dqo-ui-swagger</swaggerFileName>
 							<outputFormats>JSON,YAML</outputFormats>
 							<info>
-								<title>DQO.ai</title>
+								<title>DQOps</title>
 								<version>v1</version>
-								<description>DQO.AI REST API</description>
-								<termsOfService>https://dqo.ai/terms-of-service</termsOfService>
+								<description>DQOps REST API</description>
+								<termsOfService>https://dqops.com/terms-of-service</termsOfService>
 								<contact>
-									<email>support@dqo.ai</email>
-									<name>DQO.ai Support</name>
-									<url>https://dqo.ai</url>
+									<email>support@dqops.com</email>
+									<name>DQOps Support</name>
+									<url>https://dqops.com/</url>
 								</contact>
 								<license>
 									<url>https://www.apache.org/licenses/LICENSE-2.0.html</url>
@@ -796,7 +801,7 @@
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>6.2.1</version>
+				<version>6.6.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -838,7 +843,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>2.6.2</version>  <!--  Spring boot version  -->
 				<configuration>
 					<excludes>
 						<exclude>
@@ -851,7 +855,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
+				<version>3.1.0</version>
 				<configuration>
 					<!-- If the "too many open files" error appears, download file-leak-detector-1.15-jar-with-dependencies.jar from https://github.com/jenkinsci/lib-file-leak-detector to the current folder and add "-javaagent:file-leak-detector-1.15-jar-with-dependencies.jar=http=19999" , then run tests and instantly open localhost:19999 in the browser to find another bug in Java. -->
 					<argLine>--add-opens java.base/java.nio=ALL-UNNAMED -XX:-MaxFDLimit</argLine>  <!-- Fixes an issue with snowflake on JDK 17, see: https://github.com/snowflakedb/snowflake-jdbc/issues/589#issuecomment-983944767 -->
@@ -873,7 +877,7 @@
 			<plugin>
 				<groupId>io.swagger</groupId>
 				<artifactId>swagger-codegen-maven-plugin</artifactId>
-				<version>2.4.26</version>
+				<version>2.4.32</version>
 				<executions>
 					<execution>
 						<goals>
@@ -904,7 +908,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.4.0</version>
 				<executions>
 					<execution>
 						<id>add-generated-sources</id>
@@ -949,7 +953,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.1.0</version>
+				<version>3.3.0</version>
 				<executions>
 					<execution>
 						<id>copy-swagger-json</id>
@@ -971,7 +975,7 @@
 			<plugin>
 				<groupId>com.github.victools</groupId>
 				<artifactId>jsonschema-maven-plugin</artifactId>
-				<version>4.29.0</version>
+				<version>4.31.1</version>
 				<executions>
 					<execution>
 						<goals>
@@ -1011,8 +1015,8 @@
 				<version>4.1</version>
 				<configuration>
 					<properties>
-						<owner>DQO.ai</owner>
-						<email>support@dqo.ai</email>
+						<owner>DQOps</owner>
+						<email>support@dqops.com</email>
 					</properties>
 					<licenseSets>
 						<licenseSet>

@@ -332,10 +332,9 @@ Column level sensor that calculates the percent of non-negative values in a colu
          CASE
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE 100.0 * SUM(
-                CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }}
-                         THEN 1
-                      ELSE 0
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                    ELSE 0
                     END
                 ) / COUNT(*)
             END AS actual_value

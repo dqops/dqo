@@ -177,7 +177,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(6, result.getCategories().size());
+        Assertions.assertEquals(5, result.getCategories().size());
     }
 
     @Test
@@ -252,7 +252,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(6, result.getCategories().size());
+        Assertions.assertEquals(5, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -270,7 +270,7 @@ public class TablesControllerUTTests extends BaseTest {
         Assertions.assertNotNull(result);
 
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(6, result.getCategories().size());
+            Assertions.assertEquals(5, result.getCategories().size());
         } else {
             Assertions.assertEquals(5, result.getCategories().size());
         }
@@ -291,7 +291,7 @@ public class TablesControllerUTTests extends BaseTest {
         Assertions.assertNotNull(result);
 
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(4, result.getCategories().size());
+            Assertions.assertEquals(3, result.getCategories().size());
         } else {
             Assertions.assertEquals(3, result.getCategories().size());
         }
@@ -309,7 +309,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(6, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(5, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -326,7 +326,7 @@ public class TablesControllerUTTests extends BaseTest {
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(6, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(5, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
         } else {
             Assertions.assertEquals(5, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
         }
@@ -346,7 +346,7 @@ public class TablesControllerUTTests extends BaseTest {
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(4, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(3, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
         } else {
             Assertions.assertEquals(3, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
         }

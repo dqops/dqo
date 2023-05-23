@@ -83,7 +83,7 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(6, uiModel.getCategories().size());
+        Assertions.assertEquals(5, uiModel.getCategories().size());
     }
 
     @Test
@@ -125,7 +125,7 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
         UICheckContainerBasicModel uiBasicModel = this.sut.createUiBasicModel(tableCheckCategoriesSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiBasicModel);
-        Assertions.assertEquals(6, UICheckContainerBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());
+        Assertions.assertEquals(5, UICheckContainerBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());
 
         Map.Entry<Iterable<String>, Iterable<String>> names = extractCheckNamesFromUIModels(uiModel, uiBasicModel);
 
