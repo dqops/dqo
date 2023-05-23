@@ -20,7 +20,7 @@ import numpy as np
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class BetweenChangeRuleParametersSpec:
+class BetweenChange7DaysRuleParametersSpec:
     from_: int
     to: int
     exact: bool = False
@@ -46,7 +46,7 @@ class RuleTimeWindowSettingsSpec:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: BetweenChangeRuleParametersSpec
+    parameters: BetweenChange7DaysRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec

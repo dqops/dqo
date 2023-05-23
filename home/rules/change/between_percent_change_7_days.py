@@ -16,19 +16,13 @@
 
 from datetime import datetime
 from typing import Sequence
-import numpy as np
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class BetweenChange30DaysRuleParametersSpec:
-    from_: int
-    to: int
+class BetweenPercentChange7DaysRuleParametersSpec:
+    from_percent: float
+    to_percent: float
     exact: bool = False
-
-    def __getattr__(self, name):
-        if name == "from":
-            return self.from_
-        return object.__getattribute__(self, name)
 
 
 class HistoricDataPoint:
@@ -46,7 +40,7 @@ class RuleTimeWindowSettingsSpec:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: BetweenChange30DaysRuleParametersSpec
+    parameters: BetweenPercentChange7DaysRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -72,7 +66,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult(True, None, None, None)
 
-    past_readouts = rule_parameters.previous_readouts[:-29]
+    past_readouts = rule_parameters.previous_readouts[:-6]
     if rule_parameters.parameters.exact:
         last_readout = past_readouts[-1]
         if last_readout is None:
@@ -85,8 +79,8 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
             return RuleExecutionResult(True, None, None, None)
         previous_readout = filtered_readouts[-1]
 
-    lower_bound = previous_readout + getattr(rule_parameters.parameters, 'from')
-    upper_bound = previous_readout + rule_parameters.parameters.to
+    lower_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.from_percent / 100.0)
+    upper_bound = previous_readout + abs(previous_readout) * (rule_parameters.parameters.to_percent / 100.0)
 
     passed = lower_bound <= rule_parameters.actual_value <= upper_bound
     expected_value = (lower_bound + upper_bound) / 2

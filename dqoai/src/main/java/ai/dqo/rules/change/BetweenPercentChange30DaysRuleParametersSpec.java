@@ -28,13 +28,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if data quality sensor readout value changed by a percent between the provided bounds.
+ * Data quality rule that verifies if data quality sensor readout value changed by a percent between the provided bounds compared to last month.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class BetweenPercentChangeRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<BetweenPercentChangeRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class BetweenPercentChange30DaysRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<BetweenPercentChange30DaysRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
@@ -43,7 +43,7 @@ public class BetweenPercentChangeRuleParametersSpec extends AbstractRuleParamete
     /**
      * Default constructor.
      */
-    public BetweenPercentChangeRuleParametersSpec() {
+    public BetweenPercentChange30DaysRuleParametersSpec() {
     }
 
     @JsonPropertyDescription("Minimal accepted change relative to the previous readout (inclusive).")
@@ -53,6 +53,11 @@ public class BetweenPercentChangeRuleParametersSpec extends AbstractRuleParamete
     @JsonPropertyDescription("Maximal accepted change relative to the previous readout (inclusive).")
     @SampleValues(values = "20")
     private Double toPercent;
+
+    @JsonPropertyDescription("Whether to compare the actual value to the readout exactly 30 days in the past. " +
+            "If the flag is false, the rule searches for the newest readout, 60 days in the past, having skipped the readouts for the last 30 days.")
+    @SampleValues(values = "false")
+    private Boolean exact = false;
 
     /**
      * Gets the lower bound for the accepted change for a data quality check readout, relative to the previous readout.
@@ -89,6 +94,23 @@ public class BetweenPercentChangeRuleParametersSpec extends AbstractRuleParamete
     }
 
     /**
+     * Gets the flag that makes the rule abstain from searching for the latest readout if there was no readout exactly 30 days in the past.
+     * @return Flag <code>exact</code>'s value.
+     */
+    public Boolean getExact() {
+        return exact;
+    }
+
+    /**
+     * Set the flag that makes the rule abstain from searching for the latest readout if there was no readout exactly 30 days in the past.
+     * @param exact New flag <code>exact</code>'s value.
+     */
+    public void setExact(Boolean exact) {
+        this.exact = exact;
+    }
+
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -105,6 +127,6 @@ public class BetweenPercentChangeRuleParametersSpec extends AbstractRuleParamete
      */
     @Override
     public String getRuleDefinitionName() {
-        return "change/between_percent_change";
+        return "change/between_percent_change_30_days";
     }
 }
