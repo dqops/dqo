@@ -8,7 +8,7 @@ import StatusSelect from "./StatusSelect";
 import { useSelector } from "react-redux";
 import { getFirstLevelIncidentsState } from "../../redux/selectors";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { getIncidentsByConnection, setIncidentsFilter } from "../../redux/actions/incidents.actions";
+import { getIncidentsByConnection, setIncidentsFilter, updateIncident } from "../../redux/actions/incidents.actions";
 import { Table } from "../../components/Table";
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import { Pagination } from "../../components/Pagination";
@@ -78,19 +78,19 @@ export const IncidentDetail = () => {
   const [selectedIncident, setSelectedIncident] = useState<IncidentModel>();
 
   const onChangeIncidentStatus = async (row: IncidentModel, status: IncidentModelStatusEnum) => {
+    dispatch(updateIncident(incidents.map((item: IncidentModel) => item.incidentId === row.incidentId ? ({
+      ...row,
+      status
+    }) : item)));
     await IncidentsApi.setIncidentStatus(row.connection || "", row.year || 0, row.month || 0, row.incidentId || "", status);
-    dispatch(getIncidentsByConnection({
-      ...filters || {},
-      connection,
-    }));
   };
 
   const handleAddIssueUrl = async (issueUrl: string) => {
+    dispatch(updateIncident(incidents.map((item: IncidentModel) => item.incidentId === selectedIncident?.incidentId ? ({
+      ...selectedIncident,
+      issueUrl
+    }) : item)));
     await IncidentsApi.setIncidentIssueUrl(selectedIncident?.connection || "", selectedIncident?.year || 0, selectedIncident?.month || 0, selectedIncident?.incidentId || "", issueUrl);
-    dispatch(getIncidentsByConnection({
-      ...filters || {},
-      connection,
-    }));
   };
 
   const addIssueUrl = (row: IncidentModel) => {
