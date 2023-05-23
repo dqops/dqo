@@ -77,7 +77,7 @@ import java.util.*;
 @Component
 public class CheckDocumentationModelFactoryImpl implements CheckDocumentationModelFactory {
     private static final Map<String, String> TABLE_CATEGORY_HELP = new LinkedHashMap<>() {{
-        put("standard", "Evaluates the overall quality of the table by verifying the number of rows.");
+        put("volume", "Evaluates the overall quality of the table by verifying the number of rows.");
         put("timeliness", "Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.");
         put("accuracy", "Compares the tested table with another (reference) table.");
         put("sql", "Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");

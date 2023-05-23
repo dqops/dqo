@@ -25,9 +25,9 @@ import ai.dqo.checks.column.profiling.ColumnProfilingStringsChecksSpec;
 import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import ai.dqo.checks.column.recurring.numeric.ColumnNumericDailyRecurringChecksSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
 import ai.dqo.execution.ExecutionContextFactory;
 import ai.dqo.execution.ExecutionContextFactoryImpl;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
@@ -122,7 +122,7 @@ public class SchemasControllerUTTests extends BaseTest {
         table2.getSpec().getColumns().put("col3", col23);
 
         TableProfilingCheckCategoriesSpec t1categoriesSpec = new TableProfilingCheckCategoriesSpec();
-        TableProfilingStandardChecksSpec t1standardChecksSpec = new TableProfilingStandardChecksSpec();
+        TableProfilingVolumeChecksSpec t1volumeChecksSpec = new TableProfilingVolumeChecksSpec();
         TableRowCountCheckSpec t1rowCountSpec = new TableRowCountCheckSpec();
         MinCountRule0ParametersSpec t1rowCountErrorSpec = new MinCountRule0ParametersSpec();
         MinCountRuleFatalParametersSpec t1rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
@@ -130,12 +130,12 @@ public class SchemasControllerUTTests extends BaseTest {
         t1rowCountFatalSpec.setMinCount(20L);
         t1rowCountSpec.setError(t1rowCountErrorSpec);
         t1rowCountSpec.setFatal(t1rowCountFatalSpec);
-        t1standardChecksSpec.setRowCount(t1rowCountSpec);
-        t1categoriesSpec.setStandard(t1standardChecksSpec);
+        t1volumeChecksSpec.setRowCount(t1rowCountSpec);
+        t1categoriesSpec.setVolume(t1volumeChecksSpec);
         table1.getSpec().setProfilingChecks(t1categoriesSpec);
 
         TableProfilingCheckCategoriesSpec t2categoriesSpec = new TableProfilingCheckCategoriesSpec();
-        TableProfilingStandardChecksSpec t2standardChecksSpec = new TableProfilingStandardChecksSpec();
+        TableProfilingVolumeChecksSpec t2volumeChecksSpec = new TableProfilingVolumeChecksSpec();
         TableRowCountCheckSpec t2rowCountSpec = new TableRowCountCheckSpec();
         MinCountRule0ParametersSpec t2rowCountErrorSpec = new MinCountRule0ParametersSpec();
         MinCountRuleFatalParametersSpec t2rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
@@ -143,8 +143,8 @@ public class SchemasControllerUTTests extends BaseTest {
         t2rowCountFatalSpec.setMinCount(10L);
         t2rowCountSpec.setError(t2rowCountErrorSpec);
         t2rowCountSpec.setFatal(t2rowCountFatalSpec);
-        t2standardChecksSpec.setRowCount(t2rowCountSpec);
-        t2categoriesSpec.setStandard(t2standardChecksSpec);
+        t2volumeChecksSpec.setRowCount(t2rowCountSpec);
+        t2categoriesSpec.setVolume(t2volumeChecksSpec);
         table2.getSpec().setProfilingChecks(t2categoriesSpec);
 
         ColumnProfilingCheckCategoriesSpec col21categoriesSpec = new ColumnProfilingCheckCategoriesSpec();

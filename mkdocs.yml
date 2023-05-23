@@ -109,13 +109,13 @@ nav:
         - sql condition passed percent on table: 'checks/table/sql/sql-condition-passed-percent-on-table.md'
         - sql condition failed count on table: 'checks/table/sql/sql-condition-failed-count-on-table.md'
         - sql aggregate expr table: 'checks/table/sql/sql-aggregate-expr-table.md'
-      - standard:
-        - row count: 'checks/table/standard/row-count.md'
       - timeliness:
         - days since most recent event: 'checks/table/timeliness/days-since-most-recent-event.md'
         - data ingestion delay: 'checks/table/timeliness/data-ingestion-delay.md'
         - days since most recent ingestion: 'checks/table/timeliness/days-since-most-recent-ingestion.md'
         - daily partition reload lag: 'checks/table/timeliness/daily-partition-reload-lag.md'
+      - volume:
+        - row count: 'checks/table/volume/row-count.md'
     - column:
       - accuracy:
         - total sum match percent: 'checks/column/accuracy/total-sum-match-percent.md'
@@ -251,8 +251,8 @@ nav:
         - accuracy table sensors: 'reference/sensors/table/accuracy-table-sensors.md'
         - availability table sensors: 'reference/sensors/table/availability-table-sensors.md'
         - sql table sensors: 'reference/sensors/table/sql-table-sensors.md'
-        - standard table sensors: 'reference/sensors/table/standard-table-sensors.md'
         - timeliness table sensors: 'reference/sensors/table/timeliness-table-sensors.md'
+        - volume table sensors: 'reference/sensors/table/volume-table-sensors.md'
       - column:
         - accuracy column sensors: 'reference/sensors/column/accuracy-column-sensors.md'
         - bool column sensors: 'reference/sensors/column/bool-column-sensors.md'

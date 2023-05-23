@@ -49,7 +49,7 @@ dqo> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
+|`-cat`<br/>`--category`<br/>|Check category name (volume, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
 |`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, recurring, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
 |`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||

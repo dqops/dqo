@@ -23,7 +23,7 @@ import ai.dqo.checks.table.recurring.accuracy.TableAccuracyMonthlyRecurringCheck
 import ai.dqo.checks.table.recurring.anomaly.TableAnomalyMonthlyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.availability.TableAvailabilityMonthlyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.sql.TableSqlMonthlyRecurringChecksSpec;
-import ai.dqo.checks.table.recurring.standard.TableStandardMonthlyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.volume.TableVolumeMonthlyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.timeliness.TableTimelinessMonthlyRecurringChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -53,7 +53,7 @@ import java.util.Objects;
 public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<TableMonthlyRecurringCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-            put("standard", o -> o.standard);
+            put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
             put("accuracy", o -> o.accuracy);
             put("sql", o -> o.sql);
@@ -62,10 +62,10 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
         }
     };
 
-    @JsonPropertyDescription("Monthly recurring of standard data quality checks")
+    @JsonPropertyDescription("Monthly recurring of volume data quality checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardMonthlyRecurringChecksSpec standard;
+    private TableVolumeMonthlyRecurringChecksSpec volume;
 
     @JsonPropertyDescription("Monthly recurring of timeliness checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -93,21 +93,21 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
     private TableAnomalyMonthlyRecurringChecksSpec anomaly;
 
     /**
-     * Returns the container of recurring for standard data quality checks.
-     * @return Container of row standard data quality recurring.
+     * Returns the container of recurring for volume data quality checks.
+     * @return Container of row volume data quality recurring.
      */
-    public TableStandardMonthlyRecurringChecksSpec getStandard() {
-        return standard;
+    public TableVolumeMonthlyRecurringChecksSpec getVolume() {
+        return volume;
     }
 
     /**
-     * Sets the container of standard data quality checks (recurring).
-     * @param standard New standard checks.
+     * Sets the container of volume data quality checks (recurring).
+     * @param volume New volume checks.
      */
-    public void setStandard(TableStandardMonthlyRecurringChecksSpec standard) {
-        this.setDirtyIf(!Objects.equals(this.standard, standard));
-        this.standard = standard;
-        this.propagateHierarchyIdToField(standard, "standard");
+    public void setVolume(TableVolumeMonthlyRecurringChecksSpec volume) {
+        this.setDirtyIf(!Objects.equals(this.volume, volume));
+        this.volume = volume;
+        this.propagateHierarchyIdToField(volume, "volume");
     }
 
     /**

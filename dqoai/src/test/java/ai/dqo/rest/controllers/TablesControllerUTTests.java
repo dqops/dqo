@@ -17,15 +17,15 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
-import ai.dqo.checks.table.partitioned.standard.TableStandardDailyPartitionedChecksSpec;
+import ai.dqo.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
 import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
 import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
-import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.volume.TableVolumeDailyRecurringChecksSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoJobQueueObjectMother;
@@ -192,10 +192,10 @@ public class TablesControllerUTTests extends BaseTest {
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
         
-        TableStandardDailyRecurringChecksSpec standardDailyRecurringSpec = new TableStandardDailyRecurringChecksSpec();
-        standardDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
+        TableVolumeDailyRecurringChecksSpec volumeDailyRecurringSpec = new TableVolumeDailyRecurringChecksSpec();
+        volumeDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
         TableDailyRecurringCategoriesSpec dailyRecurring = new TableDailyRecurringCategoriesSpec();
-        dailyRecurring.setStandard(standardDailyRecurringSpec);
+        dailyRecurring.setVolume(volumeDailyRecurringSpec);
         TableRecurringChecksSpec sampleRecurring = new TableRecurringChecksSpec();
         sampleRecurring.setDaily(dailyRecurring);
         
@@ -222,10 +222,10 @@ public class TablesControllerUTTests extends BaseTest {
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
 
-        TableStandardDailyPartitionedChecksSpec standardDailyPartitionedCheckSpec = new TableStandardDailyPartitionedChecksSpec();
-        standardDailyPartitionedCheckSpec.setDailyPartitionRowCount(minRowCountSpec);
+        TableVolumeDailyPartitionedChecksSpec volumeDailyPartitionedCheckSpec = new TableVolumeDailyPartitionedChecksSpec();
+        volumeDailyPartitionedCheckSpec.setDailyPartitionRowCount(minRowCountSpec);
         TableDailyPartitionedCheckCategoriesSpec dailyPartitionedCheck = new TableDailyPartitionedCheckCategoriesSpec();
-        dailyPartitionedCheck.setStandard(standardDailyPartitionedCheckSpec);
+        dailyPartitionedCheck.setVolume(volumeDailyPartitionedCheckSpec);
         TablePartitionedChecksRootSpec samplePartitionedCheck = new TablePartitionedChecksRootSpec();
         samplePartitionedCheck.setDaily(dailyPartitionedCheck);
 
@@ -364,10 +364,10 @@ public class TablesControllerUTTests extends BaseTest {
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
 
-        TableProfilingStandardChecksSpec standardChecksSpec = new TableProfilingStandardChecksSpec();
-        standardChecksSpec.setRowCount(minRowCountSpec);
+        TableProfilingVolumeChecksSpec volumeChecksSpec = new TableProfilingVolumeChecksSpec();
+        volumeChecksSpec.setRowCount(minRowCountSpec);
         TableProfilingCheckCategoriesSpec sampleProfilingCheck = new TableProfilingCheckCategoriesSpec();
-        sampleProfilingCheck.setStandard(standardChecksSpec);
+        sampleProfilingCheck.setVolume(volumeChecksSpec);
 
         ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableProfilingChecks(
                 this.sampleTable.getConnectionName(),
@@ -392,10 +392,10 @@ public class TablesControllerUTTests extends BaseTest {
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
 
-        TableStandardDailyRecurringChecksSpec standardDailyRecurringSpec = new TableStandardDailyRecurringChecksSpec();
-        standardDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
+        TableVolumeDailyRecurringChecksSpec volumeDailyRecurringSpec = new TableVolumeDailyRecurringChecksSpec();
+        volumeDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
         TableDailyRecurringCategoriesSpec dailyRecurring = new TableDailyRecurringCategoriesSpec();
-        dailyRecurring.setStandard(standardDailyRecurringSpec);
+        dailyRecurring.setVolume(volumeDailyRecurringSpec);
         TableRecurringChecksSpec sampleRecurring = new TableRecurringChecksSpec();
         sampleRecurring.setDaily(dailyRecurring);
 
@@ -424,10 +424,10 @@ public class TablesControllerUTTests extends BaseTest {
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
 
-        TableStandardDailyPartitionedChecksSpec standardDailyPartitionedCheckSpec = new TableStandardDailyPartitionedChecksSpec();
-        standardDailyPartitionedCheckSpec.setDailyPartitionRowCount(minRowCountSpec);
+        TableVolumeDailyPartitionedChecksSpec volumeDailyPartitionedCheckSpec = new TableVolumeDailyPartitionedChecksSpec();
+        volumeDailyPartitionedCheckSpec.setDailyPartitionRowCount(minRowCountSpec);
         TableDailyPartitionedCheckCategoriesSpec dailyPartitionedCheck = new TableDailyPartitionedCheckCategoriesSpec();
-        dailyPartitionedCheck.setStandard(standardDailyPartitionedCheckSpec);
+        dailyPartitionedCheck.setVolume(volumeDailyPartitionedCheckSpec);
         TablePartitionedChecksRootSpec samplePartitionedCheck = new TablePartitionedChecksRootSpec();
         samplePartitionedCheck.setDaily(dailyPartitionedCheck);
 

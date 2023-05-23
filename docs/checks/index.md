@@ -103,21 +103,6 @@ Validate data against user-defined SQL queries at the table level. Checks in thi
 
 
 
-###standard  
-Evaluates the overall quality of the table by verifying the number of rows.
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[row_count](./table/standard/row-count/#row-count)|profiling|Verifies that the number of rows in a table does not exceed the minimum accepted count.|
-|[daily_row_count](./table/standard/row-count/#daily-row-count)|recurring|Verifies that the number of rows in a table does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_row_count](./table/standard/row-count/#monthly-row-count)|recurring|Verifies that the number of rows in a table does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_row_count](./table/standard/row-count/#daily-partition-row-count)|partitioned|Verifies that the number of rows in a table does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_min_row_count](./table/standard/row-count/#monthly-partition-min-row-count)|partitioned|Verifies that the number of rows in a table does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
-
-
-
-
-
 ###timeliness  
 Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.
 
@@ -152,6 +137,21 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 |------------|------------|-------------|
 |[daily_partition_reload_lag](./table/timeliness/daily-partition-reload-lag/#daily-partition-reload-lag)|partitioned|Daily partitioned check calculating the longest time a row waited to be load|
 |[monthly_partition_reload_lag](./table/timeliness/daily-partition-reload-lag/#monthly-partition-reload-lag)|partitioned|Monthly partitioned check calculating the longest time a row waited to be load|
+
+
+
+
+
+###volume  
+Evaluates the overall quality of the table by verifying the number of rows.
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[row_count](./table/volume/row-count/#row-count)|profiling|Verifies that the number of rows in a table does not exceed the minimum accepted count.|
+|[daily_row_count](./table/volume/row-count/#daily-row-count)|recurring|Verifies that the number of rows in a table does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_row_count](./table/volume/row-count/#monthly-row-count)|recurring|Verifies that the number of rows in a table does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_row_count](./table/volume/row-count/#daily-partition-row-count)|partitioned|Verifies that the number of rows in a table does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_min_row_count](./table/volume/row-count/#monthly-partition-min-row-count)|partitioned|Verifies that the number of rows in a table does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 

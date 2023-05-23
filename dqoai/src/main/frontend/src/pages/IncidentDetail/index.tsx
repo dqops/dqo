@@ -18,7 +18,7 @@ import { IncidentFilter } from "../../redux/reducers/incidents.reducer";
 import { IncidentModel, IncidentModelStatusEnum } from "../../api";
 import Select from "../../components/Select";
 import { IncidentsApi } from "../../services/apiClient";
-import { IconButton } from "@material-tailwind/react";
+import { IconButton, Tooltip } from "@material-tailwind/react";
 import AddIssueUrlDialog from "./AddIssueUrlDialog";
 
 const getDaysString = (value: string) => {
@@ -173,7 +173,20 @@ export const IncidentDetail = () => {
           <div>
             {value ? (
               <div className="flex items-center space-x-2">
-                <a href={value} target="_blank" rel="noreferrer">{value}</a>
+                <a
+                  href={value}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  <Tooltip
+                    content={value}
+                    className="max-w-80 py-4 px-4 bg-gray-800 delay-300"
+                    placement="top-start"
+                  >
+                    {value.length > 30 ? value.slice(0, 30) + '...' : value}
+                  </Tooltip>
+                </a>
                 <IconButton
                   color="teal"
                   size="sm"

@@ -2,7 +2,7 @@
 apiVersion: dqo/v1
 kind: check
 spec:
-  sensor_name: table/standard/row_count
+  sensor_name: table/volume/row_count
   rule_name: stdev/percentile_moving_within_60_days
   help_text: Verifies that the total row count of the tested table is within a percentile
     from measurements made during the last 60 days.
