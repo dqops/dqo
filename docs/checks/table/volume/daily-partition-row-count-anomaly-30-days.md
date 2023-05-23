@@ -1,47 +1,47 @@
-**daily partition row count anomaly 60 days** checks  
+**daily partition row count anomaly 30 days** checks  
 
 **Description**  
-Table level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 60 days. Use in partitioned checks.
+Table level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 30 days. Use in partitioned checks.
 
 ___
 
-## **daily partition row count anomaly 60 days**  
+## **daily partition row count anomaly 30 days**  
   
 **Check description**  
-Verifies that the total row count of the tested table is within a percentile from measurements made during the last 60 days.  
+Verifies that the total row count of the tested table is within a percentile from measurements made during the last 30 days.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_row_count_anomaly_60_days|partitioned|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[percentile_moving_within_60_days](../../../../reference/rules/stdev/#percentile-moving-within-60-days)|
+|daily_partition_row_count_anomaly_30_days|partitioned|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[percentile_moving_within_30_days](../../../../reference/rules/stdev/#percentile-moving-within-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=daily_partition_row_count_anomaly_60_days
+dqo> check enable -c=connection_name -ch=daily_partition_row_count_anomaly_30_days
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=daily_partition_row_count_anomaly_60_days
+dqo> check run -ch=daily_partition_row_count_anomaly_30_days
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=daily_partition_row_count_anomaly_60_days
+dqo> check run -c=connection_name -ch=daily_partition_row_count_anomaly_30_days
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=daily_partition_row_count_anomaly_60_days
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_row_count_anomaly_30_days
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_row_count_anomaly_60_days
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_row_count_anomaly_30_days
 ```
 **Check structure (Yaml)**
 ```yaml
   partitioned_checks:
     daily:
-      anomaly:
-        daily_partition_row_count_anomaly_60_days:
+      volume:
+        daily_partition_row_count_anomaly_30_days:
           warning:
             percentile_within: 95.0
           error:
@@ -63,8 +63,8 @@ spec:
     monthly_partitioning_recent_months: 1
   partitioned_checks:
     daily:
-      anomaly:
-        daily_partition_row_count_anomaly_60_days:
+      volume:
+        daily_partition_row_count_anomaly_30_days:
           warning:
             percentile_within: 95.0
           error:
@@ -231,8 +231,8 @@ spec:
             column: state
       partitioned_checks:
         daily:
-          anomaly:
-            daily_partition_row_count_anomaly_60_days:
+          volume:
+            daily_partition_row_count_anomaly_30_days:
               warning:
                 percentile_within: 95.0
               error:

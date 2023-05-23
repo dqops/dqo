@@ -19,7 +19,6 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.partitioned.anomaly.TableAnomalyDailyPartitionedChecksSpec;
 import ai.dqo.checks.table.partitioned.sql.TableSqlDailyPartitionedChecksSpec;
 import ai.dqo.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
 import ai.dqo.checks.table.partitioned.timeliness.TableTimelinessDailyPartitionedChecksSpec;
@@ -54,7 +53,7 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
             put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
             put("sql", o -> o.sql);
-            put("anomaly", o -> o.anomaly);
+            // put("anomaly", o -> o.anomaly); Moved to volume category
 
             // accuracy checks are not supported on partitioned checks yet
         }
@@ -74,11 +73,6 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlDailyPartitionedChecksSpec sql;
-
-    @JsonPropertyDescription("Daily partitioned anomaly checks")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableAnomalyDailyPartitionedChecksSpec anomaly;
 
     /**
      * Returns the container of daily partitioned checks for volume data quality checks.
@@ -132,24 +126,6 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
-    }
-
-    /**
-     * Returns a container of anomaly checks.
-     * @return Anomaly checks.
-     */
-    public TableAnomalyDailyPartitionedChecksSpec getAnomaly() {
-        return anomaly;
-    }
-
-    /**
-     * Sets a reference to a container of anomaly checks.
-     * @param anomaly Container of anomaly checks.
-     */
-    public void setAnomaly(TableAnomalyDailyPartitionedChecksSpec anomaly) {
-        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
-        this.anomaly = anomaly;
-        this.propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
     /**

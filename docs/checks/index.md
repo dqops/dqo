@@ -18,45 +18,6 @@ Compares the tested table with another (reference) table.
 
 
 
-###anomaly  
-Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[row_count_anomaly_7_days](./table/anomaly/row-count-anomaly-7-days/#row-count-anomaly-7-days)|profiling|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 7 days.|
-|[daily_row_count_anomaly_7_days](./table/anomaly/row-count-anomaly-7-days/#daily-row-count-anomaly-7-days)|recurring|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 7 days.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[row_count_anomaly_30_days](./table/anomaly/row-count-anomaly-30-days/#row-count-anomaly-30-days)|profiling|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|
-|[daily_row_count_anomaly_30_days](./table/anomaly/row-count-anomaly-30-days/#daily-row-count-anomaly-30-days)|recurring|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[row_count_anomaly_60_days](./table/anomaly/row-count-anomaly-60-days/#row-count-anomaly-60-days)|profiling|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 60 days.|
-|[daily_row_count_anomaly_60_days](./table/anomaly/row-count-anomaly-60-days/#daily-row-count-anomaly-60-days)|recurring|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 60 days.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[daily_partition_row_count_anomaly_7_days](./table/anomaly/daily-partition-row-count-anomaly-7-days/#daily-partition-row-count-anomaly-7-days)|partitioned|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 7 days.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[daily_partition_row_count_anomaly_30_days](./table/anomaly/daily-partition-row-count-anomaly-30-days/#daily-partition-row-count-anomaly-30-days)|partitioned|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 30 days.|
-
-
-| Check name | Check type | Description |
-|------------|------------|-------------|
-|[daily_partition_row_count_anomaly_60_days](./table/anomaly/daily-partition-row-count-anomaly-60-days/#daily-partition-row-count-anomaly-60-days)|partitioned|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 60 days.|
-
-
-
-
-
 ###availability  
 Checks whether the table is accessible and available for use.
 
@@ -154,6 +115,39 @@ Evaluates the overall quality of the table by verifying the number of rows.
 |[monthly_partition_min_row_count](./table/volume/row-count/#monthly-partition-min-row-count)|partitioned|Verifies that the number of rows in a table does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[row_count_anomaly_7_days](./table/volume/row-count-anomaly-7-days/#row-count-anomaly-7-days)|profiling|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 7 days.|
+|[daily_row_count_anomaly_7_days](./table/volume/row-count-anomaly-7-days/#daily-row-count-anomaly-7-days)|recurring|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 7 days.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[row_count_anomaly_30_days](./table/volume/row-count-anomaly-30-days/#row-count-anomaly-30-days)|profiling|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|
+|[daily_row_count_anomaly_30_days](./table/volume/row-count-anomaly-30-days/#daily-row-count-anomaly-30-days)|recurring|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[row_count_anomaly_60_days](./table/volume/row-count-anomaly-60-days/#row-count-anomaly-60-days)|profiling|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 60 days.|
+|[daily_row_count_anomaly_60_days](./table/volume/row-count-anomaly-60-days/#daily-row-count-anomaly-60-days)|recurring|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 60 days.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[daily_partition_row_count_anomaly_7_days](./table/volume/daily-partition-row-count-anomaly-7-days/#daily-partition-row-count-anomaly-7-days)|partitioned|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 7 days.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[daily_partition_row_count_anomaly_30_days](./table/volume/daily-partition-row-count-anomaly-30-days/#daily-partition-row-count-anomaly-30-days)|partitioned|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 30 days.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[daily_partition_row_count_anomaly_60_days](./table/volume/daily-partition-row-count-anomaly-60-days/#daily-partition-row-count-anomaly-60-days)|partitioned|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 60 days.|
+
+
 
 
 
@@ -194,9 +188,6 @@ Evaluates the overall quality of the table by verifying the number of rows.
 
 
 ## **Column checks**
-
-
-
 
 
 

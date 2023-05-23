@@ -17,7 +17,7 @@ package ai.dqo.utils.reflection;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.anomaly.TableAnomalyRowCountChange7DaysCheckSpec;
+import ai.dqo.checks.table.checkspecs.volume.TableAnomalyRowCountChange7DaysCheckSpec;
 import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;

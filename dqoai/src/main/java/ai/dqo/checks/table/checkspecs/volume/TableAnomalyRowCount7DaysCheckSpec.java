@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.table.checkspecs.anomaly;
+package ai.dqo.checks.table.checkspecs.volume;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.stdev.PercentileMovingWithin60DaysRuleParametersSpec;
+import ai.dqo.rules.stdev.PercentileMovingWithin7DaysRuleParametersSpec;
 import ai.dqo.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,14 +32,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 60 days. Use in partitioned checks.
+ * Table level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 7 days. Use in partitioned checks.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableAnomalyRowCount60DaysCheckSpec
-        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, PercentileMovingWithin60DaysRuleParametersSpec, PercentileMovingWithin60DaysRuleParametersSpec, PercentileMovingWithin60DaysRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableAnomalyRowCount60DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TableAnomalyRowCount7DaysCheckSpec
+        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, PercentileMovingWithin7DaysRuleParametersSpec, PercentileMovingWithin7DaysRuleParametersSpec, PercentileMovingWithin7DaysRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableAnomalyRowCount7DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -52,17 +52,17 @@ public class TableAnomalyRowCount60DaysCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private PercentileMovingWithin60DaysRuleParametersSpec warning;
+    private PercentileMovingWithin7DaysRuleParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private PercentileMovingWithin60DaysRuleParametersSpec error;
+    private PercentileMovingWithin7DaysRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private PercentileMovingWithin60DaysRuleParametersSpec fatal;
+    private PercentileMovingWithin7DaysRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -91,7 +91,7 @@ public class TableAnomalyRowCount60DaysCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public PercentileMovingWithin60DaysRuleParametersSpec getWarning() {
+    public PercentileMovingWithin7DaysRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -100,7 +100,7 @@ public class TableAnomalyRowCount60DaysCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(PercentileMovingWithin60DaysRuleParametersSpec warning) {
+    public void setWarning(PercentileMovingWithin7DaysRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -112,7 +112,7 @@ public class TableAnomalyRowCount60DaysCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public PercentileMovingWithin60DaysRuleParametersSpec getError() {
+    public PercentileMovingWithin7DaysRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -121,7 +121,7 @@ public class TableAnomalyRowCount60DaysCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(PercentileMovingWithin60DaysRuleParametersSpec error) {
+    public void setError(PercentileMovingWithin7DaysRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -133,7 +133,7 @@ public class TableAnomalyRowCount60DaysCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public PercentileMovingWithin60DaysRuleParametersSpec getFatal() {
+    public PercentileMovingWithin7DaysRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -142,7 +142,7 @@ public class TableAnomalyRowCount60DaysCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(PercentileMovingWithin60DaysRuleParametersSpec fatal) {
+    public void setFatal(PercentileMovingWithin7DaysRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

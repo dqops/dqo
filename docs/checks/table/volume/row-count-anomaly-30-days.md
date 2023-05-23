@@ -1,46 +1,46 @@
-**row count anomaly 7 days** checks  
+**row count anomaly 30 days** checks  
 
 **Description**  
-Table level check that ensures that the row count changes in a rate within a two-tailed percentile during last 7 days.
+Table level check that ensures that the row count changes in a rate within a two-tailed percentile during last 30 days.
 
 ___
 
-## **row count anomaly 7 days**  
+## **row count anomaly 30 days**  
   
 **Check description**  
-Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 7 days.  
+Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|row_count_anomaly_7_days|profiling| |[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percentile_moving_within_7_days](../../../../reference/rules/stdev/#change-percentile-moving-within-7-days)|
+|row_count_anomaly_30_days|profiling| |[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percentile_moving_within_30_days](../../../../reference/rules/stdev/#change-percentile-moving-within-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=row_count_anomaly_7_days
+dqo> check enable -c=connection_name -ch=row_count_anomaly_30_days
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=row_count_anomaly_7_days
+dqo> check run -ch=row_count_anomaly_30_days
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=row_count_anomaly_7_days
+dqo> check run -c=connection_name -ch=row_count_anomaly_30_days
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=row_count_anomaly_7_days
+dqo> check run -c=connection_name -t=table_name -ch=row_count_anomaly_30_days
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=row_count_anomaly_7_days
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=row_count_anomaly_30_days
 ```
 **Check structure (Yaml)**
 ```yaml
   profiling_checks:
-    anomaly:
-      row_count_anomaly_7_days:
+    volume:
+      row_count_anomaly_30_days:
         warning:
           percentile_within: 95.0
         error:
@@ -61,8 +61,8 @@ spec:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
   profiling_checks:
-    anomaly:
-      row_count_anomaly_7_days:
+    volume:
+      row_count_anomaly_30_days:
         warning:
           percentile_within: 95.0
         error:
@@ -224,8 +224,8 @@ spec:
             source: column_value
             column: state
       profiling_checks:
-        anomaly:
-          row_count_anomaly_7_days:
+        volume:
+          row_count_anomaly_30_days:
             warning:
               percentile_within: 95.0
             error:
@@ -389,43 +389,43 @@ spec:
 
 ___
 
-## **daily row count anomaly 7 days**  
+## **daily row count anomaly 30 days**  
   
 **Check description**  
-Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 7 days.  
+Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_row_count_anomaly_7_days|recurring|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percentile_moving_within_7_days](../../../../reference/rules/stdev/#change-percentile-moving-within-7-days)|
+|daily_row_count_anomaly_30_days|recurring|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percentile_moving_within_30_days](../../../../reference/rules/stdev/#change-percentile-moving-within-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo> check enable -c=connection_name -ch=daily_row_count_anomaly_7_days
+dqo> check enable -c=connection_name -ch=daily_row_count_anomaly_30_days
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo> check run -ch=daily_row_count_anomaly_7_days
+dqo> check run -ch=daily_row_count_anomaly_30_days
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo> check run -c=connection_name -ch=daily_row_count_anomaly_7_days
+dqo> check run -c=connection_name -ch=daily_row_count_anomaly_30_days
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=daily_row_count_anomaly_7_days
+dqo> check run -c=connection_name -t=table_name -ch=daily_row_count_anomaly_30_days
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_count_anomaly_7_days
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_count_anomaly_30_days
 ```
 **Check structure (Yaml)**
 ```yaml
   recurring_checks:
     daily:
-      anomaly:
-        daily_row_count_anomaly_7_days:
+      volume:
+        daily_row_count_anomaly_30_days:
           warning:
             percentile_within: 95.0
           error:
@@ -447,8 +447,8 @@ spec:
     monthly_partitioning_recent_months: 1
   recurring_checks:
     daily:
-      anomaly:
-        daily_row_count_anomaly_7_days:
+      volume:
+        daily_row_count_anomaly_30_days:
           warning:
             percentile_within: 95.0
           error:
@@ -611,8 +611,8 @@ spec:
             column: state
       recurring_checks:
         daily:
-          anomaly:
-            daily_row_count_anomaly_7_days:
+          volume:
+            daily_row_count_anomaly_30_days:
               warning:
                 percentile_within: 95.0
               error:
