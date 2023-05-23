@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import Button from '../../components/Button';
 import { ColumnApiClient, JobApiClient } from '../../services/apiClient';
-import { ColumnStatisticsModel, TableColumnsStatisticsModel } from '../../api';
+import { TableColumnsStatisticsModel } from '../../api';
 import { AxiosResponse } from 'axios';
 
 const TableColumnsView = () => {
@@ -21,15 +21,15 @@ const TableColumnsView = () => {
       console.error(err);
     }
   };
-
+  
   useEffect(() => {
     fetchColumns().then();
   }, [connectionName, schemaName, tableName]);
 
-  const collectAllStatistics = async () => {
+  const collectStatistics = async () => {
     try {
       setLoadingJob(true);
-      await JobApiClient.collectStatisticsOnDataStreams(statistics?.collect_column_statistics_job_template);
+      await JobApiClient.collectStatisticsOnTable(statistics?.collect_column_statistics_job_template);
     } finally {
       setLoadingJob(false);
     }
@@ -42,7 +42,7 @@ const TableColumnsView = () => {
           <SvgIcon name="column" className="w-5 h-5 shrink-0" />
           <div className="text-xl font-semibold truncate">{`${connectionName}.${schemaName}.${tableName} columns`}</div>
         </div>
-        <Button label='Collect Statistic' color='primary' onClick={() => collectAllStatistics()}/>
+        <Button label='Collect Statistic' color='primary' onClick={() => collectStatistics()}/>
       </div>
       <div>
         <TableColumns

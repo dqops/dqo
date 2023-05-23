@@ -203,8 +203,8 @@ const TableColumns = ({
                   onClick={() => collectStatistics(index)}
                   >
                   <SvgIcon name="boxplot" className="w-4 white" />
-                <td className="hidden absolute right-3 bottom-3 p-2 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
-                 Collect statistic</td>
+                <th className="hidden absolute right-3 bottom-3 p-2 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
+                 Collect statistic</th>
                 </IconButton>
                 
                 <IconButton
@@ -214,11 +214,10 @@ const TableColumns = ({
                   >
                   <SvgIcon name="delete" className="w-4" />
                 
-                  <div className="hidden absolute right-3 bottom-3 p-2 normal-case bg-black text-white rounded-md group-hover:block whitespace-nowrap">
-                  Click to delete</div>
+                  <th className="hidden absolute right-3 bottom-3 p-2 normal-case bg-black text-white rounded-md group-hover:block whitespace-nowrap">
+                  Click to delete</th>
                 </IconButton>
               </td>
-            <div></div>
             </tr>
           ))}
       </table>
