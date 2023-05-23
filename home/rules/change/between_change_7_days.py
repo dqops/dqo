@@ -21,8 +21,8 @@ import numpy as np
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class BetweenChange7DaysRuleParametersSpec:
-    from_: int
-    to: int
+    from_: float
+    to: float
     exact: bool = False
 
     def __getattr__(self, name):
