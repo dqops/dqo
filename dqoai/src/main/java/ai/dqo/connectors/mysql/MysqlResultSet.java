@@ -3955,6 +3955,7 @@ public class MysqlResultSet implements ResultSet {
      * {@code getUnicodeStream}
      */
     @Override
+    @Deprecated
     public InputStream getUnicodeStream(int columnIndex) throws SQLException {
         return resultSet.getUnicodeStream(columnIndex);
     }
@@ -4148,6 +4149,7 @@ public class MysqlResultSet implements ResultSet {
      * or {@code getBigDecimal(String columnLabel)}
      */
     @Override
+    @Deprecated
     public BigDecimal getBigDecimal(String columnLabel, int scale) throws SQLException {
         return resultSet.getBigDecimal(columnLabel, scale);
     }
@@ -4283,6 +4285,7 @@ public class MysqlResultSet implements ResultSet {
      * @deprecated use {@code getCharacterStream} instead
      */
     @Override
+    @Deprecated
     public InputStream getUnicodeStream(String columnLabel) throws SQLException {
         return resultSet.getUnicodeStream(columnLabel);
     }

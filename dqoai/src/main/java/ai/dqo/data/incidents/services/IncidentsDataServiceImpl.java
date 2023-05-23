@@ -18,12 +18,12 @@ package ai.dqo.data.incidents.services;
 import ai.dqo.core.configuration.DqoIncidentsConfigurationProperties;
 import ai.dqo.data.checkresults.services.CheckResultsDataService;
 import ai.dqo.data.checkresults.services.models.CheckResultDetailedSingleModel;
-import ai.dqo.data.checkresults.services.models.CheckResultsDetailedDataModel;
 import ai.dqo.data.incidents.factory.IncidentStatus;
 import ai.dqo.data.incidents.factory.IncidentsColumnNames;
+import ai.dqo.data.checkresults.services.models.CheckResultListFilterParameters;
 import ai.dqo.data.incidents.services.models.IncidentListFilterParameters;
 import ai.dqo.data.incidents.services.models.IncidentModel;
-import ai.dqo.data.incidents.services.models.IncidentSortDirection;
+import ai.dqo.rest.models.common.SortDirection;
 import ai.dqo.data.incidents.services.models.IncidentsPerConnectionModel;
 import ai.dqo.data.incidents.snapshot.IncidentsSnapshot;
 import ai.dqo.data.incidents.snapshot.IncidentsSnapshotFactory;
@@ -188,7 +188,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
         }
 
         Comparator<IncidentModel> sortComparator = IncidentModel.makeSortComparator(filterParameters.getOrder());
-        if (filterParameters.getSortDirection() == IncidentSortDirection.asc) {
+        if (filterParameters.getSortDirection() == SortDirection.asc) {
             incidentModels.sort(sortComparator);
         }
         else {
@@ -238,14 +238,19 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
 
     /**
      * Loads all failed check results covered by a given incident.
-     * @param connectionName Connection name where the incident happened.
-     * @param year           Year when the incident was first seen.
-     * @param month          Month of year when the incident was first seen.
-     * @param incidentId The incident id.
+     * @param connectionName   Connection name where the incident happened.
+     * @param year             Year when the incident was first seen.
+     * @param month            Month of year when the incident was first seen.
+     * @param incidentId       The incident id.
+     * @param filterParameters List filter parameters.
      * @return Array of check results for the incident.
      */
     @Override
-    public CheckResultDetailedSingleModel[] readCheckResultsForIncident(String connectionName, int year, int month, String incidentId) {
+    public CheckResultDetailedSingleModel[] loadCheckResultsForIncident(String connectionName,
+                                                                        int year,
+                                                                        int month,
+                                                                        String incidentId,
+                                                                        CheckResultListFilterParameters filterParameters) {
         IncidentModel incidentModel = this.loadIncident(connectionName, year, month, incidentId);
         if (incidentModel == null) {
             return null;
@@ -254,10 +259,11 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
         CheckResultDetailedSingleModel[] failedChecks = this.checkResultsDataService.loadCheckResultsRelatedToIncident(
                 connectionName,
                 new PhysicalTableName(incidentModel.getSchema(), incidentModel.getTable()),
-                incidentModel.getIncidentHash().longValue(),
+                incidentModel.getIncidentHash(),
                 incidentModel.getFirstSeen(),
                 incidentModel.getIncidentUntil(),
-                incidentModel.getMinSeverity());
+                incidentModel.getMinSeverity(),
+                filterParameters);
 
         return failedChecks;
     }

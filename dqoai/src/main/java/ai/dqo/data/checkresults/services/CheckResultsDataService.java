@@ -17,6 +17,7 @@ package ai.dqo.data.checkresults.services;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.data.checkresults.services.models.CheckResultDetailedSingleModel;
+import ai.dqo.data.checkresults.services.models.CheckResultListFilterParameters;
 import ai.dqo.data.checkresults.services.models.CheckResultsDetailedDataModel;
 import ai.dqo.data.checkresults.services.models.CheckResultsOverviewDataModel;
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -56,6 +57,7 @@ public interface CheckResultsDataService {
      * @param firstSeen The timestamp when the incident was first seen.
      * @param incidentUntil The timestamp when the incident was closed or expired, returns check results up to this timestamp.
      * @param minSeverity Minimum check issue severity that is returned.
+     * @param filterParameters Filter parameters.
      * @return An array of matching check results.
      */
     CheckResultDetailedSingleModel[] loadCheckResultsRelatedToIncident(String connectionName,
@@ -63,5 +65,6 @@ public interface CheckResultsDataService {
                                                                        long incidentHash,
                                                                        Instant firstSeen,
                                                                        Instant incidentUntil,
-                                                                       int minSeverity);
+                                                                       int minSeverity,
+                                                                       CheckResultListFilterParameters filterParameters);
 }

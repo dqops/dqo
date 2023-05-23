@@ -27,6 +27,8 @@ import lombok.Data;
 import tech.tablesaw.api.Row;
 
 import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
@@ -182,8 +184,9 @@ public class IncidentModel {
         model.setIncidentHash(incidentRow.getLong(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME));
         Instant firstSeen = incidentRow.getInstant(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME);
         model.setFirstSeen(firstSeen);
-        model.setYear(firstSeen.get(ChronoField.YEAR));
-        model.setMonth(firstSeen.get(ChronoField.MONTH_OF_YEAR));
+        ZonedDateTime zonedFirstSeen = firstSeen.atZone(ZoneOffset.UTC);
+        model.setYear(zonedFirstSeen.get(ChronoField.YEAR));
+        model.setMonth(zonedFirstSeen.get(ChronoField.MONTH_OF_YEAR));
         model.setLastSeen(incidentRow.getInstant(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME));
         model.setIncidentUntil(incidentRow.getInstant(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME));
         if (!incidentRow.isMissing(IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME)) {

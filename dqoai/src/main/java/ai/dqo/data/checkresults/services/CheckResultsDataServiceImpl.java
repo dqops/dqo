@@ -18,15 +18,13 @@ package ai.dqo.data.checkresults.services;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.data.checkresults.factory.CheckResultsColumnNames;
-import ai.dqo.data.checkresults.services.models.CheckResultDetailedSingleModel;
-import ai.dqo.data.checkresults.services.models.CheckResultStatus;
-import ai.dqo.data.checkresults.services.models.CheckResultsDetailedDataModel;
-import ai.dqo.data.checkresults.services.models.CheckResultsOverviewDataModel;
+import ai.dqo.data.checkresults.services.models.*;
 import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
 import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactory;
+import ai.dqo.data.incidents.services.models.IncidentModel;
 import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.storage.LoadedMonthlyPartition;
@@ -34,12 +32,14 @@ import ai.dqo.data.storage.ParquetPartitionId;
 import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.rest.models.common.SortDirection;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.utils.tables.TableRowUtility;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
+import tech.tablesaw.columns.instant.PackedInstant;
 import tech.tablesaw.selection.Selection;
 import tech.tablesaw.table.Relation;
 
@@ -299,15 +299,17 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @param firstSeen         The timestamp when the incident was first seen.
      * @param incidentUntil     The timestamp when the incident was closed or expired, returns check results up to this timestamp.
      * @param minSeverity       Minimum check issue severity that is returned.
+     * @param filterParameters  Filter parameters.
      * @return An array of matching check results.
      */
     @Override
     public CheckResultDetailedSingleModel[] loadCheckResultsRelatedToIncident(String connectionName,
-                                                                             PhysicalTableName physicalTableName,
-                                                                             long incidentHash,
-                                                                             Instant firstSeen,
-                                                                             Instant incidentUntil,
-                                                                             int minSeverity) {
+                                                                              PhysicalTableName physicalTableName,
+                                                                              long incidentHash,
+                                                                              Instant firstSeen,
+                                                                              Instant incidentUntil,
+                                                                              int minSeverity,
+                                                                              CheckResultListFilterParameters filterParameters) {
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS);
         LocalDate startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
@@ -321,20 +323,48 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = checkResultsSnapshot.getLoadedMonthlyPartitions();
         for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry : loadedMonthlyPartitions.entrySet()) {
             Table partitionData = loadedPartitionEntry.getValue().getData();
-            if (partitionData == null) {
+            if (partitionData == null || partitionData.rowCount() == 0) {
                 continue;
             }
 
+            Selection minSeveritySelection = partitionData.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME).isGreaterThanOrEqualTo(minSeverity);
+            Selection issuesInTimeRange = partitionData.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME).isBetweenIncluding(
+                    PackedInstant.pack(firstSeen), PackedInstant.pack(incidentUntil));
+            Selection incidentHashSelection = partitionData.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME).isIn(incidentHash);
 
+            Selection selectionOfMatchingIssues = minSeveritySelection.and(issuesInTimeRange).and(incidentHashSelection);
+            if (selectionOfMatchingIssues.size() == 0) {
+                continue;
+            }
+
+            for (Integer rowIndex : selectionOfMatchingIssues) {
+                Row row = partitionData.row(rowIndex);
+                CheckResultDetailedSingleModel singleCheckResultDetailedModel = createSingleCheckResultDetailedModel(row);
+
+
+
+                resultsList.add(singleCheckResultDetailedModel);
+            }
         }
 
+        Comparator<CheckResultDetailedSingleModel> sortComparator = CheckResultDetailedSingleModel.makeSortComparator(filterParameters.getOrder());
+        if (filterParameters.getSortDirection() == SortDirection.asc) {
+            resultsList.sort(sortComparator);
+        }
+        else {
+            resultsList.sort(sortComparator.reversed());
+        }
 
+        int startRowIndexInPage = (filterParameters.getPage() - 1) * filterParameters.getLimit();
+        int untilRowIndexInPage = filterParameters.getPage() * filterParameters.getLimit();
 
+        if (startRowIndexInPage >= resultsList.size()) {
+            return new CheckResultDetailedSingleModel[0]; // no results
+        }
 
-
-
-
-        return new CheckResultDetailedSingleModel[0];
+        List<CheckResultDetailedSingleModel> pageResults = resultsList.subList(startRowIndexInPage, Math.min(untilRowIndexInPage, resultsList.size()));
+        CheckResultDetailedSingleModel[] resultsArray = pageResults.toArray(CheckResultDetailedSingleModel[]::new);
+        return resultsArray;
     }
 
     /**

@@ -32,6 +32,7 @@ public class DqoParquetReader<T> extends ParquetReader<T> {
      * @param readSupport
      * @deprecated
      */
+    @Deprecated
     public DqoParquetReader(Path file, ReadSupport<T> readSupport) throws IOException {
         super(file, readSupport);
     }
