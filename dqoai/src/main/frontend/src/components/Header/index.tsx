@@ -138,6 +138,7 @@ const Header = () => {
         <SvgIcon name='userprofile' onClick={() => setShowProfile(!showProfile)}/>
       </div>
       {showProfile ? <div className='bg-black w-50 h-60 absolute right-5 top-15 rounded-md'></div> : ""}
+      {/* enviiromental controller java, java-rest-controllers */}
     </div>
   );
 };
