@@ -282,15 +282,15 @@ Configuration of the data stream that is used for a table.
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[level1](#datastreamlevelspec)|Data stream level 1 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
-|[level2](#datastreamlevelspec)|Data stream level 2 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
-|[level3](#datastreamlevelspec)|Data stream level 3 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
-|[level4](#datastreamlevelspec)|Data stream level 4 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
-|[level5](#datastreamlevelspec)|Data stream level 5 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
-|[level6](#datastreamlevelspec)|Data stream level 6 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
-|[level7](#datastreamlevelspec)|Data stream level 7 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
-|[level8](#datastreamlevelspec)|Data stream level 8 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
-|[level9](#datastreamlevelspec)|Data stream level 9 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
+|[level_1](#datastreamlevelspec)|Data stream level 1 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
+|[level_2](#datastreamlevelspec)|Data stream level 2 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
+|[level_3](#datastreamlevelspec)|Data stream level 3 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
+|[level_4](#datastreamlevelspec)|Data stream level 4 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
+|[level_5](#datastreamlevelspec)|Data stream level 5 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
+|[level_6](#datastreamlevelspec)|Data stream level 6 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
+|[level_7](#datastreamlevelspec)|Data stream level 7 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
+|[level_8](#datastreamlevelspec)|Data stream level 8 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
+|[level_9](#datastreamlevelspec)|Data stream level 9 configuration.|[DataStreamLevelSpec](#datastreamlevelspec)| | | |
 
 
 

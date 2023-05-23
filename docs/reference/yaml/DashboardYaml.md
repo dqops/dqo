@@ -108,7 +108,6 @@ Description of a single dashboard that is available in the platform.
 |url|Dashboard url|string| | | |
 |width|Dashboard width (px)|integer| | | |
 |height|Dashboard height (px)|integer| | | |
-|dqo_cloud_credentials|The dashboard is a DQO Cloud dashboard (Looker Studio) that requires DQO Cloud credentials to access the private data quality data lake|boolean| | | |
 
 
 
