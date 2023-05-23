@@ -58,7 +58,9 @@ nav:
       - Running checks with a scheduler: 'examples/data-quality-monitoring/running-checks-with-a-scheduler.md'
   - Working with DQO:
     - Installation:
-      - Install DQO from Git: 'working-with-dqo/install-dqo-from-git/install-dqo-from-git.md'
+      - Install DQO using PIP: 'working-with-dqo/installation/install-dqo-using-pip.md'
+      - Install DQO from Git: 'working-with-dqo/installation/install-dqo-from-git.md'
+      - Install DQO from release package: 'working-with-dqo/installation/install-dqo-from-release-package.md'
     - Adding connections:
       - 'working-with-dqo/adding-data-source-connection/index.md'
       - BigQuery: 'working-with-dqo/adding-data-source-connection/bigquery.md'
@@ -293,7 +295,7 @@ theme:
     - content.code.copy
     - content.code.annotate
     - content.action.edit
-  logo: assets/logo.svg
+  logo: images/logo.svg
   favicon: images/favicon.ico
   icon:
     repo: fontawesome/brands/github
