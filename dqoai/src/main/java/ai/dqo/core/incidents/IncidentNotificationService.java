@@ -15,7 +15,7 @@
  */
 package ai.dqo.core.incidents;
 
-import ai.dqo.metadata.incidents.IncidentGroupingSpec;
+import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
 
 import java.util.List;
 
@@ -28,5 +28,5 @@ public interface IncidentNotificationService {
      * @param newMessages List of new data quality incidents that will be sent as a payload.
      * @param incidentGrouping Incident grouping that identifies the notification target (where to send the notifications).
      */
-    void sendNotifications(List<IncidentNotificationMessage> newMessages, IncidentGroupingSpec incidentGrouping);
+    void sendNotifications(List<IncidentNotificationMessage> newMessages, ConnectionIncidentGroupingSpec incidentGrouping);
 }

@@ -22,7 +22,7 @@ import ai.dqo.data.incidents.factory.IncidentsColumnNames;
 import ai.dqo.data.incidents.snapshot.IncidentsSnapshot;
 import ai.dqo.data.incidents.snapshot.IncidentsSnapshotFactory;
 import ai.dqo.metadata.incidents.IncidentGroupingLevel;
-import ai.dqo.metadata.incidents.IncidentGroupingSpec;
+import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import com.google.common.collect.Lists;
@@ -299,7 +299,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
          */
         public List<IncidentNotificationMessage> importBatch(TableIncidentImportBatch nextTableImportBatch) {
             ConnectionSpec connection = nextTableImportBatch.getConnection();
-            IncidentGroupingSpec incidentGroupingAtConnection = connection.getIncidentGrouping();
+            ConnectionIncidentGroupingSpec incidentGroupingAtConnection = connection.getIncidentGrouping();
             if (incidentGroupingAtConnection == null || incidentGroupingAtConnection.isDisabled()) {
                 return null;
             }

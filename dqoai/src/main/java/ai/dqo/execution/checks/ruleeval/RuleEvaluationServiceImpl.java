@@ -16,7 +16,6 @@
 package ai.dqo.execution.checks.ruleeval;
 
 import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.checks.CheckType;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
@@ -29,7 +28,9 @@ import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindService;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.groupings.TimePeriodGradient;
-import ai.dqo.metadata.incidents.IncidentGroupingSpec;
+import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
+import ai.dqo.metadata.incidents.EffectiveIncidentGroupingConfiguration;
+import ai.dqo.metadata.incidents.TableIncidentGroupingSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.HistoricDataPointsGrouping;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
@@ -250,9 +251,12 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     highestSeverity = 0; // no alert
                 }
 
-                IncidentGroupingSpec incidentGrouping = sensorRunParameters.getConnection().getIncidentGrouping();
-                if (incidentGrouping != null && !incidentGrouping.isDisabled() &&
-                        highestSeverity >= incidentGrouping.getMinimumSeverity().getSeverityLevel()) {
+                ConnectionIncidentGroupingSpec connectionIncidentGrouping = sensorRunParameters.getConnection().getIncidentGrouping();
+                TableIncidentGroupingSpec tableIncidentGrouping = sensorRunParameters.getTable().getIncidentGrouping();
+                EffectiveIncidentGroupingConfiguration effectiveIncidentGrouping = new EffectiveIncidentGroupingConfiguration(connectionIncidentGrouping, tableIncidentGrouping);
+
+                if (effectiveIncidentGrouping != null && !effectiveIncidentGrouping.isDisabled() &&
+                        highestSeverity >= effectiveIncidentGrouping.getMinimumSeverity().getSeverityLevel()) {
                     String dataStreamName = !normalizedSensorResults.getDataStreamNameColumn().isMissing(allSensorResultsRowIndex) ?
                             normalizedSensorResults.getDataStreamNameColumn().get(allSensorResultsRowIndex) : null;
                     String qualityDimension = !normalizedSensorResults.getQualityDimensionColumn().isMissing(allSensorResultsRowIndex) ?
@@ -262,7 +266,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     String checkType = !normalizedSensorResults.getCheckTypeColumn().isMissing(allSensorResultsRowIndex) ?
                             normalizedSensorResults.getCheckTypeColumn().get(allSensorResultsRowIndex) : null;
                     String checkName = checkSpec.getCheckName();
-                    long incidentHash = incidentGrouping.calculateIncidentHash(sensorRunParameters.getConnection().getConnectionName(),
+                    long incidentHash = effectiveIncidentGrouping.calculateIncidentHash(sensorRunParameters.getConnection().getConnectionName(),
                             sensorRunParameters.getTable().getPhysicalTableName(),
                             dataStreamName, qualityDimension, checkCategory, checkType, checkName);
                     result.getIncidentHashColumn().set(targetRowIndex, incidentHash);

@@ -53,7 +53,7 @@ Data source (connection) specification.
 |parallel_runs_limit|The concurrency limit for the maximum number of parallel executions of checks on this connection.|integer| | | |
 |[default_data_stream_mapping](#datastreammappingspec)|Default data streams configuration for all tables. The configuration may be overridden on table, column and check level. Data streams are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning.|[DataStreamMappingSpec](#datastreammappingspec)| | | |
 |[schedules](#recurringschedulesspec)|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|[RecurringSchedulesSpec](#recurringschedulesspec)| | | |
-|[incident_grouping](#incidentgroupingspec)|Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.|[IncidentGroupingSpec](#incidentgroupingspec)| | | |
+|[incident_grouping](#connectionincidentgroupingspec)|Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.|[ConnectionIncidentGroupingSpec](#connectionincidentgroupingspec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |[labels](#labelsetspec)|Custom labels that were assigned to the connection. Labels are used for searching for tables when filtered data quality checks are executed.|[LabelSetSpec](#labelsetspec)| | | |
 
@@ -395,7 +395,7 @@ Recurring job schedule specification.
 
 ___  
 
-## IncidentGroupingSpec  
+## ConnectionIncidentGroupingSpec  
 Configuration of data quality incident grouping on a connection level. Defines how similar data quality issues are grouped into incidents.  
   
 

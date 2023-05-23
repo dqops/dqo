@@ -16,7 +16,7 @@
 package ai.dqo.core.incidents;
 
 import ai.dqo.data.incidents.factory.IncidentStatus;
-import ai.dqo.metadata.incidents.IncidentGroupingSpec;
+import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -66,7 +66,7 @@ public class IncidentStatusChangeParameters {
      * Incident grouping configuration retrieved from the connection.
      */
     @JsonPropertyDescription("Incident grouping configuration retrieved from the connection.")
-    private IncidentGroupingSpec incidentGrouping;
+    private ConnectionIncidentGroupingSpec incidentGrouping;
 
     public IncidentStatusChangeParameters() {
     }
@@ -76,7 +76,7 @@ public class IncidentStatusChangeParameters {
                                           int firstSeenMonth,
                                           String incidentId,
                                           IncidentStatus newIncidentStatus,
-                                          IncidentGroupingSpec incidentGrouping ) {
+                                          ConnectionIncidentGroupingSpec incidentGrouping ) {
         this.connectionName = connectionName;
         this.firstSeenYear = firstSeenYear;
         this.firstSeenMonth = firstSeenMonth;

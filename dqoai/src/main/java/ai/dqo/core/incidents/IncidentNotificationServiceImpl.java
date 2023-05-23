@@ -15,12 +15,10 @@
  */
 package ai.dqo.core.incidents;
 
-import ai.dqo.metadata.incidents.IncidentGroupingSpec;
+import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
 import ai.dqo.metadata.incidents.IncidentWebhookNotificationsSpec;
 import ai.dqo.utils.http.SharedHttpClientProvider;
 import ai.dqo.utils.serialization.JsonSerializer;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
@@ -31,7 +29,6 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-import reactor.netty.ByteBufFlux;
 import reactor.netty.http.client.HttpClient;
 
 import java.nio.charset.StandardCharsets;
@@ -65,7 +62,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      * @param incidentGrouping Incident grouping that identifies the notification target (where to send the notifications).
      */
     @Override
-    public void sendNotifications(List<IncidentNotificationMessage> newMessages, IncidentGroupingSpec incidentGrouping) {
+    public void sendNotifications(List<IncidentNotificationMessage> newMessages, ConnectionIncidentGroupingSpec incidentGrouping) {
         if (incidentGrouping == null || incidentGrouping.getWebhooks() == null) {
             return;
         }
@@ -80,7 +77,7 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      * @param incidentGrouping Incident grouping configuration with the webhook.
      * @return Awaitable Mono object.
      */
-    protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages, IncidentGroupingSpec incidentGrouping) {
+    protected Mono<Void> sendAllNotifications(List<IncidentNotificationMessage> newMessages, ConnectionIncidentGroupingSpec incidentGrouping) {
         final IncidentWebhookNotificationsSpec webhooksSpec = incidentGrouping.getWebhooks();
 
         Mono<Void> allNotificationsSent = Flux.fromIterable(newMessages)
