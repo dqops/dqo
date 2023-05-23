@@ -1,4 +1,4 @@
-# Installation
+# Install DQO using PIP
 
 ## Prerequisites
 
@@ -37,11 +37,9 @@ To use DQO you need:
     echo %JAVA_HOME%
     ```
 
-## Install DQO with pip manager
+## Installation
 
 DQO is available on [PyPi repository](https://pypi.org/project/dqops/). 
-
-If you want to install DQO directly from Git go to [this section](../../working-with-dqo/installation/install-dqo-from-git.md).
 
 1. Create an empty catalogue where you want to install DQO.
 2. Open a terminal, navigate to the created directory, and create a [virtual environment](https://docs.python.org/3/library/venv.html) by running:
@@ -108,7 +106,3 @@ If you want to install DQO directly from Git go to [this section](../../working-
 
 4. Open the DQO User Interface Console in your browser by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888) 
     or by copying the link.
-
-## Next step
-
-Now that you have installed and opened DQO, it is time to [connect your first data source](../adding-data-source-connection/adding-data-source-connection.md).
