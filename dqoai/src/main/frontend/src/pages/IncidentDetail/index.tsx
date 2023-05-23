@@ -250,13 +250,16 @@ export const IncidentDetail = () => {
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
             <div className="text-xl font-semibold truncate">Data quality incidents on {connection || ''}</div>
           </div>
-          <StatusSelect onChangeFilter={onChangeFilter} />
-
-          <Button
-            onClick={goToConfigure}
-            color="primary"
-            label="Configure"
-          />
+          <div className="flex items-center">
+            <div className="mr-20">
+              <StatusSelect onChangeFilter={onChangeFilter} />
+            </div>
+            <Button
+              onClick={goToConfigure}
+              color="primary"
+              label="Configure"
+            />
+          </div>
         </div>
 
         <div className="flex items-center p-4 gap-6 mb-4">
