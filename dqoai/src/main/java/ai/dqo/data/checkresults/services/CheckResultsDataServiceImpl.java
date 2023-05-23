@@ -29,18 +29,25 @@ import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactory;
 import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
+import ai.dqo.data.storage.LoadedMonthlyPartition;
+import ai.dqo.data.storage.ParquetPartitionId;
 import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.utils.tables.TableRowUtility;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 import tech.tablesaw.selection.Selection;
+import tech.tablesaw.table.Relation;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -186,83 +193,148 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         }
 
         for (Row row : workingTable) {
-            String id = row.getString(SensorReadoutsColumnNames.ID_COLUMN_NAME);
-            Double actualValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
-            Double expectedValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
-            Double warningLowerBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.WARNING_LOWER_BOUND_COLUMN_NAME);
-            Double warningUpperBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.WARNING_UPPER_BOUND_COLUMN_NAME);
-            Double errorLowerBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.ERROR_LOWER_BOUND_COLUMN_NAME);
-            Double errorUpperBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.ERROR_UPPER_BOUND_COLUMN_NAME);
-            Double fatalLowerBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME);
-            Double fatalUpperBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.FATAL_UPPER_BOUND_COLUMN_NAME);
-            Integer severity = row.getInt(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+            CheckResultDetailedSingleModel singleModel = createSingleCheckResultDetailedModel(row);
 
-            String checkCategory = row.getString(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
-            String checkDisplayName = row.getString(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
-            Long checkHash = row.getLong(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-            String checkName = row.getString(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
-            String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
-
-            String columnName = TableRowUtility.getSanitizedStringValue(row, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
-            String dataStream = row.getString(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
-
-            Integer durationMs = row.getInt(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
-            Instant executedAt = row.getInstant(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
-            String timeGradient = row.getString(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
-            LocalDateTime timePeriod = row.getDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
-
-            Boolean includeInKpi = row.getBoolean(CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME);
-            Boolean includeInSla = row.getBoolean(CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME);
-            String provider = row.getString(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME);
-            String qualityDimension = row.getString(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
-            String sensorName = row.getString(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME);
-
-            CheckResultDetailedSingleModel singleModel = new CheckResultDetailedSingleModel() {{
-                setId(id);
-                setActualValue(actualValue);
-                setExpectedValue(expectedValue);
-                setWarningLowerBound(warningLowerBound);
-                setWarningUpperBound(warningUpperBound);
-                setErrorLowerBound(errorLowerBound);
-                setErrorUpperBound(errorUpperBound);
-                setFatalLowerBound(fatalLowerBound);
-                setFatalUpperBound(fatalUpperBound);
-                setSeverity(severity);
-
-                setColumnName(columnName);
-                setDataStream(dataStream);
-
-                setDurationMs(durationMs);
-                setExecutedAt(executedAt);
-                setTimeGradient(timeGradient);
-                setTimePeriod(timePeriod);
-
-                setIncludeInKpi(includeInKpi);
-                setIncludeInSla(includeInSla);
-                setProvider(provider);
-                setQualityDimension(qualityDimension);
-                setSensorName(sensorName);
-            }};
-            
-            CheckResultsDetailedDataModel checkResultsDetailedDataModel = resultMap.get(checkHash);
+            CheckResultsDetailedDataModel checkResultsDetailedDataModel = resultMap.get(singleModel.getCheckHash());
             if (checkResultsDetailedDataModel == null) {
                 checkResultsDetailedDataModel = new CheckResultsDetailedDataModel() {{
-                    setCheckCategory(checkCategory);
-                    setCheckName(checkName);
-                    setCheckHash(checkHash);
-                    setCheckType(checkType);
-                    setCheckDisplayName(checkDisplayName);
+                    setCheckCategory(singleModel.getCheckCategory());
+                    setCheckName(singleModel.getCheckName());
+                    setCheckHash(singleModel.getCheckHash());
+                    setCheckType(singleModel.getCheckType());
+                    setCheckDisplayName(singleModel.getCheckDisplayName());
                     setDataStreamNames(dataStreams);
-                    setDataStream(selectedDataStream);
+                    setDataStream(singleModel.getDataStream());
                     setSingleCheckResults(new ArrayList<>());
                 }};
-                resultMap.put(checkHash, checkResultsDetailedDataModel);
+                resultMap.put(singleModel.getCheckHash(), checkResultsDetailedDataModel);
             }
 
             checkResultsDetailedDataModel.getSingleCheckResults().add(singleModel);
         }
 
         return resultMap.values().toArray(CheckResultsDetailedDataModel[]::new);
+    }
+
+    /**
+     * Creates a data model that returns the result of a single check.
+     * @param row Row from the data quality result table.
+     * @return Model with all information for a single check result.
+     */
+    @NotNull
+    protected CheckResultDetailedSingleModel createSingleCheckResultDetailedModel(Row row) {
+        String id = row.getString(SensorReadoutsColumnNames.ID_COLUMN_NAME);
+        Double actualValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        Double expectedValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+        Double warningLowerBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.WARNING_LOWER_BOUND_COLUMN_NAME);
+        Double warningUpperBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.WARNING_UPPER_BOUND_COLUMN_NAME);
+        Double errorLowerBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.ERROR_LOWER_BOUND_COLUMN_NAME);
+        Double errorUpperBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.ERROR_UPPER_BOUND_COLUMN_NAME);
+        Double fatalLowerBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME);
+        Double fatalUpperBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.FATAL_UPPER_BOUND_COLUMN_NAME);
+        Integer severity = row.getInt(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+
+        String checkCategory = row.getString(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+        String checkDisplayName = row.getString(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
+        Long checkHash = row.getLong(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
+        String checkName = row.getString(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
+        String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
+
+        String columnName = TableRowUtility.getSanitizedStringValue(row, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        String dataStream = row.getString(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
+
+        Integer durationMs = row.getInt(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
+        Instant executedAt = row.getInstant(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
+        String timeGradient = row.getString(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+        LocalDateTime timePeriod = row.getDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+
+        Boolean includeInKpi = row.getBoolean(CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME);
+        Boolean includeInSla = row.getBoolean(CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME);
+        String provider = row.getString(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME);
+        String qualityDimension = row.getString(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
+        String sensorName = row.getString(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME);
+
+        CheckResultDetailedSingleModel singleModel = new CheckResultDetailedSingleModel() {{
+            setId(id);
+            setActualValue(actualValue);
+            setExpectedValue(expectedValue);
+            setWarningLowerBound(warningLowerBound);
+            setWarningUpperBound(warningUpperBound);
+            setErrorLowerBound(errorLowerBound);
+            setErrorUpperBound(errorUpperBound);
+            setFatalLowerBound(fatalLowerBound);
+            setFatalUpperBound(fatalUpperBound);
+            setSeverity(severity);
+
+            setCheckCategory(checkCategory);
+            setCheckName(checkName);
+            setCheckHash(checkHash);
+            setCheckType(checkType);
+            setCheckDisplayName(checkDisplayName);
+
+            setColumnName(columnName);
+            setDataStream(dataStream);
+
+            setDurationMs(durationMs);
+            setExecutedAt(executedAt);
+            setTimeGradient(timeGradient);
+            setTimePeriod(timePeriod);
+
+            setIncludeInKpi(includeInKpi);
+            setIncludeInSla(includeInSla);
+            setProvider(provider);
+            setQualityDimension(qualityDimension);
+            setSensorName(sensorName);
+        }};
+        return singleModel;
+    }
+
+    /**
+     * Loads the results of failed data quality checks that are attached to the given incident, identified by the incident hash, first seen and incident until timestamps.
+     * Returns only check results with a minimum severity.
+     *
+     * @param connectionName    Connection name.
+     * @param physicalTableName Physical table name.
+     * @param incidentHash      Incident hash.
+     * @param firstSeen         The timestamp when the incident was first seen.
+     * @param incidentUntil     The timestamp when the incident was closed or expired, returns check results up to this timestamp.
+     * @param minSeverity       Minimum check issue severity that is returned.
+     * @return An array of matching check results.
+     */
+    @Override
+    public CheckResultDetailedSingleModel[] loadCheckResultsRelatedToIncident(String connectionName,
+                                                                             PhysicalTableName physicalTableName,
+                                                                             long incidentHash,
+                                                                             Instant firstSeen,
+                                                                             Instant incidentUntil,
+                                                                             int minSeverity) {
+        CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
+                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS);
+        LocalDate startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
+        LocalDate endMonth = incidentUntil.plus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
+        if (!checkResultsSnapshot.ensureMonthsAreLoaded(startMonth, endMonth)) {
+            return new CheckResultDetailedSingleModel[0];
+        }
+
+        List<CheckResultDetailedSingleModel> resultsList = new ArrayList<>();
+
+        Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = checkResultsSnapshot.getLoadedMonthlyPartitions();
+        for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry : loadedMonthlyPartitions.entrySet()) {
+            Table partitionData = loadedPartitionEntry.getValue().getData();
+            if (partitionData == null) {
+                continue;
+            }
+
+
+        }
+
+
+
+
+
+
+
+        return new CheckResultDetailedSingleModel[0];
     }
 
     /**

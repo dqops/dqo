@@ -16,8 +16,12 @@
 package ai.dqo.data.checkresults.services;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.data.checkresults.services.models.CheckResultDetailedSingleModel;
 import ai.dqo.data.checkresults.services.models.CheckResultsDetailedDataModel;
 import ai.dqo.data.checkresults.services.models.CheckResultsOverviewDataModel;
+import ai.dqo.metadata.sources.PhysicalTableName;
+
+import java.time.Instant;
 
 /**
  * Service that returns data from the check results.
@@ -42,4 +46,22 @@ public interface CheckResultsDataService {
      */
     CheckResultsDetailedDataModel[] readCheckStatusesDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
                                                               CheckResultsDetailedParameters loadParameters);
+
+    /**
+     * Loads the results of failed data quality checks that are attached to the given incident, identified by the incident hash, first seen and incident until timestamps.
+     * Returns only check results with a minimum severity.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @param incidentHash Incident hash.
+     * @param firstSeen The timestamp when the incident was first seen.
+     * @param incidentUntil The timestamp when the incident was closed or expired, returns check results up to this timestamp.
+     * @param minSeverity Minimum check issue severity that is returned.
+     * @return An array of matching check results.
+     */
+    CheckResultDetailedSingleModel[] loadCheckResultsRelatedToIncident(String connectionName,
+                                                                       PhysicalTableName physicalTableName,
+                                                                       long incidentHash,
+                                                                       Instant firstSeen,
+                                                                       Instant incidentUntil,
+                                                                       int minSeverity);
 }

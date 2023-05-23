@@ -16,6 +16,9 @@
 package ai.dqo.data.incidents.services;
 
 import ai.dqo.core.configuration.DqoIncidentsConfigurationProperties;
+import ai.dqo.data.checkresults.services.CheckResultsDataService;
+import ai.dqo.data.checkresults.services.models.CheckResultDetailedSingleModel;
+import ai.dqo.data.checkresults.services.models.CheckResultsDetailedDataModel;
 import ai.dqo.data.incidents.factory.IncidentStatus;
 import ai.dqo.data.incidents.factory.IncidentsColumnNames;
 import ai.dqo.data.incidents.services.models.IncidentListFilterParameters;
@@ -28,6 +31,7 @@ import ai.dqo.data.storage.LoadedMonthlyPartition;
 import ai.dqo.data.storage.ParquetPartitionId;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
+import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import org.apache.parquet.Strings;
@@ -49,20 +53,24 @@ import java.util.stream.Collectors;
 @Service
 public class IncidentsDataServiceImpl implements IncidentsDataService {
     private IncidentsSnapshotFactory incidentsSnapshotFactory;
+    private CheckResultsDataService checkResultsDataService;
     private UserHomeContextFactory userHomeContextFactory;
     private DqoIncidentsConfigurationProperties dqoIncidentsConfigurationProperties;
 
     /**
      * Creates a new incident data service, given all required dependencies.
      * @param incidentsSnapshotFactory Incident snapshot factory.
+     * @param checkResultsDataService Data quality check results data service, used to load results (matching issues).
      * @param userHomeContextFactory User home context factory, used to load a list of connections.
      * @param dqoIncidentsConfigurationProperties DQO incidents configuration parameters.
      */
     @Autowired
     public IncidentsDataServiceImpl(IncidentsSnapshotFactory incidentsSnapshotFactory,
+                                    CheckResultsDataService checkResultsDataService,
                                     UserHomeContextFactory userHomeContextFactory,
                                     DqoIncidentsConfigurationProperties dqoIncidentsConfigurationProperties) {
         this.incidentsSnapshotFactory = incidentsSnapshotFactory;
+        this.checkResultsDataService = checkResultsDataService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoIncidentsConfigurationProperties = dqoIncidentsConfigurationProperties;
     }
@@ -112,6 +120,8 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
             TextColumn checkTypeColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME);
             TextColumn checkNameColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME);
             IntColumn highestSeverityColumn = partitionTable.intColumn(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME);
+            IntColumn minSeverityColumn = partitionTable.containsColumn(IncidentsColumnNames.MIN_SEVERITY_COLUMN_NAME) ?
+                    partitionTable.intColumn(IncidentsColumnNames.MIN_SEVERITY_COLUMN_NAME) : null;
             IntColumn failedChecksCountColumn = partitionTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME);
             TextColumn issueUrlColumn = partitionTable.textColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
             TextColumn statusColumn = partitionTable.textColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
@@ -162,6 +172,9 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                     incidentModel.setIssueUrl(issueUrlColumn.get(rowIndex));
                 }
                 incidentModel.setHighestSeverity(highestSeverityColumn.get(rowIndex));
+                if (minSeverityColumn != null && !minSeverityColumn.isMissing(rowIndex)) {
+                    incidentModel.setMinSeverity(minSeverityColumn.get(rowIndex));
+                }
                 incidentModel.setFailedChecksCount(failedChecksCountColumn.get(rowIndex));
                 incidentModel.setStatus(incidentStatus);
 
@@ -221,6 +234,32 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
         int rowIndex = incidentIdSelection.get(0);
         IncidentModel incidentModel = IncidentModel.fromIncidentRow(incidentMonthData.row(rowIndex), connectionName);
         return incidentModel;
+    }
+
+    /**
+     * Loads all failed check results covered by a given incident.
+     * @param connectionName Connection name where the incident happened.
+     * @param year           Year when the incident was first seen.
+     * @param month          Month of year when the incident was first seen.
+     * @param incidentId The incident id.
+     * @return Array of check results for the incident.
+     */
+    @Override
+    public CheckResultDetailedSingleModel[] readCheckResultsForIncident(String connectionName, int year, int month, String incidentId) {
+        IncidentModel incidentModel = this.loadIncident(connectionName, year, month, incidentId);
+        if (incidentModel == null) {
+            return null;
+        }
+
+        CheckResultDetailedSingleModel[] failedChecks = this.checkResultsDataService.loadCheckResultsRelatedToIncident(
+                connectionName,
+                new PhysicalTableName(incidentModel.getSchema(), incidentModel.getTable()),
+                incidentModel.getIncidentHash().longValue(),
+                incidentModel.getFirstSeen(),
+                incidentModel.getIncidentUntil(),
+                incidentModel.getMinSeverity());
+
+        return failedChecks;
     }
 
     /**

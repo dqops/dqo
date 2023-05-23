@@ -23,6 +23,7 @@ import lombok.Data;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * Detailed results for a single check. Represent one row in the check results table.
@@ -33,6 +34,17 @@ import java.time.LocalDateTime;
 public class CheckResultDetailedSingleModel {
     @JsonPropertyDescription("Check result ID.")
     String id;
+
+    @JsonPropertyDescription("Check hash.")
+    private long checkHash;
+    @JsonPropertyDescription("Check category name.")
+    private String checkCategory;
+    @JsonPropertyDescription("Check name.")
+    private String checkName;
+    @JsonPropertyDescription("Check display name.")
+    private String checkDisplayName;
+    @JsonPropertyDescription("Check type.")
+    private String checkType;
 
     @JsonPropertyDescription("Actual value.")
     Double actualValue;

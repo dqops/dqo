@@ -16,6 +16,8 @@
 
 package ai.dqo.data.incidents.services;
 
+import ai.dqo.data.checkresults.services.models.CheckResultDetailedSingleModel;
+import ai.dqo.data.checkresults.services.models.CheckResultsDetailedDataModel;
 import ai.dqo.data.incidents.services.models.IncidentListFilterParameters;
 import ai.dqo.data.incidents.services.models.IncidentModel;
 import ai.dqo.data.incidents.services.models.IncidentsPerConnectionModel;
@@ -51,4 +53,14 @@ public interface IncidentsDataService {
      * @return Collection of connection names, with a count of open incidents.
      */
     Collection<IncidentsPerConnectionModel> findConnectionIncidentStats();
+
+    /**
+     * Loads all failed check results covered by a given incident.
+     * @param connectionName Connection name where the incident happened.
+     * @param year           Year when the incident was first seen.
+     * @param month          Month of year when the incident was first seen.
+     * @param incidentId The incident id.
+     * @return Array of check results for the incident.
+     */
+    CheckResultDetailedSingleModel[] readCheckResultsForIncident(String connectionName, int year, int month, String incidentId);
 }
