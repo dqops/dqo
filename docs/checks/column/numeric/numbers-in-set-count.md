@@ -328,7 +328,6 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
-    
     {%- macro extract_in_list(values_list) -%}
         {{values_list|join(', ')}}
     {% endmacro %}
@@ -413,11 +412,24 @@ spec:
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
-    {{- lib.render_or
+    {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for MySQL"
       
     ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` IN (2, 3)
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -714,7 +726,6 @@ spec:
         ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
-        
         {%- macro extract_in_list(values_list) -%}
             {{values_list|join(', ')}}
         {% endmacro %}
@@ -807,10 +818,25 @@ spec:
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         {{- lib.render_group_by() -}}
-        {{- lib.render_or
+        {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for MySQL"
         ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` IN (2, 3)
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            LOCALTIMESTAMP AS time_period,
+            CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -1145,7 +1171,6 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
-    
     {%- macro extract_in_list(values_list) -%}
         {{values_list|join(', ')}}
     {% endmacro %}
@@ -1230,11 +1255,24 @@ spec:
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
-    {{- lib.render_or
+    {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for MySQL"
       
     ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` IN (2, 3)
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -1532,7 +1570,6 @@ spec:
         ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
-        
         {%- macro extract_in_list(values_list) -%}
             {{values_list|join(', ')}}
         {% endmacro %}
@@ -1625,10 +1662,25 @@ spec:
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         {{- lib.render_group_by() -}}
-        {{- lib.render_or
+        {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for MySQL"
         ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` IN (2, 3)
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            LOCALTIMESTAMP AS time_period,
+            CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -1963,7 +2015,6 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
-    
     {%- macro extract_in_list(values_list) -%}
         {{values_list|join(', ')}}
     {% endmacro %}
@@ -2048,11 +2099,24 @@ spec:
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
-    {{- lib.render_or
+    {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for MySQL"
       
     ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` IN (2, 3)
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+        CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -2350,7 +2414,6 @@ spec:
         ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
-        
         {%- macro extract_in_list(values_list) -%}
             {{values_list|join(', ')}}
         {% endmacro %}
@@ -2443,10 +2506,25 @@ spec:
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         {{- lib.render_group_by() -}}
-        {{- lib.render_or
+        {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for MySQL"
         ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` IN (2, 3)
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+            CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -2781,7 +2859,6 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
-    
     {%- macro extract_in_list(values_list) -%}
         {{values_list|join(', ')}}
     {% endmacro %}
@@ -2870,11 +2947,24 @@ spec:
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
-    {{- lib.render_or
+    {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for MySQL"
       
     ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` IN (2, 3)
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table.`` AS time_period,
+        CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -3172,7 +3262,6 @@ spec:
         ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
-        
         {%- macro extract_in_list(values_list) -%}
             {{values_list|join(', ')}}
         {% endmacro %}
@@ -3262,10 +3351,25 @@ spec:
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         {{- lib.render_group_by() -}}
-        {{- lib.render_or
+        {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for MySQL"
         ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` IN (2, 3)
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            analyzed_table.`` AS time_period,
+            CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -3600,7 +3704,6 @@ spec:
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
-    
     {%- macro extract_in_list(values_list) -%}
         {{values_list|join(', ')}}
     {% endmacro %}
@@ -3689,11 +3792,24 @@ spec:
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
-    {{- lib.render_or
+    {{- lib.render_order_by() -}}
     ```
 === "Rendered SQL for MySQL"
       
     ```sql
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` IN (2, 3)
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
+        CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -3991,7 +4107,6 @@ spec:
         ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
-        
         {%- macro extract_in_list(values_list) -%}
             {{values_list|join(', ')}}
         {% endmacro %}
@@ -4081,10 +4196,25 @@ spec:
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         {{- lib.render_group_by() -}}
-        {{- lib.render_or
+        {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for MySQL"
         ```sql
+        SELECT
+            SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` IN (2, 3)
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
+            CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 

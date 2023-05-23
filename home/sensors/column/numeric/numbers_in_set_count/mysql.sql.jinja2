@@ -25,4 +25,4 @@ SELECT
 FROM {{ lib.render_target_table() }} AS analyzed_table
 {{- lib.render_where_clause() -}}
 {{- lib.render_group_by() -}}
-{{- lib.render_or
+{{- lib.render_order_by() -}}
