@@ -10,7 +10,7 @@ spring:
   lifecycle:
     timeout-per-shutdown-phase: 10s
   codec:
-    max-in-memory-size: 50MB
+    max-in-memory-size: 10MB
   mvc:
     async:
       request-timeout: 60000
