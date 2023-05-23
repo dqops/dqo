@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import NotificationMenu from '../NotificationMenu';
 import Logo from '../Logo';
 import clsx from 'clsx';
@@ -11,6 +11,7 @@ import { addFirstLevelTab } from "../../redux/actions/source.actions";
 import { IRootState } from "../../redux/reducers";
 import { COLUMN_LEVEL_TABS, CONNECTION_LEVEL_TABS, PageTab, TABLE_LEVEL_TABS } from "../../shared/constants";
 import { SynchronizeButton } from "./SynchronizeButton";
+import SvgIcon from '../SvgIcon';
 
 const Header = () => {
   const history = useHistory();
@@ -31,7 +32,7 @@ const Header = () => {
   const { tabs, activeTab } = useSelector((state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]);
   const selectedTab = tabs?.find((item) => item.url === activeTab);
   const match = useRouteMatch();
-
+  const [showProfile, setShowProfile] = useState<boolean>(false)
   const onClick = (newCheckTypes: CheckTypes) => () => {
     let url = '';
     let value = '';
@@ -134,7 +135,9 @@ const Header = () => {
         <HelpMenu />
         <SynchronizeButton />
         <NotificationMenu />
+        <SvgIcon name='userprofile' onClick={() => setShowProfile(!showProfile)}/>
       </div>
+      {showProfile ? <div className='bg-black w-50 h-60 absolute right-5 top-15 rounded-md'></div> : ""}
     </div>
   );
 };
