@@ -46,11 +46,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=numbers_in_
               - 2
               - 3
             warning:
-              min_percent: 1.0
+              min_percent: 99.0
             error:
-              min_percent: 2.0
+              min_percent: 98.0
             fatal:
-              min_percent: 5.0
+              min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-25"
@@ -74,11 +74,11 @@ spec:
               - 2
               - 3
             warning:
-              min_percent: 1.0
+              min_percent: 99.0
             error:
-              min_percent: 2.0
+              min_percent: 98.0
             fatal:
-              min_percent: 5.0
+              min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -460,11 +460,11 @@ spec:
                   - 2
                   - 3
                 warning:
-                  min_percent: 1.0
+                  min_percent: 99.0
                 error:
-                  min_percent: 2.0
+                  min_percent: 98.0
                 fatal:
-                  min_percent: 5.0
+                  min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -882,11 +882,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_numbe
                 - 2
                 - 3
               warning:
-                min_percent: 1.0
+                min_percent: 99.0
               error:
-                min_percent: 2.0
+                min_percent: 98.0
               fatal:
-                min_percent: 5.0
+                min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-26"
@@ -911,11 +911,11 @@ spec:
                 - 2
                 - 3
               warning:
-                min_percent: 1.0
+                min_percent: 99.0
               error:
-                min_percent: 2.0
+                min_percent: 98.0
               fatal:
-                min_percent: 5.0
+                min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1298,11 +1298,11 @@ spec:
                     - 2
                     - 3
                   warning:
-                    min_percent: 1.0
+                    min_percent: 99.0
                   error:
-                    min_percent: 2.0
+                    min_percent: 98.0
                   fatal:
-                    min_percent: 5.0
+                    min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1720,11 +1720,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_num
                 - 2
                 - 3
               warning:
-                min_percent: 1.0
+                min_percent: 99.0
               error:
-                min_percent: 2.0
+                min_percent: 98.0
               fatal:
-                min_percent: 5.0
+                min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-26"
@@ -1749,11 +1749,11 @@ spec:
                 - 2
                 - 3
               warning:
-                min_percent: 1.0
+                min_percent: 99.0
               error:
-                min_percent: 2.0
+                min_percent: 98.0
               fatal:
-                min_percent: 5.0
+                min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2136,11 +2136,11 @@ spec:
                     - 2
                     - 3
                   warning:
-                    min_percent: 1.0
+                    min_percent: 99.0
                   error:
-                    min_percent: 2.0
+                    min_percent: 98.0
                   fatal:
-                    min_percent: 5.0
+                    min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -2558,11 +2558,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
                 - 2
                 - 3
               warning:
-                min_percent: 1.0
+                min_percent: 99.0
               error:
-                min_percent: 2.0
+                min_percent: 98.0
               fatal:
-                min_percent: 5.0
+                min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-26"
@@ -2587,11 +2587,11 @@ spec:
                 - 2
                 - 3
               warning:
-                min_percent: 1.0
+                min_percent: 99.0
               error:
-                min_percent: 2.0
+                min_percent: 98.0
               fatal:
-                min_percent: 5.0
+                min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2978,11 +2978,11 @@ spec:
                     - 2
                     - 3
                   warning:
-                    min_percent: 1.0
+                    min_percent: 99.0
                   error:
-                    min_percent: 2.0
+                    min_percent: 98.0
                   fatal:
-                    min_percent: 5.0
+                    min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -3397,11 +3397,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
                 - 2
                 - 3
               warning:
-                min_percent: 1.0
+                min_percent: 99.0
               error:
-                min_percent: 2.0
+                min_percent: 98.0
               fatal:
-                min_percent: 5.0
+                min_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-26"
@@ -3426,11 +3426,11 @@ spec:
                 - 2
                 - 3
               warning:
-                min_percent: 1.0
+                min_percent: 99.0
               error:
-                min_percent: 2.0
+                min_percent: 98.0
               fatal:
-                min_percent: 5.0
+                min_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -3817,11 +3817,11 @@ spec:
                     - 2
                     - 3
                   warning:
-                    min_percent: 1.0
+                    min_percent: 99.0
                   error:
-                    min_percent: 2.0
+                    min_percent: 98.0
                   fatal:
-                    min_percent: 5.0
+                    min_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
