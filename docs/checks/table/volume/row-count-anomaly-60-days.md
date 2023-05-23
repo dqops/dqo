@@ -39,7 +39,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=row_count_a
 **Check structure (Yaml)**
 ```yaml
   profiling_checks:
-    anomaly:
+    volume:
       row_count_anomaly_60_days:
         warning:
           percentile_within: 95.0
@@ -61,7 +61,7 @@ spec:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
   profiling_checks:
-    anomaly:
+    volume:
       row_count_anomaly_60_days:
         warning:
           percentile_within: 95.0
@@ -224,7 +224,7 @@ spec:
             source: column_value
             column: state
       profiling_checks:
-        anomaly:
+        volume:
           row_count_anomaly_60_days:
             warning:
               percentile_within: 95.0
@@ -424,7 +424,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_c
 ```yaml
   recurring_checks:
     daily:
-      anomaly:
+      volume:
         daily_row_count_anomaly_60_days:
           warning:
             percentile_within: 95.0
@@ -447,7 +447,7 @@ spec:
     monthly_partitioning_recent_months: 1
   recurring_checks:
     daily:
-      anomaly:
+      volume:
         daily_row_count_anomaly_60_days:
           warning:
             percentile_within: 95.0
@@ -611,7 +611,7 @@ spec:
             column: state
       recurring_checks:
         daily:
-          anomaly:
+          volume:
             daily_row_count_anomaly_60_days:
               warning:
                 percentile_within: 95.0

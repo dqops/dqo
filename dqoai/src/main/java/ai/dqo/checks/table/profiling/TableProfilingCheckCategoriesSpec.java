@@ -52,7 +52,6 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
             put("accuracy", o -> o.accuracy);
             put("sql", o -> o.sql);
             put("availability", o -> o.availability);
-            put("anomaly", o -> o.anomaly);
         }
     };
 
@@ -80,11 +79,6 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableProfilingAvailabilityChecksSpec availability;
-
-    @JsonPropertyDescription("Configuration of volume data quality checks on a table level.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableProfilingAnomalyChecksSpec anomaly;
 
 
     /**
@@ -175,24 +169,6 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
         this.setDirtyIf(!Objects.equals(this.availability, availability));
         this.availability = availability;
         this.propagateHierarchyIdToField(availability, "availability");
-    }
-
-    /**
-     * Returns a container of custom sql checks.
-     * @return Custom sql checks.
-     */
-    public TableProfilingAnomalyChecksSpec getAnomaly() {
-        return anomaly;
-    }
-
-    /**
-     * Sets a reference to a custom sql checks container.
-     * @param anomaly Custom sql checks.
-     */
-    public void setAnomaly(TableProfilingAnomalyChecksSpec anomaly) {
-        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
-        this.anomaly = anomaly;
-        this.propagateHierarchyIdToField(anomaly, "anomaly");
     }
 
     /**

@@ -94,13 +94,6 @@ nav:
     - table:
       - accuracy:
         - row count match percent: 'checks/table/accuracy/row-count-match-percent.md'
-      - anomaly:
-        - row count anomaly 7 days: 'checks/table/anomaly/row-count-anomaly-7-days.md'
-        - row count anomaly 30 days: 'checks/table/anomaly/row-count-anomaly-30-days.md'
-        - row count anomaly 60 days: 'checks/table/anomaly/row-count-anomaly-60-days.md'
-        - daily partition row count anomaly 7 days: 'checks/table/anomaly/daily-partition-row-count-anomaly-7-days.md'
-        - daily partition row count anomaly 30 days: 'checks/table/anomaly/daily-partition-row-count-anomaly-30-days.md'
-        - daily partition row count anomaly 60 days: 'checks/table/anomaly/daily-partition-row-count-anomaly-60-days.md'
       - availability:
         - table availability: 'checks/table/availability/table-availability.md'
       - sql:
@@ -114,6 +107,12 @@ nav:
         - daily partition reload lag: 'checks/table/timeliness/daily-partition-reload-lag.md'
       - volume:
         - row count: 'checks/table/volume/row-count.md'
+        - row count anomaly 7 days: 'checks/table/volume/row-count-anomaly-7-days.md'
+        - row count anomaly 30 days: 'checks/table/volume/row-count-anomaly-30-days.md'
+        - row count anomaly 60 days: 'checks/table/volume/row-count-anomaly-60-days.md'
+        - daily partition row count anomaly 7 days: 'checks/table/volume/daily-partition-row-count-anomaly-7-days.md'
+        - daily partition row count anomaly 30 days: 'checks/table/volume/daily-partition-row-count-anomaly-30-days.md'
+        - daily partition row count anomaly 60 days: 'checks/table/volume/daily-partition-row-count-anomaly-60-days.md'
     - column:
       - accuracy:
         - total sum match percent: 'checks/column/accuracy/total-sum-match-percent.md'
