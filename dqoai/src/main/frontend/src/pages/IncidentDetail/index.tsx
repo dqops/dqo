@@ -184,7 +184,7 @@ export const IncidentDetail = () => {
                     className="max-w-80 py-4 px-4 bg-gray-800 delay-300"
                     placement="top-start"
                   >
-                    {value.length > 30 ? value.slice(0, 30) + '...' : value}
+                    {value.length > 15 ? '...' + value.substring(value.length - 15) : value}
                   </Tooltip>
                 </a>
                 <IconButton
