@@ -8,7 +8,7 @@ import StatusSelect from "./StatusSelect";
 import { useSelector } from "react-redux";
 import { getFirstLevelIncidentsState } from "../../redux/selectors";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { getIncidentsByConnection, setIncidentsFilter } from "../../redux/actions/incidents.actions";
+import { getIncidentsByConnection, setIncidentsFilter, updateIncident } from "../../redux/actions/incidents.actions";
 import { Table } from "../../components/Table";
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import { Pagination } from "../../components/Pagination";
@@ -18,7 +18,7 @@ import { IncidentFilter } from "../../redux/reducers/incidents.reducer";
 import { IncidentModel, IncidentModelStatusEnum } from "../../api";
 import Select from "../../components/Select";
 import { IncidentsApi } from "../../services/apiClient";
-import { IconButton } from "@material-tailwind/react";
+import { IconButton, Tooltip } from "@material-tailwind/react";
 import AddIssueUrlDialog from "./AddIssueUrlDialog";
 
 const getDaysString = (value: string) => {
@@ -78,19 +78,19 @@ export const IncidentDetail = () => {
   const [selectedIncident, setSelectedIncident] = useState<IncidentModel>();
 
   const onChangeIncidentStatus = async (row: IncidentModel, status: IncidentModelStatusEnum) => {
+    dispatch(updateIncident(incidents.map((item: IncidentModel) => item.incidentId === row.incidentId ? ({
+      ...row,
+      status
+    }) : item)));
     await IncidentsApi.setIncidentStatus(row.connection || "", row.year || 0, row.month || 0, row.incidentId || "", status);
-    dispatch(getIncidentsByConnection({
-      ...filters || {},
-      connection,
-    }));
   };
 
   const handleAddIssueUrl = async (issueUrl: string) => {
+    dispatch(updateIncident(incidents.map((item: IncidentModel) => item.incidentId === selectedIncident?.incidentId ? ({
+      ...selectedIncident,
+      issueUrl
+    }) : item)));
     await IncidentsApi.setIncidentIssueUrl(selectedIncident?.connection || "", selectedIncident?.year || 0, selectedIncident?.month || 0, selectedIncident?.incidentId || "", issueUrl);
-    dispatch(getIncidentsByConnection({
-      ...filters || {},
-      connection,
-    }));
   };
 
   const addIssueUrl = (row: IncidentModel) => {
@@ -172,7 +172,30 @@ export const IncidentDetail = () => {
         return (
           <div>
             {value ? (
-              <a href={value}>{value}</a>
+              <div className="flex items-center space-x-2">
+                <a
+                  href={value}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  <Tooltip
+                    content={value}
+                    className="max-w-80 py-4 px-4 bg-gray-800 delay-300"
+                    placement="top-start"
+                  >
+                    {value.length > 15 ? '...' + value.substring(value.length - 15) : value}
+                  </Tooltip>
+                </a>
+                <IconButton
+                  color="teal"
+                  size="sm"
+                  onClick={() => addIssueUrl(row)}
+                  className="!shadow-none"
+                >
+                  <SvgIcon name="edit" className="w-4" />
+                </IconButton>
+              </div>
             ) : (
               <IconButton
                 color="teal"
@@ -227,13 +250,16 @@ export const IncidentDetail = () => {
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
             <div className="text-xl font-semibold truncate">Data quality incidents on {connection || ''}</div>
           </div>
-          <StatusSelect onChangeFilter={onChangeFilter} />
-
-          <Button
-            onClick={goToConfigure}
-            color="primary"
-            label="Configure"
-          />
+          <div className="flex items-center">
+            <div className="mr-20">
+              <StatusSelect onChangeFilter={onChangeFilter} />
+            </div>
+            <Button
+              onClick={goToConfigure}
+              color="primary"
+              label="Configure"
+            />
+          </div>
         </div>
 
         <div className="flex items-center p-4 gap-6 mb-4">
@@ -280,6 +306,7 @@ export const IncidentDetail = () => {
         open={open}
         onClose={() => setOpen(false)}
         onSubmit={handleAddIssueUrl}
+        incident={selectedIncident}
       />
     </IncidentsLayout>
   );

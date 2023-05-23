@@ -18,7 +18,7 @@ import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selec
 const ConnectionDataStream = () => {
   const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
   const dispatch = useActionDispatch();
-  const { connectionBasic, isUpdating, updatedDataStreamsMapping, isUpdatedDataStreamsMapping } =
+  const { isUpdating, updatedDataStreamsMapping, isUpdatedDataStreamsMapping } =
     useSelector(getFirstLevelState(checkTypes));
 
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -60,7 +60,7 @@ const ConnectionDataStream = () => {
       <div className="pt-6 px-4">
         <p className="text-gray-700 italic text-base">
           The following data stream configuration will be copied to the data stream configuration of tables that will be imported in the future.
-          This configuration does not affect tables that are already imported.      </p>
+          This configuration does not affect tables that have already been imported.      </p>
       </div>
       <ConnectionActionGroup
         onUpdate={onUpdate}

@@ -29,7 +29,7 @@ $ dqo [dqo options...] check run [-deh] [--daily-partitioning-include-today] [-f
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
+dqo> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
            [--monthly-partitioning-include-current-month] [-c=<connection>]
            [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
            [-ct=<checkType>]
@@ -49,7 +49,7 @@ dqo.ai> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
+|`-cat`<br/>`--category`<br/>|Check category name (volume, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
 |`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, recurring, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
 |`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
@@ -101,7 +101,7 @@ $ dqo [dqo options...] check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+dqo> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
               [-ch=<check>] [-col=<column>] [-ct=<checkType>]
               [-dt=<datatypeFilter>] [-of=<outputFormat>] [-sn=<sensor>]
               [-t=<table>] [-ts=<timeScale>] [-E=<String=String>]...
@@ -167,7 +167,7 @@ $ dqo [dqo options...] check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+dqo> check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
                [-ch=<check>] [-col=<column>] [-ct=<checkType>]
                [-dt=<datatypeFilter>] [-of=<outputFormat>] [-s=<sensor>]
                [-t=<table>] [-ts=<timeScale>]

@@ -21,12 +21,12 @@ import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingNullsChecksSpec;
 import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
 import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
-import ai.dqo.checks.table.recurring.sql.TableSqlDailyRecurringSpec;
+import ai.dqo.checks.table.recurring.sql.TableSqlDailyRecurringChecksSpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.connectors.ConnectionProviderRegistryObjectMother;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.core.jobqueue.DqoJobQueueObjectMother;
@@ -92,13 +92,13 @@ public class CheckExecutionServiceImplTests extends BaseTest {
 
         // Table level checks
         tableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec());
-        tableSpec.getProfilingChecks().setStandard(new TableProfilingStandardChecksSpec());
-        tableSpec.getProfilingChecks().getStandard().setRowCount(new TableRowCountCheckSpec());
-        tableSpec.getProfilingChecks().getStandard().getRowCount().setError(new MinCountRule0ParametersSpec(5L));
+        tableSpec.getProfilingChecks().setVolume(new TableProfilingVolumeChecksSpec());
+        tableSpec.getProfilingChecks().getVolume().setRowCount(new TableRowCountCheckSpec());
+        tableSpec.getProfilingChecks().getVolume().getRowCount().setError(new MinCountRule0ParametersSpec(5L));
 
         tableSpec.setRecurringChecks(new TableRecurringChecksSpec());
         tableSpec.getRecurringChecks().setDaily(new TableDailyRecurringCategoriesSpec());
-        tableSpec.getRecurringChecks().getDaily().setSql(new TableSqlDailyRecurringSpec());
+        tableSpec.getRecurringChecks().getDaily().setSql(new TableSqlDailyRecurringChecksSpec());
         TableSqlConditionPassedPercentCheckSpec sqlCheckSpec = new TableSqlConditionPassedPercentCheckSpec();
         sqlCheckSpec.setError(new MinPercentRule99ParametersSpec(99.5));
         sqlCheckSpec.getParameters().setSqlCondition("nonexistent_column = 42");

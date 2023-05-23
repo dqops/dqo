@@ -3,7 +3,6 @@ import { DataStreamBasicModel } from "../../../api";
 import Button from "../../Button";
 import { DataStreamsApi } from "../../../services/apiClient";
 import ConfirmDialog from "../../CustomTree/ConfirmDialog";
-import { Checkbox } from "@material-tailwind/react";
 import SvgIcon from "../../SvgIcon";
 
 interface IDataStreamListViewProps {

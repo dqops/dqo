@@ -24,10 +24,10 @@ import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingStringsChecksSpec;
 import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
-import ai.dqo.checks.column.recurring.numeric.ColumnNumericDailyRecurringSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
+import ai.dqo.checks.column.recurring.numeric.ColumnNumericDailyRecurringChecksSpec;
+import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
 import ai.dqo.cli.commands.check.impl.models.UIAllChecksCliPatchParameters;
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.scheduler.quartz.*;
@@ -134,7 +134,7 @@ public class CheckCliServiceImplTests extends BaseTest {
         table2.getSpec().getColumns().put("col3", col23);
 
         TableProfilingCheckCategoriesSpec t1categoriesSpec = new TableProfilingCheckCategoriesSpec();
-        TableProfilingStandardChecksSpec t1standardChecksSpec = new TableProfilingStandardChecksSpec();
+        TableProfilingVolumeChecksSpec t1volumeChecksSpec = new TableProfilingVolumeChecksSpec();
         TableRowCountCheckSpec t1rowCountSpec = new TableRowCountCheckSpec();
         MinCountRule0ParametersSpec t1rowCountErrorSpec = new MinCountRule0ParametersSpec();
         MinCountRuleFatalParametersSpec t1rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
@@ -142,8 +142,8 @@ public class CheckCliServiceImplTests extends BaseTest {
         t1rowCountFatalSpec.setMinCount(20L);
         t1rowCountSpec.setError(t1rowCountErrorSpec);
         t1rowCountSpec.setFatal(t1rowCountFatalSpec);
-        t1standardChecksSpec.setRowCount(t1rowCountSpec);
-        t1categoriesSpec.setStandard(t1standardChecksSpec);
+        t1volumeChecksSpec.setRowCount(t1rowCountSpec);
+        t1categoriesSpec.setVolume(t1volumeChecksSpec);
         table1.getSpec().setProfilingChecks(t1categoriesSpec);
 
         ColumnProfilingCheckCategoriesSpec col21categoriesSpec = new ColumnProfilingCheckCategoriesSpec();
@@ -163,7 +163,7 @@ public class CheckCliServiceImplTests extends BaseTest {
         col23.setRecurringChecks(col23recurringSpec);
         ColumnDailyRecurringCheckCategoriesSpec col23categoriesSpec = new ColumnDailyRecurringCheckCategoriesSpec();
         col23recurringSpec.setDaily(col23categoriesSpec);
-        ColumnNumericDailyRecurringSpec col23numericChecksSpec = new ColumnNumericDailyRecurringSpec();
+        ColumnNumericDailyRecurringChecksSpec col23numericChecksSpec = new ColumnNumericDailyRecurringChecksSpec();
         col23categoriesSpec.setNumeric(col23numericChecksSpec);
         ColumnNegativeCountCheckSpec columnNegativeCountCheckSpec = new ColumnNegativeCountCheckSpec();
         col23numericChecksSpec.setDailyNegativeCount(columnNegativeCountCheckSpec);

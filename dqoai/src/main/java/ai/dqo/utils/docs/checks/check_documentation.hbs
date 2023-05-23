@@ -18,24 +18,24 @@ ___
 **Enable check (Shell)**{{#with "  "}}{{.}}{{/with}}
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch={{checkName}}
+dqo> check enable -c=connection_name -ch={{checkName}}
 ```
 **Run check (Shell)**{{#with "  "}}{{.}}{{/with}}
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch={{checkName}}
+dqo> check run -ch={{checkName}}
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch={{checkName}}
+dqo> check run -c=connection_name -ch={{checkName}}
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch={{checkName}}
+dqo> check run -c=connection_name -t=table_name -ch={{checkName}}
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch={{checkName}}
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch={{checkName}}
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -51,14 +51,14 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch={{checkN
 ### **{{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}{{#if (eq (lower providerType) "sqlserver")}}SQL Server{{else}}{{/if}}{{#if (eq (lower providerType) "mysql")}}MySQL{{else}}{{/if}}**
 === "Sensor template for {{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}{{#if (eq (lower providerType) "sqlserver")}}SQL Server{{else}}{{/if}}{{#if (eq (lower providerType) "mysql")}}MySQL{{else}}{{/if}}"
     {{#with "  "}}{{.}}{{/with}}
-    ```
+    ```sql+jinja
     {{#each listOfJinjaTemplate~}}
     {{{this}}}
     {{/each~}}
     ```
 === "Rendered SQL for {{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}{{#if (eq (lower providerType) "sqlserver")}}SQL Server{{else}}{{/if}}{{#if (eq (lower providerType) "mysql")}}MySQL{{else}}{{/if}}"
     {{#with "  "}}{{.}}{{/with}}
-    ```
+    ```sql
     {{#each listOfRenderedTemplate~}}
     {{{this}}}
     {{/each~}}
@@ -76,13 +76,13 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch={{checkN
     **{{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}{{#if (eq (lower providerType) "sqlserver")}}SQL Server{{else}}{{/if}}{{#if (eq (lower providerType) "mysql")}}MySQL{{else}}{{/if}}**{{#with "  "}}{{.}}{{/with}}
     {{#with "  "}}{{.}}{{/with}}
     === "Sensor template for {{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}{{#if (eq (lower providerType) "sqlserver")}}SQL Server{{else}}{{/if}}{{#if (eq (lower providerType) "mysql")}}MySQL{{else}}{{/if}}"
-        ```
+        ```sql+jinja
         {{#each listOfJinjaTemplate~}}
         {{{this}}}
         {{/each~}}
         ```
     === "Rendered SQL for {{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}{{#if (eq (lower providerType) "sqlserver")}}SQL Server{{else}}{{/if}}{{#if (eq (lower providerType) "mysql")}}MySQL{{else}}{{/if}}"
-        ```
+        ```sql
         {{#each listOfRenderedTemplate~}}
         {{{this}}}
         {{/each~}}

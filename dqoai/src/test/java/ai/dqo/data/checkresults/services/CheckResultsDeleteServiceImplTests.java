@@ -25,8 +25,11 @@ import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceImpl;
 import ai.dqo.core.synchronization.status.SynchronizationStatusTrackerStub;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
+import ai.dqo.data.errors.factory.ErrorsColumnNames;
+import ai.dqo.data.errors.models.ErrorsFragmentFilter;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
+import ai.dqo.data.models.DataDeleteResult;
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactoryImpl;
 import ai.dqo.data.checkresults.factory.CheckResultsColumnNames;
 import ai.dqo.data.checkresults.factory.CheckResultsTableFactory;
@@ -56,7 +59,7 @@ import java.util.ArrayList;
 public class CheckResultsDeleteServiceImplTests extends BaseTest {
     private CheckResultsDeleteServiceImpl sut;
     private ParquetPartitionStorageService parquetPartitionStorageService;
-    private FileStorageSettings ruleResultsStorageSettings;
+    private FileStorageSettings checkResultsStorageSettings;
     private CheckResultsTableFactory checkResultsTableFactory;
 
     /**
@@ -86,7 +89,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
                 localUserHomeFileStorageService,
                 synchronizationStatusTracker);
 
-        this.ruleResultsStorageSettings = CheckResultsSnapshot.createCheckResultsStorageSettings();
+        this.checkResultsStorageSettings = CheckResultsSnapshot.createCheckResultsStorageSettings();
         this.checkResultsTableFactory = new CheckResultsTableFactoryImpl(new SensorReadoutsTableFactoryImpl());
 
         CheckResultsSnapshotFactory checkResultsSnapshotFactory = new CheckResultsSnapshotFactoryImpl(
@@ -98,28 +101,28 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
     }
 
     private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {
-        Table ruleResultsTable = this.checkResultsTableFactory.createEmptyCheckResultsTable(tableName);
+        Table checkResultsTable = this.checkResultsTableFactory.createEmptyCheckResultsTable(tableName);
 
-        Row row1 = ruleResultsTable.appendRow();
-        ruleResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
-        ruleResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row1.getRowNumber(), 1);
-        ruleResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row1.getRowNumber(), startDate);
+        Row row1 = checkResultsTable.appendRow();
+        checkResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), id_prefix + "id1");
+        checkResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row1.getRowNumber(), 1);
+        checkResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row1.getRowNumber(), startDate);
 
-        Row row2 = ruleResultsTable.appendRow();
-        ruleResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
-        ruleResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row2.getRowNumber(), 10);
-        ruleResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
+        Row row2 = checkResultsTable.appendRow();
+        checkResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), id_prefix + "id2");
+        checkResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row2.getRowNumber(), 10);
+        checkResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
 
-        Row row3 = ruleResultsTable.appendRow();
-        ruleResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
-        ruleResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row3.getRowNumber(), 100);
-        ruleResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
+        Row row3 = checkResultsTable.appendRow();
+        checkResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), id_prefix + "id3");
+        checkResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row3.getRowNumber(), 100);
+        checkResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
 
-        return ruleResultsTable;
+        return checkResultsTable;
     }
 
     @Test
-    void deleteSelectedRuleResultsFragment_whenFilterCapturesCertainRows_thenDeleteTheseRows() {
+    void deleteSelectedCheckResultsFragment_whenFilterCapturesCertainRows_thenDeleteTheseRows() {
         String connectionName = "connection";
         String tableName1 = "tab1";
         LocalDate month = LocalDate.of(2023, 1, 1);
@@ -129,7 +132,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                this.ruleResultsStorageSettings.getTableType(),
+                this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName1,
                 month);
@@ -137,7 +140,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId1),
                 new TableDataChanges(table1),
-                this.ruleResultsStorageSettings);
+                this.checkResultsStorageSettings);
 
         CheckResultsFragmentFilter filter = new CheckResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
@@ -151,7 +154,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.sut.deleteSelectedCheckResultsFragment(filter);
 
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId1, this.ruleResultsStorageSettings, null);
+                partitionId1, this.checkResultsStorageSettings, null);
 
         Assertions.assertNotNull(partitionAfterDelete.getData());
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id1"));
@@ -161,7 +164,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
     }
 
     @Test
-    void deleteSelectedRuleResultsFragment_whenFilterCapturesAllRows_thenDeleteWholeFile() {
+    void deleteSelectedCheckResultsFragment_whenFilterCapturesAllRows_thenDeleteWholeFile() {
         String connectionName = "connection";
         String tableName1 = "tab1";
         LocalDate month = LocalDate.of(2023, 1, 1);
@@ -171,7 +174,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                this.ruleResultsStorageSettings.getTableType(),
+                this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName1,
                 month);
@@ -179,7 +182,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId1),
                 new TableDataChanges(table1),
-                this.ruleResultsStorageSettings);
+                this.checkResultsStorageSettings);
 
         CheckResultsFragmentFilter filter = new CheckResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
@@ -193,14 +196,14 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.sut.deleteSelectedCheckResultsFragment(filter);
 
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId1, this.ruleResultsStorageSettings, null);
+                partitionId1, this.checkResultsStorageSettings, null);
 
         Assertions.assertNull(partitionAfterDelete.getData());
         Assertions.assertEquals(0L, partitionAfterDelete.getLastModified());
     }
 
     @Test
-    void deleteSelectedRuleResultsFragment_whenFilterCapturesAllRowsOfOnePartition_thenDeleteOnlyThisPartition() {
+    void deleteSelectedCheckResultsFragment_whenFilterCapturesAllRowsOfOnePartition_thenDeleteOnlyThisPartition() {
         String connectionName = "connection";
         String tableName = "tab";
         String id_prefix1 = "1";
@@ -216,12 +219,12 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                this.ruleResultsStorageSettings.getTableType(),
+                this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month1);
         ParquetPartitionId partitionId2 = new ParquetPartitionId(
-                this.ruleResultsStorageSettings.getTableType(),
+                this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month2);
@@ -229,11 +232,11 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId1),
                 new TableDataChanges(table1),
-                this.ruleResultsStorageSettings);
+                this.checkResultsStorageSettings);
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId2),
                 new TableDataChanges(table2),
-                this.ruleResultsStorageSettings);
+                this.checkResultsStorageSettings);
 
         CheckResultsFragmentFilter filter = new CheckResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
@@ -247,12 +250,12 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.sut.deleteSelectedCheckResultsFragment(filter);
 
         LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId1, this.ruleResultsStorageSettings, null);
+                partitionId1, this.checkResultsStorageSettings, null);
         Assertions.assertNull(partition1AfterDelete.getData());
         Assertions.assertEquals(0L, partition1AfterDelete.getLastModified());
 
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId2, this.ruleResultsStorageSettings, null);
+                partitionId2, this.checkResultsStorageSettings, null);
         Assertions.assertNotNull(partition2AfterDelete.getData());
         Assertions.assertTrue(partition2AfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
         Assertions.assertTrue(partition2AfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
@@ -261,7 +264,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
     }
 
     @Test
-    void deleteSelectedRuleResultsFragment_whenFilterCapturesSpanOfTwoPartitions_thenDeleteCapturedRows() {
+    void deleteSelectedCheckResultsFragment_whenFilterCapturesSpanOfTwoPartitions_thenDeleteCapturedRows() {
         String connectionName = "connection";
         String tableName = "tab";
         String id_prefix1 = "1";
@@ -277,12 +280,12 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                this.ruleResultsStorageSettings.getTableType(),
+                this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month1);
         ParquetPartitionId partitionId2 = new ParquetPartitionId(
-                this.ruleResultsStorageSettings.getTableType(),
+                this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month2);
@@ -290,11 +293,11 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId1),
                 new TableDataChanges(table1),
-                this.ruleResultsStorageSettings);
+                this.checkResultsStorageSettings);
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId2),
                 new TableDataChanges(table2),
-                this.ruleResultsStorageSettings);
+                this.checkResultsStorageSettings);
 
         CheckResultsFragmentFilter filter = new CheckResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
@@ -308,12 +311,12 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.sut.deleteSelectedCheckResultsFragment(filter);
 
         LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId1, this.ruleResultsStorageSettings, null);
+                partitionId1, this.checkResultsStorageSettings, null);
         Assertions.assertNull(partition1AfterDelete.getData());
         Assertions.assertEquals(0L, partition1AfterDelete.getLastModified());
 
         LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId2, this.ruleResultsStorageSettings, null);
+                partitionId2, this.checkResultsStorageSettings, null);
         Assertions.assertNotNull(partition2AfterDelete.getData());
         Assertions.assertFalse(partition2AfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
         Assertions.assertTrue(partition2AfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
@@ -321,66 +324,129 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
+    @Test
+    void deleteSelectedErrorsFragment_whenDataAlreadyEmpty_thenPassWithSuccess() {
+        String connectionName = "connection";
+        String tableName = "tab1";
+        String id_prefix1 = "1";
+        String id_prefix2 = "2";
+        PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
+
+        LocalDate month1 = LocalDate.of(2023, 1, 1);
+        LocalDate month2 = LocalDate.of(2023, 2, 1);
+        LocalDateTime startDate1 = month1.atStartOfDay().plusDays(14);
+        LocalDateTime startDate2 = month2.atStartOfDay().plusDays(14);
+
+        Table table1 = prepareSimplePartitionTable(tableName, startDate1, id_prefix1);
+        Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
+
+        ParquetPartitionId partitionId1 = new ParquetPartitionId(
+                this.checkResultsStorageSettings.getTableType(),
+                connectionName,
+                physicalTableName,
+                month1);
+        ParquetPartitionId partitionId2 = new ParquetPartitionId(
+                this.checkResultsStorageSettings.getTableType(),
+                connectionName,
+                physicalTableName,
+                month2);
+
+        this.parquetPartitionStorageService.savePartition(
+                new LoadedMonthlyPartition(partitionId1),
+                new TableDataChanges(table1),
+                this.checkResultsStorageSettings);
+        this.parquetPartitionStorageService.savePartition(
+                new LoadedMonthlyPartition(partitionId2),
+                new TableDataChanges(table2),
+                this.checkResultsStorageSettings);
+
+        CheckResultsFragmentFilter filter = new CheckResultsFragmentFilter(){{
+            setTableSearchFilters(new TableSearchFilters(){{
+                setConnectionName(connectionName);
+                setSchemaTableName("sch.nonexistent_table");
+            }});
+        }};
+
+        DataDeleteResult result = this.sut.deleteSelectedCheckResultsFragment(filter);
+        Assertions.assertTrue(result.getPartitionResults().isEmpty());
+
+        LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
+                partitionId1, this.checkResultsStorageSettings, null);
+        Assertions.assertNotNull(partition1AfterDelete.getData());
+        Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id1"));
+        Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id2"));
+        Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id3"));
+        Assertions.assertNotEquals(0L, partition1AfterDelete.getLastModified());
+
+        LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
+                partitionId2, this.checkResultsStorageSettings, null);
+        Assertions.assertNotNull(partition2AfterDelete.getData());
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
+        Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
+    }
+
 
     private Table prepareComplexPartitionTable(String tableName, LocalDateTime startDate) {
-        Table ruleResultsTable = this.checkResultsTableFactory.createEmptyCheckResultsTable(tableName);
+        Table checkResultsTable = this.checkResultsTableFactory.createEmptyCheckResultsTable(tableName);
 
-        Row row1 = ruleResultsTable.appendRow();
-        ruleResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), "id1");
-        ruleResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row1.getRowNumber(), 1);
-        ruleResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row1.getRowNumber(), startDate);
-        ruleResultsTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row1.getRowNumber(), "cat1");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME).set(row1.getRowNumber(), "check1");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row1.getRowNumber(), "type1");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row1.getRowNumber(), "col1");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row1.getRowNumber(), "ds1");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row1.getRowNumber(), "s1");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row1.getRowNumber(), "qd1");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row1.getRowNumber(), "tg1");
+        Row row1 = checkResultsTable.appendRow();
+        checkResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row1.getRowNumber(), "id1");
+        checkResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row1.getRowNumber(), 1);
+        checkResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row1.getRowNumber(), startDate);
+        checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row1.getRowNumber(), "cat1");
+        checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME).set(row1.getRowNumber(), "check1");
+        checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row1.getRowNumber(), "type1");
+        checkResultsTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row1.getRowNumber(), "col1");
+        checkResultsTable.textColumn(CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row1.getRowNumber(), "ds1");
+        checkResultsTable.textColumn(CheckResultsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row1.getRowNumber(), "s1");
+        checkResultsTable.textColumn(CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row1.getRowNumber(), "qd1");
+        checkResultsTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row1.getRowNumber(), "tg1");
 
-        Row row2 = ruleResultsTable.appendRow();
-        ruleResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), "id2");
-        ruleResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row2.getRowNumber(), 10);
-        ruleResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
-        ruleResultsTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row2.getRowNumber(), "cat2");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row2.getRowNumber(), "type1");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row2.getRowNumber(), "col2");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row2.getRowNumber(), "ds1");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row2.getRowNumber(), "s2");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row2.getRowNumber(), "tg1");
+        Row row2 = checkResultsTable.appendRow();
+        checkResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row2.getRowNumber(), "id2");
+        checkResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row2.getRowNumber(), 10);
+        checkResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row2.getRowNumber(), startDate.plusDays(1));
+        checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row2.getRowNumber(), "cat2");
+        checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row2.getRowNumber(), "type1");
+        checkResultsTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row2.getRowNumber(), "col2");
+        checkResultsTable.textColumn(CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row2.getRowNumber(), "ds1");
+        checkResultsTable.textColumn(CheckResultsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row2.getRowNumber(), "s2");
+        checkResultsTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row2.getRowNumber(), "tg1");
 
-        Row row3 = ruleResultsTable.appendRow();
-        ruleResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), "id3");
-        ruleResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row3.getRowNumber(), 100);
-        ruleResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
-        ruleResultsTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row3.getRowNumber(), "type2");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row3.getRowNumber(), "col1");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row3.getRowNumber(), "ds2");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row3.getRowNumber(), "qd2");
+        Row row3 = checkResultsTable.appendRow();
+        checkResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row3.getRowNumber(), "id3");
+        checkResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row3.getRowNumber(), 100);
+        checkResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row3.getRowNumber(), startDate.plusDays(2));
+        checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).set(row3.getRowNumber(), "type2");
+        checkResultsTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME).set(row3.getRowNumber(), "col1");
+        checkResultsTable.textColumn(CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row3.getRowNumber(), "ds2");
+        checkResultsTable.textColumn(CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row3.getRowNumber(), "qd2");
 
-        Row row4 = ruleResultsTable.appendRow();
-        ruleResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row4.getRowNumber(), "id4");
-        ruleResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row4.getRowNumber(), 1000);
-        ruleResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row4.getRowNumber(), startDate.plusDays(3));
-        ruleResultsTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME).set(row4.getRowNumber(), "check2");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row4.getRowNumber(), "s1");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row4.getRowNumber(), "qd2");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row4.getRowNumber(), "tg1");
+        Row row4 = checkResultsTable.appendRow();
+        checkResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row4.getRowNumber(), "id4");
+        checkResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row4.getRowNumber(), 1000);
+        checkResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row4.getRowNumber(), startDate.plusDays(3));
+        checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME).set(row4.getRowNumber(), "check2");
+        checkResultsTable.textColumn(CheckResultsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row4.getRowNumber(), "s1");
+        checkResultsTable.textColumn(CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME).set(row4.getRowNumber(), "qd2");
+        checkResultsTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME).set(row4.getRowNumber(), "tg1");
 
-        Row row5 = ruleResultsTable.appendRow();
-        ruleResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row5.getRowNumber(), "id5");
-        ruleResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row5.getRowNumber(), 10000);
-        ruleResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row5.getRowNumber(), startDate.plusDays(4));
-        ruleResultsTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row5.getRowNumber(), "cat1");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME).set(row5.getRowNumber(), "check1");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row5.getRowNumber(), "ds2");
-        ruleResultsTable.textColumn(CheckResultsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row5.getRowNumber(), "s1");
+        Row row5 = checkResultsTable.appendRow();
+        checkResultsTable.textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).set(row5.getRowNumber(), "id5");
+        checkResultsTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME).set(row5.getRowNumber(), 10000);
+        checkResultsTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME).set(row5.getRowNumber(), startDate.plusDays(4));
+        checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME).set(row5.getRowNumber(), "cat1");
+        checkResultsTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME).set(row5.getRowNumber(), "check1");
+        checkResultsTable.textColumn(CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).set(row5.getRowNumber(), "ds2");
+        checkResultsTable.textColumn(CheckResultsColumnNames.SENSOR_NAME_COLUMN_NAME).set(row5.getRowNumber(), "s1");
 
-        return ruleResultsTable;
+        return checkResultsTable;
     }
 
     @Test
-    void deleteSelectedRuleResultsFragment_whenFilterByCheckCategory_thenDeleteCapturedRows() {
+    void deleteSelectedCheckResultsFragment_whenFilterByCheckCategory_thenDeleteCapturedRows() {
         String connectionName = "connection";
         String tableName = "tab1";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
@@ -389,7 +455,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.ruleResultsStorageSettings.getTableType(),
+                this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month);
@@ -397,7 +463,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId),
                 new TableDataChanges(table),
-                this.ruleResultsStorageSettings);
+                this.checkResultsStorageSettings);
 
         CheckResultsFragmentFilter filter = new CheckResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
@@ -412,7 +478,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.sut.deleteSelectedCheckResultsFragment(filter);
 
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId, this.ruleResultsStorageSettings, null);
+                partitionId, this.checkResultsStorageSettings, null);
         Assertions.assertNotNull(partitionAfterDelete.getData());
         Assertions.assertFalse(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id1"));
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id2"));
@@ -423,7 +489,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
     }
 
     @Test
-    void deleteSelectedRuleResultsFragment_whenFilterByCheckNameAndCheckType_thenDeleteCapturedRows() {
+    void deleteSelectedCheckResultsFragment_whenFilterByCheckNameAndCheckType_thenDeleteCapturedRows() {
         String connectionName = "connection";
         String tableName = "tab1";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
@@ -432,7 +498,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.ruleResultsStorageSettings.getTableType(),
+                this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month);
@@ -440,7 +506,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId),
                 new TableDataChanges(table),
-                this.ruleResultsStorageSettings);
+                this.checkResultsStorageSettings);
 
         CheckResultsFragmentFilter filter = new CheckResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
@@ -456,7 +522,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.sut.deleteSelectedCheckResultsFragment(filter);
 
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId, this.ruleResultsStorageSettings, null);
+                partitionId, this.checkResultsStorageSettings, null);
         Assertions.assertNotNull(partitionAfterDelete.getData());
         Assertions.assertFalse(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id1"));
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id2"));
@@ -467,7 +533,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
     }
 
     @Test
-    void deleteSelectedRuleResultsFragment_whenFilterByColumnNameAndDataStreamAndSensorName_thenDeleteCapturedRows() {
+    void deleteSelectedCheckResultsFragment_whenFilterByColumnNameAndDataStreamAndSensorName_thenDeleteCapturedRows() {
         String connectionName = "connection";
         String tableName = "tab1";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
@@ -476,7 +542,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.ruleResultsStorageSettings.getTableType(),
+                this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month);
@@ -484,7 +550,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId),
                 new TableDataChanges(table),
-                this.ruleResultsStorageSettings);
+                this.checkResultsStorageSettings);
 
         CheckResultsFragmentFilter filter = new CheckResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
@@ -501,7 +567,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.sut.deleteSelectedCheckResultsFragment(filter);
 
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId, this.ruleResultsStorageSettings, null);
+                partitionId, this.checkResultsStorageSettings, null);
         Assertions.assertNotNull(partitionAfterDelete.getData());
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id1"));
         Assertions.assertFalse(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id2"));
@@ -512,7 +578,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
     }
 
     @Test
-    void deleteSelectedRuleResultsFragment_whenFilterByQualityDimensionAndTimeGradient_thenDeleteCapturedRows() {
+    void deleteSelectedCheckResultsFragment_whenFilterByQualityDimensionAndTimeGradient_thenDeleteCapturedRows() {
         String connectionName = "connection";
         String tableName = "tab1";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
@@ -521,7 +587,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.ruleResultsStorageSettings.getTableType(),
+                this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month);
@@ -529,7 +595,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId),
                 new TableDataChanges(table),
-                this.ruleResultsStorageSettings);
+                this.checkResultsStorageSettings);
 
         CheckResultsFragmentFilter filter = new CheckResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
@@ -545,7 +611,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.sut.deleteSelectedCheckResultsFragment(filter);
 
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId, this.ruleResultsStorageSettings, null);
+                partitionId, this.checkResultsStorageSettings, null);
         Assertions.assertNotNull(partitionAfterDelete.getData());
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id1"));
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id2"));
@@ -556,7 +622,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
     }
 
     @Test
-    void deleteSelectedRuleResultsFragment_whenFilterBySensorNameAndTimePeriod_thenDeleteCapturedRows() {
+    void deleteSelectedCheckResultsFragment_whenFilterBySensorNameAndTimePeriod_thenDeleteCapturedRows() {
         String connectionName = "connection";
         String tableName = "tab1";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
@@ -565,7 +631,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.ruleResultsStorageSettings.getTableType(),
+                this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month);
@@ -573,7 +639,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.parquetPartitionStorageService.savePartition(
                 new LoadedMonthlyPartition(partitionId),
                 new TableDataChanges(table),
-                this.ruleResultsStorageSettings);
+                this.checkResultsStorageSettings);
 
         CheckResultsFragmentFilter filter = new CheckResultsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
@@ -588,13 +654,54 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         this.sut.deleteSelectedCheckResultsFragment(filter);
 
         LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
-                partitionId, this.ruleResultsStorageSettings, null);
+                partitionId, this.checkResultsStorageSettings, null);
         Assertions.assertNotNull(partitionAfterDelete.getData());
         Assertions.assertFalse(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id1"));
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id2"));
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id3"));
         Assertions.assertFalse(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id4"));
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
+    }
+
+    @Test
+    void deleteSelectedCheckResultsFragment_whenFilterBySensorName_thenDeleteCapturedRows() {
+        String connectionName = "connection";
+        String tableName = "tab1";
+        PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
+
+        LocalDate month = LocalDate.of(2023, 1, 1);
+        Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
+
+        ParquetPartitionId partitionId = new ParquetPartitionId(
+                this.checkResultsStorageSettings.getTableType(),
+                connectionName,
+                physicalTableName,
+                month);
+
+        this.parquetPartitionStorageService.savePartition(
+                new LoadedMonthlyPartition(partitionId),
+                new TableDataChanges(table),
+                this.checkResultsStorageSettings);
+
+        CheckResultsFragmentFilter filter = new CheckResultsFragmentFilter(){{
+            setTableSearchFilters(new TableSearchFilters(){{
+                setConnectionName(connectionName);
+                setSchemaTableName(physicalTableName.toTableSearchFilter());
+            }});
+            setSensorName("s1");
+        }};
+
+        this.sut.deleteSelectedCheckResultsFragment(filter);
+
+        LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
+                partitionId, this.checkResultsStorageSettings, null);
+        Assertions.assertNotNull(partitionAfterDelete.getData());
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 }

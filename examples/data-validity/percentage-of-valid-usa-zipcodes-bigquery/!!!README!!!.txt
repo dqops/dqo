@@ -53,13 +53,13 @@ To run the examples, follow the steps below or refer to the Examples section in 
 4. To execute the checks that were prepared in the example, run the following command in DQO Shell:
 
     ```
-    dqo.ai> check run
+    dqo> check run
     ```
 
     For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
     following command:
     ```
-    dqo.ai> check run --mode=debug
+    dqo> check run --mode=debug
     ```
 
     You can also run the check using the graphic interface.
@@ -68,7 +68,7 @@ To run the examples, follow the steps below or refer to the Examples section in 
 5. After executing the checks, synchronize the results with your DQO cloud account by running the following command.
 
     ```
-    dqo.ai> cloud sync all
+    dqo> cloud sync all
     ```
 
 6. You can now review the results on the data quality dashboards.

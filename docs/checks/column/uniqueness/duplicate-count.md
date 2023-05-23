@@ -17,24 +17,24 @@ Verifies that the number of duplicate values in a column does not exceed the max
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=duplicate_count
+dqo> check enable -c=connection_name -ch=duplicate_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=duplicate_count
+dqo> check run -ch=duplicate_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=duplicate_count
+dqo> check run -c=connection_name -ch=duplicate_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=duplicate_count
+dqo> check run -c=connection_name -t=table_name -ch=duplicate_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=duplicate_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=duplicate_count
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -84,7 +84,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -98,7 +98,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT(analyzed_table.`target_column`))
         AS actual_value,
@@ -111,7 +111,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -125,7 +125,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
         AS actual_value,
@@ -138,7 +138,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -152,7 +152,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
         AS actual_value,
@@ -165,7 +165,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -179,7 +179,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
         AS actual_value,
@@ -192,7 +192,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -206,7 +206,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT(analyzed_table.[target_column]))
         AS actual_value,
@@ -265,7 +265,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -278,7 +278,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT(analyzed_table.`target_column`))
             AS actual_value,
@@ -293,7 +293,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -306,7 +306,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
             AS actual_value,
@@ -321,7 +321,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -334,7 +334,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
             AS actual_value,
@@ -349,7 +349,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -362,7 +362,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
             AS actual_value,
@@ -377,7 +377,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -390,7 +390,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT(analyzed_table.[target_column]))
             AS actual_value,
@@ -427,24 +427,24 @@ Verifies that the number of duplicate values in a column does not exceed the max
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_duplicate_count
+dqo> check enable -c=connection_name -ch=daily_duplicate_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_duplicate_count
+dqo> check run -ch=daily_duplicate_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_duplicate_count
+dqo> check run -c=connection_name -ch=daily_duplicate_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_duplicate_count
+dqo> check run -c=connection_name -t=table_name -ch=daily_duplicate_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_duplicate_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_duplicate_count
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -496,7 +496,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -510,7 +510,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT(analyzed_table.`target_column`))
         AS actual_value,
@@ -523,7 +523,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -537,7 +537,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
         AS actual_value,
@@ -550,7 +550,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -564,7 +564,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
         AS actual_value,
@@ -577,7 +577,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -591,7 +591,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
         AS actual_value,
@@ -604,7 +604,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -618,7 +618,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT(analyzed_table.[target_column]))
         AS actual_value,
@@ -678,7 +678,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -691,7 +691,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT(analyzed_table.`target_column`))
             AS actual_value,
@@ -706,7 +706,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -719,7 +719,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
             AS actual_value,
@@ -734,7 +734,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -747,7 +747,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
             AS actual_value,
@@ -762,7 +762,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -775,7 +775,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
             AS actual_value,
@@ -790,7 +790,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -803,7 +803,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT(analyzed_table.[target_column]))
             AS actual_value,
@@ -840,24 +840,24 @@ Verifies that the number of duplicate values in a column does not exceed the max
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_duplicate_count
+dqo> check enable -c=connection_name -ch=monthly_duplicate_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_duplicate_count
+dqo> check run -ch=monthly_duplicate_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_duplicate_count
+dqo> check run -c=connection_name -ch=monthly_duplicate_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_duplicate_count
+dqo> check run -c=connection_name -t=table_name -ch=monthly_duplicate_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_duplicate_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_duplicate_count
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -909,7 +909,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -923,7 +923,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT(analyzed_table.`target_column`))
         AS actual_value,
@@ -936,7 +936,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -950,7 +950,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
         AS actual_value,
@@ -963,7 +963,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -977,7 +977,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
         AS actual_value,
@@ -990,7 +990,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1004,7 +1004,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
         AS actual_value,
@@ -1017,7 +1017,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1031,7 +1031,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT(analyzed_table.[target_column]))
         AS actual_value,
@@ -1091,7 +1091,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1104,7 +1104,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT(analyzed_table.`target_column`))
             AS actual_value,
@@ -1119,7 +1119,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1132,7 +1132,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
             AS actual_value,
@@ -1147,7 +1147,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1160,7 +1160,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
             AS actual_value,
@@ -1175,7 +1175,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1188,7 +1188,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
             AS actual_value,
@@ -1203,7 +1203,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1216,7 +1216,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT(analyzed_table.[target_column]))
             AS actual_value,
@@ -1253,24 +1253,24 @@ Verifies that the number of duplicate values in a column does not exceed the max
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_duplicate_count
+dqo> check enable -c=connection_name -ch=daily_partition_duplicate_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_duplicate_count
+dqo> check run -ch=daily_partition_duplicate_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_duplicate_count
+dqo> check run -c=connection_name -ch=daily_partition_duplicate_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_duplicate_count
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_duplicate_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_duplicate_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_duplicate_count
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1322,7 +1322,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1336,7 +1336,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT(analyzed_table.`target_column`))
         AS actual_value,
@@ -1349,7 +1349,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1363,7 +1363,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
         AS actual_value,
@@ -1376,7 +1376,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1390,7 +1390,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
         AS actual_value,
@@ -1403,7 +1403,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1417,7 +1417,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
         AS actual_value,
@@ -1430,7 +1430,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1444,7 +1444,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT(analyzed_table.[target_column]))
         AS actual_value,
@@ -1508,7 +1508,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1521,7 +1521,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT(analyzed_table.`target_column`))
             AS actual_value,
@@ -1536,7 +1536,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1549,7 +1549,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
             AS actual_value,
@@ -1564,7 +1564,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1577,7 +1577,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
             AS actual_value,
@@ -1592,7 +1592,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1605,7 +1605,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
             AS actual_value,
@@ -1620,7 +1620,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1633,7 +1633,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT(analyzed_table.[target_column]))
             AS actual_value,
@@ -1667,24 +1667,24 @@ Verifies that the number of duplicate values in a column does not exceed the max
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_duplicate_count
+dqo> check enable -c=connection_name -ch=monthly_partition_duplicate_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_duplicate_count
+dqo> check run -ch=monthly_partition_duplicate_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_duplicate_count
+dqo> check run -c=connection_name -ch=monthly_partition_duplicate_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_duplicate_count
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_duplicate_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_duplicate_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_duplicate_count
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1736,7 +1736,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1750,7 +1750,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT(analyzed_table.`target_column`))
         AS actual_value,
@@ -1763,7 +1763,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1777,7 +1777,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
         AS actual_value,
@@ -1790,7 +1790,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1804,7 +1804,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
         AS actual_value,
@@ -1817,7 +1817,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1831,7 +1831,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
         AS actual_value,
@@ -1844,7 +1844,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1858,7 +1858,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT(analyzed_table.[target_column]))
         AS actual_value,
@@ -1922,7 +1922,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1935,7 +1935,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT(analyzed_table.`target_column`))
             AS actual_value,
@@ -1950,7 +1950,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1963,7 +1963,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
             AS actual_value,
@@ -1978,7 +1978,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -1991,7 +1991,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
             AS actual_value,
@@ -2006,7 +2006,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -2019,7 +2019,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
             AS actual_value,
@@ -2034,7 +2034,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -2047,7 +2047,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT(analyzed_table.[target_column]))
             AS actual_value,

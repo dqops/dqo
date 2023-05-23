@@ -68,15 +68,22 @@ public class RuleBasicFolderModel {
             folderModel = nextRuleFolder;
         }
 
-        boolean ruleExists = ruleExists = folderModel.rules.stream().anyMatch(r -> Objects.equals(r.getRuleName(), ruleName));
+        Optional<RuleBasicModel> existingRule = folderModel.rules.stream().filter(m -> Objects.equals(m.getRuleName(), ruleName)).findFirst();
 
-        if (!ruleExists) {
+        if (!existingRule.isPresent()) {
             RuleBasicModel ruleBasicModel = new RuleBasicModel();
             ruleBasicModel.setRuleName(ruleName);
             ruleBasicModel.setFullRuleName(fullRuleName);
             ruleBasicModel.setCustom(isCustom);
             ruleBasicModel.setBuiltIn(isBuiltIn);
             folderModel.rules.add(ruleBasicModel);
+        } else {
+            if (isCustom){
+                existingRule.get().setCustom(true);
+            }
+            if (isBuiltIn){
+                existingRule.get().setBuiltIn(true);
+            }
         }
     }
 }

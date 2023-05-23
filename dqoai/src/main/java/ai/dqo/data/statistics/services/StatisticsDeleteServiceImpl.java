@@ -15,14 +15,20 @@
  */
 package ai.dqo.data.statistics.services;
 
+import ai.dqo.data.models.DataDeleteResult;
+import ai.dqo.data.models.DataDeleteResultPartition;
+import ai.dqo.data.normalization.CommonColumnNames;
 import ai.dqo.data.statistics.factory.StatisticsColumnNames;
 import ai.dqo.data.statistics.models.StatisticsResultsFragmentFilter;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshot;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshotFactory;
+import ai.dqo.data.storage.LoadedMonthlyPartition;
+import ai.dqo.data.storage.ParquetPartitionId;
 import ai.dqo.data.storage.ParquetPartitionMetadataService;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -46,9 +52,10 @@ public class StatisticsDeleteServiceImpl implements StatisticsDeleteService {
     /**
      * Deletes the statistics results from a table, applying specific filters to get the fragment (if necessary).
      * @param filter Filter for the statistics results fragment that is of interest.
+     * @return Data delete operation summary.
      */
     @Override
-    public void deleteSelectedStatisticsResultsFragment(StatisticsResultsFragmentFilter filter) {
+    public DataDeleteResult deleteSelectedStatisticsResultsFragment(StatisticsResultsFragmentFilter filter) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
         Map<String, Set<String>> conditions = new HashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
@@ -60,6 +67,8 @@ public class StatisticsDeleteServiceImpl implements StatisticsDeleteService {
         if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
             conditions.put(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
         }
+
+        DataDeleteResult dataDeleteResult = new DataDeleteResult();
 
         Collection<PhysicalTableName> tablesToDelete;
         if (filter.getTableSearchFilters().getSchemaTableName() == null) {
@@ -74,7 +83,7 @@ public class StatisticsDeleteServiceImpl implements StatisticsDeleteService {
 
         if (tablesToDelete == null) {
             // No matching tables specified or found.
-            return;
+            return dataDeleteResult;
         }
 
         Collection<StatisticsSnapshot> statisticsSnapshots = tablesToDelete.stream()
@@ -88,7 +97,33 @@ public class StatisticsDeleteServiceImpl implements StatisticsDeleteService {
             LocalDate endDeletionRange = filter.getDateEnd();
 
             currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
+            if (currentSnapshot.getLoadedMonthlyPartitions() == null) {
+                continue;
+            }
+
+            Set<String> deletedIds = currentSnapshot.getTableDataChanges().getDeletedIds();
+
+            for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry:
+                    currentSnapshot.getLoadedMonthlyPartitions().entrySet()) {
+                ParquetPartitionId partitionId = loadedPartitionEntry.getKey();
+                Table loadedPartitionTable = loadedPartitionEntry.getValue().getData();
+                if (loadedPartitionTable == null) {
+                    continue;
+                }
+
+                int deletedRows = loadedPartitionTable
+                        .textColumn(CommonColumnNames.ID_COLUMN_NAME)
+                        .isIn(deletedIds)
+                        .size();
+                boolean allRowsDeleted = deletedRows == loadedPartitionTable.rowCount();
+                DataDeleteResultPartition partitionResult = new DataDeleteResultPartition(deletedRows, allRowsDeleted);
+
+                dataDeleteResult.getPartitionResults().put(partitionId, partitionResult);
+            }
+
             currentSnapshot.save();
         }
+
+        return dataDeleteResult;
     }
 }

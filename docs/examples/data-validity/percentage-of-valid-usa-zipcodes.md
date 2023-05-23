@@ -156,7 +156,7 @@ GROUP BY time_period, time_period_utc
 ORDER BY time_period, time_period_utc
 **************************************************
 ```
-You can also see the results returned by the sensor. The actual value in this example is 100.0%, which is above the minimal
+You can also see the results returned by the sensor. The actual value in this example is 98.89%, which is below the minimal
 threshold level set in the warning (99.0%).
 
 ```

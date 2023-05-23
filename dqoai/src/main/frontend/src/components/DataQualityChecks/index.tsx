@@ -304,14 +304,14 @@ const DataQualityChecks = ({
       </div>
       {checkTypes === CheckTypes.PARTITIONED && (
         <div className="flex items-center mb-3 gap-6">
-          <div className="text-xs">
+          <div className="text-sm">
             <span className="mr-3">
               The results are partitioned (grouped) by a timestamp column:
             </span>
             {checksUI.partition_by_column || 'Not configured'}
           </div>
           <span
-            className="text-primary underline text-xs cursor-pointer"
+            className="text-primary underline text-sm cursor-pointer"
             onClick={goToTableTimestamps}
           >
             Configure the partition by column

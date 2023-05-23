@@ -13,7 +13,7 @@ Column level sensor that counts maximum value in a column.
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -26,7 +26,7 @@ Column level sensor that counts maximum value in a column.
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -39,7 +39,7 @@ Column level sensor that counts maximum value in a column.
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -52,7 +52,7 @@ Column level sensor that counts maximum value in a column.
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -65,7 +65,7 @@ Column level sensor that counts maximum value in a column.
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -92,7 +92,7 @@ Column level sensor that counts minimum value in a column.
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -105,7 +105,7 @@ Column level sensor that counts minimum value in a column.
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -118,7 +118,7 @@ Column level sensor that counts minimum value in a column.
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -131,7 +131,7 @@ Column level sensor that counts minimum value in a column.
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -144,7 +144,7 @@ Column level sensor that counts minimum value in a column.
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value

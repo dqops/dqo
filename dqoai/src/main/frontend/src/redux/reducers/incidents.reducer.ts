@@ -151,6 +151,11 @@ const incidentsReducer = (state = initialState, action: any) => {
         filters: action.data
       });
     }
+    case INCIDENTS_ACTION.UPDATE_INCIDENT: {
+      return setActiveTabState(state, action, {
+        incidents: action.data
+      });
+    }
 
     default:
       return state;

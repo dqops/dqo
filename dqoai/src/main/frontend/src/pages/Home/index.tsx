@@ -95,14 +95,14 @@ const HomePage = () => {
             </div>
             <div className="flex flex-col gap-4">
               <p>Check the docs for more tutorials</p>
-              <a href="https://docs.dqo.ai/latest/">
+              <a href="https://dqops.com/docs/">
                 <img src="/images/home/book.svg" className="w-20 mb-5" alt="" />
               </a>
               <p>
                 Download our best practices for effective <br />
                 data quality improvement
               </p>
-              <a href="https://dqo.ai/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/" className="mb-4">
+              <a href="https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/" className="mb-4">
                 <img src="/images/home/download_practice.png" alt="" />
               </a>
 
@@ -111,7 +111,7 @@ const HomePage = () => {
               </p>
               <a
                 className="w-40 bg-primary rounded-lg py-2 px-8 text-white mb-2"
-                href="https://dqo.ai/contact-us"
+                href="https://dqops.com/contact-us/"
               >
                 Contact Us
               </a>
@@ -123,9 +123,9 @@ const HomePage = () => {
                 <img src="/images/home/github.png" className="w-40" alt="" />
               </a>
               <p>
-                Visit DQO.ai website
+                Visit DQOps website
               </p>
-              <a href="https://dqo.ai/">
+              <a href="https://dqops.com/">
                 <img src="/logo.svg" className="w-40" alt="" />
               </a>
             </div>

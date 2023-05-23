@@ -13,7 +13,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -35,7 +35,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -57,7 +57,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -79,7 +79,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -101,7 +101,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -138,7 +138,7 @@ Column level sensor that analyzes all values in a text column and detects the da
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -216,7 +216,7 @@ Column level sensor that analyzes all values in a text column and detects the da
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -294,7 +294,7 @@ Column level sensor that analyzes all values in a text column and detects the da
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -372,7 +372,7 @@ Column level sensor that analyzes all values in a text column and detects the da
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -450,7 +450,7 @@ Column level sensor that analyzes all values in a text column and detects the da
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro make_text_constant(string) -%}
         {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
@@ -549,7 +549,7 @@ Column level sensor that calculates the number of rows with an empty string.
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -612,7 +612,7 @@ Column level sensor that calculates the number of rows with an empty string.
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -632,7 +632,7 @@ Column level sensor that calculates the number of rows with an empty string.
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -652,7 +652,7 @@ Column level sensor that calculates the number of rows with an empty string.
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -672,7 +672,7 @@ Column level sensor that calculates the number of rows with an empty string.
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -706,7 +706,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -772,7 +772,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -795,7 +795,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -818,7 +818,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -841,7 +841,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -884,7 +884,7 @@ Column level sensor that calculates the number of strings from a set in a column
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -922,7 +922,7 @@ Column level sensor that calculates the number of strings from a set in a column
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -963,7 +963,7 @@ Column level sensor that calculates the number of strings from a set in a column
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     {%- macro extract_in_list(values_list) -%}
         {%- for i in values_list -%}
@@ -1003,7 +1003,7 @@ Column level sensor that calculates the number of strings from a set in a column
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -1044,7 +1044,7 @@ Column level sensor that calculates the number of strings from a set in a column
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -1105,7 +1105,7 @@ Column level sensor that calculates the percent of strings from a set in a colum
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -1146,7 +1146,7 @@ Column level sensor that calculates the percent of strings from a set in a colum
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -1187,7 +1187,7 @@ Column level sensor that calculates the percent of strings from a set in a colum
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -1228,7 +1228,7 @@ Column level sensor that calculates the percent of strings from a set in a colum
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -1269,7 +1269,7 @@ Column level sensor that calculates the percent of strings from a set in a colum
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -1324,7 +1324,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1343,7 +1343,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1362,7 +1362,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1381,7 +1381,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1400,7 +1400,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1433,7 +1433,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1452,7 +1452,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1471,7 +1471,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1490,7 +1490,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1509,7 +1509,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1547,7 +1547,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1566,7 +1566,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1585,7 +1585,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1604,7 +1604,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1623,7 +1623,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1656,7 +1656,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1675,7 +1675,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1694,7 +1694,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1713,7 +1713,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1732,7 +1732,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1771,7 +1771,7 @@ Column level sensor that calculates the count of values that are longer than a g
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -1833,7 +1833,7 @@ Column level sensor that calculates the count of values that are longer than a g
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1852,7 +1852,7 @@ Column level sensor that calculates the count of values that are longer than a g
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1871,7 +1871,7 @@ Column level sensor that calculates the count of values that are longer than a g
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -1891,7 +1891,7 @@ Column level sensor that calculates the count of values that are longer than a g
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1930,7 +1930,7 @@ Column level sensor that calculates the percentage of values that are longer tha
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -1995,7 +1995,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2017,7 +2017,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2039,7 +2039,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -2062,7 +2062,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2104,7 +2104,7 @@ Column level sensor that calculates the count of values that are shorter than a 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -2166,7 +2166,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2185,7 +2185,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2204,7 +2204,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -2224,7 +2224,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2263,7 +2263,7 @@ Column level sensor that calculates the percentage of values that are shorter th
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -2328,7 +2328,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2350,7 +2350,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2372,7 +2372,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -2395,7 +2395,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2438,7 +2438,7 @@ Column level sensor that calculates percentage of strings with a length below th
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -2493,7 +2493,7 @@ Column level sensor that calculates percentage of strings with a length below th
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2515,7 +2515,7 @@ Column level sensor that calculates percentage of strings with a length below th
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -2538,7 +2538,7 @@ Column level sensor that calculates percentage of strings with a length below th
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -2561,7 +2561,7 @@ Column level sensor that calculates percentage of strings with a length below th
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2603,7 +2603,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -2640,7 +2640,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
@@ -2676,7 +2676,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
@@ -2712,7 +2712,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -2749,7 +2749,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -2800,7 +2800,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2822,7 +2822,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2844,7 +2844,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2866,7 +2866,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2888,7 +2888,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2930,7 +2930,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro make_text_constant(string) -%}
@@ -2961,7 +2961,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro make_text_constant(string) -%}
@@ -2992,7 +2992,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro make_text_constant(string) -%}
@@ -3023,7 +3023,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro make_text_constant(string) -%}
@@ -3054,7 +3054,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     {% macro make_text_constant(string) -%}
         {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
@@ -3098,7 +3098,7 @@ Column level sensor that ensures that the length of string in a column does not 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -3156,7 +3156,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
@@ -3171,7 +3171,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
@@ -3186,7 +3186,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
@@ -3201,7 +3201,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
@@ -3230,7 +3230,7 @@ Column level sensor that ensures that the length of string in a column does not 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -3288,7 +3288,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
@@ -3303,7 +3303,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
@@ -3318,7 +3318,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
@@ -3333,7 +3333,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
@@ -3362,7 +3362,7 @@ Column level sensor that ensures that the length of string in a column does not 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -3420,7 +3420,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
@@ -3435,7 +3435,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
@@ -3450,7 +3450,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
@@ -3465,7 +3465,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
@@ -3501,7 +3501,7 @@ Column level sensor that counts how many expected values are present in the top 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro top_value() -%}
@@ -3579,7 +3579,7 @@ Column level sensor that counts how many expected values are present in the top 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro top_value() -%}
@@ -3657,7 +3657,7 @@ Column level sensor that counts how many expected values are present in the top 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -3735,7 +3735,7 @@ Column level sensor that counts how many expected values are present in the top 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro top_value() -%}
@@ -3813,7 +3813,7 @@ Column level sensor that counts how many expected values are present in the top 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
@@ -3910,7 +3910,7 @@ Column level sensor that calculates the number of values that does not fit to a 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -3947,7 +3947,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
@@ -3983,7 +3983,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
@@ -4019,7 +4019,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -4056,7 +4056,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
@@ -4112,7 +4112,7 @@ Column level sensor that calculates the number of values that does not fit to a 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro make_text_constant(string) -%}
@@ -4143,7 +4143,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro make_text_constant(string) -%}
@@ -4174,7 +4174,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro make_text_constant(string) -%}
@@ -4205,7 +4205,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro make_text_constant(string) -%}
@@ -4236,7 +4236,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     {%- macro make_text_constant(string) -%}
         {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
@@ -4280,7 +4280,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -4342,7 +4342,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4362,7 +4362,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4382,7 +4382,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4402,7 +4402,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4435,7 +4435,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -4500,7 +4500,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4523,7 +4523,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4546,7 +4546,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4569,7 +4569,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4606,7 +4606,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
@@ -4625,7 +4625,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4643,7 +4643,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4661,7 +4661,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
@@ -4680,7 +4680,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4712,7 +4712,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
@@ -4731,7 +4731,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4749,7 +4749,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4767,7 +4767,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
@@ -4786,7 +4786,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4818,7 +4818,7 @@ Column level sensor that calculates the number of rows with string surrounded by
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -4882,7 +4882,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4903,7 +4903,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4924,7 +4924,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4946,7 +4946,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4981,7 +4981,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -5048,7 +5048,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5072,7 +5072,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5096,7 +5096,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -5121,7 +5121,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -5160,7 +5160,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5182,7 +5182,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5204,7 +5204,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5226,7 +5226,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5248,7 +5248,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5284,7 +5284,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -5349,7 +5349,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5371,7 +5371,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5393,7 +5393,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5415,7 +5415,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5451,7 +5451,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -5516,7 +5516,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5538,7 +5538,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -5563,7 +5563,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5585,7 +5585,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5621,7 +5621,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5643,7 +5643,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5665,7 +5665,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5687,7 +5687,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5709,7 +5709,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5745,7 +5745,7 @@ Column level sensor that calculates the number of rows with an whitespace string
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -5809,7 +5809,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5830,7 +5830,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5851,7 +5851,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5872,7 +5872,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5907,7 +5907,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -5974,7 +5974,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5998,7 +5998,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -6022,7 +6022,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -6047,7 +6047,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE

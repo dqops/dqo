@@ -36,14 +36,14 @@ function DashboardProvider(props: any) {
     setActiveTab(newTab.value);
   };
 
-  const changeActiveTab = async (dashboard: DashboardSpec, folder: string, folders: DashboardsFolderSpec[], isNew = false) => {
-    const existTab = tabs.find((item) => item.value === dashboard.dashboard_name);
+  const changeActiveTab = async (dashboard: DashboardSpec, folder: string, folders: DashboardsFolderSpec[], key: string, isNew = false) => {
+    const existTab = tabs.find((item) => item.value === key);
     if (existTab) {
-      setActiveTab(dashboard.dashboard_name);
+      setActiveTab(key);
     } else {
       const newTab = {
         label: dashboard.dashboard_name ?? '',
-        value: dashboard.dashboard_name ?? '',
+        value: key ?? '',
       };
 
       if (activeTab) {
@@ -62,17 +62,17 @@ function DashboardProvider(props: any) {
       } else {
         setTabs([newTab]);
       }
-      setActiveTab(dashboard.dashboard_name);
+      setActiveTab(key);
 
       let res: any;
       if (folders.length === 0) {
-        res = await DashboardsApi.getDashboardLevel1(folder, dashboard.dashboard_name ?? '');
+        res = await DashboardsApi.getDashboardLevel1(folder, dashboard.dashboard_name ?? '', window.location.origin);
       } else if (folders.length === 1) {
-        res = await DashboardsApi.getDashboardLevel2(folders[0].folder_name || '', folder, dashboard.dashboard_name ?? '');
+        res = await DashboardsApi.getDashboardLevel2(folders[0].folder_name || '', folder, dashboard.dashboard_name ?? '', window.location.origin);
       } else if (folders.length === 2) {
-        res = await DashboardsApi.getDashboardLevel3(folders[0].folder_name || '', folders[1].folder_name || '', folder, dashboard.dashboard_name ?? '');
+        res = await DashboardsApi.getDashboardLevel3(folders[0].folder_name || '', folders[1].folder_name || '', folder, dashboard.dashboard_name ?? '', window.location.origin);
       } else if (folders.length === 3) {
-        res = await DashboardsApi.getDashboardLevel4(folders[0].folder_name || '', folders[1].folder_name || '', folders[2].folder_name || '', folder, dashboard.dashboard_name ?? '');
+        res = await DashboardsApi.getDashboardLevel4(folders[0].folder_name || '', folders[1].folder_name || '', folders[2].folder_name || '', folder, dashboard.dashboard_name ?? '', window.location.origin);
       }
 
       const authenticatedDashboard: AuthenticatedDashboardModel = res?.data;

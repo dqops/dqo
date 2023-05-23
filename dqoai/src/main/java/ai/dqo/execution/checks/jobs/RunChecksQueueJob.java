@@ -83,7 +83,9 @@ public class RunChecksQueueJob extends ParentDqoQueueJob<CheckExecutionSummary> 
                 jobExecutionContext.getCancellationToken());
 
         RunChecksQueueJobResult jobResultSummary = RunChecksQueueJobResult.fromCheckExecutionSummary(checkExecutionSummary);
-        this.getParameters().setRunChecksResult(jobResultSummary);
+        RunChecksQueueJobParameters clonedParameters = this.getParameters().clone();
+        clonedParameters.setRunChecksResult(jobResultSummary);
+        this.setParameters(clonedParameters);
 
         return checkExecutionSummary;
     }

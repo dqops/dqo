@@ -327,6 +327,10 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
             SensorDefinitionFindResult providerSensorDefinition = this.sensorDefinitionFindService.findProviderSensorDefinition(
                     executionContext, sensorDefinitionName, providerType);
 
+            if (providerSensorDefinition == null) {
+                return null; // skip this check
+            }
+
             ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorDefinition.getProviderSensorDefinitionSpec();
             if (providerSensorDefinitionSpec == null) {
                 return null; // skip this check
@@ -383,6 +387,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         checkModel.setComments(checkSpec.getComments());
         checkModel.setDisabled(checkSpec.isDisabled());
         checkModel.setExcludeFromKpi(checkSpec.isExcludeFromKpi());
+        checkModel.setQualityDimension(checkSpec.getEffectiveDataQualityDimension());
         checkModel.setIncludeInSla(checkSpec.isIncludeInSla());
         checkModel.setDataStream(checkSpec.getDataStream());
         checkModel.setCheckSpec(checkSpec);

@@ -17,24 +17,24 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=sql_aggregate_expr_column
+dqo> check enable -c=connection_name -ch=sql_aggregate_expr_column
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=sql_aggregate_expr_column
+dqo> check run -ch=sql_aggregate_expr_column
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=sql_aggregate_expr_column
+dqo> check run -c=connection_name -ch=sql_aggregate_expr_column
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=sql_aggregate_expr_column
+dqo> check run -c=connection_name -t=table_name -ch=sql_aggregate_expr_column
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=sql_aggregate_expr_column
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=sql_aggregate_expr_column
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -94,7 +94,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -108,7 +108,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table.`target_column`)) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
@@ -120,7 +120,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -134,7 +134,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table."target_column")) AS actual_value,
         TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
@@ -146,7 +146,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -160,7 +160,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table."target_column")) AS actual_value,
         LOCALTIMESTAMP AS time_period,
@@ -172,7 +172,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -186,7 +186,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table."target_column")) AS actual_value,
         LOCALTIMESTAMP AS time_period,
@@ -198,7 +198,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -212,7 +212,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table.[target_column])) AS actual_value,
         SYSDATETIMEOFFSET() AS time_period,
@@ -275,7 +275,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -288,7 +288,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table.`target_column`)) AS actual_value,
             analyzed_table.`country` AS stream_level_1,
@@ -302,7 +302,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -315,7 +315,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table."target_column")) AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -329,7 +329,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -342,7 +342,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table."target_column")) AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -356,7 +356,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -369,7 +369,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table."target_column")) AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -383,7 +383,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -396,7 +396,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table.[target_column])) AS actual_value,
             analyzed_table.[country] AS stream_level_1,
@@ -432,24 +432,24 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_sql_aggregate_expr_column
+dqo> check enable -c=connection_name -ch=daily_sql_aggregate_expr_column
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_sql_aggregate_expr_column
+dqo> check run -ch=daily_sql_aggregate_expr_column
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_sql_aggregate_expr_column
+dqo> check run -c=connection_name -ch=daily_sql_aggregate_expr_column
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_sql_aggregate_expr_column
+dqo> check run -c=connection_name -t=table_name -ch=daily_sql_aggregate_expr_column
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sql_aggregate_expr_column
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_sql_aggregate_expr_column
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -511,7 +511,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -525,7 +525,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table.`target_column`)) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
@@ -537,7 +537,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -551,7 +551,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table."target_column")) AS actual_value,
         CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
@@ -563,7 +563,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -577,7 +577,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table."target_column")) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -589,7 +589,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -603,7 +603,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table."target_column")) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -615,7 +615,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -629,7 +629,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table.[target_column])) AS actual_value,
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
@@ -693,7 +693,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -706,7 +706,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table.`target_column`)) AS actual_value,
             analyzed_table.`country` AS stream_level_1,
@@ -720,7 +720,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -733,7 +733,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table."target_column")) AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -747,7 +747,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -760,7 +760,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table."target_column")) AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -774,7 +774,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -787,7 +787,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table."target_column")) AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -801,7 +801,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -814,7 +814,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table.[target_column])) AS actual_value,
             analyzed_table.[country] AS stream_level_1,
@@ -850,24 +850,24 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_sql_aggregate_expr_column
+dqo> check enable -c=connection_name -ch=monthly_sql_aggregate_expr_column
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_sql_aggregate_expr_column
+dqo> check run -ch=monthly_sql_aggregate_expr_column
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_sql_aggregate_expr_column
+dqo> check run -c=connection_name -ch=monthly_sql_aggregate_expr_column
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_sql_aggregate_expr_column
+dqo> check run -c=connection_name -t=table_name -ch=monthly_sql_aggregate_expr_column
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_sql_aggregate_expr_column
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_sql_aggregate_expr_column
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -929,7 +929,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -943,7 +943,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table.`target_column`)) AS actual_value,
         DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
@@ -955,7 +955,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -969,7 +969,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table."target_column")) AS actual_value,
         DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
@@ -981,7 +981,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -995,7 +995,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table."target_column")) AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -1007,7 +1007,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1021,7 +1021,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table."target_column")) AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -1033,7 +1033,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1047,7 +1047,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table.[target_column])) AS actual_value,
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
@@ -1111,7 +1111,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1124,7 +1124,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table.`target_column`)) AS actual_value,
             analyzed_table.`country` AS stream_level_1,
@@ -1138,7 +1138,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1151,7 +1151,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table."target_column")) AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1165,7 +1165,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1178,7 +1178,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table."target_column")) AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1192,7 +1192,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1205,7 +1205,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table."target_column")) AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1219,7 +1219,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1232,7 +1232,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table.[target_column])) AS actual_value,
             analyzed_table.[country] AS stream_level_1,
@@ -1268,24 +1268,24 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_sql_aggregate_expr_column
+dqo> check enable -c=connection_name -ch=daily_partition_sql_aggregate_expr_column
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_sql_aggregate_expr_column
+dqo> check run -ch=daily_partition_sql_aggregate_expr_column
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_sql_aggregate_expr_column
+dqo> check run -c=connection_name -ch=daily_partition_sql_aggregate_expr_column
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_sql_aggregate_expr_column
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_sql_aggregate_expr_column
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_sql_aggregate_expr_column
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_sql_aggregate_expr_column
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1347,7 +1347,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1361,7 +1361,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table.`target_column`)) AS actual_value,
         CAST(analyzed_table.`` AS DATE) AS time_period,
@@ -1373,7 +1373,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1387,7 +1387,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table."target_column")) AS actual_value,
         CAST(analyzed_table."" AS date) AS time_period,
@@ -1399,7 +1399,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1413,7 +1413,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table."target_column")) AS actual_value,
         CAST(analyzed_table."" AS date) AS time_period,
@@ -1425,7 +1425,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1439,7 +1439,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table."target_column")) AS actual_value,
         CAST(analyzed_table."" AS date) AS time_period,
@@ -1451,7 +1451,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1465,7 +1465,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table.[target_column])) AS actual_value,
         CAST([] AS date) AS time_period,
@@ -1533,7 +1533,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1546,7 +1546,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table.`target_column`)) AS actual_value,
             analyzed_table.`country` AS stream_level_1,
@@ -1560,7 +1560,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1573,7 +1573,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table."target_column")) AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1587,7 +1587,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1600,7 +1600,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table."target_column")) AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1614,7 +1614,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1627,7 +1627,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table."target_column")) AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1641,7 +1641,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1654,7 +1654,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table.[target_column])) AS actual_value,
             analyzed_table.[country] AS stream_level_1,
@@ -1687,24 +1687,24 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_sql_aggregate_expr_column
+dqo> check enable -c=connection_name -ch=monthly_partition_sql_aggregate_expr_column
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_sql_aggregate_expr_column
+dqo> check run -ch=monthly_partition_sql_aggregate_expr_column
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_sql_aggregate_expr_column
+dqo> check run -c=connection_name -ch=monthly_partition_sql_aggregate_expr_column
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_sql_aggregate_expr_column
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_sql_aggregate_expr_column
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_sql_aggregate_expr_column
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_sql_aggregate_expr_column
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1766,7 +1766,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1780,7 +1780,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table.`target_column`)) AS actual_value,
         DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
@@ -1792,7 +1792,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1806,7 +1806,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table."target_column")) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
@@ -1818,7 +1818,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1832,7 +1832,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table."target_column")) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
@@ -1844,7 +1844,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1858,7 +1858,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table."target_column")) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
@@ -1870,7 +1870,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1884,7 +1884,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         (MAX(analyzed_table.[target_column])) AS actual_value,
         DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
@@ -1952,7 +1952,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1965,7 +1965,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table.`target_column`)) AS actual_value,
             analyzed_table.`country` AS stream_level_1,
@@ -1979,7 +1979,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -1992,7 +1992,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table."target_column")) AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -2006,7 +2006,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -2019,7 +2019,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table."target_column")) AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -2033,7 +2033,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -2046,7 +2046,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table."target_column")) AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -2060,7 +2060,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
@@ -2073,7 +2073,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             (MAX(analyzed_table.[target_column])) AS actual_value,
             analyzed_table.[country] AS stream_level_1,

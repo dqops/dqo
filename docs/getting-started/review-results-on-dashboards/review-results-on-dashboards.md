@@ -1,7 +1,7 @@
 # Review results on the dashboards
 
 In the [previous step](../run-data-quality-checks/run-data-quality-checks.md) we run two data quality check: table-level
-[row_count](../../checks/table/standard/row-count.md) and column-level [nulls_percent](../../checks/column/nulls/not-nulls-percent.md)
+[row_count](../../checks/table/volume/row-count.md) and column-level [nulls_percent](../../checks/column/nulls/not-nulls-percent.md)
 on BigQuery public dataset Austin Crime Data. 
 
 Now let's review the results on the data quality dashboards. This is a unique feature of DQO allowing for the display of [data quality KPI](../../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
@@ -31,13 +31,13 @@ You can find it in the Governance group.
 
 1. Go to the **Data Quality Dashboards** section using the navigation bar at the top of the screen
 
-    ![Navigating to Data Quality Dashboards section](https://dqo.ai/docs/images/getting-started/data-quality-dashboards-section.jpg)
+    ![Navigating to Data Quality Dashboards section](https://dqops.com/docs/images/getting-started/data-quality-dashboards-section.jpg)
     
 2. From the tree view on the left, select the **Total DQ KPIs** dashboard in the Governance group. 
 
-    ![Total DQ KPIs dashboard](https://dqo.ai/docs/images/getting-started/total-dq-kpis-dashboard.jpg)
+    ![Total DQ KPIs dashboard](https://dqops.com/docs/images/getting-started/total-dq-kpis-dashboard.jpg)
 
-    In our example we ran two data quality checks. The result of the [row_count](../../checks/table/standard/row-count.md) 
+    In our example we ran two data quality checks. The result of the [row_count](../../checks/table/volume/row-count.md) 
     check was Correct, while [nulls_percent](../../checks/column/nulls/not-nulls-percent.md) resulted in an Error.
 
     The calculated percentage of passed data quality checks (KPI) in our example is 50%. You can see that there is on passed data quality
@@ -50,7 +50,7 @@ You can find it in the Issue Details group.
 
 1. From the tree view on the left of the Data Quality Dashboard section, select the **Total issue details** dashboard in the Issue Details group. 
 
-    ![Total issue details dashboard](https://dqo.ai/docs/images/getting-started/total-issue-details-dashboard.jpg)
+    ![Total issue details dashboard](https://dqops.com/docs/images/getting-started/total-issue-details-dashboard.jpg)
 
     On the **Total issue details** dashboard, you can see the results broken down by categories of checks, as well as the 
     list of tables affected by the issues. In our example, there is only one table with one data quality issue. 

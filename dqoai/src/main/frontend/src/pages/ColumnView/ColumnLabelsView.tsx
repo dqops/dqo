@@ -27,7 +27,7 @@ const ColumnLabelsView = ({
   columnName
 }: IColumnLabelsViewProps) => {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
-  const { labels, isUpdating, isUpdatedLabels, columnBasic } = useSelector(getFirstLevelState(checkTypes));
+  const { labels, isUpdating, isUpdatedLabels } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 

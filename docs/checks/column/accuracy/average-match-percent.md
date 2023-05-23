@@ -17,24 +17,24 @@ Verifies that the percentage of difference in average of a column in a table and
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=average_match_percent
+dqo> check enable -c=connection_name -ch=average_match_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=average_match_percent
+dqo> check run -ch=average_match_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=average_match_percent
+dqo> check run -c=connection_name -ch=average_match_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=average_match_percent
+dqo> check run -c=connection_name -t=table_name -ch=average_match_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=average_match_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=average_match_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -90,7 +90,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -112,7 +112,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             AVG(referenced_table.`customer_id`)
@@ -124,7 +124,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -147,7 +147,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             AVG(referenced_table."customer_id")
@@ -159,7 +159,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -181,7 +181,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             AVG(referenced_table."customer_id")
@@ -193,7 +193,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -216,7 +216,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             AVG(referenced_table."customer_id")
@@ -228,7 +228,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -251,7 +251,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             AVG(referenced_table.[customer_id])
@@ -259,6 +259,40 @@ spec:
         ) AS expected_value,
         AVG(analyzed_table.[target_column]) AS actual_value
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+      {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        (SELECT
+            AVG(referenced_table.`customer_id`)
+        FROM `dim_customer` AS referenced_table
+        ) AS expected_value,
+        AVG(analyzed_table.`target_column`) AS actual_value
+    FROM `<target_table>` AS analyzed_table
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -314,7 +348,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -335,7 +369,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             (SELECT
                 AVG(referenced_table.`customer_id`)
@@ -347,7 +381,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -369,7 +403,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             (SELECT
                 AVG(referenced_table."customer_id")
@@ -381,7 +415,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -402,7 +436,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             (SELECT
                 AVG(referenced_table."customer_id")
@@ -414,7 +448,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -436,7 +470,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             (SELECT
                 AVG(referenced_table."customer_id")
@@ -448,7 +482,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -470,7 +504,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             (SELECT
                 AVG(referenced_table.[customer_id])
@@ -478,6 +512,39 @@ spec:
             ) AS expected_value,
             AVG(analyzed_table.[target_column]) AS actual_value
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+          {{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            (SELECT
+                AVG(referenced_table.`customer_id`)
+            FROM `dim_customer` AS referenced_table
+            ) AS expected_value,
+            AVG(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_table>` AS analyzed_table
         ```
     
 
@@ -499,24 +566,24 @@ Verifies that the percentage of difference in average of a column in a table and
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_average_match_percent
+dqo> check enable -c=connection_name -ch=daily_average_match_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_average_match_percent
+dqo> check run -ch=daily_average_match_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_average_match_percent
+dqo> check run -c=connection_name -ch=daily_average_match_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_average_match_percent
+dqo> check run -c=connection_name -t=table_name -ch=daily_average_match_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_average_match_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_average_match_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -574,7 +641,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -596,7 +663,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             AVG(referenced_table.`customer_id`)
@@ -608,7 +675,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -631,7 +698,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             AVG(referenced_table."customer_id")
@@ -643,7 +710,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -665,7 +732,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             AVG(referenced_table."customer_id")
@@ -677,7 +744,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -700,7 +767,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             AVG(referenced_table."customer_id")
@@ -712,7 +779,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -735,7 +802,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             AVG(referenced_table.[customer_id])
@@ -743,6 +810,40 @@ spec:
         ) AS expected_value,
         AVG(analyzed_table.[target_column]) AS actual_value
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+      {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        (SELECT
+            AVG(referenced_table.`customer_id`)
+        FROM `dim_customer` AS referenced_table
+        ) AS expected_value,
+        AVG(analyzed_table.`target_column`) AS actual_value
+    FROM `<target_table>` AS analyzed_table
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -799,7 +900,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -820,7 +921,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             (SELECT
                 AVG(referenced_table.`customer_id`)
@@ -832,7 +933,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -854,7 +955,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             (SELECT
                 AVG(referenced_table."customer_id")
@@ -866,7 +967,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -887,7 +988,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             (SELECT
                 AVG(referenced_table."customer_id")
@@ -899,7 +1000,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -921,7 +1022,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             (SELECT
                 AVG(referenced_table."customer_id")
@@ -933,7 +1034,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -955,7 +1056,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             (SELECT
                 AVG(referenced_table.[customer_id])
@@ -963,6 +1064,39 @@ spec:
             ) AS expected_value,
             AVG(analyzed_table.[target_column]) AS actual_value
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+          {{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            (SELECT
+                AVG(referenced_table.`customer_id`)
+            FROM `dim_customer` AS referenced_table
+            ) AS expected_value,
+            AVG(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_table>` AS analyzed_table
         ```
     
 
@@ -984,24 +1118,24 @@ Verifies that the percentage of difference in average of a column in a table and
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_average_match_percent
+dqo> check enable -c=connection_name -ch=monthly_average_match_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_average_match_percent
+dqo> check run -ch=monthly_average_match_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_average_match_percent
+dqo> check run -c=connection_name -ch=monthly_average_match_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_average_match_percent
+dqo> check run -c=connection_name -t=table_name -ch=monthly_average_match_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_average_match_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_average_match_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1059,7 +1193,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -1081,7 +1215,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             AVG(referenced_table.`customer_id`)
@@ -1093,7 +1227,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -1116,7 +1250,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             AVG(referenced_table."customer_id")
@@ -1128,7 +1262,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -1150,7 +1284,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             AVG(referenced_table."customer_id")
@@ -1162,7 +1296,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -1185,7 +1319,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             AVG(referenced_table."customer_id")
@@ -1197,7 +1331,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -1220,7 +1354,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         (SELECT
             AVG(referenced_table.[customer_id])
@@ -1228,6 +1362,40 @@ spec:
         ) AS expected_value,
         AVG(analyzed_table.[target_column]) AS actual_value
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+      {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        (SELECT
+            AVG(referenced_table.`customer_id`)
+        FROM `dim_customer` AS referenced_table
+        ) AS expected_value,
+        AVG(analyzed_table.`target_column`) AS actual_value
+    FROM `<target_table>` AS analyzed_table
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -1284,7 +1452,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -1305,7 +1473,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             (SELECT
                 AVG(referenced_table.`customer_id`)
@@ -1317,7 +1485,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -1339,7 +1507,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             (SELECT
                 AVG(referenced_table."customer_id")
@@ -1351,7 +1519,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -1372,7 +1540,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             (SELECT
                 AVG(referenced_table."customer_id")
@@ -1384,7 +1552,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -1406,7 +1574,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             (SELECT
                 AVG(referenced_table."customer_id")
@@ -1418,7 +1586,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {%- macro render_referenced_table(referenced_table) -%}
@@ -1440,7 +1608,7 @@ spec:
         {{- lib.render_where_clause() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             (SELECT
                 AVG(referenced_table.[customer_id])
@@ -1448,6 +1616,39 @@ spec:
             ) AS expected_value,
             AVG(analyzed_table.[target_column]) AS actual_value
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+          {{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            (SELECT
+                AVG(referenced_table.`customer_id`)
+            FROM `dim_customer` AS referenced_table
+            ) AS expected_value,
+            AVG(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_table>` AS analyzed_table
         ```
     
 

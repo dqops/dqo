@@ -12,7 +12,7 @@ type StatusSelectProps = {
 
 const StatusSelect = ({ onChangeFilter }: StatusSelectProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { filters = { connection: '', openIncidents: true, acknowledgedIncidents: true, resolvedIncidents: true } }: { filters: IncidentFilter} = useSelector(getFirstLevelIncidentsState);
+  const { filters = { connection: '', openIncidents: false, acknowledgedIncidents: false, resolvedIncidents: false } }: { filters: IncidentFilter} = useSelector(getFirstLevelIncidentsState);
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);

@@ -20,7 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.BetweenFloatsRuleParametersSpec;
-import ai.dqo.sensors.column.numeric.ColumnNumericMaxInRangeSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericMaxSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -38,7 +38,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnMaxInRangeCheckSpec
-        extends AbstractCheckSpec<ColumnNumericMaxInRangeSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericMaxSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMaxInRangeCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -47,7 +47,7 @@ public class ColumnMaxInRangeCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericMaxInRangeSensorParametersSpec parameters = new ColumnNumericMaxInRangeSensorParametersSpec();
+    private ColumnNumericMaxSensorParametersSpec parameters = new ColumnNumericMaxSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -69,7 +69,7 @@ public class ColumnMaxInRangeCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNumericMaxInRangeSensorParametersSpec getParameters() {
+    public ColumnNumericMaxSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -77,7 +77,7 @@ public class ColumnMaxInRangeCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNumericMaxInRangeSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericMaxSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

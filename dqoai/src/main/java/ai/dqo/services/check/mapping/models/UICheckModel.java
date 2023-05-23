@@ -60,6 +60,12 @@ public class UICheckModel implements Cloneable {
     private String sensorName;
 
     /**
+     * Data quality dimension used for tagging the results of this data quality checks.
+     */
+    @JsonPropertyDescription("Data quality dimension used for tagging the results of this data quality checks.")
+    private String qualityDimension;
+
+    /**
      * Sensor parameters, returned only for reference and for tools such as the documentation generator.
      */
     @JsonIgnore

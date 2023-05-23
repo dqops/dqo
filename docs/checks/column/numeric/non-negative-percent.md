@@ -17,24 +17,24 @@ Verifies that the percentage of non-negative values in a column does not exceed 
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=non_negative_percent
+dqo> check enable -c=connection_name -ch=non_negative_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=non_negative_percent
+dqo> check run -ch=non_negative_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=non_negative_percent
+dqo> check run -c=connection_name -ch=non_negative_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=non_negative_percent
+dqo> check run -c=connection_name -t=table_name -ch=non_negative_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=non_negative_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=non_negative_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -84,7 +84,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -102,7 +102,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -119,7 +119,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -137,7 +137,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -154,7 +154,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -172,7 +172,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -189,7 +189,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -207,7 +207,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -224,7 +224,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -242,7 +242,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -253,6 +253,41 @@ spec:
         SYSDATETIMEOFFSET() AS time_period,
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN analyzed_table.`target_column` < 0 THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -305,7 +340,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -322,7 +357,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -341,7 +376,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -358,7 +393,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -377,7 +412,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -394,7 +429,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -413,7 +448,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -430,7 +465,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -449,7 +484,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -466,7 +501,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -486,6 +521,42 @@ spec:
             
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            LOCALTIMESTAMP AS time_period,
+            CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -507,24 +578,24 @@ Verifies that the percentage of non-negative values in a column does not exceed 
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_non_negative_percent
+dqo> check enable -c=connection_name -ch=daily_non_negative_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_non_negative_percent
+dqo> check run -ch=daily_non_negative_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_non_negative_percent
+dqo> check run -c=connection_name -ch=daily_non_negative_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_non_negative_percent
+dqo> check run -c=connection_name -t=table_name -ch=daily_non_negative_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_non_negative_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_non_negative_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -576,7 +647,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -594,7 +665,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -611,7 +682,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -629,7 +700,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -646,7 +717,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -664,7 +735,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -681,7 +752,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -699,7 +770,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -716,7 +787,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -734,7 +805,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -745,6 +816,41 @@ spec:
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN analyzed_table.`target_column` < 0 THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -798,7 +904,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -815,7 +921,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -834,7 +940,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -851,7 +957,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -870,7 +976,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -887,7 +993,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -906,7 +1012,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -923,7 +1029,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -942,7 +1048,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -959,7 +1065,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -979,6 +1085,42 @@ spec:
             
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            LOCALTIMESTAMP AS time_period,
+            CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -1000,24 +1142,24 @@ Verifies that the percentage of non-negative values in a column does not exceed 
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_non_negative_percent
+dqo> check enable -c=connection_name -ch=monthly_non_negative_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_non_negative_percent
+dqo> check run -ch=monthly_non_negative_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_non_negative_percent
+dqo> check run -c=connection_name -ch=monthly_non_negative_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_non_negative_percent
+dqo> check run -c=connection_name -t=table_name -ch=monthly_non_negative_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_non_negative_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_non_negative_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1069,7 +1211,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1087,7 +1229,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1104,7 +1246,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1122,7 +1264,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1139,7 +1281,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1157,7 +1299,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1174,7 +1316,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1192,7 +1334,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1209,7 +1351,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1227,7 +1369,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1238,6 +1380,41 @@ spec:
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN analyzed_table.`target_column` < 0 THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value,
+        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+        CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -1291,7 +1468,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -1308,7 +1485,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1327,7 +1504,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -1344,7 +1521,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1363,7 +1540,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -1380,7 +1557,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1399,7 +1576,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -1416,7 +1593,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1435,7 +1612,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -1452,7 +1629,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1472,6 +1649,42 @@ spec:
             
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+            CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -1493,24 +1706,24 @@ Verifies that the percentage of non-negative values in a column does not exceed 
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_non_negative_percent
+dqo> check enable -c=connection_name -ch=daily_partition_non_negative_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_non_negative_percent
+dqo> check run -ch=daily_partition_non_negative_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_non_negative_percent
+dqo> check run -c=connection_name -ch=daily_partition_non_negative_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_non_negative_percent
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_non_negative_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_non_negative_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_non_negative_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1562,7 +1775,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1580,7 +1793,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1597,7 +1810,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1615,7 +1828,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1632,7 +1845,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1650,7 +1863,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1667,7 +1880,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1685,7 +1898,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1702,7 +1915,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -1720,7 +1933,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1735,6 +1948,41 @@ spec:
     ORDER BY CAST([] AS date)
     
         
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN analyzed_table.`target_column` < 0 THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value,
+        analyzed_table.`` AS time_period,
+        CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -1788,7 +2036,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -1805,7 +2053,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1824,7 +2072,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -1841,7 +2089,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1860,7 +2108,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -1877,7 +2125,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1896,7 +2144,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -1913,7 +2161,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1932,7 +2180,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -1949,7 +2197,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1966,6 +2214,42 @@ spec:
         ORDER BY level_1, level_2CAST([] AS date)
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            analyzed_table.`` AS time_period,
+            CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -1987,24 +2271,24 @@ Verifies that the percentage of non-negative values in a column does not exceed 
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_non_negative_percent
+dqo> check enable -c=connection_name -ch=monthly_partition_non_negative_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_non_negative_percent
+dqo> check run -ch=monthly_partition_non_negative_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_non_negative_percent
+dqo> check run -c=connection_name -ch=monthly_partition_non_negative_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_non_negative_percent
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_non_negative_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_non_negative_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_non_negative_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2056,7 +2340,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2074,7 +2358,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -2091,7 +2375,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2109,7 +2393,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -2126,7 +2410,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2144,7 +2428,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -2161,7 +2445,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2179,7 +2463,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -2196,7 +2480,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -2214,7 +2498,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -2229,6 +2513,41 @@ spec:
     ORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
     
         
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN analyzed_table.`target_column` < 0 THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value,
+        DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
+        CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -2282,7 +2601,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -2299,7 +2618,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -2318,7 +2637,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -2335,7 +2654,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -2354,7 +2673,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -2371,7 +2690,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -2390,7 +2709,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -2407,7 +2726,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -2426,7 +2745,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             100.0 * SUM(
@@ -2443,7 +2762,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -2460,6 +2779,42 @@ spec:
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*) AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
+            CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 

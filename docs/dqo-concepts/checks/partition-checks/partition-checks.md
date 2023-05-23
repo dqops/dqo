@@ -75,7 +75,7 @@ In order to enable time partition check, set a column that contains date, dateti
 3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "DATE or DATETIME
    column name for partition checks" input field.
 
-   ![Checking results](https://dqo.ai/docs/images/run-data-quality-checks/working-with-dqo/date-or-datetime-column-configuration-for-partion-checks.jpg)
+   ![Checking results](https://dqops.com/docs/images/run-data-quality-checks/working-with-dqo/date-or-datetime-column-configuration-for-partion-checks.jpg)
 
 4. Click the Save button in the upper right corner.
 

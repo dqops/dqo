@@ -13,7 +13,7 @@ Column level sensor that calculates the percentage of rows with a false value in
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -35,7 +35,7 @@ Column level sensor that calculates the percentage of rows with a false value in
     ```
 === "mysql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -57,7 +57,7 @@ Column level sensor that calculates the percentage of rows with a false value in
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -79,7 +79,7 @@ Column level sensor that calculates the percentage of rows with a false value in
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -101,7 +101,7 @@ Column level sensor that calculates the percentage of rows with a false value in
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -123,7 +123,7 @@ Column level sensor that calculates the percentage of rows with a false value in
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -159,7 +159,7 @@ Column level sensor that calculates the percentage of rows with a true value in 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -181,7 +181,7 @@ Column level sensor that calculates the percentage of rows with a true value in 
     ```
 === "mysql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -203,7 +203,7 @@ Column level sensor that calculates the percentage of rows with a true value in 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -225,7 +225,7 @@ Column level sensor that calculates the percentage of rows with a true value in 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -247,7 +247,7 @@ Column level sensor that calculates the percentage of rows with a true value in 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -269,7 +269,7 @@ Column level sensor that calculates the percentage of rows with a true value in 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE

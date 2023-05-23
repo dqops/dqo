@@ -16,8 +16,8 @@
 package ai.dqo.metadata.userhome;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
+import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
+import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.sources.*;
 import org.junit.jupiter.api.Assertions;
@@ -52,10 +52,10 @@ public class UserHomeImplTests extends BaseTest {
         ConnectionWrapper connectionWrapper = this.sut.getConnections().createAndAddNew("src");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
-        tableSpec.getProfilingChecks().setStandard(standard);
+        TableProfilingVolumeChecksSpec volume = new TableProfilingVolumeChecksSpec();
+        tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
-        standard.setRowCount(check);
+        volume.setRowCount(check);
 
         ConnectionWrapper result = this.sut.findConnectionFor(check.getHierarchyId());
         Assertions.assertNotNull(result);
@@ -67,10 +67,10 @@ public class UserHomeImplTests extends BaseTest {
         ConnectionWrapper connectionWrapper = this.sut.getConnections().createAndAddNew("src");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
-        tableSpec.getProfilingChecks().setStandard(standard);
+        TableProfilingVolumeChecksSpec volume = new TableProfilingVolumeChecksSpec();
+        tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
-        standard.setRowCount(check);
+        volume.setRowCount(check);
 
         TableWrapper result = this.sut.findTableFor(check.getHierarchyId());
         Assertions.assertNotNull(result);
@@ -82,10 +82,10 @@ public class UserHomeImplTests extends BaseTest {
         ConnectionWrapper connectionWrapper = this.sut.getConnections().createAndAddNew("src");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
-        tableSpec.getProfilingChecks().setStandard(standard);
+        TableProfilingVolumeChecksSpec volume = new TableProfilingVolumeChecksSpec();
+        tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
-        standard.setRowCount(check);
+        volume.setRowCount(check);
 
         ColumnSpec result = this.sut.findColumnFor(check.getHierarchyId());
         Assertions.assertNull(result);

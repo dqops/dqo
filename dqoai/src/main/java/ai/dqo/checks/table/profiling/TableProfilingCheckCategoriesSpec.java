@@ -47,20 +47,18 @@ import java.util.Objects;
 public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<TableProfilingCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-            put("standard", o -> o.standard);
+            put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
             put("accuracy", o -> o.accuracy);
             put("sql", o -> o.sql);
             put("availability", o -> o.availability);
-//          put("consistency", o -> o.consistency);
-//          put("custom", o -> o.custom);
         }
     };
 
-    @JsonPropertyDescription("Configuration of standard data quality checks on a table level.")
+    @JsonPropertyDescription("Configuration of volume data quality checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableProfilingStandardChecksSpec standard;
+    private TableProfilingVolumeChecksSpec volume;
 
     @JsonPropertyDescription("Configuration of timeliness checks on a table level. Timeliness checks detect anomalies like rapid row count changes.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -77,28 +75,28 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableProfilingSqlChecksSpec sql;
 
-    @JsonPropertyDescription("Configuration of standard data quality checks on a table level.")
+    @JsonPropertyDescription("Configuration of volume data quality checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableProfilingAvailabilityChecksSpec availability;
 
 
     /**
-     * Returns a container of standard check configuration on a table level.
-     * @return Standard checks configuration.
+     * Returns a container of volume check configuration on a table level.
+     * @return Volume checks configuration.
      */
-    public TableProfilingStandardChecksSpec getStandard() {
-        return standard;
+    public TableProfilingVolumeChecksSpec getVolume() {
+        return volume;
     }
 
     /**
-     * Sets a reference to a standard checks container.
-     * @param standard New standard checks configuration.
+     * Sets a reference to a volume checks container.
+     * @param volume New volume checks configuration.
      */
-    public void setStandard(TableProfilingStandardChecksSpec standard) {
-        this.setDirtyIf(!Objects.equals(this.standard, standard));
-        this.standard = standard;
-        this.propagateHierarchyIdToField(standard, "standard");
+    public void setVolume(TableProfilingVolumeChecksSpec volume) {
+        this.setDirtyIf(!Objects.equals(this.volume, volume));
+        this.volume = volume;
+        this.propagateHierarchyIdToField(volume, "volume");
     }
 
     /**
