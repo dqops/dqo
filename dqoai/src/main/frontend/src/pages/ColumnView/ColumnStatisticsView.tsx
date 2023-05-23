@@ -40,16 +40,11 @@ const ColumnStatisticsView = () => {
     }
   };
 
-
-  
-
   useEffect(() => {
     fetchColumns()
     fetchTable()
     fetchRows()
   }, [connection, schema, table, column]);
-
-
 
   const datatype_detected = (numberForFile : any) => {
     if(Number(numberForFile) === 1){ return 'INTEGER'}
@@ -60,6 +55,7 @@ const ColumnStatisticsView = () => {
     if(Number(numberForFile) === 6){ return 'STRING'}
     if(Number(numberForFile) === 7){ return 'Mixed data type'}
   }
+  
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
       return value ? 'Yes' : 'No';
@@ -72,12 +68,11 @@ const ColumnStatisticsView = () => {
 
   return (
     <div className="p-4">
-    <div className="flex w-full">
-      {statistics?.column_name}
-      <div className="w-1/5">Datatype {statistics?.type_snapshot?.column_type}</div>
-      <div className="w-1/5">Detected Datatype{datatype_detected(statistics?.statistics?.at(15)?.result)}</div>
-      <div className="w-1/5">Total Rows{renderValue(rowCount?.statistics?.at(0)?.result)}</div>
-      <div className="w-1/4">Collected at{""}{statistics?.statistics?.at(0)?.collectedAt}</div>
+    <div className="flex w-full text-xl">
+      <div className="w-1/5 flex font-bold ml-5">Datatype <div className="font-light ml-5">{statistics?.type_snapshot?.column_type}</div></div>
+      <div className="w-1/5 flex font-bold">Detected Datatype<div className="font-light ml-5">{datatype_detected(statistics?.statistics?.at(15)?.result)}</div></div>
+      <div className="w-1/5 flex font-bold">Total Rows<div className="font-light ml-5">{renderValue(rowCount?.statistics?.at(0)?.result)}</div></div>
+      <div className="w-1/4 flex font-bold">Collected at<div className="font-light ml-5">{statistics?.statistics?.at(0)?.collectedAt}</div></div>
     </div>
     </div>
   );
