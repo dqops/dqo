@@ -80,6 +80,14 @@ const TableColumns = ({
       setLoadingJob(false);
     }
   };
+   const collectAllStatistics = async () => {
+    try {
+      setLoadingJob(true);
+      await JobApiClient.collectStatisticsOnDataStreams(statistics?.collect_column_statistics_job_template);
+    } finally {
+      setLoadingJob(false);
+    }
+  };
 
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
@@ -100,12 +108,10 @@ const TableColumns = ({
     if(Number(numberForFile) === 6){ return 'STRING'}
     if(Number(numberForFile) === 7){ return 'Mixed data type'}
   }
-
   return (
     <div className="p-4">
       <table className="mb-6 mt-4 w-full">
         <thead>
-          <th className="border-b border-gray-100 text-left px-4 py-2">Hash</th>
           <th className="border-b border-gray-100 text-left px-4 py-2">Name</th>
           <th className="border-b border-gray-100 text-left px-4 py-2">Type</th>
           <th className="border-b border-gray-100 text-left px-4 py-2">
@@ -133,9 +139,6 @@ const TableColumns = ({
         {statistics &&
           statistics?.column_statistics?.map((column, index) => (
             <tr key={index}>
-              <td className="border-b border-gray-100 text-left px-4 py-2">
-                {column.column_hash}
-              </td>
               <td className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer" 
               onClick={() => navigate(column.column_name ? column.column_name : "" )}>
                 {column.column_name}
@@ -192,23 +195,30 @@ const TableColumns = ({
                         : ""
                         ))}
               </td>
+                
               <td className="border-b border-gray-100 text-right px-4 py-2 ">
                 <IconButton
                   size="sm"
-                  className="bg-teal-500 ml-1.5"
+                  className="group bg-teal-500 ml-1.5"
                   onClick={() => collectStatistics(index)}
                   >
                   <SvgIcon name="boxplot" className="w-4 white" />
+                <td className="hidden absolute right-3 bottom-3 p-2 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
+                 Collect statistic</td>
                 </IconButton>
+                
                 <IconButton
                   size="sm"
-                  className="bg-teal-500 ml-3"
+                  className="group bg-teal-500 ml-3"
                   onClick={() => onRemoveColumn(column)}
                   >
                   <SvgIcon name="delete" className="w-4" />
+                
+                  <div className="hidden absolute right-3 bottom-3 p-2 normal-case bg-black text-white rounded-md group-hover:block whitespace-nowrap">
+                  Click to delete</div>
                 </IconButton>
-                  </td>
-            
+              </td>
+            <div></div>
             </tr>
           ))}
       </table>
@@ -223,3 +233,4 @@ const TableColumns = ({
 };
 
 export default TableColumns;
+
