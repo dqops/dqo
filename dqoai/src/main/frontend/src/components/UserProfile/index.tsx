@@ -12,8 +12,8 @@ import {
   PopoverContent,
   IconButton
 } from '@material-tailwind/react';
-import { data } from 'autoprefixer';
 import SvgIcon from '../SvgIcon';
+import Button from '../Button';
 
 interface UserProfile {
   name?: string;
@@ -45,7 +45,6 @@ export default function UserProfile({ name, email }: UserProfile) {
     fetchUserProfile().then();
   }, [name, email]);
 
-  console.log(isProfileOpen);
   return (
     <Popover open={isProfileOpen} handler={toggleOpen} placement="top-end">
       <PopoverHandler>
@@ -59,15 +58,15 @@ export default function UserProfile({ name, email }: UserProfile) {
           </div>
         </IconButton>
       </PopoverHandler>
-      <PopoverContent className="bg-white h-60 w-70 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black">
+      <PopoverContent className="bg-white h-65 w-70 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black">
         <div className="flex justify-between items-center h-12 ">
-          <div className="ml-1">Email: </div>
-          <div className="mr-1 whitespace-normal">
-            {/* {userProfile?.user ? userProfile.user : '-'} */}
-            aleksylisowski@gmail.com
+          <div className="ml-1">
+            {' '}
+            {userProfile?.user ? userProfile.user : '-'}{' '}
           </div>
+          <div className="mr-1 whitespace-normal font-bold"></div>
         </div>
-        <div className="font-bold h-8 ml-1">Limits:</div>
+        <div className="font-bold h-8 ml-1">Account limits:</div>
         <div className="flex justify-between items-center">
           <div className="ml-1">Connections:</div>
           <div className="mr-1">
@@ -107,6 +106,16 @@ export default function UserProfile({ name, email }: UserProfile) {
           <div className="mr-1">
             {userProfile?.jobs_limit ? userProfile.jobs_limit : '-'}
           </div>
+        </div>
+        <div className="w-full text-center flex justify-center items-center h-20 text-black">
+          <a
+            href="https://cloud.dqo.ai/account"
+            target="_blank"
+            rel="noreferrer"
+            className="block text-gray-700 mb-3"
+          >
+            <Button label="Menage account" color="primary" />
+          </a>
         </div>
       </PopoverContent>
     </Popover>

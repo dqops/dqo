@@ -29,8 +29,6 @@ const JobChild = ({
     }
     return value;
   };
-  // const saveCounter = succeededCounter 
-  // console.log(saveCounter)
 
   const [open, setOpen] = useState(false);
 
@@ -61,9 +59,7 @@ const JobChild = ({
         <AccordionHeader onClick={() => setOpen(!open)}>
           <div className="flex flex-wrap justify-between items-center text-sm w-full text-gray-700">
             <div className="flex flex-wrap space-x-1 items-center">
-              <div>
-                {job.jobType}
-              </div>
+              <div>{job.jobType}</div>
               {renderStatus()}
             </div>
             <div>
@@ -113,7 +109,9 @@ const JobChild = ({
                 </tr>
                 <tr>
                   <td className="px-2">Schema Name</td>
-                  <td className="px-2">{job?.parameters?.importSchemaParameters?.schemaName}</td>
+                  <td className="px-2">
+                    {job?.parameters?.importSchemaParameters?.schemaName}
+                  </td>
                 </tr>
                 <tr>
                   <td className="px-2 capitalize align-top">Tables pattern</td>
@@ -166,7 +164,9 @@ const JobChild = ({
                 </tr>
                 <tr>
                   <td className="px-2">Schema Name</td>
-                  <td className="px-2">{job?.parameters?.importTableParameters?.schemaName}</td>
+                  <td className="px-2">
+                    {job?.parameters?.importTableParameters?.schemaName}
+                  </td>
                 </tr>
                 <tr>
                   <td className="px-2 capitalize align-top">Tables</td>

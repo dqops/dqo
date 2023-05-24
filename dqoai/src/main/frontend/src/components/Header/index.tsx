@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import NotificationMenu from '../NotificationMenu';
 import Logo from '../Logo';
 import clsx from 'clsx';
@@ -21,16 +21,7 @@ import {
   TABLE_LEVEL_TABS
 } from '../../shared/constants';
 import { SynchronizeButton } from './SynchronizeButton';
-import SvgIcon from '../SvgIcon';
 import UserProfile from '../UserProfile';
-import { DqoUserProfileModel } from '../../api';
-import { AxiosResponse } from 'axios';
-import { EnviromentApiClient } from '../../services/apiClient';
-
-interface UserProfile {
-  name?: string;
-  email?: string;
-}
 
 const Header = () => {
   const history = useHistory();
@@ -54,14 +45,13 @@ const Header = () => {
     checkName: string;
   } = useParams();
 
-  const [userProfile, setUserProfile] = useState<DqoUserProfileModel>();
   const dispatch = useActionDispatch();
   const { tabs, activeTab } = useSelector(
     (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
   );
   const selectedTab = tabs?.find((item) => item.url === activeTab);
   const match = useRouteMatch();
-  const [showProfile, setShowProfile] = useState<boolean>(false);
+
   const onClick = (newCheckTypes: CheckTypes) => () => {
     let url = '';
     let value = '';
