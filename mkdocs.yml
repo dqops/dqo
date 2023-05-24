@@ -35,8 +35,6 @@ nav:
     - Data completeness:
         - Number of rows in the table: 'examples/data-completeness/number-of-rows-in-the-table.md'
         - Number of null values: 'examples/data-completeness/number-of-null-values.md'
-        - Percent of valid UUID: 'examples/data-completeness/percent-of-valid-uuid.md'
-        - Percent of string in set: 'examples/data-completeness/percent-of-string-in-set.md'
     - Data uniqueness:
         - Percentage of duplicates: 'examples/data-uniqueness/percentage-of-duplicates.md'
     - Data validity:
@@ -48,6 +46,9 @@ nav:
         - Percentage of rows passing SQL condition: 'examples/data-validity/percentage-of-rows-passing-sql-condition.md'
         - Percentage of valid currency codes: 'examples/data-validity/percentage-of-valid-currency-codes.md'
         - Percentage of negative values: 'examples/data-validity/percentage-of-negative-values.md'
+        - Percentage of valid UUID: 'examples/data-validity/percentage-of-valid-uuid.md'
+    - Data consistency:
+        - Percent of string in set: 'examples/data-consistency/percent-of-string-in-set.md'
     - Data reasonability:
         - Percentage of values in range: 'examples/data-reasonability/percentage-of-integer-values-in-range.md'
         - A string not exceeding a set length: 'examples/data-reasonability/string-not-exceeding-a-set-length.md'
