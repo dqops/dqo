@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from './redux/reducers';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { LogErrorsApi } from "./services/apiClient";
 
 const App = () => {
   const dispatch = useActionDispatch();
@@ -18,6 +19,21 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getAllJobs());
+
+    window.onunhandledrejection = event => {
+      console.log('event', event);
+      LogErrorsApi.logError({
+        window_location: window.location.href,
+        message: event.reason
+      })
+    };
+
+    window.onerror = function(message, source, lineNumber, colno, error) {
+      LogErrorsApi.logError({
+        window_location: window.location.href,
+        message: message.toString()
+      })
+    };
   }, []);
 
   useEffect(() => {

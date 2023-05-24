@@ -34,8 +34,10 @@ const NumbersView = ({ values, onChange }: INumbersViewProps) => {
     <div className="p-4">
       <table className="my-3 w-full">
         <thead>
-          <th className="text-left min-w-40 w-full pr-4 py-2">Integer Value</th>
-          <th className="px-8 min-w-40 text-left py-2">Action</th>
+          <tr>
+            <th className="text-left min-w-40 w-full pr-4 py-2">Integer Value</th>
+            <th className="px-8 min-w-40 text-left py-2">Action</th>
+          </tr>
         </thead>
         <tbody>
           {data.map((label, index) => (

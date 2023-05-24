@@ -39,7 +39,6 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
     }
   }, [activeTab])
 
-  console.log('activeTab', activeTab);
   return (
     <div className="flex min-h-screen overflow-hidden">
       <Header />

@@ -20,7 +20,7 @@ export interface CheckboxProps {
 const Checkbox = ({
   label,
   className,
-  checked,
+  checked = false,
   onChange,
   tooltipText,
   disabled,
