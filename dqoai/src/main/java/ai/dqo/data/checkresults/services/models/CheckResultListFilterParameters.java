@@ -16,13 +16,14 @@
 
 package ai.dqo.data.checkresults.services.models;
 
-import ai.dqo.data.checkresults.services.models.CheckResultSortOrder;
 import ai.dqo.rest.models.common.SortDirection;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
+
+import java.time.LocalDate;
 
 /**
  * Parameters for filtering the list of data quality issues related to an incident.
@@ -36,6 +37,12 @@ public class CheckResultListFilterParameters {
      */
     @JsonPropertyDescription("Optional filter that is a pattern expression. Filters are used on column names, sensor names, etc.")
     private String filter;
+
+    /**
+     * Optional filter for a single date to return data quality issues that were detected on that date. The date uses a local time zone of the DQO server.
+     */
+    @JsonPropertyDescription("Optional filter for a single date to return data quality issues that were detected on that date. The date uses a local time zone of the DQO server.")
+    private LocalDate date;
 
     /**
      * Page number. The first page is 1.

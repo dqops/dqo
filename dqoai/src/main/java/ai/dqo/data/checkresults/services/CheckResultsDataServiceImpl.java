@@ -24,6 +24,7 @@ import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactory;
+import ai.dqo.data.incidents.services.models.IncidentIssueHistogramModel;
 import ai.dqo.data.incidents.services.models.IncidentModel;
 import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
@@ -35,6 +36,7 @@ import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.rest.models.common.SortDirection;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.utils.tables.TableRowUtility;
+import org.apache.parquet.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,10 +45,7 @@ import tech.tablesaw.columns.instant.PackedInstant;
 import tech.tablesaw.selection.Selection;
 import tech.tablesaw.table.Relation;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -317,6 +316,13 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         if (!checkResultsSnapshot.ensureMonthsAreLoaded(startMonth, endMonth)) {
             return new CheckResultDetailedSingleModel[0];
         }
+        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
+        Instant startTimestamp = firstSeen;
+        Instant endTimestamp = incidentUntil;
+        if (filterParameters.getDate() != null) {
+            startTimestamp = filterParameters.getDate().atTime(0, 0).atZone(defaultTimeZoneId).toInstant();
+            endTimestamp = startTimestamp.plus(1L, ChronoUnit.DAYS).minus(1L, ChronoUnit.MILLIS);
+        }
 
         List<CheckResultDetailedSingleModel> resultsList = new ArrayList<>();
 
@@ -328,8 +334,9 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             }
 
             Selection minSeveritySelection = partitionData.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME).isGreaterThanOrEqualTo(minSeverity);
-            Selection issuesInTimeRange = partitionData.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME).isBetweenIncluding(
-                    PackedInstant.pack(firstSeen), PackedInstant.pack(incidentUntil));
+            InstantColumn partitionExecutedAtColumn = partitionData.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+            Selection issuesInTimeRange = partitionExecutedAtColumn.isBetweenIncluding(
+                    PackedInstant.pack(startTimestamp), PackedInstant.pack(endTimestamp));
             Selection incidentHashSelection = partitionData.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME).isIn(incidentHash);
 
             Selection selectionOfMatchingIssues = minSeveritySelection.and(issuesInTimeRange).and(incidentHashSelection);
@@ -341,7 +348,10 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 Row row = partitionData.row(rowIndex);
                 CheckResultDetailedSingleModel singleCheckResultDetailedModel = createSingleCheckResultDetailedModel(row);
 
-
+                if (!Strings.isNullOrEmpty(filterParameters.getFilter()) &&
+                        !singleCheckResultDetailedModel.matchesFilter(filterParameters.getFilter())) {
+                    continue;
+                }
 
                 resultsList.add(singleCheckResultDetailedModel);
             }
@@ -365,6 +375,80 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         List<CheckResultDetailedSingleModel> pageResults = resultsList.subList(startRowIndexInPage, Math.min(untilRowIndexInPage, resultsList.size()));
         CheckResultDetailedSingleModel[] resultsArray = pageResults.toArray(CheckResultDetailedSingleModel[]::new);
         return resultsArray;
+    }
+
+    /**
+     * Builds a histogram of data quality issues for an incident. The histogram returns daily counts of data quality issues,
+     * also counting occurrences of data quality issues at various severity levels.
+     *
+     * @param connectionName    Connection name.
+     * @param physicalTableName Physical table name.
+     * @param incidentHash      Incident hash.
+     * @param firstSeen         The timestamp when the incident was first seen.
+     * @param incidentUntil     The timestamp when the incident was closed or expired, returns check results up to this timestamp.
+     * @param minSeverity       Minimum check issue severity that is returned.
+     * @param filter            Optional filter to limit the issues included in the histogram.
+     * @return Daily histogram of failed data quality checks.
+     */
+    @Override
+    public IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
+                                                                           PhysicalTableName physicalTableName,
+                                                                           long incidentHash,
+                                                                           Instant firstSeen,
+                                                                           Instant incidentUntil,
+                                                                           int minSeverity,
+                                                                           String filter) {
+        CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
+                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS);
+        LocalDate startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
+        LocalDate endMonth = incidentUntil.plus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
+        if (!checkResultsSnapshot.ensureMonthsAreLoaded(startMonth, endMonth)) {
+            return new IncidentIssueHistogramModel();
+        }
+
+        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
+        IncidentIssueHistogramModel histogramModel = new IncidentIssueHistogramModel();
+
+        Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = checkResultsSnapshot.getLoadedMonthlyPartitions();
+        for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry : loadedMonthlyPartitions.entrySet()) {
+            Table partitionData = loadedPartitionEntry.getValue().getData();
+            if (partitionData == null || partitionData.rowCount() == 0) {
+                continue;
+            }
+
+            IntColumn severityColumn = partitionData.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+            Selection minSeveritySelection = severityColumn.isGreaterThanOrEqualTo(minSeverity);
+
+            InstantColumn executedAtColumn = partitionData.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+            Selection issuesInTimeRange = executedAtColumn.isBetweenIncluding(
+                    PackedInstant.pack(firstSeen), PackedInstant.pack(incidentUntil));
+            Selection incidentHashSelection = partitionData.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME).isIn(incidentHash);
+
+            Selection selectionOfMatchingIssues = minSeveritySelection.and(issuesInTimeRange).and(incidentHashSelection);
+            if (selectionOfMatchingIssues.size() == 0) {
+                continue;
+            }
+
+            for (Integer rowIndex : selectionOfMatchingIssues) {
+                Row row = partitionData.row(rowIndex);
+
+                if (!Strings.isNullOrEmpty(filter)) {
+                    CheckResultDetailedSingleModel singleCheckResultDetailedModel = createSingleCheckResultDetailedModel(row);
+                    if (!singleCheckResultDetailedModel.matchesFilter(filter)) {
+                        continue;
+                    }
+                }
+
+                Integer severity = severityColumn.get(rowIndex);
+                Instant executedAt = executedAtColumn.get(rowIndex);
+                LocalDate localDate = executedAt.atZone(defaultTimeZoneId).toLocalDate();
+                histogramModel.incrementSeverityForDay(localDate, severity);
+            }
+        }
+
+        histogramModel.addMissingDaysInRange();
+
+        return histogramModel;
     }
 
     /**

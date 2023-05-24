@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Optional;
 
@@ -107,8 +108,10 @@ public class IncidentsController {
      * @param year Year when the incident was first seen.
      * @param month Month when the incident was first seen.
      * @param incidentId Incident id.
+     * @param date Optional filter for a date.
      * @param limit Page size.
      * @param page Page number.
+     * @param filter Optional filter.
      * @param order Sort order.
      * @param direction Sort direction.
      * @return Incident model of the loaded incident.
@@ -127,6 +130,8 @@ public class IncidentsController {
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
             @ApiParam("Incident id") @PathVariable String incidentId,
+            @ApiParam(name = "date", value = "Optional filter to return data quality issues only for a given date. The date should be an ISO8601 formatted date, it is treated as the timezone of the DQO server.", required = false)
+            @RequestParam(required = false) Optional<LocalDate> date,
             @ApiParam(name = "page", value = "Page number, the first page is 1", required = false)
             @RequestParam(required = false) Optional<Integer> page,
             @ApiParam(name = "limit", value = "Page size, the default is 50 rows", required = false)
@@ -139,6 +144,9 @@ public class IncidentsController {
             @RequestParam(required = false) Optional<SortDirection> direction) {
         CheckResultListFilterParameters filterParameters = new CheckResultListFilterParameters();
 
+        if (date.isPresent()) {
+            filterParameters.setDate(date.get());
+        }
         if (page.isPresent()) {
             filterParameters.setPage(page.get());
         }
@@ -163,6 +171,42 @@ public class IncidentsController {
         }
 
         return new ResponseEntity<>(Flux.just(checkResultDetailedSingleModels), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Generates a histogram of data quality issues for each day, returning the number of data quality issues on that day.
+     * @param connectionName Connection name.
+     * @param year Year when the incident was first seen.
+     * @param month Month when the incident was first seen.
+     * @param incidentId Incident id.
+     * @param filter Optional filter.
+     * @return Incident histogram of data quality issues.
+     */
+    @GetMapping("/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram")
+    @ApiOperation(value = "getIncidentHistogram", notes = "Generates a histogram of data quality issues for each day, returning the number of data quality issues on that day.",
+            response = IncidentIssueHistogramModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Incident's histogram returned", response = IncidentIssueHistogramModel.class),
+            @ApiResponse(code = 404, message = "Incident not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<IncidentIssueHistogramModel>> getIncidentHistogram(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Year when the incident was first seen") @PathVariable int year,
+            @ApiParam("Month when the incident was first seen") @PathVariable int month,
+            @ApiParam("Incident id") @PathVariable String incidentId,
+            @ApiParam(name = "filter", value = "Optional filter", required = false)
+            @RequestParam(required = false) Optional<String> filter) {
+
+        IncidentIssueHistogramModel histogramModel = this.incidentsDataService.buildDailyIssuesHistogramForIncident(
+                connectionName, year, month, incidentId, filter.orElse(null));
+
+        if (histogramModel == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        return new ResponseEntity<>(Mono.just(histogramModel), HttpStatus.OK); // 200
     }
 
     /**

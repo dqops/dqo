@@ -24,6 +24,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.parquet.Strings;
 import tech.tablesaw.api.Row;
 
 import java.time.Instant;
@@ -223,6 +225,22 @@ public class IncidentModel {
      * @return True when the incident matches a pattern.
      */
     public boolean matchesFilter(String filter) {
+        if (filter.indexOf(' ') >= 0) {
+            String[] strings = StringUtils.split(filter, ' ');
+            for (int i = 0; i < strings.length; i++) {
+                String filterElement = strings[i];
+                if (Strings.isNullOrEmpty(filterElement)) {
+                    continue;
+                }
+
+                if (!matchesFilter(filterElement)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         return StringPatternComparer.matchSearchPattern(this.incidentId, filter) ||
                 StringPatternComparer.matchSearchPattern(this.schema, filter) ||
                 StringPatternComparer.matchSearchPattern(this.table, filter) ||

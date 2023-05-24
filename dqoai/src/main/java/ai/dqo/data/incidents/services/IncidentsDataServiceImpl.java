@@ -21,6 +21,7 @@ import ai.dqo.data.checkresults.services.models.CheckResultDetailedSingleModel;
 import ai.dqo.data.incidents.factory.IncidentStatus;
 import ai.dqo.data.incidents.factory.IncidentsColumnNames;
 import ai.dqo.data.checkresults.services.models.CheckResultListFilterParameters;
+import ai.dqo.data.incidents.services.models.IncidentIssueHistogramModel;
 import ai.dqo.data.incidents.services.models.IncidentListFilterParameters;
 import ai.dqo.data.incidents.services.models.IncidentModel;
 import ai.dqo.rest.models.common.SortDirection;
@@ -266,6 +267,38 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 filterParameters);
 
         return failedChecks;
+    }
+
+    /**
+     * Builds a histogram of data quality issue occurrences per day.
+     *
+     * @param connectionName   Connection name where the incident happened.
+     * @param year             Year when the incident was first seen.
+     * @param month            Month of year when the incident was first seen.
+     * @param incidentId       The incident id.
+     * @param filter           Optional filter to limit the issues included in the histogram.
+     * @return Daily histogram of days when a data quality issue failed.
+     */
+    @Override
+    public IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
+                                                                            int year,
+                                                                            int month,
+                                                                            String incidentId,
+                                                                            String filter) {
+        IncidentModel incidentModel = this.loadIncident(connectionName, year, month, incidentId);
+        if (incidentModel == null) {
+            return null;
+        }
+
+        IncidentIssueHistogramModel histogramModel = this.checkResultsDataService.buildDailyIssuesHistogramForIncident(connectionName,
+                new PhysicalTableName(incidentModel.getSchema(), incidentModel.getTable()),
+                incidentModel.getIncidentHash(),
+                incidentModel.getFirstSeen(),
+                incidentModel.getIncidentUntil(),
+                incidentModel.getMinSeverity(),
+                filter);
+
+        return histogramModel;
     }
 
     /**

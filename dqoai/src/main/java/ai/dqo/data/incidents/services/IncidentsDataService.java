@@ -18,6 +18,7 @@ package ai.dqo.data.incidents.services;
 
 import ai.dqo.data.checkresults.services.models.CheckResultDetailedSingleModel;
 import ai.dqo.data.checkresults.services.models.CheckResultListFilterParameters;
+import ai.dqo.data.incidents.services.models.IncidentIssueHistogramModel;
 import ai.dqo.data.incidents.services.models.IncidentListFilterParameters;
 import ai.dqo.data.incidents.services.models.IncidentModel;
 import ai.dqo.data.incidents.services.models.IncidentsPerConnectionModel;
@@ -68,4 +69,19 @@ public interface IncidentsDataService {
                                                                  int month,
                                                                  String incidentId,
                                                                  CheckResultListFilterParameters filterParameters);
+
+    /**
+     * Builds a histogram of data quality issue occurrences per day.
+     * @param connectionName   Connection name where the incident happened.
+     * @param year             Year when the incident was first seen.
+     * @param month            Month of year when the incident was first seen.
+     * @param incidentId       The incident id.
+     * @param filter           Optional filter to limit the issues included in the histogram.
+     * @return Daily histogram of days when a data quality issue failed.
+     */
+    IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
+                                                                     int year,
+                                                                     int month,
+                                                                     String incidentId,
+                                                                     String filter);
 }

@@ -20,6 +20,7 @@ import ai.dqo.data.checkresults.services.models.CheckResultDetailedSingleModel;
 import ai.dqo.data.checkresults.services.models.CheckResultListFilterParameters;
 import ai.dqo.data.checkresults.services.models.CheckResultsDetailedDataModel;
 import ai.dqo.data.checkresults.services.models.CheckResultsOverviewDataModel;
+import ai.dqo.data.incidents.services.models.IncidentIssueHistogramModel;
 import ai.dqo.metadata.sources.PhysicalTableName;
 
 import java.time.Instant;
@@ -67,4 +68,25 @@ public interface CheckResultsDataService {
                                                                        Instant incidentUntil,
                                                                        int minSeverity,
                                                                        CheckResultListFilterParameters filterParameters);
+
+    /**
+     * Builds a histogram of data quality issues for an incident. The histogram returns daily counts of data quality issues,
+     * also counting occurrences of data quality issues at various severity levels.
+     *
+     * @param connectionName    Connection name.
+     * @param physicalTableName Physical table name.
+     * @param incidentHash      Incident hash.
+     * @param firstSeen         The timestamp when the incident was first seen.
+     * @param incidentUntil     The timestamp when the incident was closed or expired, returns check results up to this timestamp.
+     * @param minSeverity       Minimum check issue severity that is returned.
+     * @param filter            Optional filter to limit the issues included in the histogram.
+     * @return Daily histogram of failed data quality checks.
+     */
+    IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
+                                                                     PhysicalTableName physicalTableName,
+                                                                     long incidentHash,
+                                                                     Instant firstSeen,
+                                                                     Instant incidentUntil,
+                                                                     int minSeverity,
+                                                                     String filter);
 }
