@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react';
-import { DqoUserProfileModel } from '../../api';
+import { DqoSettingsModel } from '../../api';
 import { EnviromentApiClient } from '../../services/apiClient';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
@@ -11,14 +11,8 @@ import {
   PopoverHandler,
   PopoverContent
 } from '@material-tailwind/react';
-import Button from '../Button';
 
-interface UserProfile {
-  name?: string;
-  email?: string;
-}
-
-function SettingsPopUp({ name, email }: UserProfile) {
+function SettingsPopUp() {
   const { areSettingsOpen } = useSelector((state: IRootState) => state.job);
 
   const dispatch = useActionDispatch();
@@ -27,86 +21,50 @@ function SettingsPopUp({ name, email }: UserProfile) {
     dispatch(toggleSettings(!areSettingsOpen));
   };
 
-  const [userProfile, setUserProfile] = useState<DqoUserProfileModel>();
+  const [profileSettings, setProfileSettings] = useState<DqoSettingsModel>();
 
-  const fetchUserProfile = async () => {
+  const fetchProfileSettings = async () => {
     try {
-      const res: AxiosResponse<DqoUserProfileModel> =
-        await EnviromentApiClient.getUserProfile();
-      setUserProfile(res.data);
+      const res: AxiosResponse<DqoSettingsModel> =
+        await EnviromentApiClient.getDqoSettings();
+      setProfileSettings(res.data);
     } catch (err) {
       console.error(err);
     }
   };
 
   useEffect(() => {
-    fetchUserProfile().then();
-  }, [name, email]);
+    fetchProfileSettings().then();
+  }, []);
+
+  console.log(profileSettings);
+
+  const renderValue = (value: any) => {
+    if (typeof value === 'boolean') {
+      return value ? 'Yes' : 'No';
+    }
+    if (typeof value === 'object') {
+      return value.toString();
+    }
+    return value;
+  };
+
+  const objectElements = Object.entries(
+    profileSettings?.properties ? profileSettings.properties : {}
+  ).map(([key, value]) => (
+    <div key={key} className="flex">
+      <div className=" w-2/5 mr-5 whitespace-normal">{key}: </div>
+      <div className=" w-3/5 whitespace-normal">{renderValue(value)}</div>
+    </div>
+  ));
 
   return (
-    <Popover open={areSettingsOpen} handler={toggleOpen} placement="top-end">
+    <Popover open={areSettingsOpen} handler={toggleOpen} placement="top-start">
       <PopoverHandler>
         <div className="text-black h-6 cursor-pointer">Settings</div>
       </PopoverHandler>
-      <PopoverContent className="bg-white h-65 w-70 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black">
-        <div className="flex justify-between items-center h-12 ">
-          <div className="ml-1">
-            {' '}
-            {userProfile?.user ? userProfile.user : '-'}{' '}
-          </div>
-          <div className="mr-1 whitespace-normal font-bold"></div>
-        </div>
-        <div className="font-bold h-8 ml-1">Account limits:</div>
-        <div className="flex justify-between items-center">
-          <div className="ml-1">Connections:</div>
-          <div className="mr-1">
-            {userProfile?.connections_limit
-              ? userProfile?.connections_limit
-              : '-'}
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="ml-1">Users:</div>
-          <div className="mr-1">
-            {userProfile?.users_limit ? userProfile.users_limit : '-'}
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="ml-1">Months:</div>
-          <div className="mr-1">
-            {userProfile?.months_limit ? userProfile.months_limit : '-'}
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="ml-1">Connection Tables:</div>
-          <div className="mr-1">
-            {userProfile?.connection_tables_limit
-              ? userProfile.connection_tables_limit
-              : '-'}
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="ml-1">Tables:</div>
-          <div className="mr-1">
-            {userProfile?.tables_limit ? userProfile.tables_limit : '-'}
-          </div>
-        </div>
-        <div className="flex justify-between items-center">
-          <div className="ml-1">Jobs:</div>
-          <div className="mr-1">
-            {userProfile?.jobs_limit ? userProfile.jobs_limit : '-'}
-          </div>
-        </div>
-        <div className="w-full text-center flex justify-center items-center h-20 text-black">
-          <a
-            href="https://cloud.dqo.ai/account"
-            target="_blank"
-            rel="noreferrer"
-            className="block text-gray-700 mb-3"
-          >
-            <Button label="Menage account" color="primary" />
-          </a>
-        </div>
+      <PopoverContent className="bg-white min-w-1/3 h-100 rounded-md border border-gray-400 flex-col justify-center items-center z-50 text-black overflow-y-auto">
+        <div>{objectElements}</div>
       </PopoverContent>
     </Popover>
   );
