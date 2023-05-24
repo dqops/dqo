@@ -34,6 +34,7 @@ export interface IJobsState {
   amounthOfElems?: number;
   amounthOfElements: number;
   isProfileOpen: boolean;
+  areSettingsOpen: boolean;
 }
 
 const initialState: IJobsState = {
@@ -43,7 +44,8 @@ const initialState: IJobsState = {
   isCleared: false,
   wasOpen: false,
   amounthOfElements: 0,
-  isProfileOpen: false
+  isProfileOpen: false,
+  areSettingsOpen: false
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -138,6 +140,11 @@ const schemaReducer = (state = initialState, action: any) => {
       return {
         ...state,
         isProfileOpen: action.isProfileOpen
+      };
+    case JOB_ACTION.TOGGLE_SETTINGS:
+      return {
+        ...state,
+        areSettingsOpen: action.areSettingsOpen
       };
     default:
       return state;
