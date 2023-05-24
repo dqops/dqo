@@ -19,7 +19,7 @@ import { Dispatch } from 'redux';
 import { IncidentsApi } from '../../services/apiClient';
 import { INCIDENTS_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
-import { IncidentModel, IncidentModelStatusEnum, IncidentsPerConnectionModel } from "../../api";
+import { IncidentModel, IncidentsPerConnectionModel } from "../../api";
 import { IncidentFilter } from "../reducers/incidents.reducer";
 
 export const getConnectionsRequest = () => ({

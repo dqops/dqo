@@ -42,7 +42,7 @@ const TableColumnsView = () => {
           <SvgIcon name="column" className="w-5 h-5 shrink-0" />
           <div className="text-xl font-semibold truncate">{`${connectionName}.${schemaName}.${tableName} columns`}</div>
         </div>
-        <Button label='Collect Statistic' color='primary' onClick={() => collectStatistics()}/>
+        <Button label='Collect Statistic' color='primary' onClick={collectStatistics} loading={loadingJob} />
       </div>
       <div>
         <TableColumns

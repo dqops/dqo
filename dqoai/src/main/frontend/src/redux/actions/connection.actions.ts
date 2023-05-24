@@ -23,7 +23,6 @@ import {
   CommentSpec,
   ConnectionBasicModel,
   DataStreamMappingSpec,
-  ConnectionIncidentGroupingSpec,
   RecurringScheduleSpec
 } from '../../api';
 import { CheckRunRecurringScheduleGroup } from "../../shared/enums/scheduling.enum";
