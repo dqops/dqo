@@ -113,16 +113,16 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
     @CommandLine.Option(names = {"-o", "--override"}, description = "Override existing configuration of selected checks.")
     private Boolean override = false;
 
-    @CommandLine.Option(names = {"-S", "--sensor-param"}, description = "Configuration parameters for the sensor.\nUsage:\n\t-S<param_name>=<param_value>,\n\t--sensor-param=<param_name>=<param_value>")
+    @CommandLine.Option(names = {"-S", "--sensor-param"}, description = "Configuration parameters for the sensor. Usage: -S<param_name>=<param_value>, --sensor-param=<param_name>=<param_value>")
     private Map<String, String> sensorParams;
 
-    @CommandLine.Option(names = {"-W", "--warning-rule"}, description = "Warning level rule options.\nUsage:\n\t-W<rule_name>=<rule_value>,\n\t--warning-rule=<rule_name>=<rule_value>")
+    @CommandLine.Option(names = {"-W", "--warning-rule"}, description = "Warning level rule options. Usage: -W<rule_name>=<rule_value>, --warning-rule=<rule_name>=<rule_value>")
     private Map<String, String> warningLevelOptions;
 
-    @CommandLine.Option(names = {"-E", "--error-rule"}, description = "Error level rule options.\nUsage:\n\t-E<rule_name>=<rule_value>,\n\t--error-rule=<rule_name>=<rule_value>")
+    @CommandLine.Option(names = {"-E", "--error-rule"}, description = "Error level rule options. Usage: -E<rule_name>=<rule_value>, --error-rule=<rule_name>=<rule_value>")
     private Map<String, String> errorLevelOptions;
 
-    @CommandLine.Option(names = {"-F", "--fatal-rule"}, description = "Fatal level rule options.\nUsage:\n\t-F<rule_name>=<rule_value>,\n\t--fatal-rule=<rule_name>=<rule_value>")
+    @CommandLine.Option(names = {"-F", "--fatal-rule"}, description = "Fatal level rule options. Usage: -F<rule_name>=<rule_value>, --fatal-rule=<rule_name>=<rule_value>")
     private Map<String, String> fatalLevelOptions;
 
     /**

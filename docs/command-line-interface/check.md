@@ -120,14 +120,8 @@ dqo> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 |`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
 |`-c`<br/>`--connection`<br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
 |`-dt`<br/>`--data-type`<br/>|Datatype of columns on which to enable checks.| ||
-|`-E`<br/>`--error-rule`<br/>|Error level rule options.
-Usage:
-	-E&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;,
-	--error-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
-|`-F`<br/>`--fatal-rule`<br/>|Fatal level rule options.
-Usage:
-	-F&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;,
-	--fatal-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
+|`-E`<br/>`--error-rule`<br/>|Error level rule options. Usage: -E&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --error-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
+|`-F`<br/>`--fatal-rule`<br/>|Fatal level rule options. Usage: -F&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --fatal-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
@@ -135,16 +129,10 @@ Usage:
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-o`<br/>`--override`<br/>|Override existing configuration of selected checks.| ||
 |`-sn`<br/>`--sensor`<br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
-|`-S`<br/>`--sensor-param`<br/>|Configuration parameters for the sensor.
-Usage:
-	-S&lt;param_name&gt;&#x3D;&lt;param_value&gt;,
-	--sensor-param&#x3D;&lt;param_name&gt;&#x3D;&lt;param_value&gt;| ||
+|`-S`<br/>`--sensor-param`<br/>|Configuration parameters for the sensor. Usage: -S&lt;param_name&gt;&#x3D;&lt;param_value&gt;, --sensor-param&#x3D;&lt;param_name&gt;&#x3D;&lt;param_value&gt;| ||
 |`-t`<br/>`--table`<br/>|Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;| ||
 |`-ts`<br/>`--time-scale`<br/>|Time scale for recurring and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
-|`-W`<br/>`--warning-rule`<br/>|Warning level rule options.
-Usage:
-	-W&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;,
-	--warning-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
+|`-W`<br/>`--warning-rule`<br/>|Warning level rule options. Usage: -W&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --warning-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
 
 
 
