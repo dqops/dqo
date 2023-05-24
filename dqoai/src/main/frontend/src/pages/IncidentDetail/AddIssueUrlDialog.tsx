@@ -32,7 +32,7 @@ const AddIssueUrlDialog = ({
     <div>
       <Dialog open={open} handler={onClose} className="min-w-150 max-w-150">
         <DialogBody className="pt-6 pb-2 px-8">
-          <h1 className="text-center mb-4 text-gray-700 text-2xl">Link an issue URL to this error</h1>
+          <h1 className="text-center mb-4 text-gray-700 text-2xl">Link an issue URL to this incident</h1>
           <div>
             <Input
               label="Issue URL"
