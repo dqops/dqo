@@ -1,4 +1,4 @@
-import React, {  useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Popover,
   PopoverHandler,
@@ -18,21 +18,21 @@ import moment from 'moment';
 
 const NotificationMenu = () => {
   const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
-  
+
   const dispatch = useActionDispatch();
   const { errors } = useError();
 
   const toggleOpen = () => {
     dispatch(toggleMenu(!isOpen));
   };
- 
+
   const getNotificationDate = (notification: any) => {
     if (notification.type === 'job') {
       return notification.item.jobId?.createdAt;
     }
     return notification.item.date;
   };
-  
+
   const data = useMemo(() => {
     const jobsData = jobs?.jobs
       ? jobs?.jobs
@@ -55,12 +55,12 @@ const NotificationMenu = () => {
 
     return newData;
   }, [jobs, errors]);
-  
-  const [sizeOfNot, setSizeOfNot] = useState<number>(data.length)
-  
-  const eventHandler =() =>{
-  setSizeOfNot(data.length)
-  }
+
+  const [sizeOfNot, setSizeOfNot] = useState<number>(data.length);
+
+  const eventHandler = () => {
+    setSizeOfNot(data.length);
+  };
 
   return (
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
@@ -70,12 +70,16 @@ const NotificationMenu = () => {
           ripple={false}
           variant="text"
         >
-          <div className="relative" onClick={() =>eventHandler()}>
+          <div className="relative" onClick={() => eventHandler()}>
             <SvgIcon name="bell" className="w-5 h-5 text-gray-700" />
-            <span className={sizeOfNot!==data.length && data.length!==0 ?
-               "absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-500 text-white px-1 py-0.5 text-xxs"
-                : ""}>
-              {sizeOfNot!==data.length && data.length!==0 ? "New" : ""}
+            <span
+              className={
+                sizeOfNot !== data.length && data.length !== 0
+                  ? 'absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-500 text-white px-1 py-0.5 text-xxs'
+                  : ''
+              }
+            >
+              {sizeOfNot !== data.length && data.length !== 0 ? 'New' : ''}
             </span>
           </div>
         </IconButton>
@@ -89,7 +93,11 @@ const NotificationMenu = () => {
             notification.type === 'error' ? (
               <ErrorItem error={notification.item} key={index} />
             ) : (
-              <JobItem job={notification.item} key={index} notifnumber={data.length}/>
+              <JobItem
+                job={notification.item}
+                key={index}
+                notifnumber={data.length}
+              />
             )
           )}
         </div>

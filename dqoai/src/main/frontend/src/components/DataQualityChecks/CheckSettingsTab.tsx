@@ -7,6 +7,7 @@ import { DataStreamsApi } from '../../services/apiClient';
 import { useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import Button from "../Button";
+import Input from "../Input";
 
 interface ICheckSettingsTabProps {
   check?: UICheckModel;
@@ -103,6 +104,19 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
                     checked={check?.include_in_sla}
                     onChange={(value) =>
                       onChange({ ...check, include_in_sla: value })
+                    }
+                  />
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td className="px-4 py-2">Quality Dimension</td>
+              <td className="px-4 py-2">
+                <div className="flex">
+                  <Input
+                    value={check?.quality_dimension}
+                    onChange={(e) =>
+                      onChange({ ...check, quality_dimension: e.target.value })
                     }
                   />
                 </div>

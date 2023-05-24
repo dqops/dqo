@@ -96,8 +96,16 @@ export const toggleMenu = (isOpen: boolean) => ({
   type: JOB_ACTION.TOGGLE_MENU,
   isOpen
 });
-export const reduceCounter = (wasOpen: boolean, amountOfElems?: number  ) =>({
+export const reduceCounter = (wasOpen: boolean, amountOfElems?: number) => ({
   type: JOB_ACTION.REDUCE_COUNTER,
   wasOpen,
   amountOfElems
-})
+});
+export const toggleProfile = (isProfileOpen: boolean) => ({
+  type: JOB_ACTION.TOGGLE_PROFILE,
+  isProfileOpen
+});
+export const toggleSettings = (areSettingsOpen: boolean) => ({
+  type: JOB_ACTION.TOGGLE_SETTINGS,
+  areSettingsOpen
+});

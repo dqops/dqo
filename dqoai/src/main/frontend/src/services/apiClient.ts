@@ -34,7 +34,10 @@ import {
   SensorReadoutsApiFactory,
   ErrorsApiFactory,
   SensorsApiFactory,
-  RulesApiFactory, IncidentsApiFactory, LogShippingApiFactory
+  RulesApiFactory,
+  IncidentsApiFactory,
+  LogShippingApiFactory,
+  EnvironmentApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -95,11 +98,7 @@ export const DashboardsApi = DashboardsApiFactory(
   axios
 );
 
-export const TimezonesApi = TimezonesApiFactory(
-  new Configuration(),
-  '',
-  axios
-);
+export const TimezonesApi = TimezonesApiFactory(new Configuration(), '', axios);
 
 export const SourceConnectionApi = SourceConnectionControllerApiFactory(
   new Configuration(),
@@ -113,28 +112,18 @@ export const SensorReadoutsApi = SensorReadoutsApiFactory(
   axios
 );
 
-export const ErrorsApi = ErrorsApiFactory(
+export const ErrorsApi = ErrorsApiFactory(new Configuration(), '', axios);
+
+export const SensorsApi = SensorsApiFactory(new Configuration(), '', axios);
+
+export const RulesApi = RulesApiFactory(new Configuration(), '', axios);
+
+export const IncidentsApi = IncidentsApiFactory(new Configuration(), '', axios);
+
+export const EnviromentApiClient = EnvironmentApiFactory(
   new Configuration(),
   '',
   axios
-);
-
-export const SensorsApi = SensorsApiFactory(
-  new Configuration(),
-  '',
-  axios
-);
-
-export const RulesApi = RulesApiFactory(
-  new Configuration(),
-  '',
-  axios
-);
-
-export const IncidentsApi = IncidentsApiFactory(
-  new Configuration(),
-  '',
-  axios,
 );
 
 export const LogErrorsApi = LogShippingApiFactory(
