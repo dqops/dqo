@@ -12,7 +12,7 @@ import {
 import {
   ColumnApiClient,
   ConnectionApiClient,
-  JobApiClient,
+  JobApiClient, LogErrorsApi,
   SchemaApiClient,
   TableApiClient
 } from '../services/apiClient';
@@ -78,30 +78,34 @@ function TreeProvider(props: any) {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getConnections = async () => {
-    const res: AxiosResponse<ConnectionBasicModel[]> =
-      await ConnectionApiClient.getAllConnections();
-    const mappedConnectionsToTreeData = res.data.map((item) => ({
-      id: item.connection_name ?? '',
-      parentId: null,
-      label: item.connection_name ?? '',
-      items: [],
-      level: TREE_LEVEL.DATABASE,
-      tooltip: item.connection_name,
-      run_checks_job_template: item[checkTypesToJobTemplateKey[checkTypes as keyof typeof checkTypesToJobTemplateKey] as keyof ConnectionBasicModel],
-      collect_statistics_job_template: item.collect_statistics_job_template,
-      data_clean_job_template: item.data_clean_job_template,
-      open: false
-    }));
-    const treeDataMaps = [
-      CheckTypes.RECURRING,
-      CheckTypes.SOURCES,
-      CheckTypes.PROFILING,
-      CheckTypes.PARTITIONED,
-    ].reduce((acc, cur) => ({
-      ...acc,
-      [cur]: mappedConnectionsToTreeData
-    }), {});
-    setTreeDataMaps(treeDataMaps);
+    try {
+      const res: AxiosResponse<ConnectionBasicModel[]> =
+        await ConnectionApiClient.getAllConnections();
+      const mappedConnectionsToTreeData = res.data.map((item) => ({
+        id: item.connection_name ?? '',
+        parentId: null,
+        label: item.connection_name ?? '',
+        items: [],
+        level: TREE_LEVEL.DATABASE,
+        tooltip: item.connection_name,
+        run_checks_job_template: item[checkTypesToJobTemplateKey[checkTypes as keyof typeof checkTypesToJobTemplateKey] as keyof ConnectionBasicModel],
+        collect_statistics_job_template: item.collect_statistics_job_template,
+        data_clean_job_template: item.data_clean_job_template,
+        open: false
+      }));
+      const treeDataMaps = [
+        CheckTypes.RECURRING,
+        CheckTypes.SOURCES,
+        CheckTypes.PROFILING,
+        CheckTypes.PARTITIONED,
+      ].reduce((acc, cur) => ({
+        ...acc,
+        [cur]: mappedConnectionsToTreeData
+      }), {});
+      setTreeDataMaps(treeDataMaps);
+    } catch (err) {
+      console.warn(err);
+    }
   };
 
   const addConnection = async (connection: ConnectionBasicModel) => {
@@ -140,9 +144,7 @@ function TreeProvider(props: any) {
   };
 
   useEffect(() => {
-    (async () => {
-      await getConnections();
-    })();
+    getConnections();
   }, []);
 
   const resetTreeData = (node: CustomTreeNode, items: CustomTreeNode[]) => {

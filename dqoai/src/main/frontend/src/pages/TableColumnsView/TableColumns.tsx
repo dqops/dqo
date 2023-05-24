@@ -112,114 +112,119 @@ const TableColumns = ({
     <div className="p-4">
       <table className="mb-6 mt-4 w-full">
         <thead>
-          <th className="border-b border-gray-100 text-left px-4 py-2">Name</th>
-          <th className="border-b border-gray-100 text-left px-4 py-2">Type</th>
-          <th className="border-b border-gray-100 text-left px-4 py-2">
-            Detected datatype
-          </th>
-          <th className="border-b border-gray-100 text-right px-4 py-2">
-            Length
-          </th>
-          <th className="border-b border-gray-100 text-right px-4 py-2">
-            Scale
-          </th>
-          <th className="border-b border-gray-100 text-right px-4 py-2">
-            Null count
-          </th>
-          <th className="border-b border-gray-100 text-right px-4 py-2">
-            Null percent
-          </th>
-          <th className="border-b border-gray-100 text-right px-4 py-2">
-            Unique count
-          </th>
-          <th className="border-b border-gray-100 text-right px-7.5 py-2">
-            Action
-          </th>
+          <tr>
+            <th className="border-b border-gray-100 text-left px-4 py-2">Name</th>
+            <th className="border-b border-gray-100 text-left px-4 py-2">Type</th>
+            <th className="border-b border-gray-100 text-left px-4 py-2">
+              Detected datatype
+            </th>
+            <th className="border-b border-gray-100 text-right px-4 py-2">
+              Length
+            </th>
+            <th className="border-b border-gray-100 text-right px-4 py-2">
+              Scale
+            </th>
+            <th className="border-b border-gray-100 text-right px-4 py-2">
+              Null count
+            </th>
+            <th className="border-b border-gray-100 text-right px-4 py-2">
+              Null percent
+            </th>
+            <th className="border-b border-gray-100 text-right px-4 py-2">
+              Unique count
+            </th>
+            <th className="border-b border-gray-100 text-right px-7.5 py-2">
+              Action
+            </th>
+          </tr>
         </thead>
+        <tbody>
         {statistics &&
           statistics?.column_statistics?.map((column, index) => (
             <tr key={index}>
-              <td className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer" 
-              onClick={() => navigate(column.column_name ? column.column_name : "" )}>
+              <td className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer"
+                  onClick={() => navigate(column.column_name ? column.column_name : "" )}>
                 {column.column_name}
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
                 {column.type_snapshot?.column_type}
               </td>
               <td className="border-b border-gray-100 text-right px-4 py-2">
-              {column?.statistics?.map((metric, index) => (
-                        metric.collector === 'string_datatype_detect' ? 
-                        <td key={index} className="truncate">
-                        {metric.result ?  datatype_detected(metric.result) : ""}
-                        </td>
-                        : ""
-                        ))}
+                {column?.statistics?.map((metric, index) => (
+                  metric.collector === 'string_datatype_detect' ?
+                    <div key={index} className="truncate">
+                      {metric.result ?  datatype_detected(metric.result) : ""}
+                    </div>
+                    : ""
+                ))}
               </td>
               <td className="border-b border-gray-100 text-right px-4 py-2">
-                <th className='float-right'>
-                {column.type_snapshot?.length}
-                </th>
+                <span className='float-right'>
+                  {column.type_snapshot?.length}
+                </span>
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
-                
-              <th className='float-right'>
-                {column.type_snapshot?.scale}
-                </th>
+                <span className='float-right'>
+                 {column.type_snapshot?.scale}
+                </span>
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
-              {column?.statistics?.map((metric, index) => (
-                        metric.collector === 'nulls_count' ? 
-                        <td key={index} className="text-right float-right">
-                        {metric.result ?  renderValue(metric.result) : "0"}
-                        </td>
-                        : ""
-                        ))}
+                {column?.statistics?.map((metric, index) => (
+                  metric.collector === 'nulls_count' ?
+                    <div key={index} className="text-right float-right">
+                      {metric.result ?  renderValue(metric.result) : "0"}
+                    </div>
+                    : ""
+                ))}
               </td>
               <td className="border-b border-gray-100 text-right px-4 py-2">
-              {column?.statistics?.map((metric, index) => (
-                        metric.collector === 'nulls_percent' ? 
-                        <td key={index} className="truncate float-right" >
-                        {metric.result ? (renderValue(metric.result) ==="0" ? "0%" 
-                        : renderValue(metric.result).toFixed(2))+"%"
+                {column?.statistics?.map((metric, index) => (
+                  metric.collector === 'nulls_percent' ?
+                    <div key={index} className="truncate float-right" >
+                      {metric.result ? (renderValue(metric.result) ==="0" ? "0%"
+                        : renderValue(metric.result))+"%"
                         : "0%"}
-                        </td>
-                        : ""
-                        ))}
+                    </div>
+                    : ""
+                ))}
               </td>
               <td className="border-b border-gray-100 text-left px-4 py-2">
-              {column?.statistics?.map((metric, index) => (
-                        metric.collector === 'unique_count' ? 
-                        <td key={index} className="truncate float-right">
-                        {metric.result ?  renderValue(metric.result) : ""}
-                        </td>
-                        : ""
-                        ))}
+                {column?.statistics?.map((metric, index) => (
+                  metric.collector === 'unique_count' ?
+                    <div key={index} className="truncate float-right">
+                      {metric.result ?  renderValue(metric.result) : ""}
+                    </div>
+                    : ""
+                ))}
               </td>
-                
+
               <td className="border-b border-gray-100 text-right px-4 py-2 ">
                 <IconButton
                   size="sm"
                   className="group bg-teal-500 ml-1.5"
                   onClick={() => collectStatistics(index)}
-                  >
+                >
                   <SvgIcon name="boxplot" className="w-4 white" />
-                <th className="hidden absolute right-3 bottom-3 p-2 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
-                 Collect statistic</th>
+                  <span className="hidden absolute right-3 bottom-3 p-2 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
+                    Collect statistic
+                  </span>
                 </IconButton>
-                
+
                 <IconButton
                   size="sm"
                   className="group bg-teal-500 ml-3"
                   onClick={() => onRemoveColumn(column)}
-                  >
+                >
                   <SvgIcon name="delete" className="w-4" />
-                
-                  <th className="hidden absolute right-3 bottom-3 p-2 normal-case bg-black text-white rounded-md group-hover:block whitespace-nowrap">
-                  Click to delete</th>
+
+                  <span className="hidden absolute right-3 bottom-3 p-2 normal-case bg-black text-white rounded-md group-hover:block whitespace-nowrap">
+                    Click to delete
+                  </span>
                 </IconButton>
               </td>
             </tr>
           ))}
+        </tbody>
       </table>
       <ConfirmDialog
         open={isOpen}

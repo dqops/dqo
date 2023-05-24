@@ -36,6 +36,7 @@ import {
   SensorsApiFactory,
   RulesApiFactory,
   IncidentsApiFactory,
+  LogShippingApiFactory,
   EnvironmentApiFactory
 } from '../api';
 
@@ -123,4 +124,10 @@ export const EnviromentApiClient = EnvironmentApiFactory(
   new Configuration(),
   '',
   axios
+);
+
+export const LogErrorsApi = LogShippingApiFactory(
+  new Configuration(),
+  '',
+  axios,
 );

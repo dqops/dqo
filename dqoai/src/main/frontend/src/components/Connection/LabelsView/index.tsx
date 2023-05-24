@@ -41,8 +41,10 @@ const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
     <div className="p-4">
       <table className="w-full">
         <thead>
-          <th className="text-left min-w-40 w-full pr-4 py-2">Label</th>
-          <th className="px-8 min-w-34 max-w-34 py-2">Action</th>
+          <tr>
+            <th className="text-left min-w-40 w-full pr-4 py-2">Label</th>
+            <th className="px-8 min-w-34 max-w-34 py-2">Action</th>
+          </tr>
         </thead>
         <tbody>
           {labels.slice(0, labels.length - 1).map((label, index) => (
