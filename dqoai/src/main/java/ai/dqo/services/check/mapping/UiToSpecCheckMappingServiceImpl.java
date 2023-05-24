@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service that updates the check specification from the UI model that was filled with updates.
@@ -132,6 +133,13 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
         checkSpec.setComments(checkModel.getComments());
         checkSpec.setDisabled(checkModel.isDisabled());
         checkSpec.setExcludeFromKpi(checkModel.isExcludeFromKpi());
+        if (checkSpec.getDefaultDataQualityDimension() != null &&
+                Objects.equals(checkModel.getQualityDimension(), checkSpec.getDefaultDataQualityDimension().name())) {
+            checkSpec.setQualityDimension(null);
+        }
+        else {
+            checkSpec.setQualityDimension(checkModel.getQualityDimension());
+        }
         checkSpec.setIncludeInSla(checkModel.isIncludeInSla());
         checkSpec.getParameters().setFilter(checkModel.getFilter());
         checkSpec.setDataStream(checkModel.getDataStream());

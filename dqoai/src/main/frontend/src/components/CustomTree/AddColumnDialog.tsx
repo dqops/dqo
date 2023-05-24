@@ -41,9 +41,9 @@ const AddColumnDialog = ({
   };
 
   return (
-    <div>
-      <Dialog open={open} handler={onClose}>
-        <DialogBody className="pt-6 pb-2 px-8">
+    <Dialog open={open} handler={onClose}>
+      <DialogBody className="pt-6 pb-2 px-8">
+        <div className="flex flex-col">
           <h1 className="text-center mb-4 text-gray-700 text-2xl">Add Column</h1>
           <div className="mb-6">
             <Input
@@ -59,25 +59,25 @@ const AddColumnDialog = ({
               onChange={(e) => setSqlExpression(e.target.value)}
             />
           </div>
-        </DialogBody>
-        <DialogFooter className="justify-center space-x-6 pb-8">
-          <Button
-            color="primary"
-            variant="outlined"
-            className="px-8"
-            onClick={onClose}
-            label="Cancel"
-          />
-          <Button
-            color="primary"
-            className="px-8"
-            onClick={handleSubmit}
-            label="Save"
-            loading={loading}
-          />
-        </DialogFooter>
-      </Dialog>
-    </div>
+        </div>
+      </DialogBody>
+      <DialogFooter className="justify-center space-x-6 pb-8">
+        <Button
+          color="primary"
+          variant="outlined"
+          className="px-8"
+          onClick={onClose}
+          label="Cancel"
+        />
+        <Button
+          color="primary"
+          className="px-8"
+          onClick={handleSubmit}
+          label="Save"
+          loading={loading}
+        />
+      </DialogFooter>
+    </Dialog>
   );
 };
 

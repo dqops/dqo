@@ -72,9 +72,14 @@ public final class IncidentsColumnNames {
     public static final String CHECK_NAME_COLUMN_NAME = "check_name";
 
     /**
-     * Rule severity (0, 1, 2, 3) for none, low, medium and high alerts.
+     * The highest data quality check result severity detected as part of this incident. The values are 0, 1, 2, 3 for none, warning, error and fatal severity alerts.
      */
     public static final String HIGHEST_SEVERITY_COLUMN_NAME = "highest_severity";
+
+    /**
+     * Minimum severity of data quality issues (data quality check results) that are included in the incident. It is copied from the incident configuration at a connection or table level at the time when the incident is first seen. The values are 0, 1, 2, 3 for none, warning, error and fatal severity alerts.
+     */
+    public static final String MIN_SEVERITY_COLUMN_NAME = "min_severity";
 
     /**
      * Column name that stores the exact time when the incident was raised (seen) for the first time, as a UTC timestamp: first_seen.

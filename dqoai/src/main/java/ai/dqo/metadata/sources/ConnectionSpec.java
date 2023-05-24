@@ -28,7 +28,7 @@ import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.*;
-import ai.dqo.metadata.incidents.IncidentGroupingSpec;
+import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -114,7 +114,7 @@ public class ConnectionSpec extends AbstractSpec {
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private IncidentGroupingSpec incidentGrouping = new IncidentGroupingSpec();
+    private ConnectionIncidentGroupingSpec incidentGrouping = new ConnectionIncidentGroupingSpec();
 
     @JsonPropertyDescription("Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).")
     @ToString.Exclude
@@ -304,7 +304,7 @@ public class ConnectionSpec extends AbstractSpec {
      * Returns the configuration of grouping failed data quality checks into data quality incidents.
      * @return Grouping of failed data quality checks into incidents.
      */
-    public IncidentGroupingSpec getIncidentGrouping() {
+    public ConnectionIncidentGroupingSpec getIncidentGrouping() {
         return incidentGrouping;
     }
 
@@ -312,7 +312,7 @@ public class ConnectionSpec extends AbstractSpec {
      * Sets the configuration of data quality issued into incidents.
      * @param incidentGrouping New configuration of data quality issue grouping into incidents.
      */
-    public void setIncidentGrouping(IncidentGroupingSpec incidentGrouping) {
+    public void setIncidentGrouping(ConnectionIncidentGroupingSpec incidentGrouping) {
         setDirtyIf(!Objects.equals(this.incidentGrouping, incidentGrouping));
         this.incidentGrouping = incidentGrouping;
         propagateHierarchyIdToField(incidentGrouping, "incident_grouping");

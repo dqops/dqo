@@ -22,7 +22,7 @@ import ai.dqo.data.incidents.factory.IncidentsColumnNames;
 import ai.dqo.data.incidents.snapshot.IncidentsSnapshot;
 import ai.dqo.data.incidents.snapshot.IncidentsSnapshotFactory;
 import ai.dqo.metadata.incidents.IncidentGroupingLevel;
-import ai.dqo.metadata.incidents.IncidentGroupingSpec;
+import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import com.google.common.collect.Lists;
@@ -299,13 +299,13 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
          */
         public List<IncidentNotificationMessage> importBatch(TableIncidentImportBatch nextTableImportBatch) {
             ConnectionSpec connection = nextTableImportBatch.getConnection();
-            IncidentGroupingSpec incidentGrouping = connection.getIncidentGrouping();
-            if (incidentGrouping == null || incidentGrouping.isDisabled()) {
+            ConnectionIncidentGroupingSpec incidentGroupingAtConnection = connection.getIncidentGrouping();
+            if (incidentGroupingAtConnection == null || incidentGroupingAtConnection.isDisabled()) {
                 return null;
             }
 
             Table newCheckResults = nextTableImportBatch.getNewCheckResults();
-            int minimumSeverityLevel = incidentGrouping.getMinimumSeverity().getSeverityLevel();
+            int minimumSeverityLevel = incidentGroupingAtConnection.getMinimumSeverity().getSeverityLevel();
             IntColumn severityColumn = newCheckResults.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
             InstantColumn executedAtColumn = newCheckResults.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
             LongColumn checkResultIncidentHashColumn = newCheckResults.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME);
@@ -336,14 +336,14 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                 int checkResultRowIndex = issuesRowIndexes[i];
                 Integer severity = severityColumn.get(checkResultRowIndex);
 
-                if (severity < incidentGrouping.getMinimumSeverity().getSeverityLevel()) {
+                if (severity < incidentGroupingAtConnection.getMinimumSeverity().getSeverityLevel()) {
                     continue; // skipping this incident
                 }
 
                 Instant executedAt = executedAtColumn.get(checkResultRowIndex);
                 Long incidentHash = checkResultIncidentHashColumn.get(checkResultRowIndex);
 
-                int maxDaysToLoad = Math.max(incidentGrouping.getMaxIncidentLengthDays(), incidentGrouping.getMuteForDays());
+                int maxDaysToLoad = Math.max(incidentGroupingAtConnection.getMaxIncidentLengthDays(), incidentGroupingAtConnection.getMuteForDays());
                 Instant earliestDateToLoad = executedAt.minus(maxDaysToLoad + 1, ChronoUnit.DAYS);
 
                 boolean newMonthsLoaded = this.incidentsSnapshot.ensureMonthsAreLoaded(earliestDateToLoad.atOffset(ZoneOffset.UTC).toLocalDate(),
@@ -419,6 +419,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     String incidentId = incidentIdUuid.toString();
                     newIncidentRow.setString(IncidentsColumnNames.ID_COLUMN_NAME, incidentId);
                     newIncidentRow.setLong(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME, incidentHash);
+                    newIncidentRow.setInt(IncidentsColumnNames.MIN_SEVERITY_COLUMN_NAME, minimumSeverityLevel);
 
                     PhysicalTableName physicalTableName = nextTableImportBatch.getTable().getPhysicalTableName();
                     newIncidentRow.setString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME, physicalTableName.getSchemaName());
@@ -428,7 +429,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     if (tablePriority != null) {
                         newIncidentRow.setInt(IncidentsColumnNames.TABLE_PRIORITY_COLUMN_NAME, tablePriority);
                     }
-                    if (incidentGrouping.isDivideByDataStream()) {
+                    if (incidentGroupingAtConnection.isDivideByDataStream()) {
                         String dataStreamName = newCheckResults.getString(checkResultRowIndex, CheckResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
                         newIncidentRow.setString(IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME, dataStreamName);
                     }
@@ -437,11 +438,11 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     newIncidentRow.setInstant(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME, executedAt);
                     newIncidentRow.setInstant(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME, executedAt);
                     newIncidentRow.setInstant(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME,
-                            executedAt.plus(incidentGrouping.getMaxIncidentLengthDays(), ChronoUnit.DAYS));
+                            executedAt.plus(incidentGroupingAtConnection.getMaxIncidentLengthDays(), ChronoUnit.DAYS));
                     newIncidentRow.setInt(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME, 1);
                     newIncidentRow.setString(IncidentsColumnNames.STATUS_COLUMN_NAME, IncidentStatus.open.name());
 
-                    IncidentGroupingLevel incidentGroupingLevel = incidentGrouping.getGroupingLevel();
+                    IncidentGroupingLevel incidentGroupingLevel = incidentGroupingAtConnection.getGroupingLevel();
                     if (incidentGroupingLevel.groupByDimension()) {
                         String qualityDimension = newCheckResults.getString(checkResultRowIndex, CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
                         newIncidentRow.setString(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME, qualityDimension);

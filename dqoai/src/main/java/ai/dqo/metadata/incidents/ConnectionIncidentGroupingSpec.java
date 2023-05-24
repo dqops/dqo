@@ -46,8 +46,8 @@ import java.util.stream.Collectors;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
-    private static final ChildHierarchyNodeFieldMapImpl<IncidentGroupingSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Cloneable {
+    private static final ChildHierarchyNodeFieldMapImpl<ConnectionIncidentGroupingSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("webhooks", o -> o.webhooks);
         }
@@ -223,8 +223,8 @@ public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public IncidentGroupingSpec deepClone() {
-        IncidentGroupingSpec cloned = (IncidentGroupingSpec) super.deepClone();
+    public ConnectionIncidentGroupingSpec deepClone() {
+        ConnectionIncidentGroupingSpec cloned = (ConnectionIncidentGroupingSpec) super.deepClone();
         return cloned;
     }
 
@@ -233,57 +233,11 @@ public class IncidentGroupingSpec extends AbstractSpec implements Cloneable {
      * @param secretValueProvider Secret value provider.
      * @return Cloned and expanded copy of the object.
      */
-    public IncidentGroupingSpec expandAndTrim(SecretValueProvider secretValueProvider) {
-        IncidentGroupingSpec cloned = this.deepClone();
+    public ConnectionIncidentGroupingSpec expandAndTrim(SecretValueProvider secretValueProvider) {
+        ConnectionIncidentGroupingSpec cloned = this.deepClone();
         if (cloned.webhooks != null) {
             cloned.webhooks = cloned.webhooks.expandAndTrim(secretValueProvider);
         }
         return cloned;
-    }
-
-    /**
-     * Calculates an incident hash that is used for grouping similar data quality issues into data quality incidents.
-     * This method will decide which values are used for the data quality issue calculation picking the required parameters into a hash calculation.
-     * @param connectionName Connection name.
-     * @param physicalTableName Physical table name affected by a data quality issue.
-     * @param dataStreamName Data stream name.
-     * @param dataQualityDimension Data quality dimension name.
-     * @param checkCategory Data quality check category (group of checks).
-     * @param checkType Data quality check type (profiling, recurring, partitioned).
-     * @param checkName Data quality check name.
-     * @return Hash of the data quality incident.
-     */
-    public long calculateIncidentHash(String connectionName,
-                                      PhysicalTableName physicalTableName,
-                                      String dataStreamName,
-                                      String dataQualityDimension,
-                                      String checkCategory,
-                                      String checkType,
-                                      String checkName) {
-        ArrayList<String> hashedComponents = new ArrayList<>();
-        hashedComponents.add(connectionName);
-        hashedComponents.add(physicalTableName.getSchemaName());
-        hashedComponents.add(physicalTableName.getTableName());
-        if (this.divideByDataStream && dataStreamName != null) {
-            hashedComponents.add(dataStreamName);
-        }
-        if (this.groupingLevel != IncidentGroupingLevel.table) {
-            hashedComponents.add(dataQualityDimension);
-            if (this.groupingLevel != IncidentGroupingLevel.table_dimension) {
-                hashedComponents.add(checkCategory);
-                if (this.groupingLevel != IncidentGroupingLevel.table_dimension_category) {
-                    hashedComponents.add(checkType);
-                    if (this.groupingLevel != IncidentGroupingLevel.table_dimension_category_check_type) {
-                        hashedComponents.add(checkName);
-                    }
-                }
-            }
-        }
-
-        List<HashCode> elementHashes = hashedComponents.stream()
-                .filter(element -> element != null)
-                .map(element -> Hashing.farmHashFingerprint64().hashString(element, StandardCharsets.UTF_8))
-                .collect(Collectors.toList());
-        return Math.abs(Hashing.combineOrdered(elementHashes).asLong()); // we return only positive hashes which limits the hash space to 2^63, but positive hashes are easier for users
     }
 }

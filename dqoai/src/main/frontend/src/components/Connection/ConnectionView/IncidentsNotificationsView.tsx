@@ -11,9 +11,9 @@ import {
   updateConnectionIncidentGrouping
 } from "../../../redux/actions/source.actions";
 import {
-  IncidentGroupingSpec,
-  IncidentGroupingSpecGroupingLevelEnum,
-  IncidentGroupingSpecMinimumSeverityEnum, IncidentWebhookNotificationsSpec
+  ConnectionIncidentGroupingSpec,
+  ConnectionIncidentGroupingSpecGroupingLevelEnum,
+  ConnectionIncidentGroupingSpecMinimumSeverityEnum, IncidentWebhookNotificationsSpec
 } from "../../../api";
 import Checkbox from "../../Checkbox";
 import NumberInput from "../../NumberInput";
@@ -21,12 +21,12 @@ import SectionWrapper from "../../Dashboard/SectionWrapper";
 import Input from "../../Input";
 import ConnectionActionGroup from "./ConnectionActionGroup";
 
-const groupLevelOptions = Object.values(IncidentGroupingSpecGroupingLevelEnum).map((item) => ({
+const groupLevelOptions = Object.values(ConnectionIncidentGroupingSpecGroupingLevelEnum).map((item) => ({
   label: item.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
   value: item
 }));
 
-const minimumSeverityOptions = Object.values(IncidentGroupingSpecMinimumSeverityEnum).map((item) => ({
+const minimumSeverityOptions = Object.values(ConnectionIncidentGroupingSpecMinimumSeverityEnum).map((item) => ({
   label: item.charAt(0).toUpperCase() + item.slice(1),
   value: item
 }));
@@ -41,7 +41,7 @@ export const IncidentsNotificationsView = () => {
     dispatch(getConnectionIncidentGrouping(checkTypes, firstLevelActiveTab, connection));
   }, [connection, checkTypes, firstLevelActiveTab]);
 
-  const onChange = (obj: Partial<IncidentGroupingSpec>) => {
+  const onChange = (obj: Partial<ConnectionIncidentGroupingSpec>) => {
     dispatch(setUpdateIncidentGroup(checkTypes, firstLevelActiveTab, {
       ...incidentGrouping || {},
       ...obj,

@@ -86,4 +86,17 @@ public class RuleBasicFolderModel {
             }
         }
     }
+
+    /**
+     * Collects all rules from all tree levels.
+     * @return A list of all rules.
+     */
+    public List<RuleBasicModel> getAllRules()  {
+        List<RuleBasicModel> allRules = new ArrayList<>(this.getRules());
+        for (RuleBasicFolderModel folder : this.folders.values()) {
+            allRules.addAll(folder.getAllRules());
+        }
+
+        return allRules;
+    }
 }
