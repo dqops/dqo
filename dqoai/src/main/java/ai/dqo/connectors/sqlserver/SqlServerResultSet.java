@@ -3819,6 +3819,7 @@ public class SqlServerResultSet implements ResultSet {
      * or {@code getBigDecimal(String columnLabel)}
      */
     @Override
+    @Deprecated
     public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException {
         return resultSet.getBigDecimal(columnIndex, scale);
     }
@@ -3955,6 +3956,7 @@ public class SqlServerResultSet implements ResultSet {
      * {@code getUnicodeStream}
      */
     @Override
+    @Deprecated
     public InputStream getUnicodeStream(int columnIndex) throws SQLException {
         return resultSet.getUnicodeStream(columnIndex);
     }
@@ -4148,6 +4150,7 @@ public class SqlServerResultSet implements ResultSet {
      * or {@code getBigDecimal(String columnLabel)}
      */
     @Override
+    @Deprecated
     public BigDecimal getBigDecimal(String columnLabel, int scale) throws SQLException {
         return resultSet.getBigDecimal(columnLabel, scale);
     }
@@ -4283,6 +4286,7 @@ public class SqlServerResultSet implements ResultSet {
      * @deprecated use {@code getCharacterStream} instead
      */
     @Override
+    @Deprecated
     public InputStream getUnicodeStream(String columnLabel) throws SQLException {
         return resultSet.getUnicodeStream(columnLabel);
     }

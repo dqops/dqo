@@ -97,4 +97,17 @@ public class SensorBasicFolderModel {
             folderModel.sensors.add(sensorBasicModel);
         }
     }
+
+    /**
+     * Collects all sensors from all tree levels.
+     * @return A list of all sensors.
+     */
+    public List<SensorBasicModel> getAllSensors() {
+        List<SensorBasicModel> allSensors = new ArrayList<>(this.getSensors());
+        for (SensorBasicFolderModel folder : this.folders.values()) {
+            allSensors.addAll(folder.getAllSensors());
+        }
+
+        return allSensors;
+    }
 }

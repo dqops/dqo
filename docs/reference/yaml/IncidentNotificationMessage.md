@@ -9,6 +9,7 @@
 
 
 
+
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -31,6 +32,7 @@
 |failed_checks_count|The total number of failed data quality checks that were seen when the incident was raised for the first time.|integer| | | |
 |issue_url|The link (url) to a ticket in an external system that is tracking this incident.|string| | | |
 |status|Incident status.|enum|acknowledged<br/>muted<br/>open<br/>resolved<br/>| | |
+
 
 
 

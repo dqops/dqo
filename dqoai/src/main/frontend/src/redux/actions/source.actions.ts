@@ -23,7 +23,7 @@ import { CheckTypes } from "../../shared/routes";
 import {
   CheckResultsDetailedDataModel,
   ErrorsDetailedDataModel,
-  IncidentGroupingSpec,
+  ConnectionIncidentGroupingSpec,
   SensorReadoutsDetailedDataModel
 } from "../../api";
 import { Dispatch } from "redux";
@@ -94,7 +94,7 @@ export const getConnectionIncidentGroupingRequest = (checkType: CheckTypes, acti
   activeTab
 });
 
-export const getConnectionIncidentGroupingSuccess = (checkType: CheckTypes, activeTab: string, data: IncidentGroupingSpec) => ({
+export const getConnectionIncidentGroupingSuccess = (checkType: CheckTypes, activeTab: string, data: ConnectionIncidentGroupingSpec) => ({
   type: SOURCE_ACTION.GET_CONNECTION_INCIDENT_GROUPING_SUCCESS,
   data,
   checkType,
@@ -111,7 +111,7 @@ export const getConnectionIncidentGroupingFailed = (checkType: CheckTypes, activ
 export const getConnectionIncidentGrouping = (checkType: CheckTypes, activeTab: string, connection: string) => async (dispatch: Dispatch) => {
   dispatch(getConnectionIncidentGroupingRequest(checkType, activeTab));
   try {
-    const res: AxiosResponse<IncidentGroupingSpec> =
+    const res: AxiosResponse<ConnectionIncidentGroupingSpec> =
       await ConnectionApiClient.getConnectionIncidentGrouping(connection);
     dispatch(getConnectionIncidentGroupingSuccess(checkType, activeTab, res.data));
   } catch (err) {
@@ -119,7 +119,7 @@ export const getConnectionIncidentGrouping = (checkType: CheckTypes, activeTab: 
   }
 };
 
-export const setUpdateIncidentGroup = (checkType: CheckTypes, activeTab: string, data: IncidentGroupingSpec) => ({
+export const setUpdateIncidentGroup = (checkType: CheckTypes, activeTab: string, data: ConnectionIncidentGroupingSpec) => ({
   type: SOURCE_ACTION.SET_CONNECTION_INCIDENT_GROUPING,
   data,
   checkType,
@@ -145,7 +145,7 @@ export const updateConnectionIncidentGroupingFailed = (checkType: CheckTypes, ac
   activeTab
 });
 
-export const updateConnectionIncidentGrouping = (checkType: CheckTypes, activeTab: string, connection: string, data: IncidentGroupingSpec) => async (dispatch: any) => {
+export const updateConnectionIncidentGrouping = (checkType: CheckTypes, activeTab: string, connection: string, data: ConnectionIncidentGroupingSpec) => async (dispatch: any) => {
   dispatch(updateConnectionIncidentGroupingRequest(checkType, activeTab));
   try {
     await ConnectionApiClient.updateConnectionIncidentGrouping(connection, data);

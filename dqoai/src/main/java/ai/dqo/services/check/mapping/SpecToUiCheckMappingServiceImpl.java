@@ -387,6 +387,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         checkModel.setComments(checkSpec.getComments());
         checkModel.setDisabled(checkSpec.isDisabled());
         checkModel.setExcludeFromKpi(checkSpec.isExcludeFromKpi());
+        checkModel.setQualityDimension(checkSpec.getEffectiveDataQualityDimension());
         checkModel.setIncludeInSla(checkSpec.isIncludeInSla());
         checkModel.setDataStream(checkSpec.getDataStream());
         checkModel.setCheckSpec(checkSpec);

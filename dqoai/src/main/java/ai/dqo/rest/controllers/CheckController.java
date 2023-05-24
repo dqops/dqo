@@ -27,15 +27,18 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.metadata.CheckBasicFolderModel;
+import ai.dqo.rest.models.metadata.CheckBasicModel;
 import ai.dqo.rest.models.metadata.CheckModel;
 import ai.dqo.rest.models.metadata.RuleBasicFolderModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import autovalue.shaded.com.google.common.base.Strings;
 import io.swagger.annotations.*;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
@@ -45,7 +48,7 @@ import java.util.stream.Collectors;
  * REST api controller to manage the list of checks.
  */
 @RestController
-@RequestMapping("/api/checks")
+@RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Checks", description = "Check management")
 public class CheckController {
@@ -69,7 +72,7 @@ public class CheckController {
      * @param fullCheckName Full check name.
      * @return Model of the check with specific check name.
      */
-    @GetMapping("/{fullCheckName}")
+    @GetMapping("/checks/{fullCheckName}")
     @ApiOperation(value = "getCheck", notes = "Returns a check definition", response = CheckModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -111,7 +114,7 @@ public class CheckController {
      * @param fullCheckName Full check name.
      * @return Empty response.
      */
-    @PostMapping("/{fullCheckName}")
+    @PostMapping("/checks/{fullCheckName}")
     @ApiOperation(value = "createCheck", notes = "Creates (adds) a new custom check that is a pair of a sensor name and a rule name.")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -151,7 +154,7 @@ public class CheckController {
      * @param fullCheckName Full check name.
      * @return Empty response.
      */
-    @PutMapping("/{fullCheckName}")
+    @PutMapping("/checks/{fullCheckName}")
     @ApiOperation(value = "updateCheck", notes = "Updates an existing check, making a custom check definition if it is not present")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -214,7 +217,7 @@ public class CheckController {
      * @param fullCheckName  Full check name.
      * @return Empty response.
      */
-    @DeleteMapping("/{fullCheckName}")
+    @DeleteMapping("/checks/{fullCheckName}")
     @ApiOperation(value = "deleteCheck", notes = "Deletes a custom check definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -249,7 +252,7 @@ public class CheckController {
      * Returns all combined check folder model.
      * @return check basic tree model.
      */
-    @GetMapping()
+    @GetMapping("/definitions/checks")
     @ApiOperation(value = "getCheckFolderTree", notes = "Returns a tree of all checks available in DQO, both built-in checks and user defined or customized checks.",
             response = CheckBasicFolderModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -258,6 +261,17 @@ public class CheckController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     public ResponseEntity<Mono<CheckBasicFolderModel>> getCheckFolderTree() {
+        CheckBasicFolderModel checkBasicFolderModel = createCheckTreeModel();
+
+        return new ResponseEntity<>(Mono.just(checkBasicFolderModel), HttpStatus.OK);
+    }
+
+    /**
+     * Builds a check tree.
+     * @return Check tree.
+     */
+    @NotNull
+    private CheckBasicFolderModel createCheckTreeModel() {
         CheckBasicFolderModel checkBasicFolderModel = new CheckBasicFolderModel();
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
@@ -281,7 +295,25 @@ public class CheckController {
             String checkNameDqoHome = checkDefinitionWrapperDqoHome.getCheckName();
             checkBasicFolderModel.addCheck(checkNameDqoHome, customCheckNames.contains(checkNameDqoHome), true);
         }
+        return checkBasicFolderModel;
+    }
 
-        return new ResponseEntity<>(Mono.just(checkBasicFolderModel), HttpStatus.OK);
+    /**
+     * Returns a flat list of all checks
+     * @return List of all checks
+     */
+    @GetMapping("/checks")
+    @ApiOperation(value = "getAllChecks", notes = "Returns a flat list of all checks available in DQO, both built-in checks and user defined or customized checks.",
+            response = CheckBasicModel[].class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = CheckBasicModel[].class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    public ResponseEntity<Flux<CheckBasicModel>> getAllChecks() {
+        CheckBasicFolderModel checkBasicFolderModel = createCheckTreeModel();
+        List<CheckBasicModel> allChecks = checkBasicFolderModel.getAllChecks();
+
+        return new ResponseEntity<>(Flux.fromStream(allChecks.stream()), HttpStatus.OK);
     }
 }

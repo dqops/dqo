@@ -14,9 +14,7 @@
 /// limitations under the License.
 ///
 
-import {
-  IncidentModel, IncidentsPerConnectionModel,
-} from '../../api';
+import { IncidentsPerConnectionModel } from '../../api';
 import { INCIDENTS_ACTION } from '../types';
 import { Action, INestTab } from "./source.reducer";
 
@@ -121,6 +119,8 @@ const incidentsReducer = (state = initialState, action: any) => {
           activeTab = state.tabs[index-1].url;
         } else if (index < state.tabs.length - 1) {
           activeTab = state.tabs[index+1].url;
+        } else {
+          activeTab = ''
         }
       }
 

@@ -16,6 +16,9 @@ import { findTreeNode } from "../../../utils/tree";
 import { AxiosResponse } from "axios";
 import { ConnectionBasicModel } from "../../../api";
 import { ConnectionApiClient } from "../../../services/apiClient";
+import AddColumnDialog from "../../CustomTree/AddColumnDialog";
+import AddTableDialog from "../../CustomTree/AddTableDialog";
+import AddSchemaDialog from "../../CustomTree/AddSchemaDialog";
 
 const Tree = () => {
   const { removeNode, loadingNodes, changeActiveTab, setActiveTab, treeData, toggleOpenNode, activeTab, switchTab, refreshNode, setTreeData } = useTree();
@@ -25,6 +28,9 @@ const Tree = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const match = useRouteMatch();
   const [flag, setFlag] = useState(false);
+  const [addColumnDialogOpen, setAddColumnDialogOpen] = useState(false);
+  const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
+  const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
 
   const handleNodeClick = (node: CustomTreeNode) => {
     switchTab(node, checkTypes);
@@ -221,6 +227,36 @@ const Tree = () => {
     setIsOpen(true);
   };
 
+  const openAddColumnDialog = (node: CustomTreeNode) => {
+    setSelectedNode(node);
+    setAddColumnDialogOpen(true);
+  };
+
+  const closeAddColumnDialog = () => {
+    setAddColumnDialogOpen(false);
+    setSelectedNode(undefined);
+  };
+
+  const openAddTableDialog = (node: CustomTreeNode) => {
+    setSelectedNode(node);
+    setAddTableDialogOpen(true);
+  };
+
+  const closeAddTableDialog = () => {
+    setAddTableDialogOpen(false);
+    setSelectedNode(undefined);
+  };
+
+  const openAddSchemaDialog = (node: CustomTreeNode) => {
+    setSelectedNode(node);
+    setAddSchemaDialogOpen(true);
+  };
+
+  const closeAddSchemaDialog = () => {
+    setAddSchemaDialogOpen(false);
+    setSelectedNode(undefined);
+  };
+
   const renderIcon = (node: CustomTreeNode) => {
     if (node.level === TREE_LEVEL.CHECK || (node.level === TREE_LEVEL.COLUMN && checkTypes === CheckTypes.SOURCES)) {
       return <div className="w-0 shrink-0" />;
@@ -277,7 +313,13 @@ const Tree = () => {
                 >
                   {node.label}
                 </div>
-                <ContextMenu node={node} openConfirm={openConfirm} />
+                <ContextMenu
+                  node={node}
+                  openConfirm={openConfirm}
+                  openAddColumnDialog={openAddColumnDialog}
+                  openAddTableDialog={openAddTableDialog}
+                  openAddSchemaDialog={openAddSchemaDialog}
+                />
               </div>
             </Tooltip>
           </div>
@@ -327,6 +369,22 @@ const Tree = () => {
         onClose={() => setIsOpen(false)}
         message={message}
         onConfirm={() => removeNode(selectedNode)}
+      />
+
+      <AddColumnDialog
+        open={addColumnDialogOpen}
+        onClose={closeAddColumnDialog}
+        node={selectedNode}
+      />
+      <AddTableDialog
+        open={addTableDialogOpen}
+        onClose={closeAddTableDialog}
+        node={selectedNode}
+      />
+      <AddSchemaDialog
+        open={addSchemaDialogOpen}
+        onClose={closeAddSchemaDialog}
+        node={selectedNode}
       />
     </div>
   );

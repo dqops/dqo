@@ -25,8 +25,11 @@ import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceImpl;
 import ai.dqo.core.synchronization.status.SynchronizationStatusTrackerStub;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
+import ai.dqo.data.errors.factory.ErrorsColumnNames;
+import ai.dqo.data.errors.models.ErrorsFragmentFilter;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
+import ai.dqo.data.models.DataDeleteResult;
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactoryImpl;
 import ai.dqo.data.checkresults.factory.CheckResultsColumnNames;
 import ai.dqo.data.checkresults.factory.CheckResultsTableFactory;
@@ -318,6 +321,69 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Assertions.assertFalse(partition2AfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
         Assertions.assertTrue(partition2AfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
         Assertions.assertTrue(partition2AfterDelete.getData().textColumn(CheckResultsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
+        Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
+    }
+
+    @Test
+    void deleteSelectedErrorsFragment_whenDataAlreadyEmpty_thenPassWithSuccess() {
+        String connectionName = "connection";
+        String tableName = "tab1";
+        String id_prefix1 = "1";
+        String id_prefix2 = "2";
+        PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
+
+        LocalDate month1 = LocalDate.of(2023, 1, 1);
+        LocalDate month2 = LocalDate.of(2023, 2, 1);
+        LocalDateTime startDate1 = month1.atStartOfDay().plusDays(14);
+        LocalDateTime startDate2 = month2.atStartOfDay().plusDays(14);
+
+        Table table1 = prepareSimplePartitionTable(tableName, startDate1, id_prefix1);
+        Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
+
+        ParquetPartitionId partitionId1 = new ParquetPartitionId(
+                this.checkResultsStorageSettings.getTableType(),
+                connectionName,
+                physicalTableName,
+                month1);
+        ParquetPartitionId partitionId2 = new ParquetPartitionId(
+                this.checkResultsStorageSettings.getTableType(),
+                connectionName,
+                physicalTableName,
+                month2);
+
+        this.parquetPartitionStorageService.savePartition(
+                new LoadedMonthlyPartition(partitionId1),
+                new TableDataChanges(table1),
+                this.checkResultsStorageSettings);
+        this.parquetPartitionStorageService.savePartition(
+                new LoadedMonthlyPartition(partitionId2),
+                new TableDataChanges(table2),
+                this.checkResultsStorageSettings);
+
+        CheckResultsFragmentFilter filter = new CheckResultsFragmentFilter(){{
+            setTableSearchFilters(new TableSearchFilters(){{
+                setConnectionName(connectionName);
+                setSchemaTableName("sch.nonexistent_table");
+            }});
+        }};
+
+        DataDeleteResult result = this.sut.deleteSelectedCheckResultsFragment(filter);
+        Assertions.assertTrue(result.getPartitionResults().isEmpty());
+
+        LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
+                partitionId1, this.checkResultsStorageSettings, null);
+        Assertions.assertNotNull(partition1AfterDelete.getData());
+        Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id1"));
+        Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id2"));
+        Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id3"));
+        Assertions.assertNotEquals(0L, partition1AfterDelete.getLastModified());
+
+        LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
+                partitionId2, this.checkResultsStorageSettings, null);
+        Assertions.assertNotNull(partition2AfterDelete.getData());
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 

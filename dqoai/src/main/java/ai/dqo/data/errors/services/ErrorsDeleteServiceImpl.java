@@ -94,6 +94,10 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
             LocalDate endDeletionRange = filter.getDateEnd();
 
             currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
+
+            if (currentSnapshot.getLoadedMonthlyPartitions() == null) {
+                continue;
+            }
             Set<String> deletedIds = currentSnapshot.getTableDataChanges().getDeletedIds();
 
             for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry:

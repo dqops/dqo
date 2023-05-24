@@ -14,12 +14,25 @@
  * limitations under the License.
  */
 
-package ai.dqo.data.incidents.services.models;
+package ai.dqo.data.checkresults.services.models;
 
 /**
- * Incident sort direction.
+ * Enumeration of columns names on a {@link CheckResultDetailedSingleModel} that could be sorted.
  */
-public enum IncidentSortDirection {
-    asc,
-    desc;
+public enum CheckResultSortOrder {
+    executedAt,
+    checkHash,
+    checkCategory,
+    checkName,
+    checkDisplayName,
+    checkType,
+    actualValue,
+    expectedValue,
+    severity,
+    columnName,
+    dataStream,
+    timeGradient,
+    timePeriod,
+    qualityDimension,
+    sensorName;
 }

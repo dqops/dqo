@@ -1,4 +1,4 @@
-# Percent of valid UUID
+# Percentage of valid UUID
 
 We are verifying if the rows in the table contain valid UUID values.
 

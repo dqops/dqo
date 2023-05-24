@@ -921,7 +921,7 @@ Column level sensor that counts values that are members of a given set.
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
-    {{- lib.render_or
+    {{- lib.render_order_by() -}}
     ```
 === "postgresql"
       
@@ -1038,7 +1038,6 @@ Column level sensor that counts values that are members of a given set.
       
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    
     
     {%- macro extract_in_list(values_list) -%}
         {{values_list|join(', ')}}

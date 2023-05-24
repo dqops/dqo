@@ -33,6 +33,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.metadata.incidents.TableIncidentGroupingSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
@@ -61,6 +62,7 @@ public class TableSpec extends AbstractSpec {
             put("timestamp_columns", o -> o.timestampColumns);
             put("incremental_time_window", o -> o.incrementalTimeWindow);
 			put("data_streams", o -> o.dataStreams);
+            put("incident_grouping", o -> o.incidentGrouping);
 			put("owner", o -> o.owner);
 			put("columns", o -> o.columns);
 			put("profiling_checks", o -> o.profilingChecks);
@@ -117,6 +119,11 @@ public class TableSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DataStreamMappingSpecMap dataStreams = new DataStreamMappingSpecMap();
+
+    @JsonPropertyDescription("Incident grouping configuration with the overridden configuration at a table level. The field value in this object that are configured will override the default configuration from the connection level. The incident grouping level could be changed or incident creation could be disabled.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableIncidentGroupingSpec incidentGrouping;
 
     @JsonPropertyDescription("Table owner information like the data steward name or the business application name.")
     private TableOwnerSpec owner;
@@ -281,6 +288,24 @@ public class TableSpec extends AbstractSpec {
 		setDirtyIf(!Objects.equals(this.dataStreams, dataStreams));
         this.dataStreams = dataStreams;
 		propagateHierarchyIdToField(dataStreams, "data_streams");
+    }
+
+    /**
+     * Returns the configuration of incident grouping at a table level.
+     * @return Incident grouping configuration at a table level.
+     */
+    public TableIncidentGroupingSpec getIncidentGrouping() {
+        return incidentGrouping;
+    }
+
+    /**
+     * Changes the incident grouping configuration at a table level.
+     * @param incidentGrouping Incident grouping configuration.
+     */
+    public void setIncidentGrouping(TableIncidentGroupingSpec incidentGrouping) {
+        setDirtyIf(!Objects.equals(this.incidentGrouping, incidentGrouping));
+        this.incidentGrouping = incidentGrouping;
+        propagateHierarchyIdToField(incidentGrouping, "incident_grouping");
     }
 
     /**
@@ -705,6 +730,9 @@ public class TableSpec extends AbstractSpec {
             if (cloned.dataStreams != null) {
                 cloned.dataStreams = cloned.dataStreams.expandAndTrim(secretValueProvider);
             }
+            if (cloned.incidentGrouping != null) {
+                cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider);
+            }
             cloned.columns = this.columns.expandAndTrim(secretValueProvider);
             return cloned;
         }
@@ -735,6 +763,7 @@ public class TableSpec extends AbstractSpec {
             cloned.labels = null;
             cloned.comments = null;
             cloned.statistics = null;
+            cloned.incidentGrouping = null;
             cloned.columns = this.columns.trim();
             return cloned;
         }
@@ -762,6 +791,7 @@ public class TableSpec extends AbstractSpec {
             cloned.comments = null;
             cloned.columns = null;
             cloned.statistics = null;
+            cloned.incidentGrouping = null;
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
