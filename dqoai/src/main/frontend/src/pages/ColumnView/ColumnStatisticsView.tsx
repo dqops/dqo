@@ -76,73 +76,73 @@ const ColumnStatisticsView = () => {
     </div>
     <div className="w-full flex gap-8">
       <div className="border border-gray-400 inline-block w-1/5">    
-        <div className="h-8 flex justify-between"> 
-            <div className="ml-2">Null count</div>
+        <div className="h-10 flex justify-between items-center"> 
+            <div className="ml-2 font-bold">Null count</div>
             <div className="mr-2">{renderValue(statistics?.statistics?.at(4)?.result)}</div>
         </div>
-        <div className="h-8 flex justify-between">
-          <div className="ml-2">Null percent</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(5)?.result)}%</div>
+        <div className="h-10 flex justify-between items-center">
+          <div className="ml-2 font-bold">Null percent</div>
+          <div className="mr-2">{Number(renderValue(statistics?.statistics?.at(5)?.result)).toFixed(2)}%</div>
           </div>
-        <div className="h-8 flex justify-between">
-          <div className="ml-2">Not-null</div>
+        <div className="h-10 flex justify-between items-center">
+          <div className="ml-2 font-bold">Not-null</div>
           <div className="mr-2">{renderValue(statistics?.statistics?.at(7)?.result)}</div>
           </div>
-        <div className="h-8 flex justify-between">
-          <div className="ml-2">Not-null percent</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(6)?.result)}%</div>
+        <div className="h-10 flex justify-between items-center">
+          <div className="ml-2 font-bold">Not-null percent</div>
+          <div className="mr-2">{Number(renderValue(statistics?.statistics?.at(6)?.result)).toFixed(2)}%</div>
           </div>
       </div>
       <div className="border border-gray-400 inline-block w-1/5">    
-        <div className="h-8 flex justify-between"> 
-            <div className="ml-2">Unique count</div>
-            <div className="mr-2">{renderValue(statistics?.statistics?.at(4)?.result)}</div>
+        <div className="h-10 flex justify-between items-center"> 
+            <div className="ml-2 font-bold">Unique count</div>
+            <div className="mr-2">{renderValue(statistics?.statistics?.at(9)?.result)}</div>
         </div>
-        <div className="h-8 flex justify-between">
-          <div className="ml-2">Unique percent</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(5)?.result)}%</div>
+        <div className="h-10 flex justify-between items-center">
+          <div className="ml-2 font-bold">Unique percent</div>
+          <div className="mr-2">{Number(renderValue(statistics?.statistics?.at(10)?.result)).toFixed(2)}%</div>
           </div>
-        <div className="h-8 flex justify-between">
-          <div className="ml-2">Duplicate count</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(7)?.result)}</div>
+        <div className="h-10 flex justify-between items-center">
+          <div className="ml-2 font-bold">Duplicate count</div>
+          <div className="mr-2">{renderValue(statistics?.statistics?.at(11)?.result)}</div>
           </div>
-        <div className="h-8 flex justify-between">
-          <div className="ml-2">Duplicate percent</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(6)?.result)}%</div>
+        <div className="h-10 flex justify-between items-center">
+          <div className="ml-2 font-bold">Duplicate percent</div>
+          <div className="mr-2">{Number(renderValue(statistics?.statistics?.at(8)?.result)).toFixed(2)}%</div>
           </div>
       </div>
       <div className="border border-gray-400 inline-block w-1/5">    
-        <div className="h-8 flex justify-between"> 
-            <div className="ml-2">Minimum</div>
-            <div className="mr-2">{renderValue(statistics?.statistics?.at(4)?.result)}</div>
+        <div className="h-10 flex justify-between items-center"> 
+            <div className="ml-2 font-bold">Minimum</div>
+            <div className="mr-2">{renderValue(statistics?.statistics?.at(3)?.result)}</div>
         </div>
-        <div className="h-8 flex justify-between">
-          <div className="ml-2">Median</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(5)?.result)}%</div>
+        <div className="h-10 flex justify-between items-center">
+          <div className="ml-2 font-bold">Median</div>
+          <div className="mr-2">{renderValue(statistics?.statistics?.at(2)?.result)}</div>
           </div>
-        <div className="h-8 flex justify-between">
-          <div className="ml-2">Maximum</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(7)?.result)}</div>
+        <div className="h-10 flex justify-between items-center">
+          <div className="ml-2 font-bold">Maximum</div>
+          <div className="mr-2">{renderValue(statistics?.statistics?.at(0)?.result)}</div>
           </div>
-        <div className="h-8 flex justify-between">
-          <div className="ml-2">Sum</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(6)?.result)}%</div>
+        <div className="h-10 flex justify-between items-center">
+          <div className="ml-2 font-bold">Sum</div>
+          <div className="mr-2">{renderValue(statistics?.statistics?.at(1)?.result)}</div>
           </div>
       </div>
       <div className="border border-gray-400 inline-block w-1/5">    
-        <div className="h-8 flex justify-between"> 
-            <div className="ml-2">Maximum string length</div>
-            <div className="mr-2">{renderValue(statistics?.statistics?.at(4)?.result)}</div>
+        <div className="h-10 flex justify-between items-center"> 
+            <div className="ml-2 font-bold">Maximum string length</div>
+            <div className="mr-2">{renderValue(statistics?.statistics?.at(14)?.result)}</div>
         </div>
-        <div className="h-8 flex justify-between">
-          <div className="ml-2">Mean string length</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(5)?.result)}%</div>
+        <div className="h-10 flex justify-between items-center">
+          <div className="ml-2 font-bold">Mean string length</div>
+          <div className="mr-2">{renderValue(statistics?.statistics?.at(13)?.result)}</div>
           </div>
-        <div className="h-8 flex justify-between">
-          <div className="ml-2">Minimum string length</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(7)?.result)}</div>
+        <div className="h-10 flex justify-between items-center">
+          <div className="ml-2 font-bold">Minimum string length</div>
+          <div className="mr-2">{renderValue(statistics?.statistics?.at(12)?.result)}</div>
           </div>
-        <div className="h-8 flex justify-between">
+        <div className="h-10 flex justify-between items-center">
           <div className="ml-2"></div>
           <div className="mr-2"></div>
           </div>
