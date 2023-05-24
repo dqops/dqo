@@ -105,3 +105,7 @@ export const toggleProfile = (isProfileOpen: boolean) => ({
   type: JOB_ACTION.TOGGLE_PROFILE,
   isProfileOpen
 });
+export const toggleSettings = (areSettingsOpen: boolean) => ({
+  type: JOB_ACTION.TOGGLE_SETTINGS,
+  areSettingsOpen
+});
