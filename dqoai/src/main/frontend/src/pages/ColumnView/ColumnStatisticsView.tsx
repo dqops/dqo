@@ -68,79 +68,159 @@ const ColumnStatisticsView = () => {
 
   return (
     <div className="p-4">
+    
     <div className="flex w-full text-xl h-15">
       <div className="w-1/5 flex font-bold ml-5">Datatype <div className="font-light ml-5">{statistics?.type_snapshot?.column_type}</div></div>
-      <div className="w-1/5 flex font-bold">Detected Datatype<div className="font-light ml-5">{datatype_detected(statistics?.statistics?.at(15)?.result)}</div></div>
-      <div className="w-1/5 flex font-bold">Total Rows<div className="font-light ml-5">{renderValue(rowCount?.statistics?.at(0)?.result)}</div></div>
+      <div className="w-1/5 flex font-bold">Detected Datatype<div className="font-light ml-5">{statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "string_datatype_detect" ? datatype_detected(x.result) : ""}</div>
+                ))}</div></div>
+      <div className="w-1/5 flex font-bold">Total Rows<div className="font-light ml-5">{rowCount && rowCount.statistics?.map((x, index) => (<div key={index}>{x.collector==="row_count" && x.category==="volume" ? renderValue(x.result) : ""}</div>))}</div></div>
       <div className="w-1/4 flex font-bold">Collected at<div className="font-light ml-5">{statistics?.statistics?.at(0)?.collectedAt}</div></div>
     </div>
-    <div className="w-full flex gap-8">
-      <div className="border border-gray-400 inline-block w-1/5">    
+    
+    <div className="w-full flex gap-8 flex-wrap">
+      <div className="border border-gray-400 min-w-1/5">    
         <div className="h-10 flex justify-between items-center"> 
             <div className="ml-2 font-bold">Null count</div>
-            <div className="mr-2">{renderValue(statistics?.statistics?.at(4)?.result)}</div>
+            <div>
+              {statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "nulls_count" ? renderValue(x.result) : ""}</div>
+                ))}
+            </div>
         </div>
         <div className="h-10 flex justify-between items-center">
           <div className="ml-2 font-bold">Null percent</div>
-          <div className="mr-2">{Number(renderValue(statistics?.statistics?.at(5)?.result)).toFixed(2)}%</div>
+          <div>
+              {statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "nulls_percent" ? renderValue(x.result) : ""}</div>
+                ))}
+            </div>
           </div>
         <div className="h-10 flex justify-between items-center">
           <div className="ml-2 font-bold">Not-null</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(7)?.result)}</div>
+          <div>
+              {statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "not_nulls_count" ? renderValue(x.result) : ""}</div>
+                ))}
+            </div>
           </div>
         <div className="h-10 flex justify-between items-center">
           <div className="ml-2 font-bold">Not-null percent</div>
-          <div className="mr-2">{Number(renderValue(statistics?.statistics?.at(6)?.result)).toFixed(2)}%</div>
+          <div>
+              {statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "not_nulls_percent" ? renderValue(x.result) : ""}</div>
+                ))}
+            </div>
           </div>
       </div>
-      <div className="border border-gray-400 inline-block w-1/5">    
+      <div className="border border-gray-400 min-w-1/5">    
         <div className="h-10 flex justify-between items-center"> 
             <div className="ml-2 font-bold">Unique count</div>
-            <div className="mr-2">{renderValue(statistics?.statistics?.at(9)?.result)}</div>
+            <div>
+              {statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "unique_count" ? renderValue(x.result) : ""}</div>
+                ))}
+            </div>
         </div>
         <div className="h-10 flex justify-between items-center">
           <div className="ml-2 font-bold">Unique percent</div>
-          <div className="mr-2">{Number(renderValue(statistics?.statistics?.at(10)?.result)).toFixed(2)}%</div>
+          <div>
+              {statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "unique_percent" ? renderValue(x.result) : ""}</div>
+                ))}
+            </div>
           </div>
         <div className="h-10 flex justify-between items-center">
           <div className="ml-2 font-bold">Duplicate count</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(11)?.result)}</div>
+          <div>
+              {statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "duplicate_count" ? renderValue(x.result) : ""}</div>
+                ))}
+            </div>
           </div>
         <div className="h-10 flex justify-between items-center">
           <div className="ml-2 font-bold">Duplicate percent</div>
-          <div className="mr-2">{Number(renderValue(statistics?.statistics?.at(8)?.result)).toFixed(2)}%</div>
+          <div>
+              {statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "duplicate_percent" ? renderValue(x.result) : ""}</div>
+                ))}
+            </div>
           </div>
       </div>
-      <div className="border border-gray-400 inline-block w-1/5">    
+      <div className="border border-gray-400  min-w-1/5">    
         <div className="h-10 flex justify-between items-center"> 
             <div className="ml-2 font-bold">Minimum</div>
-            <div className="mr-2">{renderValue(statistics?.statistics?.at(3)?.result)}</div>
+            <div>
+              {statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "min_value" ? renderValue(x.result) : ""}</div>
+                ))}
+            </div>
         </div>
         <div className="h-10 flex justify-between items-center">
           <div className="ml-2 font-bold">Median</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(2)?.result)}</div>
+          <div>
+              {statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "nulls_count" ? renderValue(x.result) : ""}</div>
+                ))}
+            </div>
           </div>
         <div className="h-10 flex justify-between items-center">
           <div className="ml-2 font-bold">Maximum</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(0)?.result)}</div>
+          <div>
+              {statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "max_value" ? renderValue(x.result) : ""}</div>
+                ))}
+            </div>
           </div>
         <div className="h-10 flex justify-between items-center">
           <div className="ml-2 font-bold">Sum</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(1)?.result)}</div>
+          <div>
+              {statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "sum_value" ? renderValue(x.result) : ""}</div>
+                ))}
+            </div>
           </div>
       </div>
-      <div className="border border-gray-400 inline-block w-1/5">    
+      <div className="border border-gray-400 min-w-1/5">    
         <div className="h-10 flex justify-between items-center"> 
             <div className="ml-2 font-bold">Maximum string length</div>
-            <div className="mr-2">{renderValue(statistics?.statistics?.at(14)?.result)}</div>
+            <div>
+              {statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "string_max_length" ? renderValue(x.result) : ""}</div>
+                ))}
+            </div>
         </div>
         <div className="h-10 flex justify-between items-center">
           <div className="ml-2 font-bold">Mean string length</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(13)?.result)}</div>
+          <div>
+              {statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "string_mean_length" ? renderValue(x.result) : ""}</div>
+                ))}
+            </div>
           </div>
         <div className="h-10 flex justify-between items-center">
           <div className="ml-2 font-bold">Minimum string length</div>
-          <div className="mr-2">{renderValue(statistics?.statistics?.at(12)?.result)}</div>
+          <div>
+              {statistics && 
+              statistics?.statistics?.map((x, index) => (
+                <div className="mr-2" key={index}>{x.collector === "string_min_length" ? renderValue(x.result) : ""}</div>
+                ))}
+            </div>
           </div>
         <div className="h-10 flex justify-between items-center">
           <div className="ml-2"></div>
@@ -148,6 +228,8 @@ const ColumnStatisticsView = () => {
           </div>
       </div>
     </div>
+    
+   
     </div>
   );
 };
