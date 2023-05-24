@@ -292,7 +292,7 @@ export const IncidentDetail = () => {
 
           <Pagination
             page={filters.page || 1}
-            pageSize={filters.pageSize || 5}
+            pageSize={filters.pageSize || 50}
             totalPages={10}
             onChange={(page, pageSize) => onChangeFilter({
               page,

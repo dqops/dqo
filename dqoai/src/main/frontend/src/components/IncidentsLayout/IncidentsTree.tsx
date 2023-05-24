@@ -33,7 +33,8 @@ const IncidentsTree = () => {
         filters: {
           openIncidents: true,
           acknowledgedIncidents: true,
-          resolvedIncidents: true,
+          page: 1,
+          pageSize: 50
         }
       },
       label: connection?.connection ?? ""
