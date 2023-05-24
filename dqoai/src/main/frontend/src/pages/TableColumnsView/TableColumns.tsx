@@ -49,9 +49,9 @@ const TableColumns = ({
   };
 
   const navigate = (column: string) =>{
-    const url =  ROUTES.COLUMN_LEVEL_PAGE("sources", connectionName, schemaName, tableName, column, 'detail');
-    const value = ROUTES.COLUMN_LEVEL_VALUE("sources", connection, schema, table, column)
-    dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
+    const url =  ROUTES.COLUMN_LEVEL_PAGE("profiling", connectionName, schemaName, tableName, column, 'detail');
+    const value = ROUTES.COLUMN_LEVEL_VALUE("profiling", connection, schema, table, column)
+    dispatch(addFirstLevelTab(CheckTypes.PROFILING, {
       url,
       value,
       state: {},
