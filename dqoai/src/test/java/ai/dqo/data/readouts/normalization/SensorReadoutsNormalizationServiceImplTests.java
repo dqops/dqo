@@ -244,7 +244,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
     void analyzeAndPrepareResults_whenActualValueAndTimePeriodGradientDayAndDimension1_thenCreatesDatasetWithTimePeriodTodayAndDataStreamHashNot0() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.5));
 		this.table.addColumns(DateTimeColumn.create("time_period", LocalDateTime.now(this.utcZone).minus(Period.ofDays(2)).truncatedTo(ChronoUnit.DAYS)));
-		this.table.addColumns(StringColumn.create("stream_level_1", "US"));
+		this.table.addColumns(TextColumn.create("stream_level_1", "US"));
         SensorReadoutsNormalizedResult results = this.sut.normalizeResults(this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
         Assertions.assertNotNull(results.getTable());
         Assertions.assertEquals(1, results.getTable().rowCount());
@@ -263,7 +263,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
     void analyzeAndPrepareResults_whenActualValueAndTimePeriodGradientDayAndDimension2_thenCreatesDatasetWithTimePeriodTodayAndDataStreamHashNot0() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.5));
 		this.table.addColumns(DateTimeColumn.create("time_period", LocalDateTime.now(this.utcZone).minus(Period.ofDays(2)).truncatedTo(ChronoUnit.DAYS)));
-		this.table.addColumns(StringColumn.create("stream_level_2", "US"));
+		this.table.addColumns(TextColumn.create("stream_level_2", "US"));
         SensorReadoutsNormalizedResult results = this.sut.normalizeResults(this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
         Assertions.assertNotNull(results.getTable());
         Assertions.assertEquals(1, results.getTable().rowCount());

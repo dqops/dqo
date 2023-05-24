@@ -19,9 +19,7 @@ package ai.dqo.rest.controllers;
 import ai.dqo.core.incidents.IncidentImportQueueService;
 import ai.dqo.core.incidents.IncidentIssueUrlChangeParameters;
 import ai.dqo.core.incidents.IncidentStatusChangeParameters;
-import ai.dqo.data.checkresults.services.models.CheckResultDetailedSingleModel;
-import ai.dqo.data.checkresults.services.models.CheckResultListFilterParameters;
-import ai.dqo.data.checkresults.services.models.CheckResultSortOrder;
+import ai.dqo.data.checkresults.services.models.*;
 import ai.dqo.data.incidents.factory.IncidentStatus;
 import ai.dqo.data.incidents.services.models.*;
 import ai.dqo.data.incidents.services.IncidentsDataService;
@@ -31,7 +29,6 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.common.SortDirection;
-import ai.dqo.rest.models.metadata.ConnectionModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,10 +105,12 @@ public class IncidentsController {
      * @param year Year when the incident was first seen.
      * @param month Month when the incident was first seen.
      * @param incidentId Incident id.
-     * @param date Optional filter for a date.
      * @param limit Page size.
      * @param page Page number.
      * @param filter Optional filter.
+     * @param date Optional filter for a date.
+     * @param column Optional column name to filter.
+     * @param check Optional check name to filter.
      * @param order Sort order.
      * @param direction Sort direction.
      * @return Incident model of the loaded incident.
@@ -130,23 +129,24 @@ public class IncidentsController {
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
             @ApiParam("Incident id") @PathVariable String incidentId,
-            @ApiParam(name = "date", value = "Optional filter to return data quality issues only for a given date. The date should be an ISO8601 formatted date, it is treated as the timezone of the DQO server.", required = false)
-            @RequestParam(required = false) Optional<LocalDate> date,
             @ApiParam(name = "page", value = "Page number, the first page is 1", required = false)
             @RequestParam(required = false) Optional<Integer> page,
             @ApiParam(name = "limit", value = "Page size, the default is 50 rows", required = false)
             @RequestParam(required = false) Optional<Integer> limit,
             @ApiParam(name = "filter", value = "Optional filter", required = false)
             @RequestParam(required = false) Optional<String> filter,
+            @ApiParam(name = "date", value = "Optional filter to return data quality issues only for a given date. The date should be an ISO8601 formatted date, it is treated as the timezone of the DQO server.", required = false)
+            @RequestParam(required = false) Optional<LocalDate> date,
+            @ApiParam(name = "column", value = "Optional column name filter", required = false)
+            @RequestParam(required = false) Optional<String> column,
+            @ApiParam(name = "check", value = "Optional check name filter", required = false)
+            @RequestParam(required = false) Optional<String> check,
             @ApiParam(name = "order", value = "Optional sort order, the default sort order is by the execution date", required = false)
             @RequestParam(required = false) Optional<CheckResultSortOrder> order,
             @ApiParam(name = "direction", value = "Optional sort direction, the default sort direction is ascending", required = false)
             @RequestParam(required = false) Optional<SortDirection> direction) {
         CheckResultListFilterParameters filterParameters = new CheckResultListFilterParameters();
 
-        if (date.isPresent()) {
-            filterParameters.setDate(date.get());
-        }
         if (page.isPresent()) {
             filterParameters.setPage(page.get());
         }
@@ -155,6 +155,15 @@ public class IncidentsController {
         }
         if (filter.isPresent()) {
             filterParameters.setFilter(filter.get());
+        }
+        if (date.isPresent()) {
+            filterParameters.setDate(date.get());
+        }
+        if (column.isPresent()) {
+            filterParameters.setColumn(column.get());
+        }
+        if (check.isPresent()) {
+            filterParameters.setCheck(check.get());
         }
         if (order.isPresent()) {
             filterParameters.setOrder(order.get());
@@ -175,19 +184,23 @@ public class IncidentsController {
 
     /**
      * Generates a histogram of data quality issues for each day, returning the number of data quality issues on that day.
+     * The other histograms are by a column name and by a check name.
      * @param connectionName Connection name.
      * @param year Year when the incident was first seen.
      * @param month Month when the incident was first seen.
      * @param incidentId Incident id.
-     * @param filter Optional filter.
+     * @param filter Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions.
+     * @param date Optional date filter.
+     * @param column Optional column name filter.
+     * @param check Optional check name filter.
      * @return Incident histogram of data quality issues.
      */
     @GetMapping("/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram")
-    @ApiOperation(value = "getIncidentHistogram", notes = "Generates a histogram of data quality issues for each day, returning the number of data quality issues on that day.",
+    @ApiOperation(value = "getIncidentHistogram", notes = "Generates histograms of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.",
             response = IncidentIssueHistogramModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Incident's histogram returned", response = IncidentIssueHistogramModel.class),
+            @ApiResponse(code = 200, message = "Incidents' histograms returned", response = IncidentIssueHistogramModel.class),
             @ApiResponse(code = 404, message = "Incident not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -196,11 +209,30 @@ public class IncidentsController {
             @ApiParam("Year when the incident was first seen") @PathVariable int year,
             @ApiParam("Month when the incident was first seen") @PathVariable int month,
             @ApiParam("Incident id") @PathVariable String incidentId,
-            @ApiParam(name = "filter", value = "Optional filter", required = false)
-            @RequestParam(required = false) Optional<String> filter) {
+            @ApiParam(name = "filter", value = "Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions", required = false)
+            @RequestParam(required = false) Optional<String> filter,
+            @ApiParam(name = "date", value = "Optional date filter", required = false)
+            @RequestParam(required = false) Optional<LocalDate> date,
+            @ApiParam(name = "column", value = "Optional column name filter", required = false)
+            @RequestParam(required = false) Optional<String> column,
+            @ApiParam(name = "check", value = "Optional check name filter", required = false)
+            @RequestParam(required = false) Optional<String> check) {
+        IncidentHistogramFilterParameters filterParameters = new IncidentHistogramFilterParameters();
+        if (filter.isPresent()) {
+            filterParameters.setFilter(filter.get());
+        }
+        if (date.isPresent()) {
+            filterParameters.setDate(date.get());
+        }
+        if (column.isPresent()) {
+            filterParameters.setColumn(column.get());
+        }
+        if (check.isPresent()) {
+            filterParameters.setCheck(check.get());
+        }
 
         IncidentIssueHistogramModel histogramModel = this.incidentsDataService.buildDailyIssuesHistogramForIncident(
-                connectionName, year, month, incidentId, filter.orElse(null));
+                connectionName, year, month, incidentId, filterParameters);
 
         if (histogramModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -217,7 +249,7 @@ public class IncidentsController {
      * @param acknowledged Return acknowledged incidents.
      * @param resolved Return resolved incidents.
      * @param muted Return muted incidents.
-     * @param filter Additional filter.
+     * @param filter Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions.
      * @param limit Page size.
      * @param page Page number.
      * @param order Sort order.
@@ -248,7 +280,7 @@ public class IncidentsController {
                 @RequestParam(required = false) Optional<Integer> page,
             @ApiParam(name = "limit", value = "Page size, the default is 50 rows", required = false)
                 @RequestParam(required = false) Optional<Integer> limit,
-            @ApiParam(name = "filter", value = "Optional filter", required = false)
+            @ApiParam(name = "filter", value = "Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions", required = false)
                 @RequestParam(required = false) Optional<String> filter,
             @ApiParam(name = "order", value = "Optional sort order, the default sort order is by the number of failed data quality checks", required = false)
                 @RequestParam(required = false) Optional<IncidentSortOrder> order,

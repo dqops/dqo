@@ -56,8 +56,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.DoubleColumn;
-import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.api.TextColumn;
 
 @SpringBootTest
 public class RuleEvaluationServiceImplTests extends BaseTest {
@@ -402,7 +402,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
     @Test
     void evaluateRules_whenTwoRowsForDifferentTimeSeriesAndOneRule_thenReturnsTwoResults() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 11.0, 10.0));
-		this.table.addColumns(StringColumn.create("stream_level_1", "one", "two"));
+		this.table.addColumns(TextColumn.create("stream_level_1", "one", "two"));
         SensorReadoutsNormalizedResult normalizedResult = this.normalizeService.normalizeResults(
 				this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
 		this.checkSpec.setWarning(new MinCountRuleWarningParametersSpec(12));

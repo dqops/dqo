@@ -101,6 +101,8 @@ dqo:
     viewed-statistics-age-months: 3
   incidents:
     count-open-incidents-days: 15
+    column-histogram-size: 10
+    check-histogram-size: 10
   jdbc:
     max-connection-in-pool: 1000
     expire-after-access-seconds: 1800

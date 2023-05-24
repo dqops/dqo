@@ -17,6 +17,7 @@ package ai.dqo.data.checkresults.services;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.core.configuration.DqoIncidentsConfigurationProperties;
 import ai.dqo.data.checkresults.factory.CheckResultsColumnNames;
 import ai.dqo.data.checkresults.services.models.*;
 import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
@@ -24,8 +25,7 @@ import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactory;
-import ai.dqo.data.incidents.services.models.IncidentIssueHistogramModel;
-import ai.dqo.data.incidents.services.models.IncidentModel;
+import ai.dqo.data.checkresults.services.models.IncidentIssueHistogramModel;
 import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.storage.LoadedMonthlyPartition;
@@ -36,14 +36,13 @@ import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.rest.models.common.SortDirection;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.utils.tables.TableRowUtility;
-import org.apache.parquet.Strings;
+import com.google.common.base.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.instant.PackedInstant;
 import tech.tablesaw.selection.Selection;
-import tech.tablesaw.table.Relation;
 
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -58,14 +57,17 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
     private CheckResultsSnapshotFactory checkResultsSnapshotFactory;
     private ErrorsSnapshotFactory errorsSnapshotFactory;
     private DefaultTimeZoneProvider defaultTimeZoneProvider;
+    private DqoIncidentsConfigurationProperties dqoIncidentsConfigurationProperties;
 
     @Autowired
     public CheckResultsDataServiceImpl(CheckResultsSnapshotFactory checkResultsSnapshotFactory,
                                        ErrorsSnapshotFactory errorsSnapshotFactory,
-                                       DefaultTimeZoneProvider defaultTimeZoneProvider) {
+                                       DefaultTimeZoneProvider defaultTimeZoneProvider,
+                                       DqoIncidentsConfigurationProperties dqoIncidentsConfigurationProperties) {
         this.checkResultsSnapshotFactory = checkResultsSnapshotFactory;
         this.errorsSnapshotFactory = errorsSnapshotFactory;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
+        this.dqoIncidentsConfigurationProperties = dqoIncidentsConfigurationProperties;
     }
 
     /**
@@ -340,6 +342,20 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             Selection incidentHashSelection = partitionData.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME).isIn(incidentHash);
 
             Selection selectionOfMatchingIssues = minSeveritySelection.and(issuesInTimeRange).and(incidentHashSelection);
+            if (!Strings.isNullOrEmpty(filterParameters.getColumn())) {
+                TextColumn partitionColumnNameColumn = partitionData.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
+                if (Objects.equals(CheckResultsDataService.COLUMN_NAME_TABLE_CHECKS_PLACEHOLDER, filterParameters.getColumn())) {
+                    selectionOfMatchingIssues = selectionOfMatchingIssues.and(partitionColumnNameColumn.isMissing()); // table level sensors
+                } else {
+                    selectionOfMatchingIssues = selectionOfMatchingIssues.and(partitionColumnNameColumn.isEqualTo(filterParameters.getColumn()));
+                }
+            }
+
+            if (!Strings.isNullOrEmpty(filterParameters.getCheck())) {
+                TextColumn partitionCheckNameColumn = partitionData.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+                selectionOfMatchingIssues = selectionOfMatchingIssues.and(partitionCheckNameColumn.isEqualTo(filterParameters.getCheck()));
+            }
+
             if (selectionOfMatchingIssues.size() == 0) {
                 continue;
             }
@@ -387,7 +403,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
      * @param firstSeen         The timestamp when the incident was first seen.
      * @param incidentUntil     The timestamp when the incident was closed or expired, returns check results up to this timestamp.
      * @param minSeverity       Minimum check issue severity that is returned.
-     * @param filter            Optional filter to limit the issues included in the histogram.
+     * @param filterParameters  Optional filter to limit the issues included in the histogram.
      * @return Daily histogram of failed data quality checks.
      */
     @Override
@@ -397,7 +413,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                                                                            Instant firstSeen,
                                                                            Instant incidentUntil,
                                                                            int minSeverity,
-                                                                           String filter) {
+                                                                            IncidentHistogramFilterParameters filterParameters) {
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS);
         LocalDate startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
@@ -429,24 +445,49 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 continue;
             }
 
+            TextColumn columnNameColumn = partitionData.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
+            TextColumn checkNameColumn = partitionData.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+
             for (Integer rowIndex : selectionOfMatchingIssues) {
                 Row row = partitionData.row(rowIndex);
 
-                if (!Strings.isNullOrEmpty(filter)) {
+                if (!Strings.isNullOrEmpty(filterParameters.getFilter())) {
                     CheckResultDetailedSingleModel singleCheckResultDetailedModel = createSingleCheckResultDetailedModel(row);
-                    if (!singleCheckResultDetailedModel.matchesFilter(filter)) {
+                    if (!singleCheckResultDetailedModel.matchesFilter(filterParameters.getFilter())) {
                         continue;
                     }
                 }
 
                 Integer severity = severityColumn.get(rowIndex);
                 Instant executedAt = executedAtColumn.get(rowIndex);
-                LocalDate localDate = executedAt.atZone(defaultTimeZoneId).toLocalDate();
-                histogramModel.incrementSeverityForDay(localDate, severity);
+                LocalDate executedAtDate = executedAt.atZone(defaultTimeZoneId).toLocalDate();
+                String columnName = columnNameColumn.get(rowIndex);
+                String checkName = checkNameColumn.get(rowIndex);
+                if (columnName == null) {
+                    columnName = CheckResultsDataService.COLUMN_NAME_TABLE_CHECKS_PLACEHOLDER;
+                }
+
+                boolean dateMatch = filterParameters.getDate() == null || Objects.equals(filterParameters.getDate(), executedAtDate);
+                boolean columnMatch = Strings.isNullOrEmpty(filterParameters.getColumn()) || Objects.equals(filterParameters.getColumn(), columnName);
+                boolean checkMatch = Strings.isNullOrEmpty(filterParameters.getCheck()) || Objects.equals(filterParameters.getCheck(), checkName);
+
+                if (columnMatch && checkMatch) {
+                    histogramModel.incrementSeverityForDay(executedAtDate, severity);
+                }
+
+                if (dateMatch && checkMatch) {
+                    histogramModel.incrementCountForColumn(columnName);
+                }
+
+                if (dateMatch && columnMatch) {
+                    histogramModel.incrementCountForCheck(checkName);
+                }
             }
         }
 
         histogramModel.addMissingDaysInRange();
+        histogramModel.sortAndTruncateColumnHistogram(this.dqoIncidentsConfigurationProperties.getColumnHistogramSize());
+        histogramModel.sortAndTruncateCheckHistogram(this.dqoIncidentsConfigurationProperties.getCheckHistogramSize());
 
         return histogramModel;
     }

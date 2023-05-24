@@ -16,7 +16,6 @@
 
 package ai.dqo.data.checkresults.services.models;
 
-import ai.dqo.rest.models.common.SortDirection;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -26,16 +25,16 @@ import lombok.Data;
 import java.time.LocalDate;
 
 /**
- * Parameters for filtering the list of data quality issues related to an incident.
+ * Parameters for filtering the data (the data quality issues) for the histogram of a data quality incident.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
-public class CheckResultListFilterParameters {
+public class IncidentHistogramFilterParameters {
     /**
      * Optional filter that is a pattern expression. Filter is used on schema names, table names, dimensions, categories, etc.
      */
-    @JsonPropertyDescription("Optional filter that is a pattern expression. Filters are used on column names, sensor names, etc.")
+    @JsonPropertyDescription("Optional filter that is a pattern expression. Filters are used on schema names, table names, dimensions, categories, etc.")
     private String filter;
 
     /**
@@ -55,28 +54,4 @@ public class CheckResultListFilterParameters {
      */
     @JsonPropertyDescription("Optional filter for an exact data quality check name.")
     private String check;
-
-    /**
-     * Page number. The first page is 1.
-     */
-    @JsonPropertyDescription("Page number. The first page is 1 which is the default value.")
-    private int page = 1;
-
-    /**
-     * Page size. The default page size is 50.
-     */
-    @JsonPropertyDescription("Page size. The default page size is 50.")
-    private int limit = 50;
-
-    /**
-     * Sort order.
-     */
-    @JsonPropertyDescription("Sort order.")
-    private CheckResultSortOrder order = CheckResultSortOrder.executedAt;
-
-    /**
-     * Sort direction.
-     */
-    @JsonPropertyDescription("Sort direction.")
-    private SortDirection sortDirection = SortDirection.asc;
 }

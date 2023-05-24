@@ -27,6 +27,8 @@ import org.springframework.context.annotation.Configuration;
 @EqualsAndHashCode(callSuper = false)
 public class DqoIncidentsConfigurationProperties implements Cloneable {
     private int countOpenIncidentsDays = 15;
+    private int columnHistogramSize = 10;
+    private int checkHistogramSize = 10;
 
     /**
      * Returns the number of days back that DQO counts open incidents per day.
@@ -42,6 +44,38 @@ public class DqoIncidentsConfigurationProperties implements Cloneable {
      */
     public void setCountOpenIncidentsDays(int countOpenIncidentsDays) {
         this.countOpenIncidentsDays = countOpenIncidentsDays;
+    }
+
+    /**
+     * Returns the size of a column histogram.
+     * @return Column histogram size.
+     */
+    public int getColumnHistogramSize() {
+        return columnHistogramSize;
+    }
+
+    /**
+     * Sets the size of a column histogram.
+     * @param columnHistogramSize Column histogram size.
+     */
+    public void setColumnHistogramSize(int columnHistogramSize) {
+        this.columnHistogramSize = columnHistogramSize;
+    }
+
+    /**
+     * Returns the size of the check histogram.
+     * @return The size of the check histogram.
+     */
+    public int getCheckHistogramSize() {
+        return checkHistogramSize;
+    }
+
+    /**
+     * Sets the size of the check histogram.
+     * @param checkHistogramSize The size of the check histogram.
+     */
+    public void setCheckHistogramSize(int checkHistogramSize) {
+        this.checkHistogramSize = checkHistogramSize;
     }
 
     /**

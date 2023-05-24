@@ -18,10 +18,11 @@ package ai.dqo.data.incidents.services;
 import ai.dqo.core.configuration.DqoIncidentsConfigurationProperties;
 import ai.dqo.data.checkresults.services.CheckResultsDataService;
 import ai.dqo.data.checkresults.services.models.CheckResultDetailedSingleModel;
+import ai.dqo.data.checkresults.services.models.IncidentHistogramFilterParameters;
 import ai.dqo.data.incidents.factory.IncidentStatus;
 import ai.dqo.data.incidents.factory.IncidentsColumnNames;
 import ai.dqo.data.checkresults.services.models.CheckResultListFilterParameters;
-import ai.dqo.data.incidents.services.models.IncidentIssueHistogramModel;
+import ai.dqo.data.checkresults.services.models.IncidentIssueHistogramModel;
 import ai.dqo.data.incidents.services.models.IncidentListFilterParameters;
 import ai.dqo.data.incidents.services.models.IncidentModel;
 import ai.dqo.rest.models.common.SortDirection;
@@ -276,7 +277,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
      * @param year             Year when the incident was first seen.
      * @param month            Month of year when the incident was first seen.
      * @param incidentId       The incident id.
-     * @param filter           Optional filter to limit the issues included in the histogram.
+     * @param filterParameters Filter to limit the issues included in the histogram.
      * @return Daily histogram of days when a data quality issue failed.
      */
     @Override
@@ -284,7 +285,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                                                                             int year,
                                                                             int month,
                                                                             String incidentId,
-                                                                            String filter) {
+                                                                            IncidentHistogramFilterParameters filterParameters) {
         IncidentModel incidentModel = this.loadIncident(connectionName, year, month, incidentId);
         if (incidentModel == null) {
             return null;
@@ -296,7 +297,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 incidentModel.getFirstSeen(),
                 incidentModel.getIncidentUntil(),
                 incidentModel.getMinSeverity(),
-                filter);
+                filterParameters);
 
         return histogramModel;
     }

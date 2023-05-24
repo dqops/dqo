@@ -158,6 +158,14 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "The number of days since today that are scanned for open incidents first seen in since this number of days.", defaultValue = "15")
     private Integer dqoIncidentsCountOpenIncidentsDays;
 
+    @CommandLine.Option(names = {"--dqo.incidents.column-histogram-size"},
+            description = "The size of the column histogram that is generated for a preview of a data quality incident.", defaultValue = "10")
+    private Integer dqoIncidentsColumnHistogramSize;
+
+    @CommandLine.Option(names = {"--dqo.incidents.check-histogram-size"},
+            description = "The size of the data quality check histogram that is generated for a preview of a data quality incident.", defaultValue = "10")
+    private Integer dqoIncidentsCheckHistogramSize;
+
     @CommandLine.Option(names = {"--dqo.jdbc.max-connection-in-pool"},
             description = "Sets the maximum number of connections in the JDBC connection pool, shared across all data sources using JDBC drivers.", defaultValue = "1000")
     private Integer dqoJdbcMaxConnectionInPool;
