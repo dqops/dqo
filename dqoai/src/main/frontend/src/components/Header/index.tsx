@@ -22,13 +22,9 @@ import {
 } from '../../shared/constants';
 import { SynchronizeButton } from './SynchronizeButton';
 import SvgIcon from '../SvgIcon';
-import {
-  DqoUserProfileModel,
-  EnvironmentApi,
-  EnvironmentApiAxiosParamCreator,
-  EnvironmentApiFactory
-} from '../../api';
-import { AxiosPromise, AxiosResponse } from 'axios';
+import UserProfile from '../UserProfile';
+import { DqoUserProfileModel } from '../../api';
+import { AxiosResponse } from 'axios';
 import { EnviromentApiClient } from '../../services/apiClient';
 
 interface UserProfile {
@@ -36,7 +32,7 @@ interface UserProfile {
   email?: string;
 }
 
-const Header = ({ name, email }: UserProfile) => {
+const Header = () => {
   const history = useHistory();
   const location = useLocation();
   const {
@@ -153,22 +149,6 @@ const Header = ({ name, email }: UserProfile) => {
     history.push(url);
   };
 
-  const fetchUserProfile = async () => {
-    try {
-      const res: AxiosResponse<DqoUserProfileModel> =
-        await EnviromentApiClient.getUserProfile();
-      setUserProfile(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserProfile().then();
-  }, [name, email]);
-
-  console.log(userProfile);
-
   return (
     <div className="fixed top-0 left-0 right-0 min-h-16 max-h-16 bg-white shadow-header flex items-center justify-between z-10 border-b border-gray-300 px-4">
       <div className="flex space-x-2">
@@ -253,17 +233,8 @@ const Header = ({ name, email }: UserProfile) => {
         <HelpMenu />
         <SynchronizeButton />
         <NotificationMenu />
-        <SvgIcon
-          name="userprofile"
-          onClick={() => setShowProfile(!showProfile)}
-        />
+        <UserProfile />
       </div>
-      {showProfile ? (
-        <div className="bg-black w-50 h-60 absolute right-5 top-15 rounded-md"></div>
-      ) : (
-        ''
-      )}
-      {/* enviiromental controller java, java-rest-controllers */}
     </div>
   );
 };
