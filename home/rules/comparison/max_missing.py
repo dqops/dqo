@@ -19,8 +19,8 @@ from typing import Sequence
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class MinCountRuleParametersSpec:
-    min_count: int
+class MaxMissingRuleParametersSpec:
+    max_missing: int
 
 
 class HistoricDataPoint:
@@ -32,13 +32,14 @@ class HistoricDataPoint:
 
 class RuleTimeWindowSettingsSpec:
     prediction_time_window: int
-    min_periods_with_readouts: int
+    max_periods_with_readouts: int
 
 
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: MinCountRuleParametersSpec
+    expected_value: float
+    parameters: MaxMissingRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -61,11 +62,14 @@ class RuleExecutionResult:
 
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
+    if not hasattr(rule_parameters,'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
 
-    expected_value = None
-    lower_bound = rule_parameters.parameters.min_count
+    expected_value = rule_parameters.expected_value
+    if rule_parameters.expected_value < rule_parameters.parameters.max_missing:
+        lower_bound = 0
+    else:
+        lower_bound = rule_parameters.expected_value - rule_parameters.parameters.max_missing
     upper_bound = None
     passed = rule_parameters.actual_value >= lower_bound
 
