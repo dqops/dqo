@@ -57,7 +57,7 @@ const HomePage = () => {
                   </li>
                   <li className="mb-2">
                     <div className="inline-flex items-end">
-                      In the list of checks on the right,  enable the selected data quality checks by clicking the switch <img src="/images/home/switch-off.png" alt="" className="inline" /> .
+                      In the list of checks on the right, enable the selected data quality checks by clicking the switch <img src="/images/home/switch-off.png" alt="" className="inline" /> .
                     </div>
                   </li>
                   <li className="mb-2">
