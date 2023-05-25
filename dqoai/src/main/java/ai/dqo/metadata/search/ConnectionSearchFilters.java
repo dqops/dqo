@@ -15,6 +15,9 @@
  */
 package ai.dqo.metadata.search;
 
+import ai.dqo.metadata.search.pattern.SearchPattern;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Hierarchy node search filters.
  */
@@ -24,6 +27,13 @@ public class ConnectionSearchFilters {
     private String[] dimensions;
     private String[] labels;
 
+    @JsonIgnore
+    private SearchPattern connectionNameSearchPattern;
+    @JsonIgnore
+    private SearchPattern[] dimensionsSearchPatterns;
+    @JsonIgnore
+    private SearchPattern[] labelsSearchPatterns;
+    
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
      * @return Search visitor.
@@ -96,6 +106,53 @@ public class ConnectionSearchFilters {
      */
     public void setLabels(String[] labels) {
         this.labels = labels;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>connectionName</code>.
+     * Lazy getter, parses <code>connectionName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>connectionName</code>.
+     */
+    public SearchPattern getConnectionNameSearchPattern() {
+        if (connectionNameSearchPattern == null && connectionName != null) {
+            connectionNameSearchPattern = SearchPattern.create(false, connectionName);
+        }
+
+        return connectionNameSearchPattern;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to a specific dimension in <code>dimensions</code>.
+     * Lazy getter, parses each <code>dimension</code> as a search pattern when requested and returns parsed object.
+     * @param i Index of requested dimension search pattern. Corresponds to <code>dimensions[i]</code>.
+     * @return {@link SearchPattern} related to <code>i</code>'th <code>dimension</code>.
+     */
+    public SearchPattern getDimensionSearchPatternAt(int i) {
+        if (dimensionsSearchPatterns == null) {
+            dimensionsSearchPatterns = new SearchPattern[dimensions.length];
+        }
+        if (dimensionsSearchPatterns[i] == null && dimensions[i] != null) {
+            dimensionsSearchPatterns[i] = SearchPattern.create(false, dimensions[i]);
+        }
+
+        return dimensionsSearchPatterns[i];
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to a specific label in <code>labels</code>.
+     * Lazy getter, parses each <code>label</code> as a search pattern when requested and returns parsed object.
+     * @param i Index of requested label search pattern. Corresponds to <code>labels[i]</code>.
+     * @return {@link SearchPattern} related to <code>i</code>'th <code>label</code>.
+     */
+    public SearchPattern getLabelSearchPatternAt(int i) {
+        if (labelsSearchPatterns == null) {
+            labelsSearchPatterns = new SearchPattern[labels.length];
+        }
+        if (labelsSearchPatterns[i] == null && labels[i] != null) {
+            labelsSearchPatterns[i] = SearchPattern.create(false, labels[i]);
+        }
+
+        return labelsSearchPatterns[i];
     }
 
 }

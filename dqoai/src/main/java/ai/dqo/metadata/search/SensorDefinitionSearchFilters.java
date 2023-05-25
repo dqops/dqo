@@ -15,12 +15,18 @@
  */
 package ai.dqo.metadata.search;
 
+import ai.dqo.metadata.search.pattern.SearchPattern;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Hierarchy node search filters.
  */
 public class SensorDefinitionSearchFilters {
     private String sensorName;
     private Boolean enabled = true;
+
+    @JsonIgnore
+    private SearchPattern sensorNameSearchPattern;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -62,5 +68,18 @@ public class SensorDefinitionSearchFilters {
      */
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>sensorName</code>.
+     * Lazy getter, parses <code>sensorName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>sensorName</code>.
+     */
+    public SearchPattern getSensorNameSearchPattern() {
+        if (sensorNameSearchPattern == null && sensorName != null) {
+            sensorNameSearchPattern = SearchPattern.create(false, sensorName);
+        }
+
+        return sensorNameSearchPattern;
     }
 }

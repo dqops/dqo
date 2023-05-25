@@ -15,6 +15,8 @@
  */
 package ai.dqo.metadata.search;
 
+import ai.dqo.metadata.search.pattern.SearchPattern;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -32,6 +34,15 @@ public class TableSearchFilters {
     private Boolean enabled = true;
     private String[] tags;
     private String[] labels;
+
+    @JsonIgnore
+    private SearchPattern connectionNameSearchPattern;
+    @JsonIgnore
+    private SearchPattern schemaTableNameSearchPattern;
+    @JsonIgnore
+    private SearchPattern[] tagsSearchPatterns;
+    @JsonIgnore
+    private SearchPattern[] labelsSearchPatterns;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -123,4 +134,63 @@ public class TableSearchFilters {
         this.labels = labels;
     }
 
+    /**
+     * Returns the {@link SearchPattern} related to <code>connectionName</code>.
+     * Lazy getter, parses <code>connectionName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>connectionName</code>.
+     */
+    public SearchPattern getConnectionNameSearchPattern() {
+        if (connectionNameSearchPattern == null && connectionName != null) {
+            connectionNameSearchPattern = SearchPattern.create(false, connectionName);
+        }
+
+        return connectionNameSearchPattern;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>schemaTableName</code>.
+     * Lazy getter, parses <code>schemaTableName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>schemaTableName</code>.
+     */
+    public SearchPattern getSchemaTableNameSearchPattern() {
+        if (schemaTableNameSearchPattern == null && schemaTableName != null) {
+            schemaTableNameSearchPattern = SearchPattern.create(false, schemaTableName);
+        }
+
+        return schemaTableNameSearchPattern;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to a specific tag in <code>tags</code>.
+     * Lazy getter, parses each <code>tag</code> as a search pattern when requested and returns parsed object.
+     * @param i Index of requested tag search pattern. Corresponds to <code>tags[i]</code>.
+     * @return {@link SearchPattern} related to <code>i</code>'th <code>tag</code>.
+     */
+    public SearchPattern getTagSearchPatternAt(int i) {
+        if (tagsSearchPatterns == null) {
+            tagsSearchPatterns = new SearchPattern[tags.length];
+        }
+        if (tagsSearchPatterns[i] == null && tags[i] != null) {
+            tagsSearchPatterns[i] = SearchPattern.create(false, tags[i]);
+        }
+
+        return tagsSearchPatterns[i];
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to a specific label in <code>labels</code>.
+     * Lazy getter, parses each <code>label</code> as a search pattern when requested and returns parsed object.
+     * @param i Index of requested label search pattern. Corresponds to <code>labels[i]</code>.
+     * @return {@link SearchPattern} related to <code>i</code>'th <code>label</code>.
+     */
+    public SearchPattern getLabelSearchPatternAt(int i) {
+        if (labelsSearchPatterns == null) {
+            labelsSearchPatterns = new SearchPattern[labels.length];
+        }
+        if (labelsSearchPatterns[i] == null && labels[i] != null) {
+            labelsSearchPatterns[i] = SearchPattern.create(false, labels[i]);
+        }
+
+        return labelsSearchPatterns[i];
+    }
 }

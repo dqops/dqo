@@ -17,6 +17,7 @@ package ai.dqo.metadata.search;
 
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyIdModel;
+import ai.dqo.metadata.search.pattern.SearchPattern;
 import ai.dqo.statistics.StatisticsCollectorTarget;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -44,6 +45,13 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
 
     @JsonIgnore // we can't serialize it because it is a mix of types, will not support deserialization correctly
     private Set<HierarchyId> collectorsHierarchyIds;
+
+    @JsonIgnore
+    private SearchPattern columnNameSearchPattern;
+    @JsonIgnore
+    private SearchPattern collectorNameSearchPattern;
+    @JsonIgnore
+    private SearchPattern sensorNameSearchPattern;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -176,6 +184,45 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
                 .map(hierarchyIdModel -> hierarchyIdModel.toHierarchyId())
                 .collect(Collectors.toSet());
         this.collectorsHierarchyIds = hierarchyIds;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>columnName</code>.
+     * Lazy getter, parses <code>columnName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>columnName</code>.
+     */
+    public SearchPattern getColumnNameSearchPattern() {
+        if (columnNameSearchPattern == null && columnName != null) {
+            columnNameSearchPattern = SearchPattern.create(false, columnName);
+        }
+
+        return columnNameSearchPattern;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>collectorName</code>.
+     * Lazy getter, parses <code>collectorName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>collectorName</code>.
+     */
+    public SearchPattern getCollectorNameSearchPattern() {
+        if (collectorNameSearchPattern == null && collectorName != null) {
+            collectorNameSearchPattern = SearchPattern.create(false, collectorName);
+        }
+
+        return collectorNameSearchPattern;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>sensorName</code>.
+     * Lazy getter, parses <code>sensorName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>sensorName</code>.
+     */
+    public SearchPattern getSensorNameSearchPattern() {
+        if (sensorNameSearchPattern == null && sensorName != null) {
+            sensorNameSearchPattern = SearchPattern.create(false, sensorName);
+        }
+
+        return sensorNameSearchPattern;
     }
 
     /**

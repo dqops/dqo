@@ -61,9 +61,11 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
             Set<String> wrappedValue = new HashSet<>(){{add(columnValue);}};
             conditions.put(columnName, wrappedValue);
         }
+        // TODO: up to this point można wyjebać do czegoś co korzysta z ParquetDataFragmentFilter
+
         if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
             conditions.put(ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
-        }
+        } // UNIKALNA NAZWA KOLUMNY! tego się nie wyrzuci
 
         DataDeleteResult dataDeleteResult = new DataDeleteResult();
 
@@ -73,6 +75,11 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
                     filter.getTableSearchFilters().getConnectionName(),
                     ErrorsSnapshot.createErrorsStorageSettings()
             );
+            // TODO: w praktyce chcemy uwspolnic te czesc i robić tak:
+            //  Listuj tabele, pofiltruj zgodnie z dostarczonym patternem (jeśli nie ma, to *.*),
+            //  no i te co zostaną usuń.
+            //  Taki filtrownik może być osobnym serwisem, całkiem ogólna funkcjonalność.
+            //  Albo lepiej, utility klasa do patternow, po prostu dajesz jej nazwe i ona ci mowi czy wchodzi w pattern, boola zwraca.
         } else {
             tablesToDelete = new LinkedList<>();
             tablesToDelete.add(PhysicalTableName.fromSchemaTableFilter(filter.getTableSearchFilters().getSchemaTableName()));
