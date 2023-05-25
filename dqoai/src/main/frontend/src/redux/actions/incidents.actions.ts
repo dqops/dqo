@@ -19,8 +19,8 @@ import { Dispatch } from 'redux';
 import { IncidentsApi } from '../../services/apiClient';
 import { INCIDENTS_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
-import { IncidentModel, IncidentsPerConnectionModel } from "../../api";
-import { IncidentFilter } from "../reducers/incidents.reducer";
+import { CheckResultDetailedSingleModel, IncidentModel, IncidentsPerConnectionModel } from "../../api";
+import { IncidentFilter, IncidentIssueFilter } from "../reducers/incidents.reducer";
 
 export const getConnectionsRequest = () => ({
   type: INCIDENTS_ACTION.GET_CONNECTIONS
@@ -100,7 +100,7 @@ export const getIncidentsByConnection = ({
   }
 };
 
-export const setIncidentsFilter = (filter: Partial<IncidentFilter>) => ({
+export const setIncidentsFilter = (filter: Partial<IncidentFilter | IncidentIssueFilter>) => ({
   type: INCIDENTS_ACTION.SET_INCIDENTS_FILTER,
   data: filter,
 });
@@ -109,3 +109,42 @@ export const updateIncident = (incidents: IncidentModel[]) => ({
   type: INCIDENTS_ACTION.UPDATE_INCIDENT,
   data: incidents,
 });
+
+
+export const getIncidentsIssuesRequest = () => ({
+  type: INCIDENTS_ACTION.GET_INCIDENTS_ISSUES
+});
+
+export const getIncidentsIssuesSuccess = (data: Array<CheckResultDetailedSingleModel>) => ({
+  type: INCIDENTS_ACTION.GET_INCIDENTS_ISSUES_SUCCESS,
+  data
+});
+
+export const getIncidentsIssuesFailed = (error: unknown) => ({
+  type: INCIDENTS_ACTION.GET_INCIDENTS_ISSUES_ERROR,
+  error
+});
+
+export const getIncidentsIssues = ({
+  connection,
+  year,
+  month,
+  incidentId,
+  page = 1,
+  pageSize = 50,
+  filter,
+  date,
+  column,
+  check,
+  order,
+  direction,
+}: IncidentIssueFilter) => async (dispatch: Dispatch) => {
+  dispatch(getIncidentsIssuesRequest());
+  try {
+    const res: AxiosResponse<Array<CheckResultDetailedSingleModel>> =
+      await IncidentsApi.getIncidentIssues(connection, year, month, incidentId, page, pageSize,filter, date, column, check, order, direction);
+    dispatch(getIncidentsIssuesSuccess(res.data));
+  } catch (err) {
+    dispatch(getIncidentsIssuesFailed(err));
+  }
+};

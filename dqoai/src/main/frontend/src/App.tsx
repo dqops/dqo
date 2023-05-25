@@ -21,11 +21,12 @@ const App = () => {
     dispatch(getAllJobs());
 
     window.onunhandledrejection = event => {
-      console.log('event', event);
-      LogErrorsApi.logError({
-        window_location: window.location.href,
-        message: event.reason
-      })
+      if (event?.reason?.request?.responseURL?.indexOf("api/logs/error") < 0) {
+        LogErrorsApi.logError({
+          window_location: window.location.href,
+          message: event.reason
+        })
+      }
     };
 
     window.onerror = function(message, source, lineNumber, colno, error) {
