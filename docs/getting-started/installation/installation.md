@@ -74,7 +74,7 @@ If you want to install DQO directly from Git go to [this section](../../working-
         ```
     === "MacOS/Linux"
         ```
-        pip install dqops
+        pip3 install dqops
         ```
 
 ## Start DQO application
