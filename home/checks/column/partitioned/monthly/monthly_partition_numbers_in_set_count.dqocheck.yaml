@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/numeric/numbers_in_set_count
-  rule_name: comparison/min_count
-  help_text: Verifies that the number of numbers from set in a column does not exceed
-    the minimum accepted count. Creates a separate data quality check (and an alert)
-    for each monthly partition.

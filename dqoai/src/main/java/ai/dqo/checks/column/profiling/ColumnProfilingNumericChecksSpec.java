@@ -40,8 +40,8 @@ public class ColumnProfilingNumericChecksSpec extends AbstractCheckCategorySpec 
             put("negative_percent", o -> o.negativePercent);
             put("non_negative_count", o -> o.nonNegativeCount);
             put("non_negative_percent", o -> o.nonNegativePercent);
-            put("numbers_in_set_count", o -> o.numbersInSetCount);
-            put("numbers_in_set_percent", o -> o.numbersInSetPercent);
+            put("numbers_found_count", o -> o.numbersFoundCount);
+            put("has_valid_numbers_percent", o -> o.hasValidNumbersPercent);
             put("values_in_range_numeric_percent", o -> o.valuesInRangeNumericPercent);
             put("values_in_range_integers_percent", o -> o.valuesInRangeIntegersPercent);
             put("value_below_min_value_count", o -> o.valueBelowMinValueCount);
@@ -82,11 +82,11 @@ public class ColumnProfilingNumericChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage.")
     private ColumnNonNegativePercentCheckSpec nonNegativePercent;
 
-    @JsonPropertyDescription("Verifies that the number of numbers from set in a column does not exceed the minimum accepted count.")
-    private ColumnNumbersInSetCountCheckSpec numbersInSetCount;
+    @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).")
+    private ColumnNumbersFoundCountCheckSpec numbersFoundCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of numbers from set in a column does not exceed the minimum accepted percentage.")
-    private ColumnNumbersInSetPercentCheckSpec numbersInSetPercent;
+    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.")
+    private ColumnHasValidNumbersPercentCheckSpec hasValidNumbersPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
     private ColumnValuesInRangeNumericPercentCheckSpec valuesInRangeNumericPercent;
@@ -236,36 +236,36 @@ public class ColumnProfilingNumericChecksSpec extends AbstractCheckCategorySpec 
      * Returns a numbers in set count check specification.
      * @return Numbers in set count check specification.
      */
-    public ColumnNumbersInSetCountCheckSpec getNumbersInSetCount() {
-        return numbersInSetCount;
+    public ColumnNumbersFoundCountCheckSpec getNumbersFoundCount() {
+        return numbersFoundCount;
     }
 
     /**
      * Sets a new specification of a numbers in set count check specification.
-     * @param numbersInSetCount Numbers in set count check specification.
+     * @param numbersFoundCount Numbers in set count check specification.
      */
-    public void setNumbersInSetCount(ColumnNumbersInSetCountCheckSpec numbersInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.numbersInSetCount, numbersInSetCount));
-        this.numbersInSetCount = numbersInSetCount;
-        propagateHierarchyIdToField(numbersInSetCount, "numbers_in_set_count");
+    public void setNumbersFoundCount(ColumnNumbersFoundCountCheckSpec numbersFoundCount) {
+        this.setDirtyIf(!Objects.equals(this.numbersFoundCount, numbersFoundCount));
+        this.numbersFoundCount = numbersFoundCount;
+        propagateHierarchyIdToField(numbersFoundCount, "numbers_found_count");
     }
 
     /**
-     * Returns a numbers in set percent check specification.
-     * @return Numbers in set percent check specification.
+     * Returns a numbers valid percent check specification.
+     * @return Numbers valid percent check specification.
      */
-    public ColumnNumbersInSetPercentCheckSpec getNumbersInSetPercent() {
-        return numbersInSetPercent;
+    public ColumnHasValidNumbersPercentCheckSpec getHasValidNumbersPercent() {
+        return hasValidNumbersPercent;
     }
 
     /**
-     * Sets a new specification of a numbers in set percent check specification.
-     * @param numbersInSetPercent Numbers in set percent check specification.
+     * Sets a new specification of a numbers valid percent check specification.
+     * @param hasValidNumbersPercent Numbers valid percent check specification.
      */
-    public void setNumbersInSetPercent(ColumnNumbersInSetPercentCheckSpec numbersInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.numbersInSetPercent, numbersInSetPercent));
-        this.numbersInSetPercent = numbersInSetPercent;
-        propagateHierarchyIdToField(numbersInSetPercent, "numbers_in_set_percent");
+    public void setHasValidNumbersPercent(ColumnHasValidNumbersPercentCheckSpec hasValidNumbersPercent) {
+        this.setDirtyIf(!Objects.equals(this.hasValidNumbersPercent, hasValidNumbersPercent));
+        this.hasValidNumbersPercent = hasValidNumbersPercent;
+        propagateHierarchyIdToField(hasValidNumbersPercent, "has_valid_numbers_percent");
     }
 
     /**

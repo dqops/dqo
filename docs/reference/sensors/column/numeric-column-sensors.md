@@ -1,4 +1,236 @@
 
+## **has valid number percent**
+**Full sensor name**
+```
+column/numeric/has_valid_number_percent
+```
+**Description**  
+Column level sensor that calculates the percentage of rows for which the tested numeric column contains a value from the list of expected values.
+ Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value).
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|expected_values|A list of expected values that must be present in a numeric column, only values from this list are accepted.|integer_list| ||
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```sql+jinja
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {{ values_list|join(', ') -}}
+    {% endmacro %}
+    
+    {%- macro actual_value() -%}
+        {%- if 'values' not in parameters or parameters.expected_values|length == 0 -%}
+        {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+        0.0
+        {%- else -%}
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        {{ actual_value() }} AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "mysql"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {{ values_list|join(', ') -}}
+    {% endmacro %}
+    
+    {%- macro actual_value() -%}
+        {%- if 'values' not in parameters or parameters.expected_values|length == 0 -%}
+        {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+        0.0
+        {%- else -%}
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        {{ actual_value() }} AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```sql+jinja
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {{values_list|join(', ')}}
+    {% endmacro %}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            0.0
+        {%- else -%}
+              100.0 * SUM(
+                CASE
+                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
+                    THEN 1
+                  ELSE 0
+                END
+              )/COUNT(*)
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```sql+jinja
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {%- macro extract_in_list(values_list) -%}
+        {{values_list|join(', ')}}
+    {% endmacro %}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            0.0
+        {%- else -%}
+              100.0 * SUM(
+                CASE
+                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
+                    THEN 1
+                  ELSE 0
+                END
+              )/COUNT(*)
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {{values_list|join(', ')}}
+    {% endmacro %}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            0.0
+        {%- else -%}
+              100.0 * SUM(
+                CASE
+                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
+                    THEN 1
+                  ELSE 0
+                END
+              )/COUNT(*)
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "sqlserver"
+      
+    ```sql+jinja
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {{values_list|join(', ')}}
+    {% endmacro %}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            0.0
+        {%- else -%}
+              100.0 * SUM(
+                CASE
+                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters.expected_values)}}))
+                    THEN 1
+                  ELSE 0
+                END
+              )/COUNT_BIG(*)
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT_BIG(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
 ## **invalid latitude count**
 **Full sensor name**
 ```
@@ -841,19 +1073,19 @@ Column level sensor that calculates the percent of non-negative values in a colu
     ```
 ___
 
-## **numbers in set count**
+## **numbers found count**
 **Full sensor name**
 ```
-column/numeric/numbers_in_set_count
+column/numeric/numbers_found_count
 ```
 **Description**  
-Column level sensor that counts values that are members of a given set.
+Column level sensor that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.
 
 **Parameters**  
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|values|Provided list of values to match the data.|integer_list| ||
+|expected_values|List of expected numeric values that the sensor is trying to find in the column.|integer_list| ||
 
 
 
@@ -869,12 +1101,12 @@ Column level sensor that counts values that are members of a given set.
     {% endmacro %}
     
     {%- macro actual_value() -%}
-        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
+        {%- if 'values' not in parameters or parameters.expected_values | length == 0 -%}
         0
         {%- else -%}
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                     THEN 1
                 ELSE 0
             END
@@ -883,7 +1115,8 @@ Column level sensor that counts values that are members of a given set.
     {% endmacro -%}
     
     SELECT
-        {{ actual_value() }} AS actual_value
+        {{ actual_value() }} AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -901,12 +1134,12 @@ Column level sensor that counts values that are members of a given set.
     {% endmacro %}
     
     {%- macro actual_value() -%}
-        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
+        {%- if 'values' not in parameters or parameters.expected_values|length == 0 -%}
         0
         {%- else -%}
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                     THEN 1
                 ELSE 0
             END
@@ -915,7 +1148,8 @@ Column level sensor that counts values that are members of a given set.
     {% endmacro -%}
     
     SELECT
-        {{ actual_value() }} AS actual_value
+        {{ actual_value() }} AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -933,12 +1167,12 @@ Column level sensor that counts values that are members of a given set.
     {% endmacro %}
     
     {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
+        {%- if parameters.expected_values|length == 0 -%}
             0
         {%- else -%}
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                     THEN 1
                 ELSE 0
             END
@@ -947,12 +1181,11 @@ Column level sensor that counts values that are members of a given set.
     {% endmacro -%}
     
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN NULL
-        ELSE
-        {{render_else()}}
-      END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -970,12 +1203,12 @@ Column level sensor that counts values that are members of a given set.
     {% endmacro %}
     
     {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
+        {%- if parameters.expected_values|length == 0 -%}
             0
         {%- else -%}
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                     THEN 1
                 ELSE 0
             END
@@ -984,12 +1217,11 @@ Column level sensor that counts values that are members of a given set.
     {% endmacro -%}
     
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN NULL
-        ELSE
-        {{render_else()}}
-      END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1007,12 +1239,12 @@ Column level sensor that counts values that are members of a given set.
     {% endmacro %}
     
     {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
+        {%- if parameters.expected_values|length == 0 -%}
             0
         {%- else -%}
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                     THEN 1
                 ELSE 0
             END
@@ -1021,12 +1253,11 @@ Column level sensor that counts values that are members of a given set.
     {% endmacro -%}
     
     SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN NULL
-        ELSE
-        {{render_else()}}
-      END
-      AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1044,12 +1275,12 @@ Column level sensor that counts values that are members of a given set.
     {% endmacro %}
     
     {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
+        {%- if parameters.expected_values|length == 0 -%}
             0
         {%- else -%}
         SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                     THEN 1
                 ELSE 0
             END
@@ -1058,243 +1289,11 @@ Column level sensor that counts values that are members of a given set.
     {% endmacro -%}
     
     SELECT
-      CASE
-        WHEN COUNT_BIG(*) = 0 THEN NULL
-        ELSE
-        {{render_else()}}
-      END
-      AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-___
-
-## **numbers in set percent**
-**Full sensor name**
-```
-column/numeric/numbers_in_set_percent
-```
-**Description**  
-Column level sensor that calculates the percentage of values that are members of a given set.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|values|Provided list of values to match the data.|integer_list| ||
-
-
-
-
-**SQL Template (Jinja2)**  
-=== "bigquery"
-      
-    ```sql+jinja
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {{ values_list|join(', ') -}}
-    {% endmacro %}
-    
-    {%- macro actual_value() -%}
-        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
-        {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
-        0.0
-        {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                        THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "mysql"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {{ values_list|join(', ') -}}
-    {% endmacro %}
-    
-    {%- macro actual_value() -%}
-        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
-        {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
-        0.0
-        {%- else -%}
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                        THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "postgresql"
-      
-    ```sql+jinja
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {{values_list|join(', ')}}
-    {% endmacro %}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            0.0
-        {%- else -%}
-              100.0 * SUM(
-                CASE
-                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}}))
-                    THEN 1
-                  ELSE 0
-                END
-              )/COUNT(*)
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN NULL
-        ELSE {{render_else()}}
-      END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "redshift"
-      
-    ```sql+jinja
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    {%- macro extract_in_list(values_list) -%}
-        {{values_list|join(', ')}}
-    {% endmacro %}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            0.0
-        {%- else -%}
-              100.0 * SUM(
-                CASE
-                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}}))
-                    THEN 1
-                  ELSE 0
-                END
-              )/COUNT(*)
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN NULL
-        ELSE {{render_else()}}
-      END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {{values_list|join(', ')}}
-    {% endmacro %}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            0.0
-        {%- else -%}
-              100.0 * SUM(
-                CASE
-                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}}))
-                    THEN 1
-                  ELSE 0
-                END
-              )/COUNT(*)
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-      CASE
-        WHEN COUNT(*) = 0 THEN NULL
-        ELSE {{render_else()}}
-      END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "sqlserver"
-      
-    ```sql+jinja
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {{values_list|join(', ')}}
-    {% endmacro %}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            0.0
-        {%- else -%}
-              100.0 * SUM(
-                CASE
-                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}}))
-                    THEN 1
-                  ELSE 0
-                END
-              )/COUNT_BIG(*)
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-      CASE
-        WHEN COUNT_BIG(*) = 0 THEN NULL
-        ELSE {{render_else()}}
-      END AS actual_value
+            WHEN COUNT_BIG(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table

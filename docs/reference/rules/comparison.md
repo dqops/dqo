@@ -939,6 +939,112 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
+## **max missing**
+**Full rule name**
+```
+comparison/max_missing
+```
+**Description**  
+Data quality rule that verifies the results of the data quality checks that count the number of values
+ present in a column, comparing it to a list of expected values. The rule compares the count of expected values (received as expected_value)
+ to the count of values found in the column (as the actual_value). The rule fails when the difference is higher than
+ the expected max_missing, which is the maximum difference between the expected_value (the count of values in the expected_values list)
+ and the actual number of values found in the column that match the list.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_missing|The maximum number of values from the expected_values list that were not found in the column (inclusive).|long| ||
+
+
+
+**Example**
+```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  mode: current_value
+  fields:
+  - field_name: max_missing
+    display_name: max_missing
+    help_text: The maximum number of missing values that were specified in the expected_values, but were not found among the column&#x27;s values.
+    data_type: long
+    sample_values:
+      - 1
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class MaxMissingRuleParametersSpec:
+    max_missing: int
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    max_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    expected_value: float
+    parameters: MaxMissingRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters,'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
+
+    expected_value = rule_parameters.expected_value
+    if rule_parameters.expected_value < rule_parameters.parameters.max_missing:
+        lower_bound = 0
+    else:
+        lower_bound = rule_parameters.expected_value - rule_parameters.parameters.max_missing
+    upper_bound = None
+    passed = rule_parameters.actual_value >= lower_bound
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
 ## **max percent**
 **Full rule name**
 ```
@@ -1279,7 +1385,7 @@ from typing import Sequence
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
 class MinCountRuleParametersSpec:
-    min_count: float
+    min_count: int
 
 
 class HistoricDataPoint:

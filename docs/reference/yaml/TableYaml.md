@@ -3481,8 +3481,8 @@ Container of built-in preconfigured data quality checks on a column level for nu
 |[negative_percent](#columnnegativepercentcheckspec)|Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage.|[ColumnNegativePercentCheckSpec](#columnnegativepercentcheckspec)| | | |
 |[non_negative_count](#columnnonnegativecountcheckspec)|Verifies that the number of non-negative values in a column does not exceed the maximum accepted count.|[ColumnNonNegativeCountCheckSpec](#columnnonnegativecountcheckspec)| | | |
 |[non_negative_percent](#columnnonnegativepercentcheckspec)|Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage.|[ColumnNonNegativePercentCheckSpec](#columnnonnegativepercentcheckspec)| | | |
-|[numbers_in_set_count](#columnnumbersinsetcountcheckspec)|Verifies that the number of numbers from set in a column does not exceed the minimum accepted count.|[ColumnNumbersInSetCountCheckSpec](#columnnumbersinsetcountcheckspec)| | | |
-|[numbers_in_set_percent](#columnnumbersinsetpercentcheckspec)|Verifies that the percentage of numbers from set in a column does not exceed the minimum accepted percentage.|[ColumnNumbersInSetPercentCheckSpec](#columnnumbersinsetpercentcheckspec)| | | |
+|[numbers_found_count](#columnnumbersfoundcountcheckspec)|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).|[ColumnNumbersFoundCountCheckSpec](#columnnumbersfoundcountcheckspec)| | | |
+|[has_valid_numbers_percent](#columnhasvalidnumberspercentcheckspec)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.|[ColumnHasValidNumbersPercentCheckSpec](#columnhasvalidnumberspercentcheckspec)| | | |
 |[values_in_range_numeric_percent](#columnvaluesinrangenumericpercentcheckspec)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.|[ColumnValuesInRangeNumericPercentCheckSpec](#columnvaluesinrangenumericpercentcheckspec)| | | |
 |[values_in_range_integers_percent](#columnvaluesinrangeintegerspercentcheckspec)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.|[ColumnValuesInRangeIntegersPercentCheckSpec](#columnvaluesinrangeintegerspercentcheckspec)| | | |
 |[value_below_min_value_count](#columnvaluebelowminvaluecountcheckspec)|The check counts the number of values in the column that is below the value defined by the user as a parameter.|[ColumnValueBelowMinValueCountCheckSpec](#columnvaluebelowminvaluecountcheckspec)| | | |
@@ -3859,8 +3859,9 @@ Column level sensor that calculates the percent of non-negative values in a colu
 
 ___  
 
-## ColumnNumbersInSetCountCheckSpec  
-Column level check that ensures that there are no more than a set number of numbers in a monitored column.  
+## ColumnNumbersFoundCountCheckSpec  
+Column level check that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.
+ The check raises a data quality issue when the threshold of maximum number of missing values was exceeded (too many expected values were not found in the column).  
   
 
 
@@ -3874,10 +3875,10 @@ Column level check that ensures that there are no more than a set number of numb
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnnumericnumbersinsetcountsensorparametersspec)|Data quality check parameters|[ColumnNumericNumbersInSetCountSensorParametersSpec](#columnnumericnumbersinsetcountsensorparametersspec)| | | |
-|[warning](#mincountrulewarningparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinCountRuleWarningParametersSpec](#mincountrulewarningparametersspec)| | | |
-|[error](#mincountrule0parametersspec)|Default alerting threshold for a set number of numbers in a column that raises a data quality error (alert).|[MinCountRule0ParametersSpec](#mincountrule0parametersspec)| | | |
-|[fatal](#mincountrulefatalparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinCountRuleFatalParametersSpec](#mincountrulefatalparametersspec)| | | |
+|[parameters](#columnnumericnumbersfoundcountsensorparametersspec)|Data quality check parameters that specify a list of expected numeric values to find in the column.|[ColumnNumericNumbersFoundCountSensorParametersSpec](#columnnumericnumbersfoundcountsensorparametersspec)| | | |
+|[warning](#maxmissingrule0parametersspec)|Alerting threshold that raises a data quality warning when too many expected values were not found in the column.|[MaxMissingRule0ParametersSpec](#maxmissingrule0parametersspec)| | | |
+|[error](#maxmissingrule1parametersspec)|Alerting threshold that raises a data quality error when too many expected values were not found in the column.|[MaxMissingRule1ParametersSpec](#maxmissingrule1parametersspec)| | | |
+|[fatal](#maxmissingrule2parametersspec)|Alerting threshold that raises a data quality fatal issue when too many expected values were not found in the column.|[MaxMissingRule2ParametersSpec](#maxmissingrule2parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -3897,8 +3898,8 @@ Column level check that ensures that there are no more than a set number of numb
 
 ___  
 
-## ColumnNumericNumbersInSetCountSensorParametersSpec  
-Column level sensor that counts values that are members of a given set.  
+## ColumnNumericNumbersFoundCountSensorParametersSpec  
+Column level sensor that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.  
   
 
 
@@ -3912,7 +3913,7 @@ Column level sensor that counts values that are members of a given set.
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|values|Provided list of values to match the data.|integer_list| | |2<br/>3<br/>|
+|expected_values|List of expected numeric values that the sensor is trying to find in the column.|integer_list| | |2<br/>3<br/>|
 |filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string| | | |
 
 
@@ -3925,8 +3926,12 @@ Column level sensor that counts values that are members of a given set.
 
 ___  
 
-## ColumnNumbersInSetPercentCheckSpec  
-Column level check that ensures that there are no more than a set percentage of numbers in a monitored column.  
+## MaxMissingRule0ParametersSpec  
+Data quality rule that verifies the results of the data quality checks that count the number of values
+ present in a column, comparing it to a list of expected values. The rule compares the count of expected values (received as expected_value)
+ to the count of values found in the column (as the actual_value). The rule fails when the difference is higher than
+ the expected max_missing, which is the maximum difference between the expected_value (the count of values in the expected_values list)
+ and the actual number of values found in the column that match the list.  
   
 
 
@@ -3940,10 +3945,102 @@ Column level check that ensures that there are no more than a set percentage of 
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](#columnnumericnumbersinsetpercentsensorparametersspec)|Data quality check parameters|[ColumnNumericNumbersInSetPercentSensorParametersSpec](#columnnumericnumbersinsetpercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a set percentage of numbers in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
-|[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
+|max_missing|The maximum number of values from the expected_values list that were not found in the column (inclusive).|long| | |1<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## MaxMissingRule1ParametersSpec  
+Data quality rule that verifies the results of the data quality checks that count the number of values
+ present in a column, comparing it to a list of expected values. The rule compares the count of expected values (received as expected_value)
+ to the count of values found in the column (as the actual_value). The rule fails when the difference is higher than
+ the expected max_missing, which is the maximum difference between the expected_value (the count of values in the expected_values list)
+ and the actual number of values found in the column that match the list.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|max_missing|The maximum number of values from the expected_values list that were not found in the column (inclusive).|long| | |1<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## MaxMissingRule2ParametersSpec  
+Data quality rule that verifies the results of the data quality checks that count the number of values
+ present in a column, comparing it to a list of expected values. The rule compares the count of expected values (received as expected_value)
+ to the count of values found in the column (as the actual_value). The rule fails when the difference is higher than
+ the expected max_missing, which is the maximum difference between the expected_value (the count of values in the expected_values list)
+ and the actual number of values found in the column that match the list.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|max_missing|The maximum number of values from the expected_values list that were not found in the column (inclusive).|long| | |2<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnHasValidNumbersPercentCheckSpec  
+Column level check that calculates the percentage of rows for which the tested numeric column contains a value from the list of expected values.
+ Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value).
+ The check raises a data quality issue when the percentage of rows with a not null column value that is not expected (not one of the values in the expected_values list)
+ is below an expected threshold, for example 99% of rows should have values from the defined domain.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](#columnnumerichasvalidnumberpercentsensorparametersspec)|Data quality check parameters that specify a list of expected values that are compared to the values in the tested numeric column.|[ColumnNumericHasValidNumberPercentSensorParametersSpec](#columnnumerichasvalidnumberpercentsensorparametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Default alerting threshold for a percentage of rows with invalid (not expected) values in a column that raises a data quality issue at a warning severity level.|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a percentage of rows with invalid (not expected) values in a column that raises a data quality issue at an error severity level.|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
+|[fatal](#minpercentrule95parametersspec)|Default alerting threshold for a percentage of rows with invalid (not expected) values in a column that raises a data quality fatal issue.|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -3963,8 +4060,9 @@ Column level check that ensures that there are no more than a set percentage of 
 
 ___  
 
-## ColumnNumericNumbersInSetPercentSensorParametersSpec  
-Column level sensor that calculates the percentage of values that are members of a given set.  
+## ColumnNumericHasValidNumberPercentSensorParametersSpec  
+Column level sensor that calculates the percentage of rows for which the tested numeric column contains a value from the list of expected values.
+ Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value).  
   
 
 
@@ -3978,7 +4076,7 @@ Column level sensor that calculates the percentage of values that are members of
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|values|Provided list of values to match the data.|integer_list| | |2<br/>3<br/>|
+|expected_values|A list of expected values that must be present in a numeric column, only values from this list are accepted.|integer_list| | |2<br/>3<br/>|
 |filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string| | | |
 
 
@@ -10851,8 +10949,8 @@ Container of built-in preconfigured data quality recurring on a column level tha
 |[daily_negative_percent](#columnnegativepercentcheckspec)|Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.|[ColumnNegativePercentCheckSpec](#columnnegativepercentcheckspec)| | | |
 |[daily_non_negative_count](#columnnonnegativecountcheckspec)|Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.|[ColumnNonNegativeCountCheckSpec](#columnnonnegativecountcheckspec)| | | |
 |[daily_non_negative_percent](#columnnonnegativepercentcheckspec)|Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.|[ColumnNonNegativePercentCheckSpec](#columnnonnegativepercentcheckspec)| | | |
-|[daily_numbers_in_set_count](#columnnumbersinsetcountcheckspec)|Verifies that the number of numbers from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.|[ColumnNumbersInSetCountCheckSpec](#columnnumbersinsetcountcheckspec)| | | |
-|[daily_numbers_in_set_percent](#columnnumbersinsetpercentcheckspec)|Verifies that the percentage of numbers from set in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.|[ColumnNumbersInSetPercentCheckSpec](#columnnumbersinsetpercentcheckspec)| | | |
+|[daily_numbers_found_count](#columnnumbersfoundcountcheckspec)|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each day when the data quality check was evaluated.|[ColumnNumbersFoundCountCheckSpec](#columnnumbersfoundcountcheckspec)| | | |
+|[daily_has_valid_numbers_percent](#columnhasvalidnumberspercentcheckspec)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.|[ColumnHasValidNumbersPercentCheckSpec](#columnhasvalidnumberspercentcheckspec)| | | |
 |[daily_values_in_range_numeric_percent](#columnvaluesinrangenumericpercentcheckspec)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.|[ColumnValuesInRangeNumericPercentCheckSpec](#columnvaluesinrangenumericpercentcheckspec)| | | |
 |[daily_values_in_range_integers_percent](#columnvaluesinrangeintegerspercentcheckspec)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.|[ColumnValuesInRangeIntegersPercentCheckSpec](#columnvaluesinrangeintegerspercentcheckspec)| | | |
 |[daily_value_below_min_value_count](#columnvaluebelowminvaluecountcheckspec)|The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.|[ColumnValueBelowMinValueCountCheckSpec](#columnvaluebelowminvaluecountcheckspec)| | | |
@@ -11311,8 +11409,8 @@ Container of built-in preconfigured data quality recurring on a column level tha
 |[monthly_negative_percent](#columnnegativepercentcheckspec)|Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnNegativePercentCheckSpec](#columnnegativepercentcheckspec)| | | |
 |[monthly_non_negative_count](#columnnonnegativecountcheckspec)|Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnNonNegativeCountCheckSpec](#columnnonnegativecountcheckspec)| | | |
 |[monthly_non_negative_percent](#columnnonnegativepercentcheckspec)|Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnNonNegativePercentCheckSpec](#columnnonnegativepercentcheckspec)| | | |
-|[monthly_numbers_in_set_count](#columnnumbersinsetcountcheckspec)|Verifies that the number of numbers from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnNumbersInSetCountCheckSpec](#columnnumbersinsetcountcheckspec)| | | |
-|[monthly_numbers_in_set_percent](#columnnumbersinsetpercentcheckspec)|Verifies that the percentage of numbers from set in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnNumbersInSetPercentCheckSpec](#columnnumbersinsetpercentcheckspec)| | | |
+|[monthly_numbers_found_count](#columnnumbersfoundcountcheckspec)|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnNumbersFoundCountCheckSpec](#columnnumbersfoundcountcheckspec)| | | |
+|[monthly_has_valid_numbers_percent](#columnhasvalidnumberspercentcheckspec)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnHasValidNumbersPercentCheckSpec](#columnhasvalidnumberspercentcheckspec)| | | |
 |[monthly_values_in_range_numeric_percent](#columnvaluesinrangenumericpercentcheckspec)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnValuesInRangeNumericPercentCheckSpec](#columnvaluesinrangenumericpercentcheckspec)| | | |
 |[monthly_values_in_range_integers_percent](#columnvaluesinrangeintegerspercentcheckspec)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnValuesInRangeIntegersPercentCheckSpec](#columnvaluesinrangeintegerspercentcheckspec)| | | |
 |[monthly_value_below_min_value_count](#columnvaluebelowminvaluecountcheckspec)|The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnValueBelowMinValueCountCheckSpec](#columnvaluebelowminvaluecountcheckspec)| | | |
@@ -11790,8 +11888,8 @@ Container of numeric data quality partitioned checks on a column level that are 
 |[daily_partition_negative_percent](#columnnegativepercentcheckspec)|Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnNegativePercentCheckSpec](#columnnegativepercentcheckspec)| | | |
 |[daily_partition_non_negative_count](#columnnonnegativecountcheckspec)|Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnNonNegativeCountCheckSpec](#columnnonnegativecountcheckspec)| | | |
 |[daily_partition_non_negative_percent](#columnnonnegativepercentcheckspec)|Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnNonNegativePercentCheckSpec](#columnnonnegativepercentcheckspec)| | | |
-|[daily_partition_numbers_in_set_count](#columnnumbersinsetcountcheckspec)|Verifies that the number of numbers from set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnNumbersInSetCountCheckSpec](#columnnumbersinsetcountcheckspec)| | | |
-|[daily_partition_numbers_in_set_percent](#columnnumbersinsetpercentcheckspec)|Verifies that the percentage of numbers from set in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnNumbersInSetPercentCheckSpec](#columnnumbersinsetpercentcheckspec)| | | |
+|[daily_partition_numbers_found_count](#columnnumbersfoundcountcheckspec)|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.|[ColumnNumbersFoundCountCheckSpec](#columnnumbersfoundcountcheckspec)| | | |
+|[daily_partition_has_valid_numbers_percent](#columnhasvalidnumberspercentcheckspec)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnHasValidNumbersPercentCheckSpec](#columnhasvalidnumberspercentcheckspec)| | | |
 |[daily_partition_values_in_range_numeric_percent](#columnvaluesinrangenumericpercentcheckspec)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnValuesInRangeNumericPercentCheckSpec](#columnvaluesinrangenumericpercentcheckspec)| | | |
 |[daily_partition_values_in_range_integers_percent](#columnvaluesinrangeintegerspercentcheckspec)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnValuesInRangeIntegersPercentCheckSpec](#columnvaluesinrangeintegerspercentcheckspec)| | | |
 |[daily_partition_value_below_min_value_count](#columnvaluebelowminvaluecountcheckspec)|The check counts the number of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.|[ColumnValueBelowMinValueCountCheckSpec](#columnvaluebelowminvaluecountcheckspec)| | | |
@@ -12587,8 +12685,8 @@ Container of numeric data quality partitioned checks on a column level that are 
 |[monthly_partition_negative_percent](#columnnegativepercentcheckspec)|Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnNegativePercentCheckSpec](#columnnegativepercentcheckspec)| | | |
 |[monthly_partition_non_negative_count](#columnnonnegativecountcheckspec)|Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnNonNegativeCountCheckSpec](#columnnonnegativecountcheckspec)| | | |
 |[monthly_partition_non_negative_percent](#columnnonnegativepercentcheckspec)|Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnNonNegativePercentCheckSpec](#columnnonnegativepercentcheckspec)| | | |
-|[monthly_partition_numbers_in_set_count](#columnnumbersinsetcountcheckspec)|Verifies that the number of numbers from set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnNumbersInSetCountCheckSpec](#columnnumbersinsetcountcheckspec)| | | |
-|[monthly_partition_numbers_in_set_percent](#columnnumbersinsetpercentcheckspec)|Verifies that the percentage of numbers from set in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnNumbersInSetPercentCheckSpec](#columnnumbersinsetpercentcheckspec)| | | |
+|[monthly_partition_numbers_found_count](#columnnumbersfoundcountcheckspec)|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnNumbersFoundCountCheckSpec](#columnnumbersfoundcountcheckspec)| | | |
+|[monthly_partition_has_valid_numbers_percent](#columnhasvalidnumberspercentcheckspec)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnHasValidNumbersPercentCheckSpec](#columnhasvalidnumberspercentcheckspec)| | | |
 |[monthly_partition_values_in_range_numeric_percent](#columnvaluesinrangenumericpercentcheckspec)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnValuesInRangeNumericPercentCheckSpec](#columnvaluesinrangenumericpercentcheckspec)| | | |
 |[monthly_partition_values_in_range_integers_percent](#columnvaluesinrangeintegerspercentcheckspec)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnValuesInRangeIntegersPercentCheckSpec](#columnvaluesinrangeintegerspercentcheckspec)| | | |
 |[monthly_partition_value_below_min_value_count](#columnvaluebelowminvaluecountcheckspec)|The check counts the number of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.|[ColumnValueBelowMinValueCountCheckSpec](#columnvaluebelowminvaluecountcheckspec)| | | |

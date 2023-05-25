@@ -1,0 +1,13 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/SensorDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: sensor
+spec:
+  fields:
+  - field_name: expected_values
+    display_name: expected_values
+    help_text: List of expected numeric values that the sensor is trying to find in
+      the column.
+    data_type: integer_list
+    sample_values:
+    - 2
+    - 3
