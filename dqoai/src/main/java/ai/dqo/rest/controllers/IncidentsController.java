@@ -108,6 +108,7 @@ public class IncidentsController {
      * @param limit Page size.
      * @param page Page number.
      * @param filter Optional filter.
+     * @param days Optional filter for a number of recent days to read the related issues.
      * @param date Optional filter for a date.
      * @param column Optional column name to filter.
      * @param check Optional check name to filter.
@@ -135,6 +136,8 @@ public class IncidentsController {
             @RequestParam(required = false) Optional<Integer> limit,
             @ApiParam(name = "filter", value = "Optional filter", required = false)
             @RequestParam(required = false) Optional<String> filter,
+            @ApiParam(name = "days", value = "Optional filter for a number of recent days to read the related issues", required = false)
+            @RequestParam(required = false) Optional<Integer> days,
             @ApiParam(name = "date", value = "Optional filter to return data quality issues only for a given date. The date should be an ISO8601 formatted date, it is treated as the timezone of the DQO server.", required = false)
             @RequestParam(required = false) Optional<LocalDate> date,
             @ApiParam(name = "column", value = "Optional column name filter", required = false)
@@ -155,6 +158,9 @@ public class IncidentsController {
         }
         if (filter.isPresent()) {
             filterParameters.setFilter(filter.get());
+        }
+        if (days.isPresent()) {
+            filterParameters.setDays(days.get());
         }
         if (date.isPresent()) {
             filterParameters.setDate(date.get());
@@ -190,6 +196,7 @@ public class IncidentsController {
      * @param month Month when the incident was first seen.
      * @param incidentId Incident id.
      * @param filter Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions.
+     * @param days Optional filter for a number of recent days to read the related issues.
      * @param date Optional date filter.
      * @param column Optional column name filter.
      * @param check Optional check name filter.
@@ -211,6 +218,8 @@ public class IncidentsController {
             @ApiParam("Incident id") @PathVariable String incidentId,
             @ApiParam(name = "filter", value = "Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions", required = false)
             @RequestParam(required = false) Optional<String> filter,
+            @ApiParam(name = "days", value = "Optional filter for a number of recent days to read the related issues", required = false)
+            @RequestParam(required = false) Optional<Integer> days,
             @ApiParam(name = "date", value = "Optional date filter", required = false)
             @RequestParam(required = false) Optional<LocalDate> date,
             @ApiParam(name = "column", value = "Optional column name filter", required = false)
@@ -220,6 +229,9 @@ public class IncidentsController {
         IncidentHistogramFilterParameters filterParameters = new IncidentHistogramFilterParameters();
         if (filter.isPresent()) {
             filterParameters.setFilter(filter.get());
+        }
+        if (days.isPresent()) {
+            filterParameters.setDays(days.get());
         }
         if (date.isPresent()) {
             filterParameters.setDate(date.get());
