@@ -1,22 +1,22 @@
-import React, { useEffect, useMemo, useState } from "react";
-import ConnectionLayout from "../../components/ConnectionLayout";
-import SvgIcon from "../../components/SvgIcon";
-import Tabs from "../../components/Tabs";
-import { useHistory, useParams } from "react-router-dom";
-import { CheckTypes, ROUTES } from "../../shared/routes";
-import { useTree } from "../../contexts/treeContext";
-import { useSelector } from "react-redux";
-import TableDetails from "../../components/Connection/TableView/TableDetails";
-import ScheduleDetail from "../../components/Connection/TableView/ScheduleDetail";
-import ProfilingView from "../../components/Connection/TableView/ProfilingView";
-import RecurringView from "../../components/Connection/TableView/RecurringView";
-import PartitionedChecks from "../../components/Connection/TableView/PartitionedChecks";
-import TableCommentView from "../../components/Connection/TableView/TableCommentView";
-import TableLabelsView from "../../components/Connection/TableView/TableLabelsView";
-import TableDataStream from "../../components/Connection/TableView/TableDataStream";
-import TimestampsView from "../../components/Connection/TableView/TimestampsView";
-import { getFirstLevelState } from "../../redux/selectors";
-import TableNavigation from "../../components/TableNavigation";
+import React, { useEffect, useMemo, useState } from 'react';
+import ConnectionLayout from '../../components/ConnectionLayout';
+import SvgIcon from '../../components/SvgIcon';
+import Tabs from '../../components/Tabs';
+import { useHistory, useParams } from 'react-router-dom';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import { useTree } from '../../contexts/treeContext';
+import { useSelector } from 'react-redux';
+import TableDetails from '../../components/Connection/TableView/TableDetails';
+import ScheduleDetail from '../../components/Connection/TableView/ScheduleDetail';
+import ProfilingView from '../../components/Connection/TableView/ProfilingView';
+import RecurringView from '../../components/Connection/TableView/RecurringView';
+import PartitionedChecks from '../../components/Connection/TableView/PartitionedChecks';
+import TableCommentView from '../../components/Connection/TableView/TableCommentView';
+import TableLabelsView from '../../components/Connection/TableView/TableLabelsView';
+import TableDataStream from '../../components/Connection/TableView/TableDataStream';
+import TimestampsView from '../../components/Connection/TableView/TimestampsView';
+import { getFirstLevelState } from '../../redux/selectors';
+import TableNavigation from '../../components/TableNavigation';
 
 const initTabs = [
   {
@@ -45,13 +45,32 @@ const initTabs = [
   }
 ];
 
+const tabs = [
+  {
+    label: 'Statistics',
+    value: 'statistics'
+  },
+  {
+    label: 'Advanced Profiling',
+    value: 'advanced'
+  }
+];
+
 const TablePage = () => {
-  const { connection, schema, table, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, tab: string, checkTypes: CheckTypes } = useParams();
   const {
-    activeTab: pageTab,
-    tabMap,
-    setTabMap,
-  } = useTree();
+    connection,
+    schema,
+    table,
+    tab: activeTab,
+    checkTypes
+  }: {
+    connection: string;
+    schema: string;
+    table: string;
+    tab: string;
+    checkTypes: CheckTypes;
+  } = useParams();
+  const { activeTab: pageTab, tabMap, setTabMap } = useTree();
   const history = useHistory();
   const [tabs, setTabs] = useState(initTabs);
   const {
@@ -66,16 +85,27 @@ const TablePage = () => {
     isUpdatedSchedule,
     isUpdatedDataStreamsMapping
   } = useSelector(getFirstLevelState(checkTypes));
-  const isRecurringOnly = useMemo(() => checkTypes === CheckTypes.RECURRING, [checkTypes]);
-  const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.PARTITIONED, [checkTypes]);
-  const isProfilingChecksOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
+  const isRecurringOnly = useMemo(
+    () => checkTypes === CheckTypes.RECURRING,
+    [checkTypes]
+  );
+  const isPartitionChecksOnly = useMemo(
+    () => checkTypes === CheckTypes.PARTITIONED,
+    [checkTypes]
+  );
+  const isProfilingChecksOnly = useMemo(
+    () => checkTypes === CheckTypes.PROFILING,
+    [checkTypes]
+  );
   const showAllSubTabs = useMemo(
     () => !isRecurringOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
     [isRecurringOnly, isPartitionChecksOnly, isProfilingChecksOnly]
   );
 
   const onChangeTab = (tab: string) => {
-    history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connection, schema, table, tab));
+    history.push(
+      ROUTES.TABLE_LEVEL_PAGE(checkTypes, connection, schema, table, tab)
+    );
     setTabMap({
       ...tabMap,
       [pageTab]: tab
@@ -145,10 +175,9 @@ const TablePage = () => {
       tabs.map((item) =>
         item.value === 'recurring'
           ? {
-            ...item,
-            isUpdated:
-              isUpdatedDailyRecurring || isUpdatedMonthlyRecurring
-          }
+              ...item,
+              isUpdated: isUpdatedDailyRecurring || isUpdatedMonthlyRecurring
+            }
           : item
       )
     );
@@ -159,11 +188,11 @@ const TablePage = () => {
       tabs.map((item) =>
         item.value === 'partitioned-checks'
           ? {
-            ...item,
-            isUpdated:
-              isUpdatedDailyPartitionedChecks ||
-              isUpdatedMonthlyPartitionedChecks
-          }
+              ...item,
+              isUpdated:
+                isUpdatedDailyPartitionedChecks ||
+                isUpdatedMonthlyPartitionedChecks
+            }
           : item
       )
     );
@@ -191,8 +220,13 @@ const TablePage = () => {
     if (activeTab === 'detail') {
       return 'Data source configuration for ';
     }
-    return ''
-  }, [isProfilingChecksOnly, isRecurringOnly, isPartitionChecksOnly, activeTab]);
+    return '';
+  }, [
+    isProfilingChecksOnly,
+    isRecurringOnly,
+    isPartitionChecksOnly,
+    activeTab
+  ]);
 
   return (
     <ConnectionLayout>
@@ -204,38 +238,20 @@ const TablePage = () => {
           </div>
         </div>
         <TableNavigation />
-        {isProfilingChecksOnly && (
-          <ProfilingView />
-        )}
-        {isRecurringOnly && (
-          <RecurringView />
-        )}
-        {isPartitionChecksOnly && (
-          <PartitionedChecks />
-        )}
+        {isProfilingChecksOnly && <ProfilingView />}
+        {isRecurringOnly && <RecurringView />}
+        {isPartitionChecksOnly && <PartitionedChecks />}
         {showAllSubTabs && (
           <>
             <div className="border-b border-gray-300">
               <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
             </div>
-            <div>
-              {activeTab === 'detail' && <TableDetails />}
-            </div>
-            <div>
-              {activeTab === 'schedule' && <ScheduleDetail />}
-            </div>
-            <div>
-              {activeTab === 'comments' && <TableCommentView />}
-            </div>
-            <div>
-              {activeTab === 'labels' && <TableLabelsView />}
-            </div>
-            <div>
-              {activeTab === 'data-streams' && <TableDataStream />}
-            </div>
-            <div>
-              {activeTab === 'timestamps' && <TimestampsView />}
-            </div>
+            <div>{activeTab === 'detail' && <TableDetails />}</div>
+            <div>{activeTab === 'schedule' && <ScheduleDetail />}</div>
+            <div>{activeTab === 'comments' && <TableCommentView />}</div>
+            <div>{activeTab === 'labels' && <TableLabelsView />}</div>
+            <div>{activeTab === 'data-streams' && <TableDataStream />}</div>
+            <div>{activeTab === 'timestamps' && <TimestampsView />}</div>
           </>
         )}
       </div>

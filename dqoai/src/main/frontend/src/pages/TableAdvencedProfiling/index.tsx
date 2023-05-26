@@ -1,41 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import DataQualityChecks from '../../DataQualityChecks';
-import TableActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import {
   CheckResultsOverviewDataModel,
   UICheckContainerModel
-} from '../../../api';
+} from '../../api';
+import TableActionGroup from '../../components/Connection/TableView/TableActionGroup';
+import DataQualityChecks from '../../components/DataQualityChecks';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getTableProfilingChecksUI,
-  setUpdatedChecksUi,
-  updateTableProfilingChecksUI
-} from '../../../redux/actions/table.actions';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { CheckResultOverviewApi } from '../../../services/apiClient';
-import { useParams } from 'react-router-dom';
+  updateTableProfilingChecksUI,
+  setUpdatedChecksUi
+} from '../../redux/actions/table.actions';
 import {
-  getFirstLevelActiveTab,
-  getFirstLevelState
-} from '../../../redux/selectors';
-import { CheckTypes } from '../../../shared/routes';
-import TableAdvancedProfiling from '../../../pages/TableAdvencedProfiling';
-import TableStatisticView from '../../../pages/TableStatisticView';
-import Tabs from '../../Tabs';
-import TableColumns from '../../../pages/TableColumnsView/TableColumns';
+  getFirstLevelState,
+  getFirstLevelActiveTab
+} from '../../redux/selectors';
+import { CheckResultOverviewApi } from '../../services/apiClient';
+import { CheckTypes } from '../../shared/routes';
 
-const tabs = [
-  {
-    label: 'Statistics',
-    value: 'statistics'
-  },
-  {
-    label: 'Advanced Profiling',
-    value: 'advanced'
-  }
-];
-
-const ProfilingView = () => {
+const TableAdvancedProfiling = () => {
   const {
     checkTypes,
     connection: connectionName,
@@ -54,7 +39,6 @@ const ProfilingView = () => {
     CheckResultsOverviewDataModel[]
   >([]);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const [activeTab, setActiveTab] = useState('statistics');
 
   useEffect(() => {
     dispatch(
@@ -123,17 +107,16 @@ const ProfilingView = () => {
         isUpdated={isUpdatedChecksUi}
         isUpdating={isUpdating}
       />
-      <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
-      {activeTab === 'statistics' && (
-        <TableColumns
-          connectionName={connectionName}
-          schemaName={schemaName}
-          tableName={tableName}
-        />
-      )}
-      {activeTab === 'advanced' && <TableAdvancedProfiling />}
+      <DataQualityChecks
+        onUpdate={onUpdate}
+        checksUI={checksUI}
+        onChange={handleChange}
+        checkResultsOverview={checkResultsOverview}
+        getCheckOverview={getCheckOverview}
+        loading={loading}
+      />
     </div>
   );
 };
 
-export default ProfilingView;
+export default TableAdvancedProfiling;
