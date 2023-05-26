@@ -3,6 +3,16 @@ import TableColumns from '../TableColumnsView/TableColumns';
 import { TableStatisticsModel } from '../../api';
 import { AxiosResponse } from 'axios';
 import { TableApiClient } from '../../services/apiClient';
+import Loader from '../../components/Loader';
+import { useSelector } from 'react-redux';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../redux/selectors';
+import { CheckTypes } from '../../shared/routes';
+import { useParams } from 'react-router-dom';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { getTableProfilingChecksUI } from '../../redux/actions/table.actions';
 
 export default function TableStatisticsView({
   connectionName,
@@ -13,7 +23,11 @@ export default function TableStatisticsView({
   schemaName: string;
   tableName: string;
 }) {
+  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
+  const { loading, tableBasic } = useSelector(getFirstLevelState(checkTypes));
+  const dispatch = useActionDispatch();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const fetchRows = async () => {
     try {
       const res: AxiosResponse<TableStatisticsModel> =
@@ -27,10 +41,27 @@ export default function TableStatisticsView({
       console.error(err);
     }
   };
-
   useEffect(() => {
-    fetchRows();
-  }, [connectionName, schemaName, tableName]);
+    fetchRows().then(() =>
+      dispatch(
+        getTableProfilingChecksUI(
+          checkTypes,
+          firstLevelActiveTab,
+          connectionName,
+          schemaName,
+          tableName
+        )
+      )
+    );
+  }, [
+    checkTypes,
+    firstLevelActiveTab,
+    connectionName,
+    schemaName,
+    tableName,
+    tableBasic
+  ]);
+
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
       return value ? 'Yes' : 'No';
@@ -40,6 +71,16 @@ export default function TableStatisticsView({
     }
     return value;
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center min-h-80">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
+  console.log(loading);
+
   return (
     <div>
       <div className="border border-gray-400 w-1/3 flex flex-col justify-center gap-y-6 h-28 ml-4 mt-8">
@@ -73,6 +114,7 @@ export default function TableStatisticsView({
           </div>
         </div>
       </div>
+
       <TableColumns
         connectionName={connectionName}
         schemaName={schemaName}

@@ -17,8 +17,7 @@ import { CheckTypes } from '../../../shared/routes';
 import TableAdvancedProfiling from '../../../pages/TableAdvencedProfiling';
 
 import Tabs from '../../Tabs';
-import TableColumns from '../../../pages/TableColumnsView/TableColumns';
-import TableStatisticView from '../../../pages/TableStatisticsView';
+
 import TableStatisticsView from '../../../pages/TableStatisticsView';
 
 const tabs = [
@@ -44,8 +43,9 @@ const ProfilingView = () => {
     schema: string;
     table: string;
   } = useParams();
-  const { checksUI, loading, isUpdating, isUpdatedChecksUi, tableBasic } =
-    useSelector(getFirstLevelState(checkTypes));
+  const { checksUI, isUpdating, isUpdatedChecksUi, tableBasic } = useSelector(
+    getFirstLevelState(checkTypes)
+  );
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [activeTab, setActiveTab] = useState('statistics');
@@ -104,6 +104,7 @@ const ProfilingView = () => {
           isUpdated={isUpdatedChecksUi}
           isUpdating={isUpdating}
           collectStatistic={true}
+          addSaveButton={false}
         />
       )}{' '}
       {activeTab === 'advanced' && (

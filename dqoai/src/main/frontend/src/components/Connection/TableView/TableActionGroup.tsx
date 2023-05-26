@@ -20,6 +20,7 @@ interface ITableActionGroupProps {
   isUpdated?: boolean;
   shouldDelete?: boolean;
   collectStatistic?: boolean;
+  addSaveButton?: boolean;
 }
 
 const TableActionGroup = ({
@@ -28,7 +29,8 @@ const TableActionGroup = ({
   isDisabled,
   onUpdate,
   shouldDelete = true,
-  collectStatistic
+  collectStatistic,
+  addSaveButton = true
 }: ITableActionGroupProps) => {
   const {
     checkTypes,
@@ -112,15 +114,17 @@ const TableActionGroup = ({
           loading={loadingJob}
         />
       )}
-      <Button
-        color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
-        variant="contained"
-        label="Save"
-        className="w-40 !h-10"
-        onClick={onUpdate}
-        loading={isUpdating}
-        disabled={isDisabled}
-      />
+      {addSaveButton && (
+        <Button
+          color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
+          variant="contained"
+          label="Save"
+          className="w-40 !h-10"
+          onClick={onUpdate}
+          loading={isUpdating}
+          disabled={isDisabled}
+        />
+      )}
       <ConfirmDialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
