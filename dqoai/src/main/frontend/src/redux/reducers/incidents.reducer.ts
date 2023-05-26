@@ -49,7 +49,8 @@ export interface IncidentIssueFilter {
   page?: number;
   pageSize?: number;
   filter?: string;
-  date?: number;
+  days?: number;
+  date?: string;
   column?: string;
   check?: string;
   order?:

@@ -23,6 +23,7 @@ import AddIssueUrlDialog from "../IncidentConnection/AddIssueUrlDialog";
 import { IncidentIssueList } from "./IncidentIssueList";
 import { useTree } from "../../contexts/treeContext";
 import IncidentNavigation from "./IncidentNavigation";
+import Button from "../../components/Button";
 
 const statusOptions = [
   {
@@ -45,6 +46,25 @@ const statusOptions = [
     value: IncidentModelStatusEnum.muted,
     icon: <SvgIcon name="stop" className="w-6 h-6" />,
   }
+];
+
+const options = [
+  {
+    label: '1 Day',
+    value: 1
+  },
+  {
+    label: '7 Days',
+    value: 7
+  },
+  {
+    label: '30 Days',
+    value: 30
+  },
+  {
+    label: 'All issues',
+    value: undefined
+  },
 ];
 
 export const IncidentDetail = () => {
@@ -122,6 +142,7 @@ export const IncidentDetail = () => {
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
             <div className="text-xl font-semibold truncate">Data quality incident {`${year}/${month}/${incidentId}`}</div>
           </div>
+          <Button label="Configure table notification" color="primary"></Button>
         </div>
         <div className="flex items-center p-4 gap-6 mb-4">
           <div className="grow">
@@ -131,6 +152,17 @@ export const IncidentDetail = () => {
               placeholder="Filter errors"
               className="!h-12"
             />
+          </div>
+
+          <div className="flex gap-2">
+            {options.map((o, index) => (
+              <Button
+                key={index}
+                label={o.label}
+                color={o.value === filters?.days ? 'primary' : undefined}
+                onClick={() => onChangeFilter({ days: o.value, page: 1 })}
+              />
+            ))}
           </div>
         </div>
         <div className="grid grid-cols-4 gap-4 px-4">
