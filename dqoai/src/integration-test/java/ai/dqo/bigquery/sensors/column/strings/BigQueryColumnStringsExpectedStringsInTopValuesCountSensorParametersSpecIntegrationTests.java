@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.postgresql.sensors.column.strings;
+package ai.dqo.bigquery.sensors.column.strings;
 
+import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringMostPopularValuesCheckSpec;
+import ai.dqo.checks.column.checkspecs.strings.ColumnExpectedStringsInTopValuesCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -27,12 +28,11 @@ import ai.dqo.metadata.groupings.DataStreamLevelSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMostPopularValuesSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,19 +43,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class PostgresqlColumnStringsStringMostPopularValuesSensorParametersSpecIntegrationTests extends BasePostgresqlIntegrationTest {
-    private ColumnStringsStringMostPopularValuesSensorParametersSpec sut;
+public class BigQueryColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecIntegrationTests extends BaseBigQueryIntegrationTest {
+    private ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringMostPopularValuesCheckSpec checkSpec;
+    private ColumnExpectedStringsInTopValuesCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.postgresql);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnStringsStringMostPopularValuesSensorParametersSpec();
-        this.checkSpec = new ColumnStringMostPopularValuesCheckSpec();
+        this.sut = new ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec();
+        this.checkSpec = new ColumnExpectedStringsInTopValuesCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -65,7 +65,7 @@ public class PostgresqlColumnStringsStringMostPopularValuesSensorParametersSpecI
         values.add("a111a");
         values.add("d44d");
         this.sut.setExpectedValues(values);
-        this.sut.setTopValues(2L);
+        this.sut.setTop(2L);
         this.sut.setFilter("id < 5");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
@@ -85,7 +85,7 @@ public class PostgresqlColumnStringsStringMostPopularValuesSensorParametersSpecI
         values.add("a111a");
         values.add("d44d");
         this.sut.setExpectedValues(values);
-        this.sut.setTopValues(2L);
+        this.sut.setTop(2L);
         this.sut.setFilter("id < 5");
 
         DataStreamMappingSpec dataStreamMapping = this.sampleTableMetadata.getTableSpec().getDataStreams().getFirstDataStreamMapping();
@@ -112,7 +112,7 @@ public class PostgresqlColumnStringsStringMostPopularValuesSensorParametersSpecI
         values.add("a111a");
         values.add("d44d");
         this.sut.setExpectedValues(values);
-        this.sut.setTopValues(2L);
+        this.sut.setTop(2L);
         this.sut.setFilter("id < 5");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
@@ -132,7 +132,7 @@ public class PostgresqlColumnStringsStringMostPopularValuesSensorParametersSpecI
         values.add("a111a");
         values.add("d44d");
         this.sut.setExpectedValues(values);
-        this.sut.setTopValues(5L);
+        this.sut.setTop(5L);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly);
@@ -151,7 +151,7 @@ public class PostgresqlColumnStringsStringMostPopularValuesSensorParametersSpecI
         values.add("a111a");
         values.add("d44d");
         this.sut.setExpectedValues(values);
-        this.sut.setTopValues(5L);
+        this.sut.setTop(5L);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily, "date");
@@ -170,7 +170,7 @@ public class PostgresqlColumnStringsStringMostPopularValuesSensorParametersSpecI
         values.add("a111a");
         values.add("d44d");
         this.sut.setExpectedValues(values);
-        this.sut.setTopValues(5L);
+        this.sut.setTop(5L);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly, "date");

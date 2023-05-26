@@ -61,7 +61,7 @@ public class ColumnExpectedStringsInUseCountCheckSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxMissingRule1ParametersSpec error;
 
-    @JsonPropertyDescription("Alerting threshold that raises a data quality fatal when too many expected values were not found in the column.")
+    @JsonPropertyDescription("Alerting threshold that raises a data quality fatal issue when too many expected values were not found in the column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxMissingRule2ParametersSpec fatal;

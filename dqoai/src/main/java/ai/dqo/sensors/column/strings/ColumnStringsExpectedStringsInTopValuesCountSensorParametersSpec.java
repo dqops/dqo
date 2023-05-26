@@ -30,24 +30,29 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Column level sensor that counts how many expected values are present in the top most popular values in the column.
+ * Column level sensor that counts how many expected string values are among the TOP most popular values in the column.
+ * The sensor will first count the number of occurrences of each column's value and will pick the TOP X most popular values (configurable by the 'top' parameter).
+ * Then, it will compare the list of most popular values to the given list of expected values that should be most popular.
+ * This sensor will return the number of expected values that were found within the 'top' most popular column values.
+ * This sensor is useful for analyzing string columns that have several very popular values, these could be the country codes of the countries with the most number of customers.
+ * The sensor can detect if any of the most popular value (an expected value) is no longer one of the top X most popular values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringMostPopularValuesSensorParametersSpec extends AbstractSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringMostPopularValuesSensorParametersSpec> FIELDS =
+public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec extends AbstractSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec> FIELDS =
             new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Provided list of values to match the data.")
+    @JsonPropertyDescription("List of expected string values that should be found in the tested column among the TOP most popular (highest distinct count) column values.")
     @SampleValues(values = { "USD", "GBP", "EUR" })
     private List<String> expectedValues;
 
-    @JsonPropertyDescription("Provided limit of top popular values.")
-    private Long topValues;
+    @JsonPropertyDescription("The number of the most popular values (with the highest distinct count) that are analyzed to find the expected values.")
+    private Long top;
 
     /**
      * Returns given values from user.
@@ -70,17 +75,17 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpec extends Ab
      * Returns given values from user.
      * @return values.
      */
-    public Long getTopValues() {
-        return topValues;
+    public Long getTop() {
+        return top;
     }
 
     /**
      * Sets a List given from user.
-     * @param topValues values given from user.
+     * @param top values given from user.
      */
-    public void setTopValues(Long topValues) {
-        this.setDirtyIf(!Objects.equals(this.topValues, topValues));
-        this.topValues = topValues;
+    public void setTop(Long top) {
+        this.setDirtyIf(!Objects.equals(this.top, top));
+        this.top = top;
     }
 
     /**
@@ -100,6 +105,6 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpec extends Ab
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_most_popular_values";
+        return "column/strings/expected_strings_in_top_values_count";
     }
 }

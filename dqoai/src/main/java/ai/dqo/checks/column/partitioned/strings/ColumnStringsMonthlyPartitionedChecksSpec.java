@@ -76,7 +76,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_match_date_regex_percent", o -> o.monthlyPartitionStringMatchDateRegexPercent);
             put("monthly_partition_string_match_name_regex_percent", o -> o.monthlyPartitionStringMatchNameRegexPercent);
 
-            put("monthly_partition_string_most_popular_values", o -> o.monthlyPartitionStringMostPopularValues);
+            put("monthly_partition_expected_strings_in_top_values_count", o -> o.monthlyPartitionExpectedStringsInTopValuesCount);
 
             put("monthly_partition_string_datatype_detected", o -> o.monthlyPartitionStringDatatypeDetected);
 
@@ -185,8 +185,8 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name format regex in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringMatchNameRegexPercentCheckSpec monthlyPartitionStringMatchNameRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringMostPopularValuesCheckSpec monthlyPartitionStringMostPopularValues;
+    @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnExpectedStringsInTopValuesCountCheckSpec monthlyPartitionExpectedStringsInTopValuesCount;
 
     @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringDatatypeDetectedCheckSpec monthlyPartitionStringDatatypeDetected;
@@ -812,18 +812,18 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
      * Returns a count of expected values in most popular values set count check.
      * @return Most popular values count check.
      */
-    public ColumnStringMostPopularValuesCheckSpec getMonthlyPartitionStringMostPopularValues() {
-        return monthlyPartitionStringMostPopularValues;
+    public ColumnExpectedStringsInTopValuesCountCheckSpec getMonthlyPartitionExpectedStringsInTopValuesCount() {
+        return monthlyPartitionExpectedStringsInTopValuesCount;
     }
 
     /**
      * Sets a new definition of a most popular values count check.
-     * @param monthlyPartitionStringMostPopularValues Most popular values count check.
+     * @param monthlyPartitionExpectedStringsInTopValuesCount Most popular values count check.
      */
-    public void setMonthlyPartitionStringMostPopularValues(ColumnStringMostPopularValuesCheckSpec monthlyPartitionStringMostPopularValues) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringMostPopularValues, monthlyPartitionStringMostPopularValues));
-        this.monthlyPartitionStringMostPopularValues = monthlyPartitionStringMostPopularValues;
-        propagateHierarchyIdToField(monthlyPartitionStringMostPopularValues, "monthly_partition_string_most_popular_values");
+    public void setMonthlyPartitionExpectedStringsInTopValuesCount(ColumnExpectedStringsInTopValuesCountCheckSpec monthlyPartitionExpectedStringsInTopValuesCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionExpectedStringsInTopValuesCount, monthlyPartitionExpectedStringsInTopValuesCount));
+        this.monthlyPartitionExpectedStringsInTopValuesCount = monthlyPartitionExpectedStringsInTopValuesCount;
+        propagateHierarchyIdToField(monthlyPartitionExpectedStringsInTopValuesCount, "monthly_partition_expected_strings_in_top_values_count");
     }
 
     /**

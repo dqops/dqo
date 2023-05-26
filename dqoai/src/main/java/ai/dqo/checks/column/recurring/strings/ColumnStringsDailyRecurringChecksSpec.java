@@ -77,7 +77,7 @@ public class ColumnStringsDailyRecurringChecksSpec extends AbstractCheckCategory
             put("daily_string_match_date_regex_percent", o -> o.dailyStringMatchDateRegexPercent);
             put("daily_string_match_name_regex_percent", o -> o.dailyStringMatchNameRegexPercent);
 
-            put("daily_string_most_popular_values", o -> o.dailyStringMostPopularValues);
+            put("daily_expected_strings_in_top_values_count", o -> o.dailyExpectedStringsInTopValuesCount);
 
             put("daily_string_datatype_detected", o -> o.dailyStringDatatypeDetected);
         }
@@ -185,8 +185,8 @@ public class ColumnStringsDailyRecurringChecksSpec extends AbstractCheckCategory
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name format regex in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringMatchNameRegexPercentCheckSpec dailyStringMatchNameRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not fall below the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringMostPopularValuesCheckSpec dailyStringMostPopularValues;
+    @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnExpectedStringsInTopValuesCountCheckSpec dailyExpectedStringsInTopValuesCount;
 
     @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringDatatypeDetectedCheckSpec dailyStringDatatypeDetected;
@@ -807,18 +807,18 @@ public class ColumnStringsDailyRecurringChecksSpec extends AbstractCheckCategory
      * Returns a count of expected values in most popular values set count check.
      * @return Most popular values count check.
      */
-    public ColumnStringMostPopularValuesCheckSpec getDailyStringMostPopularValues() {
-        return dailyStringMostPopularValues;
+    public ColumnExpectedStringsInTopValuesCountCheckSpec getDailyStringMostPopularValues() {
+        return dailyExpectedStringsInTopValuesCount;
     }
 
     /**
      * Sets a new definition of a most popular values count check.
      * @param dailyStringMostPopularValues Most popular values count check.
      */
-    public void setDailyStringMostPopularValues(ColumnStringMostPopularValuesCheckSpec dailyStringMostPopularValues) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringMostPopularValues, dailyStringMostPopularValues));
-        this.dailyStringMostPopularValues = dailyStringMostPopularValues;
-        propagateHierarchyIdToField(dailyStringMostPopularValues, "daily_string_most_popular_values");
+    public void setDailyStringMostPopularValues(ColumnExpectedStringsInTopValuesCountCheckSpec dailyStringMostPopularValues) {
+        this.setDirtyIf(!Objects.equals(this.dailyExpectedStringsInTopValuesCount, dailyStringMostPopularValues));
+        this.dailyExpectedStringsInTopValuesCount = dailyStringMostPopularValues;
+        propagateHierarchyIdToField(dailyStringMostPopularValues, "daily_expected_strings_in_top_values_count");
     }
 
     /**

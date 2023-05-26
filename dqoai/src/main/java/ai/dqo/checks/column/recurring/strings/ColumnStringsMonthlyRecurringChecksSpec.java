@@ -76,7 +76,7 @@ public class ColumnStringsMonthlyRecurringChecksSpec extends AbstractCheckCatego
             put("monthly_string_match_date_regex_percent", o -> o.monthlyStringMatchDateRegexPercent);
             put("monthly_string_match_name_regex_percent", o -> o.monthlyStringMatchNameRegexPercent);
 
-            put("monthly_string_most_popular_values", o -> o.monthlyStringMostPopularValues);
+            put("monthly_expected_strings_in_top_values_count", o -> o.monthlyExpectedStringsInTopValuesCount);
 
             put("monthly_string_datatype_detected", o -> o.monthlyStringDatatypeDetected);
         }
@@ -184,8 +184,8 @@ public class ColumnStringsMonthlyRecurringChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name regex in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringMatchNameRegexPercentCheckSpec monthlyStringMatchNameRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnStringMostPopularValuesCheckSpec monthlyStringMostPopularValues;
+    @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnExpectedStringsInTopValuesCountCheckSpec monthlyExpectedStringsInTopValuesCount;
 
     @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringDatatypeDetectedCheckSpec monthlyStringDatatypeDetected;
@@ -806,18 +806,18 @@ public class ColumnStringsMonthlyRecurringChecksSpec extends AbstractCheckCatego
      * Returns a count of expected values in most popular values set count check.
      * @return Most popular values count check.
      */
-    public ColumnStringMostPopularValuesCheckSpec getMonthlyStringMostPopularValues() {
-        return monthlyStringMostPopularValues;
+    public ColumnExpectedStringsInTopValuesCountCheckSpec getMonthlyExpectedStringsInTopValuesCount() {
+        return monthlyExpectedStringsInTopValuesCount;
     }
 
     /**
      * Sets a new definition of a most popular values count check.
-     * @param monthlyStringMostPopularValues Most popular values count check.
+     * @param monthlyExpectedStringsInTopValuesCount Most popular values count check.
      */
-    public void setMonthlyStringMostPopularValues(ColumnStringMostPopularValuesCheckSpec monthlyStringMostPopularValues) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringMostPopularValues, monthlyStringMostPopularValues));
-        this.monthlyStringMostPopularValues = monthlyStringMostPopularValues;
-        propagateHierarchyIdToField(monthlyStringMostPopularValues, "monthly_string_most_popular_values");
+    public void setMonthlyExpectedStringsInTopValuesCount(ColumnExpectedStringsInTopValuesCountCheckSpec monthlyExpectedStringsInTopValuesCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyExpectedStringsInTopValuesCount, monthlyExpectedStringsInTopValuesCount));
+        this.monthlyExpectedStringsInTopValuesCount = monthlyExpectedStringsInTopValuesCount;
+        propagateHierarchyIdToField(monthlyExpectedStringsInTopValuesCount, "monthly_expected_strings_in_top_values_count");
     }
 
     /**

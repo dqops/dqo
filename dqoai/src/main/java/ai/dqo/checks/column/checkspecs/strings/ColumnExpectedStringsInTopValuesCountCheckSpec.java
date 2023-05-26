@@ -19,10 +19,8 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
-import ai.dqo.rules.comparison.MinCountRuleFatalParametersSpec;
-import ai.dqo.rules.comparison.MinCountRuleWarningParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringMostPopularValuesSensorParametersSpec;
+import ai.dqo.rules.comparison.*;
+import ai.dqo.sensors.column.strings.ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,44 +32,48 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the number of top values from a set in a column does not fall below the minimum accepted count.
+ * Column level check that counts how many expected string values are among the TOP most popular values in the column.
+ * The check will first count the number of occurrences of each column's value and will pick the TOP X most popular values (configurable by the 'top' parameter).
+ * Then, it will compare the list of most popular values to the given list of expected values that should be most popular.
+ * This check will verify how many supposed most popular values (provided in the 'expected_values' list) were not found in the top X most popular values in the column.
+ * This check is useful for analyzing string columns that have several very popular values, these could be the country codes of the countries with the most number of customers.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringMostPopularValuesCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringMostPopularValuesSensorParametersSpec, MinCountRuleWarningParametersSpec, MinCountRule0ParametersSpec, MinCountRuleFatalParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringMostPopularValuesCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnExpectedStringsInTopValuesCountCheckSpec
+        extends AbstractCheckSpec<ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec, MaxMissingRule0ParametersSpec, MaxMissingRule1ParametersSpec, MaxMissingRule2ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnExpectedStringsInTopValuesCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Data quality check parameters")
+    @JsonPropertyDescription("Data quality check parameters that specify a list of expected most popular string values that should be found in the column. The second parameter is 'top', which is the limit of the most popular column values to find in the tested column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMostPopularValuesSensorParametersSpec parameters = new ColumnStringsStringMostPopularValuesSensorParametersSpec();
+    private ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec parameters = new ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
+    @JsonPropertyDescription("Alerting threshold that raises a data quality warning when too many expected values were not found among the TOP most popular values in the tested column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleWarningParametersSpec warning;
+    private MaxMissingRule0ParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with empty strings in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Alerting threshold that raises a data quality error when too many expected values were not found among the TOP most popular values in the tested column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRule0ParametersSpec error;
+    private MaxMissingRule1ParametersSpec error;
 
-    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
+    @JsonPropertyDescription("Alerting threshold that raises a data quality fatal issue when too many expected values were not found among the TOP most popular values in the tested column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleFatalParametersSpec fatal;
+    private MaxMissingRule2ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringMostPopularValuesSensorParametersSpec getParameters() {
+    public ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +81,7 @@ public class ColumnStringMostPopularValuesCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringMostPopularValuesSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -91,7 +93,7 @@ public class ColumnStringMostPopularValuesCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinCountRuleWarningParametersSpec getWarning() {
+    public MaxMissingRule0ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +101,7 @@ public class ColumnStringMostPopularValuesCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinCountRuleWarningParametersSpec warning) {
+    public void setWarning(MaxMissingRule0ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -111,7 +113,7 @@ public class ColumnStringMostPopularValuesCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinCountRule0ParametersSpec getError() {
+    public MaxMissingRule1ParametersSpec getError() {
         return this.error;
     }
 
@@ -119,7 +121,7 @@ public class ColumnStringMostPopularValuesCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinCountRule0ParametersSpec error) {
+    public void setError(MaxMissingRule1ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -131,7 +133,7 @@ public class ColumnStringMostPopularValuesCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinCountRuleFatalParametersSpec getFatal() {
+    public MaxMissingRule2ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -139,7 +141,7 @@ public class ColumnStringMostPopularValuesCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinCountRuleFatalParametersSpec fatal) {
+    public void setFatal(MaxMissingRule2ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

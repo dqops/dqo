@@ -76,7 +76,7 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
             put("string_match_date_regex_percent", o -> o.stringMatchDateRegexPercent);
             put("string_match_name_regex_percent", o -> o.stringMatchNameRegexPercent);
 
-            put("string_most_popular_values", o -> o.stringMostPopularValues);
+            put("expected_strings_in_top_values_count", o -> o.expectedStringInTopValuesCount);
 
             put("string_datatype_detected", o -> o.stringDatatypeDetected);
         }
@@ -184,8 +184,8 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name regex in a column does not fall below the minimum accepted percentage.")
     private ColumnStringMatchNameRegexPercentCheckSpec stringMatchNameRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not fall below the minimum accepted count.")
-    private ColumnStringMostPopularValuesCheckSpec stringMostPopularValues;
+    @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values.")
+    private ColumnExpectedStringsInTopValuesCountCheckSpec expectedStringInTopValuesCount;
 
     @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type.")
     private ColumnStringDatatypeDetectedCheckSpec stringDatatypeDetected;
@@ -806,18 +806,18 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
      * Returns a count of expected values in most popular values set count check.
      * @return Most popular values count check.
      */
-    public ColumnStringMostPopularValuesCheckSpec getStringMostPopularValues() {
-        return stringMostPopularValues;
+    public ColumnExpectedStringsInTopValuesCountCheckSpec getExpectedStringInTopValuesCount() {
+        return expectedStringInTopValuesCount;
     }
 
     /**
      * Sets a new definition of a most popular values count check.
-     * @param stringMostPopularValues Most popular values count check.
+     * @param expectedStringInTopValuesCount Most popular values count check.
      */
-    public void setStringMostPopularValues(ColumnStringMostPopularValuesCheckSpec stringMostPopularValues) {
-        this.setDirtyIf(!Objects.equals(this.stringMostPopularValues, stringMostPopularValues));
-        this.stringMostPopularValues = stringMostPopularValues;
-        propagateHierarchyIdToField(stringMostPopularValues, "string_most_popular_values");
+    public void setExpectedStringInTopValuesCount(ColumnExpectedStringsInTopValuesCountCheckSpec expectedStringInTopValuesCount) {
+        this.setDirtyIf(!Objects.equals(this.expectedStringInTopValuesCount, expectedStringInTopValuesCount));
+        this.expectedStringInTopValuesCount = expectedStringInTopValuesCount;
+        propagateHierarchyIdToField(expectedStringInTopValuesCount, "expected_strings_in_top_values_count");
     }
 
     /**
