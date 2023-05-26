@@ -30,7 +30,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringInSetCountSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringsFoundCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,8 +40,8 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-public class ColumnStringsStringInSetCountSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnStringsStringInSetCountSensorParametersSpec sut;
+public class ColumnStringsStringsFoundCountSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnStringsStringsFoundCountSensorParametersSpec sut;
     private String sutValuesAsString;
     private UserHomeContext userHomeContext;
     private ColumnStringInSetCountCheckSpec checkSpec;
@@ -50,13 +50,13 @@ public class ColumnStringsStringInSetCountSensorParametersSpecBigQueryTests exte
 
     @BeforeEach
     void setUp(){
-		this.sut = new ColumnStringsStringInSetCountSensorParametersSpec();
+		this.sut = new ColumnStringsStringsFoundCountSensorParametersSpec();
         this.sut.setFilter("{alias}.`correct` = 1");
-        ColumnStringsStringInSetCountSensorParametersSpec altSut = (ColumnStringsStringInSetCountSensorParametersSpec) this.sut.deepClone();
-        this.sut.setValues(new ArrayList<>(){{
+        ColumnStringsStringsFoundCountSensorParametersSpec altSut = (ColumnStringsStringsFoundCountSensorParametersSpec) this.sut.deepClone();
+        this.sut.setExpectedValues(new ArrayList<>(){{
             add("abcde"); add("abcdef"); add("abcdefg");
         }});
-        this.sutValuesAsString = this.sut.getValues().stream()
+        this.sutValuesAsString = this.sut.getExpectedValues().stream()
                 .map(s -> String.format("'%s'", s))
                 .collect(Collectors.joining(", "));
 

@@ -1,12 +1,18 @@
-{% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+{% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
 
 {%- macro extract_in_list(values_list) -%}
-    {{ values_list|join(', ') -}}
-{% endmacro %}
+    {%- for i in values_list -%}
+        {%- if not loop.last -%}
+            {{lib.make_text_constant(i)}}{{", "}}
+        {%- else -%}
+            {{lib.make_text_constant(i)}}
+        {%- endif -%}
+    {%- endfor -%}
+{% endmacro -%}
 
-{%- macro actual_value() -%}
-    {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
-    0
+{%- macro render_else() -%}
+    {%- if parameters.expected_values|length == 0 -%}
+        NULL
     {%- else -%}
     SUM(
         CASE
@@ -19,7 +25,10 @@
 {% endmacro -%}
 
 SELECT
-    {{ actual_value() }} AS actual_value,
+    CASE
+        WHEN COUNT_BIG(*) = 0 THEN NULL
+        ELSE {{render_else()}}
+    END AS actual_value,
     MAX({{ parameters.expected_values | length }}) AS expected_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}

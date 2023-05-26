@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sqlserver.sensors.column.strings;
+package ai.dqo.snowflake.sensors.column.strings;
 
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.checkspecs.strings.ColumnStringInSetCountCheckSpec;
@@ -28,8 +28,8 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringInSetCountSensorParametersSpec;
-import ai.dqo.sqlserver.BaseSqlServerIntegrationTest;
+import ai.dqo.sensors.column.strings.ColumnStringsStringsFoundCountSensorParametersSpec;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,20 +40,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class SqlServerColumnStringsStringInSetCountSensorParametersSpecIntegrationTest extends BaseSqlServerIntegrationTest {
-    private ColumnStringsStringInSetCountSensorParametersSpec sut;
+public class SnowflakeColumnStringsStringsFoundCountSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+    private ColumnStringsStringsFoundCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnStringInSetCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.sqlserver);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnStringsStringInSetCountSensorParametersSpec();
+		this.sut = new ColumnStringsStringsFoundCountSensorParametersSpec();
 		this.checkSpec = new ColumnStringInSetCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        List<String> values = new ArrayList<>();
+        this.sut.setExpectedValues(values);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "strings_with_numbers", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals("", resultTable.column(0).get(0));
     }
 
     @Test
@@ -64,7 +80,7 @@ public class SqlServerColumnStringsStringInSetCountSensorParametersSpecIntegrati
         values.add("d44d");
         values.add("c33c");
         values.add("b22b");
-        this.sut.setValues(values);
+        this.sut.setExpectedValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily);
@@ -74,7 +90,7 @@ public class SqlServerColumnStringsStringInSetCountSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30, resultTable.column(0).get(0));
+        Assertions.assertEquals(30L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -85,7 +101,7 @@ public class SqlServerColumnStringsStringInSetCountSensorParametersSpecIntegrati
         values.add("d44d");
         values.add("c33c");
         values.add("b22b");
-        this.sut.setValues(values);
+        this.sut.setExpectedValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly);
@@ -95,7 +111,7 @@ public class SqlServerColumnStringsStringInSetCountSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30, resultTable.column(0).get(0));
+        Assertions.assertEquals(30L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -106,7 +122,7 @@ public class SqlServerColumnStringsStringInSetCountSensorParametersSpecIntegrati
         values.add("d44d");
         values.add("c33c");
         values.add("b22b");
-        this.sut.setValues(values);
+        this.sut.setExpectedValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily,"date");
@@ -116,7 +132,7 @@ public class SqlServerColumnStringsStringInSetCountSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(6, resultTable.column(0).get(0));
+        Assertions.assertEquals(6L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -127,7 +143,7 @@ public class SqlServerColumnStringsStringInSetCountSensorParametersSpecIntegrati
         values.add("d44d");
         values.add("c33c");
         values.add("b22b");
-        this.sut.setValues(values);
+        this.sut.setExpectedValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly,"date");
@@ -137,6 +153,6 @@ public class SqlServerColumnStringsStringInSetCountSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30, resultTable.column(0).get(0));
+        Assertions.assertEquals(30L, resultTable.column(0).get(0));
     }
 }

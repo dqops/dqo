@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Column level sensor that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.
+ * Column level sensor that counts how many rows have a value in a tested column that is on the list of expected numeric values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

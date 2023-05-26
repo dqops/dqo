@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MinCountRuleFatalParametersSpec;
 import ai.dqo.rules.comparison.MinCountRuleWarningParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringInSetCountSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringsFoundCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,13 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the number of strings from a set in a column does not fall below the minimum accepted count.
+ * Column level check that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.
+ * The check raises a data quality issue when the threshold of maximum number of missing values was exceeded (too many expected values were not found in the column).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnStringInSetCountCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringInSetCountSensorParametersSpec, MinCountRuleWarningParametersSpec, MinCountRule0ParametersSpec, MinCountRuleFatalParametersSpec> {
+        extends AbstractCheckSpec<ColumnStringsStringsFoundCountSensorParametersSpec, MinCountRuleWarningParametersSpec, MinCountRule0ParametersSpec, MinCountRuleFatalParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStringInSetCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -49,7 +50,7 @@ public class ColumnStringInSetCountCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringInSetCountSensorParametersSpec parameters = new ColumnStringsStringInSetCountSensorParametersSpec();
+    private ColumnStringsStringsFoundCountSensorParametersSpec parameters = new ColumnStringsStringsFoundCountSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -71,7 +72,7 @@ public class ColumnStringInSetCountCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringInSetCountSensorParametersSpec getParameters() {
+    public ColumnStringsStringsFoundCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +80,7 @@ public class ColumnStringInSetCountCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringInSetCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringsFoundCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

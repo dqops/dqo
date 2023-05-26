@@ -864,227 +864,6 @@ Column level sensor that calculates the percentage of rows with an empty string.
     ```
 ___
 
-## **string in set count**
-**Full sensor name**
-```
-column/strings/string_in_set_count
-```
-**Description**  
-Column level sensor that calculates the number of strings from a set in a column does not exceed the minimum accepted count.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|values|Provided list of values to match the data.|string_list| ||
-
-
-
-
-**SQL Template (Jinja2)**  
-=== "bigquery"
-      
-    ```sql+jinja
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {%- macro actual_value() -%}
-        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
-        NULL
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                    THEN 1
-                ELSE 0
-            END
-        )
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "postgresql"
-      
-    ```sql+jinja
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            NULL
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                    THEN 1
-                ELSE 0
-            END
-        )
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN NULL
-            ELSE {{render_else()}}
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "redshift"
-      
-    ```sql+jinja
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            NULL
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                    THEN 1
-                ELSE 0
-            END
-        )
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN NULL
-            ELSE {{render_else()}}
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            NULL
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                    THEN 1
-                ELSE 0
-            END
-        )
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN NULL
-            ELSE {{render_else()}}
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "sqlserver"
-      
-    ```sql+jinja
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            NULL
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                    THEN 1
-                ELSE 0
-            END
-        )
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT_BIG(*) = 0 THEN NULL
-            ELSE {{render_else()}}
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-___
-
 ## **string in set percent**
 **Full sensor name**
 ```
@@ -6062,6 +5841,274 @@ Column level sensor that calculates the percentage of rows with a whitespace str
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
+## **strings found count**
+**Full sensor name**
+```
+column/strings/strings_found_count
+```
+**Description**  
+Column level sensor that counts how many rows have a value in a tested column that is on the list of expected text values.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|expected_values|A list of expected column values that the sensor is trying to find in the column.|string_list| ||
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```sql+jinja
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        NULL
+        {%- else -%}
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN 1
+                ELSE 0
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        {{ actual_value() }} AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "mysql"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            NULL
+        {%- else -%}
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN 1
+                ELSE 0
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```sql+jinja
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            NULL
+        {%- else -%}
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN 1
+                ELSE 0
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```sql+jinja
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            NULL
+        {%- else -%}
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN 1
+                ELSE 0
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            NULL
+        {%- else -%}
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN 1
+                ELSE 0
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "sqlserver"
+      
+    ```sql+jinja
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            NULL
+        {%- else -%}
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN 1
+                ELSE 0
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT_BIG(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table

@@ -6,13 +6,13 @@
 
 {%- macro actual_value() -%}
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-    0
+    NULL
     {%- else -%}
-    SUM(
+    COUNT(DISTINCT
         CASE
             WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
-                THEN 1
-            ELSE 0
+                THEN {{ lib.render_target_column('analyzed_table') }}
+            ELSE NULL
         END
     )
     {%- endif -%}

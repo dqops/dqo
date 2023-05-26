@@ -30,37 +30,37 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Column level sensor that calculates the number of strings from a set in a column does not exceed the minimum accepted count.
+ * Column level sensor that counts how many rows have a value in a tested column that is on the list of expected text values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringInSetCountSensorParametersSpec extends AbstractSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringInSetCountSensorParametersSpec> FIELDS =
+public class ColumnStringsStringsFoundCountSensorParametersSpec extends AbstractSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringsFoundCountSensorParametersSpec> FIELDS =
             new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Provided list of values to match the data.")
+    @JsonPropertyDescription("A list of expected column values that the sensor is trying to find in the column.")
     @SampleValues(values = { "USD", "GBP", "EUR" })
-    private List<String> values;
+    private List<String> expectedValues;
 
     /**
      * Returns given values from user.
      * @return values.
      */
-    public List<String> getValues() {
-        return values;
+    public List<String> getExpectedValues() {
+        return expectedValues;
     }
 
     /**
      * Sets a List given from user.
-     * @param values values given from user.
+     * @param expectedValues values given from user.
      */
-    public void setValues(List<String> values) {
-        this.setDirtyIf(!Objects.equals(this.values, values));
-        this.values = values != null ? Collections.unmodifiableList(values) : null;
+    public void setExpectedValues(List<String> expectedValues) {
+        this.setDirtyIf(!Objects.equals(this.expectedValues, expectedValues));
+        this.expectedValues = expectedValues != null ? Collections.unmodifiableList(expectedValues) : null;
     }
 
     /**
@@ -80,6 +80,6 @@ public class ColumnStringsStringInSetCountSensorParametersSpec extends AbstractS
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_in_set_count";
+        return "column/strings/strings_found_count";
     }
 }

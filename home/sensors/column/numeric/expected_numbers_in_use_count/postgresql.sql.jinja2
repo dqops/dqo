@@ -1,4 +1,4 @@
-{% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+{% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
 
 {%- macro extract_in_list(values_list) -%}
     {{values_list|join(', ')}}
@@ -6,13 +6,13 @@
 
 {%- macro render_else() -%}
     {%- if parameters.expected_values|length == 0 -%}
-        0
+        NULL
     {%- else -%}
-    SUM(
+    COUNT(DISTINCT
         CASE
             WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
-                THEN 1
-            ELSE 0
+                THEN {{ lib.render_target_column('analyzed_table') }}
+            ELSE NULL
         END
     )
     {%- endif -%}
