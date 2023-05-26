@@ -37,9 +37,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TablePreviousRowCountChange1DayCheckSpec
+public class TableChangeRowCountSinceYesterdayCheckSpec
         extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, WithinChange1DayRuleParametersSpec, WithinChange1DayRuleParametersSpec, WithinChange1DayRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TablePreviousRowCountChange1DayCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+    public static final ChildHierarchyNodeFieldMapImpl<TableChangeRowCountSinceYesterdayCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };

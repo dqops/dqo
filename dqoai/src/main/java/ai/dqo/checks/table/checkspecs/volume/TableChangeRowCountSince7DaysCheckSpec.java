@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.change.WithinChange30DaysRuleParametersSpec;
+import ai.dqo.rules.change.WithinChange7DaysRuleParametersSpec;
 import ai.dqo.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,14 +32,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that ensures that the row count changed by a fixed rate since the last readout from last month.
+ * Table level check that ensures that the row count changed by a fixed rate since the last readout from last week.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TablePreviousRowCountChange30DaysCheckSpec
-        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, WithinChange30DaysRuleParametersSpec, WithinChange30DaysRuleParametersSpec, WithinChange30DaysRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TablePreviousRowCountChange30DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TableChangeRowCountSince7DaysCheckSpec
+        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, WithinChange7DaysRuleParametersSpec, WithinChange7DaysRuleParametersSpec, WithinChange7DaysRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableChangeRowCountSince7DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -52,17 +52,17 @@ public class TablePreviousRowCountChange30DaysCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private WithinChange30DaysRuleParametersSpec warning;
+    private WithinChange7DaysRuleParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private WithinChange30DaysRuleParametersSpec error;
+    private WithinChange7DaysRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private WithinChange30DaysRuleParametersSpec fatal;
+    private WithinChange7DaysRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -91,7 +91,7 @@ public class TablePreviousRowCountChange30DaysCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public WithinChange30DaysRuleParametersSpec getWarning() {
+    public WithinChange7DaysRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -100,7 +100,7 @@ public class TablePreviousRowCountChange30DaysCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(WithinChange30DaysRuleParametersSpec warning) {
+    public void setWarning(WithinChange7DaysRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -112,7 +112,7 @@ public class TablePreviousRowCountChange30DaysCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public WithinChange30DaysRuleParametersSpec getError() {
+    public WithinChange7DaysRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -121,7 +121,7 @@ public class TablePreviousRowCountChange30DaysCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(WithinChange30DaysRuleParametersSpec error) {
+    public void setError(WithinChange7DaysRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -133,7 +133,7 @@ public class TablePreviousRowCountChange30DaysCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public WithinChange30DaysRuleParametersSpec getFatal() {
+    public WithinChange7DaysRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -142,7 +142,7 @@ public class TablePreviousRowCountChange30DaysCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(WithinChange30DaysRuleParametersSpec fatal) {
+    public void setFatal(WithinChange7DaysRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

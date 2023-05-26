@@ -37,9 +37,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TablePreviousRowCountChangeCheckSpec
+public class TableChangeRowCountCheckSpec
         extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, WithinChangeRuleParametersSpec, WithinChangeRuleParametersSpec, WithinChangeRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TablePreviousRowCountChangeCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+    public static final ChildHierarchyNodeFieldMapImpl<TableChangeRowCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
