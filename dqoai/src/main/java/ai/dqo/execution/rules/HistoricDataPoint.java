@@ -36,7 +36,7 @@ public class HistoricDataPoint {
     private Instant timestampUtc;
 
     /**
-     * Local date time of the previous radout (when the time zone is not important).
+     * Local date time of the previous readout (when the time zone is not important).
      */
     private LocalDateTime localDatetime;
 
