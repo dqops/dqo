@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import DataQualityChecks from '../../DataQualityChecks';
+
 import TableActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
-import {
-  CheckResultsOverviewDataModel,
-  UICheckContainerModel
-} from '../../../api';
+
 import {
   getTableProfilingChecksUI,
-  setUpdatedChecksUi,
   updateTableProfilingChecksUI
 } from '../../../redux/actions/table.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { CheckResultOverviewApi } from '../../../services/apiClient';
 import { useParams } from 'react-router-dom';
 import {
   getFirstLevelActiveTab,
@@ -20,9 +15,11 @@ import {
 } from '../../../redux/selectors';
 import { CheckTypes } from '../../../shared/routes';
 import TableAdvancedProfiling from '../../../pages/TableAdvencedProfiling';
-import TableStatisticView from '../../../pages/TableStatisticView';
+
 import Tabs from '../../Tabs';
 import TableColumns from '../../../pages/TableColumnsView/TableColumns';
+import TableStatisticView from '../../../pages/TableStatisticsView';
+import TableStatisticsView from '../../../pages/TableStatisticsView';
 
 const tabs = [
   {
@@ -50,9 +47,6 @@ const ProfilingView = () => {
   const { checksUI, loading, isUpdating, isUpdatedChecksUi, tableBasic } =
     useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
-  const [checkResultsOverview, setCheckResultsOverview] = useState<
-    CheckResultsOverviewDataModel[]
-  >([]);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [activeTab, setActiveTab] = useState('statistics');
 
@@ -101,31 +95,28 @@ const ProfilingView = () => {
     );
   };
 
-  const handleChange = (value: UICheckContainerModel) => {
-    dispatch(setUpdatedChecksUi(checkTypes, firstLevelActiveTab, value));
-  };
-
-  const getCheckOverview = () => {
-    CheckResultOverviewApi.getTableProfilingChecksOverview(
-      connectionName,
-      schemaName,
-      tableName
-    ).then((res) => {
-      setCheckResultsOverview(res.data);
-    });
-  };
-
   return (
     <div className="flex-grow min-h-0 flex flex-col">
-      <TableActionGroup
-        shouldDelete={false}
-        onUpdate={onUpdate}
-        isUpdated={isUpdatedChecksUi}
-        isUpdating={isUpdating}
-      />
+      {activeTab === 'statistics' && (
+        <TableActionGroup
+          shouldDelete={false}
+          onUpdate={onUpdate}
+          isUpdated={isUpdatedChecksUi}
+          isUpdating={isUpdating}
+          collectStatistic={true}
+        />
+      )}{' '}
+      {activeTab === 'advanced' && (
+        <TableActionGroup
+          shouldDelete={false}
+          onUpdate={onUpdate}
+          isUpdated={isUpdatedChecksUi}
+          isUpdating={isUpdating}
+        />
+      )}
       <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
       {activeTab === 'statistics' && (
-        <TableColumns
+        <TableStatisticsView
           connectionName={connectionName}
           schemaName={schemaName}
           tableName={tableName}
