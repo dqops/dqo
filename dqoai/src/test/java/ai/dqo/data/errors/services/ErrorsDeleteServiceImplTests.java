@@ -391,6 +391,66 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
+    @Test
+    void deleteSelectedErrorsFragment_whenSearchPatternOnSchemaTable_thenDeleteResultsForMatchingTables() {
+        String connectionName = "connection";
+        String tableName1 = "tab1";
+        String tableName2 = "tab2";
+        PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
+        PhysicalTableName physicalTableName2 = new PhysicalTableName("sch", tableName2);
+
+        LocalDate month1 = LocalDate.of(2023, 1, 1);
+        LocalDate month2 = LocalDate.of(2023, 2, 1);
+        LocalDateTime startDate1 = month1.atStartOfDay().plusDays(14);
+        LocalDateTime startDate2 = month2.atStartOfDay().plusDays(14);
+
+        Table table1 = prepareSimplePartitionTable(tableName1, startDate1, "");
+        Table table2 = prepareSimplePartitionTable(tableName2, startDate2, "");
+
+        ParquetPartitionId partitionId1 = new ParquetPartitionId(
+                this.errorsStorageSettings.getTableType(),
+                connectionName,
+                physicalTableName1,
+                month1);
+        ParquetPartitionId partitionId2 = new ParquetPartitionId(
+                this.errorsStorageSettings.getTableType(),
+                connectionName,
+                physicalTableName2,
+                month2);
+
+        this.parquetPartitionStorageService.savePartition(
+                new LoadedMonthlyPartition(partitionId1),
+                new TableDataChanges(table1),
+                this.errorsStorageSettings);
+        this.parquetPartitionStorageService.savePartition(
+                new LoadedMonthlyPartition(partitionId2),
+                new TableDataChanges(table2),
+                this.errorsStorageSettings);
+
+        ErrorsFragmentFilter filter = new ErrorsFragmentFilter(){{
+            setTableSearchFilters(new TableSearchFilters(){{
+                setConnectionName(connectionName);
+                setSchemaTableName("*ch.*tab1");
+            }});
+        }};
+
+        DataDeleteResult result = this.sut.deleteSelectedErrorsFragment(filter);
+        Assertions.assertFalse(result.getPartitionResults().isEmpty());
+
+        LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
+                partitionId1, this.errorsStorageSettings, null);
+        Assertions.assertNull(partition1AfterDelete.getData());
+        Assertions.assertEquals(0L, partition1AfterDelete.getLastModified());
+
+        LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
+                partitionId2, this.errorsStorageSettings, null);
+        Assertions.assertNotNull(partition2AfterDelete.getData());
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
+    }
+
     private Table prepareComplexPartitionTable(String tableName, LocalDateTime startDate) {
         Table errorsTable = this.errorsTableFactory.createEmptyErrorsTable(tableName);
 

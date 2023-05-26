@@ -16,11 +16,12 @@
 package ai.dqo.metadata.search;
 
 /**
- * String comparison functions that accept patterns like: *text, text*text2, text*
+ * String comparison functions that accept patterns like: *text, text*text2, text*, *text*.
  */
 public class StringPatternComparer {
     /**
      * Compares a given text with a pattern that may contain one '*' wildcard at the beginning, middle or the end of the pattern.
+     * Optionally may contain two '*'s, one at the beginning and one at the end of the pattern.
      * The text comparison is case-insensitive.
      * @param text Text to compare.
      * @param pattern Expected pattern.
