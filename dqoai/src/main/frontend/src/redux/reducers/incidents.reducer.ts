@@ -32,6 +32,21 @@ export interface IncidentFilter {
   sortDirection?: 'asc' | 'desc';
 }
 
+export interface IncidentIssueFilter {
+  connection: string;
+  year: number;
+  month: number;
+  incidentId: string;
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  date?: string;
+  column?: string;
+  check?: string;
+  order?: 'executedAt' | 'checkHash' | 'checkCategory' | 'checkName' | 'checkDisplayName' | 'checkType' | 'actualValue' | 'expectedValue' | 'severity' | 'columnName' | 'dataStream' | 'timeGradient' | 'timePeriod' | 'qualityDimension' | 'sensorName';
+  direction?: 'asc' | 'desc';
+}
+
 export interface IIncidentsState {
   connections: IncidentsPerConnectionModel[];
   loading: boolean;
@@ -142,6 +157,22 @@ const incidentsReducer = (state = initialState, action: any) => {
       });
     }
     case INCIDENTS_ACTION.GET_INCIDENTS_BY_CONNECTION_ERROR: {
+      return setActiveTabState(state, action, {
+        loading: false
+      });
+    }
+    case INCIDENTS_ACTION.GET_INCIDENTS_ISSUES: {
+      return setActiveTabState(state, action, {
+        loading: true,
+      });
+    }
+    case INCIDENTS_ACTION.GET_INCIDENTS_ISSUES_SUCCESS: {
+      return setActiveTabState(state, action, {
+        issues: action.data,
+        loading: false
+      });
+    }
+    case INCIDENTS_ACTION.GET_INCIDENTS_ISSUES_ERROR: {
       return setActiveTabState(state, action, {
         loading: false
       });
