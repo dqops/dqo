@@ -48,6 +48,21 @@ public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_sum_anomaly_7_days", o -> o.dailyPartitionSumAnomaly7Days);
             put("daily_partition_sum_anomaly_30_days", o -> o.dailyPartitionSumAnomaly30Days);
             put("daily_partition_sum_anomaly_60_days", o -> o.dailyPartitionSumAnomaly60Days);
+
+            put("daily_partition_mean_change", o -> o.dailyPartitionMeanChange);
+            put("daily_partition_mean_change_yesterday", o -> o.dailyPartitionMeanChangeYesterday);
+            put("daily_partition_mean_change_7_days", o -> o.dailyPartitionMeanChange7Days);
+            put("daily_partition_mean_change_30_days", o -> o.dailyPartitionMeanChange30Days);
+
+            put("daily_partition_median_change", o -> o.dailyPartitionMedianChange);
+            put("daily_partition_median_change_yesterday", o -> o.dailyPartitionMedianChangeYesterday);
+            put("daily_partition_median_change_7_days", o -> o.dailyPartitionMedianChange7Days);
+            put("daily_partition_median_change_30_days", o -> o.dailyPartitionMedianChange30Days);
+
+            put("daily_partition_sum_change", o -> o.dailyPartitionSumChange);
+            put("daily_partition_sum_change_yesterday", o -> o.dailyPartitionSumChangeYesterday);
+            put("daily_partition_sum_change_7_days", o -> o.dailyPartitionSumChange7Days);
+            put("daily_partition_sum_change_30_days", o -> o.dailyPartitionSumChange30Days);
         }
     };
 
@@ -86,7 +101,48 @@ public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonProperty("daily_partition_sum_anomaly_60_days")
     @JsonPropertyDescription("Verifies that the sum in a column is within a percentile from measurements made during the last 60 days.")
     private ColumnAnomalySum60DaysCheckSpec dailyPartitionSumAnomaly60Days;
-    
+
+    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout.")
+    private ColumnChangeMeanCheckSpec dailyPartitionMeanChange;
+
+    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.")
+    private ColumnChangeMeanSinceYesterdayCheckSpec dailyPartitionMeanChangeYesterday;
+
+    @JsonProperty("daily_partition_mean_change_7_days")
+    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout from last week.")
+    private ColumnChangeMeanSince7DaysCheckSpec dailyPartitionMeanChange7Days;
+
+    @JsonProperty("daily_partition_mean_change_30_days")
+    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout from last month.")
+    private ColumnChangeMeanSince30DaysCheckSpec dailyPartitionMeanChange30Days;
+
+    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout.")
+    private ColumnChangeMedianCheckSpec dailyPartitionMedianChange;
+
+    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout from yesterday.")
+    private ColumnChangeMedianSinceYesterdayCheckSpec dailyPartitionMedianChangeYesterday;
+
+    @JsonProperty("daily_partition_median_change_7_days")
+    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout from last week.")
+    private ColumnChangeMedianSince7DaysCheckSpec dailyPartitionMedianChange7Days;
+
+    @JsonProperty("daily_partition_median_change_30_days")
+    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout from last month.")
+    private ColumnChangeMedianSince30DaysCheckSpec dailyPartitionMedianChange30Days;
+
+    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout.")
+    private ColumnChangeSumCheckSpec dailyPartitionSumChange;
+
+    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.")
+    private ColumnChangeSumSinceYesterdayCheckSpec dailyPartitionSumChangeYesterday;
+
+    @JsonProperty("daily_partition_sum_change_7_days")
+    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout from last week.")
+    private ColumnChangeSumSince7DaysCheckSpec dailyPartitionSumChange7Days;
+
+    @JsonProperty("daily_partition_sum_change_30_days")
+    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout from last month.")
+    private ColumnChangeSumSince30DaysCheckSpec dailyPartitionSumChange30Days;
 
     /**
      * Returns a mean value anomaly 7 days check specification.
@@ -248,6 +304,222 @@ public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionSumAnomaly60Days, dailyPartitionSumAnomaly60Days));
         this.dailyPartitionSumAnomaly60Days = dailyPartitionSumAnomaly60Days;
         propagateHierarchyIdToField(dailyPartitionSumAnomaly60Days, "daily_partition_sum_anomaly_60_days");
+    }
+
+    /**
+     * Returns the mean value change check.
+     * @return Mean value change check.
+     */
+    public ColumnChangeMeanCheckSpec getDailyPartitionMeanChange() {
+        return dailyPartitionMeanChange;
+    }
+
+    /**
+     * Sets a new mean value change check.
+     * @param dailyPartitionMeanChange Mean value change check.
+     */
+    public void setDailyPartitionMeanChange(ColumnChangeMeanCheckSpec dailyPartitionMeanChange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMeanChange, dailyPartitionMeanChange));
+        this.dailyPartitionMeanChange = dailyPartitionMeanChange;
+        propagateHierarchyIdToField(dailyPartitionMeanChange, "daily_partition_mean_change");
+    }
+
+    /**
+     * Returns the mean value change yesterday check.
+     * @return Mean value change yesterday check.
+     */
+    public ColumnChangeMeanSinceYesterdayCheckSpec getDailyPartitionMeanChangeYesterday() {
+        return dailyPartitionMeanChangeYesterday;
+    }
+
+    /**
+     * Sets a new mean value change yesterday check.
+     * @param dailyPartitionMeanChangeYesterday Mean value change yesterday check.
+     */
+    public void setDailyPartitionMeanChangeYesterday(ColumnChangeMeanSinceYesterdayCheckSpec dailyPartitionMeanChangeYesterday) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMeanChangeYesterday, dailyPartitionMeanChangeYesterday));
+        this.dailyPartitionMeanChangeYesterday = dailyPartitionMeanChangeYesterday;
+        propagateHierarchyIdToField(dailyPartitionMeanChangeYesterday, "daily_partition_mean_change_yesterday");
+    }
+
+    /**
+     * Returns the mean value change 7 days check.
+     * @return Mean value change 7 days check.
+     */
+    public ColumnChangeMeanSince7DaysCheckSpec getDailyPartitionMeanChange7Days() {
+        return dailyPartitionMeanChange7Days;
+    }
+
+    /**
+     * Sets a new mean value change 7 days check.
+     * @param dailyPartitionMeanChange7Days Mean value change 7 days check.
+     */
+    public void setDailyPartitionMeanChange7Days(ColumnChangeMeanSince7DaysCheckSpec dailyPartitionMeanChange7Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMeanChange7Days, dailyPartitionMeanChange7Days));
+        this.dailyPartitionMeanChange7Days = dailyPartitionMeanChange7Days;
+        propagateHierarchyIdToField(dailyPartitionMeanChange7Days, "daily_partition_mean_change_7_days");
+    }
+
+    /**
+     * Returns the mean value change 30 days check.
+     * @return Mean value change 30 days check.
+     */
+    public ColumnChangeMeanSince30DaysCheckSpec getDailyPartitionMeanChange30Days() {
+        return dailyPartitionMeanChange30Days;
+    }
+
+    /**
+     * Sets a new mean value change 30 days check.
+     * @param dailyPartitionMeanChange30Days Mean value change 30 days check.
+     */
+    public void setDailyPartitionMeanChange30Days(ColumnChangeMeanSince30DaysCheckSpec dailyPartitionMeanChange30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMeanChange30Days, dailyPartitionMeanChange30Days));
+        this.dailyPartitionMeanChange30Days = dailyPartitionMeanChange30Days;
+        propagateHierarchyIdToField(dailyPartitionMeanChange30Days, "daily_partition_mean_change_30_days");
+    }
+
+    /**
+     * Returns the median change check.
+     * @return Median change check.
+     */
+    public ColumnChangeMedianCheckSpec getDailyPartitionMedianChange() {
+        return dailyPartitionMedianChange;
+    }
+
+    /**
+     * Sets a new median change check.
+     * @param dailyPartitionMedianChange Median change check.
+     */
+    public void setDailyPartitionMedianChange(ColumnChangeMedianCheckSpec dailyPartitionMedianChange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMedianChange, dailyPartitionMedianChange));
+        this.dailyPartitionMedianChange = dailyPartitionMedianChange;
+        propagateHierarchyIdToField(dailyPartitionMedianChange, "daily_partition_median_change");
+    }
+
+    /**
+     * Returns the median change yesterday check.
+     * @return Median change yesterday check.
+     */
+    public ColumnChangeMedianSinceYesterdayCheckSpec getDailyPartitionMedianChangeYesterday() {
+        return dailyPartitionMedianChangeYesterday;
+    }
+
+    /**
+     * Sets a new median change yesterday check.
+     * @param dailyPartitionMedianChangeYesterday Median change yesterday check.
+     */
+    public void setDailyPartitionMedianChangeYesterday(ColumnChangeMedianSinceYesterdayCheckSpec dailyPartitionMedianChangeYesterday) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMedianChangeYesterday, dailyPartitionMedianChangeYesterday));
+        this.dailyPartitionMedianChangeYesterday = dailyPartitionMedianChangeYesterday;
+        propagateHierarchyIdToField(dailyPartitionMedianChangeYesterday, "daily_partition_median_change_yesterday");
+    }
+
+    /**
+     * Returns the median change 7 days check.
+     * @return Median change 7 days check.
+     */
+    public ColumnChangeMedianSince7DaysCheckSpec getDailyPartitionMedianChange7Days() {
+        return dailyPartitionMedianChange7Days;
+    }
+
+    /**
+     * Sets a new median change 7 days check.
+     * @param dailyPartitionMedianChange7Days Median change 7 days check.
+     */
+    public void setDailyPartitionMedianChange7Days(ColumnChangeMedianSince7DaysCheckSpec dailyPartitionMedianChange7Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMedianChange7Days, dailyPartitionMedianChange7Days));
+        this.dailyPartitionMedianChange7Days = dailyPartitionMedianChange7Days;
+        propagateHierarchyIdToField(dailyPartitionMedianChange7Days, "daily_partition_median_change_7_days");
+    }
+
+    /**
+     * Returns the median change 30 days check.
+     * @return Median change 30 days check.
+     */
+    public ColumnChangeMedianSince30DaysCheckSpec getDailyPartitionMedianChange30Days() {
+        return dailyPartitionMedianChange30Days;
+    }
+
+    /**
+     * Sets a new median change 30 days check.
+     * @param dailyPartitionMedianChange30Days Median change 30 days check.
+     */
+    public void setDailyPartitionMedianChange30Days(ColumnChangeMedianSince30DaysCheckSpec dailyPartitionMedianChange30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMedianChange30Days, dailyPartitionMedianChange30Days));
+        this.dailyPartitionMedianChange30Days = dailyPartitionMedianChange30Days;
+        propagateHierarchyIdToField(dailyPartitionMedianChange30Days, "daily_partition_median_change_30_days");
+    }
+
+    /**
+     * Returns the sum change check.
+     * @return Sum change check.
+     */
+    public ColumnChangeSumCheckSpec getDailyPartitionSumChange() {
+        return dailyPartitionSumChange;
+    }
+
+    /**
+     * Sets a new sum change check.
+     * @param dailyPartitionSumChange Sum change check.
+     */
+    public void setDailyPartitionSumChange(ColumnChangeSumCheckSpec dailyPartitionSumChange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSumChange, dailyPartitionSumChange));
+        this.dailyPartitionSumChange = dailyPartitionSumChange;
+        propagateHierarchyIdToField(dailyPartitionSumChange, "daily_partition_sum_change");
+    }
+
+    /**
+     * Returns the sum change yesterday check.
+     * @return Sum change yesterday check.
+     */
+    public ColumnChangeSumSinceYesterdayCheckSpec getDailyPartitionSumChangeYesterday() {
+        return dailyPartitionSumChangeYesterday;
+    }
+
+    /**
+     * Sets a new sum change yesterday check.
+     * @param dailyPartitionSumChangeYesterday Sum change yesterday check.
+     */
+    public void setDailyPartitionSumChangeYesterday(ColumnChangeSumSinceYesterdayCheckSpec dailyPartitionSumChangeYesterday) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSumChangeYesterday, dailyPartitionSumChangeYesterday));
+        this.dailyPartitionSumChangeYesterday = dailyPartitionSumChangeYesterday;
+        propagateHierarchyIdToField(dailyPartitionSumChangeYesterday, "daily_partition_sum_change_yesterday");
+    }
+
+    /**
+     * Returns the sum change 7 days check.
+     * @return Sum change 7 days check.
+     */
+    public ColumnChangeSumSince7DaysCheckSpec getDailyPartitionSumChange7Days() {
+        return dailyPartitionSumChange7Days;
+    }
+
+    /**
+     * Sets a new sum change 7 days check.
+     * @param dailyPartitionSumChange7Days Sum change 7 days check.
+     */
+    public void setDailyPartitionSumChange7Days(ColumnChangeSumSince7DaysCheckSpec dailyPartitionSumChange7Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSumChange7Days, dailyPartitionSumChange7Days));
+        this.dailyPartitionSumChange7Days = dailyPartitionSumChange7Days;
+        propagateHierarchyIdToField(dailyPartitionSumChange7Days, "daily_partition_sum_change_7_days");
+    }
+
+    /**
+     * Returns the sum change 30 days check.
+     * @return Sum change 30 days check.
+     */
+    public ColumnChangeSumSince30DaysCheckSpec getDailyPartitionSumChange30Days() {
+        return dailyPartitionSumChange30Days;
+    }
+
+    /**
+     * Sets a new sum change 30 days check.
+     * @param dailyPartitionSumChange30Days Sum change 30 days check.
+     */
+    public void setDailyPartitionSumChange30Days(ColumnChangeSumSince30DaysCheckSpec dailyPartitionSumChange30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSumChange30Days, dailyPartitionSumChange30Days));
+        this.dailyPartitionSumChange30Days = dailyPartitionSumChange30Days;
+        propagateHierarchyIdToField(dailyPartitionSumChange30Days, "daily_partition_sum_change_30_days");
     }
 
     /**
