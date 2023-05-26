@@ -33,6 +33,7 @@ import Definitions from "./pages/Definitions";
 import SensorDetail from "./pages/SensorDetail";
 import RuleDetail from "./pages/RuleDetail";
 import Incidents from "./pages/Incidents";
+import IncidentConnection from "./pages/IncidentConnection";
 import IncidentDetail from "./pages/IncidentDetail";
 
 const Routes = () => {
@@ -66,6 +67,7 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.RULE_DETAIL} component={RuleDetail} />
       <Route exact path={ROUTES.PATTERNS.DEFINITIONS} component={Definitions} />
       <Route exact path={ROUTES.PATTERNS.INCIDENT_DETAIL} component={IncidentDetail} />
+      <Route exact path={ROUTES.PATTERNS.INCIDENT_CONNECTION} component={IncidentConnection} />
       <Route exact path={ROUTES.PATTERNS.INCIDENTS} component={Incidents} />
       <Route exact path={ROUTES.PATTERNS.QUALITY_CHECKS} component={ChecksPage} />
       <Redirect from={ROUTES.PATTERNS.INDEX} to={ROUTES.PATTERNS.HOME} />

@@ -27,8 +27,8 @@ const IncidentsTree = () => {
       return;
     }
     dispatch(addFirstLevelTab({
-      url: ROUTES.INCIDENT_DETAIL(connection?.connection ?? ""),
-      value: ROUTES.INCIDENT_DETAIL_VALUE(connection?.connection ?? ""),
+      url: ROUTES.INCIDENT_CONNECTION(connection?.connection ?? ""),
+      value: ROUTES.INCIDENT_CONNECTION_VALUE(connection?.connection ?? ""),
       state: {
         filters: {
           openIncidents: true,
