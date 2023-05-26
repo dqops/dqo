@@ -141,10 +141,15 @@ export const getIncidentsIssues = ({
 }: IncidentIssueFilter) => async (dispatch: Dispatch) => {
   dispatch(getIncidentsIssuesRequest());
   try {
+    console.log('-------filter', filter);
+
     const res: AxiosResponse<Array<CheckResultDetailedSingleModel>> =
       await IncidentsApi.getIncidentIssues(connection, year, month, incidentId, page, pageSize,filter, date, column, check, order, direction);
+    console.log('-------res', res);
+
     dispatch(getIncidentsIssuesSuccess(res.data));
   } catch (err) {
+    console.log('---------errr', err);
     dispatch(getIncidentsIssuesFailed(err));
   }
 };
