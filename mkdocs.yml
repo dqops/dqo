@@ -78,6 +78,7 @@ nav:
       - Time zone configuration: 'working-with-dqo/schedules/timezone-configuration.md'
       - Cron formatting: 'working-with-dqo/schedules/cron-formatting.md'
     - Set up data stream segmentation: 'working-with-dqo/set-up-data-streams/set-up-data-stream.md'
+    - Working with DQO Shell: 'working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
     - dqo: 'command-line-interface/dqo.md'
