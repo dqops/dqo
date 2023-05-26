@@ -22,6 +22,7 @@ import { getDaysString } from "../../utils";
 import AddIssueUrlDialog from "../IncidentConnection/AddIssueUrlDialog";
 import { IncidentIssueList } from "./IncidentIssueList";
 import { useTree } from "../../contexts/treeContext";
+import IncidentNavigation from "./IncidentNavigation";
 
 const statusOptions = [
   {
@@ -99,6 +100,9 @@ export const IncidentDetail = () => {
       ...filters || {},
       ...obj,
       connection,
+      year,
+      month,
+      incidentId
     }));
   }
 
@@ -112,6 +116,7 @@ export const IncidentDetail = () => {
   return (
     <IncidentsLayout>
       <div className="relative">
+        <IncidentNavigation incident={incidentDetail} />
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
@@ -262,7 +267,7 @@ export const IncidentDetail = () => {
 
         <div className="px-4 ">
           <div className="py-3 mb-5 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
-            <IncidentIssueList issues={issues} />
+            <IncidentIssueList issues={issues || []} />
           </div>
 
           <Pagination
