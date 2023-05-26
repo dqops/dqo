@@ -20,7 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.*;
-import ai.dqo.sensors.column.numeric.ColumnNumericHasValidNumberPercentSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericNumberValueInSetPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -32,17 +32,17 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that calculates the percentage of rows for which the tested numeric column contains a value from the list of expected values.
+ * Column level check that calculates the percentage of rows for which the tested numeric column contains a value from the set of expected values.
  * Columns with null values are also counted as a passing value (the sensor assumes that a 'null' is also an expected and accepted value).
- * The check raises a data quality issue when the percentage of rows with a not null column value that is not expected (not one of the values in the expected_values list)
+ * The check raises a data quality issue when the percentage of rows with a not null column value that is not expected (not one of the values in the expected_values set)
  * is below an expected threshold, for example 99% of rows should have values from the defined domain.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnHasValidNumbersPercentCheckSpec
-        extends AbstractCheckSpec<ColumnNumericHasValidNumberPercentSensorParametersSpec, MinPercentRule100ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnHasValidNumbersPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnNumberValueInSetPercentCheckSpec
+        extends AbstractCheckSpec<ColumnNumericNumberValueInSetPercentSensorParametersSpec, MinPercentRule100ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNumberValueInSetPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -50,19 +50,19 @@ public class ColumnHasValidNumbersPercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters that specify a list of expected values that are compared to the values in the tested numeric column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericHasValidNumberPercentSensorParametersSpec parameters = new ColumnNumericHasValidNumberPercentSensorParametersSpec();
+    private ColumnNumericNumberValueInSetPercentSensorParametersSpec parameters = new ColumnNumericNumberValueInSetPercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a percentage of rows with invalid (not expected) values in a column that raises a data quality issue at a warning severity level.")
+    @JsonPropertyDescription("Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at a warning severity level when the percentage of valid rows is below the minimum percentage threshold.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule100ParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a percentage of rows with invalid (not expected) values in a column that raises a data quality issue at an error severity level.")
+    @JsonPropertyDescription("Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at an error severity level when the percentage of valid rows is below the minimum percentage threshold")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule99ParametersSpec error;
 
-    @JsonPropertyDescription("Default alerting threshold for a percentage of rows with invalid (not expected) values in a column that raises a data quality fatal issue.")
+    @JsonPropertyDescription("Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at a fatal severity level when the percentage of valid rows is below the minimum percentage threshold")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule95ParametersSpec fatal;
@@ -72,7 +72,7 @@ public class ColumnHasValidNumbersPercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNumericHasValidNumberPercentSensorParametersSpec getParameters() {
+    public ColumnNumericNumberValueInSetPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -80,7 +80,7 @@ public class ColumnHasValidNumbersPercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNumericHasValidNumberPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericNumberValueInSetPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

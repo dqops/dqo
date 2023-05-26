@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.bigquery.sensors.column.numeric;
+package ai.dqo.sqlserver.sensors.column.numeric;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnHasValidNumbersPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnNumberValueInSetPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +28,8 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericHasValidNumberPercentSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericNumberValueInSetPercentSensorParametersSpec;
+import ai.dqo.sqlserver.BaseSqlServerIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,19 +40,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class BigQueryColumnNumericHasValidNumberPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnNumericHasValidNumberPercentSensorParametersSpec sut;
+public class SqlServerColumnNumericNumberValueInSetPercentSensorParametersSpecIntegrationTest extends BaseSqlServerIntegrationTest {
+    private ColumnNumericNumberValueInSetPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnHasValidNumbersPercentCheckSpec checkSpec;
+    private ColumnNumberValueInSetPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.sqlserver);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnNumericHasValidNumberPercentSensorParametersSpec();
-		this.checkSpec = new ColumnHasValidNumbersPercentCheckSpec();
+		this.sut = new ColumnNumericNumberValueInSetPercentSensorParametersSpec();
+		this.checkSpec = new ColumnNumberValueInSetPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -69,7 +69,7 @@ public class BigQueryColumnNumericHasValidNumberPercentSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals((float) 0.0 , resultTable.column(0).get(0));
     }
 
     @Test

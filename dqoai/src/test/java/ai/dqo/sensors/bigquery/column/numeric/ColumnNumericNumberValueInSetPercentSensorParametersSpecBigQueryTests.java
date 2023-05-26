@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.numeric;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnHasValidNumbersPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnNumberValueInSetPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -30,7 +30,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericHasValidNumberPercentSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericNumberValueInSetPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,19 +41,19 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-public class ColumnNumericHasValidNumberPercentSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnNumericHasValidNumberPercentSensorParametersSpec sut;
+public class ColumnNumericNumberValueInSetPercentSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnNumericNumberValueInSetPercentSensorParametersSpec sut;
     private String sutValuesAsString;
     private UserHomeContext userHomeContext;
-    private ColumnHasValidNumbersPercentCheckSpec checkSpec;
-    private ColumnHasValidNumbersPercentCheckSpec altCheckSpec;
+    private ColumnNumberValueInSetPercentCheckSpec checkSpec;
+    private ColumnNumberValueInSetPercentCheckSpec altCheckSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-		this.sut = new ColumnNumericHasValidNumberPercentSensorParametersSpec();
+		this.sut = new ColumnNumericNumberValueInSetPercentSensorParametersSpec();
         this.sut.setFilter("{alias}.`correct` = 1");
-        ColumnNumericHasValidNumberPercentSensorParametersSpec altSut = (ColumnNumericHasValidNumberPercentSensorParametersSpec) this.sut.deepClone();
+        ColumnNumericNumberValueInSetPercentSensorParametersSpec altSut = (ColumnNumericNumberValueInSetPercentSensorParametersSpec) this.sut.deepClone();
         this.sut.setExpectedValues(new ArrayList<>(){{
             add(12345L); add(123456L); add(1234567L);
         }});
@@ -61,9 +61,9 @@ public class ColumnNumericHasValidNumberPercentSensorParametersSpecBigQueryTests
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnHasValidNumbersPercentCheckSpec();
+        this.checkSpec = new ColumnNumberValueInSetPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        this.altCheckSpec = new ColumnHasValidNumbersPercentCheckSpec();
+        this.altCheckSpec = new ColumnNumberValueInSetPercentCheckSpec();
         this.altCheckSpec.setParameters(altSut);
     }
 

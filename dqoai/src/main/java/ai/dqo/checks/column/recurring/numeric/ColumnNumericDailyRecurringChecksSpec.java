@@ -41,7 +41,7 @@ public class ColumnNumericDailyRecurringChecksSpec extends AbstractCheckCategory
             put("daily_non_negative_count", o -> o.dailyNonNegativeCount);
             put("daily_non_negative_percent", o -> o.dailyNonNegativePercent);
             put("daily_numbers_found_count", o -> o.dailyNumbersFoundCount);
-            put("daily_has_valid_numbers_percent", o -> o.dailyHasValidNumbersPercent);
+            put("daily_number_value_in_set_percent", o -> o.dailyNumberValueInSetPercent);
             put("daily_values_in_range_numeric_percent", o -> o.dailyValuesInRangeNumericPercent);
             put("daily_values_in_range_integers_percent", o -> o.dailyValuesInRangeIntegersPercent);
             put("daily_value_below_min_value_count", o -> o.dailyValueBelowMinValueCount);
@@ -86,7 +86,7 @@ public class ColumnNumericDailyRecurringChecksSpec extends AbstractCheckCategory
     private ColumnNumbersFoundCountCheckSpec dailyNumbersFoundCount;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnHasValidNumbersPercentCheckSpec dailyHasValidNumbersPercent;
+    private ColumnNumberValueInSetPercentCheckSpec dailyNumberValueInSetPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValuesInRangeNumericPercentCheckSpec dailyValuesInRangeNumericPercent;
@@ -254,18 +254,18 @@ public class ColumnNumericDailyRecurringChecksSpec extends AbstractCheckCategory
      * Returns a numbers valid percent check specification.
      * @return Numbers valid percent check specification.
      */
-    public ColumnHasValidNumbersPercentCheckSpec getDailyHasValidNumbersPercent() {
-        return dailyHasValidNumbersPercent;
+    public ColumnNumberValueInSetPercentCheckSpec getDailyNumberValueInSetPercent() {
+        return dailyNumberValueInSetPercent;
     }
 
     /**
      * Sets a new specification of a numbers valid percent check.
-     * @param dailyHasValidNumbersPercent Number valid percent check specification.
+     * @param dailyNumberValueInSetPercent Number valid percent check specification.
      */
-    public void setDailyHasValidNumbersPercent(ColumnHasValidNumbersPercentCheckSpec dailyHasValidNumbersPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyHasValidNumbersPercent, dailyHasValidNumbersPercent));
-        this.dailyHasValidNumbersPercent = dailyHasValidNumbersPercent;
-        propagateHierarchyIdToField(dailyHasValidNumbersPercent, "daily_has_valid_numbers_percent");
+    public void setDailyNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec dailyNumberValueInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyNumberValueInSetPercent, dailyNumberValueInSetPercent));
+        this.dailyNumberValueInSetPercent = dailyNumberValueInSetPercent;
+        propagateHierarchyIdToField(dailyNumberValueInSetPercent, "daily_number_value_in_set_percent");
     }
 
     /**

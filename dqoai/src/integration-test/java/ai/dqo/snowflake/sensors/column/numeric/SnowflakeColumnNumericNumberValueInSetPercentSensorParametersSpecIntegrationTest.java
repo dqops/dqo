@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.postgresql.sensors.column.numeric;
+package ai.dqo.snowflake.sensors.column.numeric;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnHasValidNumbersPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnNumberValueInSetPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -24,12 +24,12 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericHasValidNumberPercentSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericNumberValueInSetPercentSensorParametersSpec;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,19 +40,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class PostgresqlColumnNumericHasValidNumberPercentSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
-    private ColumnNumericHasValidNumberPercentSensorParametersSpec sut;
+public class SnowflakeColumnNumericNumberValueInSetPercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+    private ColumnNumericNumberValueInSetPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnHasValidNumbersPercentCheckSpec checkSpec;
+    private ColumnNumberValueInSetPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.postgresql);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnNumericHasValidNumberPercentSensorParametersSpec();
-		this.checkSpec = new ColumnHasValidNumbersPercentCheckSpec();
+		this.sut = new ColumnNumericNumberValueInSetPercentSensorParametersSpec();
+		this.checkSpec = new ColumnNumberValueInSetPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -69,7 +69,7 @@ public class PostgresqlColumnNumericHasValidNumberPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals("", resultTable.column(0).get(0));
     }
 
     @Test
@@ -92,7 +92,7 @@ public class PostgresqlColumnNumericHasValidNumberPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
     }
 
     @Test
@@ -115,7 +115,7 @@ public class PostgresqlColumnNumericHasValidNumberPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
     }
 
     @Test
@@ -138,7 +138,7 @@ public class PostgresqlColumnNumericHasValidNumberPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
     }
 
     @Test
@@ -161,6 +161,6 @@ public class PostgresqlColumnNumericHasValidNumberPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
     }
 }

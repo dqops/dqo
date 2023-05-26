@@ -36,14 +36,14 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNumericHasValidNumberPercentSensorParametersSpec extends AbstractSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericHasValidNumberPercentSensorParametersSpec> FIELDS =
+public class ColumnNumericNumberValueInSetPercentSensorParametersSpec extends AbstractSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericNumberValueInSetPercentSensorParametersSpec> FIELDS =
             new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("A list of expected values that must be present in a numeric column, only values from this list are accepted.")
+    @JsonPropertyDescription("A list of expected values that must be present in a numeric column, only values from this list are accepted and rows having these values in the tested column are counted as valid rows.")
     @SampleValues(values = { "2", "3" })
     private List<Long> expectedValues;
 
@@ -81,6 +81,6 @@ public class ColumnNumericHasValidNumberPercentSensorParametersSpec extends Abst
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/numeric/has_valid_number_percent";
+        return "column/numeric/number_value_in_set_percent";
     }
 }

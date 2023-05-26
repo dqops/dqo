@@ -41,7 +41,7 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_non_negative_count", o -> o.dailyPartitionNonNegativeCount);
             put("daily_partition_non_negative_percent", o -> o.dailyPartitionNonNegativePercent);
             put("daily_partition_numbers_found_count", o -> o.dailyPartitionNumbersFoundCount);
-            put("daily_partition_has_valid_numbers_percent", o -> o.dailyPartitionHasValidNumbersPercent);
+            put("daily_partition_number_value_in_set_percent", o -> o.dailyPartitionNumberValueInSetPercent);
             put("daily_partition_values_in_range_numeric_percent", o -> o.dailyPartitionValuesInRangeNumericPercent);
             put("daily_partition_values_in_range_integers_percent", o -> o.dailyPartitionValuesInRangeIntegersPercent);
             put("daily_partition_value_below_min_value_count", o -> o.dailyPartitionValueBelowMinValueCount);
@@ -86,7 +86,7 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     private ColumnNumbersFoundCountCheckSpec dailyPartitionNumbersFoundCount;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnHasValidNumbersPercentCheckSpec dailyPartitionHasValidNumbersPercent;
+    private ColumnNumberValueInSetPercentCheckSpec dailyPartitionNumberValueInSetPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValuesInRangeNumericPercentCheckSpec dailyPartitionValuesInRangeNumericPercent;
@@ -255,18 +255,18 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
      * Returns a numbers in set percent check specification.
      * @return Numbers in set percent check specification.
      */
-    public ColumnHasValidNumbersPercentCheckSpec getDailyPartitionHasValidNumbersPercent() {
-        return dailyPartitionHasValidNumbersPercent;
+    public ColumnNumberValueInSetPercentCheckSpec getDailyPartitionHasValidNumbersPercent() {
+        return dailyPartitionNumberValueInSetPercent;
     }
 
     /**
      * Sets a new specification of a numbers found percent check.
-     * @param dailyPartitionHasValidNumbersPercent Numbers found percent check specification.
+     * @param dailyPartitionNumberValueInSetPercent Numbers found percent check specification.
      */
-    public void setDailyPartitionHasValidNumbersPercent(ColumnHasValidNumbersPercentCheckSpec dailyPartitionHasValidNumbersPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionHasValidNumbersPercent, dailyPartitionHasValidNumbersPercent));
-        this.dailyPartitionHasValidNumbersPercent = dailyPartitionHasValidNumbersPercent;
-        propagateHierarchyIdToField(dailyPartitionHasValidNumbersPercent, "daily_partition_has_valid_numbers_percent");
+    public void setDailyPartitionHasValidNumbersPercent(ColumnNumberValueInSetPercentCheckSpec dailyPartitionNumberValueInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNumberValueInSetPercent, dailyPartitionNumberValueInSetPercent));
+        this.dailyPartitionNumberValueInSetPercent = dailyPartitionNumberValueInSetPercent;
+        propagateHierarchyIdToField(dailyPartitionNumberValueInSetPercent, "daily_partition_number_value_in_set_percent");
     }
 
     /**
