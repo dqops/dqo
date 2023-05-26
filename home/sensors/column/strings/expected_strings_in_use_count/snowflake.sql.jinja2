@@ -1,4 +1,4 @@
-{% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+{% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
 
 {%- macro extract_in_list(values_list) -%}
     {%- for i in values_list -%}
@@ -14,11 +14,11 @@
     {%- if parameters.expected_values|length == 0 -%}
         NULL
     {%- else -%}
-    SUM(
+    COUNT(DISTINCT
         CASE
             WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
-                THEN 1
-            ELSE 0
+                THEN {{ lib.render_target_column('analyzed_table') }}
+            ELSE NULL
         END
     )
     {%- endif -%}
@@ -26,7 +26,7 @@
 
 SELECT
     CASE
-        WHEN COUNT_BIG(*) = 0 THEN NULL
+        WHEN COUNT(*) = 0 THEN NULL
         ELSE {{render_else()}}
     END AS actual_value,
     MAX({{ parameters.expected_values | length }}) AS expected_value

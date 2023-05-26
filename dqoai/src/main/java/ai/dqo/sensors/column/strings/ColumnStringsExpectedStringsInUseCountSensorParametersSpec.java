@@ -30,19 +30,21 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Column level sensor that counts how many rows have a value in a tested column that is on the list of expected text values.
+ * Column level sensor that counts how many expected string values are used in a tested column. Finds unique column values from the set of expected string values and counts them.
+ * This sensor is useful to analyze string columns that have a low number of unique values and it should be tested if all possible values from the list of expected values are used in any row.
+ * The typical type of columns analyzed using this sensor are currency, country, status or gender columns.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringsFoundCountSensorParametersSpec extends AbstractSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringsFoundCountSensorParametersSpec> FIELDS =
+public class ColumnStringsExpectedStringsInUseCountSensorParametersSpec extends AbstractSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsExpectedStringsInUseCountSensorParametersSpec> FIELDS =
             new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("A list of expected column values that the sensor is trying to find in the column.")
+    @JsonPropertyDescription("List of expected string values that should be found in the tested column.")
     @SampleValues(values = { "USD", "GBP", "EUR" })
     private List<String> expectedValues;
 
@@ -80,6 +82,6 @@ public class ColumnStringsStringsFoundCountSensorParametersSpec extends Abstract
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/strings_found_count";
+        return "column/strings/expected_strings_in_use_count";
     }
 }

@@ -31,6 +31,8 @@ import java.util.Objects;
 
 /**
  * Column level sensor that counts how many expected numeric values are used in a tested column. Finds unique column values from the set of expected numeric values and counts them.
+ * This sensor is useful to analyze numeric columns that have a low number of unique values and it should be tested if all possible values from the list of expected values are used in any row.
+ * The typical types of tested columns are numeric status or type columns.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

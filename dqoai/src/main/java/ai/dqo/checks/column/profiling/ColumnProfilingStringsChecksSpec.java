@@ -58,7 +58,7 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
             put("string_parsable_to_integer_percent", o -> o.stringParsableToIntegerPercent);
             put("string_parsable_to_float_percent", o -> o.stringParsableToFloatPercent);
 
-            put("string_in_set_count", o -> o.stringInSetCount);
+            put("expected_strings_in_use_count", o -> o.expectedStringsInUseCount);
             put("string_value_in_set_percent", o -> o.stringValueInSetPercent);
 
             put("string_valid_dates_percent", o -> o.stringValidDatesPercent);
@@ -139,8 +139,8 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not fall below the minimum accepted percentage.")
     private ColumnStringParsableToFloatPercentCheckSpec stringParsableToFloatPercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings from a set in a column does not fall below the minimum accepted count.")
-    private ColumnStringInSetCountCheckSpec stringInSetCount;
+    @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).")
+    private ColumnExpectedStringsInUseCountCheckSpec expectedStringsInUseCount;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.")
     private ColumnStringValueInSetPercentCheckSpec stringValueInSetPercent;
@@ -536,18 +536,18 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
      * Returns a minimum string parsable to float percent check.
      * @return Minimum string parsable to float percent check.
      */
-    public ColumnStringInSetCountCheckSpec getStringInSetCount() {
-        return stringInSetCount;
+    public ColumnExpectedStringsInUseCountCheckSpec getExpectedStringsInUseCount() {
+        return expectedStringsInUseCount;
     }
 
     /**
      * Sets a new definition of a string in set count check.
-     * @param stringInSetCount String in set count check.
+     * @param expectedStringsInUseCount String in set count check.
      */
-    public void setStringInSetCount(ColumnStringInSetCountCheckSpec stringInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.stringInSetCount, stringInSetCount));
-        this.stringInSetCount = stringInSetCount;
-        propagateHierarchyIdToField(stringInSetCount, "string_in_set_count");
+    public void setExpectedStringsInUseCount(ColumnExpectedStringsInUseCountCheckSpec expectedStringsInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.expectedStringsInUseCount, expectedStringsInUseCount));
+        this.expectedStringsInUseCount = expectedStringsInUseCount;
+        propagateHierarchyIdToField(expectedStringsInUseCount, "expected_strings_in_use_count");
     }
 
     /**

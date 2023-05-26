@@ -58,7 +58,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_parsable_to_integer_percent", o -> o.monthlyPartitionStringParsableToIntegerPercent);
             put("monthly_partition_string_parsable_to_float_percent", o -> o.monthlyPartitionStringParsableToFloatPercent);
             
-            put("monthly_partition_string_in_set_count", o -> o.monthlyPartitionStringInSetCount);
+            put("monthly_partition_expected_strings_in_use_count", o -> o.monthlyPartitionExpectedStringsInUseCount);
             put("monthly_partition_string_value_in_set_percent", o -> o.monthlyPartitionStringValueInSetPercent);
 
             put("monthly_partition_string_valid_dates_percent", o -> o.monthlyPartitionStringValidDatesPercent);
@@ -140,8 +140,8 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringParsableToFloatPercentCheckSpec monthlyPartitionStringParsableToFloatPercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings from set in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringInSetCountCheckSpec monthlyPartitionStringInSetCount;
+    @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnExpectedStringsInUseCountCheckSpec monthlyPartitionExpectedStringsInUseCount;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringValueInSetPercentCheckSpec monthlyPartitionStringValueInSetPercent;
@@ -542,18 +542,18 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnStringInSetCountCheckSpec getMonthlyPartitionStringInSetCount() {
-        return monthlyPartitionStringInSetCount;
+    public ColumnExpectedStringsInUseCountCheckSpec getMonthlyPartitionExpectedStringsInUseCount() {
+        return monthlyPartitionExpectedStringsInUseCount;
     }
 
     /**
      * Sets a new definition of a minimum strings in set count check.
-     * @param monthlyPartitionStringInSetCount Minimum strings in set count check.
+     * @param monthlyPartitionExpectedStringsInUseCount Minimum strings in set count check.
      */
-    public void setMonthlyPartitionStringInSetCount(ColumnStringInSetCountCheckSpec monthlyPartitionStringInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringInSetCount, monthlyPartitionStringInSetCount));
-        this.monthlyPartitionStringInSetCount = monthlyPartitionStringInSetCount;
-        propagateHierarchyIdToField(monthlyPartitionStringInSetCount, "monthly_partition_string_in_set_count");
+    public void setMonthlyPartitionExpectedStringsInUseCount(ColumnExpectedStringsInUseCountCheckSpec monthlyPartitionExpectedStringsInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionExpectedStringsInUseCount, monthlyPartitionExpectedStringsInUseCount));
+        this.monthlyPartitionExpectedStringsInUseCount = monthlyPartitionExpectedStringsInUseCount;
+        propagateHierarchyIdToField(monthlyPartitionExpectedStringsInUseCount, "monthly_partition_expected_strings_in_use_count");
     }
 
     /**

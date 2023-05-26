@@ -58,7 +58,7 @@ public class ColumnStringsMonthlyRecurringChecksSpec extends AbstractCheckCatego
             put("monthly_string_parsable_to_integer_percent", o -> o.monthlyStringParsableToIntegerPercent);
             put("monthly_string_parsable_to_float_percent", o -> o.monthlyStringParsableToFloatPercent);
 
-            put("monthly_string_in_set_count", o -> o.monthlyStringInSetCount);
+            put("monthly_expected_strings_in_use_count", o -> o.monthlyExpectedStringsInUseCount);
             put("monthly_string_value_in_set_percent", o -> o.monthlyStringValueInSetPercent);
 
             put("monthly_string_valid_dates_percent", o -> o.monthlyStringValidDatesPercent);
@@ -142,8 +142,8 @@ public class ColumnStringsMonthlyRecurringChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringParsableToFloatPercentCheckSpec monthlyStringParsableToFloatPercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnStringInSetCountCheckSpec monthlyStringInSetCount;
+    @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnExpectedStringsInUseCountCheckSpec monthlyExpectedStringsInUseCount;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringValueInSetPercentCheckSpec monthlyStringValueInSetPercent;
@@ -536,18 +536,18 @@ public class ColumnStringsMonthlyRecurringChecksSpec extends AbstractCheckCatego
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnStringInSetCountCheckSpec getMonthlyStringInSetCount() {
-        return monthlyStringInSetCount;
+    public ColumnExpectedStringsInUseCountCheckSpec getMonthlyStringInSetCount() {
+        return monthlyExpectedStringsInUseCount;
     }
 
     /**
      * Sets a new definition of a minimum strings in set count check.
      * @param monthlyStringInSetCount Minimum strings in set count check.
      */
-    public void setMonthlyStringInSetCount(ColumnStringInSetCountCheckSpec monthlyStringInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringInSetCount, monthlyStringInSetCount));
-        this.monthlyStringInSetCount = monthlyStringInSetCount;
-        propagateHierarchyIdToField(monthlyStringInSetCount, "monthly_string_in_set_count");
+    public void setMonthlyStringInSetCount(ColumnExpectedStringsInUseCountCheckSpec monthlyStringInSetCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyExpectedStringsInUseCount, monthlyStringInSetCount));
+        this.monthlyExpectedStringsInUseCount = monthlyStringInSetCount;
+        propagateHierarchyIdToField(monthlyStringInSetCount, "monthly_expected_strings_in_use_count");
     }
 
     /**

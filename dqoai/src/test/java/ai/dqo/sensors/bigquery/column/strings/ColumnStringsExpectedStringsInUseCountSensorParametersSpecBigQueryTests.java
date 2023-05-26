@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.strings;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringInSetCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.strings.ColumnExpectedStringsInUseCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -30,7 +30,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringsFoundCountSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsExpectedStringsInUseCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,19 +40,19 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-public class ColumnStringsStringsFoundCountSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnStringsStringsFoundCountSensorParametersSpec sut;
+public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnStringsExpectedStringsInUseCountSensorParametersSpec sut;
     private String sutValuesAsString;
     private UserHomeContext userHomeContext;
-    private ColumnStringInSetCountCheckSpec checkSpec;
-    private ColumnStringInSetCountCheckSpec altCheckSpec;
+    private ColumnExpectedStringsInUseCountCheckSpec checkSpec;
+    private ColumnExpectedStringsInUseCountCheckSpec altCheckSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp(){
-		this.sut = new ColumnStringsStringsFoundCountSensorParametersSpec();
+		this.sut = new ColumnStringsExpectedStringsInUseCountSensorParametersSpec();
         this.sut.setFilter("{alias}.`correct` = 1");
-        ColumnStringsStringsFoundCountSensorParametersSpec altSut = (ColumnStringsStringsFoundCountSensorParametersSpec) this.sut.deepClone();
+        ColumnStringsExpectedStringsInUseCountSensorParametersSpec altSut = (ColumnStringsExpectedStringsInUseCountSensorParametersSpec) this.sut.deepClone();
         this.sut.setExpectedValues(new ArrayList<>(){{
             add("abcde"); add("abcdef"); add("abcdefg");
         }});
@@ -62,9 +62,9 @@ public class ColumnStringsStringsFoundCountSensorParametersSpecBigQueryTests ext
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnStringInSetCountCheckSpec();
+        this.checkSpec = new ColumnExpectedStringsInUseCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        this.altCheckSpec = new ColumnStringInSetCountCheckSpec();
+        this.altCheckSpec = new ColumnExpectedStringsInUseCountCheckSpec();
         this.altCheckSpec.setParameters(altSut);
     }
 

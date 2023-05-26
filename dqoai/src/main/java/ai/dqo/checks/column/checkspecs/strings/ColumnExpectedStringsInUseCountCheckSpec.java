@@ -19,10 +19,8 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
-import ai.dqo.rules.comparison.MinCountRuleFatalParametersSpec;
-import ai.dqo.rules.comparison.MinCountRuleWarningParametersSpec;
-import ai.dqo.sensors.column.strings.ColumnStringsStringsFoundCountSensorParametersSpec;
+import ai.dqo.rules.comparison.*;
+import ai.dqo.sensors.column.strings.ColumnStringsExpectedStringsInUseCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,45 +32,46 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.
+ * Column level check that counts unique values in a string column and counts how many values out of a list of expected string values were found in the column.
  * The check raises a data quality issue when the threshold of maximum number of missing values was exceeded (too many expected values were not found in the column).
+ * This check is useful for analysing columns with a low number of unique values, such as status codes, to detect that all status codes are in use in any row.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringInSetCountCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringsFoundCountSensorParametersSpec, MinCountRuleWarningParametersSpec, MinCountRule0ParametersSpec, MinCountRuleFatalParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringInSetCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnExpectedStringsInUseCountCheckSpec
+        extends AbstractCheckSpec<ColumnStringsExpectedStringsInUseCountSensorParametersSpec, MaxMissingRule0ParametersSpec, MaxMissingRule1ParametersSpec, MaxMissingRule2ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnExpectedStringsInUseCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Data quality check parameters")
+    @JsonPropertyDescription("Data quality check parameters that specify a list of expected string values that must be present in the column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringsFoundCountSensorParametersSpec parameters = new ColumnStringsStringsFoundCountSensorParametersSpec();
+    private ColumnStringsExpectedStringsInUseCountSensorParametersSpec parameters = new ColumnStringsExpectedStringsInUseCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
+    @JsonPropertyDescription("Alerting threshold that raises a data quality warning when too many expected values were not found in the column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleWarningParametersSpec warning;
+    private MaxMissingRule0ParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with empty strings in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Alerting threshold that raises a data quality error when too many expected values were not found in the column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRule0ParametersSpec error;
+    private MaxMissingRule1ParametersSpec error;
 
-    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
+    @JsonPropertyDescription("Alerting threshold that raises a data quality fatal when too many expected values were not found in the column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleFatalParametersSpec fatal;
+    private MaxMissingRule2ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringsFoundCountSensorParametersSpec getParameters() {
+    public ColumnStringsExpectedStringsInUseCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -80,7 +79,7 @@ public class ColumnStringInSetCountCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringsFoundCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsExpectedStringsInUseCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -92,7 +91,7 @@ public class ColumnStringInSetCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinCountRuleWarningParametersSpec getWarning() {
+    public MaxMissingRule0ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -100,7 +99,7 @@ public class ColumnStringInSetCountCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinCountRuleWarningParametersSpec warning) {
+    public void setWarning(MaxMissingRule0ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -112,7 +111,7 @@ public class ColumnStringInSetCountCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinCountRule0ParametersSpec getError() {
+    public MaxMissingRule1ParametersSpec getError() {
         return this.error;
     }
 
@@ -120,7 +119,7 @@ public class ColumnStringInSetCountCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinCountRule0ParametersSpec error) {
+    public void setError(MaxMissingRule1ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -132,7 +131,7 @@ public class ColumnStringInSetCountCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinCountRuleFatalParametersSpec getFatal() {
+    public MaxMissingRule2ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -140,7 +139,7 @@ public class ColumnStringInSetCountCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinCountRuleFatalParametersSpec fatal) {
+    public void setFatal(MaxMissingRule2ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -163,6 +162,6 @@ public class ColumnStringInSetCountCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Consistency;
+        return DefaultDataQualityDimensions.Reasonableness;
     }
 }

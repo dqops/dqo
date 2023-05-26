@@ -58,7 +58,7 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_string_parsable_to_integer_percent", o -> o.dailyPartitionStringParsableToIntegerPercent);
             put("daily_partition_string_parsable_to_float_percent", o -> o.dailyPartitionStringParsableToFloatPercent);
 
-            put("daily_partition_string_in_set_count", o -> o.dailyPartitionStringInSetCount);
+            put("daily_partition_expected_strings_in_use_count", o -> o.dailyPartitionExpectedStringsInUseCount);
             put("daily_partition_string_value_in_set_percent", o -> o.dailyPartitionStringValueInSetPercent);
             
             put("daily_partition_string_valid_dates_percent", o -> o.dailyPartitionStringValidDatesPercent);
@@ -140,8 +140,8 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringParsableToFloatPercentCheckSpec dailyPartitionStringParsableToFloatPercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings from set in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnStringInSetCountCheckSpec dailyPartitionStringInSetCount;
+    @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnExpectedStringsInUseCountCheckSpec dailyPartitionExpectedStringsInUseCount;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnStringValueInSetPercentCheckSpec dailyPartitionStringValueInSetPercent;
@@ -537,18 +537,18 @@ public class ColumnStringsDailyPartitionedChecksSpec extends AbstractCheckCatego
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnStringInSetCountCheckSpec getDailyPartitionStringInSetCount() {
-        return dailyPartitionStringInSetCount;
+    public ColumnExpectedStringsInUseCountCheckSpec getDailyPartitionExpectedStringsInUseCount() {
+        return dailyPartitionExpectedStringsInUseCount;
     }
 
     /**
      * Sets a new definition of a minimum strings in set count check.
-     * @param dailyPartitionStringInSetCount Minimum strings in set count check.
+     * @param dailyPartitionExpectedStringsInUseCount Minimum strings in set count check.
      */
-    public void setDailyPartitionStringInSetCount(ColumnStringInSetCountCheckSpec dailyPartitionStringInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringInSetCount, dailyPartitionStringInSetCount));
-        this.dailyPartitionStringInSetCount = dailyPartitionStringInSetCount;
-        propagateHierarchyIdToField(dailyPartitionStringInSetCount, "daily_partition_string_in_set_count");
+    public void setDailyPartitionExpectedStringsInUseCount(ColumnExpectedStringsInUseCountCheckSpec dailyPartitionExpectedStringsInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionExpectedStringsInUseCount, dailyPartitionExpectedStringsInUseCount));
+        this.dailyPartitionExpectedStringsInUseCount = dailyPartitionExpectedStringsInUseCount;
+        propagateHierarchyIdToField(dailyPartitionExpectedStringsInUseCount, "daily_partition_expected_strings_in_use_count");
     }
 
     /**

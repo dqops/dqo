@@ -16,7 +16,7 @@
 package ai.dqo.sqlserver.sensors.column.strings;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringInSetCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.strings.ColumnExpectedStringsInUseCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -28,7 +28,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringsFoundCountSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsExpectedStringsInUseCountSensorParametersSpec;
 import ai.dqo.sqlserver.BaseSqlServerIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,10 +40,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class SqlServerColumnStringsStringsFoundCountSensorParametersSpecIntegrationTest extends BaseSqlServerIntegrationTest {
-    private ColumnStringsStringsFoundCountSensorParametersSpec sut;
+public class SqlServerColumnStringsExpectedStringsInUseCountSensorParametersSpecIntegrationTest extends BaseSqlServerIntegrationTest {
+    private ColumnStringsExpectedStringsInUseCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringInSetCountCheckSpec checkSpec;
+    private ColumnExpectedStringsInUseCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -51,8 +51,8 @@ public class SqlServerColumnStringsStringsFoundCountSensorParametersSpecIntegrat
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.sqlserver);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnStringsStringsFoundCountSensorParametersSpec();
-		this.checkSpec = new ColumnStringInSetCountCheckSpec();
+		this.sut = new ColumnStringsExpectedStringsInUseCountSensorParametersSpec();
+		this.checkSpec = new ColumnExpectedStringsInUseCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
