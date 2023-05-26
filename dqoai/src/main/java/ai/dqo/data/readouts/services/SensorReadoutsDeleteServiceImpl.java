@@ -85,8 +85,9 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
             }
 
             Collection<SensorReadoutsSnapshot> sensorReadoutsSnapshots = tables.stream()
-                    .filter(tableName -> filter.getTableSearchFilters().getSchemaTableNameSearchPattern()
-                            .match(tableName.toTableSearchFilter()))
+                    .filter(schemaTableName ->
+                            filter.getTableSearchFilters().getSchemaNameSearchPattern().match(schemaTableName.getSchemaName())
+                                    && filter.getTableSearchFilters().gettableNameSearchPattern().match(schemaTableName.getTableName()))
                     .map(tableName -> this.sensorReadoutsSnapshotFactory.createSnapshot(
                             filter.getTableSearchFilters().getConnectionName(),
                             tableName

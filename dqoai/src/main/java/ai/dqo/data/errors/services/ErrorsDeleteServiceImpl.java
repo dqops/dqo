@@ -85,8 +85,9 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
             }
 
             Collection<ErrorsSnapshot> errorsSnapshots = tables.stream()
-                    .filter(tableName -> filter.getTableSearchFilters().getSchemaTableNameSearchPattern()
-                            .match(tableName.toTableSearchFilter()))
+                    .filter(schemaTableName ->
+                            filter.getTableSearchFilters().getSchemaNameSearchPattern().match(schemaTableName.getSchemaName())
+                                    && filter.getTableSearchFilters().gettableNameSearchPattern().match(schemaTableName.getTableName()))
                     .map(tableName -> this.errorsSnapshotFactory.createSnapshot(
                             filter.getTableSearchFilters().getConnectionName(),
                             tableName

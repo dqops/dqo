@@ -85,8 +85,9 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
             }
 
             Collection<CheckResultsSnapshot> checkResultsSnapshots = tables.stream()
-                    .filter(tableName -> filter.getTableSearchFilters().getSchemaTableNameSearchPattern()
-                            .match(tableName.toTableSearchFilter()))
+                    .filter(schemaTableName ->
+                            filter.getTableSearchFilters().getSchemaNameSearchPattern().match(schemaTableName.getSchemaName())
+                                    && filter.getTableSearchFilters().gettableNameSearchPattern().match(schemaTableName.getTableName()))
                     .map(tableName -> this.checkResultsSnapshotFactory.createSnapshot(
                             filter.getTableSearchFilters().getConnectionName(),
                             tableName

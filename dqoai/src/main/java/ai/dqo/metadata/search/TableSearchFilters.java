@@ -16,6 +16,7 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.metadata.search.pattern.SearchPattern;
+import ai.dqo.metadata.sources.PhysicalTableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -38,7 +39,9 @@ public class TableSearchFilters {
     @JsonIgnore
     private SearchPattern connectionNameSearchPattern;
     @JsonIgnore
-    private SearchPattern schemaTableNameSearchPattern;
+    private SearchPattern schemaNameSearchPattern;
+    @JsonIgnore
+    private SearchPattern tableNameSearchPattern;
     @JsonIgnore
     private SearchPattern[] tagsSearchPatterns;
     @JsonIgnore
@@ -146,18 +149,37 @@ public class TableSearchFilters {
 
         return connectionNameSearchPattern;
     }
+    
+    protected void recreateSchemaTableNameSearchPatterns() {
+        PhysicalTableName parsedSchemaTableName = PhysicalTableName.fromSchemaTableFilter(schemaTableName);
+        schemaNameSearchPattern = SearchPattern.create(false, parsedSchemaTableName.getSchemaName());
+        tableNameSearchPattern = SearchPattern.create(false, parsedSchemaTableName.getTableName());
+    }
 
     /**
-     * Returns the {@link SearchPattern} related to <code>schemaTableName</code>.
-     * Lazy getter, parses <code>schemaTableName</code> as a search pattern and returns parsed object.
-     * @return {@link SearchPattern} related to <code>schemaTableName</code>.
+     * Returns the {@link SearchPattern} related to <code>schemaName</code>.
+     * Lazy getter, parses <code>schemaName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>schemaName</code>.
      */
-    public SearchPattern getSchemaTableNameSearchPattern() {
-        if (schemaTableNameSearchPattern == null && schemaTableName != null) {
-            schemaTableNameSearchPattern = SearchPattern.create(false, schemaTableName);
+    public SearchPattern getSchemaNameSearchPattern() {
+        if (schemaNameSearchPattern == null && schemaTableName != null) {
+            recreateSchemaTableNameSearchPatterns();
         }
 
-        return schemaTableNameSearchPattern;
+        return schemaNameSearchPattern;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>tableName</code>.
+     * Lazy getter, parses <code>tableName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>tableName</code>.
+     */
+    public SearchPattern gettableNameSearchPattern() {
+        if (tableNameSearchPattern == null && schemaTableName != null) {
+            recreateSchemaTableNameSearchPatterns();
+        }
+
+        return tableNameSearchPattern;
     }
 
     /**
