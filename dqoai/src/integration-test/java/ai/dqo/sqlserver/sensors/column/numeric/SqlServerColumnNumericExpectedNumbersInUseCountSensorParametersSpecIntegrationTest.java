@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.snowflake.sensors.column.numeric;
+package ai.dqo.sqlserver.sensors.column.numeric;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnNumbersFoundCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnExpectedNumbersInUseCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -28,8 +28,8 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericNumbersFoundCountSensorParametersSpec;
-import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
+import ai.dqo.sensors.column.numeric.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
+import ai.dqo.sqlserver.BaseSqlServerIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,19 +40,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class SnowflakeColumnNumericNumbersFoundCountSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
-    private ColumnNumericNumbersFoundCountSensorParametersSpec sut;
+public class SqlServerColumnNumericExpectedNumbersInUseCountSensorParametersSpecIntegrationTest extends BaseSqlServerIntegrationTest {
+    private ColumnNumericExpectedNumbersInUseCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnNumbersFoundCountCheckSpec checkSpec;
+    private ColumnExpectedNumbersInUseCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.snowflake);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.sqlserver);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnNumericNumbersFoundCountSensorParametersSpec();
-		this.checkSpec = new ColumnNumbersFoundCountCheckSpec();
+		this.sut = new ColumnNumericExpectedNumbersInUseCountSensorParametersSpec();
+		this.checkSpec = new ColumnExpectedNumbersInUseCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -69,7 +69,7 @@ public class SnowflakeColumnNumericNumbersFoundCountSensorParametersSpecIntegrat
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals("", resultTable.column(0).get(0));
+        Assertions.assertEquals(0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class SnowflakeColumnNumericNumbersFoundCountSensorParametersSpecIntegrat
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(25L, resultTable.column(0).get(0));
+        Assertions.assertEquals(25, resultTable.column(0).get(0));
     }
 
     @Test
@@ -111,7 +111,7 @@ public class SnowflakeColumnNumericNumbersFoundCountSensorParametersSpecIntegrat
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(25L, resultTable.column(0).get(0));
+        Assertions.assertEquals(25, resultTable.column(0).get(0));
     }
 
     @Test
@@ -132,7 +132,7 @@ public class SnowflakeColumnNumericNumbersFoundCountSensorParametersSpecIntegrat
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5L, resultTable.column(0).get(0));
+        Assertions.assertEquals(5, resultTable.column(0).get(0));
     }
 
     @Test
@@ -151,6 +151,6 @@ public class SnowflakeColumnNumericNumbersFoundCountSensorParametersSpecIntegrat
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(16L, resultTable.column(0).get(0));
+        Assertions.assertEquals(16, resultTable.column(0).get(0));
     }
 }

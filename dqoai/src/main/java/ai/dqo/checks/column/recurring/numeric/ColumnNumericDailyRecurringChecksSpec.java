@@ -40,7 +40,7 @@ public class ColumnNumericDailyRecurringChecksSpec extends AbstractCheckCategory
             put("daily_negative_percent", o -> o.dailyNegativePercent);
             put("daily_non_negative_count", o -> o.dailyNonNegativeCount);
             put("daily_non_negative_percent", o -> o.dailyNonNegativePercent);
-            put("daily_numbers_found_count", o -> o.dailyNumbersFoundCount);
+            put("daily_expected_numbers_in_use_count", o -> o.dailyExpectedNumbersInUseCount);
             put("daily_number_value_in_set_percent", o -> o.dailyNumberValueInSetPercent);
             put("daily_values_in_range_numeric_percent", o -> o.dailyValuesInRangeNumericPercent);
             put("daily_values_in_range_integers_percent", o -> o.dailyValuesInRangeIntegersPercent);
@@ -83,7 +83,7 @@ public class ColumnNumericDailyRecurringChecksSpec extends AbstractCheckCategory
     private ColumnNonNegativePercentCheckSpec dailyNonNegativePercent;
 
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnNumbersFoundCountCheckSpec dailyNumbersFoundCount;
+    private ColumnExpectedNumbersInUseCountCheckSpec dailyExpectedNumbersInUseCount;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnNumberValueInSetPercentCheckSpec dailyNumberValueInSetPercent;
@@ -236,18 +236,18 @@ public class ColumnNumericDailyRecurringChecksSpec extends AbstractCheckCategory
      * Returns a numbers found count check specification.
      * @return Numbers found count check specification.
      */
-    public ColumnNumbersFoundCountCheckSpec getDailyNumbersFoundCount() {
-        return dailyNumbersFoundCount;
+    public ColumnExpectedNumbersInUseCountCheckSpec getDailyExpectedNumbersInUseCount() {
+        return dailyExpectedNumbersInUseCount;
     }
 
     /**
      * Sets a new specification of a numbers found count check.
-     * @param dailyNumbersFoundCount Numbers found count check.
+     * @param dailyExpectedNumbersInUseCount Numbers found count check.
      */
-    public void setDailyNumbersFoundCount(ColumnNumbersFoundCountCheckSpec dailyNumbersFoundCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyNumbersFoundCount, dailyNumbersFoundCount));
-        this.dailyNumbersFoundCount = dailyNumbersFoundCount;
-        propagateHierarchyIdToField(dailyNumbersFoundCount, "daily_numbers_found_count");
+    public void setDailyExpectedNumbersInUseCount(ColumnExpectedNumbersInUseCountCheckSpec dailyExpectedNumbersInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyExpectedNumbersInUseCount, dailyExpectedNumbersInUseCount));
+        this.dailyExpectedNumbersInUseCount = dailyExpectedNumbersInUseCount;
+        propagateHierarchyIdToField(dailyExpectedNumbersInUseCount, "daily_expected_numbers_in_use_count");
     }
 
     /**

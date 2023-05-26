@@ -40,7 +40,7 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_negative_percent", o -> o.dailyPartitionNegativePercent);
             put("daily_partition_non_negative_count", o -> o.dailyPartitionNonNegativeCount);
             put("daily_partition_non_negative_percent", o -> o.dailyPartitionNonNegativePercent);
-            put("daily_partition_numbers_found_count", o -> o.dailyPartitionNumbersFoundCount);
+            put("daily_partition_expected_numbers_in_use_count", o -> o.dailyPartitionExpectedNumbersInUseCount);
             put("daily_partition_number_value_in_set_percent", o -> o.dailyPartitionNumberValueInSetPercent);
             put("daily_partition_values_in_range_numeric_percent", o -> o.dailyPartitionValuesInRangeNumericPercent);
             put("daily_partition_values_in_range_integers_percent", o -> o.dailyPartitionValuesInRangeIntegersPercent);
@@ -83,7 +83,7 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     private ColumnNonNegativePercentCheckSpec dailyPartitionNonNegativePercent;
 
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnNumbersFoundCountCheckSpec dailyPartitionNumbersFoundCount;
+    private ColumnExpectedNumbersInUseCountCheckSpec dailyPartitionExpectedNumbersInUseCount;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnNumberValueInSetPercentCheckSpec dailyPartitionNumberValueInSetPercent;
@@ -237,18 +237,18 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
      * Returns a numbers in set count check specification.
      * @return Numbers in set count check specification.
      */
-    public ColumnNumbersFoundCountCheckSpec getDailyPartitionNumbersFoundCount() {
-        return dailyPartitionNumbersFoundCount;
+    public ColumnExpectedNumbersInUseCountCheckSpec getDailyPartitionExpectedNumbersInUseCount() {
+        return dailyPartitionExpectedNumbersInUseCount;
     }
 
     /**
      * Sets a new specification of a numbers in set count check.
-     * @param dailyPartitionNumbersFoundCount Numbers in set count check specification.
+     * @param dailyPartitionExpectedNumbersInUseCount Numbers in set count check specification.
      */
-    public void setDailyPartitionNumbersFoundCount(ColumnNumbersFoundCountCheckSpec dailyPartitionNumbersFoundCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionNumbersFoundCount, dailyPartitionNumbersFoundCount));
-        this.dailyPartitionNumbersFoundCount = dailyPartitionNumbersFoundCount;
-        propagateHierarchyIdToField(dailyPartitionNumbersFoundCount, "daily_partition_numbers_found_count");
+    public void setDailyPartitionExpectedNumbersInUseCount(ColumnExpectedNumbersInUseCountCheckSpec dailyPartitionExpectedNumbersInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionExpectedNumbersInUseCount, dailyPartitionExpectedNumbersInUseCount));
+        this.dailyPartitionExpectedNumbersInUseCount = dailyPartitionExpectedNumbersInUseCount;
+        propagateHierarchyIdToField(dailyPartitionExpectedNumbersInUseCount, "daily_partition_expected_numbers_in_use_count");
     }
 
     /**

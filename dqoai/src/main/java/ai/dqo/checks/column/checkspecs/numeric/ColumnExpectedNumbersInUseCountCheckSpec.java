@@ -20,7 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.*;
-import ai.dqo.sensors.column.numeric.ColumnNumericNumbersFoundCountSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,21 +34,22 @@ import java.util.Objects;
 /**
  * Column level check that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.
  * The check raises a data quality issue when the threshold of maximum number of missing values was exceeded (too many expected values were not found in the column).
+ * This check is useful for analysing columns with a low number of unique values, such as status codes, to detect that all status codes are in use somewhere in any row.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNumbersFoundCountCheckSpec
-        extends AbstractCheckSpec<ColumnNumericNumbersFoundCountSensorParametersSpec, MaxMissingRule0ParametersSpec, MaxMissingRule1ParametersSpec, MaxMissingRule2ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnNumbersFoundCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnExpectedNumbersInUseCountCheckSpec
+        extends AbstractCheckSpec<ColumnNumericExpectedNumbersInUseCountSensorParametersSpec, MaxMissingRule0ParametersSpec, MaxMissingRule1ParametersSpec, MaxMissingRule2ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnExpectedNumbersInUseCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Data quality check parameters that specify a list of expected numeric values to find in the column.")
+    @JsonPropertyDescription("Data quality check parameters that specify a list of expected numeric values that must be present in the column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericNumbersFoundCountSensorParametersSpec parameters = new ColumnNumericNumbersFoundCountSensorParametersSpec();
+    private ColumnNumericExpectedNumbersInUseCountSensorParametersSpec parameters = new ColumnNumericExpectedNumbersInUseCountSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning when too many expected values were not found in the column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -70,7 +71,7 @@ public class ColumnNumbersFoundCountCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNumericNumbersFoundCountSensorParametersSpec getParameters() {
+    public ColumnNumericExpectedNumbersInUseCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,7 +79,7 @@ public class ColumnNumbersFoundCountCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNumericNumbersFoundCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericExpectedNumbersInUseCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

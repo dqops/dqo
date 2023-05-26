@@ -40,7 +40,7 @@ public class ColumnProfilingNumericChecksSpec extends AbstractCheckCategorySpec 
             put("negative_percent", o -> o.negativePercent);
             put("non_negative_count", o -> o.nonNegativeCount);
             put("non_negative_percent", o -> o.nonNegativePercent);
-            put("numbers_found_count", o -> o.numbersFoundCount);
+            put("expected_numbers_in_use_count", o -> o.expectedNumbersInUseCount);
             put("number_value_in_set_percent", o -> o.numberValueInSetPercent);
             put("values_in_range_numeric_percent", o -> o.valuesInRangeNumericPercent);
             put("values_in_range_integers_percent", o -> o.valuesInRangeIntegersPercent);
@@ -83,7 +83,7 @@ public class ColumnProfilingNumericChecksSpec extends AbstractCheckCategorySpec 
     private ColumnNonNegativePercentCheckSpec nonNegativePercent;
 
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).")
-    private ColumnNumbersFoundCountCheckSpec numbersFoundCount;
+    private ColumnExpectedNumbersInUseCountCheckSpec expectedNumbersInUseCount;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.")
     private ColumnNumberValueInSetPercentCheckSpec numberValueInSetPercent;
@@ -236,18 +236,18 @@ public class ColumnProfilingNumericChecksSpec extends AbstractCheckCategorySpec 
      * Returns a numbers in set count check specification.
      * @return Numbers in set count check specification.
      */
-    public ColumnNumbersFoundCountCheckSpec getNumbersFoundCount() {
-        return numbersFoundCount;
+    public ColumnExpectedNumbersInUseCountCheckSpec getExpectedNumbersInUseCount() {
+        return expectedNumbersInUseCount;
     }
 
     /**
      * Sets a new specification of a numbers in set count check specification.
-     * @param numbersFoundCount Numbers in set count check specification.
+     * @param expectedNumbersInUseCount Numbers in set count check specification.
      */
-    public void setNumbersFoundCount(ColumnNumbersFoundCountCheckSpec numbersFoundCount) {
-        this.setDirtyIf(!Objects.equals(this.numbersFoundCount, numbersFoundCount));
-        this.numbersFoundCount = numbersFoundCount;
-        propagateHierarchyIdToField(numbersFoundCount, "numbers_found_count");
+    public void setExpectedNumbersInUseCount(ColumnExpectedNumbersInUseCountCheckSpec expectedNumbersInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.expectedNumbersInUseCount, expectedNumbersInUseCount));
+        this.expectedNumbersInUseCount = expectedNumbersInUseCount;
+        propagateHierarchyIdToField(expectedNumbersInUseCount, "expected_numbers_in_use_count");
     }
 
     /**

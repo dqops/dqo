@@ -16,7 +16,7 @@
 package ai.dqo.mysql.column.numeric;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnNumbersFoundCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnExpectedNumbersInUseCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericNumbersFoundCountSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,10 +40,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class MysqlColumnNumericNumbersFoundCountSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
-    private ColumnNumericNumbersFoundCountSensorParametersSpec sut;
+public class MysqlColumnNumericExpectedNumbersInUseCountSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
+    private ColumnNumericExpectedNumbersInUseCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnNumbersFoundCountCheckSpec checkSpec;
+    private ColumnExpectedNumbersInUseCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -51,8 +51,8 @@ public class MysqlColumnNumericNumbersFoundCountSensorParametersSpecIntegrationT
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.mysql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnNumericNumbersFoundCountSensorParametersSpec();
-		this.checkSpec = new ColumnNumbersFoundCountCheckSpec();
+		this.sut = new ColumnNumericExpectedNumbersInUseCountSensorParametersSpec();
+		this.checkSpec = new ColumnExpectedNumbersInUseCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

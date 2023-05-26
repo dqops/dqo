@@ -30,19 +30,19 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Column level sensor that counts how many rows have a value in a tested column that is on the list of expected numeric values.
+ * Column level sensor that counts how many expected numeric values are used in a tested column. Finds unique column values from the set of expected numeric values and counts them.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNumericNumbersFoundCountSensorParametersSpec extends AbstractSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericNumbersFoundCountSensorParametersSpec> FIELDS =
+public class ColumnNumericExpectedNumbersInUseCountSensorParametersSpec extends AbstractSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericExpectedNumbersInUseCountSensorParametersSpec> FIELDS =
             new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("List of expected numeric values that the sensor is trying to find in the column.")
+    @JsonPropertyDescription("List of expected numeric values that should be found in the tested column.")
     @SampleValues(values = { "2", "3" })
     private List<Long> expectedValues;
 
@@ -80,6 +80,6 @@ public class ColumnNumericNumbersFoundCountSensorParametersSpec extends Abstract
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/numeric/numbers_found_count";
+        return "column/numeric/expected_numbers_in_use_count";
     }
 }
