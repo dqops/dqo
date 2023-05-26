@@ -59,7 +59,7 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
             put("string_parsable_to_float_percent", o -> o.stringParsableToFloatPercent);
 
             put("string_in_set_count", o -> o.stringInSetCount);
-            put("string_in_set_percent", o -> o.stringInSetPercent);
+            put("string_value_in_set_percent", o -> o.stringValueInSetPercent);
 
             put("string_valid_dates_percent", o -> o.stringValidDatesPercent);
             put("string_valid_country_code_percent", o -> o.stringValidCountryCodePercent);
@@ -142,8 +142,8 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the number of strings from a set in a column does not fall below the minimum accepted count.")
     private ColumnStringInSetCountCheckSpec stringInSetCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings from a set in a column does not fall below the minimum accepted percentage.")
-    private ColumnStringInSetPercentCheckSpec stringInSetPercent;
+    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.")
+    private ColumnStringValueInSetPercentCheckSpec stringValueInSetPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not fall below the minimum accepted percentage.")
     private ColumnStringValidDatesPercentCheckSpec stringValidDatesPercent;
@@ -554,18 +554,18 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
      * Returns a minimum string valid usa zip code percent check.
      * @return Minimum string valid usa zip code percent check.
      */
-    public ColumnStringInSetPercentCheckSpec getStringInSetPercent() {
-        return stringInSetPercent;
+    public ColumnStringValueInSetPercentCheckSpec getStringValueInSetPercent() {
+        return stringValueInSetPercent;
     }
 
     /**
      * Sets a new definition of a strings in set percent check.
-     * @param stringInSetPercent Strings in set percent check.
+     * @param stringValueInSetPercent Strings in set percent check.
      */
-    public void setStringInSetPercent(ColumnStringInSetPercentCheckSpec stringInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.stringInSetPercent, stringInSetPercent));
-        this.stringInSetPercent = stringInSetPercent;
-        propagateHierarchyIdToField(stringInSetPercent, "string_in_set_percent");
+    public void setStringValueInSetPercent(ColumnStringValueInSetPercentCheckSpec stringValueInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.stringValueInSetPercent, stringValueInSetPercent));
+        this.stringValueInSetPercent = stringValueInSetPercent;
+        propagateHierarchyIdToField(stringValueInSetPercent, "string_value_in_set_percent");
     }
 
     /**

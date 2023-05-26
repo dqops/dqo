@@ -20,7 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.*;
-import ai.dqo.sensors.column.strings.ColumnStringsStringInSetPercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringValueInSetPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -32,34 +32,39 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the percentage of strings from a set in a column does not the fall below accepted count.
+ * Column level check that calculates the percentage of rows for which the tested string column contains a value from the set of expected values.
+ * Columns with null values are also counted as a passing value (the sensor assumes that a 'null' is also an expected and accepted value).
+ * The check raises a data quality issue when the percentage of rows with a not null column value that is not expected (not one of the values in the expected_values set)
+ * is below an expected threshold, for example 99% of rows should have values from the defined domain.
+ * This data quality check is useful for checking string columns that have a low number of unique values and all the values should be from a set of expected values.
+ * For example, testing a country, state, currency, gender, type, department columns whose expected values are known.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringInSetPercentCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringInSetPercentSensorParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule95ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringInSetPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnStringValueInSetPercentCheckSpec
+        extends AbstractCheckSpec<ColumnStringsStringValueInSetPercentSensorParametersSpec, MinPercentRule100ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringValueInSetPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Data quality check parameters")
+    @JsonPropertyDescription("Data quality check parameters that specify a list of expected values that are compared to the values in the tested string column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringInSetPercentSensorParametersSpec parameters = new ColumnStringsStringInSetPercentSensorParametersSpec();
+    private ColumnStringsStringValueInSetPercentSensorParametersSpec parameters = new ColumnStringsStringValueInSetPercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
+    @JsonPropertyDescription("Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at a warning severity level when the percentage of valid rows is below the minimum percentage threshold.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule99ParametersSpec warning;
+    private MinPercentRule100ParametersSpec warning;
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with empty strings in a column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at an error severity level when the percentage of valid rows is below the minimum percentage threshold.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule98ParametersSpec error;
+    private MinPercentRule99ParametersSpec error;
 
-    @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
+    @JsonPropertyDescription("Default alerting threshold for a percentage of rows with valid values in a column (from the set of expected values). Raises a data quality issue with at a fatal severity level when the percentage of valid rows is below the minimum percentage threshold.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule95ParametersSpec fatal;
@@ -69,7 +74,7 @@ public class ColumnStringInSetPercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringInSetPercentSensorParametersSpec getParameters() {
+    public ColumnStringsStringValueInSetPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -77,7 +82,7 @@ public class ColumnStringInSetPercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringInSetPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnStringsStringValueInSetPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -89,7 +94,7 @@ public class ColumnStringInSetPercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinPercentRule99ParametersSpec getWarning() {
+    public MinPercentRule100ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -97,7 +102,7 @@ public class ColumnStringInSetPercentCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinPercentRule99ParametersSpec warning) {
+    public void setWarning(MinPercentRule100ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -109,7 +114,7 @@ public class ColumnStringInSetPercentCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinPercentRule98ParametersSpec getError() {
+    public MinPercentRule99ParametersSpec getError() {
         return this.error;
     }
 
@@ -117,7 +122,7 @@ public class ColumnStringInSetPercentCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinPercentRule98ParametersSpec error) {
+    public void setError(MinPercentRule99ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");

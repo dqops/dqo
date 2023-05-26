@@ -32,6 +32,7 @@ import java.util.Objects;
 /**
  * Column level sensor that calculates the percentage of rows for which the tested numeric column contains a value from the list of expected values.
  * Columns with null values are also counted as a passing value (the sensor assumes that a 'null' is also an expected and accepted value).
+ * This sensor is useful for checking numeric columns that store numeric codes (such as status codes) that the only values found in the column are from a set of expected values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

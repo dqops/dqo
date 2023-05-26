@@ -60,7 +60,7 @@ public class ColumnStringsDailyRecurringChecksSpec extends AbstractCheckCategory
             put("daily_string_parsable_to_float_percent", o -> o.dailyStringParsableToFloatPercent);
 
             put("daily_string_in_set_count", o -> o.dailyStringInSetCount);
-            put("daily_string_in_set_percent", o -> o.dailyStringInSetPercent);
+            put("daily_string_value_in_set_percent", o -> o.dailyStringValueInSetPercent);
 
             put("daily_string_valid_dates_percent", o -> o.dailyStringValidDatesPercent);
             put("daily_string_valid_country_code_percent", o -> o.dailyStringValidCountryCodePercent);
@@ -143,8 +143,8 @@ public class ColumnStringsDailyRecurringChecksSpec extends AbstractCheckCategory
     @JsonPropertyDescription("Verifies that the number of strings from set in a column does not fall below the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringInSetCountCheckSpec dailyStringInSetCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings from a set in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringInSetPercentCheckSpec dailyStringInSetPercent;
+    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringValueInSetPercentCheckSpec dailyStringValueInSetPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnStringValidDatesPercentCheckSpec dailyStringValidDatesPercent;
@@ -555,18 +555,18 @@ public class ColumnStringsDailyRecurringChecksSpec extends AbstractCheckCategory
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnStringInSetPercentCheckSpec getDailyStringInSetPercent() {
-        return dailyStringInSetPercent;
+    public ColumnStringValueInSetPercentCheckSpec getDailyStringValueInSetPercent() {
+        return dailyStringValueInSetPercent;
     }
 
     /**
      * Sets a new definition of a minimum strings in set percent check.
-     * @param dailyStringInSetPercent Minimum strings in set percent check.
+     * @param dailyStringValueInSetPercent Minimum strings in set percent check.
      */
-    public void setDailyStringInSetPercent(ColumnStringInSetPercentCheckSpec dailyStringInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringInSetPercent, dailyStringInSetPercent));
-        this.dailyStringInSetPercent = dailyStringInSetPercent;
-        propagateHierarchyIdToField(dailyStringInSetPercent, "daily_string_in_set_percent");
+    public void setDailyStringValueInSetPercent(ColumnStringValueInSetPercentCheckSpec dailyStringValueInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyStringValueInSetPercent, dailyStringValueInSetPercent));
+        this.dailyStringValueInSetPercent = dailyStringValueInSetPercent;
+        propagateHierarchyIdToField(dailyStringValueInSetPercent, "daily_string_value_in_set_percent");
     }
 
     /**

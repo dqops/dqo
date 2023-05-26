@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.strings;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringInSetPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.strings.ColumnStringValueInSetPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -30,7 +30,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringInSetPercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringValueInSetPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,31 +40,31 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-public class ColumnStringsStringInSetPercentSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnStringsStringInSetPercentSensorParametersSpec sut;
+public class ColumnStringsStringValueInSetPercentSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnStringsStringValueInSetPercentSensorParametersSpec sut;
     private String sutValuesAsString;
     private UserHomeContext userHomeContext;
-    private ColumnStringInSetPercentCheckSpec checkSpec;
-    private ColumnStringInSetPercentCheckSpec altCheckSpec;
+    private ColumnStringValueInSetPercentCheckSpec checkSpec;
+    private ColumnStringValueInSetPercentCheckSpec altCheckSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-		this.sut = new ColumnStringsStringInSetPercentSensorParametersSpec();
+		this.sut = new ColumnStringsStringValueInSetPercentSensorParametersSpec();
         this.sut.setFilter("{alias}.`correct` = 1");
-        ColumnStringsStringInSetPercentSensorParametersSpec altSut = (ColumnStringsStringInSetPercentSensorParametersSpec) this.sut.deepClone();
-        this.sut.setValues(new ArrayList<>(){{
+        ColumnStringsStringValueInSetPercentSensorParametersSpec altSut = (ColumnStringsStringValueInSetPercentSensorParametersSpec) this.sut.deepClone();
+        this.sut.setExpectedValues(new ArrayList<>(){{
             add("abcde"); add("abcdef"); add("abcdefg");
         }});
-        this.sutValuesAsString = this.sut.getValues().stream()
+        this.sutValuesAsString = this.sut.getExpectedValues().stream()
                 .map(s -> String.format("'%s'", s))
                 .collect(Collectors.joining(", "));
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnStringInSetPercentCheckSpec();
+        this.checkSpec = new ColumnStringValueInSetPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        this.altCheckSpec = new ColumnStringInSetPercentCheckSpec();
+        this.altCheckSpec = new ColumnStringValueInSetPercentCheckSpec();
         this.altCheckSpec.setParameters(altSut);
     }
 

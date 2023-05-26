@@ -30,37 +30,39 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Column level sensor that calculates the percent of strings from a set in a column does not exceed the minimum accepted percentage.
+ * Column level sensor that calculates the percentage of rows for which the tested string (text) column contains a value from the list of expected values.
+ * Columns with null values are also counted as a passing value (the sensor assumes that a 'null' is also an expected and accepted value).
+ * This sensor is useful for testing that a string column with a low number of unique values (country, currency, state, gender, etc.) contains only values from a set of expected values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringInSetPercentSensorParametersSpec extends AbstractSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringInSetPercentSensorParametersSpec> FIELDS =
+public class ColumnStringsStringValueInSetPercentSensorParametersSpec extends AbstractSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringValueInSetPercentSensorParametersSpec> FIELDS =
             new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Provided list of values to match the data.")
+    @JsonPropertyDescription("A list of expected values that must be present in a string column, only values from this list are accepted and rows having these values in the tested column are counted as valid rows.")
     @SampleValues(values = { "USD", "GBP", "EUR" })
-    private List<String> values;
+    private List<String> expectedValues;
 
     /**
      * Returns given values from user.
      * @return values.
      */
-    public List<String> getValues() {
-        return values;
+    public List<String> getExpectedValues() {
+        return expectedValues;
     }
 
     /**
      * Sets a List given from user.
-     * @param values values given from user.
+     * @param expectedValues values given from user.
      */
-    public void setValues(List<String> values) {
-        this.setDirtyIf(!Objects.equals(this.values, values));
-        this.values = values != null ? Collections.unmodifiableList(values) : null;
+    public void setExpectedValues(List<String> expectedValues) {
+        this.setDirtyIf(!Objects.equals(this.expectedValues, expectedValues));
+        this.expectedValues = expectedValues != null ? Collections.unmodifiableList(expectedValues) : null;
     }
 
     /**
@@ -80,6 +82,6 @@ public class ColumnStringsStringInSetPercentSensorParametersSpec extends Abstrac
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/strings/string_in_set_percent";
+        return "column/strings/string_value_in_set_percent";
     }
 }

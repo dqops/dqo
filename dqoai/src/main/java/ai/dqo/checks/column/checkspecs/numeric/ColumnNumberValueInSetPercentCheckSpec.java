@@ -36,6 +36,7 @@ import java.util.Objects;
  * Columns with null values are also counted as a passing value (the sensor assumes that a 'null' is also an expected and accepted value).
  * The check raises a data quality issue when the percentage of rows with a not null column value that is not expected (not one of the values in the expected_values set)
  * is below an expected threshold, for example 99% of rows should have values from the defined domain.
+ * This data quality check is useful for checking numeric columns that store numeric codes (such as status codes) that the only values found in the column are from a set of expected values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

@@ -16,7 +16,7 @@
 package ai.dqo.redshift.sensors.column.strings;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringInSetPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.strings.ColumnStringValueInSetPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringInSetPercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringValueInSetPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,10 +40,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class RedshiftColumnStringsStringInSetPercentSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
-    private ColumnStringsStringInSetPercentSensorParametersSpec sut;
+public class RedshiftColumnStringsStringValueInSetPercentSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
+    private ColumnStringsStringValueInSetPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringInSetPercentCheckSpec checkSpec;
+    private ColumnStringValueInSetPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -51,15 +51,15 @@ public class RedshiftColumnStringsStringInSetPercentSensorParametersSpecIntegrat
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.redshift);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnStringsStringInSetPercentSensorParametersSpec();
-		this.checkSpec = new ColumnStringInSetPercentCheckSpec();
+		this.sut = new ColumnStringsStringValueInSetPercentSensorParametersSpec();
+		this.checkSpec = new ColumnStringValueInSetPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         List<String> values = new ArrayList<>();
-        this.sut.setValues(values);
+        this.sut.setExpectedValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec);
@@ -80,7 +80,7 @@ public class RedshiftColumnStringsStringInSetPercentSensorParametersSpecIntegrat
         values.add("d44d");
         values.add("c33c");
         values.add("b22b");
-        this.sut.setValues(values);
+        this.sut.setExpectedValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily);
@@ -101,7 +101,7 @@ public class RedshiftColumnStringsStringInSetPercentSensorParametersSpecIntegrat
         values.add("d44d");
         values.add("c33c");
         values.add("b22b");
-        this.sut.setValues(values);
+        this.sut.setExpectedValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly);
@@ -119,7 +119,7 @@ public class RedshiftColumnStringsStringInSetPercentSensorParametersSpecIntegrat
         List<String> values = new ArrayList<>();
         values.add("e55e");
         values.add("a111a");
-        this.sut.setValues(values);
+        this.sut.setExpectedValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily,"date");
@@ -140,7 +140,7 @@ public class RedshiftColumnStringsStringInSetPercentSensorParametersSpecIntegrat
         values.add("d44d");
         values.add("c33c");
         values.add("b22b");
-        this.sut.setValues(values);
+        this.sut.setExpectedValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly,"date");

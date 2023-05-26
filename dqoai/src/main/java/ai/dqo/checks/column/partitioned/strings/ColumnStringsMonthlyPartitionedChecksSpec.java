@@ -59,7 +59,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_parsable_to_float_percent", o -> o.monthlyPartitionStringParsableToFloatPercent);
             
             put("monthly_partition_string_in_set_count", o -> o.monthlyPartitionStringInSetCount);
-            put("monthly_partition_string_in_set_percent", o -> o.monthlyPartitionStringInSetPercent);
+            put("monthly_partition_string_value_in_set_percent", o -> o.monthlyPartitionStringValueInSetPercent);
 
             put("monthly_partition_string_valid_dates_percent", o -> o.monthlyPartitionStringValidDatesPercent);
             put("monthly_partition_string_valid_country_code_percent", o -> o.monthlyPartitionStringValidCountryCodePercent);
@@ -143,8 +143,8 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the number of strings from set in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringInSetCountCheckSpec monthlyPartitionStringInSetCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringInSetPercentCheckSpec monthlyPartitionStringInSetPercent;
+    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnStringValueInSetPercentCheckSpec monthlyPartitionStringValueInSetPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringValidDatesPercentCheckSpec monthlyPartitionStringValidDatesPercent;
@@ -560,18 +560,18 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnStringInSetPercentCheckSpec getMonthlyPartitionStringInSetPercent() {
-        return monthlyPartitionStringInSetPercent;
+    public ColumnStringValueInSetPercentCheckSpec getMonthlyPartitionStringInSetPercent() {
+        return monthlyPartitionStringValueInSetPercent;
     }
 
     /**
      * Sets a new definition of a minimum strings in set percent check.
      * @param monthlyPartitionStringInSetPercent Minimum strings in set percent check.
      */
-    public void setMonthlyPartitionStringInSetPercent(ColumnStringInSetPercentCheckSpec monthlyPartitionStringInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringInSetPercent, monthlyPartitionStringInSetPercent));
-        this.monthlyPartitionStringInSetPercent = monthlyPartitionStringInSetPercent;
-        propagateHierarchyIdToField(monthlyPartitionStringInSetPercent, "monthly_partition_string_in_set_percent");
+    public void setMonthlyPartitionStringInSetPercent(ColumnStringValueInSetPercentCheckSpec monthlyPartitionStringInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValueInSetPercent, monthlyPartitionStringInSetPercent));
+        this.monthlyPartitionStringValueInSetPercent = monthlyPartitionStringInSetPercent;
+        propagateHierarchyIdToField(monthlyPartitionStringInSetPercent, "monthly_partition_string_value_in_set_percent");
     }
 
     /**
