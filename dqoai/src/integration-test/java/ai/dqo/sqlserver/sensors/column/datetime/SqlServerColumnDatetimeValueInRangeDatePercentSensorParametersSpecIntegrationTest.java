@@ -65,7 +65,7 @@ public class SqlServerColumnDatetimeValueInRangeDatePercentSensorParametersSpecI
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
-        runParameters.setTimeSeries(null);
+//        runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -86,7 +86,7 @@ public class SqlServerColumnDatetimeValueInRangeDatePercentSensorParametersSpecI
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
-        runParameters.setTimeSeries(null);
+//        runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -107,7 +107,7 @@ public class SqlServerColumnDatetimeValueInRangeDatePercentSensorParametersSpecI
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
-        runParameters.setTimeSeries(null);
+//        runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -128,7 +128,7 @@ public class SqlServerColumnDatetimeValueInRangeDatePercentSensorParametersSpecI
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
-        runParameters.setTimeSeries(null);
+//        runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -149,7 +149,7 @@ public class SqlServerColumnDatetimeValueInRangeDatePercentSensorParametersSpecI
 
         this.sut.setMinValue(lower);
         this.sut.setMaxValue(upper);
-        runParameters.setTimeSeries(null);
+//        runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

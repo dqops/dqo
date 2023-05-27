@@ -20,7 +20,7 @@
 
 SELECT
     CASE
-        WHEN COUNT_BIG(*) = 0 THEN NULL
+        WHEN COUNT_BIG(*) = 0 THEN MAX(0)
         ELSE {{render_else()}}
     END AS actual_value,
     MAX({{ parameters.expected_values | length }}) AS expected_value
