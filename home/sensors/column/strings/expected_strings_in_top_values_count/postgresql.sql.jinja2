@@ -1,26 +1,5 @@
 {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
 
-{%- macro top_value() -%}
-    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-    NULL AS actual_value,
-    MAX(0) AS expected_value
-    {{- lib.render_data_stream_projections('analyzed_table') }}
-    {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {%- else -%}
-    COUNT(DISTINCT
-        CASE
-            WHEN top_values IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values
-            ELSE NULL
-        END
-    ) AS actual_value,
-    MAX({{ parameters.expected_values | length }}) AS expected_value,
-    time_period,
-    time_period_utc
-{{ top_values_column() }}
-    {%- endif -%}
-{%- endmacro -%}
-
 {%- macro extract_in_list(values_list) -%}
     {%- for i in values_list -%}
         {%- if not loop.last -%}
@@ -31,28 +10,30 @@
     {%- endfor -%}
 {%- endmacro -%}
 
-{%- macro top_values_column() -%}
-FROM(
+{%- macro render_from_subquery() -%}
+FROM
+(
     SELECT
-        top_col_values.top_values as top_values,
+        top_col_values.top_value as top_value,
         top_col_values.time_period as time_period,
         top_col_values.time_period_utc as time_period_utc,
-        RANK() OVER(partition by top_col_values.time_period
+        RANK() OVER(PARTITION BY top_col_values.time_period
         {{- render_data_stream('top_col_values') }}
         ORDER BY top_col_values.total_values) as top_values_rank
         {{- render_data_stream('top_col_values') }}
-    FROM (
+    FROM
+    (
         SELECT
-        {{ lib.render_target_column('analyzed_table') }} AS top_values,
+        {{ lib.render_target_column('analyzed_table') }} AS top_value,
         COUNT(*) AS total_values
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() }}
-        {{- lib.render_group_by() }}, top_values
+        {{- lib.render_group_by() }}, top_value
         {{- lib.render_order_by() }}, total_values
     ) AS top_col_values
-) AS  top_values
+) AS top_values
 WHERE top_values_rank <= {{ parameters.top }}
 {%- endmacro -%}
 
@@ -62,7 +43,7 @@ WHERE top_values_rank <= {{ parameters.top }}
             {{ ', ' }}
             {%- with data_stream_level = lib.data_streams[attribute] -%}
                 {%- if data_stream_level.source == 'tag' -%}
-                    {{ make_text_constant(data_stream_level.tag) }}
+                    {{ lib.make_text_constant(data_stream_level.tag) }}
                 {%- elif data_stream_level.source == 'column_value' -%}
                     {{ table_alias_prefix }}.stream_{{ attribute }}
                 {%- endif -%}
@@ -72,6 +53,23 @@ WHERE top_values_rank <= {{ parameters.top }}
 {%- endmacro -%}
 
 SELECT
-    {{ top_value() -}}
+{%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+    NULL AS actual_value,
+    MAX(0) AS expected_value
+    {{- lib.render_data_stream_projections('analyzed_table') }}
+    {{- lib.render_time_dimension_projection('analyzed_table') }}
+FROM {{ lib.render_target_table() }} AS analyzed_table
+    {%- else %}
+    COUNT(DISTINCT
+        CASE
+            WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+            ELSE NULL
+        END
+    ) AS actual_value,
+    MAX({{ parameters.expected_values | length }}) AS expected_value,
+    top_values.time_period,
+    top_values.time_period_utc
+{{ render_from_subquery() }}
+{%- endif -%}
 {{- lib.render_group_by() -}}
 {{- lib.render_order_by() -}}

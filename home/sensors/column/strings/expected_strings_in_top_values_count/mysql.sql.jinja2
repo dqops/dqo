@@ -1,4 +1,4 @@
-{% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+{% import '/dialects/mysql.sql.jinja2' as lib with context -%}
 
 {%- macro extract_in_list(values_list) -%}
     {%- for i in values_list -%}

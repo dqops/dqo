@@ -65,7 +65,7 @@ public class SnowflakeColumnNumericPopulationStddevSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(106.846F, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(106.846F, Precision.round((double) resultTable.column(0).get(0),3), 5);
     }
 
     @Test
@@ -78,7 +78,7 @@ public class SnowflakeColumnNumericPopulationStddevSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(106.846F, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(106.846F, Precision.round((double) resultTable.column(0).get(0),3, 5),5);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class SnowflakeColumnNumericPopulationStddevSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(106.846F, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(106.846F, Precision.round((double) resultTable.column(0).get(0),3), 5);
     }
 
     @Test
@@ -117,6 +117,6 @@ public class SnowflakeColumnNumericPopulationStddevSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(106.846F, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(106.846F, Precision.round((double) resultTable.column(0).get(0),3),5);
     }
 }

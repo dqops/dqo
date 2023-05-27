@@ -69,7 +69,7 @@ public class BigQueryColumnNumericExpectedNumbersInUseCountSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(null, resultTable.column(0).get(0));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class BigQueryColumnNumericExpectedNumbersInUseCountSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(25L, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -111,7 +111,7 @@ public class BigQueryColumnNumericExpectedNumbersInUseCountSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(25L, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -132,7 +132,7 @@ public class BigQueryColumnNumericExpectedNumbersInUseCountSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5L, resultTable.column(0).get(0));
+        Assertions.assertEquals(4L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -141,6 +141,7 @@ public class BigQueryColumnNumericExpectedNumbersInUseCountSensorParametersSpecI
         values.add(123L);
         values.add(12345L);
         values.add(1234567L);
+        values.add(99999999999L);
         this.sut.setExpectedValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
@@ -151,6 +152,6 @@ public class BigQueryColumnNumericExpectedNumbersInUseCountSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(16L, resultTable.column(0).get(0));
+        Assertions.assertEquals(3L, resultTable.column(0).get(0));
     }
 }

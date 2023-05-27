@@ -13,23 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.postgresql.sensors.column.strings;
+package ai.dqo.sqlserver.sensors.column.strings;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnExpectedStringsInUseCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.strings.ColumnExpectedStringsInTopValuesCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
+import ai.dqo.metadata.groupings.DataStreamLevelSource;
+import ai.dqo.metadata.groupings.DataStreamLevelSpec;
+import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsExpectedStringsInUseCountSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec;
+import ai.dqo.sqlserver.BaseSqlServerIntegrationTest;
+import ai.dqo.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,26 +44,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
-public class PostgresqlColumnStringsExpectedStringsInUseCountSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
-    private ColumnStringsExpectedStringsInUseCountSensorParametersSpec sut;
+public class SqlServerColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecIntegrationTests extends BaseSqlServerIntegrationTest {
+    private ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnExpectedStringsInUseCountCheckSpec checkSpec;
+    private ColumnExpectedStringsInTopValuesCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.postgresql);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.sqlserver);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnStringsExpectedStringsInUseCountSensorParametersSpec();
-		this.checkSpec = new ColumnExpectedStringsInUseCountCheckSpec();
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        this.sut = new ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec();
+        this.checkSpec = new ColumnExpectedStringsInTopValuesCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
         this.sut.setExpectedValues(values);
+        this.sut.setTop(2L);
+        this.sut.setFilter("id < 5");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec);
@@ -69,19 +77,80 @@ public class PostgresqlColumnStringsExpectedStringsInUseCountSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals("", resultTable.column(0).get(0));
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedProfilingAndDataStreamIsTag_thenReturnsValues() {
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTop(2L);
+        this.sut.setFilter("id < 5");
+
+        DataStreamMappingSpec dataStreamMapping = this.sampleTableMetadata.getTableSpec().getDataStreams().getFirstDataStreamMapping();
+        dataStreamMapping.setLevel1(new DataStreamLevelSpec() {{
+            setSource(DataStreamLevelSource.tag);
+            setTag("mytag");
+        }});
+        this.sampleTableMetadata.getTableSpec().getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "strings_with_numbers", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedProfilingOneDataStream_thenReturnsValues() {
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTop(2L);
+        this.sut.setFilter("id < 5");
+
+        DataStreamMappingSpec dataStreamMapping = this.sampleTableMetadata.getTableSpec().getDataStreams().getFirstDataStreamMapping();
+        dataStreamMapping.setLevel1(new DataStreamLevelSpec() {{
+            setSource(DataStreamLevelSource.column_value);
+            setColumn("mix_string_int");
+        }});
+        this.sampleTableMetadata.getTableSpec().getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "strings_with_numbers", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(4, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0L, resultTable.column("actual_value").get(0));
+        Assertions.assertEquals(1L, resultTable.column("actual_value").get(1));
+        Assertions.assertEquals(1L, resultTable.column("actual_value").get(2));
+        Assertions.assertEquals(0L, resultTable.column("actual_value").get(3));
+
+        Assertions.assertEquals("11", resultTable.column("stream_level_1").get(0).toString());
+        Assertions.assertEquals("22", resultTable.column("stream_level_1").get(1).toString());
+        Assertions.assertEquals("aa", resultTable.column("stream_level_1").get(2).toString());
+        Assertions.assertEquals("bb", resultTable.column("stream_level_1").get(3).toString());
+
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
         List<String> values = new ArrayList<>();
-        values.add("e55e");
         values.add("a111a");
         values.add("d44d");
-        values.add("c33c");
-        values.add("b22b");
-        values.add("missing");
         this.sut.setExpectedValues(values);
+        this.sut.setTop(2L);
+        this.sut.setFilter("id < 5");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily);
@@ -91,19 +160,16 @@ public class PostgresqlColumnStringsExpectedStringsInUseCountSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5L, resultTable.column(0).get(0));
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
         List<String> values = new ArrayList<>();
-        values.add("e55e");
         values.add("a111a");
         values.add("d44d");
-        values.add("c33c");
-        values.add("b22b");
-        values.add("missing");
         this.sut.setExpectedValues(values);
+        this.sut.setTop(5L);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly);
@@ -113,49 +179,44 @@ public class PostgresqlColumnStringsExpectedStringsInUseCountSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5L, resultTable.column(0).get(0));
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         List<String> values = new ArrayList<>();
-        values.add("e55e");
         values.add("a111a");
         values.add("d44d");
-        values.add("c33c");
-        values.add("b22b");
-        values.add("missing");
         this.sut.setExpectedValues(values);
+        this.sut.setTop(5L);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily, "date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(3L, resultTable.column(0).get(0));
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
         List<String> values = new ArrayList<>();
-        values.add("e55e");
         values.add("a111a");
         values.add("d44d");
-        values.add("c33c");
-        values.add("b22b");
         this.sut.setExpectedValues(values);
+        this.sut.setTop(5L);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly, "date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5L, resultTable.column(0).get(0));
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 }

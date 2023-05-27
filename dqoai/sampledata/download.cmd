@@ -42,9 +42,6 @@ curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.co
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/1B-Nd7tfQjXh55S0b1Ti4-mplFwve_py3iVPrhv0T_ws
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1gXvHncgRCFgzOxA5zG1IUgJ6dAY4iRtshGojs-E20eI/export?exportFormat=csv" > test_average_delay.csv
 
-REM Spreadsheet: https://docs.google.com/spreadsheets/d/1CSav2r36Z9RSEX-Bg739v9oYEaqZ_B-tKFRdRwppYek
-curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1CSav2r36Z9RSEX-Bg739v9oYEaqZ_B-tKFRdRwppYek/export?exportFormat=csv" > now_datetime.csv
-
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/1xcvYNjAiG97MKDOTXbI0e1UeDwiyTRxvLY-6GRZ8qow
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1xcvYNjAiG97MKDOTXbI0e1UeDwiyTRxvLY-6GRZ8qow/export?exportFormat=csv" > string_test_data.csv
 
