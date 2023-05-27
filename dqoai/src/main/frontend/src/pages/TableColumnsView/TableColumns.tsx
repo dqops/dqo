@@ -123,6 +123,14 @@ const TableColumns = ({
     return value;
   };
 
+  const cutString = (text: string) => {
+    if (text.length > 22) {
+      return text.slice(0, 22) + '...';
+    } else {
+      return text;
+    }
+  };
+
   const datatype_detected = (numberForFile: any) => {
     if (Number(numberForFile) === 1) {
       return 'INTEGER';
@@ -223,7 +231,9 @@ const TableColumns = ({
                   {column?.statistics?.map((metric, index) =>
                     metric.collector === 'min_value' ? (
                       <div key={index} className="text-right float-right">
-                        {metric.result ? renderValue(metric.result) : '0'}
+                        {metric.result
+                          ? cutString(renderValue(metric.result))
+                          : '0'}
                       </div>
                     ) : (
                       ''
