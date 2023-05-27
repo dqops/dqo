@@ -130,7 +130,7 @@ const TableColumns = ({
   };
 
   const cutString = (text: string) => {
-    if (text.length > 22) {
+    if (text.length > 22 && isNaN(Number(text))) {
       return text.slice(0, 22) + '...';
     } else {
       return text;
@@ -183,19 +183,19 @@ const TableColumns = ({
 
   const calculate_color = (uniqueCount: number, maxUniqueCount: number) => {
     if (uniqueCount === 0) {
-      return 'rgba(0, 255, 0, 1)';
+      return 'rgba(255, 255, 255, 1)';
     }
 
     if (uniqueCount === maxUniqueCount) {
       return 'rgba(2, 154, 128, 0.1)';
     }
+
     if (uniqueCount === 1) {
-      return 'rgba(2,154,128,255)';
+      return 'rgba(2, 154, 128, 255)';
     }
 
     const logarithm = Math.log2(uniqueCount);
-
-    const alpha = 0.1 + (logarithm / Math.log2(maxUniqueCount)) * 0.9;
+    const alpha = 1 - (logarithm / Math.log2(maxUniqueCount)) * 0.9;
 
     const color = `rgba(2, 154, 128, ${alpha})`;
 
