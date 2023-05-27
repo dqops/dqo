@@ -79,7 +79,6 @@ export default function TableStatisticsView({
       </div>
     );
   }
-  console.log(loading);
 
   return (
     <div>
@@ -114,7 +113,6 @@ export default function TableStatisticsView({
           </div>
         </div>
       </div>
-
       <TableColumns
         connectionName={connectionName}
         schemaName={schemaName}
