@@ -22,9 +22,14 @@ const TableColumns = ({
   tableName
 }: ITableColumnsProps) => {
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
+  const [sortedStatistics, setSortedStatistics] =
+    useState<ColumnStatisticsModel[]>();
+  const [sortedStatistics1, setSortedStatistics1] =
+    useState<ColumnStatisticsModel[]>();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
   const [loadingJob, setLoadingJob] = useState(false);
+  const [uniqueCount, setUniqueCount] = useState<number>(0);
   const dispatch = useDispatch();
   const {
     connection,
@@ -55,6 +60,7 @@ const TableColumns = ({
 
   useEffect(() => {
     fetchColumns().then();
+    setSortedStatistics(statistics?.column_statistics);
   }, [connectionName, schemaName, tableName]);
 
   const onRemoveColumn = (column: ColumnStatisticsModel) => {
@@ -154,6 +160,48 @@ const TableColumns = ({
       return 'Mixed data type';
     }
   };
+
+  const max_unique_value = () => {
+    const arr: number[] = [];
+    statistics?.column_statistics?.map((x) => {
+      x.statistics?.map((y) => {
+        if (y.collector == 'unique_count') {
+          arr.push(Number(y.result));
+        }
+      });
+    });
+    console.log(arr);
+    let max = 0;
+    for (let i = 0; i < arr.length; i++) {
+      if (Number(arr.at(i)) > max) {
+        max = Number(arr.at(i));
+      }
+    }
+    console.log(max);
+    return max;
+  };
+
+  const calculate_color = (uniqueCount: number, maxUniqueCount: number) => {
+    if (uniqueCount === 0) {
+      return 'rgba(0, 255, 0, 1)';
+    }
+
+    if (uniqueCount === maxUniqueCount) {
+      return 'rgba(2, 154, 128, 0.1)';
+    }
+    if (uniqueCount === 1) {
+      return 'rgba(2,154,128,255)';
+    }
+
+    const logarithm = Math.log2(uniqueCount);
+
+    const alpha = 0.1 + (logarithm / Math.log2(maxUniqueCount)) * 0.9;
+
+    const color = `rgba(2, 154, 128, ${alpha})`;
+
+    return color;
+  };
+
   return (
     <div className="p-4">
       <table className="mb-6 mt-4 w-full">
@@ -180,10 +228,13 @@ const TableColumns = ({
             <th className="border-b border-gray-100 text-right px-4 py-2">
               Null count
             </th>
-            <th className="border-b border-gray-100 text-right px-4 py-2">
+            <th className="border-b border-gray-100 text-right px-4 py-2 ">
               Null percent
             </th>
-            <th className="border-b border-gray-100 text-right px-4 py-2">
+            <th
+              className="border-b border-gray-100 text-right px-4 py-2"
+              onClick={() => max_unique_value()}
+            >
               Unique count
             </th>
             <th className="border-b border-gray-100 text-right px-7.5 py-2">
@@ -265,7 +316,7 @@ const TableColumns = ({
                             : '0.00%'}
                         </div>
                         <div
-                          className=" h-3 border border-gray-100 flex"
+                          className=" h-3 border border-gray-100 flex ml-5"
                           style={{ width: '100px' }}
                         >
                           <div
@@ -283,10 +334,21 @@ const TableColumns = ({
                     )
                   )}
                 </td>
-                <td className="border-b border-gray-100 text-left px-4 py-2">
+                <td className="border-b border-gray-100 text-right px-4 h-full">
                   {column?.statistics?.map((metric, index) =>
                     metric.collector === 'unique_count' ? (
-                      <div key={index} className="truncate float-right">
+                      <div
+                        key={index}
+                        className="truncate float-right pr-2 w-full h-full"
+                        style={{
+                          backgroundColor: calculate_color(
+                            Number(metric.result),
+                            max_unique_value()
+                          ),
+                          width: '100%',
+                          height: '100%'
+                        }}
+                      >
                         {metric.result ? renderValue(metric.result) : ''}
                       </div>
                     ) : (
