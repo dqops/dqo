@@ -17,35 +17,34 @@ FROM
         top_col_values.top_value as top_value,
         top_col_values.time_period as time_period,
         top_col_values.time_period_utc as time_period_utc,
-        RANK() OVER(PARTITION BY top_col_values.time_period
-        {{- render_data_stream('top_col_values') }}
-        ORDER BY top_col_values.total_values) as top_values_rank
-        {{- render_data_stream('top_col_values') }}
+        RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+            ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
     FROM
     (
         SELECT
-        {{ lib.render_target_column('analyzed_table') }} AS top_value,
-        COUNT(*) AS total_values
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {{- lib.render_where_clause() }}
-        {{- lib.render_group_by() }}, top_value
-        {{- lib.render_order_by() }}, total_values
+            {{ lib.render_target_column('analyzed_table') }} AS top_value,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+            {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+        FROM
+            {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause(indentation = '        ') }}
+        {{- lib.render_group_by(indentation = '        ') }}, top_value
+        {{- lib.render_order_by(indentation = '        ') }}, total_values
     ) AS top_col_values
 ) AS top_values
 WHERE top_values_rank <= {{ parameters.top }}
 {%- endmacro -%}
 
-{%- macro render_data_stream(table_alias_prefix = '') -%}
+{%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
     {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
         {%- for attribute in lib.data_streams -%}
-            {{ ', ' }}
+            {{ ',' }}
             {%- with data_stream_level = lib.data_streams[attribute] -%}
                 {%- if data_stream_level.source == 'tag' -%}
-                    {{ lib.make_text_constant(data_stream_level.tag) }}
+                    {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
                 {%- elif data_stream_level.source == 'column_value' -%}
-                    {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
                 {%- endif -%}
             {%- endwith %}
         {%- endfor -%}
@@ -69,6 +68,7 @@ FROM {{ lib.render_target_table() }} AS analyzed_table
     MAX({{ parameters.expected_values | length }}) AS expected_value,
     top_values.time_period,
     top_values.time_period_utc
+    {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
 {{ render_from_subquery() }}
 {%- endif -%}
 {{- lib.render_group_by() -}}

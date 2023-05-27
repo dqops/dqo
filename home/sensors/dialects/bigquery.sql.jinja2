@@ -294,14 +294,14 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_group_by() %}
+{% macro render_group_by(indentation = '') %}
     {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series is not none %}
-GROUP BY {{ render_grouping_column_names() }}
+{{ indentation }}GROUP BY {{ render_grouping_column_names() }}
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_order_by() %}
+{% macro render_order_by(indentation = '') %}
     {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series is not none %}
-ORDER BY {{ render_grouping_column_names() }}
+{{ indentation }}ORDER BY {{ render_grouping_column_names() }}
     {%- endif -%}
 {% endmacro %}
