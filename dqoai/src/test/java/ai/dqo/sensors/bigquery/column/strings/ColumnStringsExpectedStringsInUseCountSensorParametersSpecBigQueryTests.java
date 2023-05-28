@@ -103,7 +103,7 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_in_set_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/strings/expected_strings_in_use_count", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -114,19 +114,21 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
+                COUNT(DISTINCT
                     CASE
                         WHEN %s IN (%s)
-                            THEN 1
-                        ELSE 0
+                            THEN %s
+                        ELSE NULL
                     END
-                ) AS actual_value
+                ) AS actual_value,
+                MAX(3) AS expected_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 this.sutValuesAsString,
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -142,7 +144,8 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                NULL AS actual_value
+                NULL AS actual_value,
+                MAX(0) AS expected_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
@@ -167,13 +170,14 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
+                COUNT(DISTINCT
                     CASE
                         WHEN %s IN (%s)
-                            THEN 1
-                        ELSE 0
+                            THEN %s
+                        ELSE NULL
                     END
                 ) AS actual_value,
+                MAX(3) AS expected_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -184,6 +188,7 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 this.sutValuesAsString,
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -198,13 +203,14 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
+                COUNT(DISTINCT
                     CASE
                         WHEN %s IN (%s)
-                            THEN 1
-                        ELSE 0
+                            THEN %s
+                        ELSE NULL
                     END
                 ) AS actual_value,
+                MAX(3) AS expected_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -215,6 +221,7 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 this.sutValuesAsString,
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -229,13 +236,14 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
+                COUNT(DISTINCT
                     CASE
                         WHEN %s IN (%s)
-                            THEN 1
-                        ELSE 0
+                            THEN %s
+                        ELSE NULL
                     END
                 ) AS actual_value,
+                MAX(3) AS expected_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -248,6 +256,7 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 this.sutValuesAsString,
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -267,13 +276,14 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
+                COUNT(DISTINCT
                     CASE
                         WHEN %s IN (%s)
-                            THEN 1
-                        ELSE 0
+                            THEN %s
+                        ELSE NULL
                     END
                 ) AS actual_value,
+                MAX(3) AS expected_value,
                 analyzed_table.`length_int` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
@@ -283,6 +293,7 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 this.sutValuesAsString,
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -300,13 +311,14 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
+                COUNT(DISTINCT
                     CASE
                         WHEN %s IN (%s)
-                            THEN 1
-                        ELSE 0
+                            THEN %s
+                        ELSE NULL
                     END
                 ) AS actual_value,
+                MAX(3) AS expected_value,
                 analyzed_table.`length_int` AS stream_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
@@ -318,6 +330,7 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 this.sutValuesAsString,
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -335,13 +348,14 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
+                COUNT(DISTINCT
                     CASE
                         WHEN %s IN (%s)
-                            THEN 1
-                        ELSE 0
+                            THEN %s
+                        ELSE NULL
                     END
                 ) AS actual_value,
+                MAX(3) AS expected_value,
                 analyzed_table.`length_int` AS stream_level_1,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
@@ -355,6 +369,7 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 this.sutValuesAsString,
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -380,13 +395,14 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
+                COUNT(DISTINCT
                     CASE
                         WHEN %s IN (%s)
-                            THEN 1
-                        ELSE 0
+                            THEN %s
+                        ELSE NULL
                     END
                 ) AS actual_value,
+                MAX(3) AS expected_value,
                 analyzed_table.`strings_with_numbers` AS stream_level_1,
                 analyzed_table.`mix_of_values` AS stream_level_2,
                 analyzed_table.`length_int` AS stream_level_3,
@@ -400,6 +416,7 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 this.sutValuesAsString,
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -419,13 +436,14 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
+                COUNT(DISTINCT
                     CASE
                         WHEN %s IN (%s)
-                            THEN 1
-                        ELSE 0
+                            THEN %s
+                        ELSE NULL
                     END
                 ) AS actual_value,
+                MAX(3) AS expected_value,
                 analyzed_table.`strings_with_numbers` AS stream_level_1,
                 analyzed_table.`mix_of_values` AS stream_level_2,
                 analyzed_table.`length_int` AS stream_level_3,
@@ -439,6 +457,7 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 this.sutValuesAsString,
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -458,13 +477,14 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                SUM(
+                COUNT(DISTINCT
                     CASE
                         WHEN %s IN (%s)
-                            THEN 1
-                        ELSE 0
+                            THEN %s
+                        ELSE NULL
                     END
                 ) AS actual_value,
+                MAX(3) AS expected_value,
                 analyzed_table.`strings_with_numbers` AS stream_level_1,
                 analyzed_table.`mix_of_values` AS stream_level_2,
                 analyzed_table.`length_int` AS stream_level_3,
@@ -480,6 +500,7 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpecBigQueryT
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 this.sutValuesAsString,
+                this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),

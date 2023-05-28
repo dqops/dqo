@@ -183,7 +183,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         if (timePartition == CheckTimeScale.daily) {
             Assertions.assertEquals(12, result.getCategories().size());
         } else {
-            Assertions.assertEquals(11, result.getCategories().size());
+            Assertions.assertEquals(12, result.getCategories().size());
         }
     }
 
@@ -205,7 +205,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         if (timePartition == CheckTimeScale.daily) {
             Assertions.assertEquals(11, result.getCategories().size());
         } else {
-            Assertions.assertEquals(10, result.getCategories().size());
+            Assertions.assertEquals(11, result.getCategories().size());
         }
     }
 
@@ -243,7 +243,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         if (timePartition == CheckTimeScale.daily) {
             Assertions.assertEquals(12, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
         } else {
-            Assertions.assertEquals(11, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(12, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
         }
     }
 
@@ -265,7 +265,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         if (timePartition == CheckTimeScale.daily) {
             Assertions.assertEquals(11, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
         } else {
-            Assertions.assertEquals(10, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(11, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
         }
     }
 

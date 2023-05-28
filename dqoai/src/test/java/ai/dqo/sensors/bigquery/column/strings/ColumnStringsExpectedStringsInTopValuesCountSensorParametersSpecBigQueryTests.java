@@ -87,7 +87,7 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_most_popular_values", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/strings/expected_strings_in_top_values_count", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -104,29 +104,35 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT
-                SUM(
-                    CASE
-                        WHEN top_values IN ('a111a', 'd44d') THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value,
-                time_period
-            FROM(
                 SELECT
-                    top_col_values.top_values as top_values,
-                    top_col_values.time_period as time_period, time_period_utc,
-                    RANK() OVER(partition by top_col_values.time_period
-                    ORDER BY top_col_values.total_values) as top_values_rank
-                FROM (
+                    COUNT(DISTINCT
+                        CASE
+                            WHEN top_values.top_value IN ('a111a', 'd44d') THEN top_values.top_value
+                            ELSE NULL
+                        END
+                    ) AS actual_value,
+                    MAX(2) AS expected_value,
+                    top_values.time_period,
+                    top_values.time_period_utc
+                FROM
+                (
                     SELECT
-                    %1$s AS top_values,
-                    COUNT(*) AS total_values
-                    FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s, top_values, total_values
-                ) top_col_values
-            )
-            WHERE top_values_rank <= 2""";
+                        top_col_values.top_value as top_value,
+                        top_col_values.time_period as time_period,
+                        top_col_values.time_period_utc as time_period_utc,
+                        RANK() OVER(PARTITION BY top_col_values.time_period
+                            ORDER BY top_col_values.total_values) as top_values_rank
+                    FROM
+                    (
+                        SELECT
+                            %1$s AS top_value,
+                            COUNT(*) AS total_values
+                        FROM
+                            `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                        WHERE id < 5, top_value, total_values
+                    ) AS top_col_values
+                ) AS top_values
+                WHERE top_values_rank <= 2""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -157,31 +163,37 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    SUM(
+                    COUNT(DISTINCT
                         CASE
-                            WHEN top_values IN ('a111a', 'd44d') THEN 1
-                            ELSE 0
+                            WHEN top_values.top_value IN ('a111a', 'd44d') THEN top_values.top_value
+                            ELSE NULL
                         END
                     ) AS actual_value,
-                    time_period
-                FROM(
+                    MAX(2) AS expected_value,
+                    top_values.time_period,
+                    top_values.time_period_utc
+                FROM
+                (
                     SELECT
-                        top_col_values.top_values as top_values,
-                        top_col_values.time_period as time_period, time_period_utc,
-                        RANK() OVER(partition by top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
-                    FROM (
+                        top_col_values.top_value as top_value,
+                        top_col_values.time_period as time_period,
+                        top_col_values.time_period_utc as time_period_utc,
+                        RANK() OVER(PARTITION BY top_col_values.time_period
+                            ORDER BY top_col_values.total_values) as top_values_rank
+                    FROM
+                    (
                         SELECT
-                        %1$s AS top_values,
-                        COUNT(*) AS total_values,
-                    analyzed_table.`date` AS time_period,
-                    TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                WHERE %5$s
-                GROUP BY time_period, time_period_utc, top_values
-                ORDER BY time_period, time_period_utc, total_values
-                    ) top_col_values
-                )
+                            %1$s AS top_value,
+                            COUNT(*) AS total_values,
+                            analyzed_table.`date` AS time_period,
+                            TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                        FROM
+                            `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                        WHERE %5$s
+                        GROUP BY time_period, time_period_utc, top_value
+                        ORDER BY time_period, time_period_utc, total_values
+                    ) AS top_col_values
+                ) AS top_values
                 WHERE top_values_rank <= 2
                 GROUP BY time_period, time_period_utc
                 ORDER BY time_period, time_period_utc""";
@@ -209,31 +221,37 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    SUM(
+                    COUNT(DISTINCT
                         CASE
-                            WHEN top_values IN ('a111a', 'd44d') THEN 1
-                            ELSE 0
+                            WHEN top_values.top_value IN ('a111a', 'd44d') THEN top_values.top_value
+                            ELSE NULL
                         END
                     ) AS actual_value,
-                    time_period
-                FROM(
+                    MAX(2) AS expected_value,
+                    top_values.time_period,
+                    top_values.time_period_utc
+                FROM
+                (
                     SELECT
-                        top_col_values.top_values as top_values,
-                        top_col_values.time_period as time_period, time_period_utc,
-                        RANK() OVER(partition by top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
-                    FROM (
+                        top_col_values.top_value as top_value,
+                        top_col_values.time_period as time_period,
+                        top_col_values.time_period_utc as time_period_utc,
+                        RANK() OVER(PARTITION BY top_col_values.time_period
+                            ORDER BY top_col_values.total_values) as top_values_rank
+                    FROM
+                    (
                         SELECT
-                        %1$s AS top_values,
-                        COUNT(*) AS total_values,
-                    DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                WHERE %5$s
-                GROUP BY time_period, time_period_utc, top_values
-                ORDER BY time_period, time_period_utc, total_values
-                    ) top_col_values
-                )
+                            %1$s AS top_value,
+                            COUNT(*) AS total_values,
+                            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                        FROM
+                            `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                        WHERE %5$s
+                        GROUP BY time_period, time_period_utc, top_value
+                        ORDER BY time_period, time_period_utc, total_values
+                    ) AS top_col_values
+                ) AS top_values
                 WHERE top_values_rank <= 2
                 GROUP BY time_period, time_period_utc
                 ORDER BY time_period, time_period_utc""";
@@ -261,33 +279,39 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    SUM(
+                    COUNT(DISTINCT
                         CASE
-                            WHEN top_values IN ('a111a', 'd44d') THEN 1
-                            ELSE 0
+                            WHEN top_values.top_value IN ('a111a', 'd44d') THEN top_values.top_value
+                            ELSE NULL
                         END
                     ) AS actual_value,
-                    time_period
-                FROM(
+                    MAX(2) AS expected_value,
+                    top_values.time_period,
+                    top_values.time_period_utc
+                FROM
+                (
                     SELECT
-                        top_col_values.top_values as top_values,
-                        top_col_values.time_period as time_period, time_period_utc,
-                        RANK() OVER(partition by top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
-                    FROM (
+                        top_col_values.top_value as top_value,
+                        top_col_values.time_period as time_period,
+                        top_col_values.time_period_utc as time_period_utc,
+                        RANK() OVER(PARTITION BY top_col_values.time_period
+                            ORDER BY top_col_values.total_values) as top_values_rank
+                    FROM
+                    (
                         SELECT
-                        %1$s AS top_values,
-                        COUNT(*) AS total_values,
-                    analyzed_table.`date` AS time_period,
-                    TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                WHERE %5$s
-                      AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
-                      AND analyzed_table.`date` < CURRENT_DATE()
-                GROUP BY time_period, time_period_utc, top_values
-                ORDER BY time_period, time_period_utc, total_values
-                    ) top_col_values
-                )
+                            %1$s AS top_value,
+                            COUNT(*) AS total_values,
+                            analyzed_table.`date` AS time_period,
+                            TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                        FROM
+                            `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                        WHERE %5$s
+                              AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                              AND analyzed_table.`date` < CURRENT_DATE()
+                        GROUP BY time_period, time_period_utc, top_value
+                        ORDER BY time_period, time_period_utc, total_values
+                    ) AS top_col_values
+                ) AS top_values
                 WHERE top_values_rank <= 2
                 GROUP BY time_period, time_period_utc
                 ORDER BY time_period, time_period_utc""";
@@ -320,30 +344,37 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    SUM(
+                    COUNT(DISTINCT
                         CASE
-                            WHEN top_values IN ('a111a', 'd44d') THEN 1
-                            ELSE 0
+                            WHEN top_values.top_value IN ('a111a', 'd44d') THEN top_values.top_value
+                            ELSE NULL
                         END
                     ) AS actual_value,
-                    time_period
-                FROM(
+                    MAX(2) AS expected_value,
+                    top_values.time_period,
+                    top_values.time_period_utc,
+                    top_values.stream_level_1
+                FROM
+                (
                     SELECT
-                        top_col_values.top_values as top_values,
-                        top_col_values.time_period as time_period, time_period_utc,
-                        RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1
-                    FROM (
+                        top_col_values.top_value as top_value,
+                        top_col_values.time_period as time_period,
+                        top_col_values.time_period_utc as time_period_utc,
+                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1
+                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1
+                    FROM
+                    (
                         SELECT
-                        %1$s AS top_values,
-                        COUNT(*) AS total_values,
-                    analyzed_table.`result` AS stream_level_1
-                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                WHERE %5$s
-                GROUP BY stream_level_1, top_values
-                ORDER BY stream_level_1, total_values
-                    ) top_col_values
-                )
+                            %1$s AS top_value,
+                            COUNT(*) AS total_values,
+                            analyzed_table.`result` AS stream_level_1
+                        FROM
+                            `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                        WHERE id < 5
+                        GROUP BY stream_level_1, top_value
+                        ORDER BY stream_level_1, total_values
+                    ) AS top_col_values
+                ) AS top_values
                 WHERE top_values_rank <= 2
                 GROUP BY stream_level_1
                 ORDER BY stream_level_1""";
@@ -374,32 +405,39 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    SUM(
+                    COUNT(DISTINCT
                         CASE
-                            WHEN top_values IN ('a111a', 'd44d') THEN 1
-                            ELSE 0
+                            WHEN top_values.top_value IN ('a111a', 'd44d') THEN top_values.top_value
+                            ELSE NULL
                         END
                     ) AS actual_value,
-                    time_period
-                FROM(
+                    MAX(2) AS expected_value,
+                    top_values.time_period,
+                    top_values.time_period_utc,
+                    top_values.stream_level_1
+                FROM
+                (
                     SELECT
-                        top_col_values.top_values as top_values,
-                        top_col_values.time_period as time_period, time_period_utc,
-                        RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1
-                    FROM (
+                        top_col_values.top_value as top_value,
+                        top_col_values.time_period as time_period,
+                        top_col_values.time_period_utc as time_period_utc,
+                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1
+                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1
+                    FROM
+                    (
                         SELECT
-                        %1$s AS top_values,
-                        COUNT(*) AS total_values,
-                    analyzed_table.`result` AS stream_level_1,
-                    DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                WHERE %5$s
-                GROUP BY stream_level_1, time_period, time_period_utc, top_values
-                ORDER BY stream_level_1, time_period, time_period_utc, total_values
-                    ) top_col_values
-                )
+                            %1$s AS top_value,
+                            COUNT(*) AS total_values,
+                            analyzed_table.`result` AS stream_level_1,
+                            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                        FROM
+                            `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                        WHERE id < 5
+                        GROUP BY stream_level_1, time_period, time_period_utc, top_value
+                        ORDER BY stream_level_1, time_period, time_period_utc, total_values
+                    ) AS top_col_values
+                ) AS top_values
                 WHERE top_values_rank <= 2
                 GROUP BY stream_level_1, time_period, time_period_utc
                 ORDER BY stream_level_1, time_period, time_period_utc""";
@@ -430,34 +468,41 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    SUM(
+                    COUNT(DISTINCT
                         CASE
-                            WHEN top_values IN ('a111a', 'd44d') THEN 1
-                            ELSE 0
+                            WHEN top_values.top_value IN ('a111a', 'd44d') THEN top_values.top_value
+                            ELSE NULL
                         END
                     ) AS actual_value,
-                    time_period
-                FROM(
+                    MAX(2) AS expected_value,
+                    top_values.time_period,
+                    top_values.time_period_utc,
+                    top_values.stream_level_1
+                FROM
+                (
                     SELECT
-                        top_col_values.top_values as top_values,
-                        top_col_values.time_period as time_period, time_period_utc,
-                        RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1
-                    FROM (
+                        top_col_values.top_value as top_value,
+                        top_col_values.time_period as time_period,
+                        top_col_values.time_period_utc as time_period_utc,
+                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1
+                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1
+                    FROM
+                    (
                         SELECT
-                        %1$s AS top_values,
-                        COUNT(*) AS total_values,
-                    analyzed_table.`result` AS stream_level_1,
-                    analyzed_table.`date` AS time_period,
-                    TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                WHERE %5$s
-                      AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
-                      AND analyzed_table.`date` < CURRENT_DATE()
-                GROUP BY stream_level_1, time_period, time_period_utc, top_values
-                ORDER BY stream_level_1, time_period, time_period_utc, total_values
-                    ) top_col_values
-                )
+                            %1$s AS top_value,
+                            COUNT(*) AS total_values,
+                            analyzed_table.`result` AS stream_level_1,
+                            analyzed_table.`date` AS time_period,
+                            TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                        FROM
+                            `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                        WHERE id < 5
+                              AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                              AND analyzed_table.`date` < CURRENT_DATE()
+                        GROUP BY stream_level_1, time_period, time_period_utc, top_value
+                        ORDER BY stream_level_1, time_period, time_period_utc, total_values
+                    ) AS top_col_values
+                ) AS top_values
                 WHERE top_values_rank <= 2
                 GROUP BY stream_level_1, time_period, time_period_utc
                 ORDER BY stream_level_1, time_period, time_period_utc""";
@@ -497,34 +542,43 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
 
         String target_query = """
                 SELECT
-                    SUM(
+                    COUNT(DISTINCT
                         CASE
-                            WHEN top_values IN ('a111a', 'd44d') THEN 1
-                            ELSE 0
+                            WHEN top_values.top_value IN ('a111a', 'd44d') THEN top_values.top_value
+                            ELSE NULL
                         END
                     ) AS actual_value,
-                    time_period
-                FROM(
+                    MAX(2) AS expected_value,
+                    top_values.time_period,
+                    top_values.time_period_utc,
+                    top_values.stream_level_1,
+                    top_values.stream_level_2,
+                    top_values.stream_level_3
+                FROM
+                (
                     SELECT
-                        top_col_values.top_values as top_values,
-                        top_col_values.time_period as time_period, time_period_utc,
-                        RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
-                    FROM (
+                        top_col_values.top_value as top_value,
+                        top_col_values.time_period as time_period,
+                        top_col_values.time_period_utc as time_period_utc,
+                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
+                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
+                    FROM
+                    (
                         SELECT
-                        %1$s AS top_values,
-                        COUNT(*) AS total_values,
-                    analyzed_table.`result` AS stream_level_1,
-                    analyzed_table.`result` AS stream_level_2,
-                    analyzed_table.`result` AS stream_level_3,
-                    analyzed_table.`date` AS time_period,
-                    TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                WHERE %5$s
-                GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, top_values
-                ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, total_values
-                    ) top_col_values
-                )
+                            %1$s AS top_value,
+                            COUNT(*) AS total_values,
+                            analyzed_table.`result` AS stream_level_1,
+                            analyzed_table.`result` AS stream_level_2,
+                            analyzed_table.`result` AS stream_level_3,
+                            analyzed_table.`date` AS time_period,
+                            TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                        FROM
+                            `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                        WHERE %5$s
+                        GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, top_value
+                        ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, total_values
+                    ) AS top_col_values
+                ) AS top_values
                 WHERE top_values_rank <= 2
                 GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
                 ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
@@ -557,34 +611,43 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    SUM(
+                    COUNT(DISTINCT
                         CASE
-                            WHEN top_values IN ('a111a', 'd44d') THEN 1
-                            ELSE 0
+                            WHEN top_values.top_value IN ('a111a', 'd44d') THEN top_values.top_value
+                            ELSE NULL
                         END
                     ) AS actual_value,
-                    time_period
-                FROM(
+                    MAX(2) AS expected_value,
+                    top_values.time_period,
+                    top_values.time_period_utc,
+                    top_values.stream_level_1,
+                    top_values.stream_level_2,
+                    top_values.stream_level_3
+                FROM
+                (
                     SELECT
-                        top_col_values.top_values as top_values,
-                        top_col_values.time_period as time_period, time_period_utc,
-                        RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
-                    FROM (
+                        top_col_values.top_value as top_value,
+                        top_col_values.time_period as time_period,
+                        top_col_values.time_period_utc as time_period_utc,
+                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
+                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
+                    FROM
+                    (
                         SELECT
-                        %1$s AS top_values,
-                        COUNT(*) AS total_values,
-                    analyzed_table.`result` AS stream_level_1,
-                    analyzed_table.`result` AS stream_level_2,
-                    analyzed_table.`result` AS stream_level_3,
-                    DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-                    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                WHERE %5$s
-                GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, top_values
-                ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, total_values
-                    ) top_col_values
-                )
+                            %1$s AS top_value,
+                            COUNT(*) AS total_values,
+                            analyzed_table.`result` AS stream_level_1,
+                            analyzed_table.`result` AS stream_level_2,
+                            analyzed_table.`result` AS stream_level_3,
+                            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                        FROM
+                            `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                        WHERE %5$s
+                        GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, top_value
+                        ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, total_values
+                    ) AS top_col_values
+                ) AS top_values
                 WHERE top_values_rank <= 2
                 GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
                 ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
@@ -617,36 +680,45 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpecBig
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    SUM(
+                    COUNT(DISTINCT
                         CASE
-                            WHEN top_values IN ('a111a', 'd44d') THEN 1
-                            ELSE 0
+                            WHEN top_values.top_value IN ('a111a', 'd44d') THEN top_values.top_value
+                            ELSE NULL
                         END
                     ) AS actual_value,
-                    time_period
-                FROM(
+                    MAX(2) AS expected_value,
+                    top_values.time_period,
+                    top_values.time_period_utc,
+                    top_values.stream_level_1,
+                    top_values.stream_level_2,
+                    top_values.stream_level_3
+                FROM
+                (
                     SELECT
-                        top_col_values.top_values as top_values,
-                        top_col_values.time_period as time_period, time_period_utc,
-                        RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
-                    FROM (
+                        top_col_values.top_value as top_value,
+                        top_col_values.time_period as time_period,
+                        top_col_values.time_period_utc as time_period_utc,
+                        RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
+                            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
+                    FROM
+                    (
                         SELECT
-                        %1$s AS top_values,
-                        COUNT(*) AS total_values,
-                    analyzed_table.`result` AS stream_level_1,
-                    analyzed_table.`result` AS stream_level_2,
-                    analyzed_table.`result` AS stream_level_3,
-                    analyzed_table.`date` AS time_period,
-                    TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-                WHERE %5$s
-                      AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
-                      AND analyzed_table.`date` < CURRENT_DATE()
-                GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, top_values
-                ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, total_values
-                    ) top_col_values
-                )
+                            %1$s AS top_value,
+                            COUNT(*) AS total_values,
+                            analyzed_table.`result` AS stream_level_1,
+                            analyzed_table.`result` AS stream_level_2,
+                            analyzed_table.`result` AS stream_level_3,
+                            analyzed_table.`date` AS time_period,
+                            TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                        FROM
+                            `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                        WHERE %5$s
+                              AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                              AND analyzed_table.`date` < CURRENT_DATE()
+                        GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, top_value
+                        ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, total_values
+                    ) AS top_col_values
+                ) AS top_values
                 WHERE top_values_rank <= 2
                 GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
                 ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";

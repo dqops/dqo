@@ -103,7 +103,7 @@ public class ColumnStringsStringValueInSetPercentSensorParametersSpecBigQueryTes
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_in_set_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/strings/string_value_in_set_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

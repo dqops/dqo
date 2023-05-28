@@ -536,18 +536,18 @@ public class ColumnStringsMonthlyRecurringChecksSpec extends AbstractCheckCatego
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnExpectedStringsInUseCountCheckSpec getMonthlyStringInSetCount() {
+    public ColumnExpectedStringsInUseCountCheckSpec getMonthlyExpectedStringsInUseCount() {
         return monthlyExpectedStringsInUseCount;
     }
 
     /**
      * Sets a new definition of a minimum strings in set count check.
-     * @param monthlyStringInSetCount Minimum strings in set count check.
+     * @param dailyExpectedStringsInUseCount Minimum strings in set count check.
      */
-    public void setMonthlyStringInSetCount(ColumnExpectedStringsInUseCountCheckSpec monthlyStringInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyExpectedStringsInUseCount, monthlyStringInSetCount));
-        this.monthlyExpectedStringsInUseCount = monthlyStringInSetCount;
-        propagateHierarchyIdToField(monthlyStringInSetCount, "monthly_expected_strings_in_use_count");
+    public void setMonthlyExpectedStringsInUseCount(ColumnExpectedStringsInUseCountCheckSpec dailyExpectedStringsInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyExpectedStringsInUseCount, dailyExpectedStringsInUseCount));
+        this.monthlyExpectedStringsInUseCount = dailyExpectedStringsInUseCount;
+        propagateHierarchyIdToField(dailyExpectedStringsInUseCount, "monthly_expected_strings_in_use_count");
     }
 
     /**
