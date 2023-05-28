@@ -34,20 +34,16 @@ spec:
   fields:
   - field_name: from
     display_name: from
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ above a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: Minimal accepted change with regards to the previous readout (inclusive).
     data_type: double
+    sample_values:
+    - 10
   - field_name: to
     display_name: to
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ below a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: Maximal accepted change with regards to the previous readout (inclusive).
     data_type: double
+    sample_values:
+    - 20
 ```
 
 
@@ -174,28 +170,24 @@ spec:
   fields:
   - field_name: from
     display_name: from
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ above a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: Minimal accepted change with regards to the previous readout (inclusive).
     data_type: double
+    sample_values:
+    - 10
   - field_name: to
     display_name: to
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ below a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: Maximal accepted change with regards to the previous readout (inclusive).
     data_type: double
+    sample_values:
+    - 20
   - field_name: exact
     display_name: exact
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ below a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: &quot;Whether to compare the actual value to the readout exactly 1 day in\
+      \ the past. If the flag is false, the rule searches for the newest readout,\
+      \ 60 days in the past, having skipped the readouts from the current day.&quot;
     data_type: boolean
+    sample_values:
+    - &quot;false&quot;
 ```
 
 
@@ -332,28 +324,24 @@ spec:
   fields:
   - field_name: from
     display_name: from
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ above a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: Minimal accepted change with regards to the previous readout (inclusive).
     data_type: double
+    sample_values:
+    - 10
   - field_name: to
     display_name: to
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ below a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: Maximal accepted change with regards to the previous readout (inclusive).
     data_type: double
+    sample_values:
+    - 20
   - field_name: exact
     display_name: exact
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ below a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: &quot;Whether to compare the actual value to the readout exactly 30 days\
+      \ in the past. If the flag is false, the rule searches for the newest readout,\
+      \ 60 days in the past, having skipped the readouts for the last 30 days.&quot;
     data_type: boolean
+    sample_values:
+    - &quot;false&quot;
 ```
 
 
@@ -492,28 +480,24 @@ spec:
   fields:
   - field_name: from
     display_name: from
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ above a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: Minimal accepted change with regards to the previous readout (inclusive).
     data_type: double
+    sample_values:
+    - 10
   - field_name: to
     display_name: to
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ below a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: Maximal accepted change with regards to the previous readout (inclusive).
     data_type: double
+    sample_values:
+    - 20
   - field_name: exact
     display_name: exact
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ below a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: &quot;Whether to compare the actual value to the readout exactly 7 days\
+      \ in the past. If the flag is false, the rule searches for the newest readout,\
+      \ 60 days in the past, having skipped the readouts for the last 7 days.&quot;
     data_type: boolean
+    sample_values:
+    - &quot;false&quot;
 ```
 
 
@@ -649,22 +633,18 @@ spec:
     min_periods_with_readouts: 1
     historic_data_point_grouping: last_n_readouts
   fields:
-    - field_name: from_percent
-      display_name: from_percent
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ above a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
-      data_type: double
-    - field_name: to_percent
-      display_name: to_percent
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ below a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
-      data_type: double
+  - field_name: from_percent
+    display_name: from_percent
+    help_text: Minimal accepted change relative to the previous readout (inclusive).
+    data_type: double
+    sample_values:
+    - 10
+  - field_name: to_percent
+    display_name: to_percent
+    help_text: Maximal accepted change relative to the previous readout (inclusive).
+    data_type: double
+    sample_values:
+    - 20
 ```
 
 
@@ -784,30 +764,26 @@ spec:
     min_periods_with_readouts: 1
     historic_data_point_grouping: day
   fields:
-    - field_name: from_percent
-      display_name: from_percent
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ above a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
-      data_type: double
-    - field_name: to_percent
-      display_name: to_percent
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ below a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
-      data_type: double
-    - field_name: exact
-      display_name: exact
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-        \ below a moving average within the time window. Set the time window at the\
-        \ threshold level for all severity levels (low, medium, high) at once. The default\
-        \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-        \ exist to run the calculation.&quot;
-      data_type: boolean
+  - field_name: from_percent
+    display_name: from_percent
+    help_text: Minimal accepted change relative to the previous readout (inclusive).
+    data_type: double
+    sample_values:
+    - 10
+  - field_name: to_percent
+    display_name: to_percent
+    help_text: Maximal accepted change relative to the previous readout (inclusive).
+    data_type: double
+    sample_values:
+    - 20
+  - field_name: exact
+    display_name: exact
+    help_text: &quot;Whether to compare the actual value to the readout exactly 1 day in\
+      \ the past. If the flag is false, the rule searches for the newest readout,\
+      \ 60 days in the past, having skipped the readouts from the current day.&quot;
+    data_type: boolean
+    sample_values:
+    - &quot;false&quot;
 ```
 
 
@@ -936,30 +912,26 @@ spec:
     min_periods_with_readouts: 1
     historic_data_point_grouping: day
   fields:
-    - field_name: from_percent
-      display_name: from_percent
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ above a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
-      data_type: double
-    - field_name: to_percent
-      display_name: to_percent
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ below a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
-      data_type: double
-    - field_name: exact
-      display_name: exact
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-        \ below a moving average within the time window. Set the time window at the\
-        \ threshold level for all severity levels (low, medium, high) at once. The default\
-        \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-        \ exist to run the calculation.&quot;
-      data_type: boolean
+  - field_name: from_percent
+    display_name: from_percent
+    help_text: Minimal accepted change relative to the previous readout (inclusive).
+    data_type: double
+    sample_values:
+    - 10
+  - field_name: to_percent
+    display_name: to_percent
+    help_text: Maximal accepted change relative to the previous readout (inclusive).
+    data_type: double
+    sample_values:
+    - 20
+  - field_name: exact
+    display_name: exact
+    help_text: &quot;Whether to compare the actual value to the readout exactly 30 days\
+      \ in the past. If the flag is false, the rule searches for the newest readout,\
+      \ 60 days in the past, having skipped the readouts for the last 30 days.&quot;
+    data_type: boolean
+    sample_values:
+    - &quot;false&quot;
 ```
 
 
@@ -1090,30 +1062,26 @@ spec:
     min_periods_with_readouts: 1
     historic_data_point_grouping: day
   fields:
-    - field_name: from_percent
-      display_name: from_percent
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ above a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
-      data_type: double
-    - field_name: to_percent
-      display_name: to_percent
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ below a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
-      data_type: double
-    - field_name: exact
-      display_name: exact
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-        \ below a moving average within the time window. Set the time window at the\
-        \ threshold level for all severity levels (low, medium, high) at once. The default\
-        \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-        \ exist to run the calculation.&quot;
-      data_type: boolean
+  - field_name: from_percent
+    display_name: from_percent
+    help_text: Minimal accepted change relative to the previous readout (inclusive).
+    data_type: double
+    sample_values:
+    - 10
+  - field_name: to_percent
+    display_name: to_percent
+    help_text: Maximal accepted change relative to the previous readout (inclusive).
+    data_type: double
+    sample_values:
+    - 20
+  - field_name: exact
+    display_name: exact
+    help_text: &quot;Whether to compare the actual value to the readout exactly 7 days\
+      \ in the past. If the flag is false, the rule searches for the newest readout,\
+      \ 60 days in the past, having skipped the readouts for the last 7 days.&quot;
+    data_type: boolean
+    sample_values:
+    - &quot;false&quot;
 ```
 
 
@@ -1242,14 +1210,13 @@ spec:
     min_periods_with_readouts: 1
     historic_data_point_grouping: last_n_readouts
   fields:
-    - field_name: max_within
-      display_name: max_within
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ above a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
-      data_type: double
+  - field_name: max_within
+    display_name: max_within
+    help_text: Maximal accepted absolute change with regards to the previous readout
+      (inclusive).
+    data_type: double
+    sample_values:
+    - 10
 ```
 
 
@@ -1367,22 +1334,21 @@ spec:
     min_periods_with_readouts: 1
     historic_data_point_grouping: day
   fields:
-    - field_name: max_within
-      display_name: max_within
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ above a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
-      data_type: double
-    - field_name: exact
-      display_name: exact
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-        \ below a moving average within the time window. Set the time window at the\
-        \ threshold level for all severity levels (low, medium, high) at once. The default\
-        \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-        \ exist to run the calculation.&quot;
-      data_type: boolean
+  - field_name: max_within
+    display_name: max_within
+    help_text: Maximal accepted absolute change with regards to the previous readout
+      (inclusive).
+    data_type: double
+    sample_values:
+    - 10
+  - field_name: exact
+    display_name: exact
+    help_text: &quot;Whether to compare the actual value to the readout exactly 1 day in\
+      \ the past. If the flag is false, the rule searches for the newest readout,\
+      \ 60 days in the past, having skipped the readouts from the current day.&quot;
+    data_type: boolean
+    sample_values:
+    - &quot;false&quot;
 ```
 
 
@@ -1509,22 +1475,21 @@ spec:
     min_periods_with_readouts: 1
     historic_data_point_grouping: day
   fields:
-    - field_name: max_within
-      display_name: max_within
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ above a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
-      data_type: double
-    - field_name: exact
-      display_name: exact
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-        \ below a moving average within the time window. Set the time window at the\
-        \ threshold level for all severity levels (low, medium, high) at once. The default\
-        \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-        \ exist to run the calculation.&quot;
-      data_type: boolean
+  - field_name: max_within
+    display_name: max_within
+    help_text: Maximal accepted absolute change with regards to the previous readout
+      (inclusive).
+    data_type: double
+    sample_values:
+    - 10
+  - field_name: exact
+    display_name: exact
+    help_text: &quot;Whether to compare the actual value to the readout exactly 30 days\
+      \ in the past. If the flag is false, the rule searches for the newest readout,\
+      \ 60 days in the past, having skipped the readouts for the last 30 days.&quot;
+    data_type: boolean
+    sample_values:
+    - &quot;false&quot;
 ```
 
 
@@ -1653,22 +1618,21 @@ spec:
     min_periods_with_readouts: 1
     historic_data_point_grouping: day
   fields:
-    - field_name: max_within
-      display_name: max_within
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ above a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
-      data_type: double
-    - field_name: exact
-      display_name: exact
-      help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-        \ below a moving average within the time window. Set the time window at the\
-        \ threshold level for all severity levels (low, medium, high) at once. The default\
-        \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-        \ exist to run the calculation.&quot;
-      data_type: boolean
+  - field_name: max_within
+    display_name: max_within
+    help_text: Maximal accepted absolute change with regards to the previous readout
+      (inclusive).
+    data_type: double
+    sample_values:
+    - 10
+  - field_name: exact
+    display_name: exact
+    help_text: &quot;Whether to compare the actual value to the readout exactly 7 days\
+      \ in the past. If the flag is false, the rule searches for the newest readout,\
+      \ 60 days in the past, having skipped the readouts for the last 7 days.&quot;
+    data_type: boolean
+    sample_values:
+    - &quot;false&quot;
 ```
 
 
@@ -1798,12 +1762,11 @@ spec:
   fields:
   - field_name: max_percent_within
     display_name: max_percent_within
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ within a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: Absolute value of the maximal accepted change relative to the previous
+      readout (inclusive).
     data_type: double
+    sample_values:
+    - 5
 ```
 
 
@@ -1923,20 +1886,19 @@ spec:
   fields:
   - field_name: max_percent_within
     display_name: max_percent_within
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ within a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: Absolute value of the maximal accepted change relative to the previous
+      readout (inclusive).
     data_type: double
+    sample_values:
+    - 5
   - field_name: exact
     display_name: exact
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ below a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: &quot;Whether to compare the actual value to the readout exactly 1 day in\
+      \ the past. If the flag is false, the rule searches for the newest readout,\
+      \ 60 days in the past, having skipped the readouts from the current day.&quot;
     data_type: boolean
+    sample_values:
+    - &quot;false&quot;
 ```
 
 
@@ -2065,20 +2027,19 @@ spec:
   fields:
   - field_name: max_percent_within
     display_name: max_percent_within
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ within a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: Absolute value of the maximal accepted change relative to the previous
+      readout (inclusive).
     data_type: double
+    sample_values:
+    - 5
   - field_name: exact
     display_name: exact
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ below a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: &quot;Whether to compare the actual value to the readout exactly 7 days\
+      \ in the past. If the flag is false, the rule searches for the newest readout,\
+      \ 60 days in the past, having skipped the readouts for the last 7 days.&quot;
     data_type: boolean
+    sample_values:
+    - &quot;false&quot;
 ```
 
 
@@ -2209,20 +2170,19 @@ spec:
   fields:
   - field_name: max_percent_within
     display_name: max_percent_within
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ within a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: Absolute value of the maximal accepted change relative to the previous
+      readout (inclusive).
     data_type: double
+    sample_values:
+    - 5
   - field_name: exact
     display_name: exact
-    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ below a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation.&quot;
+    help_text: &quot;Whether to compare the actual value to the readout exactly 7 days\
+      \ in the past. If the flag is false, the rule searches for the newest readout,\
+      \ 60 days in the past, having skipped the readouts for the last 7 days.&quot;
     data_type: boolean
+    sample_values:
+    - &quot;false&quot;
 ```
 
 
