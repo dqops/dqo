@@ -1,8 +1,9 @@
-{{parquetFileFullName}}{{#with "  "}}{{.}}{{/with}}
+##{{parquetFileFullName}}{{#with "  "}}{{.}}{{/with}}
 {{parquetFileDescription}}{{#with "  "}}{{.}}{{/with}}
-___
-{{#each parquetColumnDetailsDocumentationModels}}{{#with "  "}}{{.}}{{/with}}
-column name: {{columnName}}{{#with "  "}}{{.}}{{/with}}
-column type: {{columnType}}{{#with "  "}}{{.}}{{/with}}
-column description: {{columnDescription}}{{#with "  "}}{{.}}{{/with}}
+{{#with "  "}}{{.}}{{/with}}
+**The columns of this table is described below**{{#with "  "}}{{.}}{{/with}}
+{{#with "  "}}{{.}}{{/with}}
+| Column name | Description | Data type |
+|-------------|-------------|-----------|
+{{#each parquetColumnDetailsDocumentationModels}} | {{columnName}} | {{#if columnDescription}}{{columnDescription}}{{else}}Column name for the data stream.{{/if}} | {{lower columnType}} |
 {{/each}}
