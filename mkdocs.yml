@@ -287,6 +287,14 @@ nav:
       - TableYaml: 'reference/yaml/TableYaml.md'
       - IncidentNotificationMessage: 'reference/yaml/IncidentNotificationMessage.md'
 ########## END INCLUDE YAML REFERENCE
+########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
+    - ParquetFiles:
+      - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
+      - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
+      - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
+      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
+      - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
+########## END INCLUDE PARQUET FILES REFERENCE
 
 # Visual settings
 theme:

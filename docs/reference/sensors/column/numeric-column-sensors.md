@@ -1079,13 +1079,13 @@ ___
 column/numeric/percentile
 ```
 **Description**  
-Column level sensor that finds the median in a given column.
+Column level sensor that finds the percentile 25 in a given column.
 
 **Parameters**  
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|percentile_value|Median (50th percentile), must equal 0.5|double| ||
+|percentile_value|25th percentile, must equal 0.25|double| ||
 
 
 
