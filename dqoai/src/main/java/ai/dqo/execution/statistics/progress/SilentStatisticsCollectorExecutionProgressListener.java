@@ -67,6 +67,16 @@ public class SilentStatisticsCollectorExecutionProgressListener implements Stati
     }
 
     /**
+     * Called before a sensor is preparing for execution for a single check. The check (and sensor) is identified in the <code>sensorRunParameters</code>.
+     *
+     * @param event Log event.
+     */
+    @Override
+    public void onPreparingSensor(PreparingSensorEvent event) {
+
+    }
+
+    /**
      * Called before a sensor is executed for a single check. The check (and sensor) is identified in the <code>sensorRunParameters</code>.
      *
      * @param event Log event.

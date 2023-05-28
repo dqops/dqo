@@ -34,7 +34,7 @@ public class SensorExecutionResult {
     private Instant finishedAt;
     private int sensorDurationMs;
     private boolean success;
-    private Exception exception;
+    private Throwable exception;
 
     /**
      * Creates an empty sensor execution result object.
@@ -62,7 +62,7 @@ public class SensorExecutionResult {
      * @param parameters Sensor execution parameters.
      * @param exception The exception throw by the sensor.
      */
-    public SensorExecutionResult(SensorExecutionRunParameters parameters, Exception exception) {
+    public SensorExecutionResult(SensorExecutionRunParameters parameters, Throwable exception) {
         this.parameters = parameters;
         this.exception = exception;
         this.finishedAt = Instant.now();
@@ -158,7 +158,7 @@ public class SensorExecutionResult {
      * Returns the exception thrown by the sensor if the execution failed.
      * @return Exception.
      */
-    public Exception getException() {
+    public Throwable getException() {
         return exception;
     }
 
@@ -166,7 +166,7 @@ public class SensorExecutionResult {
      * Sets the exception that was thrown by the sensor.
      * @param exception Exception.
      */
-    public void setException(Exception exception) {
+    public void setException(Throwable exception) {
         this.exception = exception;
     }
 }

@@ -20,12 +20,15 @@ import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
+import ai.dqo.execution.sensors.SensorPrepareResult;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
 
@@ -37,6 +40,7 @@ import java.time.LocalDateTime;
  */
 @Component
 @Slf4j
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class TableAvailabilitySensorRunner extends AbstractSensorRunner {
     /**
      * Sensor runner class name.
@@ -50,25 +54,38 @@ public class TableAvailabilitySensorRunner extends AbstractSensorRunner {
     }
 
     /**
+     * Prepares a sensor for execution. SQL templated sensors will render the SQL template, filled with the table and column names.
+     *
+     * @param executionContext    Check execution context with access to the dqo home and user home, if any metadata is needed.
+     * @param sensorPrepareResult Sensor prepare result with additional sensor run parameters. The prepareSensor method should fill additional values in this object that will be used when the sensor is executed.
+     * @param progressListener    Progress listener that receives events when the sensor is executed.
+     */
+    @Override
+    public void prepareSensor(ExecutionContext executionContext,
+                              SensorPrepareResult sensorPrepareResult,
+                              SensorExecutionProgressListener progressListener) {
+        this.jinjaSqlTemplateSensorRunner.prepareSensor(executionContext, sensorPrepareResult, progressListener);
+    }
+
+    /**
      * Executes a sensor and returns the sensor result.
-     * @param executionContext Check execution context with access to the dqo home and user home, if any metadata is needed.
-     * @param sensorRunParameters   Sensor run parameters - connection, table, column, sensor parameters.
-     * @param sensorDefinition      Sensor definition (both the core sensor definition and the provider specific sensor definition).
-     * @param progressListener      Progress listener that receives events when the sensor is executed.
-     * @param dummySensorExecution  When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
-     * @param jobCancellationToken  Job cancellation token, may cancel a running query.
+     *
+     * @param executionContext     Check execution context with access to the dqo home and user home, if any metadata is needed.
+     * @param sensorPrepareResult  Sensor preparation result, contains the sensor definition, rendered SQL template, sensor run parameters (connection, table, etc.).
+     * @param progressListener     Progress listener that receives events when the sensor is executed.
+     * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken Job cancellation token, may cancel a running query.
      * @return Sensor result.
      */
     @Override
     public SensorExecutionResult executeSensor(ExecutionContext executionContext,
-                                               SensorExecutionRunParameters sensorRunParameters,
-                                               SensorDefinitionFindResult sensorDefinition,
+                                               SensorPrepareResult sensorPrepareResult,
                                                SensorExecutionProgressListener progressListener,
                                                boolean dummySensorExecution,
                                                JobCancellationToken jobCancellationToken) {
-
-        SensorExecutionResult sensorExecutionResult = jinjaSqlTemplateSensorRunner.executeSensor(executionContext,
-                sensorRunParameters, sensorDefinition, progressListener, dummySensorExecution, jobCancellationToken);
+        SensorExecutionRunParameters sensorRunParameters = sensorPrepareResult.getSensorRunParameters();
+        SensorExecutionResult sensorExecutionResult = this.jinjaSqlTemplateSensorRunner.executeSensor(executionContext,
+                sensorPrepareResult, progressListener, dummySensorExecution, jobCancellationToken);
 
         if (sensorExecutionResult.isSuccess()) {
             try {

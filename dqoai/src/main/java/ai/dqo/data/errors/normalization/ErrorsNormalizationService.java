@@ -46,5 +46,5 @@ public interface ErrorsNormalizationService {
     ErrorsNormalizedResult createNormalizedRuleErrorResults(SensorExecutionResult sensorExecutionResult,
                                                             TimePeriodGradient timePeriodGradient,
                                                             SensorExecutionRunParameters sensorRunParameters,
-                                                            Exception ruleEvaluationException);
+                                                            Throwable ruleEvaluationException);
 }

@@ -27,7 +27,7 @@ public class SensorFailedEvent extends CheckExecutionProgressEvent {
     private final TableSpec tableSpec;
     private final SensorExecutionRunParameters sensorRunParameters;
     private final SensorExecutionResult sensorResult;
-    private Exception sensorExecutionException;
+    private Throwable sensorExecutionException;
 
     /**
      * Creates an event.
@@ -40,7 +40,7 @@ public class SensorFailedEvent extends CheckExecutionProgressEvent {
     public SensorFailedEvent(TableSpec tableSpec,
                              SensorExecutionRunParameters sensorRunParameters,
                              SensorExecutionResult sensorResult,
-                             Exception sensorExecutionException) {
+                             Throwable sensorExecutionException) {
         this.tableSpec = tableSpec;
         this.sensorRunParameters = sensorRunParameters;
         this.sensorResult = sensorResult;
@@ -78,7 +78,7 @@ public class SensorFailedEvent extends CheckExecutionProgressEvent {
      * Returns the exception that was thrown by the sensor.
      * @return Exception thrown by the sensor.
      */
-    public Exception getSensorExecutionException() {
+    public Throwable getSensorExecutionException() {
         return sensorExecutionException;
     }
 }

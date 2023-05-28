@@ -16,25 +16,25 @@
 package ai.dqo.execution.sensors.progress;
 
 import ai.dqo.execution.checks.progress.CheckExecutionProgressEvent;
-import ai.dqo.execution.sensors.SensorPrepareResult;
+import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.sources.TableSpec;
 
 /**
- * Progress event raised before a sensor is executed for a single check. The check (and sensor) is identified in the <code>sensorRunParameters</code>.
+ * Progress event raised before a sensor is prepared for execution for a single check. The check (and sensor) is identified in the <code>sensorRunParameters</code>.
  */
-public class ExecutingSensorEvent extends CheckExecutionProgressEvent {
+public class PreparingSensorEvent extends CheckExecutionProgressEvent {
     private final TableSpec tableSpec;
-    private final SensorPrepareResult sensorPrepareResult;
+    private final SensorExecutionRunParameters sensorRunParameters;
 
     /**
      * Creates an event.
      *
      * @param tableSpec           Target table.
-     * @param sensorPrepareResult Sensor run parameters.
+     * @param sensorRunParameters Sensor run parameters.
      */
-    public ExecutingSensorEvent(TableSpec tableSpec, SensorPrepareResult sensorPrepareResult) {
+    public PreparingSensorEvent(TableSpec tableSpec, SensorExecutionRunParameters sensorRunParameters) {
         this.tableSpec = tableSpec;
-        this.sensorPrepareResult = sensorPrepareResult;
+        this.sensorRunParameters = sensorRunParameters;
     }
 
     /**
@@ -51,7 +51,7 @@ public class ExecutingSensorEvent extends CheckExecutionProgressEvent {
      *
      * @return Sensor execution parameters.
      */
-    public SensorPrepareResult getSensorPrepareResult() {
-        return sensorPrepareResult;
+    public SensorExecutionRunParameters getSensorRunParameters() {
+        return sensorRunParameters;
     }
 }

@@ -24,12 +24,15 @@ import com.google.auth.oauth2.OAuth2CredentialsWithRefresh;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
  * DQO Cloud bucket credentials provider. Creates a Google storage client to access the bucket with the tenant's data.
  */
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class DqoCloudBucketAccessProviderImpl implements DqoCloudBucketAccessProvider {
     private DqoCloudAccessTokenCache accessTokenCache;
 
