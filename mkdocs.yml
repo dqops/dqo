@@ -266,25 +266,25 @@ nav:
   - Reference:
 ########## INCLUDE SENSOR REFERENCE - DO NOT MODIFY MANUALLY
     - Sensors:
-      - table:
-        - accuracy table sensors: 'reference/sensors/table/accuracy-table-sensors.md'
-        - availability table sensors: 'reference/sensors/table/availability-table-sensors.md'
-        - sql table sensors: 'reference/sensors/table/sql-table-sensors.md'
-        - timeliness table sensors: 'reference/sensors/table/timeliness-table-sensors.md'
-        - volume table sensors: 'reference/sensors/table/volume-table-sensors.md'
-      - column:
-        - accuracy column sensors: 'reference/sensors/column/accuracy-column-sensors.md'
-        - bool column sensors: 'reference/sensors/column/bool-column-sensors.md'
-        - consistency column sensors: 'reference/sensors/column/consistency-column-sensors.md'
-        - datetime column sensors: 'reference/sensors/column/datetime-column-sensors.md'
-        - integrity column sensors: 'reference/sensors/column/integrity-column-sensors.md'
-        - nulls column sensors: 'reference/sensors/column/nulls-column-sensors.md'
-        - numeric column sensors: 'reference/sensors/column/numeric-column-sensors.md'
-        - pii column sensors: 'reference/sensors/column/pii-column-sensors.md'
-        - range column sensors: 'reference/sensors/column/range-column-sensors.md'
-        - sql column sensors: 'reference/sensors/column/sql-column-sensors.md'
-        - strings column sensors: 'reference/sensors/column/strings-column-sensors.md'
-        - uniqueness column sensors: 'reference/sensors/column/uniqueness-column-sensors.md'
+      - Table:
+        - accuracy table sensors: 'reference/sensors/Table/accuracy-table-sensors.md'
+        - availability table sensors: 'reference/sensors/Table/availability-table-sensors.md'
+        - sql table sensors: 'reference/sensors/Table/sql-table-sensors.md'
+        - timeliness table sensors: 'reference/sensors/Table/timeliness-table-sensors.md'
+        - volume table sensors: 'reference/sensors/Table/volume-table-sensors.md'
+      - Column:
+        - accuracy column sensors: 'reference/sensors/Column/accuracy-column-sensors.md'
+        - bool column sensors: 'reference/sensors/Column/bool-column-sensors.md'
+        - consistency column sensors: 'reference/sensors/Column/consistency-column-sensors.md'
+        - datetime column sensors: 'reference/sensors/Column/datetime-column-sensors.md'
+        - integrity column sensors: 'reference/sensors/Column/integrity-column-sensors.md'
+        - nulls column sensors: 'reference/sensors/Column/nulls-column-sensors.md'
+        - numeric column sensors: 'reference/sensors/Column/numeric-column-sensors.md'
+        - pii column sensors: 'reference/sensors/Column/pii-column-sensors.md'
+        - range column sensors: 'reference/sensors/Column/range-column-sensors.md'
+        - sql column sensors: 'reference/sensors/Column/sql-column-sensors.md'
+        - strings column sensors: 'reference/sensors/Column/strings-column-sensors.md'
+        - uniqueness column sensors: 'reference/sensors/Column/uniqueness-column-sensors.md'
 ########## END INCLUDE SENSOR REFERENCE
 ########## INCLUDE RULE REFERENCE - DO NOT MODIFY MANUALLY
     - Rules:
@@ -307,11 +307,11 @@ nav:
 ########## END INCLUDE YAML REFERENCE
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
     - ParquetFiles:
-      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
-      - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
-      - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
       - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
       - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
+      - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
+      - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
+      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
 
 # Visual settings
