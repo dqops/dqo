@@ -34,6 +34,9 @@ import ai.dqo.utils.docs.cli.CliCommandDocumentationGeneratorImpl;
 import ai.dqo.utils.docs.cli.CliCommandDocumentationModelFactoryImpl;
 import ai.dqo.utils.docs.files.DocumentationFolder;
 import ai.dqo.utils.docs.files.DocumentationFolderFactory;
+import ai.dqo.utils.docs.parquetfiles.ParquetFilesDocumentationGenerator;
+import ai.dqo.utils.docs.parquetfiles.ParquetFilesDocumentationGeneratorImpl;
+import ai.dqo.utils.docs.parquetfiles.ParquetFilesDocumentationModelFactoryImpl;
 import ai.dqo.utils.docs.rules.RuleDocumentationGenerator;
 import ai.dqo.utils.docs.rules.RuleDocumentationGeneratorImpl;
 import ai.dqo.utils.docs.rules.RuleDocumentationModelFactory;
@@ -83,6 +86,7 @@ public class GenerateDocumentationPostProcessor {
             generateDocumentationForCliCommands(projectDir);
             generateDocumentationForChecks(projectDir, dqoHomeContext);
             generateDocumentationForYaml(projectDir);
+            generateDocumentationForParquetFiles(projectDir);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -239,5 +243,25 @@ public class GenerateDocumentationPostProcessor {
                 renderedIndexYaml,
                 "########## INCLUDE YAML REFERENCE - DO NOT MODIFY MANUALLY",
                 "########## END INCLUDE YAML REFERENCE");
+    }
+
+    /**
+     * Generates documentation for parquet files classes.
+     *
+     * @param projectRoot Path to the project root.
+     */
+    public static void generateDocumentationForParquetFiles(Path projectRoot) {
+        Path parquetsDocPath = projectRoot.resolve("../docs/reference/parquets").toAbsolutePath().normalize();
+        DocumentationFolder currentParquetsDocFiles = DocumentationFolderFactory.loadCurrentFiles(parquetsDocPath);
+        ParquetFilesDocumentationGenerator parquetFilesDocumentationGenerator = new ParquetFilesDocumentationGeneratorImpl(new ParquetFilesDocumentationModelFactoryImpl());
+
+        DocumentationFolder renderedDocumentation = parquetFilesDocumentationGenerator.renderParquetDocumentation(projectRoot);
+        renderedDocumentation.writeModifiedFiles(currentParquetsDocFiles);
+
+        List<String> renderedIndexParquets = renderedDocumentation.generateMkDocsNavigation(4);
+        MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
+                renderedIndexParquets,
+                "########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY",
+                "########## END INCLUDE PARQUET FILES REFERENCE");
     }
 }

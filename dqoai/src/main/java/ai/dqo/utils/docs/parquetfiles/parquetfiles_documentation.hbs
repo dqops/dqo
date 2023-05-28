@@ -1,0 +1,8 @@
+{{parquetFileFullName}}{{#with "  "}}{{.}}{{/with}}
+{{parquetFileDescription}}{{#with "  "}}{{.}}{{/with}}
+___
+{{#each parquetColumnDetailsDocumentationModels}}{{#with "  "}}{{.}}{{/with}}
+column name: {{columnName}}{{#with "  "}}{{.}}{{/with}}
+column type: {{columnType}}{{#with "  "}}{{.}}{{/with}}
+column description: {{columnDescription}}{{#with "  "}}{{.}}{{/with}}
+{{/each}}
