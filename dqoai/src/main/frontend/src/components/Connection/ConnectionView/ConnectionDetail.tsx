@@ -20,7 +20,7 @@ import { useParams } from "react-router-dom";
 import ErrorModal from "../../Dashboard/DatabaseConnection/ErrorModal";
 import Loader from "../../Loader";
 import Button from "../../Button";
-import { SourceConnectionApi } from "../../../services/apiClient";
+import { DataSourcesApi } from "../../../services/apiClient";
 import ConfirmErrorModal from "../../Dashboard/DatabaseConnection/ConfirmErrorModal";
 import PostgreSQLConnection from "../../Dashboard/DatabaseConnection/PostgreSQLConnection";
 import RedshiftConnection from "../../Dashboard/DatabaseConnection/RedshiftConnection";
@@ -82,7 +82,7 @@ const ConnectionDetail = () => {
 
 
     setIsTesting(true);
-    const testRes = await SourceConnectionApi.testConnection(false, connectionBasic);
+    const testRes = await DataSourcesApi.testConnection(false, connectionBasic);
     setIsTesting(false);
 
     if (testRes.data?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS) {
@@ -96,7 +96,7 @@ const ConnectionDetail = () => {
   const onTestConnection = async () => {
     try {
       setIsTesting(true);
-      const res = await SourceConnectionApi.testConnection(false, connectionBasic);
+      const res = await DataSourcesApi.testConnection(false, connectionBasic);
       setTestResult(res.data);
     } catch (err) {
       console.error(err);
