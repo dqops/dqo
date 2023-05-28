@@ -135,6 +135,36 @@ Evaluates the overall quality of the table by verifying the number of rows.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
+|[row_count_change](./table/volume/row-count-change/#row-count-change)|profiling|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|
+|[daily_row_count_change](./table/volume/row-count-change/#daily-row-count-change)|recurring|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|
+|[monthly_row_count_change](./table/volume/row-count-change/#monthly-row-count-change)|recurring|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|
+|[daily_partition_row_count_change](./table/volume/row-count-change/#daily-partition-row-count-change)|partitioned|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|
+|[monthly_partition_row_count_change](./table/volume/row-count-change/#monthly-partition-row-count-change)|partitioned|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[row_count_change_yesterday](./table/volume/row-count-change-yesterday/#row-count-change-yesterday)|profiling|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.|
+|[daily_row_count_change_yesterday](./table/volume/row-count-change-yesterday/#daily-row-count-change-yesterday)|recurring|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.|
+|[daily_partition_row_count_change_yesterday](./table/volume/row-count-change-yesterday/#daily-partition-row-count-change-yesterday)|partitioned|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[row_count_change_7_days](./table/volume/row-count-change-7-days/#row-count-change-7-days)|profiling|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.|
+|[daily_row_count_change_7_days](./table/volume/row-count-change-7-days/#daily-row-count-change-7-days)|recurring|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.|
+|[daily_partition_row_count_change_7_days](./table/volume/row-count-change-7-days/#daily-partition-row-count-change-7-days)|partitioned|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[row_count_change_30_days](./table/volume/row-count-change-30-days/#row-count-change-30-days)|profiling|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.|
+|[daily_row_count_change_30_days](./table/volume/row-count-change-30-days/#daily-row-count-change-30-days)|recurring|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.|
+|[daily_partition_row_count_change_30_days](./table/volume/row-count-change-30-days/#daily-partition-row-count-change-30-days)|partitioned|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
 |[daily_partition_row_count_anomaly_7_days](./table/volume/daily-partition-row-count-anomaly-7-days/#daily-partition-row-count-anomaly-7-days)|partitioned|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 7 days.|
 
 
@@ -301,6 +331,96 @@ Detects anomalous (unexpected) changes and outliers in the time series of data q
 |------------|------------|-------------|
 |[sum_anomaly_60_days](./column/anomaly/sum-anomaly-60-days/#sum-anomaly-60-days)|profiling|Verifies that the sum in a column changes in a rate within a percentile boundary during last 60 days.|
 |[daily_sum_anomaly_60_days](./column/anomaly/sum-anomaly-60-days/#daily-sum-anomaly-60-days)|recurring|Verifies that the sum in a column changes in a rate within a percentile boundary during last 60 days.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[mean_change](./column/anomaly/mean-change/#mean-change)|profiling|Verifies that the mean value in a column changed in a fixed rate since last readout.|
+|[daily_mean_change](./column/anomaly/mean-change/#daily-mean-change)|recurring|Verifies that the mean value in a column changed in a fixed rate since last readout.|
+|[monthly_mean_change](./column/anomaly/mean-change/#monthly-mean-change)|recurring|Verifies that the mean value in a column changed in a fixed rate since last readout.|
+|[daily_partition_mean_change](./column/anomaly/mean-change/#daily-partition-mean-change)|partitioned|Verifies that the mean value in a column changed in a fixed rate since last readout.|
+|[monthly_partition_mean_change](./column/anomaly/mean-change/#monthly-partition-mean-change)|partitioned|Verifies that the mean value in a column changed in a fixed rate since last readout.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[mean_change_yesterday](./column/anomaly/mean-change-yesterday/#mean-change-yesterday)|profiling|Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.|
+|[daily_mean_change_yesterday](./column/anomaly/mean-change-yesterday/#daily-mean-change-yesterday)|recurring|Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.|
+|[daily_partition_mean_change_yesterday](./column/anomaly/mean-change-yesterday/#daily-partition-mean-change-yesterday)|partitioned|Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[mean_change_7_days](./column/anomaly/mean-change-7-days/#mean-change-7-days)|profiling|Verifies that the mean value in a column changed in a fixed rate since last readout from last week.|
+|[daily_mean_change_7_days](./column/anomaly/mean-change-7-days/#daily-mean-change-7-days)|recurring|Verifies that the mean value in a column changed in a fixed rate since last readout from last week.|
+|[daily_partition_mean_change_7_days](./column/anomaly/mean-change-7-days/#daily-partition-mean-change-7-days)|partitioned|Verifies that the mean value in a column changed in a fixed rate since last readout from last week.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[mean_change_30_days](./column/anomaly/mean-change-30-days/#mean-change-30-days)|profiling|Verifies that the mean value in a column changed in a fixed rate since last readout from last month.|
+|[daily_mean_change_30_days](./column/anomaly/mean-change-30-days/#daily-mean-change-30-days)|recurring|Verifies that the mean value in a column changed in a fixed rate since last readout from last month.|
+|[daily_partition_mean_change_30_days](./column/anomaly/mean-change-30-days/#daily-partition-mean-change-30-days)|partitioned|Verifies that the mean value in a column changed in a fixed rate since last readout from last month.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[median_change](./column/anomaly/median-change/#median-change)|profiling|Verifies that the median in a column changed in a fixed rate since last readout.|
+|[daily_median_change](./column/anomaly/median-change/#daily-median-change)|recurring|Verifies that the median in a column changed in a fixed rate since last readout.|
+|[monthly_median_change](./column/anomaly/median-change/#monthly-median-change)|recurring|Verifies that the median in a column changed in a fixed rate since last readout.|
+|[daily_partition_median_change](./column/anomaly/median-change/#daily-partition-median-change)|partitioned|Verifies that the median in a column changed in a fixed rate since last readout.|
+|[monthly_partition_median_change](./column/anomaly/median-change/#monthly-partition-median-change)|partitioned|Verifies that the median in a column changed in a fixed rate since last readout.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[median_change_yesterday](./column/anomaly/median-change-yesterday/#median-change-yesterday)|profiling|Verifies that the median in a column changed in a fixed rate since last readout from yesterday.|
+|[daily_median_change_yesterday](./column/anomaly/median-change-yesterday/#daily-median-change-yesterday)|recurring|Verifies that the median in a column changed in a fixed rate since last readout from yesterday.|
+|[daily_partition_median_change_yesterday](./column/anomaly/median-change-yesterday/#daily-partition-median-change-yesterday)|partitioned|Verifies that the median in a column changed in a fixed rate since last readout from yesterday.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[median_change_7_days](./column/anomaly/median-change-7-days/#median-change-7-days)|profiling|Verifies that the median in a column changed in a fixed rate since last readout from last week.|
+|[daily_median_change_7_days](./column/anomaly/median-change-7-days/#daily-median-change-7-days)|recurring|Verifies that the median in a column changed in a fixed rate since last readout from last week.|
+|[daily_partition_median_change_7_days](./column/anomaly/median-change-7-days/#daily-partition-median-change-7-days)|partitioned|Verifies that the median in a column changed in a fixed rate since last readout from last week.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[median_change_30_days](./column/anomaly/median-change-30-days/#median-change-30-days)|profiling|Verifies that the median in a column changed in a fixed rate since last readout from last month.|
+|[daily_median_change_30_days](./column/anomaly/median-change-30-days/#daily-median-change-30-days)|recurring|Verifies that the median in a column changed in a fixed rate since last readout from last month.|
+|[daily_partition_median_change_30_days](./column/anomaly/median-change-30-days/#daily-partition-median-change-30-days)|partitioned|Verifies that the median in a column changed in a fixed rate since last readout from last month.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[sum_change](./column/anomaly/sum-change/#sum-change)|profiling|Verifies that the sum in a column changed in a fixed rate since last readout.|
+|[daily_sum_change](./column/anomaly/sum-change/#daily-sum-change)|recurring|Verifies that the sum in a column changed in a fixed rate since last readout.|
+|[monthly_sum_change](./column/anomaly/sum-change/#monthly-sum-change)|recurring|Verifies that the sum in a column changed in a fixed rate since last readout.|
+|[daily_partition_sum_change](./column/anomaly/sum-change/#daily-partition-sum-change)|partitioned|Verifies that the sum in a column changed in a fixed rate since last readout.|
+|[monthly_partition_sum_change](./column/anomaly/sum-change/#monthly-partition-sum-change)|partitioned|Verifies that the sum in a column changed in a fixed rate since last readout.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[sum_change_yesterday](./column/anomaly/sum-change-yesterday/#sum-change-yesterday)|profiling|Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.|
+|[daily_sum_change_yesterday](./column/anomaly/sum-change-yesterday/#daily-sum-change-yesterday)|recurring|Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.|
+|[daily_partition_sum_change_yesterday](./column/anomaly/sum-change-yesterday/#daily-partition-sum-change-yesterday)|partitioned|Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[sum_change_7_days](./column/anomaly/sum-change-7-days/#sum-change-7-days)|profiling|Verifies that the sum in a column changed in a fixed rate since last readout from last week.|
+|[daily_sum_change_7_days](./column/anomaly/sum-change-7-days/#daily-sum-change-7-days)|recurring|Verifies that the sum in a column changed in a fixed rate since last readout from last week.|
+|[daily_partition_sum_change_7_days](./column/anomaly/sum-change-7-days/#daily-partition-sum-change-7-days)|partitioned|Verifies that the sum in a column changed in a fixed rate since last readout from last week.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[sum_change_30_days](./column/anomaly/sum-change-30-days/#sum-change-30-days)|profiling|Verifies that the sum in a column changed in a fixed rate since last readout from last month.|
+|[daily_sum_change_30_days](./column/anomaly/sum-change-30-days/#daily-sum-change-30-days)|recurring|Verifies that the sum in a column changed in a fixed rate since last readout from last month.|
+|[daily_partition_sum_change_30_days](./column/anomaly/sum-change-30-days/#daily-partition-sum-change-30-days)|partitioned|Verifies that the sum in a column changed in a fixed rate since last readout from last month.|
 
 
 | Check name | Check type | Description |
@@ -530,20 +650,20 @@ Validates that the data in a numeric column is in the expected format or within 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[numbers_found_count](./column/numeric/numbers-found-count/#numbers-found-count)|profiling|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).|
-|[daily_numbers_found_count](./column/numeric/numbers-found-count/#daily-numbers-found-count)|recurring|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_numbers_found_count](./column/numeric/numbers-found-count/#monthly-numbers-found-count)|recurring|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_numbers_found_count](./column/numeric/numbers-found-count/#daily-partition-numbers-found-count)|partitioned|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_numbers_found_count](./column/numeric/numbers-found-count/#monthly-partition-numbers-found-count)|partitioned|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.|
+|[expected_numbers_in_use_count](./column/numeric/expected-numbers-in-use-count/#expected-numbers-in-use-count)|profiling|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).|
+|[daily_expected_numbers_in_use_count](./column/numeric/expected-numbers-in-use-count/#daily-expected-numbers-in-use-count)|recurring|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_expected_numbers_in_use_count](./column/numeric/expected-numbers-in-use-count/#monthly-expected-numbers-in-use-count)|recurring|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_expected_numbers_in_use_count](./column/numeric/expected-numbers-in-use-count/#daily-partition-expected-numbers-in-use-count)|partitioned|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_expected_numbers_in_use_count](./column/numeric/expected-numbers-in-use-count/#monthly-partition-expected-numbers-in-use-count)|partitioned|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[has_valid_numbers_percent](./column/numeric/has-valid-numbers-percent/#has-valid-numbers-percent)|profiling|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.|
-|[daily_has_valid_numbers_percent](./column/numeric/has-valid-numbers-percent/#daily-has-valid-numbers-percent)|recurring|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_has_valid_numbers_percent](./column/numeric/has-valid-numbers-percent/#monthly-has-valid-numbers-percent)|recurring|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_has_valid_numbers_percent](./column/numeric/has-valid-numbers-percent/#daily-partition-has-valid-numbers-percent)|partitioned|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_has_valid_numbers_percent](./column/numeric/has-valid-numbers-percent/#monthly-partition-has-valid-numbers-percent)|partitioned|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[number_value_in_set_percent](./column/numeric/number-value-in-set-percent/#number-value-in-set-percent)|profiling|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.|
+|[daily_number_value_in_set_percent](./column/numeric/number-value-in-set-percent/#daily-number-value-in-set-percent)|recurring|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_number_value_in_set_percent](./column/numeric/number-value-in-set-percent/#monthly-number-value-in-set-percent)|recurring|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_number_value_in_set_percent](./column/numeric/number-value-in-set-percent/#daily-partition-number-value-in-set-percent)|partitioned|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_number_value_in_set_percent](./column/numeric/number-value-in-set-percent/#monthly-partition-number-value-in-set-percent)|partitioned|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
@@ -1050,20 +1170,20 @@ Validates that the data in a string column match the expected format or pattern.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[string_in_set_count](./column/strings/string-in-set-count/#string-in-set-count)|profiling|Verifies that the number of strings from a set in a column does not fall below the minimum accepted count.|
-|[daily_string_in_set_count](./column/strings/string-in-set-count/#daily-string-in-set-count)|recurring|Verifies that the number of strings from set in a column does not fall below the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_string_in_set_count](./column/strings/string-in-set-count/#monthly-string-in-set-count)|recurring|Verifies that the number of strings from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_string_in_set_count](./column/strings/string-in-set-count/#daily-partition-string-in-set-count)|partitioned|Verifies that the number of strings from set in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_string_in_set_count](./column/strings/string-in-set-count/#monthly-partition-string-in-set-count)|partitioned|Verifies that the number of strings from set in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[expected_strings_in_use_count](./column/strings/expected-strings-in-use-count/#expected-strings-in-use-count)|profiling|Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).|
+|[daily_expected_strings_in_use_count](./column/strings/expected-strings-in-use-count/#daily-expected-strings-in-use-count)|recurring|Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_expected_strings_in_use_count](./column/strings/expected-strings-in-use-count/#monthly-expected-strings-in-use-count)|recurring|Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_expected_strings_in_use_count](./column/strings/expected-strings-in-use-count/#daily-partition-expected-strings-in-use-count)|partitioned|Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_expected_strings_in_use_count](./column/strings/expected-strings-in-use-count/#monthly-partition-expected-strings-in-use-count)|partitioned|Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[string_in_set_percent](./column/strings/string-in-set-percent/#string-in-set-percent)|profiling|Verifies that the percentage of strings from a set in a column does not fall below the minimum accepted percentage.|
-|[daily_string_in_set_percent](./column/strings/string-in-set-percent/#daily-string-in-set-percent)|recurring|Verifies that the percentage of strings from a set in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_string_in_set_percent](./column/strings/string-in-set-percent/#monthly-string-in-set-percent)|recurring|Verifies that the percentage of strings from set in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_string_in_set_percent](./column/strings/string-in-set-percent/#daily-partition-string-in-set-percent)|partitioned|Verifies that the percentage of strings from set in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_string_in_set_percent](./column/strings/string-in-set-percent/#monthly-partition-string-in-set-percent)|partitioned|Verifies that the percentage of strings from set in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[string_value_in_set_percent](./column/strings/string-value-in-set-percent/#string-value-in-set-percent)|profiling|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.|
+|[daily_string_value_in_set_percent](./column/strings/string-value-in-set-percent/#daily-string-value-in-set-percent)|recurring|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_string_value_in_set_percent](./column/strings/string-value-in-set-percent/#monthly-string-value-in-set-percent)|recurring|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_string_value_in_set_percent](./column/strings/string-value-in-set-percent/#daily-partition-string-value-in-set-percent)|partitioned|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_string_value_in_set_percent](./column/strings/string-value-in-set-percent/#monthly-partition-string-value-in-set-percent)|partitioned|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
@@ -1185,11 +1305,11 @@ Validates that the data in a string column match the expected format or pattern.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[string_most_popular_values](./column/strings/string-most-popular-values/#string-most-popular-values)|profiling|Verifies that the number of top values from a set in a column does not fall below the minimum accepted count.|
-|[daily_string_most_popular_values](./column/strings/string-most-popular-values/#daily-string-most-popular-values)|recurring|Verifies that the number of top values from a set in a column does not fall below the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.|
-|[monthly_string_most_popular_values](./column/strings/string-most-popular-values/#monthly-string-most-popular-values)|recurring|Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_string_most_popular_values](./column/strings/string-most-popular-values/#daily-partition-string-most-popular-values)|partitioned|Verifies that the number of top values from a set in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_string_most_popular_values](./column/strings/string-most-popular-values/#monthly-partition-string-most-popular-values)|partitioned|Verifies that the number of top values from a set in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[expected_strings_in_top_values_count](./column/strings/expected-strings-in-top-values-count/#expected-strings-in-top-values-count)|profiling|Verifies that the top X most popular column values contain all values from a list of expected values.|
+|[daily_expected_strings_in_top_values_count](./column/strings/expected-strings-in-top-values-count/#daily-expected-strings-in-top-values-count)|recurring|Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_expected_strings_in_top_values_count](./column/strings/expected-strings-in-top-values-count/#monthly-expected-strings-in-top-values-count)|recurring|Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_expected_strings_in_top_values_count](./column/strings/expected-strings-in-top-values-count/#daily-partition-expected-strings-in-top-values-count)|partitioned|Verifies that the top X most popular column values contain all values from a list of expected values. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_expected_strings_in_top_values_count](./column/strings/expected-strings-in-top-values-count/#monthly-partition-expected-strings-in-top-values-count)|partitioned|Verifies that the top X most popular column values contain all values from a list of expected values. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |

@@ -12,7 +12,7 @@ Verifies that the mean value in a column is within a percentile from measurement
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_mean_anomaly_7_days|partitioned|daily|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[percentile_moving_within_7_days](../../../../reference/rules/stdev/#percentile-moving-within-7-days)|
+|daily_partition_mean_anomaly_7_days|partitioned|daily|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[percentile_moving_within_7_days](../../../../reference/rules/percentile/#percentile-moving-within-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -410,8 +410,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST([] AS date) AS time_period,
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY CAST([] AS date), CAST([] AS date)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
         ORDER BY level_1, level_2CAST([] AS date)
         
             

@@ -653,9 +653,8 @@ spec:
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
-        ON analyzed_table.[target_column] = foreign_table.[customer_id], 
-                , 
-            
+        ON analyzed_table.[target_column] = foreign_table.[customer_id]
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1321,9 +1320,8 @@ spec:
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
-        ON analyzed_table.[target_column] = foreign_table.[customer_id], 
-                , 
-            
+        ON analyzed_table.[target_column] = foreign_table.[customer_id]
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1989,9 +1987,8 @@ spec:
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
-        ON analyzed_table.[target_column] = foreign_table.[customer_id], 
-                , 
-            
+        ON analyzed_table.[target_column] = foreign_table.[customer_id]
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -2661,8 +2658,8 @@ spec:
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
-        ON analyzed_table.[target_column] = foreign_table.[customer_id], 
-        GROUP BY CAST([] AS date), CAST([] AS date)
+        ON analyzed_table.[target_column] = foreign_table.[customer_id]
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
         ORDER BY level_1, level_2CAST([] AS date)
         
             
@@ -3330,8 +3327,8 @@ spec:
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
-        ON analyzed_table.[target_column] = foreign_table.[customer_id], 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        ON analyzed_table.[target_column] = foreign_table.[customer_id]
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             

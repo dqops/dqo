@@ -329,15 +329,15 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {%- endmacro -%}
     
     SELECT
-         CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -361,12 +361,15 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {%- endmacro -%}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -390,12 +393,15 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -419,12 +425,15 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -448,12 +457,15 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {%- endmacro -%}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -493,12 +505,15 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table

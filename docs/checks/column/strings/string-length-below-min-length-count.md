@@ -592,9 +592,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1199,9 +1198,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1806,9 +1804,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -2417,8 +2414,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST([] AS date) AS time_period,
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY CAST([] AS date), CAST([] AS date)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
         ORDER BY level_1, level_2CAST([] AS date)
         
             
@@ -3025,8 +3022,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             

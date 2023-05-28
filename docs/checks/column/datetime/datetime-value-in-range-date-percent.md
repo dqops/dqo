@@ -98,15 +98,15 @@ spec:
     {%- endmacro -%}
     
     SELECT
-         CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -118,15 +118,15 @@ spec:
       
     ```sql
     SELECT
-         CASE
-                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value,
+        CASE
+            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
         TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -150,12 +150,15 @@ spec:
     {%- endmacro -%}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -167,12 +170,15 @@ spec:
       
     ```sql
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
         TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -196,12 +202,15 @@ spec:
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -215,12 +224,15 @@ spec:
     
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -244,12 +256,15 @@ spec:
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -263,12 +278,15 @@ spec:
     
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -308,12 +326,15 @@ spec:
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -327,12 +348,15 @@ spec:
     
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         SYSDATETIMEOFFSET() AS time_period,
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -354,12 +378,15 @@ spec:
     {%- endmacro -%}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -371,12 +398,15 @@ spec:
       
     ```sql
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         LOCALTIMESTAMP AS time_period,
         CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
     FROM `<target_table>` AS analyzed_table
@@ -448,15 +478,15 @@ spec:
         {%- endmacro -%}
         
         SELECT
-             CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -467,15 +497,15 @@ spec:
     === "Rendered SQL for BigQuery"
         ```sql
         SELECT
-             CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value,
+            CASE
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
             CURRENT_TIMESTAMP() AS time_period,
@@ -501,12 +531,15 @@ spec:
         {%- endmacro -%}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -517,12 +550,15 @@ spec:
     === "Rendered SQL for Snowflake"
         ```sql
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
@@ -548,12 +584,15 @@ spec:
         {% endmacro %}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -566,12 +605,15 @@ spec:
         
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             LOCALTIMESTAMP AS time_period,
@@ -597,12 +639,15 @@ spec:
         {% endmacro %}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -615,12 +660,15 @@ spec:
         
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             LOCALTIMESTAMP AS time_period,
@@ -662,12 +710,15 @@ spec:
         {% endmacro %}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -680,20 +731,21 @@ spec:
         
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
-        
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
                 , 
             level_1, level_2
         ```
@@ -714,12 +766,15 @@ spec:
         {%- endmacro -%}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -730,12 +785,15 @@ spec:
     === "Rendered SQL for MySQL"
         ```sql
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
             LOCALTIMESTAMP AS time_period,
@@ -847,15 +905,15 @@ spec:
     {%- endmacro -%}
     
     SELECT
-         CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -867,15 +925,15 @@ spec:
       
     ```sql
     SELECT
-         CASE
-                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value,
+        CASE
+            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
         TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -899,12 +957,15 @@ spec:
     {%- endmacro -%}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -916,12 +977,15 @@ spec:
       
     ```sql
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
         TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -945,12 +1009,15 @@ spec:
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -964,12 +1031,15 @@ spec:
     
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -993,12 +1063,15 @@ spec:
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1012,12 +1085,15 @@ spec:
     
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1057,12 +1133,15 @@ spec:
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1076,12 +1155,15 @@ spec:
     
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -1103,12 +1185,15 @@ spec:
     {%- endmacro -%}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1120,12 +1205,15 @@ spec:
       
     ```sql
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         LOCALTIMESTAMP AS time_period,
         CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
     FROM `<target_table>` AS analyzed_table
@@ -1198,15 +1286,15 @@ spec:
         {%- endmacro -%}
         
         SELECT
-             CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1217,15 +1305,15 @@ spec:
     === "Rendered SQL for BigQuery"
         ```sql
         SELECT
-             CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value,
+            CASE
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
             CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
@@ -1251,12 +1339,15 @@ spec:
         {%- endmacro -%}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1267,12 +1358,15 @@ spec:
     === "Rendered SQL for Snowflake"
         ```sql
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
@@ -1298,12 +1392,15 @@ spec:
         {% endmacro %}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1316,12 +1413,15 @@ spec:
         
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -1347,12 +1447,15 @@ spec:
         {% endmacro %}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1365,12 +1468,15 @@ spec:
         
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -1412,12 +1518,15 @@ spec:
         {% endmacro %}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1430,20 +1539,21 @@ spec:
         
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
-        
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
                 , 
             level_1, level_2
         ```
@@ -1464,12 +1574,15 @@ spec:
         {%- endmacro -%}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1480,12 +1593,15 @@ spec:
     === "Rendered SQL for MySQL"
         ```sql
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
             LOCALTIMESTAMP AS time_period,
@@ -1597,15 +1713,15 @@ spec:
     {%- endmacro -%}
     
     SELECT
-         CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1617,15 +1733,15 @@ spec:
       
     ```sql
     SELECT
-         CASE
-                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value,
+        CASE
+            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -1649,12 +1765,15 @@ spec:
     {%- endmacro -%}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1666,12 +1785,15 @@ spec:
       
     ```sql
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1695,12 +1817,15 @@ spec:
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1714,12 +1839,15 @@ spec:
     
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1743,12 +1871,15 @@ spec:
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1762,12 +1893,15 @@ spec:
     
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1807,12 +1941,15 @@ spec:
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1826,12 +1963,15 @@ spec:
     
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -1853,12 +1993,15 @@ spec:
     {%- endmacro -%}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1870,12 +2013,15 @@ spec:
       
     ```sql
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
         CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
     FROM `<target_table>` AS analyzed_table
@@ -1948,15 +2094,15 @@ spec:
         {%- endmacro -%}
         
         SELECT
-             CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1967,15 +2113,15 @@ spec:
     === "Rendered SQL for BigQuery"
         ```sql
         SELECT
-             CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value,
+            CASE
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
@@ -2001,12 +2147,15 @@ spec:
         {%- endmacro -%}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2017,12 +2166,15 @@ spec:
     === "Rendered SQL for Snowflake"
         ```sql
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
@@ -2048,12 +2200,15 @@ spec:
         {% endmacro %}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2066,12 +2221,15 @@ spec:
         
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -2097,12 +2255,15 @@ spec:
         {% endmacro %}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2115,12 +2276,15 @@ spec:
         
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -2162,12 +2326,15 @@ spec:
         {% endmacro %}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2180,20 +2347,21 @@ spec:
         
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
-        
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
                 , 
             level_1, level_2
         ```
@@ -2214,12 +2382,15 @@ spec:
         {%- endmacro -%}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2230,12 +2401,15 @@ spec:
     === "Rendered SQL for MySQL"
         ```sql
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
             DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
@@ -2347,15 +2521,15 @@ spec:
     {%- endmacro -%}
     
     SELECT
-         CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2367,15 +2541,15 @@ spec:
       
     ```sql
     SELECT
-         CASE
-                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value,
+        CASE
+            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         CAST(analyzed_table.`` AS DATE) AS time_period,
         TIMESTAMP(CAST(analyzed_table.`` AS DATE)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -2399,12 +2573,15 @@ spec:
     {%- endmacro -%}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2416,12 +2593,15 @@ spec:
       
     ```sql
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         CAST(analyzed_table."" AS date) AS time_period,
         TO_TIMESTAMP(CAST(analyzed_table."" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2445,12 +2625,15 @@ spec:
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2464,12 +2647,15 @@ spec:
     
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         CAST(analyzed_table."" AS date) AS time_period,
         CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2493,12 +2679,15 @@ spec:
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2512,12 +2701,15 @@ spec:
     
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         CAST(analyzed_table."" AS date) AS time_period,
         CAST((CAST(analyzed_table."" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -2557,12 +2749,15 @@ spec:
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2576,17 +2771,19 @@ spec:
     
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         CAST([] AS date) AS time_period,
         CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY CAST([] AS date), CAST([] AS date)
-    ORDER BY CAST([] AS date)
+    GROUP BY CAST([] AS date), CAST([] AS date)ORDER BY CAST([] AS date)
     ```
 ### **MySQL**
 === "Sensor template for MySQL"
@@ -2605,12 +2802,15 @@ spec:
     {%- endmacro -%}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2622,12 +2822,15 @@ spec:
       
     ```sql
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         analyzed_table.`` AS time_period,
         CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
     FROM `<target_table>` AS analyzed_table
@@ -2700,15 +2903,15 @@ spec:
         {%- endmacro -%}
         
         SELECT
-             CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2719,15 +2922,15 @@ spec:
     === "Rendered SQL for BigQuery"
         ```sql
         SELECT
-             CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value,
+            CASE
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
             CAST(analyzed_table.`` AS DATE) AS time_period,
@@ -2753,12 +2956,15 @@ spec:
         {%- endmacro -%}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2769,12 +2975,15 @@ spec:
     === "Rendered SQL for Snowflake"
         ```sql
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
@@ -2800,12 +3009,15 @@ spec:
         {% endmacro %}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2818,12 +3030,15 @@ spec:
         
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
@@ -2849,12 +3064,15 @@ spec:
         {% endmacro %}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2867,12 +3085,15 @@ spec:
         
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             CAST(analyzed_table."" AS date) AS time_period,
@@ -2914,12 +3135,15 @@ spec:
         {% endmacro %}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2932,19 +3156,21 @@ spec:
         
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2,
             CAST([] AS date) AS time_period,
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY CAST([] AS date), CAST([] AS date)
-        ORDER BY CAST([] AS date)level_1, level_2
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)ORDER BY CAST([] AS date)level_1, level_2
         ```
     **MySQL**  
       
@@ -2963,12 +3189,15 @@ spec:
         {%- endmacro -%}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2979,12 +3208,15 @@ spec:
     === "Rendered SQL for MySQL"
         ```sql
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
             analyzed_table.`` AS time_period,
@@ -3096,15 +3328,15 @@ spec:
     {%- endmacro -%}
     
     SELECT
-         CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3116,15 +3348,15 @@ spec:
       
     ```sql
     SELECT
-         CASE
-                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS actual_value,
+        CASE
+            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+                ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
         TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH)) AS time_period_utc
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -3148,12 +3380,15 @@ spec:
     {%- endmacro -%}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3165,12 +3400,15 @@ spec:
       
     ```sql
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -3194,12 +3432,15 @@ spec:
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3213,12 +3454,15 @@ spec:
     
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -3242,12 +3486,15 @@ spec:
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3261,12 +3508,15 @@ spec:
     
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -3306,12 +3556,15 @@ spec:
     {% endmacro %}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3325,17 +3578,19 @@ spec:
     
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
         CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-    GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
-    ORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
+    GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)ORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
     ```
 ### **MySQL**
 === "Sensor template for MySQL"
@@ -3354,12 +3609,15 @@ spec:
     {%- endmacro -%}
     
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3371,12 +3629,15 @@ spec:
       
     ```sql
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+        CASE
+            WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
-            END
-        ) / COUNT(*) AS actual_value,
+                END
+            ) / COUNT(*)
+        END AS actual_value,
         DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
         CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
     FROM `<target_table>` AS analyzed_table
@@ -3449,15 +3710,15 @@ spec:
         {%- endmacro -%}
         
         SELECT
-             CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3468,15 +3729,15 @@ spec:
     === "Rendered SQL for BigQuery"
         ```sql
         SELECT
-             CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS actual_value,
+            CASE
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+                    ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
             DATE_TRUNC(CAST(analyzed_table.`` AS DATE), MONTH) AS time_period,
@@ -3502,12 +3763,15 @@ spec:
         {%- endmacro -%}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3518,12 +3782,15 @@ spec:
     === "Rendered SQL for Snowflake"
         ```sql
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
@@ -3549,12 +3816,15 @@ spec:
         {% endmacro %}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3567,12 +3837,15 @@ spec:
         
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
@@ -3598,12 +3871,15 @@ spec:
         {% endmacro %}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3616,12 +3892,15 @@ spec:
         
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."" AS date)) AS time_period,
@@ -3663,12 +3942,15 @@ spec:
         {% endmacro %}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3681,19 +3963,21 @@ spec:
         
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table.[country] AS stream_level_1,
             analyzed_table.[state] AS stream_level_2,
             DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
-        ORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)level_1, level_2
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)ORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)level_1, level_2
         ```
     **MySQL**  
       
@@ -3712,12 +3996,15 @@ spec:
         {%- endmacro -%}
         
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value
+                    END
+                ) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3728,12 +4015,15 @@ spec:
     === "Rendered SQL for MySQL"
         ```sql
         SELECT
-            100.0 * SUM(
-                CASE
-                    WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
+            CASE
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN CAST(analyzed_table.`target_column` AS DATE) >= '' AND CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                     ELSE 0
-                END
-            ) / COUNT(*) AS actual_value,
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
             analyzed_table.`country` AS stream_level_1,
             analyzed_table.`state` AS stream_level_2,
             DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,

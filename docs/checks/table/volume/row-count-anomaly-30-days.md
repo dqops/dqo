@@ -12,7 +12,7 @@ Verifies that the total row count of the tested table changes in a rate within a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|row_count_anomaly_30_days|profiling| |[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percentile_moving_within_30_days](../../../../reference/rules/stdev/#change-percentile-moving-within-30-days)|
+|row_count_anomaly_30_days|profiling| |[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percentile_moving_within_30_days](../../../../reference/rules/percentile/#change-percentile-moving-within-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -372,9 +372,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -396,7 +395,7 @@ Verifies that the total row count of the tested table changes in a rate within a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_row_count_anomaly_30_days|recurring|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percentile_moving_within_30_days](../../../../reference/rules/stdev/#change-percentile-moving-within-30-days)|
+|daily_row_count_anomaly_30_days|recurring|daily|[row_count](../../../../reference/sensors/table/volume-table-sensors/#row-count)|[change_percentile_moving_within_30_days](../../../../reference/rules/percentile/#change-percentile-moving-within-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -759,9 +758,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             

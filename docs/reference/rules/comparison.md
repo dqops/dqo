@@ -828,7 +828,7 @@ ___
 comparison/max_failures
 ```
 **Description**  
-Data quality rule that verifies if the number of executive failures (the sensor returned 0) is below the max_failures. The default maximum failures is 10 failures (the 11th failure is reported).
+Data quality rule that verifies if the number of executive failures (the sensor returned 0) is below the max_failures. The default maximum failures is 0 failures (the first failure is reported).
 
 **Parameters**  
   

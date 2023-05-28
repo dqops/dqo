@@ -12,7 +12,7 @@ Verifies that the mean value in a column changes in a rate within a percentile b
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|mean_anomaly_60_days|profiling| |[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[change_percentile_moving_within_60_days](../../../../reference/rules/stdev/#change-percentile-moving-within-60-days)|
+|mean_anomaly_60_days|profiling| |[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[change_percentile_moving_within_60_days](../../../../reference/rules/percentile/#change-percentile-moving-within-60-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -403,9 +403,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -453,7 +452,7 @@ Verifies that the mean value in a column changes in a rate within a percentile b
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_mean_anomaly_60_days|recurring|daily|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[change_percentile_moving_within_60_days](../../../../reference/rules/stdev/#change-percentile-moving-within-60-days)|
+|daily_mean_anomaly_60_days|recurring|daily|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[change_percentile_moving_within_60_days](../../../../reference/rules/percentile/#change-percentile-moving-within-60-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -847,9 +846,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             

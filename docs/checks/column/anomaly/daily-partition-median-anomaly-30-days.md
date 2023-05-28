@@ -12,7 +12,7 @@ Verifies that the median in a column is within a percentile from measurements ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_median_anomaly_30_days|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[percentile_moving_within_30_days](../../../../reference/rules/stdev/#percentile-moving-within-30-days)|
+|daily_partition_median_anomaly_30_days|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[percentile_moving_within_30_days](../../../../reference/rules/percentile/#percentile-moving-within-30-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
