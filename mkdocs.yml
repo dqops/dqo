@@ -81,6 +81,7 @@ nav:
     - Working with DQO Shell: 'working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
+    - index: 'command-line-interface/index.md'
     - dqo: 'command-line-interface/dqo.md'
     - cls: 'command-line-interface/cls.md'
     - connection: 'command-line-interface/connection.md'
@@ -307,11 +308,11 @@ nav:
 ########## END INCLUDE YAML REFERENCE
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
     - ParquetFiles:
-      - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
-      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
       - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
-      - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
       - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
+      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
+      - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
+      - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
 
 # Visual settings
