@@ -30,6 +30,7 @@ import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -58,10 +59,13 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
      * Creates a sql template runner.
      * @param jinjaTemplateRenderService Jinja template rendering service.
      * @param connectionProviderRegistry Connection provider registry.
+     * @param defaultTimeZoneProvider The default time zone provider.
      */
     @Autowired
     public JinjaSqlTemplateSensorRunner(JinjaTemplateRenderService jinjaTemplateRenderService,
-										ConnectionProviderRegistry connectionProviderRegistry) {
+										ConnectionProviderRegistry connectionProviderRegistry,
+                                        DefaultTimeZoneProvider defaultTimeZoneProvider) {
+        super(defaultTimeZoneProvider);
         this.jinjaTemplateRenderService = jinjaTemplateRenderService;
         this.connectionProviderRegistry = connectionProviderRegistry;
     }
@@ -120,8 +124,10 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
                 progressListener.onExecutingSqlOnConnection(new ExecutingSqlOnConnectionEvent(sensorRunParameters,
                         sensorPrepareResult.getSensorDefinition(), connectionSpec, renderedSensorSql));
 
+                jobCancellationToken.throwIfCancelled();
                 ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
                 try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true)) {
+                    jobCancellationToken.throwIfCancelled();
                     Table sensorResultRows = sourceConnection.executeQuery(renderedSensorSql, jobCancellationToken);
                     return new SensorExecutionResult(sensorRunParameters, sensorResultRows);
                 }
@@ -134,27 +140,5 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
             log.debug("Sensor failed to execute a query :" + renderedSensorSql, exception);
             return new SensorExecutionResult(sensorRunParameters, exception);
         }
-    }
-
-    /**
-     * Creates a one row dummy result table.
-     * @param sensorRunParameters Sensor execution run parameters.
-     * @return Dummy result table.
-     */
-    public Table createDummyResultTable(SensorExecutionRunParameters sensorRunParameters) {
-        Table dummyResultTable = Table.create("dummy_results",
-                DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME),
-                DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
-                InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME));
-        Row row = dummyResultTable.appendRow();
-        row.setDouble(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, 10.0);
-
-        TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getTimeSeries();
-        if (effectiveTimeSeries != null && effectiveTimeSeries.getMode() != null) {
-            row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, LocalDateTime.now());
-            row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, Instant.now());
-        }
-
-        return dummyResultTable;
     }
 }

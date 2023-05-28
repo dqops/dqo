@@ -21,13 +21,13 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.strings.ColumnStringLengthAboveMaxLengthCountCheckSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import ai.dqo.checks.column.profiling.ColumnProfilingStringsChecksSpec;
+import ai.dqo.checks.column.profiling.ColumnStringsProfilingChecksSpec;
 import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import ai.dqo.checks.column.recurring.numeric.ColumnNumericDailyRecurringChecksSpec;
 import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
+import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import ai.dqo.cli.commands.check.impl.models.UIAllChecksCliPatchParameters;
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.scheduler.quartz.*;
@@ -134,7 +134,7 @@ public class CheckCliServiceImplTests extends BaseTest {
         table2.getSpec().getColumns().put("col3", col23);
 
         TableProfilingCheckCategoriesSpec t1categoriesSpec = new TableProfilingCheckCategoriesSpec();
-        TableProfilingVolumeChecksSpec t1volumeChecksSpec = new TableProfilingVolumeChecksSpec();
+        TableVolumeProfilingChecksSpec t1volumeChecksSpec = new TableVolumeProfilingChecksSpec();
         TableRowCountCheckSpec t1rowCountSpec = new TableRowCountCheckSpec();
         MinCountRule0ParametersSpec t1rowCountErrorSpec = new MinCountRule0ParametersSpec();
         MinCountRuleFatalParametersSpec t1rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
@@ -147,7 +147,7 @@ public class CheckCliServiceImplTests extends BaseTest {
         table1.getSpec().setProfilingChecks(t1categoriesSpec);
 
         ColumnProfilingCheckCategoriesSpec col21categoriesSpec = new ColumnProfilingCheckCategoriesSpec();
-        ColumnProfilingStringsChecksSpec col21stringChecksSpec = new ColumnProfilingStringsChecksSpec();
+        ColumnStringsProfilingChecksSpec col21stringChecksSpec = new ColumnStringsProfilingChecksSpec();
         ColumnStringLengthAboveMaxLengthCountCheckSpec col21stringLengthAboveCheckSpec = new ColumnStringLengthAboveMaxLengthCountCheckSpec();
         MaxCountRule10ParametersSpec countRule0ParametersSpec = new MaxCountRule10ParametersSpec();
         countRule0ParametersSpec.setMaxCount(40L);

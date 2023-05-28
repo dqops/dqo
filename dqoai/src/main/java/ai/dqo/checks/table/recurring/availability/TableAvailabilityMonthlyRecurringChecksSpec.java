@@ -40,7 +40,7 @@ public class TableAvailabilityMonthlyRecurringChecksSpec extends AbstractCheckCa
         }
     };
 
-    @JsonPropertyDescription("Verifies availability on table in database using simple row count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies availability on table in database using simple row count. Stores the most recent table availability status for each month when the data quality check was evaluated.")
     private TableAvailabilityCheckSpec monthlyTableAvailability;
 
 

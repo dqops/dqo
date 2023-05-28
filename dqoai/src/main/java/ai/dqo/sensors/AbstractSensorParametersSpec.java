@@ -15,12 +15,11 @@
  */
 package ai.dqo.sensors;
 
-import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
+import ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -101,5 +100,43 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec {
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
+    }
+
+    /**
+     * Returns the default sensor runner class that will be used to execute this sensor.
+     * The default sensor runner is {@link ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner}.
+     * @return The default sensor runner class.
+     */
+    @JsonIgnore
+    public Class<?> getSensorRunnerClass() {
+        return JinjaSqlTemplateSensorRunner.class;
+    }
+
+    /**
+     * Returns true if the sensor supports data streams. The default value is true.
+     * @return True when the sensor supports data streams.
+     */
+    @JsonIgnore
+    public boolean getSupportsDataStreams() {
+       return true;
+    }
+
+    /**
+     * Returns true if the sensor supports partitioned checks. The default value is true.
+     * @return True when the sensor support partitioned checks.
+     */
+    @JsonIgnore
+    public boolean getSupportsPartitionedChecks() {
+        return true;
+    }
+
+    /**
+     * Returns true if the sensor is a special type of a sensor that does not have an SQL template (for example, a column_count check)
+     * and is automatically supported on all providers.
+     * @return True when the sensor supports any provider, false when it requires an SQL template or a custom configured provider sensor yaml file to be properly configured.
+     */
+    @JsonIgnore
+    public boolean getAlwaysSupportedOnAllProviders() {
+        return false;
     }
 }

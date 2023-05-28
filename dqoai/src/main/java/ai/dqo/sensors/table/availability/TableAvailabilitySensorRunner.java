@@ -25,6 +25,7 @@ import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner;
+import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -48,8 +49,15 @@ public class TableAvailabilitySensorRunner extends AbstractSensorRunner {
     public static final String CLASS_NAME = TableAvailabilitySensorRunner.class.getName();
     private JinjaSqlTemplateSensorRunner jinjaSqlTemplateSensorRunner;
 
+    /**
+     * The default injection constructor.
+     * @param jinjaSqlTemplateSensorRunner Nested Jinja2 template based sensor runner that is called (delegated to), before this table availability sensor runner performs its calculations, adjusting the returned sensor result.
+     * @param defaultTimeZoneProvider The default time zone provider.
+     */
     @Autowired
-    public TableAvailabilitySensorRunner(JinjaSqlTemplateSensorRunner jinjaSqlTemplateSensorRunner){
+    public TableAvailabilitySensorRunner(JinjaSqlTemplateSensorRunner jinjaSqlTemplateSensorRunner,
+                                         DefaultTimeZoneProvider defaultTimeZoneProvider) {
+        super(defaultTimeZoneProvider);
         this.jinjaSqlTemplateSensorRunner = jinjaSqlTemplateSensorRunner;
     }
 
@@ -90,35 +98,17 @@ public class TableAvailabilitySensorRunner extends AbstractSensorRunner {
         if (sensorExecutionResult.isSuccess()) {
             try {
                 if (sensorExecutionResult.getResultTable().column(0).get(0) == null) {
-                    Table dummyResultTable = createDummyResultTable(1L);
-                    return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
+                    Table resultTableWithResult = createResultTableWithResult(1L);
+                    return new SensorExecutionResult(sensorRunParameters, resultTableWithResult);
                 }
             } catch (Exception exception) {
-                Table dummyResultTable = createDummyResultTable(0L);
-                return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
+                Table resultTable = createResultTableWithResult(0L);
+                return new SensorExecutionResult(sensorRunParameters, resultTable);
             }
             return sensorExecutionResult;
         }
 
-        Table dummyResultTable = createDummyResultTable(0L);
-        return new SensorExecutionResult(sensorRunParameters, dummyResultTable);
-    }
-
-    /**
-     * Creates a one row dummy result table.
-     * @param actualValue Sensor execution actual value.
-     * @return Dummy result table.
-     */
-    public Table createDummyResultTable(Long actualValue) {
-        Table dummyResultTable = Table.create("dummy_results",
-                LongColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME),
-                DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
-                InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME));
-        Row row = dummyResultTable.appendRow();
-        row.setLong(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
-        row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, LocalDateTime.now());
-        row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, Instant.now());
-
-        return dummyResultTable;
+        Table resultTable = createResultTableWithResult(0L);
+        return new SensorExecutionResult(sensorRunParameters, resultTable);
     }
 }

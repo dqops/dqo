@@ -18,7 +18,7 @@ package ai.dqo.rest.controllers;
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import ai.dqo.checks.column.profiling.ColumnProfilingNullsChecksSpec;
+import ai.dqo.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
 import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
 import ai.dqo.checks.column.recurring.nulls.ColumnNullsDailyRecurringChecksSpec;
@@ -161,7 +161,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(12, result.getCategories().size());
+        Assertions.assertEquals(13, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -181,9 +181,9 @@ public class ColumnsControllerUTTests extends BaseTest {
         Assertions.assertNotNull(result);
 
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(12, result.getCategories().size());
+            Assertions.assertEquals(13, result.getCategories().size());
         } else {
-            Assertions.assertEquals(12, result.getCategories().size());
+            Assertions.assertEquals(13, result.getCategories().size());
         }
     }
 
@@ -222,7 +222,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(12, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(13, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -241,9 +241,9 @@ public class ColumnsControllerUTTests extends BaseTest {
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(12, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(13, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
         } else {
-            Assertions.assertEquals(12, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(13, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
         }
     }
 
@@ -286,7 +286,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         nullsChecksSpec.setError(maxCountRule2);
         nullsChecksSpec.setFatal(maxCountRule3);
 
-        ColumnProfilingNullsChecksSpec nullChecks = new ColumnProfilingNullsChecksSpec();
+        ColumnNullsProfilingChecksSpec nullChecks = new ColumnNullsProfilingChecksSpec();
         nullChecks.setNullsCount(nullsChecksSpec);
         ColumnProfilingCheckCategoriesSpec sampleProfilingCheck = new ColumnProfilingCheckCategoriesSpec();
         sampleProfilingCheck.setNulls(nullChecks);

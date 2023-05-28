@@ -40,7 +40,7 @@ public class TableAvailabilityDailyRecurringChecksSpec extends AbstractCheckCate
         }
     };
 
-    @JsonPropertyDescription("Verifies availability on table in database using simple row count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies availability on table in database using simple row count. Stores the most recent table availability status for each day when the data quality check was evaluated.")
     private TableAvailabilityCheckSpec dailyTableAvailability;
 
     /**
