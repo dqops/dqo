@@ -114,5 +114,6 @@ dqo:
     #start: true
     synchronization-mode: silent
     check-run-mode: silent
-    scan-metadata-cron-schedule: "*/10 * * * *"   # every 10 minutes
+    synchronize-cron-schedule: "*/10 * * * *"   # every 10 minutes
+    synchronized-folders: locally_changed
     enable-cloud-sync: true

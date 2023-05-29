@@ -18,6 +18,7 @@ package ai.dqo.core.jobqueue.monitoring;
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
 import ai.dqo.core.jobqueue.DqoJobIdGenerator;
 import ai.dqo.core.jobqueue.DqoJobQueueEntry;
+import ai.dqo.core.jobqueue.DqoJobType;
 import ai.dqo.core.jobqueue.exceptions.DqoQueueJobExecutionException;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
@@ -154,7 +155,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     @Override
     public void publishJobRunningEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
-            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.running, jobQueueEntry.getJobId());
+            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.running, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                     this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
@@ -171,7 +172,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     @Override
     public void publishJobParkedEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
-            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.waiting, jobQueueEntry.getJobId());
+            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.waiting, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                     this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
@@ -205,7 +206,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                 dqoJobChange = new DqoJobChange(DqoJobStatus.succeeded, newJobHistoryModel);
             }
             else {
-                dqoJobChange = new DqoJobChange(DqoJobStatus.succeeded, jobQueueEntry.getJobId());
+                dqoJobChange = new DqoJobChange(DqoJobStatus.succeeded, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType());
             }
 
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
@@ -225,7 +226,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     @Override
     public void publishJobFailedEvent(DqoJobQueueEntry jobQueueEntry, String errorMessage) {
         try {
-            DqoJobChange dqoJobChange = new DqoJobChange(jobQueueEntry.getJobId(), errorMessage);
+            DqoJobChange dqoJobChange = new DqoJobChange(jobQueueEntry.getJobId(), errorMessage, jobQueueEntry.getJob().getJobType());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                     this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
@@ -243,7 +244,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     @Override
     public void publishJobCancellationRequestedEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
-            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.cancel_requested, jobQueueEntry.getJobId());
+            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.cancel_requested, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                     this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
@@ -261,7 +262,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     @Override
     public void publishJobFullyCancelledEvent(DqoJobQueueEntry jobQueueEntry) {
         try {
-            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.cancelled, jobQueueEntry.getJobId());
+            DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.cancelled, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
                     this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
             this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
@@ -407,6 +408,11 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                             }
                             this.allJobs.put(jobChange.getJobId(), clonedJobEntryModel);
                         }
+
+                        if (jobChange.getStatus() == DqoJobStatus.succeeded && jobChange.getJobType() == DqoJobType.SYNCHRONIZE_MULTIPLE_FOLDERS) {
+                            // we will keep only the last most recent successful synchronization job
+                            removeOlderSynchronizeMultipleFoldersJobs(jobChange.getJobId());
+                        }
                     }
                 }
 
@@ -428,6 +434,41 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         catch (Exception ex) {
             log.error("onJobChange failed" + ((changeNotificationEntry.getJobChange() != null) ?
                     "for job:" + changeNotificationEntry.getJobChange().getJobId() : "") + ", error: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * Remove all information of succeeded synchronize multiple folders and their child synchronize folder jobs, except
+     * for the synchronize multiple folders job identified by <code>jobIdToKeep</code> that is the most recent and should be preserved.
+     * @param jobIdToKeep Job id to keep. It's child jobs (when it is a parent job) are also preserved.
+     */
+    public void removeOlderSynchronizeMultipleFoldersJobs(final DqoQueueJobId jobIdToKeep) {
+        Set<DqoQueueJobId> oldJobIdsToDelete = this.allJobs.entrySet()
+                .stream()
+                .filter(e -> e.getValue().getJobType() == DqoJobType.SYNCHRONIZE_MULTIPLE_FOLDERS ||
+                        e.getValue().getJobType() == DqoJobType.SYNCHRONIZE_FOLDER)
+                .filter(e -> (e.getValue().getJobType() == DqoJobType.SYNCHRONIZE_MULTIPLE_FOLDERS  && e.getKey().getJobId() != jobIdToKeep.getJobId()) ||
+                        (e.getValue().getJobType() == DqoJobType.SYNCHRONIZE_FOLDER && e.getKey().getParentJobId() != null &&
+                                e.getKey().getParentJobId().getJobId() != jobIdToKeep.getJobId()))
+                .map(e -> e.getKey())
+                .collect(Collectors.toSet());
+
+        if (oldJobIdsToDelete.size() > 0) {
+            for (DqoQueueJobId jobId : oldJobIdsToDelete) {
+                this.allJobs.remove(jobId);
+            }
+
+            List<Long> oldChangeIdsToDelete = this.jobChanges.entrySet()
+                    .stream()
+                    .filter(e -> oldJobIdsToDelete.contains(e.getValue().getJobId()))
+                    .map(e -> e.getKey())
+                    .collect(Collectors.toList());
+
+            if (oldChangeIdsToDelete.size() > 0) {
+                for (Long changeIdToDelete : oldChangeIdsToDelete) {
+                    this.jobChanges.remove(changeIdToDelete);
+                }
+            }
         }
     }
 

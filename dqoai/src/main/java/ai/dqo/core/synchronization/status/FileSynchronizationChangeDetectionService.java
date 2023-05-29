@@ -27,7 +27,7 @@ public interface FileSynchronizationChangeDetectionService {
      * @param dqoRoot User home folder to be analyzed.
      * @return True when there are local unsynchronized changes, false otherwise.
      */
-    boolean detectUnsynchronizedChangesInFolder(DqoRoot dqoRoot);
+    boolean detectNotSynchronizedChangesInFolder(DqoRoot dqoRoot);
 
     /**
      * Detects changes in a folder. Optionally publishes a folder change status to "changed" if a change is detected.
@@ -39,5 +39,5 @@ public interface FileSynchronizationChangeDetectionService {
     /**
      * Starts a background job that checks all folders and tries to detect local changes that were not yet synchronized to DQO Cloud.
      */
-    void detectUnsynchronizedChangesInBackground();
+    void detectNotSynchronizedChangesInBackground();
 }
