@@ -24,6 +24,7 @@ import { IncidentIssueList } from "./IncidentIssueList";
 import { useTree } from "../../contexts/treeContext";
 import IncidentNavigation from "./IncidentNavigation";
 import Button from "../../components/Button";
+import { HistogramChart } from "./HistogramChart";
 
 const statusOptions = [
   {
@@ -68,7 +69,9 @@ const options = [
 ];
 
 export const IncidentDetail = () => {
-  const { connection, year, month, id: incidentId }: { connection: string, year: string, month: string, id: string } = useParams();
+  const { connection, year: strYear, month: strMonth, id: incidentId }: { connection: string, year: string, month: string, id: string } = useParams();
+  const year = parseInt(strYear, 10);
+  const month = parseInt(strMonth, 10);
   const [incidentDetail, setIncidentDetail] = useState<IncidentModel>();
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -78,14 +81,14 @@ export const IncidentDetail = () => {
   const { issues, filters = {} } = useSelector(getFirstLevelIncidentsState);
 
   useEffect(() => {
-    IncidentsApi.getIncident(connection, parseInt(year, 10), parseInt(month, 10), incidentId).then(res => {
+    IncidentsApi.getIncident(connection, year, month, incidentId).then(res => {
       setIncidentDetail(res.data);
     });
 
     dispatch(getIncidentsIssues({
       connection,
-      year: parseInt(year, 10),
-      month: parseInt(month, 10),
+      year,
+      month,
       incidentId
     }));
   }, []);
@@ -124,7 +127,8 @@ export const IncidentDetail = () => {
       month,
       incidentId
     }));
-  }
+  };
+
 
   useEffect(() => {
     onChangeFilter({
@@ -297,6 +301,7 @@ export const IncidentDetail = () => {
           </div>
         </div>
 
+        <HistogramChart />
         <div className="px-4 ">
           <div className="py-3 mb-5 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
             <IncidentIssueList issues={issues || []} />
