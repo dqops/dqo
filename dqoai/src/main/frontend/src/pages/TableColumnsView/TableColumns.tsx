@@ -24,12 +24,10 @@ const TableColumns = ({
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [sortedStatistics, setSortedStatistics] =
     useState<ColumnStatisticsModel[]>();
-  const [sortedStatistics1, setSortedStatistics1] =
-    useState<ColumnStatisticsModel[]>();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
   const [loadingJob, setLoadingJob] = useState(false);
-  const [uniqueCount, setUniqueCount] = useState<number>(0);
+
   const dispatch = useDispatch();
   const {
     connection,
@@ -170,14 +168,14 @@ const TableColumns = ({
         }
       });
     });
-    console.log(arr);
+
     let max = 0;
     for (let i = 0; i < arr.length; i++) {
       if (Number(arr.at(i)) > max) {
         max = Number(arr.at(i));
       }
     }
-    console.log(max);
+
     return max;
   };
 
@@ -200,6 +198,44 @@ const TableColumns = ({
     const color = `rgba(2, 154, 128, ${alpha})`;
 
     return color;
+  };
+
+  const formatNumber = (k: number) => {
+    if (k > 1000 && k < 1000000) {
+      if (k > Math.pow(10, 3) && k < Math.pow(10, 4)) {
+        return (k / Math.pow(10, 3)).toFixed(3) + 'k';
+      } else if (k > Math.pow(10, 4) && k < Math.pow(10, 5)) {
+        return (k / Math.pow(10, 3)).toFixed(2) + 'k';
+      } else {
+        return (k / Math.pow(10, 3)).toFixed(1) + 'k';
+      }
+    } else if (k > 1000000 && k < 1000000000) {
+      if (k > Math.pow(10, 6) && k < Math.pow(10, 7)) {
+        return (k / Math.pow(10, 6)).toFixed(3) + 'M';
+      } else if (k > Math.pow(10, 7) && k < Math.pow(10, 8)) {
+        return (k / Math.pow(10, 6)).toFixed(2) + 'M';
+      } else {
+        return (k / Math.pow(10, 6)).toFixed(1) + 'M';
+      }
+    } else if (k > 1000000000 && k < 1000000000000) {
+      if (k > Math.pow(10, 9) && k < Math.pow(10, 10)) {
+        return (k / Math.pow(10, 9)).toFixed(3) + 'G';
+      } else if (k > Math.pow(10, 10) && k < Math.pow(10, 11)) {
+        return (k / Math.pow(10, 9)).toFixed(2) + 'G';
+      } else {
+        return (k / Math.pow(10, 9)).toFixed(1) + 'G';
+      }
+    } else if (k > 1000000000000 && k < 1000000000000000) {
+      if (k > Math.pow(10, 12) && k < Math.pow(10, 13)) {
+        return (k / Math.pow(10, 12)).toFixed(3) + 'T';
+      } else if (k > Math.pow(10, 13) && k < Math.pow(10, 14)) {
+        return (k / Math.pow(10, 12)).toFixed(2) + 'T';
+      } else {
+        return (k / Math.pow(10, 12)).toFixed(1) + 'T';
+      }
+    } else {
+      return k;
+    }
   };
 
   return (
@@ -295,7 +331,9 @@ const TableColumns = ({
                   {column?.statistics?.map((metric, index) =>
                     metric.collector === 'nulls_count' ? (
                       <div key={index} className="text-right float-right">
-                        {metric.result ? renderValue(metric.result) : '0'}
+                        {metric.result
+                          ? formatNumber(Number(renderValue(metric.result)))
+                          : '0'}
                       </div>
                     ) : (
                       ''
@@ -311,8 +349,10 @@ const TableColumns = ({
                       >
                         <div className="w-20">
                           {metric.result
-                            ? Number(renderValue(metric.result)).toFixed(2) +
-                              '%'
+                            ? !isNaN(Number(renderValue(metric.result)))
+                              ? Number(renderValue(metric.result)).toFixed(2) +
+                                '%'
+                              : renderValue(metric.result)
                             : '0.00%'}
                         </div>
                         <div
@@ -349,7 +389,9 @@ const TableColumns = ({
                           height: '100%'
                         }}
                       >
-                        {metric.result ? renderValue(metric.result) : ''}
+                        {metric.result
+                          ? formatNumber(Number(renderValue(metric.result)))
+                          : ''}
                       </div>
                     ) : (
                       ''
