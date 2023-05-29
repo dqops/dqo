@@ -5,8 +5,8 @@ spec:
   fields:
   - field_name: expected_values
     display_name: expected_values
-    help_text: List of expected numeric values that the sensor is trying to find in
-      the column.
+    help_text: List of expected numeric values that should be found in the tested
+      column.
     data_type: integer_list
     sample_values:
     - 2

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { JobApiClient, SourceTableApi } from '../../../services/apiClient';
+import { JobApiClient, DataSourcesApi } from '../../../services/apiClient';
 import { TableRemoteBasicModel } from '../../../api';
 import SvgIcon from '../../SvgIcon';
 import Loader from '../../Loader';
@@ -28,7 +28,7 @@ const SourceTablesView = ({
   const fetchSourceTables = async () => {
     setLoading(true);
     setSelectedTables([]);
-    SourceTableApi.getRemoteTables(connectionName, schemaName)
+    DataSourcesApi.getRemoteDataSourceTables(connectionName, schemaName)
       .then((res) => {
         setTables(res.data);
       })

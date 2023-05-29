@@ -85,7 +85,7 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
     public ErrorsNormalizedResult createNormalizedRuleErrorResults(SensorExecutionResult sensorExecutionResult,
                                                                    TimePeriodGradient timePeriodGradient,
                                                                    SensorExecutionRunParameters sensorRunParameters,
-                                                                   Exception ruleEvaluationException) {
+                                                                   Throwable ruleEvaluationException) {
         assert sensorExecutionResult.getException() == null && sensorExecutionResult.getResultTable() != null;
 
         ErrorsNormalizedResult normalizedErrorResults = createNormalizedErrorResults(sensorExecutionResult,
@@ -106,7 +106,7 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
                                                                TimePeriodGradient timePeriodGradient,
                                                                SensorExecutionRunParameters sensorRunParameters,
                                                                ErrorSource errorSource,
-                                                               Exception exception) {
+                                                               Throwable exception) {
         assert sensorExecutionResult.getException() == null && sensorExecutionResult.getResultTable() != null;
 
         SensorReadoutsNormalizedResult normalizedSensorReadout = this.sensorReadoutsNormalizationService.normalizeResults(
@@ -146,7 +146,7 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
      * @param exception Exception.
      * @return Error message.
      */
-    public String makeErrorMessage(Exception exception) {
+    public String makeErrorMessage(Throwable exception) {
         String errorMessage = exception.getMessage();
         return errorMessage;
     }

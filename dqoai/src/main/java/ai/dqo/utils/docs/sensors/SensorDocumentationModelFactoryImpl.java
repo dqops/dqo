@@ -104,6 +104,9 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
         for (ProviderSensorDefinitionWrapper providerSensor : sensorDefinition.getProviderSensors()) {
             ProviderType provider = providerSensor.getProvider();
             String sqlTemplate = providerSensor.getSqlTemplate();
+            if (sensorDefinition.getName().contains("/schema/")) {
+                continue; // table and column level schema checks do not have SQL templates, they use a custom sensor runner
+            }
             if (sqlTemplate == null) {
                 throw new RuntimeException("Sensor " + sensorDefinition.getName() + " for provider " + provider.toString() + " has no SQL template");
             }

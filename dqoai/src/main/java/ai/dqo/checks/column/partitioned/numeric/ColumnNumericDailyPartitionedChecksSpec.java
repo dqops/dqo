@@ -255,7 +255,7 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
      * Returns a numbers in set percent check specification.
      * @return Numbers in set percent check specification.
      */
-    public ColumnNumberValueInSetPercentCheckSpec getDailyPartitionHasValidNumbersPercent() {
+    public ColumnNumberValueInSetPercentCheckSpec getDailyPartitionNumberValueInSetPercent() {
         return dailyPartitionNumberValueInSetPercent;
     }
 
@@ -263,7 +263,7 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
      * Sets a new specification of a numbers found percent check.
      * @param dailyPartitionNumberValueInSetPercent Numbers found percent check specification.
      */
-    public void setDailyPartitionHasValidNumbersPercent(ColumnNumberValueInSetPercentCheckSpec dailyPartitionNumberValueInSetPercent) {
+    public void setDailyPartitionNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec dailyPartitionNumberValueInSetPercent) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionNumberValueInSetPercent, dailyPartitionNumberValueInSetPercent));
         this.dailyPartitionNumberValueInSetPercent = dailyPartitionNumberValueInSetPercent;
         propagateHierarchyIdToField(dailyPartitionNumberValueInSetPercent, "daily_partition_number_value_in_set_percent");

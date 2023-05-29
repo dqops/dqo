@@ -80,6 +80,7 @@ public class PostgresqlColumnStringsExpectedStringsInUseCountSensorParametersSpe
         values.add("d44d");
         values.add("c33c");
         values.add("b22b");
+        values.add("missing");
         this.sut.setExpectedValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
@@ -90,7 +91,7 @@ public class PostgresqlColumnStringsExpectedStringsInUseCountSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30L, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -101,6 +102,7 @@ public class PostgresqlColumnStringsExpectedStringsInUseCountSensorParametersSpe
         values.add("d44d");
         values.add("c33c");
         values.add("b22b");
+        values.add("missing");
         this.sut.setExpectedValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
@@ -111,7 +113,7 @@ public class PostgresqlColumnStringsExpectedStringsInUseCountSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30L, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -122,6 +124,7 @@ public class PostgresqlColumnStringsExpectedStringsInUseCountSensorParametersSpe
         values.add("d44d");
         values.add("c33c");
         values.add("b22b");
+        values.add("missing");
         this.sut.setExpectedValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
@@ -132,7 +135,7 @@ public class PostgresqlColumnStringsExpectedStringsInUseCountSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(6L, resultTable.column(0).get(0));
+        Assertions.assertEquals(3L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -153,6 +156,6 @@ public class PostgresqlColumnStringsExpectedStringsInUseCountSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30L, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 }

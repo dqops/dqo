@@ -16,7 +16,7 @@
 package ai.dqo.execution.sensors.progress;
 
 import ai.dqo.execution.checks.progress.CheckExecutionProgressEvent;
-import ai.dqo.execution.sensors.SensorExecutionRunParameters;
+import ai.dqo.execution.sensors.SensorPrepareResult;
 import ai.dqo.metadata.sources.TableSpec;
 
 /**
@@ -24,17 +24,17 @@ import ai.dqo.metadata.sources.TableSpec;
  */
 public class ExecutingSensorEvent extends CheckExecutionProgressEvent {
     private final TableSpec tableSpec;
-    private final SensorExecutionRunParameters sensorRunParameters;
+    private final SensorPrepareResult sensorPrepareResult;
 
     /**
      * Creates an event.
      *
      * @param tableSpec           Target table.
-     * @param sensorRunParameters Sensor run parameters.
+     * @param sensorPrepareResult Sensor run parameters.
      */
-    public ExecutingSensorEvent(TableSpec tableSpec, SensorExecutionRunParameters sensorRunParameters) {
+    public ExecutingSensorEvent(TableSpec tableSpec, SensorPrepareResult sensorPrepareResult) {
         this.tableSpec = tableSpec;
-        this.sensorRunParameters = sensorRunParameters;
+        this.sensorPrepareResult = sensorPrepareResult;
     }
 
     /**
@@ -51,7 +51,7 @@ public class ExecutingSensorEvent extends CheckExecutionProgressEvent {
      *
      * @return Sensor execution parameters.
      */
-    public SensorExecutionRunParameters getSensorRunParameters() {
-        return sensorRunParameters;
+    public SensorPrepareResult getSensorPrepareResult() {
+        return sensorPrepareResult;
     }
 }

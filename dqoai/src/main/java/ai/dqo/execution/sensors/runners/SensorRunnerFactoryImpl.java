@@ -19,12 +19,15 @@ import ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorRunnerType;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 /**
  * Sensor runner factory.
  */
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class SensorRunnerFactoryImpl implements SensorRunnerFactory {
     private final BeanFactory beanFactory;
     private final JinjaSqlTemplateSensorRunner sqlTemplateSensorRunner;

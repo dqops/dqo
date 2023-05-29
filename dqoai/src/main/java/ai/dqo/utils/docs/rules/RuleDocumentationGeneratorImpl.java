@@ -41,7 +41,7 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
     /**
      * Renders documentation for all rules as markdown files.
      * @param projectRootPath Path to the project root folder, used to find the target/classes folder and scan for classes.
-     * @param dqoHome DQO home.
+     * @param dqoHome         DQO home.
      * @return Folder structure with rendered markdown files.
      */
     @Override
@@ -58,7 +58,9 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
         List<RuleGroupedDocumentationModel> ruleGroupedDocumentationModels = groupRulesByCategory(ruleDocumentationModels);
 
         for (RuleGroupedDocumentationModel ruleGroupedDocumentationModel : ruleGroupedDocumentationModels) {
-            DocumentationMarkdownFile documentationMarkdownFile = rulesFolder.addNestedFile(ruleGroupedDocumentationModel.getCategory() + ".md");
+            DocumentationMarkdownFile documentationMarkdownFile = rulesFolder.addNestedFile(ruleGroupedDocumentationModel.getCategory().substring(0, 1).toUpperCase()
+                    + ruleGroupedDocumentationModel.getCategory().substring(1)
+                    + ".md");
             documentationMarkdownFile.setRenderContext(ruleGroupedDocumentationModel);
 
             String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, ruleGroupedDocumentationModel);
@@ -135,8 +137,7 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
             Constructor<? extends AbstractRuleParametersSpec> defaultConstructor = ruleParametersClass.getConstructor();
             AbstractRuleParametersSpec abstractRuleParametersSpec = defaultConstructor.newInstance();
             return abstractRuleParametersSpec;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw new RuntimeException(ex.getMessage(), ex);
         }
     }

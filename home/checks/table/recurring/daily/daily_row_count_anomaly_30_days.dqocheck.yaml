@@ -3,6 +3,6 @@ apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: table/volume/row_count
-  rule_name: stdev/change_percentile_moving_within_30_days
+  rule_name: percentile/change_percentile_moving_within_30_days
   help_text: Verifies that the total row count of the tested table changes in a rate
     within a percentile boundary during last 30 days.

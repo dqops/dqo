@@ -560,18 +560,18 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnStringValueInSetPercentCheckSpec getMonthlyPartitionStringInSetPercent() {
+    public ColumnStringValueInSetPercentCheckSpec getMonthlyPartitionStringValueInSetPercent() {
         return monthlyPartitionStringValueInSetPercent;
     }
 
     /**
      * Sets a new definition of a minimum strings in set percent check.
-     * @param monthlyPartitionStringInSetPercent Minimum strings in set percent check.
+     * @param monthlyPartitionStringValueInSetPercent Minimum strings in set percent check.
      */
-    public void setMonthlyPartitionStringInSetPercent(ColumnStringValueInSetPercentCheckSpec monthlyPartitionStringInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValueInSetPercent, monthlyPartitionStringInSetPercent));
-        this.monthlyPartitionStringValueInSetPercent = monthlyPartitionStringInSetPercent;
-        propagateHierarchyIdToField(monthlyPartitionStringInSetPercent, "monthly_partition_string_value_in_set_percent");
+    public void setMonthlyPartitionStringValueInSetPercent(ColumnStringValueInSetPercentCheckSpec monthlyPartitionStringValueInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValueInSetPercent, monthlyPartitionStringValueInSetPercent));
+        this.monthlyPartitionStringValueInSetPercent = monthlyPartitionStringValueInSetPercent;
+        propagateHierarchyIdToField(monthlyPartitionStringValueInSetPercent, "monthly_partition_string_value_in_set_percent");
     }
 
     /**

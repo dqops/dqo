@@ -18,10 +18,10 @@ package ai.dqo.execution.checks.progress;
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import ai.dqo.checks.column.profiling.ColumnProfilingNullsChecksSpec;
+import ai.dqo.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
+import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
 import ai.dqo.checks.table.recurring.sql.TableSqlDailyRecurringChecksSpec;
@@ -92,7 +92,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
 
         // Table level checks
         tableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec());
-        tableSpec.getProfilingChecks().setVolume(new TableProfilingVolumeChecksSpec());
+        tableSpec.getProfilingChecks().setVolume(new TableVolumeProfilingChecksSpec());
         tableSpec.getProfilingChecks().getVolume().setRowCount(new TableRowCountCheckSpec());
         tableSpec.getProfilingChecks().getVolume().getRowCount().setError(new MinCountRule0ParametersSpec(5L));
 
@@ -107,11 +107,11 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         // Column level checks
         ColumnSpec columnSpec = new ColumnSpec(ColumnTypeSnapshotSpec.fromType("INTEGER"));
         ColumnProfilingCheckCategoriesSpec columnProfilingCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
-        ColumnProfilingNullsChecksSpec columnProfilingNullsChecksSpec = new ColumnProfilingNullsChecksSpec();
+        ColumnNullsProfilingChecksSpec columnNullsProfilingChecksSpec = new ColumnNullsProfilingChecksSpec();
         ColumnNullsCountCheckSpec columnNullsCountCheckSpec = new ColumnNullsCountCheckSpec();
         columnNullsCountCheckSpec.setError(new MaxCountRule10ParametersSpec());
-        columnProfilingNullsChecksSpec.setNullsCount(columnNullsCountCheckSpec);
-        columnProfilingCheckCategoriesSpec.setNulls(columnProfilingNullsChecksSpec);
+        columnNullsProfilingChecksSpec.setNullsCount(columnNullsCountCheckSpec);
+        columnProfilingCheckCategoriesSpec.setNulls(columnNullsProfilingChecksSpec);
         columnSpec.setProfilingChecks(columnProfilingCheckCategoriesSpec);
         tableWrapper.getSpec().getColumns().put("col1", columnSpec);
 

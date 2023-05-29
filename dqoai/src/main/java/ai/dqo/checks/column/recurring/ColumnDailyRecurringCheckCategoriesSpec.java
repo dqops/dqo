@@ -28,6 +28,7 @@ import ai.dqo.checks.column.recurring.integrity.ColumnIntegrityDailyRecurringChe
 import ai.dqo.checks.column.recurring.nulls.ColumnNullsDailyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.numeric.ColumnNumericDailyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.pii.ColumnPiiDailyRecurringChecksSpec;
+import ai.dqo.checks.column.recurring.schema.ColumnSchemaDailyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.sql.ColumnSqlDailyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.strings.ColumnStringsDailyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.uniqueness.ColumnUniquenessDailyRecurringChecksSpec;
@@ -59,80 +60,86 @@ import java.util.Objects;
 public class ColumnDailyRecurringCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDailyRecurringCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-           put("nulls", o -> o.nulls);
-           put("numeric", o -> o.numeric);
-           put("strings", o -> o.strings);
-           put("uniqueness", o -> o.uniqueness);
-           put("datetime", o -> o.datetime);
-           put("pii", o -> o.pii);
-           put("sql", o -> o.sql);
-           put("bool", o -> o.bool);
-           put("integrity", o -> o.integrity);
-           put("accuracy", o -> o.accuracy);
-           put("consistency", o -> o.consistency);
-           put("anomaly", o -> o.anomaly);
+            put("nulls", o -> o.nulls);
+            put("numeric", o -> o.numeric);
+            put("strings", o -> o.strings);
+            put("uniqueness", o -> o.uniqueness);
+            put("datetime", o -> o.datetime);
+            put("pii", o -> o.pii);
+            put("sql", o -> o.sql);
+            put("bool", o -> o.bool);
+            put("integrity", o -> o.integrity);
+            put("accuracy", o -> o.accuracy);
+            put("consistency", o -> o.consistency);
+            put("anomaly", o -> o.anomaly);
+            put("schema", o -> o.schema);
         }
     };
 
-    @JsonPropertyDescription("Daily recurring of nulls in the column")
+    @JsonPropertyDescription("Daily recurring checks of nulls in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsDailyRecurringChecksSpec nulls;
 
-    @JsonPropertyDescription("Daily recurring of numeric in the column")
+    @JsonPropertyDescription("Daily recurring checks of numeric in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericDailyRecurringChecksSpec numeric;
 
-    @JsonPropertyDescription("Daily recurring of strings in the column")
+    @JsonPropertyDescription("Daily recurring checks of strings in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsDailyRecurringChecksSpec strings;
 
-    @JsonPropertyDescription("Daily recurring of uniqueness in the column")
+    @JsonPropertyDescription("Daily recurring checks of uniqueness in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnUniquenessDailyRecurringChecksSpec uniqueness;
 
-    @JsonPropertyDescription("Daily recurring of datetime in the column")
+    @JsonPropertyDescription("Daily recurring checks of datetime in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnDatetimeDailyRecurringChecksSpec datetime;
 
-    @JsonPropertyDescription("Daily recurring of Personal Identifiable Information (PII) in the column")
+    @JsonPropertyDescription("Daily recurring checks of Personal Identifiable Information (PII) in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnPiiDailyRecurringChecksSpec pii;
 
-    @JsonPropertyDescription("Daily recurring of custom SQL checks in the column")
+    @JsonPropertyDescription("Daily recurring checks of custom SQL checks in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnSqlDailyRecurringChecksSpec sql;
 
-    @JsonPropertyDescription("Daily recurring of booleans in the column")
+    @JsonPropertyDescription("Daily recurring checks of booleans in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBoolDailyRecurringChecksSpec bool;
 
-    @JsonPropertyDescription("Daily recurring of integrity in the column")
+    @JsonPropertyDescription("Daily recurring checks of integrity in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnIntegrityDailyRecurringChecksSpec integrity;
 
-    @JsonPropertyDescription("Daily recurring of accuracy in the column")
+    @JsonPropertyDescription("Daily recurring checks of accuracy in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAccuracyDailyRecurringChecksSpec accuracy;
 
-    @JsonPropertyDescription("Daily recurring of consistency in the column")
+    @JsonPropertyDescription("Daily recurring checks of consistency in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnConsistencyDailyRecurringChecksSpec consistency;
 
-    @JsonPropertyDescription("Daily recurring of anomaly in the column")
+    @JsonPropertyDescription("Daily recurring checks of anomaly in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAnomalyDailyRecurringChecksSpec anomaly;
+
+    @JsonPropertyDescription("Daily recurring column schema checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnSchemaDailyRecurringChecksSpec schema;
 
     /**
      * Returns the container of recurring for standard data quality checks.
@@ -334,7 +341,7 @@ public class ColumnDailyRecurringCheckCategoriesSpec extends AbstractRootChecksC
 
     /**
      * Returns the container of recurring for standard data quality checks.
-     * @return Container of row standard data quality recurring.
+     * @return Container of anomaly data quality recurring.
      */
     public ColumnAnomalyDailyRecurringChecksSpec getAnomaly() {
         return anomaly;
@@ -348,6 +355,24 @@ public class ColumnDailyRecurringCheckCategoriesSpec extends AbstractRootChecksC
         this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
         this.anomaly = anomaly;
         this.propagateHierarchyIdToField(anomaly, "anomaly");
+    }
+
+    /**
+     * Returns the container of daily recurring column schema checks.
+     * @return Container of column schema checks.
+     */
+    public ColumnSchemaDailyRecurringChecksSpec getSchema() {
+        return schema;
+    }
+
+    /**
+     * Sets the container of daily recurring schema checks.
+     * @param schema Container of schema checks.
+     */
+    public void setSchema(ColumnSchemaDailyRecurringChecksSpec schema) {
+        this.setDirtyIf(!Objects.equals(this.schema, schema));
+        this.schema = schema;
+        this.propagateHierarchyIdToField(schema, "schema");
     }
 
     /**

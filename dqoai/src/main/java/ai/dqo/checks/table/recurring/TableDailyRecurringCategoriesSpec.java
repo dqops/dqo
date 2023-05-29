@@ -21,6 +21,7 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.recurring.accuracy.TableAccuracyDailyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.availability.TableAvailabilityDailyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.schema.TableSchemaDailyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.sql.TableSqlDailyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.volume.TableVolumeDailyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.timeliness.TableTimelinessDailyRecurringChecksSpec;
@@ -57,6 +58,7 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
             put("accuracy", o -> o.accuracy);
             put("sql", o -> o.sql);
             put("availability", o -> o.availability);
+            put("schema", o -> o.schema);
         }
     };
 
@@ -80,10 +82,16 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlDailyRecurringChecksSpec sql;
 
-    @JsonPropertyDescription("Daily recurring availability checks")
+    @JsonPropertyDescription("Daily recurring table availability checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableAvailabilityDailyRecurringChecksSpec availability;
+
+    @JsonPropertyDescription("Daily recurring table schema checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableSchemaDailyRecurringChecksSpec schema;
+
 
     /**
      * Returns the container of recurring for volume data quality checks.
@@ -158,21 +166,39 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
     }
 
     /**
-     * Returns a container of custom sql checks.
-     * @return Custom sql checks.
+     * Returns a container of table availability checks.
+     * @return Table availability checks.
      */
     public TableAvailabilityDailyRecurringChecksSpec getAvailability() {
         return availability;
     }
 
     /**
-     * Sets a reference to a container of custom sql checks.
-     * @param availability Container of custom sql checks.
+     * Sets a reference to a container of the table availability checks.
+     * @param availability Container of table availability checks.
      */
     public void setAvailability(TableAvailabilityDailyRecurringChecksSpec availability) {
         this.setDirtyIf(!Objects.equals(this.availability, availability));
         this.availability = availability;
         this.propagateHierarchyIdToField(availability, "availability");
+    }
+
+    /**
+     * Returns a container of table schema checks.
+     * @return Table schema checks.
+     */
+    public TableSchemaDailyRecurringChecksSpec getSchema() {
+        return schema;
+    }
+
+    /**
+     * Sets a reference to a container with the table schema checks.
+     * @param schema Container of table schema checks.
+     */
+    public void setSchema(TableSchemaDailyRecurringChecksSpec schema) {
+        this.setDirtyIf(!Objects.equals(this.schema, schema));
+        this.schema = schema;
+        this.propagateHierarchyIdToField(schema, "schema");
     }
 
     /**

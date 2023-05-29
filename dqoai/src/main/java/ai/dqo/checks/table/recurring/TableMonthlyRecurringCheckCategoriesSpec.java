@@ -21,6 +21,7 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.recurring.accuracy.TableAccuracyMonthlyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.availability.TableAvailabilityMonthlyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.schema.TableSchemaMonthlyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.sql.TableSqlMonthlyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.volume.TableVolumeMonthlyRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.timeliness.TableTimelinessMonthlyRecurringChecksSpec;
@@ -57,6 +58,7 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
             put("accuracy", o -> o.accuracy);
             put("sql", o -> o.sql);
             put("availability", o -> o.availability);
+            put("schema", o -> o.schema);
         }
     };
 
@@ -84,6 +86,11 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableAvailabilityMonthlyRecurringChecksSpec availability;
+
+    @JsonPropertyDescription("Monthly recurring table schema checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableSchemaMonthlyRecurringChecksSpec schema;
 
     /**
      * Returns the container of recurring for volume data quality checks.
@@ -173,6 +180,24 @@ public class TableMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecks
         this.setDirtyIf(!Objects.equals(this.availability, availability));
         this.availability = availability;
         this.propagateHierarchyIdToField(availability, "availability");
+    }
+
+    /**
+     * Returns a container of table schema checks.
+     * @return Table schema checks.
+     */
+    public TableSchemaMonthlyRecurringChecksSpec getSchema() {
+        return schema;
+    }
+
+    /**
+     * Sets a reference to a container with the table schema checks.
+     * @param schema Container of table schema checks.
+     */
+    public void setSchema(TableSchemaMonthlyRecurringChecksSpec schema) {
+        this.setDirtyIf(!Objects.equals(this.schema, schema));
+        this.schema = schema;
+        this.propagateHierarchyIdToField(schema, "schema");
     }
 
     /**

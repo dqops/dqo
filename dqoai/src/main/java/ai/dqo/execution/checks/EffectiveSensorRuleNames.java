@@ -16,8 +16,6 @@
 
 package ai.dqo.execution.checks;
 
-import ai.dqo.rules.RuleSeverityLevel;
-
 /**
  * Model object that contains the sensor name and rule name that will be used to execute a check or a statistics profiler.
  */

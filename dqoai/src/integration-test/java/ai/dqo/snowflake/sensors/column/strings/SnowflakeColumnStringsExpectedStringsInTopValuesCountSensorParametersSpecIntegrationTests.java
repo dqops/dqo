@@ -66,7 +66,7 @@ public class SnowflakeColumnStringsExpectedStringsInTopValuesCountSensorParamete
         values.add("d44d");
         this.sut.setExpectedValues(values);
         this.sut.setTop(2L);
-        this.sut.setFilter("id < 5");
+        this.sut.setFilter("{alias}.\"id\" < 5");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec);
@@ -86,7 +86,7 @@ public class SnowflakeColumnStringsExpectedStringsInTopValuesCountSensorParamete
         values.add("d44d");
         this.sut.setExpectedValues(values);
         this.sut.setTop(2L);
-        this.sut.setFilter("id < 5");
+        this.sut.setFilter("{alias}.\"id\" < 5");
 
         DataStreamMappingSpec dataStreamMapping = this.sampleTableMetadata.getTableSpec().getDataStreams().getFirstDataStreamMapping();
         dataStreamMapping.setLevel1(new DataStreamLevelSpec() {{
@@ -113,7 +113,7 @@ public class SnowflakeColumnStringsExpectedStringsInTopValuesCountSensorParamete
         values.add("d44d");
         this.sut.setExpectedValues(values);
         this.sut.setTop(2L);
-        this.sut.setFilter("id < 5");
+        this.sut.setFilter("{alias}.\"id\" < 5");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily);

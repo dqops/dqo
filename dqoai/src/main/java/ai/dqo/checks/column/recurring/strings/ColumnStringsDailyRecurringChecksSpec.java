@@ -537,18 +537,18 @@ public class ColumnStringsDailyRecurringChecksSpec extends AbstractCheckCategory
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnExpectedStringsInUseCountCheckSpec getDailyStringInSetCount() {
+    public ColumnExpectedStringsInUseCountCheckSpec getDailyExpectedStringsInUseCount() {
         return dailyExpectedStringsInUseCount;
     }
 
     /**
      * Sets a new definition of a minimum strings in set count check.
-     * @param dailyStringInSetCount Minimum strings in set count check.
+     * @param dailyExpectedStringsInUseCount Minimum strings in set count check.
      */
-    public void setDailyStringInSetCount(ColumnExpectedStringsInUseCountCheckSpec dailyStringInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyExpectedStringsInUseCount, dailyStringInSetCount));
-        this.dailyExpectedStringsInUseCount = dailyStringInSetCount;
-        propagateHierarchyIdToField(dailyStringInSetCount, "daily_expected_strings_in_use_count");
+    public void setDailyExpectedStringsInUseCount(ColumnExpectedStringsInUseCountCheckSpec dailyExpectedStringsInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyExpectedStringsInUseCount, dailyExpectedStringsInUseCount));
+        this.dailyExpectedStringsInUseCount = dailyExpectedStringsInUseCount;
+        propagateHierarchyIdToField(dailyExpectedStringsInUseCount, "daily_expected_strings_in_use_count");
     }
 
     /**
@@ -807,18 +807,18 @@ public class ColumnStringsDailyRecurringChecksSpec extends AbstractCheckCategory
      * Returns a count of expected values in most popular values set count check.
      * @return Most popular values count check.
      */
-    public ColumnExpectedStringsInTopValuesCountCheckSpec getDailyStringMostPopularValues() {
+    public ColumnExpectedStringsInTopValuesCountCheckSpec getDailyExpectedStringsInTopValuesCount() {
         return dailyExpectedStringsInTopValuesCount;
     }
 
     /**
      * Sets a new definition of a most popular values count check.
-     * @param dailyStringMostPopularValues Most popular values count check.
+     * @param dailyExpectedStringsInTopValuesCount Most popular values count check.
      */
-    public void setDailyStringMostPopularValues(ColumnExpectedStringsInTopValuesCountCheckSpec dailyStringMostPopularValues) {
-        this.setDirtyIf(!Objects.equals(this.dailyExpectedStringsInTopValuesCount, dailyStringMostPopularValues));
-        this.dailyExpectedStringsInTopValuesCount = dailyStringMostPopularValues;
-        propagateHierarchyIdToField(dailyStringMostPopularValues, "daily_expected_strings_in_top_values_count");
+    public void setDailyExpectedStringsInTopValuesCount(ColumnExpectedStringsInTopValuesCountCheckSpec dailyExpectedStringsInTopValuesCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyExpectedStringsInTopValuesCount, dailyExpectedStringsInTopValuesCount));
+        this.dailyExpectedStringsInTopValuesCount = dailyExpectedStringsInTopValuesCount;
+        propagateHierarchyIdToField(dailyExpectedStringsInTopValuesCount, "daily_expected_strings_in_top_values_count");
     }
 
     /**

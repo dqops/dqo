@@ -28,7 +28,6 @@ public class SampleCsvFileNames {
     public static final String test_data_timeliness_sensors = "test_data_timeliness_sensors.csv";
     public static final String test_data_time_series = "test_data_time_series.csv";
     public static final String test_average_delay = "test_average_delay.csv";
-    public static final String now_datetime = "now_datetime.csv";
     public static final String string_test_data = "string_test_data.csv";
     public static final String nulls_and_uniqueness = "nulls_and_uniqueness.csv";
     public static final String full_name_test = "full_name_test.csv";

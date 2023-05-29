@@ -42,48 +42,99 @@ import lombok.Data;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "ConnectionBasicModel", description = "Basic connection model with a subset of parameters, excluding all nested objects.")
 public class ConnectionBasicModel {
+    /**
+     * Connection name.
+     */
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
+    /**
+     * Connection hash that identifies the connection using a unique hash code.
+     */
     @JsonPropertyDescription("Connection hash that identifies the connection using a unique hash code.")
     private Long connectionHash;
 
+    /**
+     * The concurrency limit for the maximum number of parallel SQL queries executed on this connection.
+     */
+    @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
+    private Integer parallelRunsLimit;
+
+    /**
+     * Database provider type (required). Accepts: bigquery, snowflake.
+     */
     @JsonPropertyDescription("Database provider type (required). Accepts: bigquery, snowflake.")
     private ProviderType providerType;
 
+    /**
+     * BigQuery connection parameters. Specify parameters in the bigquery section.
+     */
     @JsonPropertyDescription("BigQuery connection parameters. Specify parameters in the bigquery section.")
     private BigQueryParametersSpec bigquery;
 
+    /**
+     * Snowflake connection parameters.
+     */
     @JsonPropertyDescription("Snowflake connection parameters.")
     private SnowflakeParametersSpec snowflake;
 
+    /**
+     * PostgreSQL connection parameters.
+     */
     @JsonPropertyDescription("PostgreSQL connection parameters.")
     private PostgresqlParametersSpec postgresql;
 
+    /**
+     * Redshift connection parameters.
+     */
     @JsonPropertyDescription("Redshift connection parameters.")
     private RedshiftParametersSpec redshift;
 
+    /**
+     * SqlServer connection parameters.
+     */
     @JsonPropertyDescription("SqlServer connection parameters.")
     private SqlServerParametersSpec sqlserver;
 
+    /**
+     * MySQL connection parameters.
+     */
     @JsonPropertyDescription("MySQL connection parameters.")
     private MysqlParametersSpec mysql;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.")
     private CheckSearchFilters runChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run profiling checks within this connection.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run profiling checks within this connection.")
     private CheckSearchFilters runProfilingChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run recurring checks within this connection.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run recurring checks within this connection.")
     private CheckSearchFilters runRecurringChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to run partition partitioned checks within this connection.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run partition partitioned checks within this connection.")
     private CheckSearchFilters runPartitionChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "collect statistics" job that should be pushed to the job queue in order to run all statistics collectors within this connection.
+     */
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collectors within this connection.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
 
+    /**
+     * Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this connection.
+     */
     @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this connection.")
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
@@ -96,6 +147,7 @@ public class ConnectionBasicModel {
     public static ConnectionBasicModel fromConnectionSpecification(String connectionName, ConnectionSpec connectionSpec) {
         return new ConnectionBasicModel() {{
             setConnectionName(connectionName);
+            setParallelRunsLimit(connectionSpec.getParallelRunsLimit());
             setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
             setProviderType(connectionSpec.getProviderType());
             setBigquery(connectionSpec.getBigquery());
@@ -153,6 +205,7 @@ public class ConnectionBasicModel {
      */
     public void copyToConnectionSpecification(ConnectionSpec targetConnectionSpec) {
         targetConnectionSpec.setProviderType(this.getProviderType());
+        targetConnectionSpec.setParallelRunsLimit(this.parallelRunsLimit);
         targetConnectionSpec.setBigquery(this.getBigquery());
         targetConnectionSpec.setSnowflake(this.getSnowflake());
         targetConnectionSpec.setPostgresql(this.getPostgresql());

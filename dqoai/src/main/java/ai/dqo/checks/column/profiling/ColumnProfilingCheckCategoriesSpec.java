@@ -60,74 +60,80 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
             put("accuracy", o -> o.accuracy);
             put("consistency", o -> o.consistency);
             put("anomaly", o -> o.anomaly);
+            put("schema", o -> o.schema);
         }
     };
 
     @JsonPropertyDescription("Configuration of column level checks that verify nulls and blanks.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnProfilingNullsChecksSpec nulls;
+    private ColumnNullsProfilingChecksSpec nulls;
 
     @JsonPropertyDescription("Configuration of column level checks that verify negative values.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnProfilingNumericChecksSpec numeric;
+    private ColumnNumericProfilingChecksSpec numeric;
 
     @JsonPropertyDescription("Configuration of strings checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnProfilingStringsChecksSpec strings;
+    private ColumnStringsProfilingChecksSpec strings;
 
     @JsonPropertyDescription("Configuration of uniqueness checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnProfilingUniquenessChecksSpec uniqueness;
+    private ColumnUniquenessProfilingChecksSpec uniqueness;
 
     @JsonPropertyDescription("Configuration of datetime checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnProfilingDatetimeChecksSpec datetime;
+    private ColumnDatetimeProfilingChecksSpec datetime;
 
     @JsonPropertyDescription("Configuration of Personal Identifiable Information (PII) checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnProfilingPiiChecksSpec pii;
+    private ColumnPiiProfilingChecksSpec pii;
 
     @JsonPropertyDescription("Configuration of SQL checks that use custom SQL aggregated expressions and SQL conditions in data quality checks.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnProfilingSqlChecksSpec sql;
+    private ColumnSqlProfilingChecksSpec sql;
 
     @JsonPropertyDescription("Configuration of booleans checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnProfilingBoolChecksSpec bool;
+    private ColumnBoolProfilingChecksSpec bool;
 
     @JsonPropertyDescription("Configuration of integrity checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnProfilingIntegrityChecksSpec integrity;
+    private ColumnIntegrityProfilingChecksSpec integrity;
 
     @JsonPropertyDescription("Configuration of accuracy checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnProfilingAccuracyChecksSpec accuracy;
+    private ColumnAccuracyProfilingChecksSpec accuracy;
 
     @JsonPropertyDescription("Configuration of consistency checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnProfilingConsistencyChecksSpec consistency;
+    private ColumnConsistencyProfilingChecksSpec consistency;
 
     @JsonPropertyDescription("Configuration of anomaly checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnProfilingAnomalyChecksSpec anomaly;
+    private ColumnAnomalyProfilingChecksSpec anomaly;
+
+    @JsonPropertyDescription("Configuration of schema checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnSchemaProfilingChecksSpec schema;
 
     /**
      * Returns the nulls check configuration on a column level.
      * @return Nulls check configuration.
      */
-    public ColumnProfilingNullsChecksSpec getNulls() {
+    public ColumnNullsProfilingChecksSpec getNulls() {
         return nulls;
     }
 
@@ -135,7 +141,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Sets the nulls check configuration on a column level.
      * @param nulls New nulls checks configuration.
      */
-    public void setNulls(ColumnProfilingNullsChecksSpec nulls) {
+    public void setNulls(ColumnNullsProfilingChecksSpec nulls) {
         this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
         this.propagateHierarchyIdToField(nulls, "nulls");
@@ -145,7 +151,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Returns the negative values check configuration on a column level.
      * @return Negative values check configuration.
      */
-    public ColumnProfilingNumericChecksSpec getNumeric() {
+    public ColumnNumericProfilingChecksSpec getNumeric() {
         return numeric;
     }
 
@@ -153,7 +159,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Sets the negative values check configuration on a column level.
      * @param numeric New negative values checks configuration.
      */
-    public void setNumeric(ColumnProfilingNumericChecksSpec numeric) {
+    public void setNumeric(ColumnNumericProfilingChecksSpec numeric) {
         this.setDirtyIf(!Objects.equals(this.numeric, numeric));
         this.numeric = numeric;
         this.propagateHierarchyIdToField(numeric, "numeric");
@@ -163,7 +169,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Returns the strings check configuration on a column level.
      * @return Strings check configuration.
      */
-    public ColumnProfilingStringsChecksSpec getStrings() {
+    public ColumnStringsProfilingChecksSpec getStrings() {
         return strings;
     }
 
@@ -171,7 +177,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Sets the string check configuration on a column level.
      * @param strings New string checks configuration.
      */
-    public void setStrings(ColumnProfilingStringsChecksSpec strings) {
+    public void setStrings(ColumnStringsProfilingChecksSpec strings) {
         this.setDirtyIf(!Objects.equals(this.strings, strings));
         this.strings = strings;
         this.propagateHierarchyIdToField(strings, "strings");
@@ -181,7 +187,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Returns the uniqueness check configuration on a column level.
      * @return Uniqueness check configuration.
      */
-    public ColumnProfilingUniquenessChecksSpec getUniqueness() {
+    public ColumnUniquenessProfilingChecksSpec getUniqueness() {
         return uniqueness;
     }
 
@@ -189,7 +195,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Sets the uniqueness check configuration on a column level.
      * @param uniqueness New uniqueness checks configuration.
      */
-    public void setUniqueness(ColumnProfilingUniquenessChecksSpec uniqueness) {
+    public void setUniqueness(ColumnUniquenessProfilingChecksSpec uniqueness) {
         this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
         this.uniqueness = uniqueness;
         this.propagateHierarchyIdToField(uniqueness, "uniqueness");
@@ -199,7 +205,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Returns the datetime check configuration on a column level.
      * @return Datetime check configuration.
      */
-    public ColumnProfilingDatetimeChecksSpec getDatetime() {
+    public ColumnDatetimeProfilingChecksSpec getDatetime() {
         return datetime;
     }
 
@@ -207,7 +213,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Sets the datetime check configuration on a column level.
      * @param datetime New datetime checks configuration.
      */
-    public void setDatetime(ColumnProfilingDatetimeChecksSpec datetime) {
+    public void setDatetime(ColumnDatetimeProfilingChecksSpec datetime) {
         this.setDirtyIf(!Objects.equals(this.datetime, datetime));
         this.datetime = datetime;
         this.propagateHierarchyIdToField(datetime, "datetime");
@@ -217,7 +223,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Returns the Personal Identifiable Information (PII) check configuration on a column level.
      * @return Personal Identifiable Information (PII) check configuration.
      */
-    public ColumnProfilingPiiChecksSpec getPii() {
+    public ColumnPiiProfilingChecksSpec getPii() {
         return pii;
     }
 
@@ -225,7 +231,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Sets the Personal Identifiable Information (PII) check configuration on a column level.
      * @param pii New Personal Identifiable Information (PII) checks configuration.
      */
-    public void setPii(ColumnProfilingPiiChecksSpec pii) {
+    public void setPii(ColumnPiiProfilingChecksSpec pii) {
         this.setDirtyIf(!Objects.equals(this.pii, pii));
         this.pii = pii;
         this.propagateHierarchyIdToField(pii, "pii");
@@ -235,7 +241,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Returns the configuration of custom SQL checks.
      * @return Configuration of custom sql checks.
      */
-    public ColumnProfilingSqlChecksSpec getSql() {
+    public ColumnSqlProfilingChecksSpec getSql() {
         return sql;
     }
 
@@ -243,7 +249,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Sets a reference to the configuration of custom SQL checks.
      * @param sql Custom sql checks.
      */
-    public void setSql(ColumnProfilingSqlChecksSpec sql) {
+    public void setSql(ColumnSqlProfilingChecksSpec sql) {
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
@@ -253,7 +259,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Returns the booleans check configuration on a column level.
      * @return Boolean check configuration.
      */
-    public ColumnProfilingBoolChecksSpec getBool() {
+    public ColumnBoolProfilingChecksSpec getBool() {
         return bool;
     }
 
@@ -261,7 +267,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Sets the boolean check configuration on a column level.
      * @param bool New boolean checks configuration.
      */
-    public void setBool(ColumnProfilingBoolChecksSpec bool) {
+    public void setBool(ColumnBoolProfilingChecksSpec bool) {
         this.setDirtyIf(!Objects.equals(this.bool, bool));
         this.bool = bool;
         this.propagateHierarchyIdToField(bool, "bool");
@@ -271,7 +277,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Returns the integrity check configuration on a column level.
      * @return Integrity check configuration.
      */
-    public ColumnProfilingIntegrityChecksSpec getIntegrity() {
+    public ColumnIntegrityProfilingChecksSpec getIntegrity() {
         return integrity;
     }
 
@@ -279,7 +285,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Sets the integrity check configuration on a column level.
      * @param integrity New integrity checks configuration.
      */
-    public void setIntegrity(ColumnProfilingIntegrityChecksSpec integrity) {
+    public void setIntegrity(ColumnIntegrityProfilingChecksSpec integrity) {
         this.setDirtyIf(!Objects.equals(this.integrity, integrity));
         this.integrity = integrity;
         this.propagateHierarchyIdToField(integrity, "integrity");
@@ -289,7 +295,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Returns the accuracy check configuration on a column level.
      * @return Accuracy check configuration.
      */
-    public ColumnProfilingAccuracyChecksSpec getAccuracy() {
+    public ColumnAccuracyProfilingChecksSpec getAccuracy() {
         return accuracy;
     }
 
@@ -297,7 +303,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Sets the accuracy check configuration on a column level.
      * @param accuracy New accuracy checks configuration.
      */
-    public void setAccuracy(ColumnProfilingAccuracyChecksSpec accuracy) {
+    public void setAccuracy(ColumnAccuracyProfilingChecksSpec accuracy) {
         this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
         this.accuracy = accuracy;
         this.propagateHierarchyIdToField(accuracy, "accuracy");
@@ -307,7 +313,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Returns the consistency check configuration on a column level.
      * @return Consistency check configuration.
      */
-    public ColumnProfilingConsistencyChecksSpec getConsistency() {
+    public ColumnConsistencyProfilingChecksSpec getConsistency() {
         return consistency;
     }
 
@@ -315,7 +321,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Sets the consistency check configuration on a column level.
      * @param consistency New consistency checks configuration.
      */
-    public void setConsistency(ColumnProfilingConsistencyChecksSpec consistency) {
+    public void setConsistency(ColumnConsistencyProfilingChecksSpec consistency) {
         this.setDirtyIf(!Objects.equals(this.consistency, consistency));
         this.consistency = consistency;
         this.propagateHierarchyIdToField(consistency, "consistency");
@@ -325,7 +331,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Returns the anomaly check configuration on a column level.
      * @return Anomaly check configuration.
      */
-    public ColumnProfilingAnomalyChecksSpec getAnomaly() {
+    public ColumnAnomalyProfilingChecksSpec getAnomaly() {
         return anomaly;
     }
 
@@ -333,10 +339,28 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Sets the anomaly check configuration on a column level.
      * @param anomaly New anomaly checks configuration.
      */
-    public void setAnomaly(ColumnProfilingAnomalyChecksSpec anomaly) {
+    public void setAnomaly(ColumnAnomalyProfilingChecksSpec anomaly) {
         this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
         this.anomaly = anomaly;
         this.propagateHierarchyIdToField(anomaly, "anomaly");
+    }
+
+    /**
+     * Returns the schema checks container on a column level.
+     * @return Schema checks container.
+     */
+    public ColumnSchemaProfilingChecksSpec getSchema() {
+        return schema;
+    }
+
+    /**
+     * Sets teh schema checks container for column level checks.
+     * @param schema Schema checks container.
+     */
+    public void setSchema(ColumnSchemaProfilingChecksSpec schema) {
+        this.setDirtyIf(!Objects.equals(this.schema, schema));
+        this.schema = schema;
+        this.propagateHierarchyIdToField(schema, "schema");
     }
 
     /**

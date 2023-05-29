@@ -80,18 +80,36 @@ public class BigQueryColumnStringsExpectedStringsInTopValuesCountSensorParameter
     }
 
     @Test
+    void runSensor_whenSensorExecutedProfilingAndExpectedValueNotFound_thenReturnsCorrectCount() {
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("not_found");
+        this.sut.setExpectedValues(values);
+        this.sut.setTop(2L);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "strings_with_numbers", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(1L, resultTable.column(0).get(0));
+    }
+
+    @Test
     void runSensor_whenSensorExecutedProfilingOneDataStream_thenReturnsValues() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
-        values.add("d44d");
+        values.add("b22b");
         this.sut.setExpectedValues(values);
         this.sut.setTop(2L);
-        this.sut.setFilter("id < 5");
 
         DataStreamMappingSpec dataStreamMapping = this.sampleTableMetadata.getTableSpec().getDataStreams().getFirstDataStreamMapping();
         dataStreamMapping.setLevel1(new DataStreamLevelSpec() {{
             setSource(DataStreamLevelSource.column_value);
-            setColumn("mix_string_int");
+            setColumn("dim1");
         }});
         this.sampleTableMetadata.getTableSpec().getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
 
@@ -101,9 +119,11 @@ public class BigQueryColumnStringsExpectedStringsInTopValuesCountSensorParameter
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(4, resultTable.rowCount());
+        Assertions.assertEquals(3, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
+        Assertions.assertEquals(1L, resultTable.column(0).get(1));
+        Assertions.assertEquals(1L, resultTable.column(0).get(2));
     }
 
     @Test

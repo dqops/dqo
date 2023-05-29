@@ -10,11 +10,10 @@ spec:
     min_periods_with_readouts: 1
     historic_data_point_grouping: last_n_readouts
   fields:
-    - field_name: max_within
-      display_name: max_within
-      help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ above a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (low, medium, high) at once. The default\
-      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-      \ exist to run the calculation."
-      data_type: double
+  - field_name: max_within
+    display_name: max_within
+    help_text: Maximal accepted absolute change with regards to the previous readout
+      (inclusive).
+    data_type: double
+    sample_values:
+    - 10

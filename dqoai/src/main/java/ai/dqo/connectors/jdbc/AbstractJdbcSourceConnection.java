@@ -121,7 +121,7 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
                              jobCancellationToken.registerCancellationListener(
                                      cancellationToken -> RunSilently.run(statement::cancel))) {
                     try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
-                        Table resultTable = Table.read().db(results, "query_result");
+                        Table resultTable = Table.read().db(results, sqlQueryStatement);
                         for (Column<?> column : resultTable.columns()) {
                             if (column.name() != null) {
                                 column.setName(column.name().toLowerCase(Locale.ROOT));
