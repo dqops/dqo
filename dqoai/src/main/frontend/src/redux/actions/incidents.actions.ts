@@ -72,9 +72,10 @@ export const getIncidentsByConnectionRequest = () => ({
   type: INCIDENTS_ACTION.GET_INCIDENTS_BY_CONNECTION
 });
 
-export const getIncidentsByConnectionSuccess = (data: Array<IncidentModel>) => ({
+export const getIncidentsByConnectionSuccess = (data: Array<IncidentModel>, isEnd: boolean) => ({
   type: INCIDENTS_ACTION.GET_INCIDENTS_BY_CONNECTION_SUCCESS,
-  data
+  data,
+  isEnd
 });
 
 export const getIncidentsByConnectionFailed = (error: unknown) => ({
@@ -99,7 +100,12 @@ export const getIncidentsByConnection = ({
   try {
     const res: AxiosResponse<Array<IncidentModel>> =
       await IncidentsApi.findRecentIncidentsOnConnection(connection, numberOfMonth, openIncidents, acknowledgedIncidents, resolvedIncidents, mutedIncidents, page, pageSize, optionalFilter, sortBy, sortDirection);
-    dispatch(getIncidentsByConnectionSuccess(res.data));
+
+
+    const nextPageRes: AxiosResponse<Array<IncidentModel>> =
+      await IncidentsApi.findRecentIncidentsOnConnection(connection, numberOfMonth, openIncidents, acknowledgedIncidents, resolvedIncidents, mutedIncidents, page + 1, pageSize, optionalFilter, sortBy, sortDirection);
+
+    dispatch(getIncidentsByConnectionSuccess(res.data, !nextPageRes.data.length));
   } catch (err) {
     dispatch(getIncidentsByConnectionFailed(err));
   }
