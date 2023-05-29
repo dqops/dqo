@@ -384,6 +384,11 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode, false);
         CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, this.timeWindowFilterParameters, progressListener, this.dummyRun);
 
+        if (checkExecutionSummary.getTotalChecksExecutedCount() == 0) {
+            this.terminalWriter.writeLine("No checks with these filters were found.");
+            return 0;
+        }
+
         if (this.mode != CheckRunReportingMode.silent) {
             TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());
 			this.terminalWriter.writeLine("Check evaluation summary per table:");
