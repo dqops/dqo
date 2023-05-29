@@ -24,11 +24,12 @@ const TableColumns = ({
 }: ITableColumnsProps) => {
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [sortedStatistics, setSortedStatistics] =
-    useState<ColumnStatisticsModel[]>();
+    useState<Array<ColumnStatisticsModel>>();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
   const [loadingJob, setLoadingJob] = useState(false);
   const [workingArr, setWorkingArr] = useState<any>([]);
+  const [reverse, setReverse] = useState<boolean>(true);
 
   const dispatch = useDispatch();
   const {
@@ -60,7 +61,6 @@ const TableColumns = ({
 
   useEffect(() => {
     fetchColumns().then();
-    setSortedStatistics(statistics?.column_statistics);
   }, [connectionName, schemaName, tableName]);
 
   const onRemoveColumn = (column: ColumnStatisticsModel) => {
@@ -196,7 +196,6 @@ const TableColumns = ({
 
     const logarithm = Math.log2(uniqueCount);
     const alpha = (1 - (logarithm / Math.log2(maxUniqueCount)) * 0.9) / 1.3;
-
     const color = `rgba(2, 154, 128, ${alpha})`;
 
     return color;
@@ -253,26 +252,71 @@ const TableColumns = ({
     }
   };
 
+  const sortAlphabetictly = async (reverse?: boolean) => {
+    const sortedStats = statistics?.column_statistics?.sort((a, b) =>
+      a.column_name && b.column_name
+        ? reverse === true
+          ? a.column_name.localeCompare(b.column_name)
+          : b.column_name.localeCompare(a.column_name)
+        : 0
+    );
+    setSortedStatistics(sortedStats);
+    console.log(sortedStatistics);
+  };
+
   const workInProgress = () => {
     statistics?.column_statistics?.forEach((x) =>
       x.statistics?.forEach((a) =>
         a.collector === 'nulls_percent' ? workingArr.push(a.result) : ''
       )
     );
-    workingArr.sort!((y: any, z: any) => y - z);
+    workingArr.sort((y: any, z: any) => y - z);
     console.log(workingArr);
 
     // workingArr.map((x: any) => statistics?.column_statistics?.map((y) => y.statistics?.map((z) => z.collector==='nulls_percent' && z.result=== x ? secondArr.statistics?.push(y.statistics ?  y.statistics : [])))))
   };
-  console.log(statistics?.column_statistics?.length);
+  // console.log(statistics?.column_statistics?.length);
   //console.log(sortedStatistics);
+
+  const setSortedStatsFunc = () => {
+    const sortingArray: (ColumnStatisticsModel[] | undefined)[] = [];
+    if (statistics?.column_statistics) {
+      for (let i = 0; i < statistics?.column_statistics?.length; i++) {
+        statistics.column_statistics.map((x) => {
+          x.statistics?.map((y) => {
+            if (
+              y.collector === 'nulls_percent' &&
+              y.result === workingArr.at(i)
+            ) {
+              sortingArray.push(statistics.column_statistics);
+            }
+          });
+        });
+      }
+      console.log(sortingArray);
+    }
+  };
+
   return (
     <div className="p-4">
       <table className="mb-6 mt-4 w-full">
         <thead>
           <tr>
-            <th className="border-b border-gray-100 text-left px-4 py-2">
-              Name
+            <th className="border-b border-gray-100 text-left px-4 py-2 ">
+              <div>Name</div>
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  setReverse(!reverse), sortAlphabetictly(reverse);
+                }}
+              >
+                <div>
+                  <SvgIcon name="chevron-up" className="w-3 h-3" />
+                </div>
+                <div>
+                  <SvgIcon name="chevron-down" className="w-3 h-3" />
+                </div>
+              </div>
             </th>
             <th className="border-b border-gray-100 text-left px-4 py-2">
               Detected datatype
@@ -290,7 +334,16 @@ const TableColumns = ({
               Minimal value
             </th>
             <th className="border-b border-gray-100 text-right px-4 py-2 flex items-center">
-              <div className="text-right" onClick={() => workInProgress()}>
+              <div
+                className="text-right"
+                onClick={() =>
+                  statistics?.column_statistics
+                    ? workingArr.length < statistics?.column_statistics?.length
+                      ? workInProgress()
+                      : ''
+                    : ''
+                }
+              >
                 Null count
               </div>
               <div className="cursor-pointer">
@@ -302,7 +355,10 @@ const TableColumns = ({
                 </div>
               </div>
             </th>
-            <th className="border-b border-gray-100 text-right px-10 py-2 ">
+            <th
+              className="border-b border-gray-100 text-right px-10 py-2 "
+              onClick={() => setSortedStatsFunc()}
+            >
               Null percent
             </th>
             <th className="border-b border-gray-100 text-right px-4 py-2">
