@@ -9,6 +9,7 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDispatch } from 'react-redux/es/hooks/useDispatch';
 import { useParams, useHistory } from 'react-router-dom';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { SortableColumn } from '../IncidentConnection/SortableColumn';
 
 interface ITableColumnsProps {
   connectionName: string;
@@ -27,6 +28,7 @@ const TableColumns = ({
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
   const [loadingJob, setLoadingJob] = useState(false);
+  const [workingArr, setWorkingArr] = useState<any>([]);
 
   const dispatch = useDispatch();
   const {
@@ -189,11 +191,11 @@ const TableColumns = ({
     }
 
     if (uniqueCount === 1) {
-      return 'rgba(2, 154, 128, 255)';
+      return 'rgba(2, 154, 128, 0.8)';
     }
 
     const logarithm = Math.log2(uniqueCount);
-    const alpha = 1 - (logarithm / Math.log2(maxUniqueCount)) * 0.9;
+    const alpha = (1 - (logarithm / Math.log2(maxUniqueCount)) * 0.9) / 1.3;
 
     const color = `rgba(2, 154, 128, ${alpha})`;
 
@@ -237,7 +239,33 @@ const TableColumns = ({
       return k;
     }
   };
+  const handleSortChange = (sortBy: string) => {
+    switch (sortBy) {
+      case 'nulls_percent':
+        // setSortedStatistics(sortedStatistics?.forEach((x) => x.statistics))
+        break;
+      case 'name':
+        break;
+      case 'unique_count':
+        break;
+      case 'nulls_count':
+      default:
+    }
+  };
 
+  const workInProgress = () => {
+    statistics?.column_statistics?.forEach((x) =>
+      x.statistics?.forEach((a) =>
+        a.collector === 'nulls_percent' ? workingArr.push(a.result) : ''
+      )
+    );
+    workingArr.sort!((y: any, z: any) => y - z);
+    console.log(workingArr);
+
+    // workingArr.map((x: any) => statistics?.column_statistics?.map((y) => y.statistics?.map((z) => z.collector==='nulls_percent' && z.result=== x ? secondArr.statistics?.push(y.statistics ?  y.statistics : [])))))
+  };
+  console.log(statistics?.column_statistics?.length);
+  //console.log(sortedStatistics);
   return (
     <div className="p-4">
       <table className="mb-6 mt-4 w-full">
@@ -259,18 +287,25 @@ const TableColumns = ({
               Scale
             </th>
             <th className="border-b border-gray-100 text-right px-4 py-2">
-              First value sample
+              Minimal value
             </th>
-            <th className="border-b border-gray-100 text-right px-4 py-2">
-              Null count
+            <th className="border-b border-gray-100 text-right px-4 py-2 flex items-center">
+              <div className="text-right" onClick={() => workInProgress()}>
+                Null count
+              </div>
+              <div className="cursor-pointer">
+                <div className="w-3 h-3">
+                  <SvgIcon name="chevron-up" className="w-3 h-3" />
+                </div>
+                <div className="w-3 h-3">
+                  <SvgIcon name="chevron-down" className="w-3 h-3" />
+                </div>
+              </div>
             </th>
-            <th className="border-b border-gray-100 text-right px-4 py-2 ">
+            <th className="border-b border-gray-100 text-right px-10 py-2 ">
               Null percent
             </th>
-            <th
-              className="border-b border-gray-100 text-right px-4 py-2"
-              onClick={() => max_unique_value()}
-            >
+            <th className="border-b border-gray-100 text-right px-4 py-2">
               Unique count
             </th>
             <th className="border-b border-gray-100 text-right px-7.5 py-2">
@@ -357,13 +392,15 @@ const TableColumns = ({
                         </div>
                         <div
                           className=" h-3 border border-gray-100 flex ml-5"
-                          style={{ width: '100px' }}
+                          style={{ width: '66.66px' }}
                         >
                           <div
                             className="h-3 bg-amber-700"
                             style={{
                               width: metric.result
-                                ? `${Number(renderValue(metric.result))}px`
+                                ? `${
+                                    (Number(renderValue(metric.result)) * 2) / 3
+                                  }px`
                                 : ''
                             }}
                           ></div>
@@ -399,16 +436,16 @@ const TableColumns = ({
                   )}
                 </td>
 
-                <td className="border-b border-gray-100 text-right px-4 py-2 ">
+                <td className="border-b border-gray-100 text-right px-4 py-2 flex flex-nowrap justify-end items-end">
                   <IconButton
                     size="sm"
                     className="group bg-teal-500 ml-1.5"
                     onClick={() => collectStatistics(index)}
                   >
                     <SvgIcon name="boxplot" className="w-4 white" />
-                    <span className="hidden absolute right-3 bottom-3 p-2 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
+                    <div className="hidden absolute right-0 bottom-6 p-1 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
                       Collect statistic
-                    </span>
+                    </div>
                   </IconButton>
 
                   <IconButton
@@ -418,7 +455,7 @@ const TableColumns = ({
                   >
                     <SvgIcon name="delete" className="w-4" />
 
-                    <span className="hidden absolute right-3 bottom-3 p-2 normal-case bg-black text-white rounded-md group-hover:block whitespace-nowrap">
+                    <span className="hidden absolute right-0 bottom-6 p-1 normal-case bg-black text-white rounded-md group-hover:block whitespace-nowrap">
                       Click to delete
                     </span>
                   </IconButton>

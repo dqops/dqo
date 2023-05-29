@@ -83,10 +83,60 @@ const ColumnStatisticsView = () => {
     }
     return value;
   };
+  const formatNumber = (k: number) => {
+    if (k < 10 && k / Math.floor(k) !== 1 && k !== 0) {
+      return k.toFixed(3);
+    } else if (k > 10 && k / Math.floor(k) !== 1 && k < Math.pow(10, 2)) {
+      return k.toFixed(2);
+    } else if (
+      k > Math.pow(10, 2) &&
+      k / Math.floor(k) !== 1 &&
+      k < Math.pow(10, 3)
+    ) {
+      return k.toFixed(1);
+    } else if (
+      k > Math.pow(10, 3) &&
+      k / Math.floor(k) !== 1 &&
+      k < Math.pow(10, 6)
+    ) {
+      return k.toFixed(0);
+    } else if (k > Math.pow(10, 6) && k < Math.pow(10, 9)) {
+      if (k > Math.pow(10, 6) && k < Math.pow(10, 7)) {
+        return (k / Math.pow(10, 6)).toFixed(3) + 'M';
+      } else if (k > Math.pow(10, 7) && k < Math.pow(10, 8)) {
+        return (k / Math.pow(10, 6)).toFixed(2) + 'M';
+      } else {
+        return (k / Math.pow(10, 6)).toFixed(1) + 'M';
+      }
+    } else if (k > Math.pow(10, 9) && k < Math.pow(10, 12)) {
+      if (k > Math.pow(10, 9) && k < Math.pow(10, 10)) {
+        return (k / Math.pow(10, 9)).toFixed(3) + 'G';
+      } else if (k > Math.pow(10, 10) && k < Math.pow(10, 11)) {
+        return (k / Math.pow(10, 9)).toFixed(2) + 'G';
+      } else {
+        return (k / Math.pow(10, 9)).toFixed(1) + 'G';
+      }
+    } else if (k > Math.pow(10, 12) && k < Math.pow(10, 15)) {
+      if (k > Math.pow(10, 12) && k < Math.pow(10, 13)) {
+        return (k / Math.pow(10, 12)).toFixed(3) + 'T';
+      } else if (k > Math.pow(10, 13) && k < Math.pow(10, 14)) {
+        return (k / Math.pow(10, 12)).toFixed(2) + 'T';
+      } else {
+        return (k / Math.pow(10, 12)).toFixed(1) + 'T';
+      }
+    } else {
+      return k;
+    }
+  };
+
+  const dateToString = (k: string) => {
+    const a = k.replace(/T/g, ' ');
+    return a;
+  };
 
   return (
     <div className="p-4">
-      <div className="flex w-full text-xl h-15">
+      <div className="flex w-full h-15">
         <div className="w-1/5 flex font-bold ml-5">
           Datatype{' '}
           <div className="font-light ml-5">
@@ -122,20 +172,25 @@ const ColumnStatisticsView = () => {
         <div className="w-1/4 flex font-bold">
           Collected at
           <div className="font-light ml-5">
-            {statistics?.statistics?.at(0)?.collectedAt}
+            {statistics?.statistics?.at(0)?.collectedAt &&
+              dateToString(
+                renderValue(statistics?.statistics?.at(0)?.collectedAt)
+              )}
           </div>
         </div>
       </div>
 
       <div className="w-full flex gap-8 flex-wrap">
-        <div className="border border-gray-400 inline-block">
+        <div className="border border-gray-400 inline-block w-100">
           <div className="h-10 flex justify-between items-center gap-x-36">
             <div className="ml-2 font-bold">Null count</div>
             <div>
               {statistics &&
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2" key={index}>
-                    {x.collector === 'nulls_count' ? renderValue(x.result) : ''}
+                    {x.collector === 'nulls_count'
+                      ? formatNumber(Number(renderValue(x.result)))
+                      : ''}
                   </div>
                 ))}
             </div>
@@ -163,7 +218,7 @@ const ColumnStatisticsView = () => {
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2" key={index}>
                     {x.collector === 'not_nulls_count'
-                      ? renderValue(x.result)
+                      ? formatNumber(Number(renderValue(x.result)))
                       : ''}
                   </div>
                 ))}
@@ -186,7 +241,7 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
         </div>
-        <div className="border border-gray-400 inline-block">
+        <div className="border border-gray-400 inline-block w-100">
           <div className="h-10 flex justify-between items-center gap-x-36">
             <div className="ml-2 font-bold">Unique count</div>
             <div>
@@ -194,7 +249,7 @@ const ColumnStatisticsView = () => {
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2" key={index}>
                     {x.collector === 'unique_count'
-                      ? renderValue(x.result)
+                      ? formatNumber(Number(renderValue(x.result)))
                       : ''}
                   </div>
                 ))}
@@ -223,7 +278,7 @@ const ColumnStatisticsView = () => {
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2" key={index}>
                     {x.collector === 'duplicate_count'
-                      ? renderValue(x.result)
+                      ? formatNumber(Number(renderValue(x.result)))
                       : ''}
                   </div>
                 ))}
@@ -246,7 +301,7 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
         </div>
-        <div className="border border-gray-400 inline-block ">
+        <div className="border border-gray-400 inline-block">
           <div className="h-10 flex justify-between items-center gap-x-36">
             <div className="ml-2 font-bold">Minimum</div>
             <div>
@@ -265,7 +320,9 @@ const ColumnStatisticsView = () => {
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2" key={index}>
                     {x.collector === 'median_value'
-                      ? renderValue(x.result)
+                      ? !isNaN(Number(renderValue(x.result)))
+                        ? formatNumber(renderValue(x.result))
+                        : renderValue(x.result)
                       : ''}
                   </div>
                 ))}
@@ -277,7 +334,11 @@ const ColumnStatisticsView = () => {
               {statistics &&
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2" key={index}>
-                    {x.collector === 'max_value' ? renderValue(x.result) : ''}
+                    {x.collector === 'max_value'
+                      ? !isNaN(Number(renderValue(x.result)))
+                        ? formatNumber(renderValue(x.result))
+                        : renderValue(x.result)
+                      : ''}
                   </div>
                 ))}
             </div>
@@ -288,13 +349,17 @@ const ColumnStatisticsView = () => {
               {statistics &&
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2" key={index}>
-                    {x.collector === 'sum_value' ? renderValue(x.result) : ''}
+                    {x.collector === 'sum_value'
+                      ? !isNaN(Number(renderValue(x.result)))
+                        ? formatNumber(renderValue(x.result))
+                        : renderValue(x.result)
+                      : ''}
                   </div>
                 ))}
             </div>
           </div>
         </div>
-        <div className="border border-gray-400 inline-block">
+        <div className="border border-gray-400 inline-block w-100">
           <div className="h-10 flex justify-between items-center gap-x-36">
             <div className="ml-2 font-bold">Maximum string length</div>
             <div>
@@ -315,7 +380,7 @@ const ColumnStatisticsView = () => {
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2" key={index}>
                     {x.collector === 'string_mean_length'
-                      ? renderValue(x.result)
+                      ? Number(renderValue(x.result)).toFixed(2)
                       : ''}
                   </div>
                 ))}
@@ -333,10 +398,6 @@ const ColumnStatisticsView = () => {
                   </div>
                 ))}
             </div>
-          </div>
-          <div className="h-10 flex justify-between items-center">
-            <div className="ml-2"></div>
-            <div className="mr-2"></div>
           </div>
         </div>
       </div>
