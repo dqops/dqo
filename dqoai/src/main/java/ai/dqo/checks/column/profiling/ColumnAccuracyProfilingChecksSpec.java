@@ -56,7 +56,7 @@ public class ColumnAccuracyProfilingChecksSpec extends AbstractCheckCategorySpec
     @JsonPropertyDescription("Verifies that the percentage of difference in average of a column in a table and average of a column of another table does not exceed the set number.")
     private ColumnAccuracyAverageMatchPercentCheckSpec averageMatchPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnAccuracyNotNullCountMatchPercentCheckSpec notNullCountMatchPercent;
 
     /**
