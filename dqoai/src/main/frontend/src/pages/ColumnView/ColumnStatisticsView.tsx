@@ -264,7 +264,9 @@ const ColumnStatisticsView = () => {
               {statistics &&
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2" key={index}>
-                    {x.collector === 'nulls_count' ? renderValue(x.result) : ''}
+                    {x.collector === 'median_value'
+                      ? renderValue(x.result)
+                      : ''}
                   </div>
                 ))}
             </div>

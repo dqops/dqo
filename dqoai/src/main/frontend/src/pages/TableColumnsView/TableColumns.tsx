@@ -209,7 +209,7 @@ const TableColumns = ({
       } else {
         return (k / Math.pow(10, 3)).toFixed(1) + 'k';
       }
-    } else if (k > 1000000 && k < 1000000000) {
+    } else if (k > Math.pow(10, 6) && k < Math.pow(10, 9)) {
       if (k > Math.pow(10, 6) && k < Math.pow(10, 7)) {
         return (k / Math.pow(10, 6)).toFixed(3) + 'M';
       } else if (k > Math.pow(10, 7) && k < Math.pow(10, 8)) {
@@ -217,7 +217,7 @@ const TableColumns = ({
       } else {
         return (k / Math.pow(10, 6)).toFixed(1) + 'M';
       }
-    } else if (k > 1000000000 && k < 1000000000000) {
+    } else if (k > Math.pow(10, 9) && k < Math.pow(10, 12)) {
       if (k > Math.pow(10, 9) && k < Math.pow(10, 10)) {
         return (k / Math.pow(10, 9)).toFixed(3) + 'G';
       } else if (k > Math.pow(10, 10) && k < Math.pow(10, 11)) {
@@ -225,7 +225,7 @@ const TableColumns = ({
       } else {
         return (k / Math.pow(10, 9)).toFixed(1) + 'G';
       }
-    } else if (k > 1000000000000 && k < 1000000000000000) {
+    } else if (k > Math.pow(10, 12) && k < Math.pow(10, 15)) {
       if (k > Math.pow(10, 12) && k < Math.pow(10, 13)) {
         return (k / Math.pow(10, 12)).toFixed(3) + 'T';
       } else if (k > Math.pow(10, 13) && k < Math.pow(10, 14)) {
@@ -374,19 +374,19 @@ const TableColumns = ({
                     )
                   )}
                 </td>
-                <td className="border-b border-gray-100 text-right px-4 h-full">
+                <td className="border-b border-gray-100 text-right px-4 my-0 py-0">
                   {column?.statistics?.map((metric, index) =>
                     metric.collector === 'unique_count' ? (
                       <div
                         key={index}
-                        className="truncate float-right pr-2 w-full h-full"
+                        className="truncate float-right pr-2 my-0 py-0"
                         style={{
+                          width: '100%',
+
                           backgroundColor: calculate_color(
                             Number(metric.result),
                             max_unique_value()
-                          ),
-                          width: '100%',
-                          height: '100%'
+                          )
                         }}
                       >
                         {metric.result
