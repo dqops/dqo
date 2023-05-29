@@ -68,7 +68,7 @@ const statusOptions = [
 
 export const IncidentConnection = () => {
   const { connection }: { connection: string } = useParams();
-  const { incidents, filters = {} } = useSelector(getFirstLevelIncidentsState);
+  const { incidents, isEnd, filters = {} } = useSelector(getFirstLevelIncidentsState);
   const dispatch = useActionDispatch();
   const history = useHistory();
   const [searchTerm, setSearchTerm] = useState("");
@@ -136,6 +136,7 @@ export const IncidentConnection = () => {
     {
       header: () => (
         <SortableColumn
+          className="justify-end"
           label="Failed checks count"
           order="failedChecksCount"
           direction={filters.sortBy === 'failedChecksCount' ? filters.sortDirection : undefined}
@@ -143,7 +144,7 @@ export const IncidentConnection = () => {
         />
       ),
       label: 'Failed checks count',
-      className: 'text-left text-sm py-2 px-4',
+      className: 'text-right text-sm py-2 px-4',
       value: 'failedChecksCount'
     },
     {
@@ -227,11 +228,11 @@ export const IncidentConnection = () => {
     },
     {
       label: 'Issue Link',
-      className: 'text-left issueUrl py-2 px-4',
+      className: 'text-center issueUrl py-2 px-4',
       value: 'issueUrl',
       render: (value: string, row: IncidentModel) => {
         return (
-          <div>
+          <div className="flex justify-center">
             {value ? (
               <div className="flex items-center space-x-2">
                 <a
@@ -348,12 +349,13 @@ export const IncidentConnection = () => {
           <Table
             columns={columns}
             data={incidents || []}
-            className="w-full"
+            className="w-full mb-8"
           />
 
           <Pagination
             page={filters.page || 1}
             pageSize={filters.pageSize || 50}
+            isEnd={isEnd}
             totalPages={10}
             onChange={(page, pageSize) => onChangeFilter({
               page,
