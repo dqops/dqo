@@ -14,6 +14,10 @@ import {
   setIncidentsFilter,
   updateIncident
 } from "../../redux/actions/incidents.actions";
+import {
+  addFirstLevelTab as addSourceFirstLevelTab,
+} from "../../redux/actions/source.actions";
+
 import { Table } from "../../components/Table";
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import { Pagination } from "../../components/Pagination";
@@ -300,6 +304,16 @@ export const IncidentConnection = () => {
   };
 
   const goToConfigure = () => {
+    dispatch(addSourceFirstLevelTab(CheckTypes.SOURCES, {
+      url: ROUTES.CONNECTION_DETAIL(
+        CheckTypes.SOURCES,
+        connection,
+        'incidents'
+      ),
+      value: ROUTES.CONNECTION_LEVEL_VALUE(CheckTypes.SOURCES, connection),
+      state: {},
+      label: connection
+    }));
     history.push(ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'incidents'));
   };
 
