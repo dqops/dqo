@@ -16,14 +16,11 @@
 package ai.dqo.core.scheduler.synchronize;
 
 import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
-import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
+import ai.dqo.core.jobqueue.ParentDqoJobQueue;
 import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob;
 import ai.dqo.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJobParameters;
-import ai.dqo.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
-import ai.dqo.core.synchronization.status.FolderSynchronizationStatus;
-import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
@@ -43,7 +40,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SynchronizeMetadataSchedulerJob implements Job {
     private DqoQueueJobFactory dqoQueueJobFactory;
-    private DqoJobQueue dqoJobQueue;
+    private ParentDqoJobQueue dqoJobQueue;
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
 
     /**
@@ -54,7 +51,7 @@ public class SynchronizeMetadataSchedulerJob implements Job {
      */
     @Autowired
     public SynchronizeMetadataSchedulerJob(DqoQueueJobFactory dqoQueueJobFactory,
-                                           DqoJobQueue dqoJobQueue,
+                                           ParentDqoJobQueue dqoJobQueue,
                                            DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties) {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
