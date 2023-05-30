@@ -27,6 +27,14 @@ import java.util.Optional;
  */
 public interface ParquetPartitionMetadataService {
     /**
+     * Lists all connections present in the directory under specific storage settings.
+     *
+     * @param storageSettings Storage settings that identify the target partition type.
+     * @return Returns a list of connection names that are currently stored for this storage type.
+     */
+    List<String> listConnections(FileStorageSettings storageSettings);
+
+    /**
      * Lists all tables present in the directory dedicated to the connection under specific storage settings.
      *
      * @param connectionName  Connection name.

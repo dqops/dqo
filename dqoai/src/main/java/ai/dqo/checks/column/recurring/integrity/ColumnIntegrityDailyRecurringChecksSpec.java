@@ -43,10 +43,10 @@ public class ColumnIntegrityDailyRecurringChecksSpec extends AbstractCheckCatego
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnIntegrityForeignKeyNotMatchCountCheckSpec dailyForeignKeyNotMatchCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnIntegrityForeignKeyMatchPercentCheckSpec dailyForeignKeyMatchPercent;
 
     /**

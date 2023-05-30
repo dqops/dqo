@@ -58,8 +58,8 @@ public class ColumnStringsMonthlyRecurringChecksSpec extends AbstractCheckCatego
             put("monthly_string_parsable_to_integer_percent", o -> o.monthlyStringParsableToIntegerPercent);
             put("monthly_string_parsable_to_float_percent", o -> o.monthlyStringParsableToFloatPercent);
 
-            put("monthly_string_in_set_count", o -> o.monthlyStringInSetCount);
-            put("monthly_string_in_set_percent", o -> o.monthlyStringInSetPercent);
+            put("monthly_expected_strings_in_use_count", o -> o.monthlyExpectedStringsInUseCount);
+            put("monthly_string_value_in_set_percent", o -> o.monthlyStringValueInSetPercent);
 
             put("monthly_string_valid_dates_percent", o -> o.monthlyStringValidDatesPercent);
             put("monthly_string_valid_country_code_percent", o -> o.monthlyStringValidCountryCodePercent);
@@ -76,7 +76,7 @@ public class ColumnStringsMonthlyRecurringChecksSpec extends AbstractCheckCatego
             put("monthly_string_match_date_regex_percent", o -> o.monthlyStringMatchDateRegexPercent);
             put("monthly_string_match_name_regex_percent", o -> o.monthlyStringMatchNameRegexPercent);
 
-            put("monthly_string_most_popular_values", o -> o.monthlyStringMostPopularValues);
+            put("monthly_expected_strings_in_top_values_count", o -> o.monthlyExpectedStringsInTopValuesCount);
 
             put("monthly_string_datatype_detected", o -> o.monthlyStringDatatypeDetected);
         }
@@ -142,11 +142,11 @@ public class ColumnStringsMonthlyRecurringChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringParsableToFloatPercentCheckSpec monthlyStringParsableToFloatPercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnStringInSetCountCheckSpec monthlyStringInSetCount;
+    @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnExpectedStringsInUseCountCheckSpec monthlyExpectedStringsInUseCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnStringInSetPercentCheckSpec monthlyStringInSetPercent;
+    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnStringValueInSetPercentCheckSpec monthlyStringValueInSetPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringValidCountryCodePercentCheckSpec monthlyStringValidCountryCodePercent;
@@ -184,8 +184,8 @@ public class ColumnStringsMonthlyRecurringChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name regex in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringMatchNameRegexPercentCheckSpec monthlyStringMatchNameRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnStringMostPopularValuesCheckSpec monthlyStringMostPopularValues;
+    @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnExpectedStringsInTopValuesCountCheckSpec monthlyExpectedStringsInTopValuesCount;
 
     @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnStringDatatypeDetectedCheckSpec monthlyStringDatatypeDetected;
@@ -536,36 +536,36 @@ public class ColumnStringsMonthlyRecurringChecksSpec extends AbstractCheckCatego
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnStringInSetCountCheckSpec getMonthlyStringInSetCount() {
-        return monthlyStringInSetCount;
+    public ColumnExpectedStringsInUseCountCheckSpec getMonthlyExpectedStringsInUseCount() {
+        return monthlyExpectedStringsInUseCount;
     }
 
     /**
      * Sets a new definition of a minimum strings in set count check.
-     * @param monthlyStringInSetCount Minimum strings in set count check.
+     * @param dailyExpectedStringsInUseCount Minimum strings in set count check.
      */
-    public void setMonthlyStringInSetCount(ColumnStringInSetCountCheckSpec monthlyStringInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringInSetCount, monthlyStringInSetCount));
-        this.monthlyStringInSetCount = monthlyStringInSetCount;
-        propagateHierarchyIdToField(monthlyStringInSetCount, "monthly_string_in_set_count");
+    public void setMonthlyExpectedStringsInUseCount(ColumnExpectedStringsInUseCountCheckSpec dailyExpectedStringsInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyExpectedStringsInUseCount, dailyExpectedStringsInUseCount));
+        this.monthlyExpectedStringsInUseCount = dailyExpectedStringsInUseCount;
+        propagateHierarchyIdToField(dailyExpectedStringsInUseCount, "monthly_expected_strings_in_use_count");
     }
 
     /**
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnStringInSetPercentCheckSpec getMonthlyStringInSetPercent() {
-        return monthlyStringInSetPercent;
+    public ColumnStringValueInSetPercentCheckSpec getMonthlyStringValueInSetPercent() {
+        return monthlyStringValueInSetPercent;
     }
 
     /**
      * Sets a new definition of a minimum strings in set percent check.
-     * @param monthlyStringInSetPercent Minimum strings in set percent check.
+     * @param monthlyStringValueInSetPercent Minimum strings in set percent check.
      */
-    public void setMonthlyStringInSetPercent(ColumnStringInSetPercentCheckSpec monthlyStringInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringInSetPercent, monthlyStringInSetPercent));
-        this.monthlyStringInSetPercent = monthlyStringInSetPercent;
-        propagateHierarchyIdToField(monthlyStringInSetPercent, "monthly_string_in_set_percent");
+    public void setMonthlyStringValueInSetPercent(ColumnStringValueInSetPercentCheckSpec monthlyStringValueInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyStringValueInSetPercent, monthlyStringValueInSetPercent));
+        this.monthlyStringValueInSetPercent = monthlyStringValueInSetPercent;
+        propagateHierarchyIdToField(monthlyStringValueInSetPercent, "monthly_string_value_in_set_percent");
     }
 
     /**
@@ -806,18 +806,18 @@ public class ColumnStringsMonthlyRecurringChecksSpec extends AbstractCheckCatego
      * Returns a count of expected values in most popular values set count check.
      * @return Most popular values count check.
      */
-    public ColumnStringMostPopularValuesCheckSpec getMonthlyStringMostPopularValues() {
-        return monthlyStringMostPopularValues;
+    public ColumnExpectedStringsInTopValuesCountCheckSpec getMonthlyExpectedStringsInTopValuesCount() {
+        return monthlyExpectedStringsInTopValuesCount;
     }
 
     /**
      * Sets a new definition of a most popular values count check.
-     * @param monthlyStringMostPopularValues Most popular values count check.
+     * @param monthlyExpectedStringsInTopValuesCount Most popular values count check.
      */
-    public void setMonthlyStringMostPopularValues(ColumnStringMostPopularValuesCheckSpec monthlyStringMostPopularValues) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringMostPopularValues, monthlyStringMostPopularValues));
-        this.monthlyStringMostPopularValues = monthlyStringMostPopularValues;
-        propagateHierarchyIdToField(monthlyStringMostPopularValues, "monthly_string_most_popular_values");
+    public void setMonthlyExpectedStringsInTopValuesCount(ColumnExpectedStringsInTopValuesCountCheckSpec monthlyExpectedStringsInTopValuesCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyExpectedStringsInTopValuesCount, monthlyExpectedStringsInTopValuesCount));
+        this.monthlyExpectedStringsInTopValuesCount = monthlyExpectedStringsInTopValuesCount;
+        propagateHierarchyIdToField(monthlyExpectedStringsInTopValuesCount, "monthly_expected_strings_in_top_values_count");
     }
 
     /**

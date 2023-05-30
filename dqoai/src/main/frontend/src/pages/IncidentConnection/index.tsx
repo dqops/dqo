@@ -14,6 +14,10 @@ import {
   setIncidentsFilter,
   updateIncident
 } from "../../redux/actions/incidents.actions";
+import {
+  addFirstLevelTab as addSourceFirstLevelTab,
+} from "../../redux/actions/source.actions";
+
 import { Table } from "../../components/Table";
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import { Pagination } from "../../components/Pagination";
@@ -26,6 +30,7 @@ import { IncidentsApi } from "../../services/apiClient";
 import { IconButton, Tooltip } from "@material-tailwind/react";
 import AddIssueUrlDialog from "./AddIssueUrlDialog";
 import { getDaysString } from "../../utils";
+import { SortableColumn } from "./SortableColumn";
 
 const options = [
   {
@@ -67,7 +72,7 @@ const statusOptions = [
 
 export const IncidentConnection = () => {
   const { connection }: { connection: string } = useParams();
-  const { incidents, filters = {} } = useSelector(getFirstLevelIncidentsState);
+  const { incidents, isEnd, filters = {} } = useSelector(getFirstLevelIncidentsState);
   const dispatch = useActionDispatch();
   const history = useHistory();
   const [searchTerm, setSearchTerm] = useState("");
@@ -106,6 +111,15 @@ export const IncidentConnection = () => {
     }));
   };
 
+  const handleSortChange = (orderBy: string, orderDirection?: 'asc' | 'desc') => {
+    onChangeFilter({
+      sortBy: orderBy as any,
+      ...filters.sortBy !== orderBy ? {
+        sortDirection: 'asc',
+        page: 1 }: { sortDirection: orderDirection }
+    })
+  };
+
   const columns = [
     {
       label: 'Resolution status',
@@ -124,8 +138,17 @@ export const IncidentConnection = () => {
       }
     },
     {
+      header: () => (
+        <SortableColumn
+          className="justify-end"
+          label="Failed checks count"
+          order="failedChecksCount"
+          direction={filters.sortBy === 'failedChecksCount' ? filters.sortDirection : undefined}
+          onChange={handleSortChange}
+        />
+      ),
       label: 'Failed checks count',
-      className: 'text-left text-sm py-2 px-4',
+      className: 'text-right text-sm py-2 px-4',
       value: 'failedChecksCount'
     },
     {
@@ -134,11 +157,27 @@ export const IncidentConnection = () => {
       value: 'schema'
     },
     {
+      header: () => (
+        <SortableColumn
+          label="Table"
+          order="table"
+          direction={filters.sortBy === 'table' ? filters.sortDirection : undefined}
+          onChange={handleSortChange}
+        />
+      ),
       label: 'Table',
       className: 'text-left text-sm py-2 px-4',
       value: 'table'
     },
     {
+      header: () => (
+        <SortableColumn
+          label="Checks"
+          order="checkName"
+          direction={filters.sortBy === 'checkName' ? filters.sortDirection : undefined}
+          onChange={handleSortChange}
+        />
+      ),
       label: 'Checks',
       className: 'text-left py-2 px-4',
       value: 'checkName',
@@ -154,6 +193,14 @@ export const IncidentConnection = () => {
       }
     },
     {
+      header: () => (
+        <SortableColumn
+          label="First seen"
+          order="firstSeen"
+          direction={filters.sortBy === 'firstSeen' ? filters.sortDirection : undefined}
+          onChange={handleSortChange}
+        />
+      ),
       label: 'First seen',
       className: 'text-left py-2 px-4',
       value: 'firstSeen',
@@ -165,6 +212,14 @@ export const IncidentConnection = () => {
       )
     },
     {
+      header: () => (
+        <SortableColumn
+          label="Last seen"
+          order="lastSeen"
+          direction={filters.sortBy === 'lastSeen' ? filters.sortDirection : undefined}
+          onChange={handleSortChange}
+        />
+      ),
       label: 'Last seen',
       className: 'text-left py-2 px-4',
       value: 'lastSeen',
@@ -177,11 +232,11 @@ export const IncidentConnection = () => {
     },
     {
       label: 'Issue Link',
-      className: 'text-left issueUrl py-2 px-4',
+      className: 'text-center issueUrl py-2 px-4',
       value: 'issueUrl',
       render: (value: string, row: IncidentModel) => {
         return (
-          <div>
+          <div className="flex justify-center">
             {value ? (
               <div className="flex items-center space-x-2">
                 <a
@@ -250,6 +305,16 @@ export const IncidentConnection = () => {
   };
 
   const goToConfigure = () => {
+    dispatch(addSourceFirstLevelTab(CheckTypes.SOURCES, {
+      url: ROUTES.CONNECTION_DETAIL(
+        CheckTypes.SOURCES,
+        connection,
+        'incidents'
+      ),
+      value: ROUTES.CONNECTION_LEVEL_VALUE(CheckTypes.SOURCES, connection),
+      state: {},
+      label: connection
+    }));
     history.push(ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'incidents'));
   };
 
@@ -298,12 +363,13 @@ export const IncidentConnection = () => {
           <Table
             columns={columns}
             data={incidents || []}
-            className="w-full"
+            className="w-full mb-8"
           />
 
           <Pagination
             page={filters.page || 1}
             pageSize={filters.pageSize || 50}
+            isEnd={isEnd}
             totalPages={10}
             onChange={(page, pageSize) => onChangeFilter({
               page,

@@ -30,6 +30,7 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.column.numeric.ColumnNumericPopulationVarianceSensorParametersSpec;
+import ai.dqo.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,7 +65,7 @@ public class BigQueryColumnNumericPopulationVarianceSensorParametersSpecIntegrat
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.0896, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.1);
     }
 
     @Test
@@ -77,7 +78,7 @@ public class BigQueryColumnNumericPopulationVarianceSensorParametersSpecIntegrat
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.0896, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.1);
     }
 
     @Test
@@ -90,7 +91,7 @@ public class BigQueryColumnNumericPopulationVarianceSensorParametersSpecIntegrat
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.0896, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.1);
     }
 
     @Test
@@ -116,6 +117,6 @@ public class BigQueryColumnNumericPopulationVarianceSensorParametersSpecIntegrat
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(11416.0896, resultTable.column(0).get(0));
+        Assertions.assertEquals(11416.0896, ValueConverter.toDouble(resultTable.column(0).get(0)), 0.1);
     }
 }

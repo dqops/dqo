@@ -41,7 +41,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
+public class RunScheduledChecksDqoJob extends DqoQueueJob<CheckExecutionSummary> {
     private JobSchedulerService jobSchedulerService;
     private CheckExecutionService checkExecutionService;
     private ExecutionContextFactory executionContextFactory;
@@ -93,8 +93,7 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
      * @return Optional result value that could be returned by the job.
      */
     @Override
-    public Void onExecute(DqoJobExecutionContext jobExecutionContext) {
-        FileSystemSynchronizationReportingMode synchronizationMode = this.jobSchedulerService.getSynchronizationMode();
+    public CheckExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
         CheckRunReportingMode checkRunReportingMode = this.jobSchedulerService.getCheckRunReportingMode();
 
         ExecutionContext executionContext = this.executionContextFactory.create();
@@ -105,7 +104,7 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
                 executionContext, this.cronSchedule, progressListener, jobExecutionContext.getJobId(),
                 jobExecutionContext.getCancellationToken());
 
-        return null;
+        return checkExecutionSummary;
     }
 
     /**

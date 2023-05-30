@@ -27,6 +27,8 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.parquet.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -37,6 +39,7 @@ import java.nio.charset.StandardCharsets;
  * after the user executed the "login" CLI command.
  */
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     private DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
     private UserHomeContextFactory userHomeContextFactory;

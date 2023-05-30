@@ -20,6 +20,7 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyIdModel;
+import ai.dqo.metadata.search.pattern.SearchPattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -52,6 +53,13 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
 
     @JsonIgnore // we can't serialize it because it is a mix of types, will not support deserialization correctly
     private Set<HierarchyId> checkHierarchyIds;
+    
+    @JsonIgnore
+    private SearchPattern columnNameSearchPattern;
+    @JsonIgnore
+    private SearchPattern sensorNameSearchPattern;
+    @JsonIgnore
+    private SearchPattern checkNameSearchPattern;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -249,6 +257,45 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
                 .map(hierarchyIdModel -> hierarchyIdModel.toHierarchyId())
                 .collect(Collectors.toSet());
         this.checkHierarchyIds = hierarchyIds;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>columnName</code>.
+     * Lazy getter, parses <code>columnName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>columnName</code>.
+     */
+    public SearchPattern getColumnNameSearchPattern() {
+        if (columnNameSearchPattern == null && columnName != null) {
+            columnNameSearchPattern = SearchPattern.create(false, columnName);
+        }
+        
+        return columnNameSearchPattern;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>sensorName</code>.
+     * Lazy getter, parses <code>sensorName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>sensorName</code>.
+     */
+    public SearchPattern getSensorNameSearchPattern() {
+        if (sensorNameSearchPattern == null && sensorName != null) {
+            sensorNameSearchPattern = SearchPattern.create(false, sensorName);
+        }
+
+        return sensorNameSearchPattern;
+    }
+    
+    /**
+     * Returns the {@link SearchPattern} related to <code>checkName</code>.
+     * Lazy getter, parses <code>checkName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>checkName</code>.
+     */
+    public SearchPattern getCheckNameSearchPattern() {
+        if (checkNameSearchPattern == null && checkName != null) {
+            checkNameSearchPattern = SearchPattern.create(false, checkName);
+        }
+
+        return checkNameSearchPattern;
     }
 
     /**

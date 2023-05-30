@@ -16,6 +16,7 @@
 package ai.dqo.checks.table.recurring.volume;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.table.checkspecs.volume.TableChangeRowCountCheckSpec;
 import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -38,7 +39,8 @@ import java.util.Objects;
 public class TableVolumeMonthlyRecurringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableVolumeMonthlyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-           put("monthly_row_count", o -> o.monthlyRowCount);
+            put("monthly_row_count", o -> o.monthlyRowCount);
+            put("monthly_row_count_change", o -> o.monthlyRowCountChange);
         }
     };
 
@@ -46,6 +48,11 @@ public class TableVolumeMonthlyRecurringChecksSpec extends AbstractCheckCategory
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableRowCountCheckSpec monthlyRowCount;
+
+    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableChangeRowCountCheckSpec monthlyRowCountChange;
 
     /**
      * Returns the row count check configuration.
@@ -63,6 +70,24 @@ public class TableVolumeMonthlyRecurringChecksSpec extends AbstractCheckCategory
 		this.setDirtyIf(!Objects.equals(this.monthlyRowCount, monthlyRowCount));
         this.monthlyRowCount = monthlyRowCount;
 		this.propagateHierarchyIdToField(monthlyRowCount, "monthly_row_count");
+    }
+
+    /**
+     * Returns the row count change check.
+     * @return Row count change check.
+     */
+    public TableChangeRowCountCheckSpec getMonthlyRowCountChange() {
+        return monthlyRowCountChange;
+    }
+
+    /**
+     * Sets a new row count change check.
+     * @param monthlyRowCountChange Row count change check.
+     */
+    public void setMonthlyRowCountChange(TableChangeRowCountCheckSpec monthlyRowCountChange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyRowCountChange, monthlyRowCountChange));
+        this.monthlyRowCountChange = monthlyRowCountChange;
+        propagateHierarchyIdToField(monthlyRowCountChange, "monthly_row_count_change");
     }
 
     /**

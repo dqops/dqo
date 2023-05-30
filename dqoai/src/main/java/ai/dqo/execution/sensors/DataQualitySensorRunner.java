@@ -24,16 +24,27 @@ import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
  */
 public interface DataQualitySensorRunner {
     /**
+     * Prepare the sensor before it is executed on the data source.
+     * @param executionContext DQO execution context that provides access to the DQO and user home.
+     * @param sensorRunParameters Sensor run parameters (connection, table, column, sensor parameters).
+     * @param progressListener Progress lister that receives information about the progress of a sensor execution.
+     * @return Sensor preparation result with a rendered sensor.
+     */
+    SensorPrepareResult prepareSensor(ExecutionContext executionContext,
+                                      SensorExecutionRunParameters sensorRunParameters,
+                                      SensorExecutionProgressListener progressListener);
+
+    /**
      * Executes a sensor and returns the sensor result as a table returned from the query.
      * @param executionContext Check execution context that provides access to the user home and dqo home.
-     * @param sensorRunParameters Sensor run parameters (connection, table, column, sensor parameters).
+     * @param sensorPrepareResult Sensor preparation object with the information prepared by the sensor runner before it can execute the sensor.
      * @param progressListener Progress lister that receives information about the progress of a sensor execution.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param jobCancellationToken Job cancellation token, used to cancel a running sensor query.
      * @return Sensor execution result with the query result from the sensor.
      */
     SensorExecutionResult executeSensor(ExecutionContext executionContext,
-                                        SensorExecutionRunParameters sensorRunParameters,
+                                        SensorPrepareResult sensorPrepareResult,
                                         SensorExecutionProgressListener progressListener,
                                         boolean dummySensorExecution,
                                         JobCancellationToken jobCancellationToken);

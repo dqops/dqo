@@ -49,6 +49,7 @@ import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindService;
 import ai.dqo.execution.sensors.*;
 import ai.dqo.execution.sensors.progress.ExecutingSensorEvent;
+import ai.dqo.execution.sensors.progress.PreparingSensorEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutedEvent;
 import ai.dqo.execution.sensors.progress.SensorFailedEvent;
 import ai.dqo.metadata.definitions.checks.CheckDefinitionSpec;
@@ -335,8 +336,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = this.hierarchyNodeTreeSearcher.findChecks(targetTable, checkSearchFilters);
         if (checks.size() == 0) {
-            checkExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0,
-                    0, 0, 0, 0);
+            // checkExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0, 0, 0, 0, 0);
             return; // no checks for this table
         }
         jobCancellationToken.throwIfCancelled();
@@ -396,9 +396,13 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 }
 
                 jobCancellationToken.throwIfCancelled();
-                progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorRunParameters));
+                progressListener.onPreparingSensor(new PreparingSensorEvent(tableSpec, sensorRunParameters));
+                SensorPrepareResult sensorPrepareResult = this.dataQualitySensorRunner.prepareSensor(executionContext, sensorRunParameters, progressListener);
+
+                jobCancellationToken.throwIfCancelled();
+                progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorPrepareResult));
                 SensorExecutionResult sensorResult = this.dataQualitySensorRunner.executeSensor(executionContext,
-                        sensorRunParameters, progressListener, dummySensorExecution, jobCancellationToken);
+                        sensorPrepareResult, progressListener, dummySensorExecution, jobCancellationToken);
                 jobCancellationToken.throwIfCancelled();
 
                 if (!sensorResult.isSuccess()) {

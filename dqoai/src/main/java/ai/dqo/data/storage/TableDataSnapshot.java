@@ -15,6 +15,9 @@
  */
 package ai.dqo.data.storage;
 
+import ai.dqo.data.models.DataDeleteResult;
+import ai.dqo.data.models.DataDeleteResultPartition;
+import ai.dqo.data.normalization.CommonColumnNames;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
@@ -467,6 +470,30 @@ public class TableDataSnapshot {
 
         // Assuming not read-only.
         tableDataChanges.getDeletedIds().addAll(idsToDelete);
+    }
+
+    public DataDeleteResult getDeleteResults() {
+        DataDeleteResult dataDeleteResult = new DataDeleteResult();
+        Set<String> deletedIds = this.getTableDataChanges().getDeletedIds();
+
+        for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry:
+                this.getLoadedMonthlyPartitions().entrySet()) {
+            ParquetPartitionId partitionId = loadedPartitionEntry.getKey();
+            Table loadedPartitionTable = loadedPartitionEntry.getValue().getData();
+            if (loadedPartitionTable == null) {
+                continue;
+            }
+
+            int deletedRows = loadedPartitionTable
+                    .textColumn(CommonColumnNames.ID_COLUMN_NAME)
+                    .isIn(deletedIds)
+                    .size();
+            boolean allRowsDeleted = deletedRows == loadedPartitionTable.rowCount();
+            DataDeleteResultPartition partitionResult = new DataDeleteResultPartition(deletedRows, allRowsDeleted);
+
+            dataDeleteResult.getPartitionResults().put(partitionId, partitionResult);
+        }
+        return dataDeleteResult;
     }
 
     /**

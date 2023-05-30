@@ -20,8 +20,6 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.DatatypeEqualsRuleParametersSpec;
-import ai.dqo.rules.comparison.EqualsRuleParametersSpec;
-import ai.dqo.rules.comparison.ValueChangedParametersSpec;
 import ai.dqo.sensors.column.strings.ColumnStringsStringDatatypeDetectSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;

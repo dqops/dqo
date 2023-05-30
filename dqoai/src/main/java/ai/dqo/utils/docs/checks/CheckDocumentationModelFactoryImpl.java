@@ -462,10 +462,10 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             CheckProviderRenderedSqlDocumentationModel providerDocModel = new CheckProviderRenderedSqlDocumentationModel();
             providerDocModel.setProviderType(providerType);
             String sqlTemplate = providerSensorDefinitionWrapper.getSqlTemplate();
-            providerDocModel.setJinjaTemplate(sqlTemplate);
-            providerDocModel.setListOfJinjaTemplate(splitStringByEndOfLine(sqlTemplate));
-
             if (sqlTemplate != null) {
+                providerDocModel.setJinjaTemplate(sqlTemplate);
+                providerDocModel.setListOfJinjaTemplate(splitStringByEndOfLine(sqlTemplate));
+
                 SensorDefinitionFindResult sensorDefinitionFindResult = new SensorDefinitionFindResult(sensorDefinitionWrapper.getSpec(),
                         providerSensorDefinitionWrapper.getSpec(), sqlTemplate,
                         providerType, HomeType.DQO_HOME, null);

@@ -22,6 +22,9 @@ import { getDaysString } from "../../utils";
 import AddIssueUrlDialog from "../IncidentConnection/AddIssueUrlDialog";
 import { IncidentIssueList } from "./IncidentIssueList";
 import { useTree } from "../../contexts/treeContext";
+import IncidentNavigation from "./IncidentNavigation";
+import Button from "../../components/Button";
+import { HistogramChart } from "./HistogramChart";
 
 const statusOptions = [
   {
@@ -46,8 +49,29 @@ const statusOptions = [
   }
 ];
 
+const options = [
+  {
+    label: '1 Day',
+    value: 1
+  },
+  {
+    label: '7 Days',
+    value: 7
+  },
+  {
+    label: '30 Days',
+    value: 30
+  },
+  {
+    label: 'All issues',
+    value: undefined
+  },
+];
+
 export const IncidentDetail = () => {
-  const { connection, year, month, id: incidentId }: { connection: string, year: string, month: string, id: string } = useParams();
+  const { connection, year: strYear, month: strMonth, id: incidentId }: { connection: string, year: string, month: string, id: string } = useParams();
+  const year = parseInt(strYear, 10);
+  const month = parseInt(strMonth, 10);
   const [incidentDetail, setIncidentDetail] = useState<IncidentModel>();
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
@@ -57,14 +81,14 @@ export const IncidentDetail = () => {
   const { issues, filters = {} } = useSelector(getFirstLevelIncidentsState);
 
   useEffect(() => {
-    IncidentsApi.getIncident(connection, parseInt(year, 10), parseInt(month, 10), incidentId).then(res => {
+    IncidentsApi.getIncident(connection, year, month, incidentId).then(res => {
       setIncidentDetail(res.data);
     });
 
     dispatch(getIncidentsIssues({
       connection,
-      year: parseInt(year, 10),
-      month: parseInt(month, 10),
+      year,
+      month,
       incidentId
     }));
   }, []);
@@ -99,8 +123,12 @@ export const IncidentDetail = () => {
       ...filters || {},
       ...obj,
       connection,
+      year,
+      month,
+      incidentId
     }));
-  }
+  };
+
 
   useEffect(() => {
     onChangeFilter({
@@ -112,11 +140,13 @@ export const IncidentDetail = () => {
   return (
     <IncidentsLayout>
       <div className="relative">
+        <IncidentNavigation incident={incidentDetail} />
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
             <div className="text-xl font-semibold truncate">Data quality incident {`${year}/${month}/${incidentId}`}</div>
           </div>
+          <Button label="Configure table notification" color="primary"></Button>
         </div>
         <div className="flex items-center p-4 gap-6 mb-4">
           <div className="grow">
@@ -126,6 +156,17 @@ export const IncidentDetail = () => {
               placeholder="Filter errors"
               className="!h-12"
             />
+          </div>
+
+          <div className="flex gap-2">
+            {options.map((o, index) => (
+              <Button
+                key={index}
+                label={o.label}
+                color={o.value === filters?.days ? 'primary' : undefined}
+                onClick={() => onChangeFilter({ days: o.value, page: 1 })}
+              />
+            ))}
           </div>
         </div>
         <div className="grid grid-cols-4 gap-4 px-4">
@@ -260,9 +301,10 @@ export const IncidentDetail = () => {
           </div>
         </div>
 
+        <HistogramChart />
         <div className="px-4 ">
           <div className="py-3 mb-5 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
-            <IncidentIssueList issues={issues} />
+            <IncidentIssueList issues={issues || []} />
           </div>
 
           <Pagination

@@ -40,8 +40,8 @@ public class ColumnNumericMonthlyRecurringChecksSpec extends AbstractCheckCatego
             put("monthly_negative_percent", o -> o.monthlyNegativePercent);
             put("monthly_non_negative_count", o -> o.monthlyNonNegativeCount);
             put("monthly_non_negative_percent", o -> o.monthlyNonNegativePercent);
-            put("monthly_numbers_found_count", o -> o.monthlyNumbersFoundCount);
-            put("monthly_has_valid_numbers_percent", o -> o.monthlyHasValidNumbersPercent);
+            put("monthly_expected_numbers_in_use_count", o -> o.monthlyExpectedNumbersInUseCount);
+            put("monthly_number_value_in_set_percent", o -> o.monthlyNumberValueInSetPercent);
             put("monthly_values_in_range_numeric_percent", o -> o.monthlyValuesInRangeNumericPercent);
             put("monthly_values_in_range_integers_percent", o -> o.monthlyValuesInRangeIntegersPercent);
             put("monthly_value_below_min_value_count", o -> o.monthlyValueBelowMinValueCount);
@@ -83,10 +83,10 @@ public class ColumnNumericMonthlyRecurringChecksSpec extends AbstractCheckCatego
     private ColumnNonNegativePercentCheckSpec monthlyNonNegativePercent;
 
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnNumbersFoundCountCheckSpec monthlyNumbersFoundCount;
+    private ColumnExpectedNumbersInUseCountCheckSpec monthlyExpectedNumbersInUseCount;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnHasValidNumbersPercentCheckSpec monthlyHasValidNumbersPercent;
+    private ColumnNumberValueInSetPercentCheckSpec monthlyNumberValueInSetPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnValuesInRangeNumericPercentCheckSpec monthlyValuesInRangeNumericPercent;
@@ -237,36 +237,36 @@ public class ColumnNumericMonthlyRecurringChecksSpec extends AbstractCheckCatego
      * Returns a numbers found count check specification.
      * @return Minimum Numbers found count check specification.
      */
-    public ColumnNumbersFoundCountCheckSpec getMonthlyNumbersFoundCount() {
-        return monthlyNumbersFoundCount;
+    public ColumnExpectedNumbersInUseCountCheckSpec getMonthlyExpectedNumbersInUseCount() {
+        return monthlyExpectedNumbersInUseCount;
     }
 
     /**
      * Sets a new specification of a numbers found count check.
-     * @param monthlyNumbersFoundCount Numbers found count check specification.
+     * @param monthlyExpectedNumbersInUseCount Numbers found count check specification.
      */
-    public void setMonthlyNumbersFoundCount(ColumnNumbersFoundCountCheckSpec monthlyNumbersFoundCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyNumbersFoundCount, monthlyNumbersFoundCount));
-        this.monthlyNumbersFoundCount = monthlyNumbersFoundCount;
-        propagateHierarchyIdToField(monthlyNumbersFoundCount, "monthly_numbers_found_count");
+    public void setMonthlyExpectedNumbersInUseCount(ColumnExpectedNumbersInUseCountCheckSpec monthlyExpectedNumbersInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyExpectedNumbersInUseCount, monthlyExpectedNumbersInUseCount));
+        this.monthlyExpectedNumbersInUseCount = monthlyExpectedNumbersInUseCount;
+        propagateHierarchyIdToField(monthlyExpectedNumbersInUseCount, "monthly_expected_numbers_in_use_count");
     }
 
     /**
      * Returns a numbers in set percent check specification.
      * @return Numbers in set percent check specification.
      */
-    public ColumnHasValidNumbersPercentCheckSpec getMonthlyHasValidNumbersPercent() {
-        return monthlyHasValidNumbersPercent;
+    public ColumnNumberValueInSetPercentCheckSpec getMonthlyNumberValueInSetPercent() {
+        return monthlyNumberValueInSetPercent;
     }
 
     /**
      * Sets a new definition of a minimum Numbers in set percent check.
-     * @param monthlyHasValidNumbersPercent Minimum Numbers in set percent check.
+     * @param monthlyNumberValueInSetPercent Minimum Numbers in set percent check.
      */
-    public void setMonthlyHasValidNumbersPercent(ColumnHasValidNumbersPercentCheckSpec monthlyHasValidNumbersPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyHasValidNumbersPercent, monthlyHasValidNumbersPercent));
-        this.monthlyHasValidNumbersPercent = monthlyHasValidNumbersPercent;
-        propagateHierarchyIdToField(monthlyHasValidNumbersPercent, "monthly_has_valid_numbers_percent");
+    public void setMonthlyNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec monthlyNumberValueInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyNumberValueInSetPercent, monthlyNumberValueInSetPercent));
+        this.monthlyNumberValueInSetPercent = monthlyNumberValueInSetPercent;
+        propagateHierarchyIdToField(monthlyNumberValueInSetPercent, "monthly_number_value_in_set_percent");
     }
 
     /**

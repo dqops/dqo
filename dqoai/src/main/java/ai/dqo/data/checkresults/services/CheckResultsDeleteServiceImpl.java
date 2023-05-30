@@ -20,15 +20,11 @@ import ai.dqo.data.checkresults.models.CheckResultsFragmentFilter;
 import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
 import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import ai.dqo.data.models.DataDeleteResult;
-import ai.dqo.data.models.DataDeleteResultPartition;
-import ai.dqo.data.normalization.CommonColumnNames;
-import ai.dqo.data.storage.LoadedMonthlyPartition;
-import ai.dqo.data.storage.ParquetPartitionId;
+import ai.dqo.data.storage.FileStorageSettings;
 import ai.dqo.data.storage.ParquetPartitionMetadataService;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -61,64 +57,58 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
             Set<String> wrappedValue = new HashSet<>(){{add(columnValue);}};
             conditions.put(columnName, wrappedValue);
         }
+
         if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
             conditions.put(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
         }
 
         DataDeleteResult dataDeleteResult = new DataDeleteResult();
 
-        Collection<PhysicalTableName> tablesToDelete;
-        if (filter.getTableSearchFilters().getSchemaTableName() == null) {
-            tablesToDelete = this.parquetPartitionMetadataService.listTablesForConnection(
-                    filter.getTableSearchFilters().getConnectionName(),
-                    CheckResultsSnapshot.createCheckResultsStorageSettings()
-            );
-        } else {
-            tablesToDelete = new LinkedList<>();
-            tablesToDelete.add(PhysicalTableName.fromSchemaTableFilter(filter.getTableSearchFilters().getSchemaTableName()));
-        }
-
-        if (tablesToDelete == null) {
-            // No matching tables specified or found.
+        FileStorageSettings fileStorageSettings = CheckResultsSnapshot.createCheckResultsStorageSettings();
+        List<String> connections = this.parquetPartitionMetadataService.listConnections(fileStorageSettings);
+        if (connections == null) {
+            // No connections present.
             return dataDeleteResult;
         }
 
-        Collection<CheckResultsSnapshot> checkResultsSnapshots = tablesToDelete.stream()
-                .map(tableName -> this.checkResultsSnapshotFactory.createSnapshot(
-                        filter.getTableSearchFilters().getConnectionName(),
-                        tableName
-                )).collect(Collectors.toList());
+        List<String> filteredConnections = connections.stream()
+                .filter(filter.getTableSearchFilters().getConnectionNameSearchPattern()::match)
+                .collect(Collectors.toList());
 
-        for (CheckResultsSnapshot currentSnapshot: checkResultsSnapshots) {
-            LocalDate startDeletionRange = filter.getDateStart();
-            LocalDate endDeletionRange = filter.getDateEnd();
+        for (String connectionName: filteredConnections) {
+            List<PhysicalTableName> tables = this.parquetPartitionMetadataService.listTablesForConnection(
+                    connectionName, fileStorageSettings);
 
-            currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
-            if (currentSnapshot.getLoadedMonthlyPartitions() == null) {
+            if (tables == null) {
+                // No tables present for this connection.
                 continue;
             }
 
-            Set<String> deletedIds = currentSnapshot.getTableDataChanges().getDeletedIds();
+            Collection<CheckResultsSnapshot> checkResultsSnapshots = tables.stream()
+                    .filter(schemaTableName ->
+                            filter.getTableSearchFilters().getSchemaNameSearchPattern().match(schemaTableName.getSchemaName())
+                                    && filter.getTableSearchFilters().gettableNameSearchPattern().match(schemaTableName.getTableName()))
+                    .map(tableName -> this.checkResultsSnapshotFactory.createSnapshot(
+                            filter.getTableSearchFilters().getConnectionName(),
+                            tableName
+                    ))
+                    .collect(Collectors.toList());
 
-            for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry:
-                    currentSnapshot.getLoadedMonthlyPartitions().entrySet()) {
-                ParquetPartitionId partitionId = loadedPartitionEntry.getKey();
-                Table loadedPartitionTable = loadedPartitionEntry.getValue().getData();
-                if (loadedPartitionTable == null) {
+            for (CheckResultsSnapshot currentSnapshot: checkResultsSnapshots) {
+                LocalDate startDeletionRange = filter.getDateStart();
+                LocalDate endDeletionRange = filter.getDateEnd();
+
+                currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
+
+                if (currentSnapshot.getLoadedMonthlyPartitions() == null) {
                     continue;
                 }
 
-                int deletedRows = loadedPartitionTable
-                        .textColumn(CommonColumnNames.ID_COLUMN_NAME)
-                        .isIn(deletedIds)
-                        .size();
-                boolean allRowsDeleted = deletedRows == loadedPartitionTable.rowCount();
-                DataDeleteResultPartition partitionResult = new DataDeleteResultPartition(deletedRows, allRowsDeleted);
+                DataDeleteResult snapshotDataDeleteResult = currentSnapshot.getDeleteResults();
+                dataDeleteResult.concat(snapshotDataDeleteResult);
 
-                dataDeleteResult.getPartitionResults().put(partitionId, partitionResult);
+                currentSnapshot.save();
             }
-
-            currentSnapshot.save();
         }
 
         return dataDeleteResult;

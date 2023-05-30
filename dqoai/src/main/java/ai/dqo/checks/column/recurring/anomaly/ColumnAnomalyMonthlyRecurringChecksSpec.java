@@ -16,12 +16,18 @@
 package ai.dqo.checks.column.recurring.anomaly;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.column.checkspecs.anomaly.ColumnChangeMeanCheckSpec;
+import ai.dqo.checks.column.checkspecs.anomaly.ColumnChangeMedianCheckSpec;
+import ai.dqo.checks.column.checkspecs.anomaly.ColumnChangeSumCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
+
+import java.util.Objects;
 
 /**
  * Container of built-in preconfigured data quality checks on a column level for detecting anomalies.
@@ -32,8 +38,74 @@ import lombok.EqualsAndHashCode;
 public class ColumnAnomalyMonthlyRecurringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyMonthlyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("monthly_mean_change", o -> o.monthlyMeanChange);
+            put("monthly_median_change", o -> o.monthlyMedianChange);
+            put("monthly_sum_change", o -> o.monthlySumChange);
         }
     };
+
+    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout.")
+    private ColumnChangeMeanCheckSpec monthlyMeanChange;
+
+    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout.")
+    private ColumnChangeMedianCheckSpec monthlyMedianChange;
+
+    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout.")
+    private ColumnChangeSumCheckSpec monthlySumChange;
+
+    /**
+     * Returns the mean value change check.
+     * @return Mean value change check.
+     */
+    public ColumnChangeMeanCheckSpec getMonthlyMeanChange() {
+        return monthlyMeanChange;
+    }
+
+    /**
+     * Sets a new mean value change check.
+     * @param monthlyMeanChange Mean value change check.
+     */
+    public void setMonthlyMeanChange(ColumnChangeMeanCheckSpec monthlyMeanChange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyMeanChange, monthlyMeanChange));
+        this.monthlyMeanChange = monthlyMeanChange;
+        propagateHierarchyIdToField(monthlyMeanChange, "monthly_mean_change");
+    }
+
+    /**
+     * Returns the median change check.
+     * @return Median change check.
+     */
+    public ColumnChangeMedianCheckSpec getMonthlyMedianChange() {
+        return monthlyMedianChange;
+    }
+
+    /**
+     * Sets a new median change check.
+     * @param monthlyMedianChange Median change check.
+     */
+    public void setMonthlyMedianChange(ColumnChangeMedianCheckSpec monthlyMedianChange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyMedianChange, monthlyMedianChange));
+        this.monthlyMedianChange = monthlyMedianChange;
+        propagateHierarchyIdToField(monthlyMedianChange, "monthly_median_change");
+    }
+
+    /**
+     * Returns the sum change check.
+     * @return Sum change check.
+     */
+    public ColumnChangeSumCheckSpec getMonthlySumChange() {
+        return monthlySumChange;
+    }
+
+    /**
+     * Sets a new sum change check.
+     * @param monthlySumChange Sum change check.
+     */
+    public void setMonthlySumChange(ColumnChangeSumCheckSpec monthlySumChange) {
+        this.setDirtyIf(!Objects.equals(this.monthlySumChange, monthlySumChange));
+        this.monthlySumChange = monthlySumChange;
+        propagateHierarchyIdToField(monthlySumChange, "monthly_sum_change");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

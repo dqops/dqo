@@ -17,7 +17,7 @@ package ai.dqo.utils.reflection;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
+import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import org.junit.jupiter.api.Assertions;
@@ -114,7 +114,7 @@ public class FieldInfoTests extends BaseTest {
         FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
         TableProfilingCheckCategoriesSpec target = new TableProfilingCheckCategoriesSpec();
-        TableProfilingVolumeChecksSpec expected = new TableProfilingVolumeChecksSpec();
+        TableVolumeProfilingChecksSpec expected = new TableVolumeProfilingChecksSpec();
         target.setVolume(expected);
 
         Object result = sut.getFieldValueOrNewObject(target);
@@ -129,10 +129,10 @@ public class FieldInfoTests extends BaseTest {
 
         TableProfilingCheckCategoriesSpec target = new TableProfilingCheckCategoriesSpec();
         target.setVolume(null);
-        TableProfilingVolumeChecksSpec result = (TableProfilingVolumeChecksSpec)sut.getFieldValueOrNewObject(target);
+        TableVolumeProfilingChecksSpec result = (TableVolumeProfilingChecksSpec)sut.getFieldValueOrNewObject(target);
         Assertions.assertNotNull(result);
 
-        TableProfilingVolumeChecksSpec result2 = (TableProfilingVolumeChecksSpec)sut.getFieldValueOrNewObject(target);
+        TableVolumeProfilingChecksSpec result2 = (TableVolumeProfilingChecksSpec)sut.getFieldValueOrNewObject(target);
         Assertions.assertNotNull(result2);
         Assertions.assertNotSame(result, result2);
     }

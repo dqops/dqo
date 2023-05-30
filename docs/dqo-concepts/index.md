@@ -49,6 +49,6 @@ These topics introduce the basic concepts of DQO.
 
 - **[Working with CLI](./working-with-cli/working-with-cli.md)**
 
-    Introduction to working with DQO Command Line Interface.
+    Introduction to working with DQO Command-Line Interface.
 
  

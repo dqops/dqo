@@ -31,17 +31,20 @@ const AddIssueUrlDialog = ({
   return (
     <div>
       <Dialog open={open} handler={onClose} className="min-w-150 max-w-150">
-        <DialogBody className="pt-6 pb-2 px-8">
-          <h1 className="text-center mb-4 text-gray-700 text-2xl">Link an issue URL to this incident</h1>
+        <DialogBody className="pt-10 pb-2 px-8">
           <div>
-            <Input
-              label="Issue URL"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-            />
+            <h1 className="text-center mb-4 text-gray-700 text-2xl">Link an issue URL to this incident</h1>
+            <div className="flex gap-x-3 items-center justify-center mt-10 mb-4">
+              <div className="text-sm text-gray-700 text-right">Issue URL</div>
+              <Input
+                className="!w-80"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+              />
+            </div>
           </div>
         </DialogBody>
-        <DialogFooter className="justify-end space-x-6 px-8 pb-8">
+        <DialogFooter className="flex justify-center space-x-6 px-8 pb-8">
           <Button
             color="primary"
             variant="outlined"

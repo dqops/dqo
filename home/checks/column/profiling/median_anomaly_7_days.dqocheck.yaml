@@ -3,6 +3,6 @@ apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/numeric/percentile
-  rule_name: stdev/change_percentile_moving_within_7_days
+  rule_name: percentile/change_percentile_moving_within_7_days
   help_text: Verifies that the median in a column changes in a rate within a percentile
     boundary during last 7 days.

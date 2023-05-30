@@ -47,8 +47,8 @@
 	</licenses>
 
 	<organization>
-		<name>Documati</name>
-		<url>https://dqo.ai/</url>
+		<name>Documati Sp. z o.o.</name>
+		<url>https://dqops.com/</url>
 	</organization>
 
 	<inceptionYear>2021</inceptionYear>
@@ -749,7 +749,7 @@
 						</path>
 					</annotationProcessorPaths>
 					<compilerArgs>
-						<arg>-Ajavadoc.packages=ai.dqo.sensors,ai.dqo.rules,ai.dqo.checks,ai.dqo.metadata</arg>
+						<arg>-Ajavadoc.packages=ai.dqo.sensors,ai.dqo.rules,ai.dqo.checks,ai.dqo.metadata,ai.dqo.data</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>
