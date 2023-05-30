@@ -77,9 +77,9 @@ To terminate dqo running in the background, simply use the Ctrl+C.
 For more information on the `run` command, please refer to the [Command-line interface section](../../command-line-interface/run.md).
 
 
-## Using DQO commands in the command-line 
+## Using DQO commands on the command-line interface
 
-You can also use any DQO commands directly in the command-line. Just add `dqo` before the name of the command. For example, 
+You can also use any DQO commands directly on the command line. Just add `dqo` before the name of the command. For example, 
 to run all the enabled checks use the following command
 
 ```

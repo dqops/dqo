@@ -19,8 +19,13 @@ import { Dispatch } from 'redux';
 import { IncidentsApi } from '../../services/apiClient';
 import { INCIDENTS_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
-import { CheckResultDetailedSingleModel, IncidentModel, IncidentsPerConnectionModel } from "../../api";
-import { IncidentFilter, IncidentIssueFilter } from "../reducers/incidents.reducer";
+import {
+  CheckResultDetailedSingleModel,
+  IncidentIssueHistogramModel,
+  IncidentModel,
+  IncidentsPerConnectionModel
+} from "../../api";
+import { IncidentFilter, IncidentHistogramFilter, IncidentIssueFilter } from "../reducers/incidents.reducer";
 
 export const getConnectionsRequest = () => ({
   type: INCIDENTS_ACTION.GET_CONNECTIONS
@@ -67,9 +72,10 @@ export const getIncidentsByConnectionRequest = () => ({
   type: INCIDENTS_ACTION.GET_INCIDENTS_BY_CONNECTION
 });
 
-export const getIncidentsByConnectionSuccess = (data: Array<IncidentModel>) => ({
+export const getIncidentsByConnectionSuccess = (data: Array<IncidentModel>, isEnd: boolean) => ({
   type: INCIDENTS_ACTION.GET_INCIDENTS_BY_CONNECTION_SUCCESS,
-  data
+  data,
+  isEnd
 });
 
 export const getIncidentsByConnectionFailed = (error: unknown) => ({
@@ -94,7 +100,12 @@ export const getIncidentsByConnection = ({
   try {
     const res: AxiosResponse<Array<IncidentModel>> =
       await IncidentsApi.findRecentIncidentsOnConnection(connection, numberOfMonth, openIncidents, acknowledgedIncidents, resolvedIncidents, mutedIncidents, page, pageSize, optionalFilter, sortBy, sortDirection);
-    dispatch(getIncidentsByConnectionSuccess(res.data));
+
+
+    const nextPageRes: AxiosResponse<Array<IncidentModel>> =
+      await IncidentsApi.findRecentIncidentsOnConnection(connection, numberOfMonth, openIncidents, acknowledgedIncidents, resolvedIncidents, mutedIncidents, page + 1, pageSize, optionalFilter, sortBy, sortDirection);
+
+    dispatch(getIncidentsByConnectionSuccess(res.data, !nextPageRes.data.length));
   } catch (err) {
     dispatch(getIncidentsByConnectionFailed(err));
   }
@@ -150,3 +161,46 @@ export const getIncidentsIssues = ({
     dispatch(getIncidentsIssuesFailed(err));
   }
 };
+
+
+export const getIncidentsHistogramsRequest = () => ({
+  type: INCIDENTS_ACTION.GET_INCIDENTS_HISTOGRAMS
+});
+
+export const getIncidentsHistogramsSuccess = (data: IncidentIssueHistogramModel) => ({
+  type: INCIDENTS_ACTION.GET_INCIDENTS_HISTOGRAMS_SUCCESS,
+  data
+});
+
+export const getIncidentsHistogramsFailed = (error: unknown) => ({
+  type: INCIDENTS_ACTION.GET_INCIDENTS_HISTOGRAMS_ERROR,
+  error
+});
+
+
+export const getIncidentsHistograms = ({
+  connection,
+  year,
+  month,
+  incidentId,
+  filter,
+  days = 999999,
+  date,
+  column,
+  check,
+}: IncidentHistogramFilter) => async (dispatch: Dispatch) => {
+  dispatch(getIncidentsHistogramsRequest());
+  try {
+    const res: AxiosResponse<IncidentIssueHistogramModel> =
+      await IncidentsApi.getIncidentHistogram(connection, year, month, incidentId, filter, days, date, column, check);
+
+    dispatch(getIncidentsHistogramsSuccess(res.data));
+  } catch (err) {
+    dispatch(getIncidentsHistogramsFailed(err));
+  }
+};
+
+export const setIncidentsHistogramFilter = (filter: Partial<IncidentHistogramFilter>) => ({
+  type: INCIDENTS_ACTION.SET_INCIDENTS_HISTOGRAM_FILTER,
+  data: filter,
+});

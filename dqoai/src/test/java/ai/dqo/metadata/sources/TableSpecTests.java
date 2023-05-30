@@ -17,7 +17,7 @@ package ai.dqo.metadata.sources;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
+import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
 import ai.dqo.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
@@ -120,7 +120,7 @@ public class TableSpecTests extends BaseTest {
     @Test
     void isDirty_whenDefaultChecksSpecSet_thenIsDirtyIsTrue() {
         TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
-        profilingChecks.setVolume(new TableProfilingVolumeChecksSpec());
+        profilingChecks.setVolume(new TableVolumeProfilingChecksSpec());
         profilingChecks.getVolume().setRowCount(new TableRowCountCheckSpec());
 		this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertEquals(this.sut.getProfilingChecks(), profilingChecks);
@@ -130,7 +130,7 @@ public class TableSpecTests extends BaseTest {
     @Test
     void isDirty_whenSameDefaultChecksSpecObjectAsCurrentSet_thenIsDirtyIsFalse() {
         TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
-        profilingChecks.setVolume(new TableProfilingVolumeChecksSpec());
+        profilingChecks.setVolume(new TableVolumeProfilingChecksSpec());
         profilingChecks.getVolume().setRowCount(new TableRowCountCheckSpec());
 		this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertTrue(this.sut.isDirty());
@@ -148,7 +148,7 @@ public class TableSpecTests extends BaseTest {
     @Test
     void hasAnyChecksConfigured_whenOneProfilingCheckConfigured_thenReturnsTrue() {
         TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
-        profilingChecks.setVolume(new TableProfilingVolumeChecksSpec());
+        profilingChecks.setVolume(new TableVolumeProfilingChecksSpec());
         profilingChecks.getVolume().setRowCount(new TableRowCountCheckSpec());
         this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());

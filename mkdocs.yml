@@ -103,6 +103,9 @@ nav:
         - row count match percent: 'checks/Table/accuracy/row-count-match-percent.md'
       - availability:
         - table availability: 'checks/Table/availability/table-availability.md'
+      - schema:
+        - column count: 'checks/Table/schema/column-count.md'
+        - column count changed: 'checks/Table/schema/column-count-changed.md'
       - sql:
         - sql condition passed percent on table: 'checks/Table/sql/sql-condition-passed-percent-on-table.md'
         - sql condition failed count on table: 'checks/Table/sql/sql-condition-failed-count-on-table.md'
@@ -216,6 +219,8 @@ nav:
         - contains ip4 percent: 'checks/Column/pii/contains-ip4-percent.md'
         - valid ip6 address percent: 'checks/Column/pii/valid-ip6-address-percent.md'
         - contains ip6 percent: 'checks/Column/pii/contains-ip6-percent.md'
+      - schema:
+        - column exists: 'checks/Column/schema/column-exists.md'
       - sql:
         - sql condition passed percent on column: 'checks/Column/sql/sql-condition-passed-percent-on-column.md'
         - sql condition failed count on column: 'checks/Column/sql/sql-condition-failed-count-on-column.md'
@@ -270,6 +275,7 @@ nav:
       - Table:
         - accuracy table sensors: 'reference/sensors/Table/accuracy-table-sensors.md'
         - availability table sensors: 'reference/sensors/Table/availability-table-sensors.md'
+        - schema table sensors: 'reference/sensors/Table/schema-table-sensors.md'
         - sql table sensors: 'reference/sensors/Table/sql-table-sensors.md'
         - timeliness table sensors: 'reference/sensors/Table/timeliness-table-sensors.md'
         - volume table sensors: 'reference/sensors/Table/volume-table-sensors.md'
@@ -283,6 +289,7 @@ nav:
         - numeric column sensors: 'reference/sensors/Column/numeric-column-sensors.md'
         - pii column sensors: 'reference/sensors/Column/pii-column-sensors.md'
         - range column sensors: 'reference/sensors/Column/range-column-sensors.md'
+        - schema column sensors: 'reference/sensors/Column/schema-column-sensors.md'
         - sql column sensors: 'reference/sensors/Column/sql-column-sensors.md'
         - strings column sensors: 'reference/sensors/Column/strings-column-sensors.md'
         - uniqueness column sensors: 'reference/sensors/Column/uniqueness-column-sensors.md'
@@ -308,11 +315,11 @@ nav:
 ########## END INCLUDE YAML REFERENCE
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
     - ParquetFiles:
-      - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
       - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
       - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
-      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
       - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
+      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
+      - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
 
 # Visual settings

@@ -28,6 +28,8 @@ import ai.dqo.checks.column.recurring.integrity.ColumnIntegrityMonthlyRecurringC
 import ai.dqo.checks.column.recurring.nulls.ColumnNullsMonthlyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.numeric.ColumnNumericMonthlyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.pii.ColumnPiiMonthlyRecurringChecksSpec;
+import ai.dqo.checks.column.recurring.schema.ColumnSchemaDailyRecurringChecksSpec;
+import ai.dqo.checks.column.recurring.schema.ColumnSchemaMonthlyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.sql.ColumnSqlMonthlyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.strings.ColumnStringsMonthlyRecurringChecksSpec;
 import ai.dqo.checks.column.recurring.uniqueness.ColumnUniquenessMonthlyRecurringChecksSpec;
@@ -59,80 +61,87 @@ import java.util.Objects;
 public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMonthlyRecurringCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-           put("nulls", o -> o.nulls);
-           put("numeric", o -> o.numeric);
-           put("strings", o -> o.strings);
-           put("uniqueness", o -> o.uniqueness);
-           put("datetime", o -> o.datetime);
-           put("pii", o -> o.pii);
-           put("sql", o -> o.sql);
-           put("bool", o -> o.bool);
-           put("integrity", o -> o.integrity);
-           put("accuracy", o -> o.accuracy);
-           put("consistency", o -> o.consistency);
-           put("anomaly", o -> o.anomaly);
+            put("nulls", o -> o.nulls);
+            put("numeric", o -> o.numeric);
+            put("strings", o -> o.strings);
+            put("uniqueness", o -> o.uniqueness);
+            put("datetime", o -> o.datetime);
+            put("pii", o -> o.pii);
+            put("sql", o -> o.sql);
+            put("bool", o -> o.bool);
+            put("integrity", o -> o.integrity);
+            put("accuracy", o -> o.accuracy);
+            put("consistency", o -> o.consistency);
+            put("anomaly", o -> o.anomaly);
+            put("schema", o -> o.schema);
         }
     };
 
-    @JsonPropertyDescription("Monthly recurring of nulls in the column")
+    @JsonPropertyDescription("Monthly recurring checks of nulls in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsMonthlyRecurringChecksSpec nulls;
 
-    @JsonPropertyDescription("Monthly recurring of numeric in the column")
+    @JsonPropertyDescription("Monthly recurring checks of numeric in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericMonthlyRecurringChecksSpec numeric;
 
-    @JsonPropertyDescription("Monthly recurring of strings in the column")
+    @JsonPropertyDescription("Monthly recurring checks of strings in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsMonthlyRecurringChecksSpec strings;
 
-    @JsonPropertyDescription("Monthly recurring of uniqueness in the column")
+    @JsonPropertyDescription("Monthly recurring checks of uniqueness in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnUniquenessMonthlyRecurringChecksSpec uniqueness;
 
-    @JsonPropertyDescription("Monthly recurring of datetime in the column")
+    @JsonPropertyDescription("Monthly recurring checks of datetime in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnDatetimeMonthlyRecurringChecksSpec datetime;
 
-    @JsonPropertyDescription("Monthly recurring of Personal Identifiable Information (PII) in the column")
+    @JsonPropertyDescription("Monthly recurring checks of Personal Identifiable Information (PII) in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnPiiMonthlyRecurringChecksSpec pii;
 
-    @JsonPropertyDescription("Monthly recurring of custom SQL checks in the column")
+    @JsonPropertyDescription("Monthly recurring checks of custom SQL checks in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnSqlMonthlyRecurringChecksSpec sql;
 
-    @JsonPropertyDescription("Monthly recurring of booleans in the column")
+    @JsonPropertyDescription("Monthly recurring checks of booleans in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBoolMonthlyRecurringChecksSpec bool;
 
-    @JsonPropertyDescription("Monthly recurring of integrity in the column")
+    @JsonPropertyDescription("Monthly recurring checks of integrity in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnIntegrityMonthlyRecurringChecksSpec integrity;
 
-    @JsonPropertyDescription("Monthly recurring of accuracy in the column")
+    @JsonPropertyDescription("Monthly recurring checks of accuracy in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAccuracyMonthlyRecurringChecksSpec accuracy;
 
-    @JsonPropertyDescription("Monthly recurring of consistency in the column")
+    @JsonPropertyDescription("Monthly recurring checks of consistency in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnConsistencyMonthlyRecurringChecksSpec consistency;
 
-    @JsonPropertyDescription("Monthly recurring of anomaly in the column")
+    @JsonPropertyDescription("Monthly recurring checks of anomaly in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAnomalyMonthlyRecurringChecksSpec anomaly;
+
+    @JsonPropertyDescription("Monthly recurring column schema checks")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnSchemaMonthlyRecurringChecksSpec schema;
+
 
     /**
      * Returns the container of recurring for standard data quality checks.
@@ -334,7 +343,7 @@ public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootCheck
 
     /**
      * Returns the container of recurring for standard data quality checks.
-     * @return Container of row standard data quality recurring.
+     * @return Container of anomaly data quality recurring checks.
      */
     public ColumnAnomalyMonthlyRecurringChecksSpec getAnomaly() {
         return anomaly;
@@ -348,6 +357,24 @@ public class ColumnMonthlyRecurringCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
         this.anomaly = anomaly;
         this.propagateHierarchyIdToField(anomaly, "anomaly");
+    }
+
+    /**
+     * Returns the container of monthly recurring column schema checks.
+     * @return Container of column schema checks.
+     */
+    public ColumnSchemaMonthlyRecurringChecksSpec getSchema() {
+        return schema;
+    }
+
+    /**
+     * Sets a new container of column schema checks (monthly).
+     * @param schema Container of monthly recurring column schema checks.
+     */
+    public void setSchema(ColumnSchemaMonthlyRecurringChecksSpec schema) {
+        this.setDirtyIf(!Objects.equals(this.schema, schema));
+        this.schema = schema;
+        this.propagateHierarchyIdToField(schema, "schema");
     }
 
     /**

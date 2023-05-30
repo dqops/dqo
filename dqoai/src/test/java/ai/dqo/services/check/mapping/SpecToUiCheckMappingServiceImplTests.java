@@ -83,7 +83,7 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(5, uiModel.getCategories().size());
+        Assertions.assertEquals(6, uiModel.getCategories().size());
     }
 
     @Test
@@ -93,7 +93,7 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(12, uiModel.getCategories().size());
+        Assertions.assertEquals(13, uiModel.getCategories().size());
     }
 
     private Map.Entry<Iterable<String>, Iterable<String>> extractCheckNamesFromUIModels(
@@ -125,7 +125,7 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
         UICheckContainerBasicModel uiBasicModel = this.sut.createUiBasicModel(tableCheckCategoriesSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiBasicModel);
-        Assertions.assertEquals(5, UICheckContainerBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());
+        Assertions.assertEquals(6, UICheckContainerBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());
 
         Map.Entry<Iterable<String>, Iterable<String>> names = extractCheckNamesFromUIModels(uiModel, uiBasicModel);
 
@@ -140,7 +140,7 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
         UICheckContainerBasicModel uiBasicModel = this.sut.createUiBasicModel(columnCheckCategoriesSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiBasicModel);
-        Assertions.assertEquals(12, UICheckContainerBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());
+        Assertions.assertEquals(13, UICheckContainerBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());
 
         Map.Entry<Iterable<String>, Iterable<String>> names = extractCheckNamesFromUIModels(uiModel, uiBasicModel);
 

@@ -15,9 +15,11 @@
  */
 package ai.dqo.sensors.table.availability;
 
+import ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -53,5 +55,39 @@ public class TableAvailabilitySensorParametersSpec extends AbstractSensorParamet
     @Override
     public String getSensorDefinitionName() {
         return "table/availability/table_availability";
+    }
+
+    /**
+     * Returns the default sensor runner class that will be used to execute this sensor.
+     * The default sensor runner is {@link JinjaSqlTemplateSensorRunner}.
+     *
+     * @return The default sensor runner class.
+     */
+    @Override
+    @JsonIgnore
+    public Class<?> getSensorRunnerClass() {
+        return TableAvailabilitySensorRunner.class;
+    }
+
+    /**
+     * Returns true if the sensor supports data streams. The default value is true.
+     *
+     * @return True when the sensor supports data streams.
+     */
+    @Override
+    @JsonIgnore
+    public boolean getSupportsDataStreams() {
+        return false;
+    }
+
+    /**
+     * Returns true if the sensor supports partitioned checks. The default value is true.
+     *
+     * @return True when the sensor support partitioned checks.
+     */
+    @Override
+    @JsonIgnore
+    public boolean getSupportsPartitionedChecks() {
+        return false;
     }
 }

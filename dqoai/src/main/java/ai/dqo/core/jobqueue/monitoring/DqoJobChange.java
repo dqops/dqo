@@ -15,6 +15,7 @@
  */
 package ai.dqo.core.jobqueue.monitoring;
 
+import ai.dqo.core.jobqueue.DqoJobType;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
 
 /**
@@ -23,6 +24,7 @@ import ai.dqo.core.jobqueue.DqoQueueJobId;
 public class DqoJobChange {
     private DqoJobStatus status;
     private DqoQueueJobId jobId;
+    private DqoJobType jobType;
     private String errorMessage;
     private DqoJobHistoryEntryModel updatedModel;
 
@@ -35,27 +37,32 @@ public class DqoJobChange {
         this.status = status;
         this.updatedModel = updatedModel;
         this.jobId = updatedModel.getJobId();
+        this.jobType = updatedModel.getJobType();
     }
 
     /**
      * Creates a job change model when just the status of a job has changed.
      * @param status New job status.
      * @param jobId Job id.
+     * @param jobType Job type.
      */
-    public DqoJobChange(DqoJobStatus status, DqoQueueJobId jobId) {
+    public DqoJobChange(DqoJobStatus status, DqoQueueJobId jobId, DqoJobType jobType) {
         this.status = status;
         this.jobId = jobId;
+        this.jobType = jobType;
     }
 
     /**
      * Creates a job change model when the job has failed. The job status should be failed.
      * @param jobId Job id.
      * @param errorMessage Error message.
+     * @param jobType Job type.
      */
-    public DqoJobChange(DqoQueueJobId jobId, String errorMessage) {
+    public DqoJobChange(DqoQueueJobId jobId, String errorMessage, DqoJobType jobType) {
         this.status = DqoJobStatus.failed;
         this.jobId = jobId;
         this.errorMessage = errorMessage;
+        this.jobType = jobType;
     }
 
     /**
@@ -80,6 +87,14 @@ public class DqoJobChange {
      */
     public DqoQueueJobId getJobId() {
         return jobId;
+    }
+
+    /**
+     * Returns the job type.
+     * @return Job type.
+     */
+    public DqoJobType getJobType() {
+        return jobType;
     }
 
     /**
