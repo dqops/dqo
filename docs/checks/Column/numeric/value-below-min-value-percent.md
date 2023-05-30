@@ -576,7 +576,7 @@ ___
 ## **daily value below min value percent**  
   
 **Check description**  
-The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.  
+The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

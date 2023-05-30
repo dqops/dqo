@@ -656,7 +656,7 @@ ___
 ## **daily string length in range percent**  
   
 **Check description**  
-The check counts the percentage of those strings with length in the range provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.  
+The check counts the percentage of those strings with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

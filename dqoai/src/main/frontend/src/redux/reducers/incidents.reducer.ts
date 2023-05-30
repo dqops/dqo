@@ -72,6 +72,18 @@ export interface IncidentIssueFilter {
   direction?: any;
 }
 
+export interface IncidentHistogramFilter {
+  connection: string;
+  year: number;
+  month: number;
+  incidentId: string;
+  filter?: string;
+  days?: number;
+  date?: string;
+  column?: string;
+  check?: string;
+}
+
 export interface IIncidentsState {
   connections: IncidentsPerConnectionModel[];
   loading: boolean;
@@ -189,6 +201,7 @@ const incidentsReducer = (state = initialState, action: any) => {
     case INCIDENTS_ACTION.GET_INCIDENTS_BY_CONNECTION_SUCCESS: {
       return setActiveTabState(state, action, {
         incidents: action.data,
+        isEnd: action.isEnd,
         loading: false
       });
     }
@@ -213,6 +226,22 @@ const incidentsReducer = (state = initialState, action: any) => {
         loading: false
       });
     }
+    case INCIDENTS_ACTION.GET_INCIDENTS_HISTOGRAMS: {
+      return setActiveTabState(state, action, {
+        loading: true
+      });
+    }
+    case INCIDENTS_ACTION.GET_INCIDENTS_HISTOGRAMS_SUCCESS: {
+      return setActiveTabState(state, action, {
+        histograms: action.data,
+        loading: false
+      });
+    }
+    case INCIDENTS_ACTION.GET_INCIDENTS_HISTOGRAMS_ERROR: {
+      return setActiveTabState(state, action, {
+        loading: false
+      });
+    }
     case INCIDENTS_ACTION.SET_INCIDENTS_FILTER: {
       return setActiveTabState(state, action, {
         filters: action.data
@@ -224,6 +253,11 @@ const incidentsReducer = (state = initialState, action: any) => {
       });
     }
 
+    case INCIDENTS_ACTION.SET_INCIDENTS_HISTOGRAM_FILTER: {
+      return setActiveTabState(state, action, {
+        histogramFilter: action.data
+      });
+    }
     default:
       return state;
   }

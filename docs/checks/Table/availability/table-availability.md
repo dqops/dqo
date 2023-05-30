@@ -569,7 +569,7 @@ ___
 ## **daily table availability**  
   
 **Check description**  
-Verifies availability on table in database using simple row count. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies availability on table in database using simple row count. Stores the most recent table availability status for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -1133,7 +1133,7 @@ ___
 ## **monthly table availability**  
   
 **Check description**  
-Verifies availability on table in database using simple row count. Stores the most recent row count for each month when the data quality check was evaluated.  
+Verifies availability on table in database using simple row count. Stores the most recent table availability status for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

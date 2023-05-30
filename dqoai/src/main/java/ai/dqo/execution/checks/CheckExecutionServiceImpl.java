@@ -336,8 +336,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = this.hierarchyNodeTreeSearcher.findChecks(targetTable, checkSearchFilters);
         if (checks.size() == 0) {
-            checkExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0,
-                    0, 0, 0, 0);
+            // checkExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0, 0, 0, 0, 0);
             return; // no checks for this table
         }
         jobCancellationToken.throwIfCancelled();

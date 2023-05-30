@@ -67,12 +67,12 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
     }
 
     /**
-     * Detects if there are any unsynchronized changes in a given DQO User home folder.
+     * Detects if there are any not synchronized changes in a given DQO User home folder.
      * @param dqoRoot User home folder to be analyzed.
-     * @return True when there are local unsynchronized changes, false otherwise.
+     * @return True when there are local not synchronized changes, false otherwise.
      */
     @Override
-    public boolean detectUnsynchronizedChangesInFolder(DqoRoot dqoRoot) {
+    public boolean detectNotSynchronizedChangesInFolder(DqoRoot dqoRoot) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -107,7 +107,7 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
     @Override
     public void detectAndPublishLocalFolderStatus(DqoRoot dqoRoot) {
         try {
-            boolean hasLocalChanges = detectUnsynchronizedChangesInFolder(dqoRoot);
+            boolean hasLocalChanges = detectNotSynchronizedChangesInFolder(dqoRoot);
             if (hasLocalChanges) {
                 this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, FolderSynchronizationStatus.changed);
             }
@@ -121,12 +121,11 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
      * Starts a background job that checks all folders and tries to detect local changes that were not yet synchronized to DQO Cloud.
      */
     @Override
-    public void detectUnsynchronizedChangesInBackground() {
+    public void detectNotSynchronizedChangesInBackground() {
         Schedulers.boundedElastic().schedule(() -> {
             detectAndPublishLocalFolderStatus(DqoRoot.sources);
             detectAndPublishLocalFolderStatus(DqoRoot.sensors);
             detectAndPublishLocalFolderStatus(DqoRoot.rules);
-            detectAndPublishLocalFolderStatus(DqoRoot.sensors);
             detectAndPublishLocalFolderStatus(DqoRoot.checks);
             detectAndPublishLocalFolderStatus(DqoRoot.data_sensor_readouts);
             detectAndPublishLocalFolderStatus(DqoRoot.data_check_results);

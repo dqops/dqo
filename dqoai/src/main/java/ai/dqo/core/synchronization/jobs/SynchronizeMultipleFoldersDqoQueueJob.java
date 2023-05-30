@@ -21,14 +21,19 @@ import ai.dqo.core.jobqueue.concurrency.ConcurrentJobType;
 import ai.dqo.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import ai.dqo.core.jobqueue.concurrency.JobConcurrencyTarget;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import ai.dqo.core.scheduler.JobSchedulerService;
+import ai.dqo.core.scheduler.quartz.JobKeys;
+import ai.dqo.core.scheduler.synchronize.JobSchedulesDelta;
+import ai.dqo.core.scheduler.synchronize.ScheduleChangeFinderService;
+import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
 import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.core.synchronization.listeners.SilentFileSystemSynchronizationListener;
+import ai.dqo.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
+import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,18 +48,30 @@ import java.util.stream.Collectors;
 public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Void> {
     private DqoJobQueue dqoJobQueue;
     private DqoQueueJobFactory dqoQueueJobFactory;
+    private ScheduleChangeFinderService scheduleChangeFinderService;
+    private JobSchedulerService jobSchedulerService;
+    private SynchronizationStatusTracker synchronizationStatusTracker;
     private SynchronizeMultipleFoldersDqoQueueJobParameters parameters;
 
     /**
      * Creates an instance of a job that synchronizes multiple folder roots.
      * @param dqoJobQueue Dqo queue for child jobs, where folder level jobs will be scheduled.
      * @param dqoQueueJobFactory Factory of jobs.
+     * @param scheduleChangeFinderService Cron schedule finder that will find new schedules.
+     * @param jobSchedulerService Cron job scheduler, used to update the scheduling configuration.
+     * @param synchronizationStatusTracker Folder synchronization tracker service. Used to detect which folders were updated and synchronize only folders with local updates.
      */
     @Autowired
     public SynchronizeMultipleFoldersDqoQueueJob(DqoJobQueue dqoJobQueue,
-                                                 DqoQueueJobFactory dqoQueueJobFactory) {
+                                                 DqoQueueJobFactory dqoQueueJobFactory,
+                                                 ScheduleChangeFinderService scheduleChangeFinderService,
+                                                 JobSchedulerService jobSchedulerService,
+                                                 SynchronizationStatusTracker synchronizationStatusTracker) {
         this.dqoJobQueue = dqoJobQueue;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
+        this.scheduleChangeFinderService = scheduleChangeFinderService;
+        this.jobSchedulerService = jobSchedulerService;
+        this.synchronizationStatusTracker = synchronizationStatusTracker;
     }
 
     /**
@@ -74,6 +91,17 @@ public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Voi
     }
 
     /**
+     * Finds new or deleted CRON schedules (cron expressions) and updates the triggers in the quartz scheduler.
+     */
+    protected void updateListOfSchedulesInQuartzScheduler() {
+        if (this.jobSchedulerService.isStarted()) {
+            UniqueSchedulesCollection activeSchedules = this.jobSchedulerService.getActiveSchedules(JobKeys.RUN_CHECKS);
+            JobSchedulesDelta schedulesToAddOrRemove = this.scheduleChangeFinderService.findSchedulesToAddOrRemove(activeSchedules);
+            this.jobSchedulerService.applyScheduleDeltaToJob(schedulesToAddOrRemove, JobKeys.RUN_CHECKS);
+        }
+    }
+
+    /**
      * Job internal implementation method that should be implemented by derived jobs.
      *
      * @param jobExecutionContext Job execution context.
@@ -82,49 +110,56 @@ public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Voi
     @Override
     public Void onExecute(DqoJobExecutionContext jobExecutionContext) {
         List<SynchronizeRootFolderParameters> jobParametersList = new ArrayList<>();
-        if (parameters.isSources()) {
+
+        SynchronizeMultipleFoldersDqoQueueJobParameters clonedParameters = this.parameters.clone();
+        if (clonedParameters.isSynchronizeFolderWithLocalChanges()) {
+            CloudSynchronizationFoldersStatusModel currentSynchronizationStatus = this.synchronizationStatusTracker.getCurrentSynchronizationStatus();
+            clonedParameters.synchronizeFoldersWithLocalChanges(currentSynchronizationStatus);
+        }
+
+        if (clonedParameters.isSources()) {
             jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.sources,
-                    parameters.getDirection(), parameters.isForceRefreshNativeTables()));
+                    clonedParameters.getDirection(), clonedParameters.isForceRefreshNativeTables()));
         }
 
-        if (parameters.isSensors()) {
+        if (clonedParameters.isSensors()) {
             jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.sensors,
-                    parameters.getDirection(), parameters.isForceRefreshNativeTables()));
+                    clonedParameters.getDirection(), clonedParameters.isForceRefreshNativeTables()));
         }
 
-        if (parameters.isRules()) {
+        if (clonedParameters.isRules()) {
             jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.rules,
-                    parameters.getDirection(), parameters.isForceRefreshNativeTables()));
+                    clonedParameters.getDirection(), clonedParameters.isForceRefreshNativeTables()));
         }
 
-        if (parameters.isChecks()) {
+        if (clonedParameters.isChecks()) {
             jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.checks,
-                    parameters.getDirection(), parameters.isForceRefreshNativeTables()));
+                    clonedParameters.getDirection(), clonedParameters.isForceRefreshNativeTables()));
         }
 
-        if (parameters.isDataSensorReadouts()) {
+        if (clonedParameters.isDataSensorReadouts()) {
             jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_sensor_readouts,
-                    parameters.getDirection(), parameters.isForceRefreshNativeTables()));
+                    clonedParameters.getDirection(), clonedParameters.isForceRefreshNativeTables()));
         }
 
-        if (parameters.isDataCheckResults()) {
+        if (clonedParameters.isDataCheckResults()) {
             jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_check_results,
-                    parameters.getDirection(), parameters.isForceRefreshNativeTables()));
+                    clonedParameters.getDirection(), clonedParameters.isForceRefreshNativeTables()));
         }
 
-        if (parameters.isDataStatistics()) {
+        if (clonedParameters.isDataStatistics()) {
             jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_statistics,
-                    parameters.getDirection(), parameters.isForceRefreshNativeTables()));
+                    clonedParameters.getDirection(), clonedParameters.isForceRefreshNativeTables()));
         }
 
-        if (parameters.isDataErrors()) {
+        if (clonedParameters.isDataErrors()) {
             jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_errors,
-                    parameters.getDirection(), parameters.isForceRefreshNativeTables()));
+                    clonedParameters.getDirection(), clonedParameters.isForceRefreshNativeTables()));
         }
 
-        if (parameters.isDataIncidents()) {
+        if (clonedParameters.isDataIncidents()) {
             jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_incidents,
-                    parameters.getDirection(), parameters.isForceRefreshNativeTables()));
+                    clonedParameters.getDirection(), clonedParameters.isForceRefreshNativeTables()));
         }
 
         Collection<DqoQueueJob<Void>> synchronizeFolderJobs = jobParametersList.stream()
@@ -139,6 +174,13 @@ public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Voi
 
         ChildDqoQueueJobsContainer<Void> childJobsContainer = this.dqoJobQueue.pushChildJobs(synchronizeFolderJobs, jobExecutionContext.getJobId());
         childJobsContainer.waitForChildResults(jobExecutionContext.getCancellationToken());
+
+        // TODO: the child folder synchronization jobs should return a summary of files uploaded and downloaded, when the "sources" folder has incoming changes, we should always update the schedules
+
+        if (clonedParameters.isDetectCronSchedules() || clonedParameters.isSources()) {
+            this.updateListOfSchedulesInQuartzScheduler();
+        }
+
         return null;
     }
 

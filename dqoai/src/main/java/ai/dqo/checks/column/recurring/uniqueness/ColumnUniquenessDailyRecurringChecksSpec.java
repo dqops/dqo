@@ -46,16 +46,16 @@ public class ColumnUniquenessDailyRecurringChecksSpec extends AbstractCheckCateg
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of unique values in a column does not fall below the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of unique values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnUniqueCountCheckSpec dailyUniqueCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not fall below the minimum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnUniquePercentCheckSpec dailyUniquePercent;
 
-    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnDuplicateCountCheckSpec dailyDuplicateCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnDuplicatePercentCheckSpec dailyDuplicatePercent;
 
     /**
