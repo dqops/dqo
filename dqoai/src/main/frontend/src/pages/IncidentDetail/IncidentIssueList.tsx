@@ -67,7 +67,7 @@ export const IncidentIssueRow = ({ issue }: IncidentIssueRowProps) => {
             ) : (
               <SvgIcon className="w-4" name="chevron-down" onClick={toggleCheckDetails} />
             )}
-            <span>{issue.id}</span>
+            <span>{issue.columnName}</span>
           </div>
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
@@ -121,6 +121,9 @@ export const IncidentIssueRow = ({ issue }: IncidentIssueRowProps) => {
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
           {issue.dataStream}
         </td>
+        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+          <span>{issue.id}</span>
+        </td>
       </tr>
       {open && (
         <tr>
@@ -146,7 +149,7 @@ export const IncidentIssueList = ({ issues }: IncidentIssueListProps) => {
         <thead>
         <tr>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-            Id
+            Column Name
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
             Check Name
@@ -198,6 +201,9 @@ export const IncidentIssueList = ({ issues }: IncidentIssueListProps) => {
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
             Data Stream
+          </th>
+          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
+            Id
           </th>
         </tr>
         </thead>
