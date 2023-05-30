@@ -25,6 +25,7 @@ import { useTree } from "../../contexts/treeContext";
 import IncidentNavigation from "./IncidentNavigation";
 import Button from "../../components/Button";
 import { HistogramChart } from "./HistogramChart";
+import SectionWrapper from "../../components/Dashboard/SectionWrapper";
 
 const statusOptions = [
   {
@@ -170,7 +171,7 @@ export const IncidentDetail = () => {
           </div>
         </div>
         <div className="grid grid-cols-4 gap-4 px-4">
-          <div className="text-sm bg-white rounded-lg p-4 border border-gray-200">
+          <SectionWrapper title="Table">
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Connection</div>
               <div className="flex-[2] font-bold">{incidentDetail?.connection}</div>
@@ -187,8 +188,8 @@ export const IncidentDetail = () => {
               <div className="flex-1">Table priority</div>
               <div className="flex-[2] font-bold">{incidentDetail?.tablePriority}</div>
             </div>
-          </div>
-          <div className="text-sm bg-white rounded-lg p-4 border border-gray-200">
+          </SectionWrapper>
+          <SectionWrapper title="Status and time range">
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Status:</div>
               <div className="flex-[2] font-bold">
@@ -220,8 +221,8 @@ export const IncidentDetail = () => {
                 ({getDaysString(incidentDetail?.incidentUntil || 0)})
               </div>
             </div>
-          </div>
-          <div className="text-sm bg-white rounded-lg p-4 border border-gray-200">
+          </SectionWrapper>
+          <SectionWrapper title="Severity statistics">
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-[2]">Min severity threshold:</div>
               <div className="flex-[1] font-bold">{incidentDetail?.minSeverity}</div>
@@ -276,8 +277,8 @@ export const IncidentDetail = () => {
                 </div>
               </div>
             </div>
-          </div>
-          <div className="text-sm bg-white rounded-lg p-4 border border-gray-200">
+          </SectionWrapper>
+          <SectionWrapper title="Data quality issue grouping">
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Quality dimension:</div>
               <div className="flex-1 font-bold">{incidentDetail?.qualityDimension}</div>
@@ -298,7 +299,7 @@ export const IncidentDetail = () => {
               <div className="flex-1">Data stream:</div>
               <div className="flex-1 font-bold">{incidentDetail?.dataStreamName}</div>
             </div>
-          </div>
+          </SectionWrapper>
         </div>
 
         <HistogramChart />
