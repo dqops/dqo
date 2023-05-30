@@ -51,7 +51,7 @@ const tabs = [
 ];
 
 interface CheckDetailsProps {
-  check: UICheckModel;
+  check?: UICheckModel;
   onClose: () => void;
   job?: DqoJobHistoryEntryModel;
 }
@@ -97,7 +97,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
   const getCheckResult = (
     data: CheckResultsDetailedDataModel[]
   ): CheckResultsDetailedDataModel[] => {
-    return data.filter((item) => item.checkName === check.check_name);
+    return data.filter((item) => item.checkName === check?.check_name);
   };
 
   const getSensorReadout = (
@@ -106,14 +106,14 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
     return data.filter(
       (item) =>
         item.singleSensorReadouts &&
-        item.singleSensorReadouts[0]?.checkName === check.check_name
+        item.singleSensorReadouts[0]?.checkName === check?.check_name
     );
   };
 
   const getErrorItem = (
     data: ErrorsDetailedDataModel[]
   ): ErrorsDetailedDataModel[] => {
-    return data.filter((item) => item.checkName === check.check_name);
+    return data.filter((item) => item.checkName === check?.check_name);
   };
 
   useEffect(() => {
@@ -144,7 +144,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
         : '';
 
       if (
-        check.run_checks_job_template?.checkType ===
+        check?.run_checks_job_template?.checkType ===
         CheckSearchFiltersCheckTypeEnum.profiling
       ) {
         if (column) {
@@ -185,7 +185,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
         }
       }
       if (
-        check.run_checks_job_template?.checkType ===
+        check?.run_checks_job_template?.checkType ===
         CheckSearchFiltersCheckTypeEnum.recurring
       ) {
         if (column) {
@@ -194,7 +194,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             schema,
             table,
             column,
-            check.run_checks_job_template?.timeScale || 'daily',
+            check?.run_checks_job_template?.timeScale || 'daily',
             dataStreamName,
             startDate,
             endDate
@@ -212,7 +212,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             connection,
             schema,
             table,
-            check.run_checks_job_template?.timeScale || 'daily',
+            check?.run_checks_job_template?.timeScale || 'daily',
             dataStreamName,
             startDate,
             endDate
@@ -228,7 +228,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
         }
       }
       if (
-        check.run_checks_job_template?.checkType ===
+        check?.run_checks_job_template?.checkType ===
         CheckSearchFiltersCheckTypeEnum.partitioned
       ) {
         if (column) {
@@ -237,7 +237,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             schema,
             table,
             column,
-            check.run_checks_job_template?.timeScale || 'daily',
+            check?.run_checks_job_template?.timeScale || 'daily',
             dataStreamName,
             startDate,
             endDate
@@ -255,7 +255,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             connection,
             schema,
             table,
-            check.run_checks_job_template?.timeScale || 'daily',
+            check?.run_checks_job_template?.timeScale || 'daily',
             dataStreamName,
             startDate,
             endDate
@@ -284,7 +284,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
         : '';
 
       if (
-        check.run_checks_job_template?.checkType ===
+        check?.run_checks_job_template?.checkType ===
         CheckSearchFiltersCheckTypeEnum.profiling
       ) {
         if (column) {
@@ -325,7 +325,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
         }
       }
       if (
-        check.run_checks_job_template?.checkType ===
+        check?.run_checks_job_template?.checkType ===
         CheckSearchFiltersCheckTypeEnum.recurring
       ) {
         if (column) {
@@ -334,7 +334,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             schema,
             table,
             column,
-            check.run_checks_job_template?.timeScale || 'daily',
+            check?.run_checks_job_template?.timeScale || 'daily',
             dataStreamName,
             startDate,
             endDate
@@ -352,7 +352,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             connection,
             schema,
             table,
-            check.run_checks_job_template?.timeScale || 'daily',
+            check?.run_checks_job_template?.timeScale || 'daily',
             dataStreamName,
             startDate,
             endDate
@@ -368,7 +368,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
         }
       }
       if (
-        check.run_checks_job_template?.checkType ===
+        check?.run_checks_job_template?.checkType ===
         CheckSearchFiltersCheckTypeEnum.partitioned
       ) {
         if (column) {
@@ -377,7 +377,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             schema,
             table,
             column,
-            check.run_checks_job_template?.timeScale || 'daily',
+            check?.run_checks_job_template?.timeScale || 'daily',
             dataStreamName,
             startDate,
             endDate
@@ -395,7 +395,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             connection,
             schema,
             table,
-            check.run_checks_job_template?.timeScale || 'daily',
+            check?.run_checks_job_template?.timeScale || 'daily',
             dataStreamName,
             startDate,
             endDate
@@ -424,7 +424,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
         : '';
 
       if (
-        check.run_checks_job_template?.checkType ===
+        check?.run_checks_job_template?.checkType ===
         CheckSearchFiltersCheckTypeEnum.profiling
       ) {
         if (column) {
@@ -465,7 +465,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
         }
       }
       if (
-        check.run_checks_job_template?.checkType ===
+        check?.run_checks_job_template?.checkType ===
         CheckSearchFiltersCheckTypeEnum.recurring
       ) {
         if (column) {
@@ -474,7 +474,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             schema,
             table,
             column,
-            check.run_checks_job_template?.timeScale || 'daily',
+            check?.run_checks_job_template?.timeScale || 'daily',
             dataStreamName,
             startDate,
             endDate
@@ -492,7 +492,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             connection,
             schema,
             table,
-            check.run_checks_job_template?.timeScale || 'daily',
+            check?.run_checks_job_template?.timeScale || 'daily',
             dataStreamName,
             startDate,
             endDate
@@ -508,7 +508,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
         }
       }
       if (
-        check.run_checks_job_template?.checkType ===
+        check?.run_checks_job_template?.checkType ===
         CheckSearchFiltersCheckTypeEnum.partitioned
       ) {
         if (column) {
@@ -517,7 +517,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             schema,
             table,
             column,
-            check.run_checks_job_template?.timeScale || 'daily',
+            check?.run_checks_job_template?.timeScale || 'daily',
             dataStreamName,
             startDate,
             endDate
@@ -535,7 +535,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             connection,
             schema,
             table,
-            check.run_checks_job_template?.timeScale || 'daily',
+            check?.run_checks_job_template?.timeScale || 'daily',
             dataStreamName,
             startDate,
             endDate
@@ -655,7 +655,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
           onDelete={(params) => {
             setDeleteDataDialogOpened(false);
             JobApiClient.deleteStoredData({
-              ...check.data_clean_job_template,
+              ...check?.data_clean_job_template,
               ...params
             });
           }}
