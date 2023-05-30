@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import { ColumnApiClient, JobApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
-import { ColumnStatisticsModel, TableColumnsStatisticsModel } from '../../api';
+import {
+  ColumnStatisticsModel,
+  StatisticsMetricModel,
+  TableColumnsStatisticsModel
+} from '../../api';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../components/SvgIcon';
 import ConfirmDialog from './ConfirmDialog';
@@ -17,6 +21,14 @@ interface ITableColumnsProps {
   tableName: string;
 }
 
+const dataObj: {
+  name?: string;
+  minimalValue?: any;
+  nullCount?: number;
+  nullPercent?: number;
+  uniqueCount?: number;
+} = {};
+
 const TableColumns = ({
   connectionName,
   schemaName,
@@ -30,7 +42,9 @@ const TableColumns = ({
   const [loadingJob, setLoadingJob] = useState(false);
   const [workingArr, setWorkingArr] = useState<any>([]);
   const [reverse, setReverse] = useState<boolean>(true);
-
+  const [sortedStatistics1, setSortedStatistics1] = useState<
+    StatisticsMetricModel[] | undefined
+  >();
   const dispatch = useDispatch();
   const {
     connection,
@@ -264,6 +278,19 @@ const TableColumns = ({
     console.log(sortedStatistics);
   };
 
+  // const sortByNulls = async () => {
+  //   // const sortedNulls = statistics?.column_statistics?.((column) =>
+  //   //   column.statistics?.sort((a, b) =>
+  //   //     a.collector === 'nulls_percent' && b.collector == 'nulls_percent'
+  //   //       ? Number(renderValue(a.result)) - Number(renderValue(b.result))
+  //   //       : 0
+  //   //   )
+  //   // );
+  //   const sortedNulls = statistics?.column_statistics?.sort((a , b) => (a.statistics?.map((x) => x.collector === 'nulls_percent' && b.statistics?.map((y) => y.collector === 'nulls_percent' ? Number(renderValue(x.result)) - Number(renderValue(y.result)) : 0))))
+
+  //   console.log(sortedNulls);
+  // };
+
   const workInProgress = () => {
     statistics?.column_statistics?.forEach((x) =>
       x.statistics?.forEach((a) =>
@@ -295,6 +322,8 @@ const TableColumns = ({
       }
       console.log(sortingArray);
     }
+
+    // const sortedStats2 = statistics?.column_statistics.map((column, index) => column.statistics.map((x) => x.result === workingArr.at(index) ?  ) )
   };
 
   return (
@@ -302,18 +331,18 @@ const TableColumns = ({
       <table className="mb-6 mt-4 w-full">
         <thead>
           <tr>
-            <th className="border-b border-gray-100 text-left px-4 py-2 ">
-              <div>Name</div>
+            <th className="border-b border-gray-100 text-left px-4 py-2 cursor-pointer">
               <div
-                className="cursor-pointer"
+                className="flex"
                 onClick={() => {
                   setReverse(!reverse), sortAlphabetictly(reverse);
                 }}
               >
+                <div>Name</div>
+
                 <div>
                   <SvgIcon name="chevron-up" className="w-3 h-3" />
-                </div>
-                <div>
+
                   <SvgIcon name="chevron-down" className="w-3 h-3" />
                 </div>
               </div>
@@ -357,7 +386,7 @@ const TableColumns = ({
             </th>
             <th
               className="border-b border-gray-100 text-right px-10 py-2 "
-              onClick={() => setSortedStatsFunc()}
+              onClick={() => workInProgress()}
             >
               Null percent
             </th>

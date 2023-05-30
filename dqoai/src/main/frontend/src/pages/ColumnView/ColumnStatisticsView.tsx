@@ -181,7 +181,7 @@ const ColumnStatisticsView = () => {
       </div>
 
       <div className="w-full flex gap-8 flex-wrap">
-        <div className="border border-gray-400 inline-block w-100">
+        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 inline-block w-100">
           <div className="h-10 flex justify-between items-center gap-x-36">
             <div className="ml-2 font-bold">Null count</div>
             <div>
@@ -241,7 +241,7 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
         </div>
-        <div className="border border-gray-400 inline-block w-100">
+        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 inline-block w-100">
           <div className="h-10 flex justify-between items-center gap-x-36">
             <div className="ml-2 font-bold">Unique count</div>
             <div>
@@ -301,7 +301,7 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
         </div>
-        <div className="border border-gray-400 inline-block">
+        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 inline-block">
           <div className="h-10 flex justify-between items-center gap-x-36">
             <div className="ml-2 font-bold">Minimum</div>
             <div>
@@ -359,14 +359,14 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
         </div>
-        <div className="border border-gray-400 inline-block w-100">
+        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 inline-block w-100">
           <div className="h-10 flex justify-between items-center gap-x-36">
-            <div className="ml-2 font-bold">Maximum string length</div>
+            <div className="ml-2 font-bold">Minimum string length</div>
             <div>
               {statistics &&
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2" key={index}>
-                    {x.collector === 'string_max_length'
+                    {x.collector === 'string_min_length'
                       ? renderValue(x.result)
                       : ''}
                   </div>
@@ -387,12 +387,12 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
           <div className="h-10 flex justify-between items-center gap-x-36">
-            <div className="ml-2 font-bold">Minimum string length</div>
+            <div className="ml-2 font-bold">Maximum string length</div>
             <div>
               {statistics &&
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2" key={index}>
-                    {x.collector === 'string_min_length'
+                    {x.collector === 'string_max_length'
                       ? renderValue(x.result)
                       : ''}
                   </div>
