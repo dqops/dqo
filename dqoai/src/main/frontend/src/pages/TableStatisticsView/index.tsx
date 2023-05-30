@@ -5,14 +5,9 @@ import { AxiosResponse } from 'axios';
 import { TableApiClient } from '../../services/apiClient';
 import Loader from '../../components/Loader';
 import { useSelector } from 'react-redux';
-import {
-  getFirstLevelActiveTab,
-  getFirstLevelState
-} from '../../redux/selectors';
+import { getFirstLevelState } from '../../redux/selectors';
 import { CheckTypes } from '../../shared/routes';
 import { useParams } from 'react-router-dom';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { getTableProfilingChecksUI } from '../../redux/actions/table.actions';
 
 export default function TableStatisticsView({
   connectionName,
@@ -25,9 +20,7 @@ export default function TableStatisticsView({
 }) {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
-  const { loading, tableBasic } = useSelector(getFirstLevelState(checkTypes));
-  const dispatch = useActionDispatch();
-  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const { loading } = useSelector(getFirstLevelState(checkTypes));
   const fetchRows = async () => {
     try {
       const res: AxiosResponse<TableStatisticsModel> =
@@ -42,25 +35,8 @@ export default function TableStatisticsView({
     }
   };
   useEffect(() => {
-    fetchRows().then(() =>
-      dispatch(
-        getTableProfilingChecksUI(
-          checkTypes,
-          firstLevelActiveTab,
-          connectionName,
-          schemaName,
-          tableName
-        )
-      )
-    );
-  }, [
-    checkTypes,
-    firstLevelActiveTab,
-    connectionName,
-    schemaName,
-    tableName,
-    tableBasic
-  ]);
+    fetchRows();
+  }, [connectionName, schemaName, tableName]);
 
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
@@ -79,18 +55,23 @@ export default function TableStatisticsView({
       </div>
     );
   }
+  const replaceTWithSpace = (input: string) => {
+    return input.replace(/T/g, ' ');
+  };
 
   return (
     <div>
-      <div className="border border-gray-400 w-1/3 flex flex-col justify-center gap-y-6 h-28 ml-4 mt-8">
-        <div className="font-bold w-11/12 ml-3">Table Statistics</div>
+      <div className="w-1/3 flex flex-col justify-center gap-y-6 h-20 ml-4 mt-8 border border-gray-300 px-4 py-6 relative rounded mt-8">
+        <div className="font-bold ml-3 px-2 absolute bg-white left-2 top-0 -translate-y-1/2 text-gray-700 font-semibold">
+          Table Statistics
+        </div>
         <div className="flex justify-between">
           <div className="flex gap-x-6 ml-3">
             <div>Total Rows</div>
             <div>
               {rowCount &&
                 rowCount.statistics?.map((x, index) => (
-                  <div key={index}>
+                  <div key={index} className="font-bold">
                     {x.collector === 'row_count' && x.category === 'volume'
                       ? renderValue(x.result)
                       : ''}
@@ -103,9 +84,9 @@ export default function TableStatisticsView({
             <div>
               {rowCount &&
                 rowCount.statistics?.map((x, index) => (
-                  <div key={index}>
+                  <div key={index} className="font-bold">
                     {x.collector === 'row_count' && x.category === 'volume'
-                      ? renderValue(x.collectedAt)
+                      ? replaceTWithSpace(renderValue(x.collectedAt))
                       : ''}
                   </div>
                 ))}

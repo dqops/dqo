@@ -106,7 +106,7 @@ const TableColumns = ({
   };
 
   useEffect(() => {
-    fetchColumns().then();
+    fetchColumns();
   }, [connectionName, schemaName, tableName]);
 
   const renderValue = (value: any) => {
