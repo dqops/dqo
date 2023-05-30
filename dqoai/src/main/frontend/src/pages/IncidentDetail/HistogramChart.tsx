@@ -9,6 +9,7 @@ import HighchartsReact from 'highcharts-react-official';
 import { IncidentDailyIssuesCount, IncidentIssueHistogramModel } from "../../api";
 import moment from "moment";
 import { IncidentHistogramFilter } from "../../redux/reducers/incidents.reducer";
+import SectionWrapper from "../../components/Dashboard/SectionWrapper";
 
 export const HistogramChart = () => {
   const { connection, year: strYear, month: strMonth, id: incidentId }: { connection: string, year: string, month: string, id: string } = useParams();
@@ -101,7 +102,7 @@ export const HistogramChart = () => {
           ref={chartComponentRef}
         />
       </div>
-      <div className="text-sm bg-white rounded-lg p-4 border border-gray-200">
+      <SectionWrapper title="Filter by columns">
         {Object.keys(histograms?.columns || {}).map((column, index) => (
           <div
             className="flex gap-2 mb-2 cursor-pointer"
@@ -111,8 +112,8 @@ export const HistogramChart = () => {
             <span>{column}</span>({histograms?.columns?.[column]})
           </div>
         ))}
-      </div>
-      <div className="text-sm bg-white rounded-lg p-4 border border-gray-200">
+      </SectionWrapper>
+      <SectionWrapper title="Filter by check name">
         {Object.keys(histograms?.checks || {}).map((check, index) => (
           <div
             className="flex gap-2 mb-2"
@@ -122,7 +123,7 @@ export const HistogramChart = () => {
             <span>{check}</span>({histograms?.checks?.[check]})
           </div>
         ))}
-      </div>
+      </SectionWrapper>
     </div>
   );
 };
