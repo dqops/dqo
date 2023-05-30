@@ -310,14 +310,15 @@ nav:
     - ParquetFiles:
       - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
       - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
-      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
       - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
+      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
       - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
 
 # Visual settings
 theme:
   name: material
+  custom_dir: docs
   features:
     - navigation.indexes
     - content.tabs.link
