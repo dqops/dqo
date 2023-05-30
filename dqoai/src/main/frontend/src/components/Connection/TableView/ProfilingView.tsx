@@ -1,68 +1,129 @@
 import React, { useEffect, useState } from 'react';
-import DataQualityChecks from '../../DataQualityChecks';
+
 import TableActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../../api';
+
 import {
   getTableProfilingChecksUI,
-  setUpdatedChecksUi,
   updateTableProfilingChecksUI
 } from '../../../redux/actions/table.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { CheckResultOverviewApi } from '../../../services/apiClient';
-import { useParams } from "react-router-dom";
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
-import { CheckTypes } from "../../../shared/routes";
+import { useParams } from 'react-router-dom';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../../redux/selectors';
+import { CheckTypes } from '../../../shared/routes';
+import TableAdvancedProfiling from '../../../pages/TableAdvencedProfiling';
+
+import Tabs from '../../Tabs';
+
+import TableStatisticsView from '../../../pages/TableStatisticsView';
+
+const tabs = [
+  {
+    label: 'Statistics',
+    value: 'statistics'
+  },
+  {
+    label: 'Advanced Profiling',
+    value: 'advanced'
+  }
+];
 
 const ProfilingView = () => {
-  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
-  const { checksUI, loading, isUpdating, isUpdatedChecksUi, tableBasic } = useSelector(getFirstLevelState(checkTypes));
+  const {
+    checkTypes,
+    connection: connectionName,
+    schema: schemaName,
+    table: tableName
+  }: {
+    checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
+    table: string;
+  } = useParams();
+  const { checksUI, isUpdating, isUpdatedChecksUi, tableBasic } = useSelector(
+    getFirstLevelState(checkTypes)
+  );
   const dispatch = useActionDispatch();
-  const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const [activeTab, setActiveTab] = useState('statistics');
 
   useEffect(() => {
-    dispatch(getTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
-  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, tableBasic]);
+    dispatch(
+      getTableProfilingChecksUI(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName
+      )
+    );
+  }, [
+    checkTypes,
+    firstLevelActiveTab,
+    connectionName,
+    schemaName,
+    tableName,
+    tableBasic
+  ]);
 
   const onUpdate = async () => {
     if (!checksUI) {
       return;
     }
     await dispatch(
-      updateTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, checksUI)
+      updateTableProfilingChecksUI(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName,
+        checksUI
+      )
     );
     await dispatch(
-      getTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, false)
+      getTableProfilingChecksUI(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName,
+        false
+      )
     );
-  };
-
-  const handleChange = (value: UICheckContainerModel) => {
-    dispatch(setUpdatedChecksUi(checkTypes, firstLevelActiveTab, value));
-  };
-
-  const getCheckOverview = () => {
-    CheckResultOverviewApi.getTableProfilingChecksOverview(connectionName, schemaName, tableName).then((res) => {
-      setCheckResultsOverview(res.data);
-    });
   };
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">
-      <TableActionGroup
-        shouldDelete={false}
-        onUpdate={onUpdate}
-        isUpdated={isUpdatedChecksUi}
-        isUpdating={isUpdating}
-      />
-      <DataQualityChecks
-        onUpdate={onUpdate}
-        checksUI={checksUI}
-        onChange={handleChange}
-        checkResultsOverview={checkResultsOverview}
-        getCheckOverview={getCheckOverview}
-        loading={loading}
-      />
+      {activeTab === 'statistics' && (
+        <TableActionGroup
+          shouldDelete={false}
+          onUpdate={onUpdate}
+          isUpdated={isUpdatedChecksUi}
+          isUpdating={isUpdating}
+          collectStatistic={true}
+          addSaveButton={false}
+        />
+      )}{' '}
+      {activeTab === 'advanced' && (
+        <TableActionGroup
+          shouldDelete={false}
+          onUpdate={onUpdate}
+          isUpdated={isUpdatedChecksUi}
+          isUpdating={isUpdating}
+        />
+      )}
+      <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+      {activeTab === 'statistics' && (
+        <TableStatisticsView
+          connectionName={connectionName}
+          schemaName={schemaName}
+          tableName={tableName}
+        />
+      )}
+      {activeTab === 'advanced' && <TableAdvancedProfiling />}
     </div>
   );
 };
