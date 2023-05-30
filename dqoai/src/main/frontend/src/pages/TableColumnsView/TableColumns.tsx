@@ -1,11 +1,7 @@
-import React, { SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ColumnApiClient, JobApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
-import {
-  ColumnStatisticsModel,
-  StatisticsMetricModel,
-  TableColumnsStatisticsModel
-} from '../../api';
+import { ColumnStatisticsModel, TableColumnsStatisticsModel } from '../../api';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../components/SvgIcon';
 import ConfirmDialog from './ConfirmDialog';
@@ -13,7 +9,6 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDispatch } from 'react-redux/es/hooks/useDispatch';
 import { useParams, useHistory } from 'react-router-dom';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
-import { SortableColumn } from '../IncidentConnection/SortableColumn';
 
 interface ITableColumnsProps {
   connectionName: string;
@@ -21,13 +16,17 @@ interface ITableColumnsProps {
   tableName: string;
 }
 
-const dataObj: {
-  name?: string;
-  minimalValue?: any;
-  nullCount?: number;
-  nullPercent?: number;
-  uniqueCount?: number;
-} = {};
+interface MyData {
+  null_percent: number | undefined;
+  unique_value: number | undefined;
+  null_count?: number | undefined;
+  nameOfCol?: string | undefined;
+  minimalValue?: string | undefined;
+  detectedDatatype?: string | number | undefined;
+  length?: number | undefined;
+  skale?: number | undefined;
+  importedDatatype?: string | undefined;
+}
 
 const TableColumns = ({
   connectionName,
@@ -42,9 +41,7 @@ const TableColumns = ({
   const [loadingJob, setLoadingJob] = useState(false);
   const [workingArr, setWorkingArr] = useState<any>([]);
   const [reverse, setReverse] = useState<boolean>(true);
-  const [sortedStatistics1, setSortedStatistics1] = useState<
-    StatisticsMetricModel[] | undefined
-  >();
+
   const dispatch = useDispatch();
   const {
     connection,
@@ -278,19 +275,6 @@ const TableColumns = ({
     console.log(sortedStatistics);
   };
 
-  // const sortByNulls = async () => {
-  //   // const sortedNulls = statistics?.column_statistics?.((column) =>
-  //   //   column.statistics?.sort((a, b) =>
-  //   //     a.collector === 'nulls_percent' && b.collector == 'nulls_percent'
-  //   //       ? Number(renderValue(a.result)) - Number(renderValue(b.result))
-  //   //       : 0
-  //   //   )
-  //   // );
-  //   const sortedNulls = statistics?.column_statistics?.sort((a , b) => (a.statistics?.map((x) => x.collector === 'nulls_percent' && b.statistics?.map((y) => y.collector === 'nulls_percent' ? Number(renderValue(x.result)) - Number(renderValue(y.result)) : 0))))
-
-  //   console.log(sortedNulls);
-  // };
-
   const workInProgress = () => {
     statistics?.column_statistics?.forEach((x) =>
       x.statistics?.forEach((a) =>
@@ -299,11 +283,7 @@ const TableColumns = ({
     );
     workingArr.sort((y: any, z: any) => y - z);
     console.log(workingArr);
-
-    // workingArr.map((x: any) => statistics?.column_statistics?.map((y) => y.statistics?.map((z) => z.collector==='nulls_percent' && z.result=== x ? secondArr.statistics?.push(y.statistics ?  y.statistics : [])))))
   };
-  // console.log(statistics?.column_statistics?.length);
-  //console.log(sortedStatistics);
 
   const setSortedStatsFunc = () => {
     const sortingArray: (ColumnStatisticsModel[] | undefined)[] = [];
@@ -322,9 +302,41 @@ const TableColumns = ({
       }
       console.log(sortingArray);
     }
-
-    // const sortedStats2 = statistics?.column_statistics.map((column, index) => column.statistics.map((x) => x.result === workingArr.at(index) ?  ) )
   };
+
+  const nullPercentData = statistics?.column_statistics?.map((x) =>
+    x.statistics
+      ?.filter((item) => item.collector === 'nulls_percent')
+      .map((item) => item.result)
+  );
+  const uniqueCountData = statistics?.column_statistics?.map((x) =>
+    x.statistics
+      ?.filter((item) => item.collector === 'unique_count')
+      .map((item) => item.result)
+  );
+  const nullCountData = statistics?.column_statistics?.map((x) =>
+    x.statistics
+      ?.filter((item) => item.collector === 'nulls_count')
+      .map((item) => item.result)
+  );
+  const dataArray: MyData[] = [];
+
+  if (nullPercentData && uniqueCountData && nullCountData) {
+    const maxLength = Math.max(nullPercentData.length, uniqueCountData.length);
+
+    for (let i = 0; i < maxLength; i++) {
+      const nullPercent = nullPercentData[i];
+      const uniqueValue = uniqueCountData[i];
+
+      const newData: MyData = {
+        null_percent: Number(nullPercent),
+        unique_value: Number(uniqueValue)
+      };
+
+      dataArray.push(newData);
+    }
+  }
+  console.log(dataArray);
 
   return (
     <div className="p-4">
