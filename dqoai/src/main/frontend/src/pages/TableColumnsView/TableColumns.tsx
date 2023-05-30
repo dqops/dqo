@@ -26,8 +26,6 @@ const TableColumns = ({
     useState<ColumnStatisticsModel[]>();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
-  const [loadingJob, setLoadingJob] = useState(false);
-
   const dispatch = useDispatch();
   const {
     connection,
@@ -55,11 +53,6 @@ const TableColumns = ({
       console.error(err);
     }
   };
-
-  useEffect(() => {
-    fetchColumns().then();
-    setSortedStatistics(statistics?.column_statistics);
-  }, [connectionName, schemaName, tableName]);
 
   const onRemoveColumn = (column: ColumnStatisticsModel) => {
     setIsOpen(true);
@@ -106,16 +99,15 @@ const TableColumns = ({
   };
 
   const collectStatistics = async (index: number) => {
-    try {
-      setLoadingJob(true);
-      await JobApiClient.collectStatisticsOnDataStreams(
-        statistics?.column_statistics?.at(index)
-          ?.collect_column_statistics_job_template
-      );
-    } finally {
-      setLoadingJob(false);
-    }
+    await JobApiClient.collectStatisticsOnDataStreams(
+      statistics?.column_statistics?.at(index)
+        ?.collect_column_statistics_job_template
+    );
   };
+
+  useEffect(() => {
+    fetchColumns();
+  }, [connectionName, schemaName, tableName]);
 
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
