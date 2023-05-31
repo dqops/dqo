@@ -378,36 +378,84 @@ const TableColumns = ({
     const NumberArray = [];
 
     for (let i = 0; i < sortedArray.length; i++) {
+      const object = sortedArray[i];
+      const minimalValue = object?.minimalValue;
+
       if (
-        String(sortedArray.at(i)?.minimalValue).at(0) === '0' &&
-        String(sortedArray.at(i)?.minimalValue).length !== 1 &&
-        String(sortedArray.at(i)?.minimalValue).at(1) !== '.'
+        String(minimalValue)?.charAt(0) === '0' &&
+        String(minimalValue)?.length !== 1 &&
+        String(minimalValue)?.charAt(1) !== '.'
       ) {
-        StringArray.push(sortedArray.at(i)?.minimalValue);
+        StringArray.push(object);
+      } else if (minimalValue === 'Yes' || minimalValue === 'No') {
+        BoolArray.push(object);
       } else if (
-        sortedArray.at(i)?.minimalValue === 'Yes' ||
-        sortedArray.at(i)?.minimalValue === 'No'
+        typeof minimalValue === 'string' &&
+        isNaN(Number(minimalValue))
       ) {
-        BoolArray.push(sortedArray.at(i)?.minimalValue);
+        StringArray.push(object);
       } else if (
-        typeof sortedArray.at(i)?.minimalValue === 'string' &&
-        isNaN(Number(sortedArray.at(i)?.minimalValue))
+        typeof minimalValue === 'string' &&
+        !isNaN(Number(minimalValue))
       ) {
-        StringArray.push(sortedArray.at(i)?.minimalValue);
-      } else if (
-        typeof sortedArray.at(i)?.minimalValue === 'string' &&
-        !isNaN(Number(sortedArray.at(i)?.minimalValue))
-      ) {
-        NumberArray.push(Number(sortedArray.at(i)?.minimalValue));
+        NumberArray.push(object);
       }
     }
+    BoolArray.sort((a, b) => {
+      const nullsCountA = String(a.minimalValue);
+      const nullsCountB = String(b.minimalValue);
 
-    console.log('Bool Arr');
-    console.log(BoolArray);
-    console.log('String Arr');
-    console.log(StringArray);
-    console.log('Number Arr');
-    console.log(NumberArray);
+      if (nullsCountA && nullsCountB) {
+        return sortDirection === 'asc'
+          ? nullsCountA.localeCompare(nullsCountB)
+          : nullsCountB.localeCompare(nullsCountA);
+      } else if (nullsCountA) {
+        return sortDirection === 'asc' ? -1 : 1;
+      } else if (nullsCountB) {
+        return sortDirection === 'asc' ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
+
+    StringArray.sort((a, b) => {
+      const nullsCountA = String(a.minimalValue);
+      const nullsCountB = String(b.minimalValue);
+
+      if (nullsCountA && nullsCountB) {
+        return sortDirection === 'asc'
+          ? nullsCountA.localeCompare(nullsCountB)
+          : nullsCountB.localeCompare(nullsCountA);
+      } else if (nullsCountA) {
+        return sortDirection === 'asc' ? -1 : 1;
+      } else if (nullsCountB) {
+        return sortDirection === 'asc' ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
+
+    NumberArray.sort((a, b) => {
+      const nullsPercentA = String(a.minimalValue);
+      const nullsPercentB = String(b.minimalValue);
+
+      if (nullsPercentA && nullsPercentB) {
+        return sortDirection === 'asc'
+          ? parseFloat(nullsPercentA) - parseFloat(nullsPercentB)
+          : parseFloat(nullsPercentB) - parseFloat(nullsPercentA);
+      } else if (nullsPercentA) {
+        return sortDirection === 'asc' ? -1 : 1;
+      } else if (nullsPercentB) {
+        return sortDirection === 'asc' ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
+
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    const sortedResult = [...BoolArray, ...StringArray, ...NumberArray];
+    setDataArray1(sortedResult);
+    console.log(sortedResult);
   };
 
   const sortDataByLength = () => {
