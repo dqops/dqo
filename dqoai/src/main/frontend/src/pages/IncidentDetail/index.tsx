@@ -224,16 +224,16 @@ export const IncidentDetail = () => {
           </SectionWrapper>
           <SectionWrapper title="Severity statistics">
             <div className="flex gap-3 mb-3 items-center">
-              <div className="flex-[2]">Min severity threshold:</div>
-              <div className="flex-[1] font-bold">{incidentDetail?.minSeverity}</div>
+              <div className="flex-[2]">Lowest detected issue severity:</div>
+              <div className="flex-[1] font-bold">{incidentDetail?.minSeverity} Warning</div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
-              <div className="flex-[2]">Highest detected severity:</div>
-              <div className="flex-[1] font-bold">{incidentDetail?.highestSeverity}</div>
+              <div className="flex-[2]">Highest detected issue severity:</div>
+              <div className="flex-[1] font-bold">{incidentDetail?.highestSeverity} Error</div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
-              <div className="flex-[2]">Failed checks:</div>
-              <div className="flex-[1] font-bold">{incidentDetail?.failedChecksCount}</div>
+              <div className="flex-[2]">Total data quality incidents:</div>
+              <div className="flex-[1] font-bold">{incidentDetail?.failedChecksCount} Fatal</div>
             </div>
             <div className="flex gap-3 items-center">
               <div className="flex-[2]">Issue url:</div>
