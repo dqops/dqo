@@ -17,6 +17,7 @@ package ai.dqo.cli.exceptions;
 
 import ai.dqo.cli.terminal.TerminalFactory;
 import ai.dqo.core.configuration.DqoCoreConfigurationProperties;
+import ai.dqo.utils.exceptions.DqoErrorUserMessage;
 import org.apache.parquet.Strings;
 import org.jline.reader.UserInterruptException;
 import org.slf4j.Logger;
@@ -30,17 +31,16 @@ import picocli.CommandLine;
 public class CommandExecutionErrorHandler implements CommandLine.IExecutionExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(CommandExecutionErrorHandler.class);
 
-    private final DqoCoreConfigurationProperties coreConfigurationProperties;
     private final TerminalFactory terminalFactory;
+    private final DqoCoreConfigurationProperties coreConfigurationProperties;
 
     /**
      * Command error handler.
      * @param terminalFactory Terminal writer factory.
-     * @param coreConfigurationProperties core configuration properties.
+     * @param coreConfigurationProperties DQO Core configuration properties.
      */
     @Autowired
-    public CommandExecutionErrorHandler(TerminalFactory terminalFactory,
-                                        DqoCoreConfigurationProperties coreConfigurationProperties) {
+    public CommandExecutionErrorHandler(TerminalFactory terminalFactory, DqoCoreConfigurationProperties coreConfigurationProperties) {
         this.terminalFactory = terminalFactory;
         this.coreConfigurationProperties = coreConfigurationProperties;
     }
@@ -54,7 +54,7 @@ public class CommandExecutionErrorHandler implements CommandLine.IExecutionExcep
      * @throws Exception Exception.
      */
     @Override
-    public int handleExecutionException(Exception e, CommandLine commandLine, CommandLine.ParseResult parseResult) throws Exception {
+    public int handleExecutionException(Exception e, CommandLine commandLine, CommandLine.ParseResult parseResult) {
         if (e instanceof CliRequiredParameterMissingException) {
             CliRequiredParameterMissingException parameterMissingException = (CliRequiredParameterMissingException)e;
 			this.terminalFactory.getWriter().writeLine("Missing required parameter: " + parameterMissingException.getParameterName());
@@ -71,18 +71,24 @@ public class CommandExecutionErrorHandler implements CommandLine.IExecutionExcep
         String exceptionMessage = e.getMessage();
         if (Strings.isNullOrEmpty(exceptionMessage)) {
 			this.terminalFactory.getWriter().writeLine("Command failed");
-            if (this.coreConfigurationProperties.isPrintStackTrace()) {
-                e.printStackTrace();
-            }
         }
         else {
 			this.terminalFactory.getWriter().writeLine("Command failed, error message: " + exceptionMessage);
-            if (this.coreConfigurationProperties.isPrintStackTrace()) {
-                e.printStackTrace();
+        }
+
+        if (this.coreConfigurationProperties.isPrintStackTrace()) {
+            e.printStackTrace();
+        } else {
+            Throwable innerCause = e;
+            while (innerCause != null && !(innerCause instanceof DqoErrorUserMessage)) {
+                innerCause = e.getCause();
+            }
+            if (innerCause != null) {
+                System.err.println(((DqoErrorUserMessage) innerCause).getUserFriendlyMessage());
             }
         }
 
-		LOG.debug("Command " + parseResult.toString() + " failed", e);
+        LOG.debug("Command " + parseResult.toString() + " failed", e);
         return -1;
     }
 }

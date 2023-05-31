@@ -15,10 +15,15 @@
  */
 package ai.dqo.execution.checks.progress;
 
+import ai.dqo.cli.terminal.TablesawDatasetTableModel;
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.execution.checks.CheckExecutionErrorSummary;
+import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.progress.*;
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.utils.serialization.JsonSerializer;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -222,6 +227,24 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
         this.terminalWriter.writeLine(String.format("Executing SQL on connection %s (%s)", connectionName, providerType));
         this.terminalWriter.writeLine("SQL to be executed on the connection:");
         this.terminalWriter.writeLine(sql);
+        renderEventFooter();
+    }
+
+    /**
+     * Called after all data quality checks were executed.
+     *
+     * @param event Data quality check execution summary for one batch of checks.
+     */
+    @Override
+    public void onCheckExecutionFinished(CheckExecutionFinishedEvent event) {
+        renderEventHeader();
+        CheckExecutionSummary checkExecutionSummary = event.getCheckExecutionSummary();
+        TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());
+        this.terminalWriter.writeTable(tablesawDatasetTableModel, true);
+        CheckExecutionErrorSummary checkExecutionErrorSummary = checkExecutionSummary.getCheckExecutionErrorSummary();
+        if (checkExecutionErrorSummary != null) {
+            this.terminalWriter.writeLine(checkExecutionErrorSummary.getDebugMessage());
+        }
         renderEventFooter();
     }
 }
