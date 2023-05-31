@@ -276,39 +276,10 @@ const TableColumns = ({
     console.log(dataArray1);
   };
 
-  const workInProgress = () => {
-    statistics?.column_statistics?.forEach((x) =>
-      x.statistics?.forEach((a) =>
-        a.collector === 'nulls_percent' ? workingArr.push(a.result) : ''
-      )
-    );
-    workingArr.sort((y: any, z: any) => y - z);
-    console.log(workingArr);
-  };
-
-  const setSortedStatsFunc = () => {
-    const sortingArray: (ColumnStatisticsModel[] | undefined)[] = [];
-    if (statistics?.column_statistics) {
-      for (let i = 0; i < statistics?.column_statistics?.length; i++) {
-        statistics.column_statistics.map((x) => {
-          x.statistics?.map((y) => {
-            if (
-              y.collector === 'nulls_percent' &&
-              y.result === workingArr.at(i)
-            ) {
-              sortingArray.push(statistics.column_statistics);
-            }
-          });
-        });
-      }
-      console.log(sortingArray);
-    }
-  };
-
   const nullPercentData = statistics?.column_statistics?.map((x) =>
     x.statistics
       ?.filter((item) => item.collector === 'nulls_percent')
-      .map((item) => item.result)
+      .map((item) => Number(renderValue(item.result)))
   );
   const uniqueCountData = statistics?.column_statistics?.map((x) =>
     x.statistics
@@ -318,7 +289,7 @@ const TableColumns = ({
   const nullCountData = statistics?.column_statistics?.map((x) =>
     x.statistics
       ?.filter((item) => item.collector === 'nulls_count')
-      .map((item) => item.result)
+      .map((item) => renderValue(item.result))
   );
   const detectedDatatypeVar = statistics?.column_statistics?.map((x) =>
     x.statistics
@@ -401,13 +372,13 @@ const TableColumns = ({
   const sortDataByNullPercent = () => {
     const sortedArray = [...dataArray];
     sortedArray.sort((a, b) => {
-      const nullsPercentA = a.null_percent;
-      const nullsPercentB = b.null_percent;
+      const nullsPercentA = String(a.null_percent);
+      const nullsPercentB = String(b.null_percent);
 
       if (nullsPercentA && nullsPercentB) {
         return sortDirection === 'asc'
-          ? nullsPercentA - nullsPercentB
-          : nullsPercentB - nullsPercentA;
+          ? parseFloat(nullsPercentA) - parseFloat(nullsPercentB)
+          : parseFloat(nullsPercentB) - parseFloat(nullsPercentA);
       } else if (nullsPercentA) {
         return sortDirection === 'asc' ? -1 : 1;
       } else if (nullsPercentB) {
@@ -425,13 +396,13 @@ const TableColumns = ({
   const sortDataByNullCount = () => {
     const sortedArray = [...dataArray];
     sortedArray.sort((a, b) => {
-      const nullsCountA = a.null_count;
-      const nullsCountB = b.null_count;
+      const nullsCountA = String(a.null_count);
+      const nullsCountB = String(b.null_count);
 
       if (nullsCountA && nullsCountB) {
         return sortDirection === 'asc'
-          ? nullsCountA - nullsCountB
-          : nullsCountB - nullsCountA;
+          ? Number(nullsCountA) - Number(nullsCountB)
+          : Number(nullsCountB) - Number(nullsCountA);
       } else if (nullsCountA) {
         return sortDirection === 'asc' ? -1 : 1;
       } else if (nullsCountB) {
