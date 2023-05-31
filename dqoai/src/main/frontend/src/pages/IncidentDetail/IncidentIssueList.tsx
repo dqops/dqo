@@ -71,7 +71,7 @@ export const IncidentIssueRow = ({ issue }: IncidentIssueRowProps) => {
           </div>
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          {issue.checkName}
+          {issue.checkName}8
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
           {issue.executedAt}
