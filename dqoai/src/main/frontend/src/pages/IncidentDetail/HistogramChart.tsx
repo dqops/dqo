@@ -10,6 +10,7 @@ import { IncidentDailyIssuesCount, IncidentIssueHistogramModel } from "../../api
 import moment from "moment";
 import { IncidentHistogramFilter } from "../../redux/reducers/incidents.reducer";
 import SectionWrapper from "../../components/Dashboard/SectionWrapper";
+import clsx from "clsx";
 
 export const HistogramChart = () => {
   const { connection, year: strYear, month: strMonth, id: incidentId }: { connection: string, year: string, month: string, id: string } = useParams();
@@ -105,9 +106,12 @@ export const HistogramChart = () => {
       <SectionWrapper title="Filter by columns">
         {Object.keys(histograms?.columns || {}).map((column, index) => (
           <div
-            className="flex gap-2 mb-2 cursor-pointer"
+            className={clsx("flex gap-2 mb-2 cursor-pointer", {
+              'font-bold text-gray-700': histogramFilter.column === column,
+              'text-gray-500': histogramFilter.column && histogramFilter.column !== column,
+            })}
             key={index}
-            onClick={() => onChangeFilter({ column })}
+            onClick={() => onChangeFilter({ column: histogramFilter.column === column ? '' : column })}
           >
             <span>{column}</span>({histograms?.columns?.[column]})
           </div>
@@ -116,9 +120,12 @@ export const HistogramChart = () => {
       <SectionWrapper title="Filter by check name">
         {Object.keys(histograms?.checks || {}).map((check, index) => (
           <div
-            className="flex gap-2 mb-2"
+            className={clsx("flex gap-2 mb-2 cursor-pointer", {
+              'font-bold text-gray-700': histogramFilter.check === check,
+              'text-gray-500': histogramFilter.check && histogramFilter.check !== check,
+            })}
             key={index}
-            onClick={() => onChangeFilter({ check })}
+            onClick={() => onChangeFilter({ check: histogramFilter.check === check ? '' : check })}
           >
             <span>{check}</span>({histograms?.checks?.[check]})
           </div>
