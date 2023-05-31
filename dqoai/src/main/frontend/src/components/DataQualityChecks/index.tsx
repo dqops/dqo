@@ -16,6 +16,7 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import moment from 'moment/moment';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import Button from '../Button';
 
 interface IDataQualityChecksProps {
   checksUI?: UICheckContainerModel;
@@ -247,58 +248,76 @@ const DataQualityChecks = ({
       className={clsx(className, 'p-4 overflow-auto')}
       style={{ maxWidth: `calc(100vw - ${sidebarWidth + 30}px` }}
     >
-      <div className="flex items-center text-sm mb-3 gap-6">
-        <div className="flex items-center space-x-1">
-          <span>Scheduling status:</span>
-          <span>
-            {checksUI?.effective_schedule_enabled_status
-              ?.replaceAll('_', ' ')
-              .split(' ')
-              .map((item) => item.charAt(0).toUpperCase() + item.slice(1))
-              .join(' ')}
-          </span>
-        </div>
-        <div className="flex items-center space-x-1">
-          <span>Scheduling configured at:</span>
-          <a className="underline cursor-pointer" onClick={goToSchedule}>
-            {checksUI?.effective_schedule?.schedule_level}
-          </a>
-        </div>
-        <div className="flex items-center space-x-1">
-          <span>Effective cron expression:</span>
-          <span>{checksUI?.effective_schedule?.cron_expression}</span>
-        </div>
-        {checksUI?.effective_schedule?.cron_expression && (
+      <div className="flex items-center justify-between text-sm mb-3 gap-6">
+        <div className="flex items-center space-x-1 gap-x-4">
           <div className="flex items-center space-x-1">
-            <span>Next execution at:</span>
+            <span>Scheduling status:</span>
             <span>
-              {moment(checksUI?.effective_schedule?.time_of_execution).format(
-                'MMM, DD YYYY'
-              )}
+              {checksUI?.effective_schedule_enabled_status
+                ?.replaceAll('_', ' ')
+                .split(' ')
+                .map((item) => item.charAt(0).toUpperCase() + item.slice(1))
+                .join(' ')}
             </span>
           </div>
-        )}
-        <div className="flex items-center space-x-5">
-          <span>Configure at:</span>
+          {checksUI.effective_schedule_enabled_status !==
+          UICheckContainerModelEffectiveScheduleEnabledStatusEnum.not_configured ? (
+            <div className="flex items-center">
+              <div className="flex items-center space-x-1">
+                <span>Scheduling configured at:</span>
+                <a className="underline cursor-pointer" onClick={goToSchedule}>
+                  {checksUI?.effective_schedule?.schedule_level}
+                </a>
+              </div>
+              <div className="flex items-center space-x-1">
+                <span>Effective cron expression:</span>
+                <span>{checksUI?.effective_schedule?.cron_expression}</span>
+              </div>
+            </div>
+          ) : (
+            <div className="text-red-500">
+              Warning: Data Quality Checks will not be scheduled, please
+              configure the scheduling
+            </div>
+          )}
+          {checksUI?.effective_schedule?.cron_expression && (
+            <div className="flex items-center space-x-1">
+              <span>Next execution at:</span>
+              <span>
+                {moment(checksUI?.effective_schedule?.time_of_execution).format(
+                  'MMM, DD YYYY'
+                )}
+              </span>
+            </div>
+          )}
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="mr-3">Configure at:</span>
           <a className="underline cursor-pointer" onClick={goToScheduleTab}>
             {checksUI?.effective_schedule?.schedule_group}
           </a>
+
           {checksUI?.effective_schedule_enabled_status ===
             UICheckContainerModelEffectiveScheduleEnabledStatusEnum.not_configured && (
-            <>
-              <a
-                className="underline cursor-pointer"
+            <div className="flex items-center gap-x-4">
+              <Button
+                label="Configure on connection"
+                color="primary"
+                variant="outlined"
                 onClick={goToConnectionSchedule}
-              >
-                Configure on connection
-              </a>
-              <a
-                className="underline cursor-pointer"
+                className="px-1 py-1"
+                textSize="sm"
+              />
+
+              <Button
+                label="Configure on table"
+                color="primary"
+                variant="outlined"
                 onClick={goToTableSchedule}
-              >
-                Configure on table
-              </a>
-            </>
+                className="px-1 py-1"
+                textSize="sm"
+              />
+            </div>
           )}
         </div>
       </div>
