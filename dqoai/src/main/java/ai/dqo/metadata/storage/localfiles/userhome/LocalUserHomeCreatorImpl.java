@@ -16,6 +16,7 @@
 package ai.dqo.metadata.storage.localfiles.userhome;
 
 import ai.dqo.cli.terminal.TerminalFactory;
+import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.configuration.DqoLoggingConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.filesystem.BuiltInFolderNames;
@@ -33,8 +34,11 @@ import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 /**
  * Component that ensures that a DQO local user home was created and the default files were written.
@@ -184,6 +188,23 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     }
 
     /**
+     * Checks for the existence of <code>.DQO_USER_HOME_NOT_MOUNTED</code> file in DQO_USER_HOME.
+     * @param userHomePath DQO User Home path.
+     * @return True if the application is run inside a docker container and DQO_USER_HOME hasn't been mounted to an external volume.
+     */
+    protected boolean isUninitializedInUnmountedDockerVolume(Path userHomePath) {
+        try (Stream<Path> filesStream = Files.walk(userHomePath, 1)) {
+            return filesStream
+                    .filter(file -> !Files.isDirectory(file))
+                    .map(Path::getFileName)
+                    .map(Path::toString)
+                    .anyMatch(fileName -> fileName.equals(".DQO_USER_HOME_NOT_MOUNTED"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Ensures that the DQO User home is initialized at the default location. Prompts the user before creating the user home to confirm.
      * NOTE: this method may forcibly stop the program execution if the user did not agree to create the DQO User home.
      * @param isHeadless Is headless mode - when true, then the dqo user home is created silently, when false (interactive execution) then the user is asked to confirm.
@@ -198,6 +219,17 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         if (this.isDefaultDqoUserHomeInitialized()) {
             activateFileLoggingInUserHome();
             return;
+        }
+
+        if (this.isUninitializedInUnmountedDockerVolume(Paths.get(userHomePathString))) {
+            TerminalWriter terminalWriter = this.terminalFactory.getWriter();
+            terminalWriter.writeLine("DQO User Home is not mounted to the docker's folder " + userHomePathString + ".");
+            terminalWriter.writeLine("To run DQO in docker using a User Home folder inside the docker image (not advised),"
+                    + " do one of the following:");
+            terminalWriter.writeLine("\t- Start DQO with a parameter --dqo.docker.userhome.allow-unmounted=true");
+            terminalWriter.writeLine("\t- Set the environment variable DQO_DOCKER_USERHOME_ALLOW_UNMOUNTED=true");
+            terminalWriter.writeLine("DQO will quit.");
+            System.exit(101);
         }
 
         if (isHeadless || this.dqoUserConfigurationProperties.isInitializeUserHome()) {

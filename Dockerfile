@@ -19,6 +19,7 @@ ENV PATH=$PATH:$JAVA_HOME/bin
 # dqo
 COPY --from=dqo-fetcher /dqo/home /dqo/home
 WORKDIR /dqo/userhome
+RUN touch .DQO_USER_HOME_NOT_MOUNTED
 ENV DQO_HOME=/dqo/home
 ENV DQO_USER_HOME=/dqo/userhome
 ENV DQO_USER_INITIALIZE_USER_HOME=true

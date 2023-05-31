@@ -39,7 +39,7 @@ if [ -e $(dirname $0)/dqoai/pom.xml ]; then
         fi
     fi
 
-    if [ -n $DQO_PREPEND_CLASSES ]; then
+    if [ -n "$DQO_PREPEND_CLASSES" ]; then
         export DQO_LAUNCH_CLASSPATH=$DQO_PREPEND_CLASSES:$(dirname $0)/dqoai/target/dqo-dqoai-$DQO_VERSION.jar:$(dirname $0)/lib/target/output/dqo-lib-$DQO_VERSION/jars/*
     else
         export DQO_LAUNCH_CLASSPATH=$(dirname $0)/dqoai/target/dqo-dqoai-$DQO_VERSION.jar:$(dirname $0)/lib/target/output/dqo-lib-$DQO_VERSION/jars/*
@@ -51,7 +51,7 @@ else
         exit 1
     fi
 
-    if [ -n $DQO_PREPEND_CLASSES ]; then
+    if [ -n "$DQO_PREPEND_CLASSES" ]; then
         export DQO_LAUNCH_CLASSPATH=$DQO_PREPEND_CLASSES:$DQO_HOME/jars/*
     else
         export DQO_LAUNCH_CLASSPATH=$DQO_HOME/jars/*
