@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import SvgIcon from "../../components/SvgIcon";
 import CheckDetails from "../../components/DataQualityChecks/CheckDetails/CheckDetails";
 import { ChecksApi } from "../../services/apiClient";
+import { SortableColumn } from "../IncidentConnection/SortableColumn";
+import { IncidentIssueFilter } from "../../redux/reducers/incidents.reducer";
 
 type IncidentIssueRowProps = {
   issue: CheckResultDetailedSingleModel;
@@ -10,7 +12,6 @@ type IncidentIssueRowProps = {
 
 export const IncidentIssueRow = ({ issue }: IncidentIssueRowProps) => {
   const [open, setOpen] = useState(false);
-  const [check, setCheck] = useState<UICheckModel>();
 
   const getIssueSeverityLevel = (value?: number) => {
     let name = '';
@@ -71,7 +72,7 @@ export const IncidentIssueRow = ({ issue }: IncidentIssueRowProps) => {
           </div>
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          {issue.checkName}8
+          {issue.checkName}
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
           {issue.executedAt}
@@ -140,37 +141,96 @@ export const IncidentIssueRow = ({ issue }: IncidentIssueRowProps) => {
 
 type IncidentIssueListProps = {
   issues: CheckResultDetailedSingleModel[];
+  filters?: IncidentIssueFilter;
+  onChangeFilter: (obj: Partial<IncidentIssueFilter>) => void;
 };
 
-export const IncidentIssueList = ({ issues }: IncidentIssueListProps) => {
+export const IncidentIssueList = ({ issues, filters, onChangeFilter }: IncidentIssueListProps) => {
+  const handleSortChange = (orderBy: string, direction?: 'asc' | 'desc') => {
+    onChangeFilter({
+      order: orderBy as any,
+      ...filters?.order !== orderBy ? {
+        direction: 'asc',
+        page: 1 }: { direction }
+    })
+  };
+
   return (
     <div>
       <table className="mt-4 w-full">
         <thead>
         <tr>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-            Column Name
+            <SortableColumn
+              className="justify-end"
+              label="Column Name"
+              order="columnName"
+              direction={filters?.order === 'columnName' ? filters.direction : undefined}
+              onChange={handleSortChange}
+            />
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-            Check Name
+            <SortableColumn
+              className="justify-end"
+              label="Check Name"
+              order="checkName"
+              direction={filters?.order === 'checkName' ? filters.direction : undefined}
+              onChange={handleSortChange}
+            />
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-            Executed At
+            <SortableColumn
+              className="justify-end"
+              label="Executed At"
+              order="executedAt"
+              direction={filters?.order === 'executedAt' ? filters.direction : undefined}
+              onChange={handleSortChange}
+            />
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-            Time Scale
+            <SortableColumn
+              className="justify-end"
+              label="Time Scale"
+              order="timeGradient"
+              direction={filters?.order === 'timeGradient' ? filters.direction : undefined}
+              onChange={handleSortChange}
+            />
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
-            Time Period
+            <SortableColumn
+              className="justify-end"
+              label="Time Period"
+              order="timePeriod"
+              direction={filters?.order === 'timePeriod' ? filters.direction : undefined}
+              onChange={handleSortChange}
+            />
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-            Actual Value
+            <SortableColumn
+              className="justify-end"
+              label="Actual Value"
+              order="actualValue"
+              direction={filters?.order === 'actualValue' ? filters.direction : undefined}
+              onChange={handleSortChange}
+            />
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-            Expected Value
+            <SortableColumn
+              className="justify-end"
+              label="Expected Value"
+              order="expectedValue"
+              direction={filters?.order === 'expectedValue' ? filters.direction : undefined}
+              onChange={handleSortChange}
+            />
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-            Issue Severity Level
+            <SortableColumn
+              className="justify-end"
+              label="Issue Severity Level"
+              order="severity"
+              direction={filters?.order === 'severity' ? filters.direction : undefined}
+              onChange={handleSortChange}
+            />
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
             <span>Warning<br/>Lower Threshold</span>
@@ -200,7 +260,13 @@ export const IncidentIssueList = ({ issues }: IncidentIssueListProps) => {
             Duration Ms
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-            Data Stream
+            <SortableColumn
+              className="justify-end"
+              label="Data Stream"
+              order="dataStream"
+              direction={filters?.order === 'dataStream' ? filters.direction : undefined}
+              onChange={handleSortChange}
+            />
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
             Id

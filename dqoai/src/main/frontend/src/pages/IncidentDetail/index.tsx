@@ -305,7 +305,11 @@ export const IncidentDetail = () => {
         <HistogramChart />
         <div className="px-4 ">
           <div className="py-3 mb-5 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
-            <IncidentIssueList issues={issues || []} />
+            <IncidentIssueList
+              filters={filters}
+              issues={issues || []}
+              onChangeFilter={onChangeFilter}
+            />
           </div>
 
           <Pagination
