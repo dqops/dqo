@@ -17,6 +17,7 @@ interface ITableColumnsProps {
 }
 
 interface MyData {
+  [x: string]: any;
   null_percent: number | undefined;
   unique_value: number | undefined;
   null_count?: number | undefined;
@@ -34,13 +35,8 @@ const TableColumns = ({
   tableName
 }: ITableColumnsProps) => {
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
-  const [sortedStatistics, setSortedStatistics] =
-    useState<Array<ColumnStatisticsModel>>();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
-  const [loadingJob, setLoadingJob] = useState(false);
-  const [workingArr, setWorkingArr] = useState<any>([]);
-  const [reverse, setReverse] = useState<boolean>(true);
   const [dataArray1, setDataArray1] = useState<MyData[]>();
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
@@ -57,6 +53,16 @@ const TableColumns = ({
     checkTypes: CheckTypes;
   } = useParams();
   const history = useHistory();
+
+  const labels = [
+    'Name',
+    'Detected Datatype',
+    'Imported Type',
+    'Length',
+    'Scale',
+    'Minimal Value',
+    'Null count'
+  ];
 
   const fetchColumns = async () => {
     try {
@@ -250,32 +256,6 @@ const TableColumns = ({
       return k;
     }
   };
-  const handleSortChange = (sortBy: string) => {
-    switch (sortBy) {
-      case 'nulls_percent':
-        // setSortedStatistics(sortedStatistics?.forEach((x) => x.statistics))
-        break;
-      case 'name':
-        break;
-      case 'unique_count':
-        break;
-      case 'nulls_count':
-      default:
-    }
-  };
-
-  const sortAlphabetictly = async (reverse?: boolean) => {
-    const sorted = dataArray.sort((a, b) =>
-      a.nameOfCol && b.nameOfCol
-        ? reverse === true
-          ? a.nameOfCol.localeCompare(b.nameOfCol)
-          : b.nameOfCol.localeCompare(a.nameOfCol)
-        : 0
-    );
-    setDataArray1(sorted);
-    console.log(dataArray1);
-  };
-
   const nullPercentData = statistics?.column_statistics?.map((x) =>
     x.statistics
       ?.filter((item) => item.collector === 'nulls_percent')
@@ -359,7 +339,7 @@ const TableColumns = ({
         null_count: Number(renderValue(nullCount)),
         detectedDatatypeVar: Number(detectedDatatype),
         nameOfCol: columnname,
-        minimalValue: minimalValue?.toString(),
+        minimalValue: renderValue(minimalValue),
         length: renderValue(lengthValue),
         scale: renderValue(scaleValue),
         importedDatatype: renderValue(typeValue)
@@ -368,6 +348,111 @@ const TableColumns = ({
       dataArray.push(newData);
     }
   }
+
+  const sortAlphabetictly = () => {
+    const sortedArray = [...dataArray];
+    sortedArray.sort((a, b) => {
+      const nullsCountA = String(a.nameOfCol);
+      const nullsCountB = String(b.nameOfCol);
+
+      if (nullsCountA && nullsCountB) {
+        return sortDirection === 'asc'
+          ? nullsCountA.localeCompare(nullsCountB)
+          : nullsCountB.localeCompare(nullsCountA);
+      } else if (nullsCountA) {
+        return sortDirection === 'asc' ? -1 : 1;
+      } else if (nullsCountB) {
+        return sortDirection === 'asc' ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
+    setDataArray1(sortedArray);
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+  };
+
+  const sortDataByMinimalValue = () => {
+    const sortedArray = [...dataArray];
+    const BoolArray = [];
+    const StringArray = [];
+    const NumberArray = [];
+
+    for (let i = 0; i < sortedArray.length; i++) {
+      if (
+        String(sortedArray.at(i)?.minimalValue).at(0) === '0' &&
+        String(sortedArray.at(i)?.minimalValue).length !== 1 &&
+        String(sortedArray.at(i)?.minimalValue).at(1) !== '.'
+      ) {
+        StringArray.push(sortedArray.at(i)?.minimalValue);
+      } else if (
+        sortedArray.at(i)?.minimalValue === 'Yes' ||
+        sortedArray.at(i)?.minimalValue === 'No'
+      ) {
+        BoolArray.push(sortedArray.at(i)?.minimalValue);
+      } else if (
+        typeof sortedArray.at(i)?.minimalValue === 'string' &&
+        isNaN(Number(sortedArray.at(i)?.minimalValue))
+      ) {
+        StringArray.push(sortedArray.at(i)?.minimalValue);
+      } else if (
+        typeof sortedArray.at(i)?.minimalValue === 'string' &&
+        !isNaN(Number(sortedArray.at(i)?.minimalValue))
+      ) {
+        NumberArray.push(Number(sortedArray.at(i)?.minimalValue));
+      }
+    }
+
+    console.log('Bool Arr');
+    console.log(BoolArray);
+    console.log('String Arr');
+    console.log(StringArray);
+    console.log('Number Arr');
+    console.log(NumberArray);
+  };
+
+  const sortDataByLength = () => {
+    const sortedArray = [...dataArray];
+    sortedArray.sort((a, b) => {
+      const nullsPercentA = String(a.length);
+      const nullsPercentB = String(b.length);
+
+      if (nullsPercentA && nullsPercentB) {
+        return sortDirection === 'asc'
+          ? parseFloat(nullsPercentA) - parseFloat(nullsPercentB)
+          : parseFloat(nullsPercentB) - parseFloat(nullsPercentA);
+      } else if (nullsPercentA) {
+        return sortDirection === 'asc' ? -1 : 1;
+      } else if (nullsPercentB) {
+        return sortDirection === 'asc' ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
+    setDataArray1(sortedArray);
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+  };
+
+  const sortDataByScale = () => {
+    const sortedArray = [...dataArray];
+    sortedArray.sort((a, b) => {
+      const nullsPercentA = String(a.scale);
+      const nullsPercentB = String(b.scale);
+
+      if (nullsPercentA && nullsPercentB) {
+        return sortDirection === 'asc'
+          ? parseFloat(nullsPercentA) - parseFloat(nullsPercentB)
+          : parseFloat(nullsPercentB) - parseFloat(nullsPercentA);
+      } else if (nullsPercentA) {
+        return sortDirection === 'asc' ? -1 : 1;
+      } else if (nullsPercentB) {
+        return sortDirection === 'asc' ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
+    setDataArray1(sortedArray);
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+  };
 
   const sortDataByNullPercent = () => {
     const sortedArray = [...dataArray];
@@ -389,8 +474,6 @@ const TableColumns = ({
     });
     setDataArray1(sortedArray);
     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    console.log(dataArray);
-    console.log(dataArray1);
   };
 
   const sortDataByNullCount = () => {
@@ -413,8 +496,6 @@ const TableColumns = ({
     });
     setDataArray1(sortedArray);
     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    console.log(dataArray);
-    console.log(dataArray1);
   };
 
   const sortDataByUniqueValue = () => {
@@ -437,8 +518,76 @@ const TableColumns = ({
     });
     setDataArray1(sortedArray);
     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-    console.log(dataArray);
-    console.log(dataArray1);
+  };
+
+  const sortDataByDetectedtype = () => {
+    const sortedArray = [...dataArray];
+    sortedArray.sort((a, b) => {
+      const nullsCountA = String(a.detectedDatatypeVar);
+      const nullsCountB = String(b.detectedDatatypeVar);
+
+      if (nullsCountA && nullsCountB) {
+        return sortDirection === 'asc'
+          ? Number(nullsCountA) - Number(nullsCountB)
+          : Number(nullsCountB) - Number(nullsCountA);
+      } else if (nullsCountA) {
+        return sortDirection === 'asc' ? -1 : 1;
+      } else if (nullsCountB) {
+        return sortDirection === 'asc' ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
+    setDataArray1(sortedArray);
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+  };
+
+  const sortDataByImportedtype = () => {
+    const sortedArray = [...dataArray];
+    sortedArray.sort((a, b) => {
+      const nullsCountA = String(a.detectedDatatypeVar);
+      const nullsCountB = String(b.detectedDatatypeVar);
+
+      if (nullsCountA && nullsCountB) {
+        return sortDirection === 'asc'
+          ? nullsCountA.localeCompare(nullsCountB)
+          : nullsCountB.localeCompare(nullsCountA);
+      } else if (nullsCountA) {
+        return sortDirection === 'asc' ? -1 : 1;
+      } else if (nullsCountB) {
+        return sortDirection === 'asc' ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
+    setDataArray1(sortedArray);
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+  };
+
+  const handleSorting = (param: string) => {
+    switch (param) {
+      case 'Name':
+        sortAlphabetictly();
+        break;
+      case 'Detected Datatype':
+        sortDataByDetectedtype();
+        break;
+      case 'Imported Type':
+        sortDataByImportedtype();
+        break;
+      case 'Length':
+        sortDataByLength();
+        break;
+      case 'Scale':
+        sortDataByScale();
+        break;
+      case 'Null count':
+        sortDataByNullCount();
+        break;
+      case 'Minimal Value':
+        sortDataByMinimalValue();
+        break;
+    }
   };
 
   const mapFunc = (column: MyData, index: number): ReactNode => {
@@ -448,60 +597,28 @@ const TableColumns = ({
           {column.nameOfCol}
         </td>
         <td className="border-b border-gray-100 px-4 py-2">
-          {/* {column?.statistics?.map((metric, index) =>
-      metric.collector === 'string_datatype_detect' ? ( */}
           <div key={index} className="truncate">
-            {/* {metric.result ? datatype_detected(metric.result) : ''} */}
             {datatype_detected(column.detectedDatatypeVar)}
           </div>
-          {/* //   ) : (
-    //     ''
-    //   )
-    // )} */}
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">
-          {/* {column.type_snapshot?.column_type} */}
           {column.importedDatatype}
         </td>
         <td className="border-b border-gray-100 text-right px-4 py-2">
-          <span className="float-right">
-            {/* {column.type_snapshot?.length} */}
-            {column.length}
-          </span>
+          <span className="float-right">{column.length}</span>
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">
-          <span className="float-right">
-            {/* {column.type_snapshot?.scale} */}
-            {column.scale}
-          </span>
+          <span className="float-right">{column.scale}</span>
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">
-          {/* {column?.statistics?.map((metric, index) =>
-      metric.collector === 'min_value' ? ( */}
           <div key={index} className="text-right float-right">
-            {/* {metric.result
-          ? cutString(renderValue(metric.result))
-          : '0'} */}
             {column.minimalValue}
           </div>
-          {/* ) : (
-        ''
-      )
-    )} */}
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">
-          {/* {column?.statistics?.map((metric, index) =>
-      metric.collector === 'nulls_count' ? ( */}
           <div key={index} className="text-right float-right">
-            {/* {metric.result
-          ? formatNumber(Number(renderValue(metric.result)))
-          : '0'} */}
             {column.null_count}
           </div>
-          {/* ) : (
-        ''
-      )
-    )} */}
         </td>
         <td className="border-b border-gray-100 text-right px-4 py-2">
           <div className="flex justify-center items-center">
@@ -520,40 +637,6 @@ const TableColumns = ({
               ></div>
             </div>
           </div>
-          {/* {column?.statistics?.map((metric, index) =>
-      metric.collector === 'nulls_percent' ? (
-        <div
-          key={index}
-          className="truncate float-right flex justify-center items-center"
-        >
-          <div className="w-20">
-            {metric.result
-              ? !isNaN(Number(renderValue(metric.result)))
-                ? Number(renderValue(metric.result)).toFixed(2) +
-                  '%'
-                : renderValue(metric.result)
-              : '0.00%'}
-          </div>
-          <div
-            className=" h-3 border border-gray-100 flex ml-5"
-            style={{ width: '66.66px' }}
-          >
-            <div
-              className="h-3 bg-amber-700"
-              style={{
-                width: metric.result
-                  ? `${
-                      (Number(renderValue(metric.result)) * 2) / 3
-                    }px`
-                  : ''
-              }}
-            ></div>
-          </div>
-        </div>
-      ) : (
-        ''
-      )
-    )} */}
         </td>
         <td className="border-b border-gray-100 text-right px-4 my-0 py-0">
           <div
@@ -603,61 +686,55 @@ const TableColumns = ({
       <table className="mb-6 mt-4 w-full">
         <thead>
           <tr>
-            <th className="border-b border-gray-100 text-left px-4 py-2 cursor-pointer">
-              <div
-                className="flex"
-                onClick={() => {
-                  setReverse(!reverse), sortAlphabetictly(reverse);
-                }}
+            {labels.map((x, index) => (
+              <th
+                className="border-b border-gray-100 text-left px-4 py-2 cursor-pointer"
+                key={index}
               >
-                <div>Name</div>
+                <div
+                  className="flex"
+                  style={{
+                    justifyContent:
+                      x === 'Minimal Value' || x === 'Null count'
+                        ? 'flex-end'
+                        : 'flex-start'
+                  }}
+                  onClick={() => {
+                    handleSorting(x);
+                  }}
+                >
+                  <div>{x}</div>
+                  <div>
+                    <SvgIcon name="chevron-up" className="w-3 h-3" />
+                    <SvgIcon name="chevron-down" className="w-3 h-3" />
+                  </div>
+                </div>
+              </th>
+            ))}
 
+            <th className="border-b border-gray-100 text-right px-10 py-2 ">
+              <div
+                className="flex justify-center cursor-pointer"
+                onClick={() => sortDataByNullPercent()}
+              >
+                <div>Null percent</div>
                 <div>
                   <SvgIcon name="chevron-up" className="w-3 h-3" />
-
                   <SvgIcon name="chevron-down" className="w-3 h-3" />
                 </div>
               </div>
             </th>
-            <th className="border-b border-gray-100 text-left px-4 py-2">
-              Detected datatype
-            </th>
-            <th className="border-b border-gray-100 text-left px-4 py-2">
-              Imported type
-            </th>
             <th className="border-b border-gray-100 text-right px-4 py-2">
-              Length
-            </th>
-            <th className="border-b border-gray-100 text-right px-4 py-2">
-              Scale
-            </th>
-            <th className="border-b border-gray-100 text-right px-4 py-2">
-              Minimal value
-            </th>
-            <th className="border-b border-gray-100 text-right px-4 py-2 flex items-center">
-              <div className="text-right" onClick={() => sortDataByNullCount()}>
-                Null count
-              </div>
-              <div className="cursor-pointer">
-                <div className="w-3 h-3">
+              <div
+                className="flex justify-end cursor-pointer"
+                onClick={() => sortDataByUniqueValue()}
+              >
+                <div>Unique Count</div>
+                <div>
                   <SvgIcon name="chevron-up" className="w-3 h-3" />
-                </div>
-                <div className="w-3 h-3">
                   <SvgIcon name="chevron-down" className="w-3 h-3" />
                 </div>
               </div>
-            </th>
-            <th
-              className="border-b border-gray-100 text-right px-10 py-2 "
-              onClick={() => sortDataByNullPercent()}
-            >
-              Null percent
-            </th>
-            <th
-              className="border-b border-gray-100 text-right px-4 py-2"
-              onClick={() => sortDataByUniqueValue()}
-            >
-              Unique count
             </th>
             <th className="border-b border-gray-100 text-right px-7.5 py-2">
               Action
