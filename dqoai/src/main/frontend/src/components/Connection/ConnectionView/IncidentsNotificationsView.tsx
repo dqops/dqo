@@ -123,7 +123,7 @@ export const IncidentsNotificationsView = () => {
         >
           <Input
             className="mb-4"
-            label="A new incident was opened(detected):"
+            label="A new incident was opened (detected):"
             value={incidentGrouping?.webhooks?.incident_opened_webhook_url}
             onChange={(e) => onChangeWebhooks({ incident_opened_webhook_url: e.target.value })}
           />

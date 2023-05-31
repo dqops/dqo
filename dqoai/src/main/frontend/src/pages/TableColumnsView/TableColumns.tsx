@@ -121,16 +121,15 @@ const TableColumns = ({
   };
 
   const collectStatistics = async (index: number) => {
-    try {
-      setLoadingJob(true);
-      await JobApiClient.collectStatisticsOnDataStreams(
-        statistics?.column_statistics?.at(index)
-          ?.collect_column_statistics_job_template
-      );
-    } finally {
-      setLoadingJob(false);
-    }
+    await JobApiClient.collectStatisticsOnDataStreams(
+      statistics?.column_statistics?.at(index)
+        ?.collect_column_statistics_job_template
+    );
   };
+
+  useEffect(() => {
+    fetchColumns();
+  }, [connectionName, schemaName, tableName]);
 
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {

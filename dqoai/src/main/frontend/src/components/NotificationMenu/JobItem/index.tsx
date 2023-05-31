@@ -16,6 +16,7 @@ import { useError, IError } from '../../../contexts/errrorContext';
 import { IRootState } from '../../../redux/reducers';
 import { reduceCounter } from '../../../redux/actions/job.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { JobApiClient } from '../../../services/apiClient';
 
 const JobItem = ({
   job,
@@ -76,6 +77,10 @@ const JobItem = ({
     return value;
   };
 
+  const cancelJob = async (jobId: number) => {
+    await JobApiClient.cancelJob(jobId);
+  };
+
   const renderStatus = () => {
     if (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
       return <SvgIcon name="success" className="w-4 h-4 text-primary" />;
@@ -92,6 +97,9 @@ const JobItem = ({
     if (job.status === DqoJobHistoryEntryModelStatusEnum.running) {
       return <SvgIcon name="running" className="w-4 h-4 text-orange-700" />;
     }
+    if (job.status === DqoJobHistoryEntryModelStatusEnum.cancelled) {
+      return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
+    }
   };
 
   return (
@@ -106,8 +114,21 @@ const JobItem = ({
               <div>{job.jobType}</div>
               {renderStatus()}
             </div>
-            <div>
-              {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+            <div className="flex items-center gap-x-2">
+              {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
+                <div
+                  onClick={() =>
+                    cancelJob(job.jobId?.jobId ? Number(job.jobId?.jobId) : 0)
+                  }
+                >
+                  <SvgIcon name="canceljobs" />
+                </div>
+              ) : (
+                <div></div>
+              )}
+              <div>
+                {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+              </div>
             </div>
           </div>
         </AccordionHeader>
