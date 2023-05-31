@@ -95,7 +95,7 @@ export const HistogramChart = () => {
   };
 
   return (
-    <div className="grid grid-cols-4 gap-4 my-6">
+    <div className="grid grid-cols-4 px-4 gap-4 my-6">
       <div className="col-span-2">
         <HighchartsReact
           highcharts={Highcharts}
