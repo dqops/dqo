@@ -20,7 +20,6 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.EqualsIntegerRuleParametersSpec;
-import ai.dqo.rules.comparison.ValueChangedParametersSpec;
 import ai.dqo.sensors.table.schema.TableColumnCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -33,14 +32,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table level check that retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to the last known number of columns
- * that was captured and is stored in the data quality check results database.
+ * Table level check that retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableColumnCountChangedCheckSpec extends AbstractCheckSpec<TableColumnCountSensorParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec, ValueChangedParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableColumnCountChangedCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TableSchemaColumnCountCheckSpec extends AbstractCheckSpec<TableColumnCountSensorParametersSpec, EqualsIntegerRuleParametersSpec, EqualsIntegerRuleParametersSpec, EqualsIntegerRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableSchemaColumnCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -53,17 +51,17 @@ public class TableColumnCountChangedCheckSpec extends AbstractCheckSpec<TableCol
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ValueChangedParametersSpec warning;
+    private EqualsIntegerRuleParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ValueChangedParametersSpec error;
+    private EqualsIntegerRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ValueChangedParametersSpec fatal;
+    private EqualsIntegerRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -90,7 +88,7 @@ public class TableColumnCountChangedCheckSpec extends AbstractCheckSpec<TableCol
      * @return Warning severity rule parameters.
      */
     @Override
-    public ValueChangedParametersSpec getWarning() {
+    public EqualsIntegerRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -98,7 +96,7 @@ public class TableColumnCountChangedCheckSpec extends AbstractCheckSpec<TableCol
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(ValueChangedParametersSpec warning) {
+    public void setWarning(EqualsIntegerRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -110,7 +108,7 @@ public class TableColumnCountChangedCheckSpec extends AbstractCheckSpec<TableCol
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public ValueChangedParametersSpec getError() {
+    public EqualsIntegerRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -118,7 +116,7 @@ public class TableColumnCountChangedCheckSpec extends AbstractCheckSpec<TableCol
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(ValueChangedParametersSpec error) {
+    public void setError(EqualsIntegerRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -130,7 +128,7 @@ public class TableColumnCountChangedCheckSpec extends AbstractCheckSpec<TableCol
      * @return Fatal severity rule parameters.
      */
     @Override
-    public ValueChangedParametersSpec getFatal() {
+    public EqualsIntegerRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -138,7 +136,7 @@ public class TableColumnCountChangedCheckSpec extends AbstractCheckSpec<TableCol
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(ValueChangedParametersSpec fatal) {
+    public void setFatal(EqualsIntegerRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

@@ -17,6 +17,7 @@ package ai.dqo.checks.column.recurring.schema;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
+import ai.dqo.checks.column.checkspecs.schema.ColumnSchemaTypeChangedCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,11 +38,15 @@ public class ColumnSchemaMonthlyRecurringChecksSpec extends AbstractCheckCategor
     public static final ChildHierarchyNodeFieldMapImpl<ColumnSchemaMonthlyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_column_exists", o -> o.monthlyColumnExists);
+            put("monthly_column_type_changed", o -> o.monthlyColumnTypeChanged);
         }
     };
 
     @JsonPropertyDescription("Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnSchemaColumnExistsCheckSpec monthlyColumnExists;
+
+    @JsonPropertyDescription("Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last month. Stores the most recent hash for each month when the data quality check was evaluated.")
+    private ColumnSchemaTypeChangedCheckSpec monthlyColumnTypeChanged;
 
 
     /**
@@ -60,6 +65,24 @@ public class ColumnSchemaMonthlyRecurringChecksSpec extends AbstractCheckCategor
         this.setDirtyIf(!Objects.equals(this.monthlyColumnExists, monthlyColumnExists));
         this.monthlyColumnExists = monthlyColumnExists;
         propagateHierarchyIdToField(monthlyColumnExists, "monthly_column_exists");
+    }
+
+    /**
+     * Returns the check configuration that detects if the column type has changed.
+     * @return Column type has changed.
+     */
+    public ColumnSchemaTypeChangedCheckSpec getMonthlyColumnTypeChanged() {
+        return monthlyColumnTypeChanged;
+    }
+
+    /**
+     * Sets the check that detects if the column type hash changed.
+     * @param monthlyColumnTypeChanged Column type has changed check.
+     */
+    public void setMonthlyColumnTypeChanged(ColumnSchemaTypeChangedCheckSpec monthlyColumnTypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.monthlyColumnTypeChanged, monthlyColumnTypeChanged));
+        this.monthlyColumnTypeChanged = monthlyColumnTypeChanged;
+        propagateHierarchyIdToField(monthlyColumnTypeChanged, "monthly_column_type_changed");
     }
 
     /**

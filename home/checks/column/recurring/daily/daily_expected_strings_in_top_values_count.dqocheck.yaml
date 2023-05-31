@@ -5,5 +5,5 @@ spec:
   sensor_name: column/strings/expected_strings_in_top_values_count
   rule_name: comparison/max_missing
   help_text: Verifies that the top X most popular column values contain all values
-    from a list of expected values. Stores the most recent row count for each day
-    when the data quality check was evaluated.
+    from a list of expected values. Stores the most recent captured value for each
+    day when the data quality check was evaluated.
