@@ -154,7 +154,7 @@ export const IncidentDetail = () => {
             <Input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Filter errors"
+              placeholder="Filter errors: col*"
               className="!h-12"
             />
           </div>
