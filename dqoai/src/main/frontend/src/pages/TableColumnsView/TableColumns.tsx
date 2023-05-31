@@ -9,6 +9,9 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDispatch } from 'react-redux/es/hooks/useDispatch';
 import { useParams, useHistory } from 'react-router-dom';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { useSelector } from 'react-redux';
+import { getFirstLevelState } from '../../redux/selectors';
+import Loader from '../../components/Loader';
 
 interface ITableColumnsProps {
   connectionName: string;
@@ -17,7 +20,6 @@ interface ITableColumnsProps {
 }
 
 interface MyData {
-  [x: string]: any;
   null_percent: number | undefined;
   unique_value: number | undefined;
   null_count?: number | undefined;
@@ -37,6 +39,7 @@ const TableColumns = ({
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
+  const [columnToDelete, setColumnToDelete] = useState<ColumnStatisticsModel>();
   const [dataArray1, setDataArray1] = useState<MyData[]>();
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
@@ -53,6 +56,7 @@ const TableColumns = ({
     checkTypes: CheckTypes;
   } = useParams();
   const history = useHistory();
+  const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
 
   const labels = [
     'Name',
@@ -638,10 +642,28 @@ const TableColumns = ({
     }
   };
 
+  const rewriteData = (columnName: string) => {
+    const columnToDelete = statistics?.column_statistics?.find(
+      (x) => x.column_name === columnName
+    );
+
+    if (columnToDelete) {
+      Promise.resolve()
+        .then(() => setColumnToDelete(columnToDelete))
+        .then(() => onRemoveColumn(columnToDelete))
+        .catch((error) => console.error(error));
+    }
+  };
+
+  // console.log(loading);
+
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
       <tr key={index}>
-        <td className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer">
+        <td
+          className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer"
+          onClick={() => navigate(column.nameOfCol ? column.nameOfCol : '')}
+        >
           {column.nameOfCol}
         </td>
         <td className="border-b border-gray-100 px-4 py-2">
@@ -660,7 +682,7 @@ const TableColumns = ({
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">
           <div key={index} className="text-right float-right">
-            {column.minimalValue}
+            {cutString(String(column.minimalValue))}
           </div>
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">
@@ -717,7 +739,13 @@ const TableColumns = ({
             </div>
           </IconButton>
 
-          <IconButton size="sm" className="group bg-teal-500 ml-3">
+          <IconButton
+            size="sm"
+            className="group bg-teal-500 ml-3"
+            onClick={() => {
+              rewriteData(column.nameOfCol ? column.nameOfCol : '');
+            }}
+          >
             <SvgIcon name="delete" className="w-4" />
 
             <span className="hidden absolute right-0 bottom-6 p-1 normal-case bg-black text-white rounded-md group-hover:block whitespace-nowrap">
@@ -728,6 +756,14 @@ const TableColumns = ({
       </tr>
     );
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center min-h-80">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
 
   return (
     <div className="p-4">
