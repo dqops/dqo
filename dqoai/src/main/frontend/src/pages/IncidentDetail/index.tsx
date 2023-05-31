@@ -79,7 +79,7 @@ export const IncidentDetail = () => {
   const [open, setOpen] = useState(false);
   const dispatch = useActionDispatch();
   const { sidebarWidth } = useTree();
-  const { issues, filters = {} } = useSelector(getFirstLevelIncidentsState);
+  const { issues, isEnd, filters = {} } = useSelector(getFirstLevelIncidentsState);
 
   useEffect(() => {
     IncidentsApi.getIncident(connection, year, month, incidentId).then(res => {
@@ -316,6 +316,7 @@ export const IncidentDetail = () => {
             page={filters.page || 1}
             pageSize={filters.pageSize || 50}
             totalPages={10}
+            isEnd={isEnd}
             onChange={(page, pageSize) => onChangeFilter({
               page,
               pageSize

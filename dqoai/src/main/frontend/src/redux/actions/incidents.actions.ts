@@ -126,9 +126,10 @@ export const getIncidentsIssuesRequest = () => ({
   type: INCIDENTS_ACTION.GET_INCIDENTS_ISSUES
 });
 
-export const getIncidentsIssuesSuccess = (data: Array<CheckResultDetailedSingleModel>) => ({
+export const getIncidentsIssuesSuccess = (data: Array<CheckResultDetailedSingleModel>, isEnd: boolean) => ({
   type: INCIDENTS_ACTION.GET_INCIDENTS_ISSUES_SUCCESS,
-  data
+  data,
+  isEnd
 });
 
 export const getIncidentsIssuesFailed = (error: unknown) => ({
@@ -156,7 +157,10 @@ export const getIncidentsIssues = ({
     const res: AxiosResponse<Array<CheckResultDetailedSingleModel>> =
       await IncidentsApi.getIncidentIssues(connection, year, month, incidentId, page, pageSize, filter, days, date, column, check, order, direction);
 
-    dispatch(getIncidentsIssuesSuccess(res.data));
+    const nextRes: AxiosResponse<Array<CheckResultDetailedSingleModel>> =
+      await IncidentsApi.getIncidentIssues(connection, year, month, incidentId, page + 1, pageSize, filter, days, date, column, check, order, direction);
+
+    dispatch(getIncidentsIssuesSuccess(res.data, !nextRes.data.length));
   } catch (err) {
     dispatch(getIncidentsIssuesFailed(err));
   }
