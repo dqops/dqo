@@ -218,7 +218,8 @@ const incidentsReducer = (state = initialState, action: any) => {
     case INCIDENTS_ACTION.GET_INCIDENTS_ISSUES_SUCCESS: {
       return setActiveTabState(state, action, {
         issues: action.data,
-        loading: false
+        loading: false,
+        isEnd: action.isEnd,
       });
     }
     case INCIDENTS_ACTION.GET_INCIDENTS_ISSUES_ERROR: {
