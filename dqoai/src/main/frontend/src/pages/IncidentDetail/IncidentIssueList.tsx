@@ -5,6 +5,7 @@ import CheckDetails from "../../components/DataQualityChecks/CheckDetails/CheckD
 import { ChecksApi } from "../../services/apiClient";
 import { SortableColumn } from "../IncidentConnection/SortableColumn";
 import { IncidentIssueFilter } from "../../redux/reducers/incidents.reducer";
+import moment from "moment";
 
 type IncidentIssueRowProps = {
   issue: CheckResultDetailedSingleModel;
@@ -75,13 +76,13 @@ export const IncidentIssueRow = ({ issue }: IncidentIssueRowProps) => {
           {issue.checkName}
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          {issue.executedAt}
+          {moment(issue.executedAt).format("YYYY-MM-DD HH:mm:ss.SSS")}
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
           {issue.timeGradient}
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-          {issue.timePeriod}
+          {moment(issue.timePeriod).format("YYYY-MM-DD HH:mm:ss.SSS")}
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
           <div>{typeof issue.actualValue === 'number' ? issue.actualValue : ''}</div>
