@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { ColumnApiClient, JobApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
 import { ColumnStatisticsModel, TableColumnsStatisticsModel } from '../../api';
@@ -24,7 +24,7 @@ interface MyData {
   minimalValue?: string | undefined;
   detectedDatatypeVar: number | undefined;
   length?: number | undefined;
-  skale?: number | undefined;
+  scale?: number | undefined;
   importedDatatype?: string | undefined;
 }
 
@@ -265,15 +265,15 @@ const TableColumns = ({
   };
 
   const sortAlphabetictly = async (reverse?: boolean) => {
-    const sortedStats = statistics?.column_statistics?.sort((a, b) =>
-      a.column_name && b.column_name
+    const sorted = dataArray.sort((a, b) =>
+      a.nameOfCol && b.nameOfCol
         ? reverse === true
-          ? a.column_name.localeCompare(b.column_name)
-          : b.column_name.localeCompare(a.column_name)
+          ? a.nameOfCol.localeCompare(b.nameOfCol)
+          : b.nameOfCol.localeCompare(a.nameOfCol)
         : 0
     );
-    setSortedStatistics(sortedStats);
-    console.log(sortedStatistics);
+    setDataArray1(sorted);
+    console.log(dataArray1);
   };
 
   const workInProgress = () => {
@@ -334,6 +334,17 @@ const TableColumns = ({
       ?.filter((item) => item.collector === 'min_value')
       .map((item) => item.result)
   );
+  const lengthData = statistics?.column_statistics?.map(
+    (x) => x.type_snapshot?.length
+  );
+
+  const scaleData = statistics?.column_statistics?.map(
+    (x) => x.type_snapshot?.scale
+  );
+
+  const typeData = statistics?.column_statistics?.map(
+    (x) => x.type_snapshot?.column_type
+  );
 
   const dataArray: MyData[] = [];
 
@@ -343,7 +354,10 @@ const TableColumns = ({
     nullCountData &&
     detectedDatatypeVar &&
     columnNameData &&
-    minimalValueData
+    minimalValueData &&
+    lengthData &&
+    scaleData &&
+    typeData
   ) {
     const maxLength = Math.max(
       nullPercentData.length,
@@ -351,7 +365,10 @@ const TableColumns = ({
       nullCountData.length,
       detectedDatatypeVar.length,
       columnNameData.length,
-      minimalValueData.length
+      minimalValueData.length,
+      lengthData.length,
+      scaleData.length,
+      typeData.length
     );
 
     for (let i = 0; i < maxLength; i++) {
@@ -361,20 +378,25 @@ const TableColumns = ({
       const detectedDatatype = detectedDatatypeVar[i];
       const columnname = columnNameData[i];
       const minimalValue = minimalValueData[i];
+      const lengthValue = lengthData[i];
+      const scaleValue = scaleData[i];
+      const typeValue = typeData[i];
 
       const newData: MyData = {
-        null_percent: Number(nullPercent),
-        unique_value: Number(uniqueValue),
-        null_count: Number(nullCount),
+        null_percent: Number(renderValue(nullPercent)),
+        unique_value: Number(renderValue(uniqueValue)),
+        null_count: Number(renderValue(nullCount)),
         detectedDatatypeVar: Number(detectedDatatype),
         nameOfCol: columnname,
-        minimalValue: minimalValue?.toString()
+        minimalValue: minimalValue?.toString(),
+        length: renderValue(lengthValue),
+        scale: renderValue(scaleValue),
+        importedDatatype: renderValue(typeValue)
       };
 
       dataArray.push(newData);
     }
   }
-  console.log(dataArray);
 
   const sortDataByNullPercent = () => {
     const sortedArray = [...dataArray];
@@ -394,9 +416,215 @@ const TableColumns = ({
         return 0;
       }
     });
-
     setDataArray1(sortedArray);
     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    console.log(dataArray);
+    console.log(dataArray1);
+  };
+
+  const sortDataByNullCount = () => {
+    const sortedArray = [...dataArray];
+    sortedArray.sort((a, b) => {
+      const nullsCountA = a.null_count;
+      const nullsCountB = b.null_count;
+
+      if (nullsCountA && nullsCountB) {
+        return sortDirection === 'asc'
+          ? nullsCountA - nullsCountB
+          : nullsCountB - nullsCountA;
+      } else if (nullsCountA) {
+        return sortDirection === 'asc' ? -1 : 1;
+      } else if (nullsCountB) {
+        return sortDirection === 'asc' ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
+    setDataArray1(sortedArray);
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    console.log(dataArray);
+    console.log(dataArray1);
+  };
+
+  const sortDataByUniqueValue = () => {
+    const sortedArray = [...dataArray];
+    sortedArray.sort((a, b) => {
+      const uniqueValueA = a.unique_value;
+      const uniqueValueB = b.unique_value;
+
+      if (uniqueValueA && uniqueValueB) {
+        return sortDirection === 'asc'
+          ? uniqueValueA - uniqueValueB
+          : uniqueValueB - uniqueValueA;
+      } else if (uniqueValueA) {
+        return sortDirection === 'asc' ? -1 : 1;
+      } else if (uniqueValueB) {
+        return sortDirection === 'asc' ? 1 : -1;
+      } else {
+        return 0;
+      }
+    });
+    setDataArray1(sortedArray);
+    setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    console.log(dataArray);
+    console.log(dataArray1);
+  };
+
+  const mapFunc = (column: MyData, index: number): ReactNode => {
+    return (
+      <tr key={index}>
+        <td className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer">
+          {column.nameOfCol}
+        </td>
+        <td className="border-b border-gray-100 px-4 py-2">
+          {/* {column?.statistics?.map((metric, index) =>
+      metric.collector === 'string_datatype_detect' ? ( */}
+          <div key={index} className="truncate">
+            {/* {metric.result ? datatype_detected(metric.result) : ''} */}
+            {datatype_detected(column.detectedDatatypeVar)}
+          </div>
+          {/* //   ) : (
+    //     ''
+    //   )
+    // )} */}
+        </td>
+        <td className="border-b border-gray-100 text-left px-4 py-2">
+          {/* {column.type_snapshot?.column_type} */}
+          {column.importedDatatype}
+        </td>
+        <td className="border-b border-gray-100 text-right px-4 py-2">
+          <span className="float-right">
+            {/* {column.type_snapshot?.length} */}
+            {column.length}
+          </span>
+        </td>
+        <td className="border-b border-gray-100 text-left px-4 py-2">
+          <span className="float-right">
+            {/* {column.type_snapshot?.scale} */}
+            {column.scale}
+          </span>
+        </td>
+        <td className="border-b border-gray-100 text-left px-4 py-2">
+          {/* {column?.statistics?.map((metric, index) =>
+      metric.collector === 'min_value' ? ( */}
+          <div key={index} className="text-right float-right">
+            {/* {metric.result
+          ? cutString(renderValue(metric.result))
+          : '0'} */}
+            {column.minimalValue}
+          </div>
+          {/* ) : (
+        ''
+      )
+    )} */}
+        </td>
+        <td className="border-b border-gray-100 text-left px-4 py-2">
+          {/* {column?.statistics?.map((metric, index) =>
+      metric.collector === 'nulls_count' ? ( */}
+          <div key={index} className="text-right float-right">
+            {/* {metric.result
+          ? formatNumber(Number(renderValue(metric.result)))
+          : '0'} */}
+            {column.null_count}
+          </div>
+          {/* ) : (
+        ''
+      )
+    )} */}
+        </td>
+        <td className="border-b border-gray-100 text-right px-4 py-2">
+          <div className="flex justify-center items-center">
+            <div>{Number(column.null_percent).toFixed(2)}%</div>
+            <div
+              className=" h-3 border border-gray-100 flex ml-5"
+              style={{ width: '66.66px' }}
+            >
+              <div
+                className="h-3 bg-amber-700"
+                style={{
+                  width: column.null_percent
+                    ? `${(Number(renderValue(column.null_percent)) * 2) / 3}px`
+                    : ''
+                }}
+              ></div>
+            </div>
+          </div>
+          {/* {column?.statistics?.map((metric, index) =>
+      metric.collector === 'nulls_percent' ? (
+        <div
+          key={index}
+          className="truncate float-right flex justify-center items-center"
+        >
+          <div className="w-20">
+            {metric.result
+              ? !isNaN(Number(renderValue(metric.result)))
+                ? Number(renderValue(metric.result)).toFixed(2) +
+                  '%'
+                : renderValue(metric.result)
+              : '0.00%'}
+          </div>
+          <div
+            className=" h-3 border border-gray-100 flex ml-5"
+            style={{ width: '66.66px' }}
+          >
+            <div
+              className="h-3 bg-amber-700"
+              style={{
+                width: metric.result
+                  ? `${
+                      (Number(renderValue(metric.result)) * 2) / 3
+                    }px`
+                  : ''
+              }}
+            ></div>
+          </div>
+        </div>
+      ) : (
+        ''
+      )
+    )} */}
+        </td>
+        <td className="border-b border-gray-100 text-right px-4 my-0 py-0">
+          <div
+            key={index}
+            className="truncate float-right pr-2 my-0 py-0"
+            style={{
+              width: '100%',
+
+              backgroundColor: calculate_color(
+                Number(column.unique_value),
+                max_unique_value()
+              )
+            }}
+          >
+            {column.unique_value
+              ? formatNumber(Number(renderValue(column.unique_value)))
+              : ''}
+          </div>
+        </td>
+
+        <td className="border-b border-gray-100 text-right px-4 py-2 flex flex-nowrap justify-end items-end">
+          <IconButton
+            size="sm"
+            className="group bg-teal-500 ml-1.5"
+            onClick={() => collectStatistics(index)}
+          >
+            <SvgIcon name="boxplot" className="w-4 white" />
+            <div className="hidden absolute right-0 bottom-6 p-1 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
+              Collect statistic
+            </div>
+          </IconButton>
+
+          <IconButton size="sm" className="group bg-teal-500 ml-3">
+            <SvgIcon name="delete" className="w-4" />
+
+            <span className="hidden absolute right-0 bottom-6 p-1 normal-case bg-black text-white rounded-md group-hover:block whitespace-nowrap">
+              Click to delete
+            </span>
+          </IconButton>
+        </td>
+      </tr>
+    );
   };
 
   return (
@@ -436,16 +664,7 @@ const TableColumns = ({
               Minimal value
             </th>
             <th className="border-b border-gray-100 text-right px-4 py-2 flex items-center">
-              <div
-                className="text-right"
-                onClick={() =>
-                  statistics?.column_statistics
-                    ? workingArr.length < statistics?.column_statistics?.length
-                      ? workInProgress()
-                      : ''
-                    : ''
-                }
-              >
+              <div className="text-right" onClick={() => sortDataByNullCount()}>
                 Null count
               </div>
               <div className="cursor-pointer">
@@ -463,7 +682,10 @@ const TableColumns = ({
             >
               Null percent
             </th>
-            <th className="border-b border-gray-100 text-right px-4 py-2">
+            <th
+              className="border-b border-gray-100 text-right px-4 py-2"
+              onClick={() => sortDataByUniqueValue()}
+            >
               Unique count
             </th>
             <th className="border-b border-gray-100 text-right px-7.5 py-2">
@@ -472,157 +694,9 @@ const TableColumns = ({
           </tr>
         </thead>
         <tbody>
-          {dataArray &&
-            dataArray.map((column, index) => (
-              <tr key={index}>
-                <td
-                  className="border-b border-gray-100 text-left px-4 py-2 underline cursor-pointer"
-                  // onClick={() =>
-                  //   navigate(column.column_name ? column.column_name : '')
-                  // }
-                >
-                  {column.nameOfCol}
-                </td>
-                <td className="border-b border-gray-100 px-4 py-2">
-                  {/* {column?.statistics?.map((metric, index) =>
-                    metric.collector === 'string_datatype_detect' ? ( */}
-                  <div key={index} className="truncate">
-                    {/* {metric.result ? datatype_detected(metric.result) : ''} */}
-                    {column.detectedDatatypeVar}
-                  </div>
-                  {/* //   ) : (
-                  //     ''
-                  //   )
-                  // )} */}
-                </td>
-                <td className="border-b border-gray-100 text-left px-4 py-2">
-                  {/* {column.type_snapshot?.column_type} */}
-                </td>
-                <td className="border-b border-gray-100 text-right px-4 py-2">
-                  <span className="float-right">
-                    {/* {column.type_snapshot?.length} */}
-                  </span>
-                </td>
-                <td className="border-b border-gray-100 text-left px-4 py-2">
-                  <span className="float-right">
-                    {/* {column.type_snapshot?.scale} */}
-                  </span>
-                </td>
-                <td className="border-b border-gray-100 text-left px-4 py-2">
-                  {/* {column?.statistics?.map((metric, index) =>
-                    metric.collector === 'min_value' ? ( */}
-                  <div key={index} className="text-right float-right">
-                    {/* {metric.result
-                          ? cutString(renderValue(metric.result))
-                          : '0'} */}
-                    {column.minimalValue}
-                  </div>
-                  {/* ) : (
-                      ''
-                    )
-                  )} */}
-                </td>
-                <td className="border-b border-gray-100 text-left px-4 py-2">
-                  {/* {column?.statistics?.map((metric, index) =>
-                    metric.collector === 'nulls_count' ? ( */}
-                  <div key={index} className="text-right float-right">
-                    {/* {metric.result
-                          ? formatNumber(Number(renderValue(metric.result)))
-                          : '0'} */}
-                    {column.null_count}
-                  </div>
-                  {/* ) : (
-                      ''
-                    )
-                  )} */}
-                </td>
-                <td className="border-b border-gray-100 text-right px-4 py-2">
-                  {/* {column?.statistics?.map((metric, index) =>
-                    metric.collector === 'nulls_percent' ? (
-                      <div
-                        key={index}
-                        className="truncate float-right flex justify-center items-center"
-                      >
-                        <div className="w-20">
-                          {metric.result
-                            ? !isNaN(Number(renderValue(metric.result)))
-                              ? Number(renderValue(metric.result)).toFixed(2) +
-                                '%'
-                              : renderValue(metric.result)
-                            : '0.00%'}
-                        </div>
-                        <div
-                          className=" h-3 border border-gray-100 flex ml-5"
-                          style={{ width: '66.66px' }}
-                        >
-                          <div
-                            className="h-3 bg-amber-700"
-                            style={{
-                              width: metric.result
-                                ? `${
-                                    (Number(renderValue(metric.result)) * 2) / 3
-                                  }px`
-                                : ''
-                            }}
-                          ></div>
-                        </div>
-                      </div>
-                    ) : (
-                      ''
-                    )
-                  )} */}
-                </td>
-                <td className="border-b border-gray-100 text-right px-4 my-0 py-0">
-                  {/* {column?.statistics?.map((metric, index) =>
-                    metric.collector === 'unique_count' ? (
-                      <div
-                        key={index}
-                        className="truncate float-right pr-2 my-0 py-0"
-                        style={{
-                          width: '100%',
-
-                          backgroundColor: calculate_color(
-                            Number(metric.result),
-                            max_unique_value()
-                          )
-                        }}
-                      >
-                        {metric.result
-                          ? formatNumber(Number(renderValue(metric.result)))
-                          : ''}
-                      </div>
-                    ) : (
-                      ''
-                    )
-                  )} */}
-                </td>
-
-                <td className="border-b border-gray-100 text-right px-4 py-2 flex flex-nowrap justify-end items-end">
-                  <IconButton
-                    size="sm"
-                    className="group bg-teal-500 ml-1.5"
-                    onClick={() => collectStatistics(index)}
-                  >
-                    <SvgIcon name="boxplot" className="w-4 white" />
-                    <div className="hidden absolute right-0 bottom-6 p-1 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
-                      Collect statistic
-                    </div>
-                  </IconButton>
-
-                  <IconButton
-                    size="sm"
-                    className="group bg-teal-500 ml-3"
-                    // onClick={() => onRemoveColumn(column)}
-                  >
-                    <SvgIcon name="delete" className="w-4" />
-
-                    <span className="hidden absolute right-0 bottom-6 p-1 normal-case bg-black text-white rounded-md group-hover:block whitespace-nowrap">
-                      Click to delete
-                    </span>
-                  </IconButton>
-                </td>
-              </tr>
-            ))}
+          {dataArray1 !== undefined
+            ? dataArray1.map(mapFunc)
+            : dataArray.map(mapFunc)}
         </tbody>
       </table>
       <ConfirmDialog
