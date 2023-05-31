@@ -16,6 +16,7 @@ import JobItem from './JobItem';
 import ErrorItem from './ErrorItem';
 import moment from 'moment';
 import { JobApiClient } from '../../services/apiClient';
+import Switch from '../Switch';
 
 const NotificationMenu = () => {
   const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
@@ -36,7 +37,6 @@ const NotificationMenu = () => {
 
   useEffect(() => {
     getData();
-    colorOfButton();
   }, []);
 
   const data = useMemo(() => {
@@ -91,26 +91,6 @@ const NotificationMenu = () => {
     }
   };
 
-  const colorOfButton = () => {
-    if (cronBoolean === true) {
-      return 'rgba(2, 154, 128, 255)';
-    }
-    if (cronBoolean === false) {
-      return 'red';
-    } else {
-      return 'white';
-    }
-  };
-
-  const renderText = () => {
-    if (cronBoolean === true) {
-      return 'ON';
-    }
-    if (cronBoolean === false) {
-      return 'OFF';
-    } else return '';
-  };
-
   return (
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
       <PopoverHandler>
@@ -136,15 +116,19 @@ const NotificationMenu = () => {
       <PopoverContent className="z-50 min-w-120 max-w-120 px-0 ">
         <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex flex-col gap-y-2 px-4">
           <div>Notifications ({data.length})</div>
-          <div className="flex items-center gap-x-5">
-            Scheduler status:{' '}
-            <div
-              className="h-8 w-12 text-white flex justify-center items-center rounded-lg border border-gray-400 text-sm cursor-pointer"
-              style={{ backgroundColor: colorOfButton() }}
-              onClick={() => changeStatus()}
-            >
-              {renderText()}
+          <div className="flex items-center gap-x-3 text-sm">
+            <div className="whitespace-no-wrap">Scheduler status </div>
+            <div>
+              <Switch
+                checked={cronBoolean ? cronBoolean : false}
+                onChange={() => changeStatus()}
+              />
             </div>
+            {cronBoolean === false && (
+              <div className="font-light text-xs text-red-500 text-center">
+                (Warning, scheduled jobs won{"'"}t be executed)
+              </div>
+            )}
           </div>
         </div>
         <div className="overflow-auto max-h-100 py-4 px-4">
