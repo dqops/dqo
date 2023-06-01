@@ -79,17 +79,17 @@ export const getJobsChanges =
       clearTimeout(timerId);
     }
     dispatch(getJobsChangesRequest());
-    try {
-      const res: AxiosResponse<DqoJobQueueIncrementalSnapshotModel> =
-        await JobApiClient.getJobChangesSince(sequenceNumber);
-      dispatch(getJobsChangesSuccess(res.data));
-    } catch (err) {
-      dispatch(getJobsChangesFailed(err));
-      timerId = setTimeout(() => {
-        dispatch(getJobsChanges(sequenceNumber) as any);
-        return;
-      }, JOB_CHANGES_RETRY_INTERVAL);
-    }
+    JobApiClient.getJobChangesSince(sequenceNumber)
+      .then((res: AxiosResponse<DqoJobQueueIncrementalSnapshotModel>) => {
+        dispatch(getJobsChangesSuccess(res.data));
+      })
+      .catch(err => {
+        dispatch(getJobsChangesFailed(err));
+        timerId = setTimeout(() => {
+          dispatch(getJobsChanges(sequenceNumber) as any);
+          return;
+        }, JOB_CHANGES_RETRY_INTERVAL);
+      })
   };
 
 export const toggleMenu = (isOpen: boolean) => ({
