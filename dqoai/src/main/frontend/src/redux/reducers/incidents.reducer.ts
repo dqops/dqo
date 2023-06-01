@@ -86,8 +86,8 @@ export interface IncidentHistogramFilter {
 
 export interface IIncidentsState {
   connections: IncidentsPerConnectionModel[];
-  loading: boolean;
-  error: any;
+  loading?: boolean;
+  error?: any;
   tabs: INestTab[];
   activeTab?: string;
 }
