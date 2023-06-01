@@ -126,7 +126,7 @@ const NotificationMenu = () => {
             </div>
             {cronBoolean === false && (
               <div className="font-light text-xs text-red-500 text-center">
-                (Warning, scheduled jobs won{"'"}t be executed)
+                (Warning: scheduled jobs will not be executed)
               </div>
             )}
           </div>
