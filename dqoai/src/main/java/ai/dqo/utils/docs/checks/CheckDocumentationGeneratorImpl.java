@@ -70,8 +70,7 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
             allChecksDocumentationModels.addAll(check.getCheckGroups());
         }
         for (SimilarChecksDocumentationModel similarCheck : allChecksDocumentationModels) {
-            DocumentationMarkdownFile documentationMarkdownFile = rulesFolder.addNestedFile(similarCheck.getTarget().substring(0, 1).toUpperCase()
-                    + similarCheck.getTarget().substring(1)
+            DocumentationMarkdownFile documentationMarkdownFile = rulesFolder.addNestedFile(similarCheck.getTarget()
                     + "/" + similarCheck.getCategory()
                     + "/" + similarCheck.getPrimaryCheckName().replace(' ', '-') + ".md");
             documentationMarkdownFile.setRenderContext(similarCheck);

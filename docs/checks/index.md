@@ -32,7 +32,7 @@ Checks whether the table is accessible and available for use.
 
 
 ###schema  
-
+Detects schema drifts such as columns added, removed, reordered or the data types of columns have changed.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
@@ -1009,7 +1009,7 @@ Checks for the presence of sensitive or personally identifiable information (PII
 
 
 ###schema  
-
+Detects schema drifts such as a column is missing or the data type has changed.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
