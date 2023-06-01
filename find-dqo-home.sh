@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright © 2021 DQO.ai (support@dqo.ai)
+# Copyright © 2023 DQO.ai (support@dqo.ai)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,25 +16,25 @@
 #
 
 # Only attempt to find DQO_HOME if it is not set
-if [ -z $DQO_HOME ]; then
-  export DQO_HOME=$(dirname $0)/..
+if [ -z "$DQO_HOME" ]; then
+  export DQO_HOME=$(dirname "$0")/..
 fi
 
-if [ -z $DQO_USER_HOME ]; then
+if [ -z "$DQO_USER_HOME" ]; then
   export DQO_USER_HOME=.
 fi
 
-if [ ! -d $DQO_USER_HOME ]; then
+if [ ! -d "$DQO_USER_HOME" ]; then
   mkdir $DQO_USER_HOME
 fi
 
-if [ -z $DQO_JAVA_OPTS ]; then
+if [ -z "$DQO_JAVA_OPTS" ]; then
   export DQO_JAVA_OPTS=-Xmx1024m
 fi
 
 # Figure out where java is.
 export DQO_RUNNER=java
-if [ -n $JAVA_HOME ]; then
+if [ -n "$JAVA_HOME" ]; then
   export DQO_RUNNER=$JAVA_HOME/bin/java
 else
   printenv DQO_RUNNER >> /dev/null
