@@ -17,6 +17,7 @@ package ai.dqo.metadata.storage.localfiles.userhome;
 
 import ai.dqo.cli.terminal.TerminalFactory;
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.core.configuration.DqoDockerUserhomeConfigurationProperties;
 import ai.dqo.core.configuration.DqoLoggingConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.filesystem.BuiltInFolderNames;
@@ -48,7 +49,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     private HomeLocationFindService homeLocationFindService;
     private TerminalFactory terminalFactory;
     private DqoLoggingConfigurationProperties loggingConfigurationProperties;
-    private DqoUserConfigurationProperties dqoUserConfigurationProperties;
+    private DqoUserConfigurationProperties userConfigurationProperties;
+    private DqoDockerUserhomeConfigurationProperties dockerUserhomeConfigurationProperties;
 
     /**
      * Default constructor called by the IoC container.
@@ -56,17 +58,20 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * @param terminalFactory Terminal factory, creates a terminal reader - used to prompt the user before the default user home is created,
      *                        and a terminal writer - used to notify the user that the default user home will not be created.
      * @param loggingConfigurationProperties Logging configuration parameters to configure logging in the user home's .logs folder.
-     * @param dqoUserConfigurationProperties DQO user home configuration parameters.
+     * @param userConfigurationProperties DQO user home configuration parameters.
+     * @param dockerUserhomeConfigurationProperties DQO user home configuration properties related specifically to running under docker.
      */
     @Autowired
     public LocalUserHomeCreatorImpl(HomeLocationFindService homeLocationFindService,
                                     TerminalFactory terminalFactory,
                                     DqoLoggingConfigurationProperties loggingConfigurationProperties,
-                                    DqoUserConfigurationProperties dqoUserConfigurationProperties) {
+                                    DqoUserConfigurationProperties userConfigurationProperties,
+                                    DqoDockerUserhomeConfigurationProperties dockerUserhomeConfigurationProperties) {
         this.homeLocationFindService = homeLocationFindService;
         this.terminalFactory = terminalFactory;
         this.loggingConfigurationProperties = loggingConfigurationProperties;
-        this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
+        this.userConfigurationProperties = userConfigurationProperties;
+        this.dockerUserhomeConfigurationProperties = dockerUserhomeConfigurationProperties;
     }
 
     /**
@@ -221,11 +226,11 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             return;
         }
 
-        if (this.isUninitializedInUnmountedDockerVolume(Paths.get(userHomePathString))) {
+        if (this.isUninitializedInUnmountedDockerVolume(Paths.get(userHomePathString)) && !this.dockerUserhomeConfigurationProperties.isAllowUnmounted()) {
             TerminalWriter terminalWriter = this.terminalFactory.getWriter();
             terminalWriter.writeLine("DQO User Home volume is not mounted to the docker's folder " + userHomePathString + ".");
             terminalWriter.writeLine("In order to mount a volume, execute docker run with parameter \"-v\":");
-            terminalWriter.writeLine("\tdocker run -v $DQO_USER_HOME:" + userHomePathString + " --name my_dqo_container -d dqo");
+            terminalWriter.writeLine("\tdocker run -it -v $DQO_USER_HOME:" + userHomePathString + " -p 8888:8888 dqops/dqo");
             terminalWriter.writeLine("To run DQO in docker using a User Home folder inside the docker image (not advised),"
                     + " do one of the following:");
             terminalWriter.writeLine("\t- Start DQO with a parameter --dqo.docker.userhome.allow-unmounted=true");
@@ -234,7 +239,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             System.exit(101);
         }
 
-        if (isHeadless || this.dqoUserConfigurationProperties.isInitializeUserHome()) {
+        if (isHeadless || this.userConfigurationProperties.isInitializeUserHome()) {
             this.initializeDefaultDqoUserHome();
             activateFileLoggingInUserHome();
         }
