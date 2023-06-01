@@ -15,6 +15,7 @@
  */
 package ai.dqo.core.configuration;
 
+import ai.dqo.core.scheduler.synchronize.ScheduledSynchronizationFolderSelectionMode;
 import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import lombok.EqualsAndHashCode;
@@ -29,8 +30,9 @@ import org.springframework.context.annotation.Configuration;
 @EqualsAndHashCode(callSuper = false)
 public class DqoSchedulerConfigurationProperties implements Cloneable {
     private Boolean start;
-    private String scanMetadataCronSchedule;
+    private String synchronizeCronSchedule;
     private boolean enableCloudSync = true;
+    private ScheduledSynchronizationFolderSelectionMode synchronizedFolders = ScheduledSynchronizationFolderSelectionMode.locally_changed;
     private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
     private CheckRunReportingMode checkRunMode = CheckRunReportingMode.silent;
 
@@ -51,19 +53,19 @@ public class DqoSchedulerConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Returns the default cron expression used to scan the metadata for new schedules to run data quality checks.
+     * Returns the default cron expression used to scan the metadata for new schedules and to synchronize to DQO Cloud.
      * @return Cron expression used to scan the metadata.
      */
-    public String getScanMetadataCronSchedule() {
-        return scanMetadataCronSchedule;
+    public String getSynchronizeCronSchedule() {
+        return synchronizeCronSchedule;
     }
 
     /**
-     * Sets the scan metadata cron schedule.
-     * @param scanMetadataCronSchedule Cron schedule used to scan the metadata.
+     * Sets the cron schedule used to synchronize to DQO cloud and detect new schedules.
+     * @param synchronizeCronSchedule Cron schedule used to scan the metadata for new cron expressions and to synchronize to DQO Cloud.
      */
-    public void setScanMetadataCronSchedule(String scanMetadataCronSchedule) {
-        this.scanMetadataCronSchedule = scanMetadataCronSchedule;
+    public void setSynchronizeCronSchedule(String synchronizeCronSchedule) {
+        this.synchronizeCronSchedule = synchronizeCronSchedule;
     }
 
     /**
@@ -80,6 +82,22 @@ public class DqoSchedulerConfigurationProperties implements Cloneable {
      */
     public void setEnableCloudSync(boolean enableCloudSync) {
         this.enableCloudSync = enableCloudSync;
+    }
+
+    /**
+     * Returns the default "cloud sync" mode used for selecting folders to be synchronized during a recurring synchronization.
+     * @return The folder selection mode for a recurring cloud sync operation: synchronize all folders or only locally changed.
+     */
+    public ScheduledSynchronizationFolderSelectionMode getSynchronizedFolders() {
+        return synchronizedFolders;
+    }
+
+    /**
+     * Sets the folder selection mode for deciding which folders should be synchronized to the DQO Cloud during a scheduled synchronization.
+     * @param synchronizedFolders The value that decides which folders are synchronized during a recurring synchronization.
+     */
+    public void setSynchronizedFolders(ScheduledSynchronizationFolderSelectionMode synchronizedFolders) {
+        this.synchronizedFolders = synchronizedFolders;
     }
 
     /**

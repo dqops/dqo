@@ -44,9 +44,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=string_matc
             parameters:
               date_formats: YYYY-MM-DD
             warning:
-              min_percent: 99.0
+              min_percent: 100.0
             error:
-              min_percent: 98.0
+              min_percent: 99.0
             fatal:
               min_percent: 95.0
 ```
@@ -70,9 +70,9 @@ spec:
             parameters:
               date_formats: YYYY-MM-DD
             warning:
-              min_percent: 99.0
+              min_percent: 100.0
             error:
-              min_percent: 98.0
+              min_percent: 99.0
             fatal:
               min_percent: 95.0
       labels:
@@ -401,9 +401,9 @@ spec:
                 parameters:
                   date_formats: YYYY-MM-DD
                 warning:
-                  min_percent: 99.0
+                  min_percent: 100.0
                 error:
-                  min_percent: 98.0
+                  min_percent: 99.0
                 fatal:
                   min_percent: 95.0
           labels:
@@ -729,7 +729,7 @@ ___
 ## **daily string match date regex percent**  
   
 **Check description**  
-Verifies that the percentage of strings matching the date format regex in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the percentage of strings matching the date format regex in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -766,9 +766,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_strin
               parameters:
                 date_formats: YYYY-MM-DD
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -793,9 +793,9 @@ spec:
               parameters:
                 date_formats: YYYY-MM-DD
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -1125,9 +1125,9 @@ spec:
                   parameters:
                     date_formats: YYYY-MM-DD
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -1490,9 +1490,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_str
               parameters:
                 date_formats: YYYY-MM-DD
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -1517,9 +1517,9 @@ spec:
               parameters:
                 date_formats: YYYY-MM-DD
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -1849,9 +1849,9 @@ spec:
                   parameters:
                     date_formats: YYYY-MM-DD
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -2214,9 +2214,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
               parameters:
                 date_formats: YYYY-MM-DD
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -2241,9 +2241,9 @@ spec:
               parameters:
                 date_formats: YYYY-MM-DD
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -2577,9 +2577,9 @@ spec:
                   parameters:
                     date_formats: YYYY-MM-DD
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -2940,9 +2940,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
               parameters:
                 date_formats: YYYY-MM-DD
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -2967,9 +2967,9 @@ spec:
               parameters:
                 date_formats: YYYY-MM-DD
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -3303,9 +3303,9 @@ spec:
                   parameters:
                     date_formats: YYYY-MM-DD
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:

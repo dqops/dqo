@@ -200,7 +200,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
             ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId);
             List<CheckExecutionSummary> checkExecutionSummaries = childTableJobsContainer.waitForChildResults(jobCancellationToken);
-            checkExecutionSummaries.forEach(tableSummary -> checkExecutionSummary.append(tableSummary));
+            checkExecutionSummaries.forEach(checkExecutionSummary::append);
         }
         else {
             for (TableWrapper targetTable : targetTables) {
@@ -261,7 +261,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
         ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId);
         List<CheckExecutionSummary> checkExecutionSummaries = childTableJobsContainer.waitForChildResults(jobCancellationToken);
-        checkExecutionSummaries.forEach(tableSummary -> checkExecutionSummary.append(tableSummary));
+        checkExecutionSummaries.forEach(checkExecutionSummary::append);
 
         progressListener.onCheckExecutionFinished(new CheckExecutionFinishedEvent(checkExecutionSummary));
 
@@ -336,8 +336,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = this.hierarchyNodeTreeSearcher.findChecks(targetTable, checkSearchFilters);
         if (checks.size() == 0) {
-            checkExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0,
-                    0, 0, 0, 0);
+            // checkExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0, 0, 0, 0, 0);
             return; // no checks for this table
         }
         jobCancellationToken.throwIfCancelled();
@@ -380,6 +379,14 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getTimeSeries();
                 TimePeriodGradient timeGradient = effectiveTimeSeries.getTimeGradient();
 
+                CheckSearchFilters exactCheckSearchFilters = checkSearchFilters.clone();
+                exactCheckSearchFilters.setConnectionName(connectionName);
+                exactCheckSearchFilters.setSchemaTableName(physicalTableName.toTableSearchFilter());
+                exactCheckSearchFilters.setColumnName(sensorRunParameters.getColumn() == null ? null : sensorRunParameters.getColumn().getColumnName());
+                exactCheckSearchFilters.setCheckCategory(checkSpec.getCategoryName());
+                exactCheckSearchFilters.setCheckName(checkSpec.getCheckName());
+                exactCheckSearchFilters.setSensorName(sensorRunParameters.getEffectiveSensorRuleNames().getSensorName());
+
                 if (sensorRunParameters.getTimeSeries().getMode() == TimeSeriesMode.timestamp_column &&
                         Strings.isNullOrEmpty(sensorRunParameters.getTimeSeries().getTimestampColumn())) {
                     // timestamp column not configured, date/time partitioned data quality checks cannot be evaluated
@@ -393,6 +400,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                             sensorExecutionResultWithError, timeGradient, sensorRunParameters);
                     allErrorsTable.append(normalizedSensorErrorResults.getTable());
                     progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters, sensorExecutionResultWithError, missingTimestampException));
+                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(missingTimestampException, exactCheckSearchFilters));
                     continue;
                 }
 
@@ -412,7 +420,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                             sensorResult, timeGradient, sensorRunParameters);
                     allErrorsTable.append(normalizedSensorErrorResults.getTable());
                     progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters, sensorResult, sensorResult.getException()));
-
+                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(sensorResult.getException(), exactCheckSearchFilters));
                     continue;
                 }
 
@@ -471,6 +479,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                 sensorResult, timeGradient, sensorRunParameters, ex);
                         allErrorsTable.append(normalizedRuleErrorResults.getTable());
                         progressListener.onRuleFailed(new RuleFailedEvent(tableSpec, sensorRunParameters, sensorResult, ex, ruleDefinitionName));
+                        checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(ex, exactCheckSearchFilters));
                     }
                 }
             }

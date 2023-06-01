@@ -17,7 +17,7 @@ package ai.dqo.cli;
 
 import ai.dqo.cli.commands.DqoRootCliCommand;
 import ai.dqo.cli.completion.InputCapturingCompleter;
-import ai.dqo.cli.configuration.DqoCliOneshotConfigurationProperties;
+import ai.dqo.core.configuration.DqoCliOneshotConfigurationProperties;
 import ai.dqo.cli.exceptions.CommandExecutionErrorHandler;
 import ai.dqo.cli.terminal.*;
 import ai.dqo.cli.terminal.ansi.UrlFormatter;
@@ -95,14 +95,14 @@ public class CliConfiguration {
      * @param rootShellCommand Root cli command.
      * @param factory Picocli command factory (default).
      * @param terminalFactory Terminal reader and writer factory, used to delay the instance creation.
-     * @param coreConfigurationProperties Core configuration properties.
+     * @param coreConfigurationProperties DQO Core configuration properties.
      * @return Command line.
      */
     @Bean(name = "commandLine")
     public CommandLine commandLine(DqoRootCliCommand rootShellCommand,
-								   CommandLine.IFactory factory,
+                                   CommandLine.IFactory factory,
                                    TerminalFactory terminalFactory,
-								   DqoCoreConfigurationProperties coreConfigurationProperties) {
+                                   DqoCoreConfigurationProperties coreConfigurationProperties) {
         PicocliCommands.PicocliCommandsFactory shellCommandFactory = new PicocliCommands.PicocliCommandsFactory(factory);
         if (!CliApplication.isRunningOneShotMode()) {
             Terminal terminal = StaticBeanFactory.getBeanFactory().getBean(Terminal.class);

@@ -42,9 +42,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=non_negativ
         numeric:
           non_negative_percent:
             warning:
-              max_percent: 99.0
+              max_percent: 100.0
             error:
-              max_percent: 98.0
+              max_percent: 99.0
             fatal:
               max_percent: 95.0
 ```
@@ -66,9 +66,9 @@ spec:
         numeric:
           non_negative_percent:
             warning:
-              max_percent: 99.0
+              max_percent: 100.0
             error:
-              max_percent: 98.0
+              max_percent: 99.0
             fatal:
               max_percent: 95.0
       labels:
@@ -317,9 +317,9 @@ spec:
             numeric:
               non_negative_percent:
                 warning:
-                  max_percent: 99.0
+                  max_percent: 100.0
                 error:
-                  max_percent: 98.0
+                  max_percent: 99.0
                 fatal:
                   max_percent: 95.0
           labels:
@@ -568,7 +568,7 @@ ___
 ## **daily non negative percent**  
   
 **Check description**  
-Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -603,9 +603,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_non_n
           numeric:
             daily_non_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 100.0
               error:
-                max_percent: 98.0
+                max_percent: 99.0
               fatal:
                 max_percent: 95.0
 ```
@@ -628,9 +628,9 @@ spec:
           numeric:
             daily_non_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 100.0
               error:
-                max_percent: 98.0
+                max_percent: 99.0
               fatal:
                 max_percent: 95.0
       labels:
@@ -880,9 +880,9 @@ spec:
               numeric:
                 daily_non_negative_percent:
                   warning:
-                    max_percent: 99.0
+                    max_percent: 100.0
                   error:
-                    max_percent: 98.0
+                    max_percent: 99.0
                   fatal:
                     max_percent: 95.0
           labels:
@@ -1166,9 +1166,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_non
           numeric:
             monthly_non_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 100.0
               error:
-                max_percent: 98.0
+                max_percent: 99.0
               fatal:
                 max_percent: 95.0
 ```
@@ -1191,9 +1191,9 @@ spec:
           numeric:
             monthly_non_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 100.0
               error:
-                max_percent: 98.0
+                max_percent: 99.0
               fatal:
                 max_percent: 95.0
       labels:
@@ -1443,9 +1443,9 @@ spec:
               numeric:
                 monthly_non_negative_percent:
                   warning:
-                    max_percent: 99.0
+                    max_percent: 100.0
                   error:
-                    max_percent: 98.0
+                    max_percent: 99.0
                   fatal:
                     max_percent: 95.0
           labels:
@@ -1729,9 +1729,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           numeric:
             daily_partition_non_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 100.0
               error:
-                max_percent: 98.0
+                max_percent: 99.0
               fatal:
                 max_percent: 95.0
 ```
@@ -1754,9 +1754,9 @@ spec:
           numeric:
             daily_partition_non_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 100.0
               error:
-                max_percent: 98.0
+                max_percent: 99.0
               fatal:
                 max_percent: 95.0
       labels:
@@ -2010,9 +2010,9 @@ spec:
               numeric:
                 daily_partition_non_negative_percent:
                   warning:
-                    max_percent: 99.0
+                    max_percent: 100.0
                   error:
-                    max_percent: 98.0
+                    max_percent: 99.0
                   fatal:
                     max_percent: 95.0
           labels:
@@ -2294,9 +2294,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
           numeric:
             monthly_partition_non_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 100.0
               error:
-                max_percent: 98.0
+                max_percent: 99.0
               fatal:
                 max_percent: 95.0
 ```
@@ -2319,9 +2319,9 @@ spec:
           numeric:
             monthly_partition_non_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 100.0
               error:
-                max_percent: 98.0
+                max_percent: 99.0
               fatal:
                 max_percent: 95.0
       labels:
@@ -2575,9 +2575,9 @@ spec:
               numeric:
                 monthly_partition_non_negative_percent:
                   warning:
-                    max_percent: 99.0
+                    max_percent: 100.0
                   error:
-                    max_percent: 98.0
+                    max_percent: 99.0
                   fatal:
                     max_percent: 95.0
           labels:

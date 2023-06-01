@@ -27,9 +27,10 @@ type PaginationProps = {
   pageSize: number;
   onChange: (page: number, pageSize: number) => void;
   totalPages: number;
+  isEnd?: boolean;
 }
 
-export const Pagination = ({ page, pageSize, totalPages, onChange }: PaginationProps) => {
+export const Pagination = ({ page, pageSize, totalPages, onChange, isEnd }: PaginationProps) => {
   const onChangePageSize = (value: number) => {
     onChange(1, value);
   };
@@ -77,7 +78,7 @@ export const Pagination = ({ page, pageSize, totalPages, onChange }: PaginationP
           className="w-10 h-10 !shadow-none"
           color="teal"
           onClick={onNext}
-          disabled={page === totalPages}
+          disabled={page === totalPages || isEnd}
         >
           <SvgIcon name="chevron-right" className="w-7 text-white" />
         </IconButton>

@@ -17,7 +17,9 @@ package ai.dqo.execution.checks.progress;
 
 import ai.dqo.cli.terminal.TablesawDatasetTableModel;
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.execution.checks.CheckExecutionErrorSummary;
 import ai.dqo.execution.checks.CheckExecutionSummary;
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -46,6 +48,10 @@ public class SummaryCheckExecutionProgressListener extends SilentCheckExecutionP
             CheckExecutionSummary checkExecutionSummary = event.getCheckExecutionSummary();
             TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());
             this.terminalWriter.writeTable(tablesawDatasetTableModel, true);
+            CheckExecutionErrorSummary checkExecutionErrorSummary = checkExecutionSummary.getCheckExecutionErrorSummary();
+            if (checkExecutionErrorSummary != null) {
+                this.terminalWriter.writeLine(checkExecutionErrorSummary.getSummaryMessage());
+            }
         }
     }
 }

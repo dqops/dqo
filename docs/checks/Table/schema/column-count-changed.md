@@ -1,7 +1,8 @@
 **column count changed** checks  
 
 **Description**  
-Table level check that retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to the last known number of columns
+Table level check that detects if the number of columns in the table has changed since the check (checkpoint) was run the last time.
+ This check retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to the last known number of columns
  that was captured and is stored in the data quality check results database.
 
 ___
@@ -9,7 +10,7 @@ ___
 ## **column count changed**  
   
 **Check description**  
-Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.  
+Detects if the count of columns has changed. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -228,7 +229,7 @@ ___
 ## **daily column count changed**  
   
 **Check description**  
-Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each day when the data quality check was evaluated.  
+Detects if the count of columns has changed since the most recent day. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -450,7 +451,7 @@ ___
 ## **monthly column count changed**  
   
 **Check description**  
-Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each month when the data quality check was evaluated.  
+Detects if the count of columns has changed since the last month. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|

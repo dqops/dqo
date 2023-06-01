@@ -42,11 +42,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=negative_pe
         numeric:
           negative_percent:
             warning:
-              max_percent: 99.0
+              max_percent: 0.0
             error:
-              max_percent: 98.0
+              max_percent: 2.0
             fatal:
-              max_percent: 95.0
+              max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-21"
@@ -66,11 +66,11 @@ spec:
         numeric:
           negative_percent:
             warning:
-              max_percent: 99.0
+              max_percent: 0.0
             error:
-              max_percent: 98.0
+              max_percent: 2.0
             fatal:
-              max_percent: 95.0
+              max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -353,11 +353,11 @@ spec:
             numeric:
               negative_percent:
                 warning:
-                  max_percent: 99.0
+                  max_percent: 0.0
                 error:
-                  max_percent: 98.0
+                  max_percent: 2.0
                 fatal:
-                  max_percent: 95.0
+                  max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -640,7 +640,7 @@ ___
 ## **daily negative percent**  
   
 **Check description**  
-Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -675,11 +675,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_negat
           numeric:
             daily_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 0.0
               error:
-                max_percent: 98.0
+                max_percent: 2.0
               fatal:
-                max_percent: 95.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -700,11 +700,11 @@ spec:
           numeric:
             daily_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 0.0
               error:
-                max_percent: 98.0
+                max_percent: 2.0
               fatal:
-                max_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -988,11 +988,11 @@ spec:
               numeric:
                 daily_negative_percent:
                   warning:
-                    max_percent: 99.0
+                    max_percent: 0.0
                   error:
-                    max_percent: 98.0
+                    max_percent: 2.0
                   fatal:
-                    max_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1310,11 +1310,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_neg
           numeric:
             monthly_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 0.0
               error:
-                max_percent: 98.0
+                max_percent: 2.0
               fatal:
-                max_percent: 95.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1335,11 +1335,11 @@ spec:
           numeric:
             monthly_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 0.0
               error:
-                max_percent: 98.0
+                max_percent: 2.0
               fatal:
-                max_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1623,11 +1623,11 @@ spec:
               numeric:
                 monthly_negative_percent:
                   warning:
-                    max_percent: 99.0
+                    max_percent: 0.0
                   error:
-                    max_percent: 98.0
+                    max_percent: 2.0
                   fatal:
-                    max_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1945,11 +1945,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           numeric:
             daily_partition_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 0.0
               error:
-                max_percent: 98.0
+                max_percent: 2.0
               fatal:
-                max_percent: 95.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1970,11 +1970,11 @@ spec:
           numeric:
             daily_partition_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 0.0
               error:
-                max_percent: 98.0
+                max_percent: 2.0
               fatal:
-                max_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2262,11 +2262,11 @@ spec:
               numeric:
                 daily_partition_negative_percent:
                   warning:
-                    max_percent: 99.0
+                    max_percent: 0.0
                   error:
-                    max_percent: 98.0
+                    max_percent: 2.0
                   fatal:
-                    max_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -2582,11 +2582,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
           numeric:
             monthly_partition_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 0.0
               error:
-                max_percent: 98.0
+                max_percent: 2.0
               fatal:
-                max_percent: 95.0
+                max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -2607,11 +2607,11 @@ spec:
           numeric:
             monthly_partition_negative_percent:
               warning:
-                max_percent: 99.0
+                max_percent: 0.0
               error:
-                max_percent: 98.0
+                max_percent: 2.0
               fatal:
-                max_percent: 95.0
+                max_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2899,11 +2899,11 @@ spec:
               numeric:
                 monthly_partition_negative_percent:
                   warning:
-                    max_percent: 99.0
+                    max_percent: 0.0
                   error:
-                    max_percent: 98.0
+                    max_percent: 2.0
                   fatal:
-                    max_percent: 95.0
+                    max_percent: 5.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:

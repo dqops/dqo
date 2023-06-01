@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Sensor runner that introspects the metadata on a table and calculates a hash of the column names, the hash depends on the order of columns in the data source.
+ * Sensor runner that introspects the metadata on a table and calculates a hash of the column names, the hash does not depend on the order of columns in the data source.
  */
 @Component
 @Slf4j

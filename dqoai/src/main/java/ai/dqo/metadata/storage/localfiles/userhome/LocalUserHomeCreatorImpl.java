@@ -16,6 +16,8 @@
 package ai.dqo.metadata.storage.localfiles.userhome;
 
 import ai.dqo.cli.terminal.TerminalFactory;
+import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.core.configuration.DqoDockerUserhomeConfigurationProperties;
 import ai.dqo.core.configuration.DqoLoggingConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.filesystem.BuiltInFolderNames;
@@ -33,8 +35,11 @@ import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 /**
  * Component that ensures that a DQO local user home was created and the default files were written.
@@ -44,7 +49,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     private HomeLocationFindService homeLocationFindService;
     private TerminalFactory terminalFactory;
     private DqoLoggingConfigurationProperties loggingConfigurationProperties;
-    private DqoUserConfigurationProperties dqoUserConfigurationProperties;
+    private DqoUserConfigurationProperties userConfigurationProperties;
+    private DqoDockerUserhomeConfigurationProperties dockerUserhomeConfigurationProperties;
 
     /**
      * Default constructor called by the IoC container.
@@ -52,17 +58,20 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * @param terminalFactory Terminal factory, creates a terminal reader - used to prompt the user before the default user home is created,
      *                        and a terminal writer - used to notify the user that the default user home will not be created.
      * @param loggingConfigurationProperties Logging configuration parameters to configure logging in the user home's .logs folder.
-     * @param dqoUserConfigurationProperties DQO user home configuration parameters.
+     * @param userConfigurationProperties DQO user home configuration parameters.
+     * @param dockerUserhomeConfigurationProperties DQO user home configuration properties related specifically to running under docker.
      */
     @Autowired
     public LocalUserHomeCreatorImpl(HomeLocationFindService homeLocationFindService,
                                     TerminalFactory terminalFactory,
                                     DqoLoggingConfigurationProperties loggingConfigurationProperties,
-                                    DqoUserConfigurationProperties dqoUserConfigurationProperties) {
+                                    DqoUserConfigurationProperties userConfigurationProperties,
+                                    DqoDockerUserhomeConfigurationProperties dockerUserhomeConfigurationProperties) {
         this.homeLocationFindService = homeLocationFindService;
         this.terminalFactory = terminalFactory;
         this.loggingConfigurationProperties = loggingConfigurationProperties;
-        this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
+        this.userConfigurationProperties = userConfigurationProperties;
+        this.dockerUserhomeConfigurationProperties = dockerUserhomeConfigurationProperties;
     }
 
     /**
@@ -184,6 +193,23 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     }
 
     /**
+     * Checks for the existence of <code>.DQO_USER_HOME_NOT_MOUNTED</code> file in DQO_USER_HOME.
+     * @param userHomePath DQO User Home path.
+     * @return True if the application is run inside a docker container and DQO_USER_HOME hasn't been mounted to an external volume.
+     */
+    protected boolean isUninitializedInUnmountedDockerVolume(Path userHomePath) {
+        try (Stream<Path> filesStream = Files.walk(userHomePath, 1)) {
+            return filesStream
+                    .filter(file -> !Files.isDirectory(file))
+                    .map(Path::getFileName)
+                    .map(Path::toString)
+                    .anyMatch(fileName -> fileName.equals(".DQO_USER_HOME_NOT_MOUNTED"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Ensures that the DQO User home is initialized at the default location. Prompts the user before creating the user home to confirm.
      * NOTE: this method may forcibly stop the program execution if the user did not agree to create the DQO User home.
      * @param isHeadless Is headless mode - when true, then the dqo user home is created silently, when false (interactive execution) then the user is asked to confirm.
@@ -200,7 +226,20 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             return;
         }
 
-        if (isHeadless || this.dqoUserConfigurationProperties.isInitializeUserHome()) {
+        if (this.isUninitializedInUnmountedDockerVolume(Paths.get(userHomePathString)) && !this.dockerUserhomeConfigurationProperties.isAllowUnmounted()) {
+            TerminalWriter terminalWriter = this.terminalFactory.getWriter();
+            terminalWriter.writeLine("DQO User Home volume is not mounted to the docker's folder " + userHomePathString + ".");
+            terminalWriter.writeLine("In order to mount a volume, execute docker run with parameter \"-v\":");
+            terminalWriter.writeLine("\tdocker run -it -v $DQO_USER_HOME:" + userHomePathString + " -p 8888:8888 dqops/dqo");
+            terminalWriter.writeLine("To run DQO in docker using a User Home folder inside the docker image (not advised),"
+                    + " do one of the following:");
+            terminalWriter.writeLine("\t- Start DQO with a parameter --dqo.docker.userhome.allow-unmounted=true");
+            terminalWriter.writeLine("\t- Or set the environment variable DQO_DOCKER_USERHOME_ALLOW_UNMOUNTED=true");
+            terminalWriter.writeLine("DQO will quit.");
+            System.exit(101);
+        }
+
+        if (isHeadless || this.userConfigurationProperties.isInitializeUserHome()) {
             this.initializeDefaultDqoUserHome();
             activateFileLoggingInUserHome();
         }

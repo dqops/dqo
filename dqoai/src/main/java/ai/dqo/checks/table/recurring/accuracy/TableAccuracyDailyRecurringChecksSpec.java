@@ -40,7 +40,7 @@ public class TableAccuracyDailyRecurringChecksSpec extends AbstractCheckCategory
         }
     };
 
-    @JsonPropertyDescription("Verifies the row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies the row count of a tested table and compares it to a row count of a reference table. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private TableAccuracyRowCountMatchPercentCheckSpec dailyRowCountMatchPercent;
 
     /**

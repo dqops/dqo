@@ -16,8 +16,7 @@
 package ai.dqo.checks.table.recurring.schema;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.schema.TableColumnCountChangedCheckSpec;
-import ai.dqo.checks.table.checkspecs.schema.TableColumnCountCheckSpec;
+import ai.dqo.checks.table.checkspecs.schema.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,20 +38,32 @@ public class TableSchemaDailyRecurringChecksSpec extends AbstractCheckCategorySp
         {
             put("daily_column_count", o -> o.dailyColumnCount);
             put("daily_column_count_changed", o -> o.dailyColumnCountChanged);
+            put("daily_column_list_changed", o -> o.dailyColumnListChanged);
+            put("daily_column_list_or_order_changed", o -> o.dailyColumnListOrOrderChanged);
+            put("daily_column_types_changed", o -> o.dailyColumnTypesChanged);
         }
     };
 
-    @JsonPropertyDescription("Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each day when the data quality check was evaluated.")
-    private TableColumnCountCheckSpec dailyColumnCount;
+    @JsonPropertyDescription("Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each day when the data quality check was evaluated.")
+    private TableSchemaColumnCountCheckSpec dailyColumnCount;
 
-    @JsonPropertyDescription("Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each day when the data quality check was evaluated.")
-    private TableColumnCountChangedCheckSpec dailyColumnCountChanged;
+    @JsonPropertyDescription("Detects if the count of columns has changed since the most recent day. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each day when the data quality check was evaluated.")
+    private TableSchemaColumnCountChangedCheckSpec dailyColumnCountChanged;
+
+    @JsonPropertyDescription("Detects if new columns were added or existing columns were removed since the most recent day. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.")
+    private TableSchemaColumnListChangedCheckSpec dailyColumnListChanged;
+
+    @JsonPropertyDescription("Detects if new columns were added, existing columns were removed or the columns were reordered since the most recent day. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.")
+    private TableSchemaColumnListOrOrderChangedCheckSpec dailyColumnListOrOrderChanged;
+
+    @JsonPropertyDescription("Detects if new columns were added, removed or their data types have changed since the most recent day. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.")
+    private TableSchemaColumnTypesChangedCheckSpec dailyColumnTypesChanged;
 
     /**
      * Returns a column count check.
      * @return Column count check.
      */
-    public TableColumnCountCheckSpec getDailyColumnCount() {
+    public TableSchemaColumnCountCheckSpec getDailyColumnCount() {
         return dailyColumnCount;
     }
 
@@ -60,7 +71,7 @@ public class TableSchemaDailyRecurringChecksSpec extends AbstractCheckCategorySp
      * Sets a new definition of a column count check.
      * @param dailyColumnCount Column count check.
      */
-    public void setDailyColumnCount(TableColumnCountCheckSpec dailyColumnCount) {
+    public void setDailyColumnCount(TableSchemaColumnCountCheckSpec dailyColumnCount) {
         this.setDirtyIf(!Objects.equals(this.dailyColumnCount, dailyColumnCount));
         this.dailyColumnCount = dailyColumnCount;
         propagateHierarchyIdToField(dailyColumnCount, "daily_column_count");
@@ -70,7 +81,7 @@ public class TableSchemaDailyRecurringChecksSpec extends AbstractCheckCategorySp
      * Returns the configuration of a column count changed check.
      * @return Column count changed check.
      */
-    public TableColumnCountChangedCheckSpec getDailyColumnCountChanged() {
+    public TableSchemaColumnCountChangedCheckSpec getDailyColumnCountChanged() {
         return dailyColumnCountChanged;
     }
 
@@ -78,10 +89,64 @@ public class TableSchemaDailyRecurringChecksSpec extends AbstractCheckCategorySp
      * Sets the new definition of a column count changed check.
      * @param dailyColumnCountChanged Column count changed check.
      */
-    public void setDailyColumnCountChanged(TableColumnCountChangedCheckSpec dailyColumnCountChanged) {
+    public void setDailyColumnCountChanged(TableSchemaColumnCountChangedCheckSpec dailyColumnCountChanged) {
         this.setDirtyIf(!Objects.equals(this.dailyColumnCountChanged, dailyColumnCountChanged));
         this.dailyColumnCountChanged = dailyColumnCountChanged;
         propagateHierarchyIdToField(dailyColumnCountChanged, "daily_column_count_changed");
+    }
+
+    /**
+     * Returns the configuration of the column list changed check.
+     * @return Column list changed check.
+     */
+    public TableSchemaColumnListChangedCheckSpec getDailyColumnListChanged() {
+        return dailyColumnListChanged;
+    }
+
+    /**
+     * Sets the check that detects changes to the list of columns.
+     * @param dailyColumnListChanged Column list changed check.
+     */
+    public void setDailyColumnListChanged(TableSchemaColumnListChangedCheckSpec dailyColumnListChanged) {
+        this.setDirtyIf(!Objects.equals(this.dailyColumnListChanged, dailyColumnListChanged));
+        this.dailyColumnListChanged = dailyColumnListChanged;
+        propagateHierarchyIdToField(dailyColumnListChanged, "daily_column_list_changed");
+    }
+
+    /**
+     * Returns the check that detects if the list or order of columns have changed.
+     * @return List or order of columns changed check.
+     */
+    public TableSchemaColumnListOrOrderChangedCheckSpec getDailyColumnListOrOrderChanged() {
+        return dailyColumnListOrOrderChanged;
+    }
+
+    /**
+     * Sets the check that detects if the list or order of columns have changed.
+     * @param dailyColumnListOrOrderChanged List or order of columns changed check.
+     */
+    public void setDailyColumnListOrOrderChanged(TableSchemaColumnListOrOrderChangedCheckSpec dailyColumnListOrOrderChanged) {
+        this.setDirtyIf(!Objects.equals(this.dailyColumnListOrOrderChanged, dailyColumnListOrOrderChanged));
+        this.dailyColumnListOrOrderChanged = dailyColumnListOrOrderChanged;
+        propagateHierarchyIdToField(dailyColumnListOrOrderChanged, "daily_column_list_or_order_changed");
+    }
+
+    /**
+     * Returns the column types changed check.
+     * @return Column types changed check.
+     */
+    public TableSchemaColumnTypesChangedCheckSpec getDailyColumnTypesChanged() {
+        return dailyColumnTypesChanged;
+    }
+
+    /**
+     * Sets the column types changed check.
+     * @param dailyColumnTypesChanged Column types changed check.
+     */
+    public void setDailyColumnTypesChanged(TableSchemaColumnTypesChangedCheckSpec dailyColumnTypesChanged) {
+        this.setDirtyIf(!Objects.equals(this.dailyColumnTypesChanged, dailyColumnTypesChanged));
+        this.dailyColumnTypesChanged = dailyColumnTypesChanged;
+        propagateHierarchyIdToField(dailyColumnTypesChanged, "daily_column_types_changed");
     }
 
     /**

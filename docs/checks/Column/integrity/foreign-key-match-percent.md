@@ -45,9 +45,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=foreign_key
               foreign_table: dim_customer
               foreign_column: customer_id
             warning:
-              min_percent: 99.0
+              min_percent: 100.0
             error:
-              min_percent: 98.0
+              min_percent: 99.0
             fatal:
               min_percent: 95.0
 ```
@@ -72,9 +72,9 @@ spec:
               foreign_table: dim_customer
               foreign_column: customer_id
             warning:
-              min_percent: 99.0
+              min_percent: 100.0
             error:
-              min_percent: 98.0
+              min_percent: 99.0
             fatal:
               min_percent: 95.0
       labels:
@@ -366,9 +366,9 @@ spec:
                   foreign_table: dim_customer
                   foreign_column: customer_id
                 warning:
-                  min_percent: 99.0
+                  min_percent: 100.0
                 error:
-                  min_percent: 98.0
+                  min_percent: 99.0
                 fatal:
                   min_percent: 95.0
           labels:
@@ -656,7 +656,7 @@ ___
 ## **daily foreign key match percent**  
   
 **Check description**  
-Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
@@ -694,9 +694,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_forei
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -722,9 +722,9 @@ spec:
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -1017,9 +1017,9 @@ spec:
                     foreign_table: dim_customer
                     foreign_column: customer_id
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -1345,9 +1345,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_for
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -1373,9 +1373,9 @@ spec:
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -1668,9 +1668,9 @@ spec:
                     foreign_table: dim_customer
                     foreign_column: customer_id
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -1996,9 +1996,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -2024,9 +2024,9 @@ spec:
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -2323,9 +2323,9 @@ spec:
                     foreign_table: dim_customer
                     foreign_column: customer_id
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -2649,9 +2649,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -2677,9 +2677,9 @@ spec:
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -2976,9 +2976,9 @@ spec:
                     foreign_table: dim_customer
                     foreign_column: customer_id
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
