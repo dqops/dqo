@@ -15,6 +15,9 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
 
   const { tabs: pageTabs, activeTab } = useSelector((state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]);
+  const sourceState = useSelector((state: IRootState) => state.source);
+
+  console.log('sourceState', sourceState);
   const dispatch= useDispatch();
   const history = useHistory();
   const location = useLocation();
@@ -36,6 +39,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   }, [pageTabs]);
 
   useEffect(() => {
+    console.log('activeTab', activeTab);
     if (activeTab && activeTab !== location.pathname) {
       history.push(activeTab);
     }

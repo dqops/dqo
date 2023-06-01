@@ -13,7 +13,7 @@ import {
 } from '@material-tailwind/react';
 
 function SettingsPopUp() {
-  const { areSettingsOpen } = useSelector((state: IRootState) => state.job);
+  const { areSettingsOpen } = useSelector((state: IRootState) => state.job || {});
 
   const dispatch = useActionDispatch();
 

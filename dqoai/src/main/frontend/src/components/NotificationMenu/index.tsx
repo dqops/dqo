@@ -19,7 +19,7 @@ import { JobApiClient } from '../../services/apiClient';
 import Switch from '../Switch';
 
 const NotificationMenu = () => {
-  const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
+  const { jobs, isOpen } = useSelector((state: IRootState) => state.job || {});
 
   const dispatch = useActionDispatch();
   const { errors } = useError();

@@ -25,7 +25,7 @@ const JobItem = ({
   job: DqoJobHistoryEntryModel;
   notifnumber?: number;
 }) => {
-  const { jobs } = useSelector((state: IRootState) => state.job);
+  const { jobs } = useSelector((state: IRootState) => state.job || {});
   const { errors } = useError();
   const dispatch = useActionDispatch();
 

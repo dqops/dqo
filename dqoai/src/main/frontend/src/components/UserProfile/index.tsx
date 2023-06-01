@@ -21,7 +21,7 @@ interface UserProfile {
 }
 
 export default function UserProfile({ name, email }: UserProfile) {
-  const { isProfileOpen } = useSelector((state: IRootState) => state.job);
+  const { isProfileOpen } = useSelector((state: IRootState) => state.job || {});
 
   const dispatch = useActionDispatch();
 
