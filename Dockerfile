@@ -1,7 +1,7 @@
 FROM openjdk:17-jdk-slim-buster AS dqo-libs
 WORKDIR /workspace/app
 
-COPY mvnw .
+COPY --chmod=755 mvnw.sh ./
 COPY .mvn .mvn
 
 COPY pom.xml .
@@ -11,8 +11,8 @@ COPY lib/pom.xml lib/
 
 # resolve dependencies
 ENV USER_HOME="/user/mvn"
-RUN chmod a+x ./mvnw && mkdir -p "${USER_HOME}/.m2" && ./mvnw dependency:resolve -am && ./mvnw dependency:resolve-plugins -am
-RUN ./mvnw frontend:install-node-and-npm -pl dqoai
+RUN mkdir -p "${USER_HOME}/.m2" && ./mvnw.sh dependency:resolve -pl !distribution && ./mvnw.sh dependency:resolve-plugins
+RUN ./mvnw.sh frontend:install-node-and-npm -pl dqoai
 
 # npm install
 COPY dqoai/src/main/frontend/package.json dqoai/src/main/frontend/
@@ -24,15 +24,15 @@ RUN npm install
 WORKDIR /workspace/app
 
 # compile project
-COPY dqoai/src dqoai/
-RUN ./mvnw install -DskipTests -am
+COPY dqoai/src dqoai/src
+RUN ./mvnw.sh install -DskipTests -am
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
 
-FROM python:3.11.3-alpine3.18 AS dqo-home
+FROM python:3.11.3-slim-bullseye AS dqo-home
 WORKDIR /dqo
 
 # copy dqo home
-COPY home/ /dqo/
+COPY home home
 WORKDIR /dqo/home
 RUN rm -rf venv/
 
@@ -58,8 +58,9 @@ ENV PATH=$PATH:$JAVA_HOME/bin
 ENV DQO_HOME=/dqo/home
 ENV DQO_USER_HOME=/dqo/userhome
 ENV DQO_USER_INITIALIZE_USER_HOME=true
+RUN mkdir $DQO_USER_HOME
 RUN touch $DQO_USER_HOME/.DQO_USER_HOME_NOT_MOUNTED
-COPY --from=dqo-home /dqo/home .
+COPY --from=dqo-home /dqo/home home
 
 # copy spring dependencies
 ARG DEPENDENCY=/workspace/app/target/dependency

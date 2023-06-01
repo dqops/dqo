@@ -1,9 +1,9 @@
 userhome
 examples
-dqoai
-lib
 docs
 .run
-.mvn
 .idea
-home
+dqoai/target
+distribution/target
+lib/target
+.vscode
