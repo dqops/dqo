@@ -42,7 +42,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=values_in_r
         numeric:
           values_in_range_numeric_percent:
             warning:
-              min_percent: 1.0
+              min_percent: 0.0
             error:
               min_percent: 2.0
             fatal:
@@ -66,7 +66,7 @@ spec:
         numeric:
           values_in_range_numeric_percent:
             warning:
-              min_percent: 1.0
+              min_percent: 0.0
             error:
               min_percent: 2.0
             fatal:
@@ -321,7 +321,7 @@ spec:
             numeric:
               values_in_range_numeric_percent:
                 warning:
-                  min_percent: 1.0
+                  min_percent: 0.0
                 error:
                   min_percent: 2.0
                 fatal:
@@ -611,7 +611,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_value
           numeric:
             daily_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -636,7 +636,7 @@ spec:
           numeric:
             daily_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -892,7 +892,7 @@ spec:
               numeric:
                 daily_values_in_range_numeric_percent:
                   warning:
-                    min_percent: 1.0
+                    min_percent: 0.0
                   error:
                     min_percent: 2.0
                   fatal:
@@ -1182,7 +1182,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_val
           numeric:
             monthly_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -1207,7 +1207,7 @@ spec:
           numeric:
             monthly_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -1463,7 +1463,7 @@ spec:
               numeric:
                 monthly_values_in_range_numeric_percent:
                   warning:
-                    min_percent: 1.0
+                    min_percent: 0.0
                   error:
                     min_percent: 2.0
                   fatal:
@@ -1753,7 +1753,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           numeric:
             daily_partition_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -1778,7 +1778,7 @@ spec:
           numeric:
             daily_partition_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -2038,7 +2038,7 @@ spec:
               numeric:
                 daily_partition_values_in_range_numeric_percent:
                   warning:
-                    min_percent: 1.0
+                    min_percent: 0.0
                   error:
                     min_percent: 2.0
                   fatal:
@@ -2326,7 +2326,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
           numeric:
             monthly_partition_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -2351,7 +2351,7 @@ spec:
           numeric:
             monthly_partition_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -2611,7 +2611,7 @@ spec:
               numeric:
                 monthly_partition_values_in_range_numeric_percent:
                   warning:
-                    min_percent: 1.0
+                    min_percent: 0.0
                   error:
                     min_percent: 2.0
                   fatal:

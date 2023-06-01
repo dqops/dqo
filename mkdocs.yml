@@ -106,6 +106,9 @@ nav:
       - schema:
         - column count: 'checks/Table/schema/column-count.md'
         - column count changed: 'checks/Table/schema/column-count-changed.md'
+        - column list changed: 'checks/Table/schema/column-list-changed.md'
+        - column list or order changed: 'checks/Table/schema/column-list-or-order-changed.md'
+        - column types changed: 'checks/Table/schema/column-types-changed.md'
       - sql:
         - sql condition passed percent on table: 'checks/Table/sql/sql-condition-passed-percent-on-table.md'
         - sql condition failed count on table: 'checks/Table/sql/sql-condition-failed-count-on-table.md'
@@ -221,6 +224,7 @@ nav:
         - contains ip6 percent: 'checks/Column/pii/contains-ip6-percent.md'
       - schema:
         - column exists: 'checks/Column/schema/column-exists.md'
+        - column type changed: 'checks/Column/schema/column-type-changed.md'
       - sql:
         - sql condition passed percent on column: 'checks/Column/sql/sql-condition-passed-percent-on-column.md'
         - sql condition failed count on column: 'checks/Column/sql/sql-condition-failed-count-on-column.md'
@@ -315,11 +319,11 @@ nav:
 ########## END INCLUDE YAML REFERENCE
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
     - ParquetFiles:
-      - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
-      - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
       - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
-      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
+      - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
       - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
+      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
+      - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
 
 # Visual settings

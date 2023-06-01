@@ -42,9 +42,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=valid_ip6_a
         pii:
           valid_ip6_address_percent:
             warning:
-              min_percent: 99.0
+              min_percent: 100.0
             error:
-              min_percent: 98.0
+              min_percent: 99.0
             fatal:
               min_percent: 95.0
 ```
@@ -66,9 +66,9 @@ spec:
         pii:
           valid_ip6_address_percent:
             warning:
-              min_percent: 99.0
+              min_percent: 100.0
             error:
-              min_percent: 98.0
+              min_percent: 99.0
             fatal:
               min_percent: 95.0
       labels:
@@ -389,9 +389,9 @@ spec:
             pii:
               valid_ip6_address_percent:
                 warning:
-                  min_percent: 99.0
+                  min_percent: 100.0
                 error:
-                  min_percent: 98.0
+                  min_percent: 99.0
                 fatal:
                   min_percent: 95.0
           labels:
@@ -747,9 +747,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_valid
           pii:
             daily_valid_ip6_address_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -772,9 +772,9 @@ spec:
           pii:
             daily_valid_ip6_address_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -1096,9 +1096,9 @@ spec:
               pii:
                 daily_valid_ip6_address_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -1454,9 +1454,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_val
           pii:
             monthly_valid_ip6_address_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -1479,9 +1479,9 @@ spec:
           pii:
             monthly_valid_ip6_address_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -1803,9 +1803,9 @@ spec:
               pii:
                 monthly_valid_ip6_address_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -2161,9 +2161,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           pii:
             daily_partition_valid_ip6_address_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -2186,9 +2186,9 @@ spec:
           pii:
             daily_partition_valid_ip6_address_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -2514,9 +2514,9 @@ spec:
               pii:
                 daily_partition_valid_ip6_address_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -2870,9 +2870,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
           pii:
             monthly_partition_valid_ip6_address_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -2895,9 +2895,9 @@ spec:
           pii:
             monthly_partition_valid_ip6_address_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -3223,9 +3223,9 @@ spec:
               pii:
                 monthly_partition_valid_ip6_address_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:

@@ -36,16 +36,37 @@ Checks whether the table is accessible and available for use.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[column_count](./table/schema/column-count/#column-count)|profiling|Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns).|
-|[daily_column_count](./table/schema/column-count/#daily-column-count)|recurring|Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each day when the data quality check was evaluated.|
-|[monthly_column_count](./table/schema/column-count/#monthly-column-count)|recurring|Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each month when the data quality check was evaluated.|
+|[column_count](./table/schema/column-count/#column-count)|profiling|Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns).|
+|[daily_column_count](./table/schema/column-count/#daily-column-count)|recurring|Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each day when the data quality check was evaluated.|
+|[monthly_column_count](./table/schema/column-count/#monthly-column-count)|recurring|Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each month when the data quality check was evaluated.|
 
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[column_count_changed](./table/schema/column-count-changed/#column-count-changed)|profiling|Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.|
-|[daily_column_count_changed](./table/schema/column-count-changed/#daily-column-count-changed)|recurring|Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each day when the data quality check was evaluated.|
-|[monthly_column_count_changed](./table/schema/column-count-changed/#monthly-column-count-changed)|recurring|Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each month when the data quality check was evaluated.|
+|[column_count_changed](./table/schema/column-count-changed/#column-count-changed)|profiling|Detects if the count of columns has changed. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.|
+|[daily_column_count_changed](./table/schema/column-count-changed/#daily-column-count-changed)|recurring|Detects if the count of columns has changed since the most recent day. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each day when the data quality check was evaluated.|
+|[monthly_column_count_changed](./table/schema/column-count-changed/#monthly-column-count-changed)|recurring|Detects if the count of columns has changed since the last month. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each month when the data quality check was evaluated.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[column_list_changed](./table/schema/column-list-changed/#column-list-changed)|profiling|Detects if new columns were added or existing columns were removed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.|
+|[daily_column_list_changed](./table/schema/column-list-changed/#daily-column-list-changed)|recurring|Detects if new columns were added or existing columns were removed since the most recent day. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.|
+|[monthly_column_list_changed](./table/schema/column-list-changed/#monthly-column-list-changed)|recurring|Detects if new columns were added or existing columns were removed since the last month. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[column_list_or_order_changed](./table/schema/column-list-or-order-changed/#column-list-or-order-changed)|profiling|Detects if new columns were added, existing columns were removed or the columns were reordered. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.|
+|[daily_column_list_or_order_changed](./table/schema/column-list-or-order-changed/#daily-column-list-or-order-changed)|recurring|Detects if new columns were added, existing columns were removed or the columns were reordered since the most recent day. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.|
+|[monthly_column_list_or_order_changed](./table/schema/column-list-or-order-changed/#monthly-column-list-or-order-changed)|recurring|Detects if new columns were added, existing columns were removed or the columns were reordered since the last month. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[column_types_changed](./table/schema/column-types-changed/#column-types-changed)|profiling|Detects if new columns were added, removed or their data types have changed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.|
+|[daily_column_types_changed](./table/schema/column-types-changed/#daily-column-types-changed)|recurring|Detects if new columns were added, removed or their data types have changed since the most recent day. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.|
+|[monthly_column_types_changed](./table/schema/column-types-changed/#monthly-column-types-changed)|recurring|Detects if new columns were added, removed or their data types have changed since the last month. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.|
 
 
 
@@ -995,6 +1016,13 @@ Checks for the presence of sensitive or personally identifiable information (PII
 |[column_exists](./column/schema/column-exists/#column-exists)|profiling|Checks the metadata of the monitored table and verifies if the column exists.|
 |[daily_column_exists](./column/schema/column-exists/#daily-column-exists)|recurring|Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each day when the data quality check was evaluated.|
 |[monthly_column_exists](./column/schema/column-exists/#monthly-column-exists)|recurring|Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each month when the data quality check was evaluated.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[column_type_changed](./column/schema/column-type-changed/#column-type-changed)|profiling|Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed.|
+|[daily_column_type_changed](./column/schema/column-type-changed/#daily-column-type-changed)|recurring|Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last day. Stores the most recent hash for each day when the data quality check was evaluated.|
+|[monthly_column_type_changed](./column/schema/column-type-changed/#monthly-column-type-changed)|recurring|Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last month. Stores the most recent hash for each month when the data quality check was evaluated.|
 
 
 

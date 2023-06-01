@@ -12,7 +12,7 @@ The check counts the percentage of strings in the column that is above the lengt
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_length_above_max_length_percent|profiling| |[string_length_above_max_length_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-above-max-length-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|string_length_above_max_length_percent|profiling| |[string_length_above_max_length_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-above-max-length-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -44,11 +44,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=string_leng
             parameters:
               max_length: 5
             warning:
-              min_percent: 99.0
+              max_percent: 100.0
             error:
-              min_percent: 98.0
+              max_percent: 99.0
             fatal:
-              min_percent: 95.0
+              max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-23"
@@ -70,11 +70,11 @@ spec:
             parameters:
               max_length: 5
             warning:
-              min_percent: 99.0
+              max_percent: 100.0
             error:
-              min_percent: 98.0
+              max_percent: 99.0
             fatal:
-              min_percent: 95.0
+              max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -372,11 +372,11 @@ spec:
                 parameters:
                   max_length: 5
                 warning:
-                  min_percent: 99.0
+                  max_percent: 100.0
                 error:
-                  min_percent: 98.0
+                  max_percent: 99.0
                 fatal:
-                  min_percent: 95.0
+                  max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -675,7 +675,7 @@ The check counts the percentage of strings in the column that is above the lengt
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_length_above_max_length_percent|recurring|daily|[string_length_above_max_length_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-above-max-length-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_string_length_above_max_length_percent|recurring|daily|[string_length_above_max_length_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-above-max-length-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -708,11 +708,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_strin
               parameters:
                 max_length: 5
               warning:
-                min_percent: 99.0
+                max_percent: 100.0
               error:
-                min_percent: 98.0
+                max_percent: 99.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-24"
@@ -735,11 +735,11 @@ spec:
               parameters:
                 max_length: 5
               warning:
-                min_percent: 99.0
+                max_percent: 100.0
               error:
-                min_percent: 98.0
+                max_percent: 99.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1038,11 +1038,11 @@ spec:
                   parameters:
                     max_length: 5
                   warning:
-                    min_percent: 99.0
+                    max_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    max_percent: 99.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1341,7 +1341,7 @@ The check counts percentage of those strings with length above the one provided 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_length_above_max_length_percent|recurring|monthly|[string_length_above_max_length_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-above-max-length-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_string_length_above_max_length_percent|recurring|monthly|[string_length_above_max_length_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-above-max-length-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1374,11 +1374,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_str
               parameters:
                 max_length: 5
               warning:
-                min_percent: 99.0
+                max_percent: 100.0
               error:
-                min_percent: 98.0
+                max_percent: 99.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-24"
@@ -1401,11 +1401,11 @@ spec:
               parameters:
                 max_length: 5
               warning:
-                min_percent: 99.0
+                max_percent: 100.0
               error:
-                min_percent: 98.0
+                max_percent: 99.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1704,11 +1704,11 @@ spec:
                   parameters:
                     max_length: 5
                   warning:
-                    min_percent: 99.0
+                    max_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    max_percent: 99.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -2007,7 +2007,7 @@ The check counts the percentage of strings in the column that is above the lengt
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_length_above_max_length_percent|partitioned|daily|[string_length_above_max_length_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-above-max-length-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_partition_string_length_above_max_length_percent|partitioned|daily|[string_length_above_max_length_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-above-max-length-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -2040,11 +2040,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
               parameters:
                 max_length: 5
               warning:
-                min_percent: 99.0
+                max_percent: 100.0
               error:
-                min_percent: 98.0
+                max_percent: 99.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-24"
@@ -2067,11 +2067,11 @@ spec:
               parameters:
                 max_length: 5
               warning:
-                min_percent: 99.0
+                max_percent: 100.0
               error:
-                min_percent: 98.0
+                max_percent: 99.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2374,11 +2374,11 @@ spec:
                   parameters:
                     max_length: 5
                   warning:
-                    min_percent: 99.0
+                    max_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    max_percent: 99.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -2675,7 +2675,7 @@ The check counts the percentage of strings in the column that is above the lengt
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_length_above_max_length_percent|partitioned|monthly|[string_length_above_max_length_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-above-max-length-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_partition_string_length_above_max_length_percent|partitioned|monthly|[string_length_above_max_length_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-length-above-max-length-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -2708,11 +2708,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
               parameters:
                 max_length: 5
               warning:
-                min_percent: 99.0
+                max_percent: 100.0
               error:
-                min_percent: 98.0
+                max_percent: 99.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-24"
@@ -2735,11 +2735,11 @@ spec:
               parameters:
                 max_length: 5
               warning:
-                min_percent: 99.0
+                max_percent: 100.0
               error:
-                min_percent: 98.0
+                max_percent: 99.0
               fatal:
-                min_percent: 95.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -3042,11 +3042,11 @@ spec:
                   parameters:
                     max_length: 5
                   warning:
-                    min_percent: 99.0
+                    max_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    max_percent: 99.0
                   fatal:
-                    min_percent: 95.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:

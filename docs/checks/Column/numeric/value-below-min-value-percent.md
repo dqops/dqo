@@ -12,7 +12,7 @@ The check counts the percentage of values in the column that is below the value 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|value_below_min_value_percent|profiling| |[value_below_min_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|value_below_min_value_percent|profiling| |[value_below_min_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -42,11 +42,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=value_below
         numeric:
           value_below_min_value_percent:
             warning:
-              min_percent: 1.0
+              max_percent: 100.0
             error:
-              min_percent: 2.0
+              max_percent: 99.0
             fatal:
-              min_percent: 5.0
+              max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-21"
@@ -66,11 +66,11 @@ spec:
         numeric:
           value_below_min_value_percent:
             warning:
-              min_percent: 1.0
+              max_percent: 100.0
             error:
-              min_percent: 2.0
+              max_percent: 99.0
             fatal:
-              min_percent: 5.0
+              max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -321,11 +321,11 @@ spec:
             numeric:
               value_below_min_value_percent:
                 warning:
-                  min_percent: 1.0
+                  max_percent: 100.0
                 error:
-                  min_percent: 2.0
+                  max_percent: 99.0
                 fatal:
-                  min_percent: 5.0
+                  max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -580,7 +580,7 @@ The check counts the percentage of values in the column that is below the value 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_value_below_min_value_percent|recurring|daily|[value_below_min_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_value_below_min_value_percent|recurring|daily|[value_below_min_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -611,11 +611,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_value
           numeric:
             daily_value_below_min_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -636,11 +636,11 @@ spec:
           numeric:
             daily_value_below_min_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -892,11 +892,11 @@ spec:
               numeric:
                 daily_value_below_min_value_percent:
                   warning:
-                    min_percent: 1.0
+                    max_percent: 100.0
                   error:
-                    min_percent: 2.0
+                    max_percent: 99.0
                   fatal:
-                    min_percent: 5.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1151,7 +1151,7 @@ The check counts the percentage of values in the column that is below the value 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_value_below_min_value_percent|recurring|monthly|[value_below_min_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_value_below_min_value_percent|recurring|monthly|[value_below_min_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1182,11 +1182,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_val
           numeric:
             monthly_value_below_min_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1207,11 +1207,11 @@ spec:
           numeric:
             monthly_value_below_min_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1463,11 +1463,11 @@ spec:
               numeric:
                 monthly_value_below_min_value_percent:
                   warning:
-                    min_percent: 1.0
+                    max_percent: 100.0
                   error:
-                    min_percent: 2.0
+                    max_percent: 99.0
                   fatal:
-                    min_percent: 5.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1722,7 +1722,7 @@ The check counts the percentage of values in the column that is below the value 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_value_below_min_value_percent|partitioned|daily|[value_below_min_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|daily_partition_value_below_min_value_percent|partitioned|daily|[value_below_min_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1753,11 +1753,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           numeric:
             daily_partition_value_below_min_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1778,11 +1778,11 @@ spec:
           numeric:
             daily_partition_value_below_min_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2038,11 +2038,11 @@ spec:
               numeric:
                 daily_partition_value_below_min_value_percent:
                   warning:
-                    min_percent: 1.0
+                    max_percent: 100.0
                   error:
-                    min_percent: 2.0
+                    max_percent: 99.0
                   fatal:
-                    min_percent: 5.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -2295,7 +2295,7 @@ The check counts the percentage of values in the column that is below the value 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_value_below_min_value_percent|partitioned|monthly|[value_below_min_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
+|monthly_partition_value_below_min_value_percent|partitioned|monthly|[value_below_min_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-below-min-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -2326,11 +2326,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
           numeric:
             monthly_partition_value_below_min_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -2351,11 +2351,11 @@ spec:
           numeric:
             monthly_partition_value_below_min_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2611,11 +2611,11 @@ spec:
               numeric:
                 monthly_partition_value_below_min_value_percent:
                   warning:
-                    min_percent: 1.0
+                    max_percent: 100.0
                   error:
-                    min_percent: 2.0
+                    max_percent: 99.0
                   fatal:
-                    min_percent: 5.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:

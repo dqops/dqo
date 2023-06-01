@@ -42,9 +42,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=valid_latit
         numeric:
           valid_latitude_percent:
             warning:
-              min_percent: 99.0
+              min_percent: 100.0
             error:
-              min_percent: 98.0
+              min_percent: 99.0
             fatal:
               min_percent: 95.0
 ```
@@ -66,9 +66,9 @@ spec:
         numeric:
           valid_latitude_percent:
             warning:
-              min_percent: 99.0
+              min_percent: 100.0
             error:
-              min_percent: 98.0
+              min_percent: 99.0
             fatal:
               min_percent: 95.0
       labels:
@@ -317,9 +317,9 @@ spec:
             numeric:
               valid_latitude_percent:
                 warning:
-                  min_percent: 99.0
+                  min_percent: 100.0
                 error:
-                  min_percent: 98.0
+                  min_percent: 99.0
                 fatal:
                   min_percent: 95.0
           labels:
@@ -603,9 +603,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_valid
           numeric:
             daily_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -628,9 +628,9 @@ spec:
           numeric:
             daily_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -880,9 +880,9 @@ spec:
               numeric:
                 daily_valid_latitude_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -1166,9 +1166,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_val
           numeric:
             monthly_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -1191,9 +1191,9 @@ spec:
           numeric:
             monthly_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -1443,9 +1443,9 @@ spec:
               numeric:
                 monthly_valid_latitude_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -1729,9 +1729,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           numeric:
             daily_partition_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -1754,9 +1754,9 @@ spec:
           numeric:
             daily_partition_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -2010,9 +2010,9 @@ spec:
               numeric:
                 daily_partition_valid_latitude_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -2294,9 +2294,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
           numeric:
             monthly_partition_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -2319,9 +2319,9 @@ spec:
           numeric:
             monthly_partition_valid_latitude_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -2575,9 +2575,9 @@ spec:
               numeric:
                 monthly_partition_valid_latitude_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:

@@ -42,3 +42,19 @@ Table schema data quality sensor detects if the list of columns have changed on 
 
 **SQL Template (Jinja2)**  
 ___
+
+## **column types hash**
+**Full sensor name**
+```
+table/schema/column_types_hash
+```
+**Description**  
+Table schema data quality sensor detects if the list of columns has changed or any of the column has a new data type, length, scale, precision or nullability.
+ The sensor calculates a hash of the list of column names and all components of the column&#x27;s type (the type name, length, scale, precision, nullability).
+ The hash value does not depend on the order of columns.
+
+
+
+
+**SQL Template (Jinja2)**  
+___

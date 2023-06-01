@@ -3,7 +3,7 @@ apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/numeric/value_below_min_value_percent
-  rule_name: comparison/min_percent
+  rule_name: comparison/max_percent
   help_text: The check counts the percentage of values in the column that is below
     the value defined by the user as a parameter. Creates a separate data quality
     check (and an alert) for each daily partition.
