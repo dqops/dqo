@@ -315,8 +315,8 @@ nav:
 ########## END INCLUDE YAML REFERENCE
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
     - ParquetFiles:
-      - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
       - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
+      - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
       - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
       - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
       - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
@@ -325,6 +325,7 @@ nav:
 # Visual settings
 theme:
   name: material
+  custom_dir: docs
   features:
     - navigation.indexes
     - content.tabs.link

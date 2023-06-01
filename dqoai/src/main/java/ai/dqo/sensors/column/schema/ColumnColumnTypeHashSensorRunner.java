@@ -137,19 +137,8 @@ public class ColumnColumnTypeHashSensorRunner extends AbstractSensorRunner {
                     }
 
                     ColumnTypeSnapshotSpec typeSnapshot = introspectedColumnSpec.getTypeSnapshot();
-                    String[] typeComponents = {
-                            typeSnapshot.getColumnType() != null ? typeSnapshot.getColumnType() : "",
-                            typeSnapshot.getNullable() != null ? typeSnapshot.getNullable().toString() : "",
-                            typeSnapshot.getLength() != null ? typeSnapshot.getLength().toString() : "",
-                            typeSnapshot.getScale() != null ? typeSnapshot.getScale().toString() : "",
-                            typeSnapshot.getPrecision() != null ? typeSnapshot.getPrecision().toString() : "",
-                    };
-
-                    List<HashCode> elementHashes = Arrays.stream(typeComponents)
-                            .map(typeComponent -> Hashing.farmHashFingerprint64().hashString(typeComponent, StandardCharsets.UTF_8))
-                            .collect(Collectors.toList());
-                    long fullHash = Math.abs(Hashing.combineOrdered(elementHashes).asLong());
-                    long hashFitInDoubleExponent = fullHash & ((1L << 52) - 1L); // because we are storing the results of data quality checks in a IEEE 754 double-precision floating-point value and we need exact match, we need to return only as many bits as the fraction part (52 bits) can fit in a Double value, without any unwanted truncations
+                    long typeSnapshotHash = typeSnapshot.hashCode64();
+                    long hashFitInDoubleExponent = typeSnapshotHash & ((1L << 52) - 1L); // because we are storing the results of data quality checks in a IEEE 754 double-precision floating-point value and we need exact match, we need to return only as many bits as the fraction part (52 bits) can fit in a Double value, without any unwanted truncations
 
                     Table table = createResultTableWithResult(hashFitInDoubleExponent);
                     return new SensorExecutionResult(sensorRunParameters, table);

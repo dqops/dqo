@@ -149,7 +149,7 @@ public class CliInitializerImpl implements CliInitializer {
         }
         finally {
             this.jobQueueMonitoringService.start();
-            this.fileSynchronizationChangeDetectionService.detectUnsynchronizedChangesInBackground();
+            this.fileSynchronizationChangeDetectionService.detectNotSynchronizedChangesInBackground();
             this.dqoJobQueue.start();
             this.parentDqoJobQueue.start();
 

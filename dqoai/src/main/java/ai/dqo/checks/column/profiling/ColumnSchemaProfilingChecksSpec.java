@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.bool.ColumnFalsePercentCheckSpec;
 import ai.dqo.checks.column.checkspecs.bool.ColumnTruePercentCheckSpec;
 import ai.dqo.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
+import ai.dqo.checks.column.checkspecs.schema.ColumnSchemaTypeChangedCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,11 +40,15 @@ public class ColumnSchemaProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnSchemaProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("column_exists", o -> o.columnExists);
+            put("column_type_changed", o -> o.columnTypeChanged);
         }
     };
 
     @JsonPropertyDescription("Checks the metadata of the monitored table and verifies if the column exists.")
     private ColumnSchemaColumnExistsCheckSpec columnExists;
+
+    @JsonPropertyDescription("Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed.")
+    private ColumnSchemaTypeChangedCheckSpec columnTypeChanged;
 
 
     /**
@@ -62,6 +67,24 @@ public class ColumnSchemaProfilingChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.columnExists, columnExists));
         this.columnExists = columnExists;
         propagateHierarchyIdToField(columnExists, "column_exists");
+    }
+
+    /**
+     * Returns the check configuration that detects if the column type has changed.
+     * @return Column type has changed.
+     */
+    public ColumnSchemaTypeChangedCheckSpec getColumnTypeChanged() {
+        return columnTypeChanged;
+    }
+
+    /**
+     * Sets the check that detects if the column type hash changed.
+     * @param columnTypeChanged Column type has changed check.
+     */
+    public void setColumnTypeChanged(ColumnSchemaTypeChangedCheckSpec columnTypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.columnTypeChanged, columnTypeChanged));
+        this.columnTypeChanged = columnTypeChanged;
+        propagateHierarchyIdToField(columnTypeChanged, "column_type_changed");
     }
 
     /**

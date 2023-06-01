@@ -28,6 +28,7 @@ import ai.dqo.cli.terminal.FileWritter;
 import ai.dqo.cli.terminal.TablesawDatasetTableModel;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.execution.checks.CheckExecutionErrorSummary;
 import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
@@ -428,6 +429,15 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                         this.terminalTableWritter.writeTable(tablesawDatasetTableModel, true);
                     }
                     break;
+                }
+            }
+
+            CheckExecutionErrorSummary checkExecutionErrorSummary = checkExecutionSummary.getCheckExecutionErrorSummary();
+            if (checkExecutionErrorSummary != null) {
+                if (this.mode == CheckRunReportingMode.debug) {
+                    this.terminalWriter.writeLine(checkExecutionErrorSummary.getDebugMessage());
+                } else {
+                    this.terminalWriter.writeLine(checkExecutionErrorSummary.getSummaryMessage());
                 }
             }
         }

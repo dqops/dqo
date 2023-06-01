@@ -33,6 +33,7 @@ public class CheckExecutionSummary {
     private final IntColumn sensorResultsColumn;
     private final IntColumn executionErrorsCountColumn;
     private final Table summaryTable;
+    private CheckExecutionErrorSummary checkExecutionErrorSummary;
 
     /**
      * Default constructor that creates the output table.
@@ -140,6 +141,14 @@ public class CheckExecutionSummary {
     }
 
     /**
+     * Returns a check execution error summary, digging into the details of errors that <code>executionErrorsCountColumn</code> comprises.
+     * @return Check execution error summary.
+     */
+    public CheckExecutionErrorSummary getCheckExecutionErrorSummary() {
+        return checkExecutionErrorSummary;
+    }
+
+    /**
      * Adds a table check summary row.
      * @param connection Connection wrapper.
      * @param tableSpec Table specification.
@@ -163,6 +172,16 @@ public class CheckExecutionSummary {
 		this.errorsCountColumn.set(row.getRowNumber(), errorsCount);
 		this.fatalErrorsCountColumn.set(row.getRowNumber(), fatalErrorsCount);
         this.executionErrorsCountColumn.set(row.getRowNumber(), executionErrorsCount);
+    }
+
+    /**
+     * Sets <code>checkExecutionErrorSummary</code> if it's null. Else noop.
+     * @param checkExecutionErrorSummary New check execution error summary.
+     */
+    public void updateCheckExecutionErrorSummary(CheckExecutionErrorSummary checkExecutionErrorSummary) {
+        if (this.checkExecutionErrorSummary == null) {
+            this.checkExecutionErrorSummary = checkExecutionErrorSummary;
+        }
     }
 
     /**
@@ -220,5 +239,6 @@ public class CheckExecutionSummary {
      */
     public void append(CheckExecutionSummary otherCheckExecutionSummary) {
         this.summaryTable.append(otherCheckExecutionSummary.getSummaryTable());
+        this.updateCheckExecutionErrorSummary(otherCheckExecutionSummary.checkExecutionErrorSummary);
     }
 }

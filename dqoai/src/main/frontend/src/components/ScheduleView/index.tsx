@@ -187,12 +187,11 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
           )}
         >
           <RadioButton
-            label="Run every X minutes"
+            label="Run every"
             checked={mode === 'minutes'}
             onClick={() => onChangeMode('minutes')}
           />
           <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
-            <div>Run every</div>
             <NumberInput
               className="!text-sm"
               min={0}
@@ -210,12 +209,11 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
           )}
         >
           <RadioButton
-            label="Run every hour"
+            label="Run"
             checked={mode === 'hour'}
             onClick={() => onChangeMode('hour')}
           />
           <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
-            <div>At</div>
             <NumberInput
               className="!text-sm"
               min={0}
@@ -223,7 +221,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
               value={minutes}
               onChange={onChangeMinutes}
             />
-            <div>minutes past hour</div>
+            <div>minutes past every hour</div>
           </div>
         </div>
         <div
@@ -233,12 +231,11 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
           )}
         >
           <RadioButton
-            label="Run every day"
+            label="Run every day at"
             checked={mode === 'day'}
             onClick={() => onChangeMode('day')}
           />
           <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
-            <div>At</div>
             <NumberInput
               className="!text-sm"
               min={0}

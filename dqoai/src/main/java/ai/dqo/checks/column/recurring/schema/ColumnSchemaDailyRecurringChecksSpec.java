@@ -17,6 +17,7 @@ package ai.dqo.checks.column.recurring.schema;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
+import ai.dqo.checks.column.checkspecs.schema.ColumnSchemaTypeChangedCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,12 +38,15 @@ public class ColumnSchemaDailyRecurringChecksSpec extends AbstractCheckCategoryS
     public static final ChildHierarchyNodeFieldMapImpl<ColumnSchemaDailyRecurringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_column_exists", o -> o.dailyColumnExists);
+            put("daily_column_type_changed", o -> o.dailyColumnTypeChanged);
         }
     };
 
     @JsonPropertyDescription("Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each day when the data quality check was evaluated.")
     private ColumnSchemaColumnExistsCheckSpec dailyColumnExists;
 
+    @JsonPropertyDescription("Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last day. Stores the most recent hash for each day when the data quality check was evaluated.")
+    private ColumnSchemaTypeChangedCheckSpec dailyColumnTypeChanged;
 
     /**
      * Returns a column exists check specification.
@@ -60,6 +64,24 @@ public class ColumnSchemaDailyRecurringChecksSpec extends AbstractCheckCategoryS
         this.setDirtyIf(!Objects.equals(this.dailyColumnExists, dailyColumnExists));
         this.dailyColumnExists = dailyColumnExists;
         propagateHierarchyIdToField(dailyColumnExists, "daily_column_exists");
+    }
+
+    /**
+     * Returns the check configuration that detects if the column type has changed.
+     * @return Column type has changed.
+     */
+    public ColumnSchemaTypeChangedCheckSpec getDailyColumnTypeChanged() {
+        return dailyColumnTypeChanged;
+    }
+
+    /**
+     * Sets the check that detects if the column type hash changed.
+     * @param dailyColumnTypeChanged Column type has changed check.
+     */
+    public void setDailyColumnTypeChanged(ColumnSchemaTypeChangedCheckSpec dailyColumnTypeChanged) {
+        this.setDirtyIf(!Objects.equals(this.dailyColumnTypeChanged, dailyColumnTypeChanged));
+        this.dailyColumnTypeChanged = dailyColumnTypeChanged;
+        propagateHierarchyIdToField(dailyColumnTypeChanged, "daily_column_type_changed");
     }
 
     /**

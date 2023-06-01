@@ -25,6 +25,7 @@ import { useTree } from "../../contexts/treeContext";
 import IncidentNavigation from "./IncidentNavigation";
 import Button from "../../components/Button";
 import { HistogramChart } from "./HistogramChart";
+import SectionWrapper from "../../components/Dashboard/SectionWrapper";
 
 const statusOptions = [
   {
@@ -78,7 +79,7 @@ export const IncidentDetail = () => {
   const [open, setOpen] = useState(false);
   const dispatch = useActionDispatch();
   const { sidebarWidth } = useTree();
-  const { issues, filters = {} } = useSelector(getFirstLevelIncidentsState);
+  const { issues, isEnd, filters = {} } = useSelector(getFirstLevelIncidentsState);
 
   useEffect(() => {
     IncidentsApi.getIncident(connection, year, month, incidentId).then(res => {
@@ -153,7 +154,7 @@ export const IncidentDetail = () => {
             <Input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Filter errors"
+              placeholder="Filter errors: col*"
               className="!h-12"
             />
           </div>
@@ -170,7 +171,7 @@ export const IncidentDetail = () => {
           </div>
         </div>
         <div className="grid grid-cols-4 gap-4 px-4">
-          <div className="text-sm bg-white rounded-lg p-4 border border-gray-200">
+          <SectionWrapper title="Table">
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Connection</div>
               <div className="flex-[2] font-bold">{incidentDetail?.connection}</div>
@@ -187,8 +188,8 @@ export const IncidentDetail = () => {
               <div className="flex-1">Table priority</div>
               <div className="flex-[2] font-bold">{incidentDetail?.tablePriority}</div>
             </div>
-          </div>
-          <div className="text-sm bg-white rounded-lg p-4 border border-gray-200">
+          </SectionWrapper>
+          <SectionWrapper title="Status and time range">
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Status:</div>
               <div className="flex-[2] font-bold">
@@ -220,23 +221,23 @@ export const IncidentDetail = () => {
                 ({getDaysString(incidentDetail?.incidentUntil || 0)})
               </div>
             </div>
-          </div>
-          <div className="text-sm bg-white rounded-lg p-4 border border-gray-200">
+          </SectionWrapper>
+          <SectionWrapper title="Severity statistics">
             <div className="flex gap-3 mb-3 items-center">
-              <div className="flex-[2]">Min severity threshold:</div>
-              <div className="flex-[1] font-bold">{incidentDetail?.minSeverity}</div>
+              <div className="flex-[2]">Lowest detected issue severity:</div>
+              <div className="flex-[1] text-right font-bold">{incidentDetail?.minSeverity} Warning</div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
-              <div className="flex-[2]">Highest detected severity:</div>
-              <div className="flex-[1] font-bold">{incidentDetail?.highestSeverity}</div>
+              <div className="flex-[2]">Highest detected issue severity:</div>
+              <div className="flex-[1] text-right font-bold">{incidentDetail?.highestSeverity} Error</div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
-              <div className="flex-[2]">Failed checks:</div>
-              <div className="flex-[1] font-bold">{incidentDetail?.failedChecksCount}</div>
+              <div className="flex-[2]">Total data quality incidents:</div>
+              <div className="flex-[1] text-right font-bold">{incidentDetail?.failedChecksCount} Fatal</div>
             </div>
             <div className="flex gap-3 items-center">
               <div className="flex-[2]">Issue url:</div>
-              <div className="flex-[1] font-bold">
+              <div className="flex-[1] text-right font-bold">
                 <div>
                   {incidentDetail?.issueUrl ? (
                     <div className="flex items-center space-x-2">
@@ -276,8 +277,8 @@ export const IncidentDetail = () => {
                 </div>
               </div>
             </div>
-          </div>
-          <div className="text-sm bg-white rounded-lg p-4 border border-gray-200">
+          </SectionWrapper>
+          <SectionWrapper title="Data quality issue grouping">
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Quality dimension:</div>
               <div className="flex-1 font-bold">{incidentDetail?.qualityDimension}</div>
@@ -298,19 +299,24 @@ export const IncidentDetail = () => {
               <div className="flex-1">Data stream:</div>
               <div className="flex-1 font-bold">{incidentDetail?.dataStreamName}</div>
             </div>
-          </div>
+          </SectionWrapper>
         </div>
 
         <HistogramChart />
         <div className="px-4 ">
           <div className="py-3 mb-5 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
-            <IncidentIssueList issues={issues || []} />
+            <IncidentIssueList
+              filters={filters}
+              issues={issues || []}
+              onChangeFilter={onChangeFilter}
+            />
           </div>
 
           <Pagination
             page={filters.page || 1}
             pageSize={filters.pageSize || 50}
             totalPages={10}
+            isEnd={isEnd}
             onChange={(page, pageSize) => onChangeFilter({
               page,
               pageSize

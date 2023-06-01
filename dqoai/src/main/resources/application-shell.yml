@@ -1,4 +1,0 @@
-spring:
-  shell:
-    interactive:
-      enabled: true
