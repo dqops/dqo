@@ -223,11 +223,13 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
 
         if (this.isUninitializedInUnmountedDockerVolume(Paths.get(userHomePathString))) {
             TerminalWriter terminalWriter = this.terminalFactory.getWriter();
-            terminalWriter.writeLine("DQO User Home is not mounted to the docker's folder " + userHomePathString + ".");
+            terminalWriter.writeLine("DQO User Home volume is not mounted to the docker's folder " + userHomePathString + ".");
+            terminalWriter.writeLine("In order to mount a volume, execute docker run with parameter \"-v\":");
+            terminalWriter.writeLine("\tdocker run -v $DQO_USER_HOME:" + userHomePathString + " --name my_dqo_container -d dqo");
             terminalWriter.writeLine("To run DQO in docker using a User Home folder inside the docker image (not advised),"
                     + " do one of the following:");
             terminalWriter.writeLine("\t- Start DQO with a parameter --dqo.docker.userhome.allow-unmounted=true");
-            terminalWriter.writeLine("\t- Set the environment variable DQO_DOCKER_USERHOME_ALLOW_UNMOUNTED=true");
+            terminalWriter.writeLine("\t- Or set the environment variable DQO_DOCKER_USERHOME_ALLOW_UNMOUNTED=true");
             terminalWriter.writeLine("DQO will quit.");
             System.exit(101);
         }
