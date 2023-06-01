@@ -27,49 +27,49 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
+ * Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MaxPercentRule98ParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MaxPercentRule98ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class MinPercentRule0ParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<MinPercentRule0ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Double maxPercent = 98.0;
+    @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
+    private Double minPercent = 0.0;
 
     /**
      * Default constructor, the minimum accepted value is 0.
      */
-    public MaxPercentRule98ParametersSpec() {
+    public MinPercentRule0ParametersSpec() {
     }
 
     /**
      * Creates a rule with a given value.
-     * @param maxPercent Minimum accepted value.
+     * @param minPercent Minimum accepted value.
      */
-    public MaxPercentRule98ParametersSpec(Double maxPercent) {
-        this.maxPercent = maxPercent;
+    public MinPercentRule0ParametersSpec(Double minPercent) {
+        this.minPercent = minPercent;
     }
 
     /**
-     * Returns a maximum value for a data quality check readout, for example a maximum row count.
-     * @return Maximum value for a data quality check readout.
+     * Minimum value for a data quality check readout, for example a minimum row count.
+     * @return Minimum value for a data quality check readout.
      */
-    public Double getMaxPercent() {
-        return maxPercent;
+    public Double getMinPercent() {
+        return minPercent;
     }
 
     /**
-     * Sets a maximum data quality check readout that is accepted, for example a maximum row count.
-     * @param maxPercent Maximum value that is accepted.
+     * Changes the minimum value (threshold) for a data quality readout.
+     * @param minPercent Minimum value.
      */
-    public void setMaxPercent(Double maxPercent) {
-        this.setDirtyIf(!Objects.equals(this.maxPercent, maxPercent));
-        this.maxPercent = maxPercent;
+    public void setMinPercent(Double minPercent) {
+        this.setDirtyIf(!Objects.equals(this.minPercent, minPercent));
+        this.minPercent = minPercent;
     }
 
     /**
@@ -89,6 +89,6 @@ public class MaxPercentRule98ParametersSpec extends AbstractRuleParametersSpec {
      */
     @Override
     public String getRuleDefinitionName() {
-        return "comparison/max_percent";
+        return "comparison/min_percent";
     }
 }
