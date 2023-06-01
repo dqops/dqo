@@ -66,7 +66,7 @@ public class MysqlColumnStringsStringMatchDateRegexPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -80,7 +80,7 @@ public class MysqlColumnStringsStringMatchDateRegexPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class MysqlColumnStringsStringMatchDateRegexPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -108,7 +108,7 @@ public class MysqlColumnStringsStringMatchDateRegexPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -122,6 +122,6 @@ public class MysqlColumnStringsStringMatchDateRegexPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 }

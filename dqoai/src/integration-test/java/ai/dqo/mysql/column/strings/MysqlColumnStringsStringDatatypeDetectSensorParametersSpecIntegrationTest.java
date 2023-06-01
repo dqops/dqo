@@ -73,6 +73,7 @@ public class MysqlColumnStringsStringDatatypeDetectSensorParametersSpecIntegrati
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "float2", this.checkSpec);
 
+
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
