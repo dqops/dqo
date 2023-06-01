@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "dqo.cli.oneshot")
 @EqualsAndHashCode(callSuper = false)
-public class DqoCliOneshotConfigurationProperties {
+public class DqoCliOneshotConfigurationProperties implements Cloneable {
     private Integer terminalWidth;
 
     /**
@@ -42,5 +42,19 @@ public class DqoCliOneshotConfigurationProperties {
      */
     public void setTerminalWidth(Integer terminalWidth) {
         this.terminalWidth = terminalWidth;
+    }
+
+    /**
+     * Clones the current object.
+     * @return Cloned instance.
+     */
+    @Override
+    public DqoCliOneshotConfigurationProperties clone() {
+        try {
+            return (DqoCliOneshotConfigurationProperties)super.clone();
+        }
+        catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }

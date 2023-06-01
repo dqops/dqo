@@ -17,10 +17,7 @@ package ai.dqo.metadata.storage.localfiles.userhome;
 
 import ai.dqo.cli.terminal.TerminalFactory;
 import ai.dqo.cli.terminal.TerminalFactoryObjectMother;
-import ai.dqo.core.configuration.DqoLoggingConfigurationProperties;
-import ai.dqo.core.configuration.DqoLoggingConfigurationPropertiesObjectMother;
-import ai.dqo.core.configuration.DqoUserConfigurationProperties;
-import ai.dqo.core.configuration.DqoUserConfigurationPropertiesObjectMother;
+import ai.dqo.core.configuration.*;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindService;
 import ai.dqo.utils.BeanFactoryObjectMother;
 
@@ -38,9 +35,10 @@ public class LocalUserHomeCreatorObjectMother {
         HomeLocationFindService homeLocationFindService = BeanFactoryObjectMother.getBeanFactory().getBean(HomeLocationFindService.class);
         DqoLoggingConfigurationProperties noLoggingConfiguration = DqoLoggingConfigurationPropertiesObjectMother.getNoLoggingConfiguration();
         DqoUserConfigurationProperties defaultUserConfiguration = DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration();
+        DqoDockerUserhomeConfigurationProperties defaultDockerUserhomeConfiguration = DqoDockerUserhomeConfigurationPropertiesObjectMother.createDefaultDockerUserhomeConfiguration();
         TerminalFactory terminalFactory = TerminalFactoryObjectMother.getDefault();
         LocalUserHomeCreatorImpl localUserHomeCreator = new LocalUserHomeCreatorImpl(
-                homeLocationFindService, terminalFactory, noLoggingConfiguration, defaultUserConfiguration);
+                homeLocationFindService, terminalFactory, noLoggingConfiguration, defaultUserConfiguration, defaultDockerUserhomeConfiguration);
         return localUserHomeCreator;
     }
 
