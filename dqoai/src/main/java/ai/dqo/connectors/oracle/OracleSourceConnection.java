@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.connectors.postgresql;
+package ai.dqo.connectors.oracle;
 
 import ai.dqo.connectors.ConnectorOperationFailedException;
 import ai.dqo.connectors.jdbc.AbstractJdbcSourceConnection;
@@ -30,21 +30,21 @@ import org.springframework.stereotype.Component;
 import java.util.Properties;
 
 /**
- * Postgresql source connection.
+ * Oracle source connection.
  */
-@Component("postgresql-connection")
+@Component("oracle-connection")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
+public class OracleSourceConnection extends AbstractJdbcSourceConnection {
     /**
-     * Injection constructor for the postgresql connection.
+     * Injection constructor for the oracle connection.
      * @param jdbcConnectionPool Jdbc connection pool.
      * @param secretValueProvider Secret value provider for the environment variable expansion.
      */
     @Autowired
-    public PostgresqlSourceConnection(JdbcConnectionPool jdbcConnectionPool,
-                                      SecretValueProvider secretValueProvider,
-                                      PostgresqlConnectionProvider postgresqlConnectionProvider) {
-        super(jdbcConnectionPool, secretValueProvider, postgresqlConnectionProvider);
+    public OracleSourceConnection(JdbcConnectionPool jdbcConnectionPool,
+                                  SecretValueProvider secretValueProvider,
+                                  OracleConnectionProvider oracleConnectionProvider) {
+        super(jdbcConnectionPool, secretValueProvider, oracleConnectionProvider);
     }
 
     /**
@@ -56,14 +56,14 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
     public HikariConfig createHikariConfig() {
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
-        PostgresqlParametersSpec postgresqlSpec = connectionSpec.getPostgresql();
+        OracleParametersSpec oracleParametersSpec = connectionSpec.getOracle();
 
-        String host = this.getSecretValueProvider().expandValue(postgresqlSpec.getHost());
+        String host = this.getSecretValueProvider().expandValue(oracleParametersSpec.getHost());
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
-        jdbcConnectionBuilder.append("jdbc:postgresql://");
+        jdbcConnectionBuilder.append("jdbc:oracle:thin:@");
         jdbcConnectionBuilder.append(host);
 
-        String port = this.getSecretValueProvider().expandValue(postgresqlSpec.getPort());
+        String port = this.getSecretValueProvider().expandValue(oracleParametersSpec.getPort());
         if (!Strings.isNullOrEmpty(port)) {
             try {
                 int portNumber = Integer.parseInt(port);
@@ -71,11 +71,11 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
                 jdbcConnectionBuilder.append(portNumber);
             }
             catch (NumberFormatException nfe) {
-                throw new ConnectorOperationFailedException("Cannot create a connection to PostgreSQL, the port number is invalid: " + port, nfe);
+                throw new ConnectorOperationFailedException("Cannot create a connection to Oracle, the port number is invalid: " + port, nfe);
             }
         }
         jdbcConnectionBuilder.append('/');
-        String database = this.getSecretValueProvider().expandValue(postgresqlSpec.getDatabase());
+        String database = this.getSecretValueProvider().expandValue(oracleParametersSpec.getDatabase());
         if (!Strings.isNullOrEmpty(database)) {
             jdbcConnectionBuilder.append(database);
         }
@@ -84,17 +84,17 @@ public class PostgresqlSourceConnection extends AbstractJdbcSourceConnection {
         hikariConfig.setJdbcUrl(jdbcUrl);
 
         Properties dataSourceProperties = new Properties();
-        if (postgresqlSpec.getProperties() != null) {
-            dataSourceProperties.putAll(postgresqlSpec.getProperties());
+        if (oracleParametersSpec.getProperties() != null) {
+            dataSourceProperties.putAll(oracleParametersSpec.getProperties());
         }
 
-        String userName = this.getSecretValueProvider().expandValue(postgresqlSpec.getUser());
+        String userName = this.getSecretValueProvider().expandValue(oracleParametersSpec.getUser());
         hikariConfig.setUsername(userName);
 
-        String password = this.getSecretValueProvider().expandValue(postgresqlSpec.getPassword());
+        String password = this.getSecretValueProvider().expandValue(oracleParametersSpec.getPassword());
         hikariConfig.setPassword(password);
 
-        String options =  this.getSecretValueProvider().expandValue(postgresqlSpec.getOptions());
+        String options =  this.getSecretValueProvider().expandValue(oracleParametersSpec.getOptions());
         if (!Strings.isNullOrEmpty(options)) {
             dataSourceProperties.put("options", options);
         }
