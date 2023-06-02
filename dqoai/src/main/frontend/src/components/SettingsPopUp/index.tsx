@@ -37,8 +37,6 @@ function SettingsPopUp() {
     fetchProfileSettings().then();
   }, []);
 
-  console.log(profileSettings);
-
   const renderValue = (value: any) => {
     if (typeof value === 'boolean') {
       return value ? 'Yes' : 'No';
