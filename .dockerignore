@@ -1,9 +1,14 @@
 userhome
 examples
 docs
+.git*
 .run
 .idea
+.vscode
 dqoai/target
 distribution/target
 lib/target
-.vscode
+home/venv
+dqoai/src/main/frontend/build
+dqoai/src/main/frontend/node
+dqoai/src/main/frontend/node_modules
