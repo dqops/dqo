@@ -149,14 +149,6 @@ const JobItem = ({
               </td>
             </tr>
 
-            {job?.errorMessage && (
-              <>
-                <tr>
-                  <td className="px-2 capitalize">Error Message</td>
-                  <td className="px-2 max-w-76">{job?.errorMessage}</td>
-                </tr>
-              </>
-            )}
             {job?.parameters?.runChecksParameters?.checkSearchFilters &&
               Object.entries(
                 job?.parameters?.runChecksParameters?.checkSearchFilters
@@ -240,6 +232,14 @@ const JobItem = ({
                       )
                     )}
                   </td>
+                </tr>
+              </>
+            )}
+            {job?.errorMessage && (
+              <>
+                <tr className="flex flex-col w-108">
+                  <td className="capitalize">Error Message:</td>
+                  <td className="px-2 ">{job?.errorMessage}</td>
                 </tr>
               </>
             )}
