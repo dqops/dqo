@@ -122,7 +122,7 @@
 						<configuration>
 							<workingDirectory>src/main/frontend</workingDirectory>
 							<nodeVersion>v18.16.0</nodeVersion>
-							<npmVersion>9.5.1</npmVersion>
+							<npmVersion>9.6.7</npmVersion>
 						</configuration>
 						<executions>
 							<execution>
