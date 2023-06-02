@@ -29,7 +29,7 @@ interface MyData {
   length?: number | undefined;
   scale?: number | undefined;
   importedDatatype?: string | undefined;
-  columnHash?: number | undefined;
+  columnHash: number;
 }
 
 const TableColumns = ({
@@ -654,9 +654,9 @@ const TableColumns = ({
     }
   };
 
-  const rewriteData = (columnName: string) => {
+  const rewriteData = (hashValue: number) => {
     const columnToDelete = statistics?.column_statistics?.find(
-      (x) => x.column_name === columnName
+      (x) => x.column_hash === hashValue
     );
 
     if (columnToDelete) {
@@ -755,7 +755,7 @@ const TableColumns = ({
             size="sm"
             className="group bg-teal-500 ml-3"
             onClick={() => {
-              rewriteData(column.nameOfCol ? column.nameOfCol : '');
+              rewriteData(column.columnHash);
             }}
           >
             <SvgIcon name="delete" className="w-4" />
