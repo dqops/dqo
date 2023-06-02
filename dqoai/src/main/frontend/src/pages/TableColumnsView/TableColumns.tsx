@@ -597,8 +597,8 @@ const TableColumns = ({
   const sortDataByImportedtype = () => {
     const sortedArray = [...dataArray];
     sortedArray.sort((a, b) => {
-      const nullsCountA = String(a.detectedDatatypeVar);
-      const nullsCountB = String(b.detectedDatatypeVar);
+      const nullsCountA = String(a.importedDatatype);
+      const nullsCountB = String(b.importedDatatype);
 
       if (nullsCountA && nullsCountB) {
         return sortDirection === 'asc'
