@@ -471,7 +471,6 @@ const TableColumns = ({
     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     const sortedResult = [...BoolArray, ...StringArray, ...NumberArray];
     setDataArray1(sortedResult);
-    console.log(sortedResult);
   };
 
   const sortDataByLength = () => {

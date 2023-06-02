@@ -594,8 +594,6 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
     fetchCheckResults(month, name);
   };
 
-  console.log(checkResults.length);
-
   return (
     <div
       className="my-4"
