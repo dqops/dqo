@@ -43,7 +43,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN cp lib/requirements.txt $VIRTUAL_ENV/home_requirements.txt
 RUN pip3 install -r $VIRTUAL_ENV/home_requirements.txt
 
-# todo: Add python3 -m compileall call to precompile scripts in dqo-home.
+RUN python3 -m compileall ./
 
 FROM python:3.11.3-slim-bullseye AS dqo-main
 EXPOSE 8888
