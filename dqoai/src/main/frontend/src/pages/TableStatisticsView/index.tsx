@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { getFirstLevelState } from '../../redux/selectors';
 import { CheckTypes } from '../../shared/routes';
 import { useParams } from 'react-router-dom';
+import moment from 'moment';
 
 export default function TableStatisticsView({
   connectionName,
@@ -55,10 +56,6 @@ export default function TableStatisticsView({
       </div>
     );
   }
-  const replaceTWithSpace = (input: string) => {
-    return input.replace(/T/g, ' ');
-  };
-
   const formatNumber = (k: number) => {
     if (k > 1000 && k < 1000000) {
       if (k > Math.pow(10, 3) && k < Math.pow(10, 4)) {
@@ -97,14 +94,6 @@ export default function TableStatisticsView({
     }
   };
 
-  const deleteMiniSec = (str: string) => {
-    const dotIndex = str.lastIndexOf('.');
-    if (dotIndex !== -1) {
-      return str.substring(0, dotIndex);
-    }
-    return str;
-  };
-
   return (
     <div>
       <div className="inline-block justify-center gap-y-6 h-20 ml-4 mt-8 border border-gray-300 px-4 py-6 relative rounded mt-8">
@@ -132,9 +121,7 @@ export default function TableStatisticsView({
                 rowCount.statistics?.map((x, index) => (
                   <div key={index} className="font-bold">
                     {x.collector === 'row_count' && x.category === 'volume'
-                      ? deleteMiniSec(
-                          replaceTWithSpace(renderValue(x.collectedAt))
-                        )
+                      ? moment(renderValue(x.collectedAt)).format('LLL')
                       : ''}
                   </div>
                 ))}

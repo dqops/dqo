@@ -130,11 +130,16 @@ const TableColumns = ({
     }
   };
 
-  const collectStatistics = async (index: number) => {
-    await JobApiClient.collectStatisticsOnDataStreams(
-      statistics?.column_statistics?.at(index)
-        ?.collect_column_statistics_job_template
-    );
+  const collectStatistics = async (nameOfCol?: string) => {
+    statistics?.column_statistics &&
+      statistics?.column_statistics.map(async (x, index) =>
+        x.column_name === nameOfCol
+          ? await JobApiClient.collectStatisticsOnDataStreams(
+              statistics?.column_statistics?.at(index)
+                ?.collect_column_statistics_job_template
+            )
+          : ''
+      );
   };
 
   useEffect(() => {
@@ -731,7 +736,7 @@ const TableColumns = ({
           <IconButton
             size="sm"
             className="group bg-teal-500 ml-1.5"
-            onClick={() => collectStatistics(index)}
+            onClick={() => collectStatistics(column.nameOfCol)}
           >
             <SvgIcon name="boxplot" className="w-4 white" />
             <div className="hidden absolute right-0 bottom-6 p-1 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
