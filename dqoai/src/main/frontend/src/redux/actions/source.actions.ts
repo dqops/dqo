@@ -48,28 +48,31 @@ export const closeFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   data,
 });
 
-export const setCheckResults = (checkType: CheckTypes, checkName: string, checkResults: CheckResultsDetailedDataModel[]) => ({
+export const setCheckResults = (checkType: CheckTypes, activeTab: string, checkName: string, checkResults: CheckResultsDetailedDataModel[]) => ({
   type: SOURCE_ACTION.SET_CHECK_RESULTS,
   checkType,
+  activeTab,
   data: {
     checkName,
     checkResults
   }
 });
 
-export const setSensorReadouts = (checkType: CheckTypes, checkName: string, sensorReadouts: SensorReadoutsDetailedDataModel[]) => ({
+export const setSensorReadouts = (checkType: CheckTypes, activeTab: string, checkName: string, sensorReadouts: SensorReadoutsDetailedDataModel[]) => ({
   type: SOURCE_ACTION.SET_SENSOR_READOUTS,
   checkType,
+  activeTab,
   data: {
     checkName,
     sensorReadouts
   }
 });
 
-export const setSensorErrors = (checkType: CheckTypes, checkName: string, errors: ErrorsDetailedDataModel[]) => {
+export const setSensorErrors = (checkType: CheckTypes, activeTab: string, checkName: string, errors: ErrorsDetailedDataModel[]) => {
   return ({
     type: SOURCE_ACTION.SET_SENSOR_ERRORS,
     checkType,
+    activeTab,
     data: {
       checkName,
       sensorErrors: errors
@@ -77,10 +80,11 @@ export const setSensorErrors = (checkType: CheckTypes, checkName: string, errors
   });
 }
 
-export const setCheckFilters = (checkType: CheckTypes, checkName: string, filters: any) => {
+export const setCheckFilters = (checkType: CheckTypes, activeTab: string, checkName: string, filters: any) => {
   return ({
     type: SOURCE_ACTION.SET_CHECK_FILTERS,
     checkType,
+    activeTab,
     data: {
       checkName,
       filters,
