@@ -29,6 +29,7 @@ interface MyData {
   length?: number | undefined;
   scale?: number | undefined;
   importedDatatype?: string | undefined;
+  columnHash?: number | undefined;
 }
 
 const TableColumns = ({
@@ -130,10 +131,10 @@ const TableColumns = ({
     }
   };
 
-  const collectStatistics = async (nameOfCol?: string) => {
+  const collectStatistics = async (hashValue?: number) => {
     statistics?.column_statistics &&
       statistics?.column_statistics.map(async (x, index) =>
-        x.column_name === nameOfCol
+        x.column_hash === hashValue
           ? await JobApiClient.collectStatisticsOnDataStreams(
               statistics?.column_statistics?.at(index)
                 ?.collect_column_statistics_job_template
@@ -306,6 +307,8 @@ const TableColumns = ({
     (x) => x.type_snapshot?.column_type
   );
 
+  const hashData = statistics?.column_statistics?.map((x) => x.column_hash);
+
   const dataArray: MyData[] = [];
 
   if (
@@ -317,7 +320,8 @@ const TableColumns = ({
     minimalValueData &&
     lengthData &&
     scaleData &&
-    typeData
+    typeData &&
+    hashData
   ) {
     const maxLength = Math.max(
       nullPercentData.length,
@@ -328,7 +332,8 @@ const TableColumns = ({
       minimalValueData.length,
       lengthData.length,
       scaleData.length,
-      typeData.length
+      typeData.length,
+      hashData.length
     );
 
     for (let i = 0; i < maxLength; i++) {
@@ -341,6 +346,7 @@ const TableColumns = ({
       const lengthValue = lengthData[i];
       const scaleValue = scaleData[i];
       const typeValue = typeData[i];
+      const hashValue = hashData[i];
 
       const newData: MyData = {
         null_percent: Number(renderValue(nullPercent)),
@@ -351,7 +357,8 @@ const TableColumns = ({
         minimalValue: renderValue(minimalValue),
         length: renderValue(lengthValue),
         scale: renderValue(scaleValue),
-        importedDatatype: renderValue(typeValue)
+        importedDatatype: renderValue(typeValue),
+        columnHash: Number(hashValue)
       };
 
       dataArray.push(newData);
@@ -736,7 +743,7 @@ const TableColumns = ({
           <IconButton
             size="sm"
             className="group bg-teal-500 ml-1.5"
-            onClick={() => collectStatistics(column.nameOfCol)}
+            onClick={() => collectStatistics(column.columnHash)}
           >
             <SvgIcon name="boxplot" className="w-4 white" />
             <div className="hidden absolute right-0 bottom-6 p-1 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
