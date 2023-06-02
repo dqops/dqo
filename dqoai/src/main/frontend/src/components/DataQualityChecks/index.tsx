@@ -262,7 +262,7 @@ const DataQualityChecks = ({
           </div>
           {checksUI.effective_schedule_enabled_status !==
           UICheckContainerModelEffectiveScheduleEnabledStatusEnum.not_configured ? (
-            <div className="flex items-center">
+            <div className="flex items-center gap-x-4">
               <div className="flex items-center space-x-1">
                 <span>Scheduling configured at:</span>
                 <a className="underline cursor-pointer" onClick={goToSchedule}>
