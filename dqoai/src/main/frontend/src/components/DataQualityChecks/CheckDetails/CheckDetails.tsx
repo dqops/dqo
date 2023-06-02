@@ -33,7 +33,7 @@ import {
   setSensorReadouts
 } from '../../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
-import { getFirstLevelState } from '../../../redux/selectors';
+import { getFirstLevelActiveTab, getFirstLevelState } from '../../../redux/selectors';
 
 const tabs = [
   {
@@ -78,7 +78,9 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
     sensorErrors: errorsData,
     checkFilters: filtersData
   } = useSelector(getFirstLevelState(checkTypes));
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
+  console.log('resultsData', resultsData)
   const checkResults = resultsData
     ? resultsData[check?.check_name ?? ''] || []
     : [];
@@ -160,6 +162,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setSensorErrors(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getErrorItem(res.data)
               )
@@ -177,6 +180,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setSensorErrors(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getErrorItem(res.data)
               )
@@ -202,6 +206,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setSensorErrors(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getErrorItem(res.data)
               )
@@ -220,6 +225,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setSensorErrors(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getErrorItem(res.data)
               )
@@ -245,6 +251,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setSensorErrors(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getErrorItem(res.data)
               )
@@ -263,6 +270,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setSensorErrors(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getErrorItem(res.data)
               )
@@ -300,6 +308,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setSensorReadouts(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getSensorReadout(res.data)
               )
@@ -317,6 +326,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setSensorReadouts(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getSensorReadout(res.data)
               )
@@ -342,6 +352,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setSensorReadouts(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getSensorReadout(res.data)
               )
@@ -360,6 +371,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setSensorReadouts(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getSensorReadout(res.data)
               )
@@ -385,6 +397,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setSensorReadouts(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getSensorReadout(res.data)
               )
@@ -403,6 +416,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setSensorReadouts(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getSensorReadout(res.data)
               )
@@ -440,6 +454,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setCheckResults(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getCheckResult(res.data)
               )
@@ -457,6 +472,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setCheckResults(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getCheckResult(res.data)
               )
@@ -482,6 +498,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setCheckResults(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getCheckResult(res.data)
               )
@@ -500,6 +517,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setCheckResults(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getCheckResult(res.data)
               )
@@ -525,6 +543,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setCheckResults(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getCheckResult(res.data)
               )
@@ -543,6 +562,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
             dispatch(
               setCheckResults(
                 checkTypes,
+                firstLevelActiveTab,
                 check?.check_name ?? '',
                 getCheckResult(res.data)
               )
@@ -570,7 +590,8 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
 
   const onChangeDataStream = (value: string) => {
     dispatch(
-      setCheckFilters(checkTypes, check?.check_name ?? '', {
+      setCheckFilters(checkTypes, firstLevelActiveTab,
+      check?.check_name ?? '', {
         ...filters,
         dataStreamName: value
       })
@@ -580,7 +601,7 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
 
   const onChangeMonth = (value: string) => {
     dispatch(
-      setCheckFilters(checkTypes, check?.check_name ?? '', {
+      setCheckFilters(checkTypes, firstLevelActiveTab, check?.check_name ?? '', {
         ...filters,
         month: value
       })
@@ -591,10 +612,8 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
   const refetch = (month: string, name?: string) => {
     fetchCheckErrors(month, name);
     fetchCheckResults(month, name);
-    fetchCheckResults(month, name);
+    fetchCheckReadouts(month, name);
   };
-
-  console.log(checkResults.length);
 
   return (
     <div
