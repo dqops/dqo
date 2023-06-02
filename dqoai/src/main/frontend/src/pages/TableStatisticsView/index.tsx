@@ -121,7 +121,9 @@ export default function TableStatisticsView({
                 rowCount.statistics?.map((x, index) => (
                   <div key={index} className="font-bold">
                     {x.collector === 'row_count' && x.category === 'volume'
-                      ? moment(renderValue(x.collectedAt)).format('LLL')
+                      ? moment(renderValue(x.collectedAt)).format('L') +
+                        '  ' +
+                        moment(renderValue(x.collectedAt)).format('LTS')
                       : ''}
                   </div>
                 ))}
