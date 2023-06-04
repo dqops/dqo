@@ -41,7 +41,7 @@ public class SensorReadoutsTableFactoryImplTests extends BaseTest {
     @Test
     void createEmptySensorReadoutsTable_whenCalled_thenCreatesTableWithSchema() {
         Table table = this.sut.createEmptySensorReadoutsTable("empty");
-        Assertions.assertEquals(39, table.columnCount());
+        Assertions.assertEquals(43, table.columnCount());
 
         int columnIndex = 0;
         Assertions.assertEquals(SensorReadoutsColumnNames.ID_COLUMN_NAME, table.column(columnIndex++).name());

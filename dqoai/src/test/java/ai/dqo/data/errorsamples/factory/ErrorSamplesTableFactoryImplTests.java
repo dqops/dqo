@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.data.errors.factory;
+package ai.dqo.data.errorsamples.factory;
 
 import ai.dqo.BaseTest;
+import ai.dqo.data.checkresults.factory.CheckResultsTableFactoryImpl;
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactoryImpl;
 import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetWriter;
@@ -31,31 +32,32 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 @SpringBootTest
-public class ErrorsTableFactoryImplTests extends BaseTest {
-    private ErrorsTableFactoryImpl sut;
+public class ErrorSamplesTableFactoryImplTests extends BaseTest {
+    private ErrorSamplesTableFactoryImpl sut;
 
     @BeforeEach
     void setUp() {
-        this.sut = new ErrorsTableFactoryImpl(new SensorReadoutsTableFactoryImpl());
+		this.sut = new ErrorSamplesTableFactoryImpl();
     }
 
     @Test
-    void createEmptyErrorsTable_whenCalled_thenCreatesTableWithSchema() {
-        Table table = this.sut.createEmptyErrorsTable("empty");
-        Assertions.assertEquals(47, table.columnCount());
+    void createEmptyErrorSamplesTable_whenCalled_thenCreatesTableWithErrorSampleRelatedColumns() {
+        Table table = this.sut.createEmptyErrorSamplesTable("tab");
+        Assertions.assertNotNull(table);
+        Assertions.assertEquals(38, table.columnCount());
     }
 
-    // This is a special test, it produces an empty error parquet file in the target/parquet-samples/errors-empty.snappy.parquet file
+    // This is a special test, it produces an empty rule results parquet file in the target/parquet-samples/rule-results-empty.parquet file
     @Test
-    void createEmptyErrorsTable_whenEmptyTableWrittenAsParquet_thenWritesParquetFile() throws IOException {
-        Table table = this.sut.createEmptyErrorsTable("empty");
+    void createEmptyErrorSamplesTable_whenEmptyTableWrittenAsParquet_thenWritesParquetFile() throws IOException {
+        Table table = this.sut.createEmptyErrorSamplesTable("empty");
         String mavenTargetFolderPath = System.getenv("DQO_TEST_TEMPORARY_FOLDER");
         Path parquetSamplesFolder = Path.of(mavenTargetFolderPath).resolve("parquet-samples");
         if( !parquetSamplesFolder.toFile().exists()) {
             Files.createDirectories(parquetSamplesFolder);
         }
 
-        File targetParquetFile = parquetSamplesFolder.resolve("errors-empty.parquet").toFile();
+        File targetParquetFile = parquetSamplesFolder.resolve("error-samples-empty.parquet").toFile();
 
         TablesawParquetWriteOptions writeOptions = TablesawParquetWriteOptions
                 .builder(targetParquetFile)
