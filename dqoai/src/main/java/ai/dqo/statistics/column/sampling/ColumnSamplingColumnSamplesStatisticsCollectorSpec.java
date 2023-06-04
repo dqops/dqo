@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.statistics.column.range;
+package ai.dqo.statistics.column.sampling;
 
 import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.sensors.column.numeric.ColumnNumericMedianSensorParametersSpec;
+import ai.dqo.sensors.column.sampling.ColumnSamplingColumnSamplesSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringMaxLengthSensorParametersSpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -31,13 +32,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column profiler that finds the median value in the column.
+ * Column profiler that collects the column value samples.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnRangeMedianValueStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnNumericMedianSensorParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnRangeMedianValueStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
+public class ColumnSamplingColumnSamplesStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnSamplingColumnSamplesSensorParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnSamplingColumnSamplesStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
     };
@@ -45,14 +46,14 @@ public class ColumnRangeMedianValueStatisticsCollectorSpec extends AbstractStati
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericMedianSensorParametersSpec parameters = new ColumnNumericMedianSensorParametersSpec();
+    private ColumnSamplingColumnSamplesSensorParametersSpec parameters = new ColumnSamplingColumnSamplesSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnNumericMedianSensorParametersSpec getParameters() {
+    public ColumnSamplingColumnSamplesSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +61,7 @@ public class ColumnRangeMedianValueStatisticsCollectorSpec extends AbstractStati
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnNumericMedianSensorParametersSpec parameters) {
+    public void setParameters(ColumnSamplingColumnSamplesSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -84,6 +85,6 @@ public class ColumnRangeMedianValueStatisticsCollectorSpec extends AbstractStati
      */
     @Override
     public DataTypeCategory[] getSupportedDataTypes() {
-        return DataTypeCategory.NUMERIC;
+        return DataTypeCategory.COMPARABLE;
     }
 }

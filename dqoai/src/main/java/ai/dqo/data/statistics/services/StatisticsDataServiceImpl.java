@@ -29,11 +29,10 @@ import ai.dqo.metadata.sources.PhysicalTableName;
 import com.google.common.base.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tech.tablesaw.api.Row;
-import tech.tablesaw.api.Table;
-import tech.tablesaw.api.TextColumn;
+import tech.tablesaw.api.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
 /**
@@ -152,17 +151,21 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
         }
         Table selectedDataStreamData = allData.where(allData.textColumn(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME).isEqualTo(columName)
                 .and(allData.textColumn(StatisticsColumnNames.DATA_STREAM_NAME_COLUMN_NAME).isEqualTo(dataStreamName)));
-        Table sortedResults = selectedDataStreamData.sortDescendingOn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME);
+        Table sortedResults = selectedDataStreamData.sortDescendingOn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME, StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME);
 
         TextColumn categoryColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_CATEGORY_COLUMN_NAME);
         TextColumn collectorNameColumn = sortedResults.textColumn(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME);
+        DateTimeColumn collectedAtColumn = sortedResults.dateTimeColumn(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME);
 
         int rowCount = sortedResults.rowCount();
         for (int i = 0; i < rowCount ; i++) {
             String category = categoryColumn.get(i);
             String collectorName = collectorNameColumn.get(i);
+            LocalDateTime collectedAt = collectedAtColumn.get(i);
             if (columnStatisticsResults.getMetrics().stream()
-                    .noneMatch(m -> Objects.equal(m.getCategory(), category) && Objects.equal(m.getCollector(), collectorName))) {
+                    .noneMatch(m -> Objects.equal(m.getCategory(), category) &&
+                            Objects.equal(m.getCollector(), collectorName) &&
+                            !Objects.equal(m.getCollectedAt(), collectedAt))) {
                 columnStatisticsResults.getMetrics().add(createMetricModel(sortedResults.row(i)));
             }
         }
@@ -204,6 +207,12 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
         StatisticsResultDataType statisticsResultDataType = StatisticsResultDataType.fromName(resultTypeString);
         result.setResultDataType(statisticsResultDataType);
         result.setCollectedAt(row.getDateTime(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME));
+        if (!row.isMissing(StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME)) {
+            result.setSampleCount(row.getLong(StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME));
+        }
+        if (!row.isMissing(StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME)) {
+            result.setSampleIndex(row.getInt(StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME));
+        }
 
         switch (statisticsResultDataType) {
             case INTEGER:

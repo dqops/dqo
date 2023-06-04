@@ -293,6 +293,7 @@ nav:
         - numeric column sensors: 'reference/sensors/column/numeric-column-sensors.md'
         - pii column sensors: 'reference/sensors/column/pii-column-sensors.md'
         - range column sensors: 'reference/sensors/column/range-column-sensors.md'
+        - sampling column sensors: 'reference/sensors/column/sampling-column-sensors.md'
         - schema column sensors: 'reference/sensors/column/schema-column-sensors.md'
         - sql column sensors: 'reference/sensors/column/sql-column-sensors.md'
         - strings column sensors: 'reference/sensors/column/strings-column-sensors.md'
@@ -320,10 +321,10 @@ nav:
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
     - ParquetFiles:
       - StatisticsResultsTable: 'reference/parquetfiles/StatisticsResultsTable.md'
-      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
+      - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
       - CheckResultsTable: 'reference/parquetfiles/CheckResultsTable.md'
       - ErrorsTable: 'reference/parquetfiles/ErrorsTable.md'
-      - IncidentsTable: 'reference/parquetfiles/IncidentsTable.md'
+      - SensorReadoutsTable: 'reference/parquetfiles/SensorReadoutsTable.md'
 ########## END INCLUDE PARQUET FILES REFERENCE
 
 # Visual settings

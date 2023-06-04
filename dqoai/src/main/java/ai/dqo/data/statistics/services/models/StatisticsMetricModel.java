@@ -60,4 +60,16 @@ public class StatisticsMetricModel {
      */
     @JsonPropertyDescription("The local timestamp when the metric was collected")
     private LocalDateTime collectedAt;
+
+    /**
+     * The number of the value samples for this result value. Filled only by the column value sampling profilers.
+     */
+    @JsonPropertyDescription("The number of the value samples for this result value. Filled only by the column value sampling profilers.")
+    private Long sampleCount;
+
+    /**
+     * The index of the result that was returned. Filled only by the column value sampling profilers to identify each column value sample.
+     */
+    @JsonPropertyDescription("The index of the result that was returned. Filled only by the column value sampling profilers to identify each column value sample.")
+    private Integer sampleIndex;
 }

@@ -24,6 +24,7 @@ import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.execution.sensors.runners.SensorRunnerFactory;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Component;
  * Data quality sensor run service. Executes a sensor, reads the sensor values and returns it for further processing (rule evaluation).
  */
 @Component
+@Slf4j
 public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
     private final SensorDefinitionFindService sensorDefinitionFindService;
     private final SensorRunnerFactory sensorRunnerFactory;
@@ -71,6 +73,7 @@ public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
             sensorRunner.prepareSensor(executionContext, sensorPrepareResult, progressListener);
         }
         catch (Throwable ex) {
+            log.error("Sensor failed to render, sensor name: " + sensorName, ex);
             sensorPrepareResult.setPrepareException(ex);
         }
 
