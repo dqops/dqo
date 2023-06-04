@@ -56,6 +56,10 @@ public class SensorReadoutsNormalizedResult {
     private final TextColumn timeSeriesIdColumn;
     private final InstantColumn executedAtColumn;
     private final IntColumn durationMsColumn;
+    private final InstantColumn createdAtColumn;
+    private final InstantColumn updatedAtColumn;
+    private final TextColumn createdByColumn;
+    private final TextColumn updatedByColumn;
 
     /**
      * Creates a sensor result dataset, extracting key columns.
@@ -94,6 +98,10 @@ public class SensorReadoutsNormalizedResult {
         this.timeSeriesIdColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
         this.executedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
         this.durationMsColumn = TableColumnUtility.getOrAddIntColumn(table, SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
+        this.createdAtColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.CREATED_AT_COLUMN_NAME);
+        this.updatedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.UPDATED_AT_COLUMN_NAME);
+        this.createdByColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CREATED_BY_COLUMN_NAME);
+        this.updatedByColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.UPDATED_BY_COLUMN_NAME);
     }
 
     /**
@@ -343,5 +351,37 @@ public class SensorReadoutsNormalizedResult {
      */
     public IntColumn getDurationMsColumn() {
         return durationMsColumn;
+    }
+
+    /**
+     * Returns the created at column.
+     * @return Created at column.
+     */
+    public InstantColumn getCreatedAtColumn() {
+        return createdAtColumn;
+    }
+
+    /**
+     * Returns the updated at column.
+     * @return Updated at column.
+     */
+    public InstantColumn getUpdatedAtColumn() {
+        return updatedAtColumn;
+    }
+
+    /**
+     * Returns the created by column.
+     * @return Created by column.
+     */
+    public TextColumn getCreatedByColumn() {
+        return createdByColumn;
+    }
+
+    /**
+     * Returns the updated by column.
+     * @return Updated by column.
+     */
+    public TextColumn getUpdatedByColumn() {
+        return updatedByColumn;
     }
 }

@@ -153,6 +153,44 @@ public final class TableColumnUtility {
     }
 
     /**
+     * Creates (or casts) a given column to a {@link IntColumn}.
+     * @param sourceColumn Source column.
+     * @return IntColumn. It is a copy of the original column (with casting to a int) or the original column object instance if it is an IntColumn.
+     */
+    public static IntColumn convertToIntColumn(Column<?> sourceColumn) {
+        if (sourceColumn instanceof IntColumn) {
+            return (IntColumn) sourceColumn;
+        }
+
+        if (sourceColumn instanceof LongColumn) {
+            return ((LongColumn) sourceColumn).asIntColumn();
+        }
+
+        if (sourceColumn instanceof DoubleColumn) {
+            return ((DoubleColumn) sourceColumn).asIntColumn();
+        }
+
+        if (sourceColumn instanceof FloatColumn) {
+            return ((FloatColumn) sourceColumn).asIntColumn();
+        }
+
+        if (sourceColumn instanceof ShortColumn) {
+            return ((ShortColumn) sourceColumn).asIntColumn();
+        }
+
+        int size = sourceColumn.size();
+        IntColumn targetColumn = IntColumn.create(sourceColumn.name(), size);
+
+        for (int i = 0; i < size; i++) {
+            if (!sourceColumn.isMissing(i)) {
+                targetColumn.set(i, NumericTypeConverter.toInt(sourceColumn.get(i)));
+            }
+        }
+
+        return targetColumn;
+    }
+
+    /**
      * Retrieves or adds and returns a text column from a table.
      * @param table Table.
      * @param columnName Column name.

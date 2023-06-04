@@ -122,8 +122,8 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
             TextColumn checkTypeColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME);
             TextColumn checkNameColumn = partitionTable.textColumn(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME);
             IntColumn highestSeverityColumn = partitionTable.intColumn(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME);
-            IntColumn minSeverityColumn = partitionTable.containsColumn(IncidentsColumnNames.MIN_SEVERITY_COLUMN_NAME) ?
-                    partitionTable.intColumn(IncidentsColumnNames.MIN_SEVERITY_COLUMN_NAME) : null;
+            IntColumn minSeverityColumn = partitionTable.containsColumn(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME) ?
+                    partitionTable.intColumn(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME) : null;
             IntColumn failedChecksCountColumn = partitionTable.intColumn(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME);
             TextColumn issueUrlColumn = partitionTable.textColumn(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME);
             TextColumn statusColumn = partitionTable.textColumn(IncidentsColumnNames.STATUS_COLUMN_NAME);
@@ -175,7 +175,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 }
                 incidentModel.setHighestSeverity(highestSeverityColumn.get(rowIndex));
                 if (minSeverityColumn != null && !minSeverityColumn.isMissing(rowIndex)) {
-                    incidentModel.setMinSeverity(minSeverityColumn.get(rowIndex));
+                    incidentModel.setMinimumSeverity(minSeverityColumn.get(rowIndex));
                 }
                 incidentModel.setFailedChecksCount(failedChecksCountColumn.get(rowIndex));
                 incidentModel.setStatus(incidentStatus);
@@ -264,7 +264,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 incidentModel.getIncidentHash(),
                 incidentModel.getFirstSeen(),
                 incidentModel.getIncidentUntil(),
-                incidentModel.getMinSeverity(),
+                incidentModel.getMinimumSeverity(),
                 filterParameters);
 
         return failedChecks;
@@ -296,7 +296,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                 incidentModel.getIncidentHash(),
                 incidentModel.getFirstSeen(),
                 incidentModel.getIncidentUntil(),
-                incidentModel.getMinSeverity(),
+                incidentModel.getMinimumSeverity(),
                 filterParameters);
 
         return histogramModel;

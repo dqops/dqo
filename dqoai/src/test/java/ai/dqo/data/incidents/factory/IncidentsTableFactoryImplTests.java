@@ -55,7 +55,7 @@ public class IncidentsTableFactoryImplTests extends BaseTest {
         Assertions.assertEquals(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME, table.column(columnIndex++).name());
-        Assertions.assertEquals(IncidentsColumnNames.MIN_SEVERITY_COLUMN_NAME, table.column(columnIndex++).name());
+        Assertions.assertEquals(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME, table.column(columnIndex++).name());
