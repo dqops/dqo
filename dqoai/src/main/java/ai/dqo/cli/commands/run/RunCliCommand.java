@@ -67,13 +67,15 @@ public class RunCliCommand extends BaseCommand implements ICommand {
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
         this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
+        this.synchronizationMode = dqoSchedulerConfigurationProperties.getSynchronizationMode();
+        this.checkRunMode = dqoSchedulerConfigurationProperties.getCheckRunMode();
     }
 
-    @CommandLine.Option(names = {"-s", "--synchronization-mode"}, description = "Reporting mode for the DQO cloud synchronization (silent, summary, debug)", defaultValue = "summary")
-    private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.summary;
+    @CommandLine.Option(names = {"-s", "--synchronization-mode"}, description = "Reporting mode for the DQO cloud synchronization (silent, summary, debug)", defaultValue = "silent")
+    private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
 
-    @CommandLine.Option(names = {"-m", "--mode"}, description = "Check execution reporting mode (silent, summary, info, debug)", defaultValue = "summary")
-    private CheckRunReportingMode checkRunMode = CheckRunReportingMode.summary;
+    @CommandLine.Option(names = {"-m", "--mode"}, description = "Check execution reporting mode (silent, summary, info, debug)", defaultValue = "silent")
+    private CheckRunReportingMode checkRunMode = CheckRunReportingMode.silent;
 
     @CommandLine.Option(names = {"-t", "--time-limit"}, description = "Optional execution time limit. DQO will run for the given duration and gracefully shut down. " +
             "Supported values are in the following format: 300s (300 seconds), 10m (10 minutes), 2h (run for up to 2 hours) or just a number that is the time limit in seconds.")

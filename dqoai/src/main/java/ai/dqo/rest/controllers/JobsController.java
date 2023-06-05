@@ -16,6 +16,7 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
+import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
@@ -71,6 +72,7 @@ public class JobsController {
     private StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider;
     private final DqoJobQueueMonitoringService jobQueueMonitoringService;
     private final DqoQueueConfigurationProperties queueConfigurationProperties;
+    private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
     private SynchronizationStatusTracker synchronizationStatusTracker;
 
     /**
@@ -83,6 +85,7 @@ public class JobsController {
      * @param statisticsCollectorExecutionProgressListenerProvider Profiler execution progress listener provider used to create a valid progress listener when starting a "runprofilers" job.
      * @param jobQueueMonitoringService Job queue monitoring service.
      * @param queueConfigurationProperties Queue configuration parameters.
+     * @param dqoSchedulerConfigurationProperties DQO job scheduler configuration properties.
      * @param synchronizationStatusTracker Synchronization change tracker.
      */
     @Autowired
@@ -94,6 +97,7 @@ public class JobsController {
                           StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider,
                           DqoJobQueueMonitoringService jobQueueMonitoringService,
                           DqoQueueConfigurationProperties queueConfigurationProperties,
+                          DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties,
                           SynchronizationStatusTracker synchronizationStatusTracker) {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
@@ -103,6 +107,7 @@ public class JobsController {
         this.statisticsCollectorExecutionProgressListenerProvider = statisticsCollectorExecutionProgressListenerProvider;
         this.jobQueueMonitoringService = jobQueueMonitoringService;
         this.queueConfigurationProperties = queueConfigurationProperties;
+        this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
         this.synchronizationStatusTracker = synchronizationStatusTracker;
     }
 
@@ -358,7 +363,9 @@ public class JobsController {
     })
     public ResponseEntity<Mono<?>> startCronScheduler() {
         if (!this.jobSchedulerService.isStarted()) {
-            this.jobSchedulerService.start(FileSystemSynchronizationReportingMode.silent, CheckRunReportingMode.silent);
+            this.jobSchedulerService.start(
+                    this.dqoSchedulerConfigurationProperties.getSynchronizationMode(),
+                    this.dqoSchedulerConfigurationProperties.getCheckRunMode());
             this.jobSchedulerService.triggerMetadataSynchronization();
         }
         return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
