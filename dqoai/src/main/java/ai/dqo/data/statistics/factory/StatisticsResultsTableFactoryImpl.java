@@ -15,6 +15,7 @@
  */
 package ai.dqo.data.statistics.factory;
 
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
 
@@ -44,6 +45,8 @@ public class StatisticsResultsTableFactoryImpl implements StatisticsResultsTable
                 DateTimeColumn.create(StatisticsColumnNames.RESULT_DATE_TIME_COLUMN_NAME),
                 InstantColumn.create(StatisticsColumnNames.RESULT_INSTANT_COLUMN_NAME),
                 TimeColumn.create(StatisticsColumnNames.RESULT_TIME_COLUMN_NAME),
+                IntColumn.create(StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME),
+                LongColumn.create(StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME),
                 TextColumn.create(StatisticsColumnNames.SCOPE_COLUMN_NAME),
                 TextColumn.create(StatisticsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "1"),
                 TextColumn.create(StatisticsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "2"),
@@ -73,7 +76,11 @@ public class StatisticsResultsTableFactoryImpl implements StatisticsResultsTable
                 TextColumn.create(StatisticsColumnNames.TIME_SERIES_ID_COLUMN_NAME),
                 InstantColumn.create(StatisticsColumnNames.EXECUTED_AT_COLUMN_NAME),
                 IntColumn.create(StatisticsColumnNames.DURATION_MS_COLUMN_NAME),
-                TextColumn.create(StatisticsColumnNames.ERROR_MESSAGE_COLUMN_NAME)
+                TextColumn.create(StatisticsColumnNames.ERROR_MESSAGE_COLUMN_NAME),
+                InstantColumn.create(SensorReadoutsColumnNames.CREATED_AT_COLUMN_NAME),
+                InstantColumn.create(SensorReadoutsColumnNames.UPDATED_AT_COLUMN_NAME),
+                TextColumn.create(SensorReadoutsColumnNames.CREATED_BY_COLUMN_NAME),
+                TextColumn.create(SensorReadoutsColumnNames.UPDATED_BY_COLUMN_NAME)
         );
 
         return table;

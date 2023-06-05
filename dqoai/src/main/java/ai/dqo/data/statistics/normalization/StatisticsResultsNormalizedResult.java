@@ -15,6 +15,7 @@
  */
 package ai.dqo.data.statistics.normalization;
 
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.statistics.factory.StatisticsCollectorResultStatus;
 import ai.dqo.data.statistics.factory.StatisticsColumnNames;
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
@@ -38,6 +39,8 @@ public class StatisticsResultsNormalizedResult {
     private final DateTimeColumn resultDateTimeColumn;
     private final InstantColumn resultInstantColumn;
     private final TimeColumn resultTimeColumn;
+    private final IntColumn sampleIndex;
+    private final LongColumn sampleCount;
     private final TextColumn scopeColumn;
     private final LongColumn dataStreamHashColumn;
     private final TextColumn dataStreamNameColumn;
@@ -59,6 +62,10 @@ public class StatisticsResultsNormalizedResult {
     private final InstantColumn executedAtColumn;
     private final IntColumn durationMsColumn;
     private final TextColumn errorMessageColumn;
+    private final InstantColumn createdAtColumn;
+    private final InstantColumn updatedAtColumn;
+    private final TextColumn createdByColumn;
+    private final TextColumn updatedByColumn;
 
     /**
      * Creates a statistics result dataset, extracting key columns.
@@ -79,6 +86,8 @@ public class StatisticsResultsNormalizedResult {
         this.resultDateTimeColumn = TableColumnUtility.getOrAddDateTimeColumn(table, StatisticsColumnNames.RESULT_DATE_TIME_COLUMN_NAME);
         this.resultInstantColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.RESULT_INSTANT_COLUMN_NAME);
         this.resultTimeColumn = TableColumnUtility.getOrAddTimeColumn(table, StatisticsColumnNames.RESULT_TIME_COLUMN_NAME);
+        this.sampleIndex = TableColumnUtility.getOrAddIntColumn(table, StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME);
+        this.sampleCount = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME);
         this.scopeColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.SCOPE_COLUMN_NAME);
         this.dataStreamHashColumn = TableColumnUtility.getOrAddLongColumn(table, StatisticsColumnNames.DATA_STREAM_HASH_COLUMN_NAME);
         this.dataStreamNameColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
@@ -100,6 +109,10 @@ public class StatisticsResultsNormalizedResult {
         this.executedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, StatisticsColumnNames.EXECUTED_AT_COLUMN_NAME);
         this.durationMsColumn = TableColumnUtility.getOrAddIntColumn(table, StatisticsColumnNames.DURATION_MS_COLUMN_NAME);
         this.errorMessageColumn = TableColumnUtility.getOrAddTextColumn(table, StatisticsColumnNames.ERROR_MESSAGE_COLUMN_NAME);
+        this.createdAtColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.CREATED_AT_COLUMN_NAME);
+        this.updatedAtColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.UPDATED_AT_COLUMN_NAME);
+        this.createdByColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.CREATED_BY_COLUMN_NAME);
+        this.updatedByColumn = TableColumnUtility.getOrAddTextColumn(table, SensorReadoutsColumnNames.UPDATED_BY_COLUMN_NAME);
     }
 
 
@@ -206,6 +219,22 @@ public class StatisticsResultsNormalizedResult {
      */
     public TimeColumn getResultTimeColumn() {
         return resultTimeColumn;
+    }
+
+    /**
+     * Returns the sample index column that stores an index of a value from a column value sampling collector.
+     * @return Sample index column.
+     */
+    public IntColumn getSampleIndex() {
+        return sampleIndex;
+    }
+
+    /**
+     * Returns the sample count column that stores the number of rows that contain the given sample value, obtained by a column value sampling collector.
+     * @return Sample count column.
+     */
+    public LongColumn getSampleCount() {
+        return sampleCount;
     }
 
     /**
@@ -375,5 +404,37 @@ public class StatisticsResultsNormalizedResult {
      */
     public TextColumn getErrorMessageColumn() {
         return errorMessageColumn;
+    }
+
+    /**
+     * Returns the created at column.
+     * @return Created at column.
+     */
+    public InstantColumn getCreatedAtColumn() {
+        return createdAtColumn;
+    }
+
+    /**
+     * Returns the updated at column.
+     * @return Updated at column.
+     */
+    public InstantColumn getUpdatedAtColumn() {
+        return updatedAtColumn;
+    }
+
+    /**
+     * Returns the created by column.
+     * @return Created by column.
+     */
+    public TextColumn getCreatedByColumn() {
+        return createdByColumn;
+    }
+
+    /**
+     * Returns the updated by column.
+     * @return Updated by column.
+     */
+    public TextColumn getUpdatedByColumn() {
+        return updatedByColumn;
     }
 }

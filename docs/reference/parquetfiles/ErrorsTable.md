@@ -5,12 +5,13 @@ Constants with the column names in the &quot;errors&quot; parquet tables.
   
 | Column name | Description | Data type |
 |-------------|-------------|-----------|
- | id | Column name for a check result id (primary key), it is a uuid of the check hash, time period and the data stream id. This value identifies a single row. | text |
- | actual_value | Column name that stores the actual value: actual_value. | double |
- | expected_value | Column name that stores the expected value (expected_value). It is an optional column used when the sensor will also retrieve a comparison value (for accuracy checks). | double |
- | time_period | Column name that stores the time period of the sensor readout (timestamp): timestamp_period. | local_date_time |
- | time_period_utc | Column name that stores the time period of the sensor readout (timestamp) as a UTC timestamp: timestamp_period_utc. | instant |
- | time_gradient | Column name for a time gradient. | text |
+ | id | The check result id (primary key), it is a uuid of the check hash, time period and the data stream id. This value identifies a single row. | text |
+ | actual_value | The actual sensor value that was captured. | double |
+ | expected_value | The expected value (expected_value). It is an optional column used when the sensor will also retrieve a comparison value (for accuracy checks). | double |
+ | time_period | The time period of the sensor readout (timestamp), using a local timezone from the data source. | local_date_time |
+ | time_period_utc | The time period of the sensor readout (timestamp) as a UTC timestamp. | instant |
+ | time_gradient | The time gradient (daily, monthly) for recurring checks (checkpoints) and partition checks. It is a &quot;milliseconds&quot; for profiling checks.
+ When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient. | text |
  | stream_level_1 | Column name for the data stream. | text |
  | stream_level_2 | Column name for the data stream. | text |
  | stream_level_3 | Column name for the data stream. | text |
@@ -20,30 +21,34 @@ Constants with the column names in the &quot;errors&quot; parquet tables.
  | stream_level_7 | Column name for the data stream. | text |
  | stream_level_8 | Column name for the data stream. | text |
  | stream_level_9 | Column name for the data stream. | text |
- | data_stream_hash | Column name for a data stream hash, it is a hash of the data stream level names. | long |
- | data_stream_name | Column name for a data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ... | text |
- | connection_hash | Column name for a connection hash. | long |
- | connection_name | Column name for a connection name. | text |
- | provider | Column name for a provider name. | text |
- | table_hash | Column name for a table hash. | long |
- | schema_name | Column name for a table schema. | text |
- | table_name | Column name for a table name. | text |
- | table_name_pattern | Column name for a table name pattern. | text |
- | table_stage | Column name for a table stage. | text |
- | table_priority | Column name for a table priority. | integer |
- | column_hash | Column name for a column hash. | long |
- | column_name | Column name for a column name. | text |
- | column_name_pattern | Column name for a column name pattern. | text |
- | check_hash | Column name for a check hash. | long |
- | check_name | Column name for a check name. | text |
- | check_display_name | Column name for a check display name. | text |
- | check_type | Column name for a check type (profiling, recurring, partitioned). | text |
- | check_category | Column name for a check category. | text |
- | quality_dimension | Column name for a data quality dimension. | text |
- | sensor_name | Column name for a sensor name. | text |
- | time_series_id | Column name for a time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_stream_hash. | text |
- | executed_at | Column name for a sensor executed at timestamp. | instant |
- | duration_ms | Column name for a sensor duration in milliseconds. | integer |
+ | data_stream_hash | The data stream hash, it is a hash of the data stream level names. | long |
+ | data_stream_name | The data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ... | text |
+ | connection_hash | A hash calculated from the connection name (the data source name). | long |
+ | connection_name | The connection name (the data source name). | text |
+ | provider | The provider name, which is the type of the data source. | text |
+ | table_hash | The table name hash. | long |
+ | schema_name | The database schema name. | text |
+ | table_name | The monitored table name. | text |
+ | table_name_pattern | The table name pattern, in case that a data quality check targets multiple tables. | text |
+ | table_stage | The stage name of the table. It is a free-form text configured on the table level that could identify the layers of the data warehouse or a data lake, for example: &quot;landing&quot;, &quot;staging&quot;, &quot;cleansing&quot;, etc. | text |
+ | table_priority | The table priority value copied from the table&#x27;s definition. The table priority could be used for sorting tables by their importance. | integer |
+ | column_hash | The hash of a column. | long |
+ | column_name | The column name for which the results are stored. | text |
+ | column_name_pattern | The column name pattern, in case that a data quality check targets multiple columns. | text |
+ | check_hash | The hash of a data quality check. | long |
+ | check_name | The data quality check name. | text |
+ | check_display_name | The user configured display name for a data quality check, used when the user wants to use custom, user-friendly data quality check names. | text |
+ | check_type | The data quality check type (profiling, recurring, partitioned). | text |
+ | check_category | The data quality check category name. | text |
+ | quality_dimension | The data quality dimension name. The popular dimensions are: Timeliness, Completeness, Consistency, Validity, Reasonableness, Uniqueness. | text |
+ | sensor_name | The data quality sensor name. | text |
+ | time_series_id | The time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_stream_hash. | text |
+ | executed_at | The UTC timestamp, when the data sensor was executed. | instant |
+ | duration_ms | The sensor (query) execution duration in milliseconds. | integer |
+ | created_at | The timestamp when the row was created at. | instant |
+ | updated_at | The timestamp when the row was updated at. | instant |
+ | created_by | The login of the user that created the row. | text |
+ | updated_by | The login of the user that updated the row. | text |
  | readout_id | Column name that stores the sensor readout ID. | text |
  | error_message | Column name that stores the error message. | text |
  | error_source | Column name that stores the error source, which is the component that raised an error (sensor or rule). | text |

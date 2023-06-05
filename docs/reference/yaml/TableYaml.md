@@ -2096,8 +2096,11 @@ Container of built-in preconfigured volume data quality checks on a table level.
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[column_count](#tablecolumncountcheckspec)|Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns).|[TableColumnCountCheckSpec](#tablecolumncountcheckspec)| | | |
-|[column_count_changed](#tablecolumncountchangedcheckspec)|Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.|[TableColumnCountChangedCheckSpec](#tablecolumncountchangedcheckspec)| | | |
+|[column_count](#tableschemacolumncountcheckspec)|Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns).|[TableSchemaColumnCountCheckSpec](#tableschemacolumncountcheckspec)| | | |
+|[column_count_changed](#tableschemacolumncountchangedcheckspec)|Detects if the count of columns has changed. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.|[TableSchemaColumnCountChangedCheckSpec](#tableschemacolumncountchangedcheckspec)| | | |
+|[column_list_changed](#tableschemacolumnlistchangedcheckspec)|Detects if new columns were added or existing columns were removed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.|[TableSchemaColumnListChangedCheckSpec](#tableschemacolumnlistchangedcheckspec)| | | |
+|[column_list_or_order_changed](#tableschemacolumnlistororderchangedcheckspec)|Detects if new columns were added, existing columns were removed or the columns were reordered. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.|[TableSchemaColumnListOrOrderChangedCheckSpec](#tableschemacolumnlistororderchangedcheckspec)| | | |
+|[column_types_changed](#tableschemacolumntypeschangedcheckspec)|Detects if new columns were added, removed or their data types have changed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.|[TableSchemaColumnTypesChangedCheckSpec](#tableschemacolumntypeschangedcheckspec)| | | |
 
 
 
@@ -2109,7 +2112,7 @@ Container of built-in preconfigured volume data quality checks on a table level.
 
 ___  
 
-## TableColumnCountCheckSpec  
+## TableSchemaColumnCountCheckSpec  
 Table level check that retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns.  
   
 
@@ -2201,8 +2204,9 @@ Data quality rule that verifies that a data quality check readout equals a given
 
 ___  
 
-## TableColumnCountChangedCheckSpec  
-Table level check that retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to the last known number of columns
+## TableSchemaColumnCountChangedCheckSpec  
+Table level check that detects if the number of columns in the table has changed since the check (checkpoint) was run the last time.
+ This check retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to the last known number of columns
  that was captured and is stored in the data quality check results database.  
   
 
@@ -2255,6 +2259,212 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
+
+
+
+
+
+
+
+
+
+___  
+
+## TableSchemaColumnListChangedCheckSpec  
+Table level check that detects if the list of columns has changed since the last time this check was run.
+ This check will retrieve the metadata of a tested table and calculate a hash of the column names. The hash will not depend on the order of columns, only on the column names.
+ A data quality issue will be detected if new columns were added or columns that existed during the previous test were dropped.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](#tablecolumnlistunorderedhashsensorparametersspec)|Column list hash sensor parameters|[TableColumnListUnorderedHashSensorParametersSpec](#tablecolumnlistunorderedhashsensorparametersspec)| | | |
+|[warning](#valuechangedparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ValueChangedParametersSpec](#valuechangedparametersspec)| | | |
+|[error](#valuechangedparametersspec)|Default alerting threshold for a row count that raises a data quality error (alert)|[ValueChangedParametersSpec](#valuechangedparametersspec)| | | |
+|[fatal](#valuechangedparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ValueChangedParametersSpec](#valuechangedparametersspec)| | | |
+|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
+|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
+|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
+|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
+|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
+|data_stream|Data stream name that should be applied to this data quality check. The data stream is used to group checks on similar tables using tags or use dynamic data segmentation to execute the data quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by the data quality check). Use a name of one of known data streams defined on the parent table.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableColumnListUnorderedHashSensorParametersSpec  
+Table schema data quality sensor detects if the list of columns have changed on the table.
+ The sensor calculates a hash of the list of column names. The hash value depends on the names of the columns, but not on the order of columns.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableSchemaColumnListOrOrderChangedCheckSpec  
+Table level check that detects if the list of columns and the order of columns have changed since the last time this check was run.
+ This check will retrieve the metadata of a tested table and calculate a hash of the column names. The hash will depend on the order of columns.
+ A data quality issue will be detected if new columns were added, columns that existed during the previous test were dropped or the columns were reordered.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](#tablecolumnlistorderedhashsensorparametersspec)|Column list and order sensor parameters|[TableColumnListOrderedHashSensorParametersSpec](#tablecolumnlistorderedhashsensorparametersspec)| | | |
+|[warning](#valuechangedparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ValueChangedParametersSpec](#valuechangedparametersspec)| | | |
+|[error](#valuechangedparametersspec)|Default alerting threshold for a row count that raises a data quality error (alert)|[ValueChangedParametersSpec](#valuechangedparametersspec)| | | |
+|[fatal](#valuechangedparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ValueChangedParametersSpec](#valuechangedparametersspec)| | | |
+|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
+|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
+|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
+|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
+|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
+|data_stream|Data stream name that should be applied to this data quality check. The data stream is used to group checks on similar tables using tags or use dynamic data segmentation to execute the data quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by the data quality check). Use a name of one of known data streams defined on the parent table.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableColumnListOrderedHashSensorParametersSpec  
+Table schema data quality sensor detects if the list and order of columns have changed on the table.
+ The sensor calculates a hash of the list of column names. The hash value depends on the names of the columns and the order of the columns.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableSchemaColumnTypesChangedCheckSpec  
+Table level check that detects if the column names or column types have changed since the last time this check was run.
+ This check will calculate a hash of the column names and all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability.
+ A data quality issue will be detected if the hash of the column data types has changed. This check does not depend on the order of columns, the columns could be reordered as long
+ as all columns are still present and the data types match since the last time they were tested.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](#tablecolumntypeshashsensorparametersspec)|Column list and types sensor parameters|[TableColumnTypesHashSensorParametersSpec](#tablecolumntypeshashsensorparametersspec)| | | |
+|[warning](#valuechangedparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ValueChangedParametersSpec](#valuechangedparametersspec)| | | |
+|[error](#valuechangedparametersspec)|Default alerting threshold for a row count that raises a data quality error (alert)|[ValueChangedParametersSpec](#valuechangedparametersspec)| | | |
+|[fatal](#valuechangedparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ValueChangedParametersSpec](#valuechangedparametersspec)| | | |
+|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
+|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
+|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
+|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
+|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
+|data_stream|Data stream name that should be applied to this data quality check. The data stream is used to group checks on similar tables using tags or use dynamic data segmentation to execute the data quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by the data quality check). Use a name of one of known data streams defined on the parent table.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableColumnTypesHashSensorParametersSpec  
+Table schema data quality sensor detects if the list of columns has changed or any of the column has a new data type, length, scale, precision or nullability.
+ The sensor calculates a hash of the list of column names and all components of the column&#x27;s type (the type name, length, scale, precision, nullability).
+ The hash value does not depend on the order of columns.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string| | | |
 
 
 
@@ -2599,8 +2809,11 @@ Container of built-in preconfigured volume data quality checks on a table level 
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_column_count](#tablecolumncountcheckspec)|Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each day when the data quality check was evaluated.|[TableColumnCountCheckSpec](#tablecolumncountcheckspec)| | | |
-|[daily_column_count_changed](#tablecolumncountchangedcheckspec)|Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each day when the data quality check was evaluated.|[TableColumnCountChangedCheckSpec](#tablecolumncountchangedcheckspec)| | | |
+|[daily_column_count](#tableschemacolumncountcheckspec)|Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each day when the data quality check was evaluated.|[TableSchemaColumnCountCheckSpec](#tableschemacolumncountcheckspec)| | | |
+|[daily_column_count_changed](#tableschemacolumncountchangedcheckspec)|Detects if the count of columns has changed since the most recent day. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each day when the data quality check was evaluated.|[TableSchemaColumnCountChangedCheckSpec](#tableschemacolumncountchangedcheckspec)| | | |
+|[daily_column_list_changed](#tableschemacolumnlistchangedcheckspec)|Detects if new columns were added or existing columns were removed since the most recent day. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.|[TableSchemaColumnListChangedCheckSpec](#tableschemacolumnlistchangedcheckspec)| | | |
+|[daily_column_list_or_order_changed](#tableschemacolumnlistororderchangedcheckspec)|Detects if new columns were added, existing columns were removed or the columns were reordered since the most recent day. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.|[TableSchemaColumnListOrOrderChangedCheckSpec](#tableschemacolumnlistororderchangedcheckspec)| | | |
+|[daily_column_types_changed](#tableschemacolumntypeschangedcheckspec)|Detects if new columns were added, removed or their data types have changed since the most recent day. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.|[TableSchemaColumnTypesChangedCheckSpec](#tableschemacolumntypeschangedcheckspec)| | | |
 
 
 
@@ -2800,8 +3013,11 @@ Container of built-in preconfigured volume data quality checks on a table level 
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_column_count](#tablecolumncountcheckspec)|Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each month when the data quality check was evaluated.|[TableColumnCountCheckSpec](#tablecolumncountcheckspec)| | | |
-|[monthly_column_count_changed](#tablecolumncountchangedcheckspec)|Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each month when the data quality check was evaluated.|[TableColumnCountChangedCheckSpec](#tablecolumncountchangedcheckspec)| | | |
+|[monthly_column_count](#tableschemacolumncountcheckspec)|Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each month when the data quality check was evaluated.|[TableSchemaColumnCountCheckSpec](#tableschemacolumncountcheckspec)| | | |
+|[monthly_column_count_changed](#tableschemacolumncountchangedcheckspec)|Detects if the count of columns has changed since the last month. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each month when the data quality check was evaluated.|[TableSchemaColumnCountChangedCheckSpec](#tableschemacolumncountchangedcheckspec)| | | |
+|[monthly_column_list_changed](#tableschemacolumnlistchangedcheckspec)|Detects if new columns were added or existing columns were removed since the last month. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.|[TableSchemaColumnListChangedCheckSpec](#tableschemacolumnlistchangedcheckspec)| | | |
+|[monthly_column_list_or_order_changed](#tableschemacolumnlistororderchangedcheckspec)|Detects if new columns were added, existing columns were removed or the columns were reordered since the last month. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.|[TableSchemaColumnListOrOrderChangedCheckSpec](#tableschemacolumnlistororderchangedcheckspec)| | | |
+|[monthly_column_types_changed](#tableschemacolumntypeschangedcheckspec)|Detects if new columns were added, removed or their data types have changed since the last month. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.|[TableSchemaColumnTypesChangedCheckSpec](#tableschemacolumntypeschangedcheckspec)| | | |
 
 
 
@@ -3908,8 +4124,8 @@ Column-level check that ensures that there are no more than a set percentage of 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnullsnotnullspercentsensorparametersspec)|Data quality check parameters|[ColumnNullsNotNullsPercentSensorParametersSpec](#columnnullsnotnullspercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a set percentage of rows with null values in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a set percentage of rows with null values in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -3946,33 +4162,6 @@ Column level sensor that calculates the percentage of not null values in a colum
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## MinPercentRule98ParametersSpec  
-Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| | | |
 
 
 
@@ -4121,9 +4310,9 @@ Column level check that ensures that there are no more than a set percentage of 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericnegativepercentsensorparametersspec)|Data quality check parameters|[ColumnNumericNegativePercentSensorParametersSpec](#columnnumericnegativepercentsensorparametersspec)| | | |
-|[warning](#maxpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxPercentRule99ParametersSpec](#maxpercentrule99parametersspec)| | | |
-|[error](#maxpercentrule98parametersspec)|Default alerting threshold for a set percentage of rows with negative value in a column that raises a data quality alert|[MaxPercentRule98ParametersSpec](#maxpercentrule98parametersspec)| | | |
-|[fatal](#maxpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxPercentRule95ParametersSpec](#maxpercentrule95parametersspec)| | | |
+|[warning](#maxpercentrule0parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxPercentRule0ParametersSpec](#maxpercentrule0parametersspec)| | | |
+|[error](#maxpercentrule2parametersspec)|Default alerting threshold for a set percentage of rows with negative value in a column that raises a data quality alert|[MaxPercentRule2ParametersSpec](#maxpercentrule2parametersspec)| | | |
+|[fatal](#maxpercentrule5parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxPercentRule5ParametersSpec](#maxpercentrule5parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -4170,61 +4359,7 @@ Column level sensor that counts percentage of negative values in a column.
 
 ___  
 
-## MaxPercentRule99ParametersSpec  
-Data quality rule that verifies if a data quality check readout is less or equal a maximum value.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## MaxPercentRule98ParametersSpec  
-Data quality rule that verifies if a data quality check readout is less or equal a maximum value.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## MaxPercentRule95ParametersSpec  
+## MaxPercentRule0ParametersSpec  
 Data quality rule that verifies if a data quality check readout is less or equal a maximum value.  
   
 
@@ -4332,8 +4467,8 @@ Column level check that ensures that there are no more than a set percentage of 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericnonnegativepercentsensorparametersspec)|Data quality check parameters|[ColumnNumericNonNegativePercentSensorParametersSpec](#columnnumericnonnegativepercentsensorparametersspec)| | | |
-|[warning](#maxpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxPercentRule99ParametersSpec](#maxpercentrule99parametersspec)| | | |
-|[error](#maxpercentrule98parametersspec)|Default alerting threshold for a set percentage of rows with non-negative value in a column that raises a data quality alert|[MaxPercentRule98ParametersSpec](#maxpercentrule98parametersspec)| | | |
+|[warning](#maxpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxPercentRule100ParametersSpec](#maxpercentrule100parametersspec)| | | |
+|[error](#maxpercentrule99parametersspec)|Default alerting threshold for a set percentage of rows with non-negative value in a column that raises a data quality alert|[MaxPercentRule99ParametersSpec](#maxpercentrule99parametersspec)| | | |
 |[fatal](#maxpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxPercentRule95ParametersSpec](#maxpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -4370,6 +4505,87 @@ Column level sensor that calculates the percent of non-negative values in a colu
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## MaxPercentRule100ParametersSpec  
+Data quality rule that verifies if a data quality check readout is less or equal a maximum value.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## MaxPercentRule99ParametersSpec  
+Data quality rule that verifies if a data quality check readout is less or equal a maximum value.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## MaxPercentRule95ParametersSpec  
+Data quality rule that verifies if a data quality check readout is less or equal a maximum value.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| | | |
 
 
 
@@ -4632,7 +4848,7 @@ Column level check that ensures that there are no more than a set percentage of 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericvaluesinrangenumericpercentsensorparametersspec)|Data quality check parameters|[ColumnNumericValuesInRangeNumericPercentSensorParametersSpec](#columnnumericvaluesinrangenumericpercentsensorparametersspec)| | | |
-|[warning](#minpercentrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule1ParametersSpec](#minpercentrule1parametersspec)| | | |
+|[warning](#minpercentrule0parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule0ParametersSpec](#minpercentrule0parametersspec)| | | |
 |[error](#minpercentrule2parametersspec)|Default alerting threshold for set percentage of values from range in a column that raises a data quality error (alert).|[MinPercentRule2ParametersSpec](#minpercentrule2parametersspec)| | | |
 |[fatal](#minpercentrule5parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule5ParametersSpec](#minpercentrule5parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
@@ -4684,7 +4900,7 @@ Column level sensor that finds the maximum value. It works on any data type that
 
 ___  
 
-## MinPercentRule1ParametersSpec  
+## MinPercentRule0ParametersSpec  
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.  
   
 
@@ -4781,8 +4997,8 @@ Column level check that ensures that there are no more than a set number of valu
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericvaluesinrangeintegerspercentsensorparametersspec)|Data quality check parameters|[ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec](#columnnumericvaluesinrangeintegerspercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a set number of values from range in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a set number of values from range in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -4915,9 +5131,9 @@ Column level check that ensures that the percentage of values in the monitored c
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericvaluebelowminvaluepercentsensorparametersspec)|Data quality check parameters|[ColumnNumericValueBelowMinValuePercentSensorParametersSpec](#columnnumericvaluebelowminvaluepercentsensorparametersspec)| | | |
-|[warning](#minpercentrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule1ParametersSpec](#minpercentrule1parametersspec)| | | |
-|[error](#minpercentrule2parametersspec)|Default alerting threshold for a maximum number of rows with values with a value below the indicated by the user value in a column that raises a data quality error (alert).|[MinPercentRule2ParametersSpec](#minpercentrule2parametersspec)| | | |
-|[fatal](#minpercentrule5parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule5ParametersSpec](#minpercentrule5parametersspec)| | | |
+|[warning](#maxpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxPercentRule100ParametersSpec](#maxpercentrule100parametersspec)| | | |
+|[error](#maxpercentrule99parametersspec)|Default alerting threshold for a maximum number of rows with values with a value below the indicated by the user value in a column that raises a data quality error (alert).|[MaxPercentRule99ParametersSpec](#maxpercentrule99parametersspec)| | | |
+|[fatal](#maxpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxPercentRule95ParametersSpec](#maxpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -5047,9 +5263,9 @@ Column level check that ensures that the percentage of values in the monitored c
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericvalueabovemaxvaluepercentsensorparametersspec)|Data quality check parameters|[ColumnNumericValueAboveMaxValuePercentSensorParametersSpec](#columnnumericvalueabovemaxvaluepercentsensorparametersspec)| | | |
-|[warning](#minpercentrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule1ParametersSpec](#minpercentrule1parametersspec)| | | |
-|[error](#minpercentrule2parametersspec)|Default alerting threshold for a maximum number of rows with values with a value above the indicated by the user value in a column that raises a data quality error (alert).|[MinPercentRule2ParametersSpec](#minpercentrule2parametersspec)| | | |
-|[fatal](#minpercentrule5parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule5ParametersSpec](#minpercentrule5parametersspec)| | | |
+|[warning](#maxpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxPercentRule100ParametersSpec](#maxpercentrule100parametersspec)| | | |
+|[error](#maxpercentrule99parametersspec)|Default alerting threshold for a maximum number of rows with values with a value above the indicated by the user value in a column that raises a data quality error (alert).|[MaxPercentRule99ParametersSpec](#maxpercentrule99parametersspec)| | | |
+|[fatal](#maxpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxPercentRule95ParametersSpec](#maxpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -6122,8 +6338,8 @@ Column level check that ensures that there are no more than a set percentage of 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericvalidlatitudepercentsensorparametersspec)|Data quality check parameters|[ColumnNumericValidLatitudePercentSensorParametersSpec](#columnnumericvalidlatitudepercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a set percentage of rows with valid latitude value in a column that raises a data quality alert|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a set percentage of rows with valid latitude value in a column that raises a data quality alert|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -6252,8 +6468,8 @@ Column level check that ensures that there are no more than a set percentage of 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericvalidlongitudepercentsensorparametersspec)|Data quality check parameters|[ColumnNumericValidLongitudePercentSensorParametersSpec](#columnnumericvalidlongitudepercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a set percentage of rows with valid longitude value in a column that raises a data quality alert|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a set percentage of rows with valid longitude value in a column that raises a data quality alert|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -6667,9 +6883,9 @@ Column level check that ensures that the percentage of strings in the monitored 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnstringsstringlengthbelowminlengthpercentsensorparametersspec)|Data quality check parameters|[ColumnStringsStringLengthBelowMinLengthPercentSensorParametersSpec](#columnstringsstringlengthbelowminlengthpercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a maximum percentage of rows with strings with a length below the indicated by the user length in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
-|[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
+|[warning](#maxpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxPercentRule100ParametersSpec](#maxpercentrule100parametersspec)| | | |
+|[error](#maxpercentrule99parametersspec)|Default alerting threshold for a maximum percentage of rows with strings with a length below the indicated by the user length in a column that raises a data quality error (alert).|[MaxPercentRule99ParametersSpec](#maxpercentrule99parametersspec)| | | |
+|[fatal](#maxpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxPercentRule95ParametersSpec](#maxpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -6799,9 +7015,9 @@ Column level check that ensures that the percentage of strings in the monitored 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnstringsstringlengthabovemaxlengthpercentsensorparametersspec)|Data quality check parameters|[ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpec](#columnstringsstringlengthabovemaxlengthpercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a maximum percentage of rows with strings with a length above the indicated by the user length in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
-|[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
+|[warning](#maxpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MaxPercentRule100ParametersSpec](#maxpercentrule100parametersspec)| | | |
+|[error](#maxpercentrule99parametersspec)|Default alerting threshold for a maximum percentage of rows with strings with a length above the indicated by the user length in a column that raises a data quality error (alert).|[MaxPercentRule99ParametersSpec](#maxpercentrule99parametersspec)| | | |
+|[fatal](#maxpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MaxPercentRule95ParametersSpec](#maxpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
 |disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
@@ -6865,8 +7081,8 @@ Column check that calculates percentage of strings with a length below the indic
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnstringsstringlengthinrangepercentsensorparametersspec)|Data quality check parameters|[ColumnStringsStringLengthInRangePercentSensorParametersSpec](#columnstringsstringlengthinrangepercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a maximum percentage of rows with strings with a length in the range indicated by the user in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a maximum percentage of rows with strings with a length in the range indicated by the user in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -7452,8 +7668,8 @@ Column level check that ensures that the percentage of boolean placeholder strin
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnstringsstringbooleanplaceholderpercentsensorparametersspec)|Data quality check parameters|[ColumnStringsStringBooleanPlaceholderPercentSensorParametersSpec](#columnstringsstringbooleanplaceholderpercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a minimum percentage of rows with a boolean placeholder strings in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows with a boolean placeholder strings in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -7517,8 +7733,8 @@ Column level check that ensures that the percentage of parsable to integer strin
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnstringsstringparsabletointegerpercentsensorparametersspec)|Data quality check parameters|[ColumnStringsStringParsableToIntegerPercentSensorParametersSpec](#columnstringsstringparsabletointegerpercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a minimum percentage of rows with a parsable to integer strings in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows with a parsable to integer strings in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -7582,8 +7798,8 @@ Column level check that ensures that the percentage of parsable to float strings
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnstringsstringparsabletofloatpercentsensorparametersspec)|Data quality check parameters|[ColumnStringsStringParsableToFloatPercentSensorParametersSpec](#columnstringsstringparsabletofloatpercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a minimum percentage of rows with a parsable to float strings in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows with a parsable to float strings in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -7790,8 +8006,8 @@ Column level check that ensures that there is at least a minimum percentage of v
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnstringsstringvaliddatepercentsensorparametersspec)|Data quality check parameters|[ColumnStringsStringValidDatePercentSensorParametersSpec](#columnstringsstringvaliddatepercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -7855,8 +8071,8 @@ Column level check that ensures that the percentage of valid country code string
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnstringsstringvalidcountrycodepercentsensorparametersspec)|Data quality check parameters|[ColumnStringsStringValidCountryCodePercentSensorParametersSpec](#columnstringsstringvalidcountrycodepercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a maximum percentage of rows with a valid country code strings in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a maximum percentage of rows with a valid country code strings in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -7920,8 +8136,8 @@ Column level check that ensures that the percentage of valid currency code strin
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnstringsstringvalidcurrencycodepercentsensorparametersspec)|Data quality check parameters|[ColumnStringsStringValidCurrencyCodePercentSensorParametersSpec](#columnstringsstringvalidcurrencycodepercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a maximum percentage of rows with a valid currency code strings in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a maximum percentage of rows with a valid currency code strings in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -8115,8 +8331,8 @@ Column level check that ensures that the percentage of valid UUID strings in the
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnstringsstringvaliduuidpercentsensorparametersspec)|Data quality check parameters|[ColumnStringsStringValidUuidPercentSensorParametersSpec](#columnstringsstringvaliduuidpercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a minimum percentage of rows with a valid UUID in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows with a valid UUID in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -8376,8 +8592,8 @@ Column check that calculates percentage of values that matches the custom regex 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnstringsstringmatchregexpercentsensorparametersspec)|Data quality check parameters|[ColumnStringsStringMatchRegexPercentSensorParametersSpec](#columnstringsstringmatchregexpercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a minimum percentage of rows with matching regex in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows with matching regex in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -8508,8 +8724,8 @@ Column check that calculates percentage of values that match the date regex in a
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnstringsstringmatchdateregexpercentsensorparametersspec)|Data quality check parameters|[ColumnStringsStringMatchDateRegexPercentSensorParametersSpec](#columnstringsstringmatchdateregexpercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a maximum percentage of rows with matching date regex in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a maximum percentage of rows with matching date regex in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -8574,8 +8790,8 @@ Column check that calculates percentage of values that match the name regex in a
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnstringsstringmatchnameregexpercentsensorparametersspec)|Data quality check parameters|[ColumnStringsStringMatchNameRegexPercentSensorParametersSpec](#columnstringsstringmatchnameregexpercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a maximum percentage of rows with matching name regex in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a maximum percentage of rows with matching name regex in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -8905,8 +9121,8 @@ Column level check that ensures that the percentage of unique values in a column
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnuniquenessuniquepercentsensorparametersspec)|Data quality check parameters|[ColumnUniquenessUniquePercentSensorParametersSpec](#columnuniquenessuniquepercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a minimum percentage of rows with unique value in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows with unique value in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -9296,8 +9512,8 @@ Column check that calculates percent of valid USA phone values in a column.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnpiivalidusaphonepercentsensorparametersspec)|Numerical value in range percent sensor parameters|[ColumnPiiValidUsaPhonePercentSensorParametersSpec](#columnpiivalidusaphonepercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a minimum percentage of rows with a parsable to integer strings in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows with a parsable to integer strings in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -9426,8 +9642,8 @@ Column check that calculates percent of valid USA Zip code values in a column.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnpiivalidusazipcodepercentsensorparametersspec)|Data quality check parameters|[ColumnPiiValidUsaZipcodePercentSensorParametersSpec](#columnpiivalidusazipcodepercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a minimum percentage of rows with a parsable to integer strings in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows with a parsable to integer strings in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -9556,8 +9772,8 @@ Column check that calculates the percentage of rows that contains valid email va
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnpiivalidemailpercentsensorparametersspec)|Data quality check parameters|[ColumnPiiValidEmailPercentSensorParametersSpec](#columnpiivalidemailpercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a minimum percentage of rows with a valid email in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows with a valid email in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -9621,8 +9837,8 @@ Column check that calculates the percentage of rows that contains valid email va
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnpiicontainsemailpercentsensorparametersspec)|Data quality check parameters|[ColumnPiiContainsEmailPercentSensorParametersSpec](#columnpiicontainsemailpercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a minimum percentage of rows that contains email values in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows that contains email values in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -9686,8 +9902,8 @@ Column check that calculates percent of valid IP4 address values in a column.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnpiivalidip4addresspercentsensorparametersspec)|Data quality check parameters|[ColumnPiiValidIp4AddressPercentSensorParametersSpec](#columnpiivalidip4addresspercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a minimum percentage of rows with a valid IP4 addresses in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows with a valid IP4 addresses in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -9751,8 +9967,8 @@ Column check that calculates the percentage of rows that contains valid IP4 addr
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnpiicontainsip4percentsensorparametersspec)|Data quality check parameters|[ColumnPiiContainsIp4PercentSensorParametersSpec](#columnpiicontainsip4percentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a minimum percentage of rows that contains IP4 values in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows that contains IP4 values in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -9816,8 +10032,8 @@ Column check that calculates the percent of valid IP6 address values in a column
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnpiivalidip6addresspercentsensorparametersspec)|Data quality check parameters|[ColumnPiiValidIp6AddressPercentSensorParametersSpec](#columnpiivalidip6addresspercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a minimum percentage of rows with a valid IP6 addresses in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows with a valid IP6 addresses in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -9881,8 +10097,8 @@ Column check that calculates the percentage of rows that contains valid IP6 addr
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnpiicontainsip6percentsensorparametersspec)|Data quality check parameters|[ColumnPiiContainsIp6PercentSensorParametersSpec](#columnpiicontainsip6percentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a minimum percentage of rows that contains IP6 values in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows that contains IP6 values in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -10201,8 +10417,8 @@ Column level check that ensures that there are at least percentage of rows with 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnbooltruepercentsensorparametersspec)|Data quality check parameters|[ColumnBoolTruePercentSensorParametersSpec](#columnbooltruepercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a set percentage of true value in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a set percentage of true value in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -10266,8 +10482,8 @@ Column level check that ensures that there are at least a minimum percentage of 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnboolfalsepercentsensorparametersspec)|Data quality check parameters|[ColumnBoolFalsePercentSensorParametersSpec](#columnboolfalsepercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a set percentage of false value in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a set percentage of false value in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -10426,8 +10642,8 @@ Column level check that ensures that there are no more than a minimum percentage
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnintegrityforeignkeymatchpercentsensorparametersspec)|Data quality check parameters|[ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec](#columnintegrityforeignkeymatchpercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a minimum percentage of rows with values matching values in another table column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum percentage of rows with values matching values in another table column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -10887,8 +11103,8 @@ Column check that calculates percentage of values that match the date format in 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnconsistencydatematchformatpercentsensorparametersspec)|Data quality check parameters|[ColumnConsistencyDateMatchFormatPercentSensorParametersSpec](#columnconsistencydatematchformatpercentsensorparametersspec)| | | |
-|[warning](#minpercentrule99parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
-|[error](#minpercentrule98parametersspec)|Default alerting threshold for a maximum percentage of rows with matching date format in a column that raises a data quality error (alert).|[MinPercentRule98ParametersSpec](#minpercentrule98parametersspec)| | | |
+|[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[MinPercentRule100ParametersSpec](#minpercentrule100parametersspec)| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a maximum percentage of rows with matching date format in a column that raises a data quality error (alert).|[MinPercentRule99ParametersSpec](#minpercentrule99parametersspec)| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[MinPercentRule95ParametersSpec](#minpercentrule95parametersspec)| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
@@ -11838,6 +12054,7 @@ Container of built-in preconfigured data quality checks on a column level that a
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[column_exists](#columnschemacolumnexistscheckspec)|Checks the metadata of the monitored table and verifies if the column exists.|[ColumnSchemaColumnExistsCheckSpec](#columnschemacolumnexistscheckspec)| | | |
+|[column_type_changed](#columnschematypechangedcheckspec)|Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed.|[ColumnSchemaTypeChangedCheckSpec](#columnschematypechangedcheckspec)| | | |
 
 
 
@@ -11932,6 +12149,75 @@ Data quality rule that verifies that a data quality check readout equals a given
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |expected_value|Expected value for the actual_value returned by the sensor. It must be an integer value.|long| | |1<br/>|
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnSchemaTypeChangedCheckSpec  
+Column level check that detects if the data type of the column has changed since the last time it was retrieved.
+ This check will calculate a hash of all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability.
+ A data quality issue will be detected if the hash of the column&#x27;s data types has changed.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](#columncolumntypehashsensorparametersspec)|Column data type hash sensor parameters|[ColumnColumnTypeHashSensorParametersSpec](#columncolumntypehashsensorparametersspec)| | | |
+|[warning](#valuechangedparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|[ValueChangedParametersSpec](#valuechangedparametersspec)| | | |
+|[error](#valuechangedparametersspec)|Default alerting threshold for a row count that raises a data quality error (alert)|[ValueChangedParametersSpec](#valuechangedparametersspec)| | | |
+|[fatal](#valuechangedparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|[ValueChangedParametersSpec](#valuechangedparametersspec)| | | |
+|[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|[RecurringScheduleSpec](#recurringschedulespec)| | | |
+|[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](#commentslistspec)| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
+|include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
+|quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
+|display_name|Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.|string| | | |
+|data_stream|Data stream name that should be applied to this data quality check. The data stream is used to group checks on similar tables using tags or use dynamic data segmentation to execute the data quality check for different groups of rows (by using a GROUP BY clause in the SQL SELECT statement executed by the data quality check). Use a name of one of known data streams defined on the parent table.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnColumnTypeHashSensorParametersSpec  
+Column level data quality sensor that reads the metadata of the table from the data source and calculates a hash of the detected data type (also including the length, scale and precision)
+ of the target colum.
+ Returns a 15-16 decimal digit hash of the column data type.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string| | | |
 
 
 
@@ -12460,6 +12746,7 @@ Container of built-in preconfigured data quality checks on a column level that a
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[daily_column_exists](#columnschemacolumnexistscheckspec)|Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each day when the data quality check was evaluated.|[ColumnSchemaColumnExistsCheckSpec](#columnschemacolumnexistscheckspec)| | | |
+|[daily_column_type_changed](#columnschematypechangedcheckspec)|Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last day. Stores the most recent hash for each day when the data quality check was evaluated.|[ColumnSchemaTypeChangedCheckSpec](#columnschematypechangedcheckspec)| | | |
 
 
 
@@ -12942,6 +13229,7 @@ Container of built-in preconfigured data quality checks on a column level that a
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[monthly_column_exists](#columnschemacolumnexistscheckspec)|Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each month when the data quality check was evaluated.|[ColumnSchemaColumnExistsCheckSpec](#columnschemacolumnexistscheckspec)| | | |
+|[monthly_column_type_changed](#columnschematypechangedcheckspec)|Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last month. Stores the most recent hash for each month when the data quality check was evaluated.|[ColumnSchemaTypeChangedCheckSpec](#columnschematypechangedcheckspec)| | | |
 
 
 
@@ -14258,6 +14546,7 @@ ___
 |[strings](#columnstringsstatisticscollectorsspec)|Configuration of string (text) profilers on a column level.|[ColumnStringsStatisticsCollectorsSpec](#columnstringsstatisticscollectorsspec)| | | |
 |[uniqueness](#columnuniquenessstatisticscollectorsspec)|Configuration of profilers that analyse uniqueness of values (distinct count).|[ColumnUniquenessStatisticsCollectorsSpec](#columnuniquenessstatisticscollectorsspec)| | | |
 |[range](#columnrangestatisticscollectorsspec)|Configuration of profilers that analyse the range of values (min, max).|[ColumnRangeStatisticsCollectorsSpec](#columnrangestatisticscollectorsspec)| | | |
+|[sampling](#columnsamplingstatisticscollectorsspec)|Configuration of profilers that collect the column samples.|[ColumnSamplingStatisticsCollectorsSpec](#columnsamplingstatisticscollectorsspec)| | | |
 
 
 
@@ -14882,6 +15171,89 @@ ___
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#columnnumericsumsensorparametersspec)|Profiler parameters|[ColumnNumericSumSensorParametersSpec](#columnnumericsumsensorparametersspec)| | | |
 |disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnSamplingStatisticsCollectorsSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[column_samples](#columnsamplingcolumnsamplesstatisticscollectorspec)|Configuration of the profiler that finds the maximum string length.|[ColumnSamplingColumnSamplesStatisticsCollectorSpec](#columnsamplingcolumnsamplesstatisticscollectorspec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnSamplingColumnSamplesStatisticsCollectorSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](#columnsamplingcolumnsamplessensorparametersspec)|Profiler parameters|[ColumnSamplingColumnSamplesSensorParametersSpec](#columnsamplingcolumnsamplessensorparametersspec)| | | |
+|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnSamplingColumnSamplesSensorParametersSpec  
+Column level sensor that retrieves a column value samples. Column value sampling is used in profiling and in capturing error samples for failed data quality checks.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|limit|The limit of results that are returned. The default value is 10 sample values with the highest count (the most popular).|integer| | |10<br/>|
+|filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string| | | |
 
 
 

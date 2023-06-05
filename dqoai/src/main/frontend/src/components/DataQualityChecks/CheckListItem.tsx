@@ -39,7 +39,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('data-streams');
   const [tabs, setTabs] = useState<ITab[]>([]);
-  const { jobs } = useSelector((state: IRootState) => state.job);
+  const { jobs } = useSelector((state: IRootState) => state.job || {});
   const [showDetails, setShowDetails] = useState(false);
 
   const job = jobs?.jobs?.find((item) =>

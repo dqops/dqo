@@ -37,6 +37,21 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
     public static final String INCIDENT_HASH_COLUMN_NAME = "incident_hash";
 
     /**
+     * The name of a connection to another data source that contains the reference data used as the expected values for accuracy checks.
+     */
+    public static final String REFERENCE_CONNECTION_COLUMN_NAME = "reference_connection";
+
+    /**
+     * The schema in another data source that contains the reference data used as the expected values for accuracy checks.
+     */
+    public static final String REFERENCE_SCHEMA_COLUMN_NAME = "reference_schema";
+
+    /**
+     * The table name in another data source that contains the reference data used as the expected values for accuracy checks.
+     */
+    public static final String REFERENCE_TABLE_COLUMN_NAME = "reference_table";
+
+    /**
      * Column name for a boolean column that identifies data quality rule results that should be counted in the data quality KPI.
      */
     public static final String INCLUDE_IN_KPI_COLUMN_NAME = "include_in_kpi";

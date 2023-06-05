@@ -35,6 +35,7 @@ import RuleDetail from "./pages/RuleDetail";
 import Incidents from "./pages/Incidents";
 import IncidentConnection from "./pages/IncidentConnection";
 import IncidentDetail from "./pages/IncidentDetail";
+import NotFound from "./pages/NotFound";
 
 const Routes = () => {
   return (
@@ -71,7 +72,7 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.INCIDENTS} component={Incidents} />
       <Route exact path={ROUTES.PATTERNS.QUALITY_CHECKS} component={ChecksPage} />
       <Redirect from={ROUTES.PATTERNS.INDEX} to={ROUTES.PATTERNS.HOME} />
-      <Route component={ChecksPage} />
+      <Route exact path="*" component={NotFound} />
     </Switch>
   );
 };

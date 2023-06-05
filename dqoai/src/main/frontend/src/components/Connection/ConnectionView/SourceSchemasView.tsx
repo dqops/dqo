@@ -31,7 +31,7 @@ const SourceSchemasView = () => {
   ]);
 
   const [selectedSchema, setSelectedSchema] = useState<SchemaRemoteModel>();
-  const { jobs } = useSelector((state: IRootState) => state.job);
+  const { jobs } = useSelector((state: IRootState) => state.job || {});
 
   useEffect(() => {
     setLoading(true);

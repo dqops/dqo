@@ -19,7 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MinPercentRule1ParametersSpec;
+import ai.dqo.rules.comparison.MinPercentRule0ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule2ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule5ParametersSpec;
 import ai.dqo.sensors.column.numeric.ColumnNumericValuesInRangeNumericPercentSensorParametersSpec;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnValuesInRangeNumericPercentCheckSpec
-        extends AbstractCheckSpec<ColumnNumericValuesInRangeNumericPercentSensorParametersSpec, MinPercentRule1ParametersSpec, MinPercentRule2ParametersSpec, MinPercentRule5ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericValuesInRangeNumericPercentSensorParametersSpec, MinPercentRule0ParametersSpec, MinPercentRule2ParametersSpec, MinPercentRule5ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnValuesInRangeNumericPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,7 +54,7 @@ public class ColumnValuesInRangeNumericPercentCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule1ParametersSpec warning;
+    private MinPercentRule0ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for set percentage of values from range in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -91,7 +91,7 @@ public class ColumnValuesInRangeNumericPercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinPercentRule1ParametersSpec getWarning() {
+    public MinPercentRule0ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +99,7 @@ public class ColumnValuesInRangeNumericPercentCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinPercentRule1ParametersSpec warning) {
+    public void setWarning(MinPercentRule0ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");

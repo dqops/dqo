@@ -15,7 +15,7 @@ import { LogErrorsApi } from "./services/apiClient";
 
 const App = () => {
   const dispatch = useActionDispatch();
-  const { lastSequenceNumber, loading } = useSelector((state: IRootState) => state.job);
+  const { lastSequenceNumber, loading } = useSelector((state: IRootState) => state.job || {});
 
   useEffect(() => {
     dispatch(getAllJobs());
@@ -29,7 +29,7 @@ const App = () => {
       }
     };
 
-    window.onerror = function(message, source, lineNumber, colno, error) {
+    window.onerror = function(message) {
       LogErrorsApi.logError({
         window_location: window.location.href,
         message: message.toString()

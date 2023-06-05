@@ -29,6 +29,7 @@ interface MyData {
   length?: number | undefined;
   scale?: number | undefined;
   importedDatatype?: string | undefined;
+  columnHash: number;
 }
 
 const TableColumns = ({
@@ -130,11 +131,16 @@ const TableColumns = ({
     }
   };
 
-  const collectStatistics = async (index: number) => {
-    await JobApiClient.collectStatisticsOnDataStreams(
-      statistics?.column_statistics?.at(index)
-        ?.collect_column_statistics_job_template
-    );
+  const collectStatistics = async (hashValue?: number) => {
+    statistics?.column_statistics &&
+      statistics?.column_statistics.map(async (x, index) =>
+        x.column_hash === hashValue
+          ? await JobApiClient.collectStatisticsOnDataStreams(
+              statistics?.column_statistics?.at(index)
+                ?.collect_column_statistics_job_template
+            )
+          : ''
+      );
   };
 
   useEffect(() => {
@@ -301,6 +307,8 @@ const TableColumns = ({
     (x) => x.type_snapshot?.column_type
   );
 
+  const hashData = statistics?.column_statistics?.map((x) => x.column_hash);
+
   const dataArray: MyData[] = [];
 
   if (
@@ -312,7 +320,8 @@ const TableColumns = ({
     minimalValueData &&
     lengthData &&
     scaleData &&
-    typeData
+    typeData &&
+    hashData
   ) {
     const maxLength = Math.max(
       nullPercentData.length,
@@ -323,7 +332,8 @@ const TableColumns = ({
       minimalValueData.length,
       lengthData.length,
       scaleData.length,
-      typeData.length
+      typeData.length,
+      hashData.length
     );
 
     for (let i = 0; i < maxLength; i++) {
@@ -336,6 +346,7 @@ const TableColumns = ({
       const lengthValue = lengthData[i];
       const scaleValue = scaleData[i];
       const typeValue = typeData[i];
+      const hashValue = hashData[i];
 
       const newData: MyData = {
         null_percent: Number(renderValue(nullPercent)),
@@ -346,7 +357,8 @@ const TableColumns = ({
         minimalValue: renderValue(minimalValue),
         length: renderValue(lengthValue),
         scale: renderValue(scaleValue),
-        importedDatatype: renderValue(typeValue)
+        importedDatatype: renderValue(typeValue),
+        columnHash: Number(hashValue)
       };
 
       dataArray.push(newData);
@@ -459,7 +471,6 @@ const TableColumns = ({
     setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     const sortedResult = [...BoolArray, ...StringArray, ...NumberArray];
     setDataArray1(sortedResult);
-    console.log(sortedResult);
   };
 
   const sortDataByLength = () => {
@@ -597,8 +608,8 @@ const TableColumns = ({
   const sortDataByImportedtype = () => {
     const sortedArray = [...dataArray];
     sortedArray.sort((a, b) => {
-      const nullsCountA = String(a.detectedDatatypeVar);
-      const nullsCountB = String(b.detectedDatatypeVar);
+      const nullsCountA = String(a.importedDatatype);
+      const nullsCountB = String(b.importedDatatype);
 
       if (nullsCountA && nullsCountB) {
         return sortDirection === 'asc'
@@ -642,9 +653,9 @@ const TableColumns = ({
     }
   };
 
-  const rewriteData = (columnName: string) => {
+  const rewriteData = (hashValue: number) => {
     const columnToDelete = statistics?.column_statistics?.find(
-      (x) => x.column_name === columnName
+      (x) => x.column_hash === hashValue
     );
 
     if (columnToDelete) {
@@ -731,7 +742,7 @@ const TableColumns = ({
           <IconButton
             size="sm"
             className="group bg-teal-500 ml-1.5"
-            onClick={() => collectStatistics(index)}
+            onClick={() => collectStatistics(column.columnHash)}
           >
             <SvgIcon name="boxplot" className="w-4 white" />
             <div className="hidden absolute right-0 bottom-6 p-1 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
@@ -743,7 +754,7 @@ const TableColumns = ({
             size="sm"
             className="group bg-teal-500 ml-3"
             onClick={() => {
-              rewriteData(column.nameOfCol ? column.nameOfCol : '');
+              rewriteData(column.columnHash);
             }}
           >
             <SvgIcon name="delete" className="w-4" />

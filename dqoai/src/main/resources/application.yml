@@ -124,3 +124,6 @@ dqo:
   cli:
     oneshot:
       terminal-width: 150
+  docker:
+    userhome:
+      allow-unmounted: false

@@ -134,7 +134,7 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
         long columnHash = sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().getHierarchyId().hashCode64() : 0L;
 
         LongColumn dataStreamHashColumn = normalizedSensorReadout.getDataStreamHashColumn();
-        TextColumn rowIdColumn = this.commonNormalizationService.createRowIdColumn(dataStreamHashColumn, errorTimestampColumn,
+        TextColumn rowIdColumn = this.commonNormalizationService.createRowIdColumnAndUpdateIndexes(dataStreamHashColumn, errorTimestampColumn,
                 checkHash, tableHash, columnHash, table.rowCount());
         table.addColumns(rowIdColumn);
 

@@ -227,6 +227,10 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Configures the console logging mode for the '\"check run\" jobs performed by the job scheduler in the background.", defaultValue = "silent")
     private CheckRunReportingMode dqoSchedulerCheckRunMode;
 
+    @CommandLine.Option(names = {"--dqo.docker.userhome.allow-unmounted"},
+            description = "When running DQO in a docker container, allow DQO user home folder to be initialized inside the container's filesystem if the folder hasn't been mounted to an external volume.", defaultValue = "false")
+    private Boolean dqoDockerUserhomeAllowUnmounted;
+
     @CommandLine.Option(names = {"--spring.config.location"},
             description = "Sets a path to the folder that has the spring configuration files (application.properties or application.yml) or directly to an application.properties or application.yml file. " +
                     "The format of this value is: --spring.config.location=file:./foldername/,file:./alternativeapplication.yml")

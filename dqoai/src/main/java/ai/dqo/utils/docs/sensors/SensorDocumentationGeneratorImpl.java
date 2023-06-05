@@ -57,8 +57,7 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
         List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = groupSensors(sensorDocumentationModels);
 
         for (SensorGroupedDocumentationModel sensorGroupedDocumentation : sensorGroupedDocumentationModels) {
-            DocumentationMarkdownFile documentationMarkdownFile = sensorsFolder.addNestedFile(sensorGroupedDocumentation.getTarget().substring(0, 1).toUpperCase()
-                    + sensorGroupedDocumentation.getTarget().substring(1)
+            DocumentationMarkdownFile documentationMarkdownFile = sensorsFolder.addNestedFile(sensorGroupedDocumentation.getTarget()
                     + "/" + sensorGroupedDocumentation.getCategory()
                     + "-" + sensorGroupedDocumentation.getTarget().replace(' ', '-') + "-sensors" + ".md");
             documentationMarkdownFile.setRenderContext(sensorGroupedDocumentation);

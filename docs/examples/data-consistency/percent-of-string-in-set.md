@@ -39,7 +39,7 @@ The `Fjob` column of interest contains father job's values.
 
 **SOLUTION**
 
-We will verify the data using profiling [string_in_set_percent](../../checks/column/strings/string-in-set-percent.md) column check.
+We will verify the data using profiling [string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md) column check.
 Our data quality check will compare the values in the tested column to a set of accepted values. We're accepting only `services`, `at_home`, `teacher`.
 The SQL query that will be executed will use an IN SQL clause:
 
@@ -130,7 +130,7 @@ spec:
         nullable: true
       profiling_checks:
         strings:
-          string_in_set_percent:
+          string_value_in_set_percent:
             parameters:
               values:
               - services

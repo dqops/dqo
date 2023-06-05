@@ -17,7 +17,7 @@ package ai.dqo.cli;
 
 import ai.dqo.cli.commands.DqoRootCliCommand;
 import ai.dqo.cli.completion.InputCapturingCompleter;
-import ai.dqo.cli.configuration.DqoCliOneshotConfigurationProperties;
+import ai.dqo.core.configuration.DqoCliOneshotConfigurationProperties;
 import ai.dqo.cli.exceptions.CommandExecutionErrorHandler;
 import ai.dqo.cli.terminal.*;
 import ai.dqo.cli.terminal.ansi.UrlFormatter;

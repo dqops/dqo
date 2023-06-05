@@ -224,15 +224,15 @@ export const IncidentDetail = () => {
           </SectionWrapper>
           <SectionWrapper title="Severity statistics">
             <div className="flex gap-3 mb-3 items-center">
-              <div className="flex-[2]">Lowest detected issue severity:</div>
-              <div className="flex-[1] text-right font-bold">{incidentDetail?.minSeverity} Warning</div>
+              <div className="flex-[2]">Minimum issue severity:</div>
+              <div className="flex-[1] text-right font-bold">{incidentDetail?.minimumSeverity} Warning</div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-[2]">Highest detected issue severity:</div>
               <div className="flex-[1] text-right font-bold">{incidentDetail?.highestSeverity} Error</div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
-              <div className="flex-[2]">Total data quality incidents:</div>
+              <div className="flex-[2]">Total data quality issues:</div>
               <div className="flex-[1] text-right font-bold">{incidentDetail?.failedChecksCount} Fatal</div>
             </div>
             <div className="flex gap-3 items-center">
@@ -306,6 +306,7 @@ export const IncidentDetail = () => {
         <div className="px-4 ">
           <div className="py-3 mb-5 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
             <IncidentIssueList
+              incidentDetail={incidentDetail}
               filters={filters}
               issues={issues || []}
               onChangeFilter={onChangeFilter}

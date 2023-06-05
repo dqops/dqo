@@ -1,6 +1,7 @@
 # Most popular values count
 
-Verifies that the number of most popular values from a set in a column does not fall below the minimum accepted count.
+Verifies that most popular values (with the highest count of occurrence) are among the list of expected most popular values.
+Count how many of the current most popular values are from the expected set of most popular values.
 
 **PROBLEM**
 
@@ -31,7 +32,7 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 
 **SOLUTION**
 
-We will verify the data using profiling [string_most_popular_values](../../checks/column/strings/string-most-popular-values.md) column check.
+We will verify the data using profiling [expected_strings_in_top_values_count](../../checks/column/strings/expected-strings-in-top-values-count.md) column check.
 Our data quality check will compare the values in the tested column to a most popular values. The popular values, in this case, are `Able-Bodied`,
 `Dedicated Health Care Provider`,`Gender Pay Gap`.
 The SQL query that will be executed will use an IN SQL clause:

@@ -13,7 +13,7 @@ interface TableHeaderProps {
 }
 
 const TableHeader = ({ checksUI }: TableHeaderProps) => {
-  const { jobs } = useSelector((state: IRootState) => state.job);
+  const { jobs } = useSelector((state: IRootState) => state.job || {});
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
 
   const job = jobs?.jobs?.find((item) =>

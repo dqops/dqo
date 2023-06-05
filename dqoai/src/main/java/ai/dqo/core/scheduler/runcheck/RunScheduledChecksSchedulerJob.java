@@ -15,8 +15,8 @@
  */
 package ai.dqo.core.scheduler.runcheck;
 
-import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
+import ai.dqo.core.jobqueue.ParentDqoJobQueue;
 import ai.dqo.core.scheduler.quartz.JobDataMapAdapter;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ import org.springframework.stereotype.Component;
 public class RunScheduledChecksSchedulerJob implements Job {
     private JobDataMapAdapter jobDataMapAdapter;
     private DqoQueueJobFactory dqoQueueJobFactory;
-    private DqoJobQueue dqoJobQueue;
+    private ParentDqoJobQueue dqoJobQueue;
 
     /**
      * Creates a data quality check run job that is executed by the job scheduler. Dependencies are injected.
@@ -48,7 +48,7 @@ public class RunScheduledChecksSchedulerJob implements Job {
     @Autowired
     public RunScheduledChecksSchedulerJob(JobDataMapAdapter jobDataMapAdapter,
                                           DqoQueueJobFactory dqoQueueJobFactory,
-                                          DqoJobQueue dqoJobQueue) {
+                                          ParentDqoJobQueue dqoJobQueue) {
         this.jobDataMapAdapter = jobDataMapAdapter;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;

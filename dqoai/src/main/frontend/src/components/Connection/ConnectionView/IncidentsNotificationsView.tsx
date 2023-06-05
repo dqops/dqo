@@ -87,7 +87,7 @@ export const IncidentsNotificationsView = () => {
             onChange={(value) => onChange({ minimum_severity: value })}
           />
         </div>
-        <div className="w-1/2 flex justify-between items-center mb-4">
+        <div className="flex gap-4 items-center mb-4 text-sm">
           <p>Create separate incidents for each data stream:</p>
           <div className="w-6 h-6">
             <Checkbox
@@ -96,24 +96,24 @@ export const IncidentsNotificationsView = () => {
             />
           </div>
         </div>
-        <div className="w-1/2 flex justify-between items-center mb-4">
-          <p>Create another incident when an incident is open or acknowledged for:</p>
+        <div className="flex items-center mb-4 gap-2 text-sm">
+          <p>Maximum incident duration</p>
           <div className="flex gap-2 items-center">
             <NumberInput
               value={incidentGrouping?.max_incident_length_days}
               onChange={(value) => onChange({ max_incident_length_days: value })}
             />
-            <span>days</span>
+            <span>days. After this time, the DQO creates a new incident.</span>
           </div>
         </div>
-        <div className="w-1/2 flex justify-between items-center mb-4">
-          <p>Do not create a new incident similar to a muted incident for:</p>
+        <div className="flex items-center mb-4 gap-2 text-sm">
+          <p>Mute data quality issues for</p>
           <div className="flex gap-2 items-center">
             <NumberInput
               value={incidentGrouping?.mute_for_days}
               onChange={() => {}}
             />
-            <span>days</span>
+            <span> days. If the incident is muted, DQO will not create a new one.</span>
           </div>
         </div>
 

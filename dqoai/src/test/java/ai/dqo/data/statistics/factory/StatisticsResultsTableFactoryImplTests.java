@@ -41,7 +41,7 @@ public class StatisticsResultsTableFactoryImplTests extends BaseTest {
     @Test
     void createEmptyStatisticsTable_whenCalled_thenCreatesTableWithSchema() {
         Table table = this.sut.createEmptyStatisticsTable("empty");
-        Assertions.assertEquals(42, table.columnCount());
+        Assertions.assertEquals(48, table.columnCount());
     }
 
     // This is a special test, it produces an empty statistics parquet file in the target/parquet-samples/statistics-empty.snappy.parquet file
