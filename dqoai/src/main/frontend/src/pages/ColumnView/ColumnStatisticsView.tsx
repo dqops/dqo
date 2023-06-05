@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { ColumnApiClient, TableApiClient } from '../../services/apiClient';
 import { useParams } from 'react-router-dom';
-import {
-  ColumnStatisticsModel,
-  StatisticsMetricModel,
-  TableStatisticsModel
-} from '../../api';
+import { ColumnStatisticsModel, TableStatisticsModel } from '../../api';
 import { CheckTypes } from '../../shared/routes';
 import { AxiosResponse } from 'axios';
+import { formatNumber } from '../../shared/constants';
 
 const ColumnStatisticsView = () => {
   const {
@@ -87,52 +84,6 @@ const ColumnStatisticsView = () => {
     }
     return value;
   };
-  const formatNumber = (k: number) => {
-    if (k < 10 && k / Math.floor(k) !== 1 && k !== 0) {
-      return k.toFixed(3);
-    } else if (k > 10 && k / Math.floor(k) !== 1 && k < Math.pow(10, 2)) {
-      return k.toFixed(2);
-    } else if (
-      k > Math.pow(10, 2) &&
-      k / Math.floor(k) !== 1 &&
-      k < Math.pow(10, 3)
-    ) {
-      return k.toFixed(1);
-    } else if (
-      k > Math.pow(10, 3) &&
-      k / Math.floor(k) !== 1 &&
-      k < Math.pow(10, 6)
-    ) {
-      return k.toFixed(0);
-    } else if (k > Math.pow(10, 6) && k < Math.pow(10, 9)) {
-      if (k > Math.pow(10, 6) && k < Math.pow(10, 7)) {
-        return (k / Math.pow(10, 6)).toFixed(3) + 'M';
-      } else if (k > Math.pow(10, 7) && k < Math.pow(10, 8)) {
-        return (k / Math.pow(10, 6)).toFixed(2) + 'M';
-      } else {
-        return (k / Math.pow(10, 6)).toFixed(1) + 'M';
-      }
-    } else if (k > Math.pow(10, 9) && k < Math.pow(10, 12)) {
-      if (k > Math.pow(10, 9) && k < Math.pow(10, 10)) {
-        return (k / Math.pow(10, 9)).toFixed(3) + 'G';
-      } else if (k > Math.pow(10, 10) && k < Math.pow(10, 11)) {
-        return (k / Math.pow(10, 9)).toFixed(2) + 'G';
-      } else {
-        return (k / Math.pow(10, 9)).toFixed(1) + 'G';
-      }
-    } else if (k > Math.pow(10, 12) && k < Math.pow(10, 15)) {
-      if (k > Math.pow(10, 12) && k < Math.pow(10, 13)) {
-        return (k / Math.pow(10, 12)).toFixed(3) + 'T';
-      } else if (k > Math.pow(10, 13) && k < Math.pow(10, 14)) {
-        return (k / Math.pow(10, 12)).toFixed(2) + 'T';
-      } else {
-        return (k / Math.pow(10, 12)).toFixed(1) + 'T';
-      }
-    } else {
-      return k;
-    }
-  };
-
   const dateToString = (k: string) => {
     if (k === '') {
       return false;
@@ -192,7 +143,7 @@ const ColumnStatisticsView = () => {
       </div>
 
       <div className="w-full flex gap-8 flex-wrap">
-        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 inline-block w-100">
+        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
           <div className="h-10 flex justify-between items-center gap-x-36">
             <div className="ml-2 font-light">Null count</div>
             <div>
@@ -252,7 +203,7 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
         </div>
-        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 inline-block w-100">
+        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
           <div className="h-10 flex justify-between items-center gap-x-36">
             <div className="ml-2 font-light">Unique count</div>
             <div>
@@ -312,7 +263,7 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
         </div>
-        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 inline-block">
+        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50">
           <div className="h-10 flex justify-between items-center gap-x-36">
             <div className="ml-2 font-light font-bold">Minimum</div>
             <div>
@@ -370,7 +321,7 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
         </div>
-        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 inline-block w-100">
+        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
           <div className="h-10 flex justify-between items-center gap-x-36">
             <div className="ml-2 font-light">Minimum string length</div>
             <div>
@@ -411,21 +362,21 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
         </div>
-        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 inline-block ">
+        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 inline">
           {statistics &&
             statistics.statistics?.map((x, index) =>
               x.category === 'sampling' ? (
-                <div
-                  key={index}
-                  className="h-10 flex justify-between items-center gap-x-36"
-                >
-                  <div className="ml-2 font-light">
-                    Result{' '}
-                    {renderValue(x.result) !== ''
-                      ? renderValue(x.result)
-                      : `""`}
+                <div key={index} className="h-10 flex items-center gap-x-5">
+                  <div className="flex gap-x-5 w-50">
+                    <div className="ml-2 font-light overflow-hidden whitespace-nowrap overflow-ellipsis">
+                      {renderValue(x.result) !== ''
+                        ? renderValue(x.result)
+                        : `""`}
+                    </div>
                   </div>
-                  <div>Sample Count {x.sampleCount}</div>
+                  <div className="w-8">
+                    {formatNumber(Number(x.sampleCount))}
+                  </div>
                   <div
                     className=" h-3 border border-gray-100 flex ml-5"
                     style={{ width: '200px' }}
@@ -443,10 +394,7 @@ const ColumnStatisticsView = () => {
                                 : 0
                             }px`
                           }}
-                        >
-                          not nulls: {Number(renderValue(y.result))}
-                          result: {Number(renderValue(x.sampleCount))}
-                        </div>
+                        ></div>
                       ) : (
                         ''
                       )
