@@ -20,28 +20,28 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Cli configuration regarding one-shot running mode.
+ * Cli configuration describing properties of the terminal.
  */
 @Configuration
-@ConfigurationProperties(prefix = "dqo.cli.oneshot")
+@ConfigurationProperties(prefix = "dqo.cli.terminal")
 @EqualsAndHashCode(callSuper = false)
-public class DqoCliOneshotConfigurationProperties implements Cloneable {
-    private Integer terminalWidth;
+public class DqoCliTerminalConfigurationProperties implements Cloneable {
+    private Integer width;
 
     /**
      * Get the width of a terminal of applications in one-shot running mode.
      * @return The maximum number of characters in one row for terminals.
      */
-    public Integer getTerminalWidth() {
-        return terminalWidth;
+    public Integer getWidth() {
+        return width;
     }
 
     /**
      * Set the width of a terminal of applications in one-shot running mode.
-     * @param terminalWidth New maximum number of characters in one row for terminals.
+     * @param width New maximum number of characters in one row for terminals.
      */
-    public void setTerminalWidth(Integer terminalWidth) {
-        this.terminalWidth = terminalWidth;
+    public void setWidth(Integer width) {
+        this.width = width;
     }
 
     /**
@@ -49,9 +49,9 @@ public class DqoCliOneshotConfigurationProperties implements Cloneable {
      * @return Cloned instance.
      */
     @Override
-    public DqoCliOneshotConfigurationProperties clone() {
+    public DqoCliTerminalConfigurationProperties clone() {
         try {
-            return (DqoCliOneshotConfigurationProperties)super.clone();
+            return (DqoCliTerminalConfigurationProperties)super.clone();
         }
         catch (Exception ex) {
             throw new RuntimeException(ex);
