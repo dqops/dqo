@@ -207,3 +207,14 @@ export const formatNumber = (t: number) => {
     return k;
   }
 };
+export const dateToString = (k: string) => {
+  if (k === '') {
+    return false;
+  }
+
+  if (isNaN(Date.parse(k))) {
+    return false;
+  }
+  const a = k.replace(/T/g, ' ');
+  return a;
+};

@@ -12,7 +12,7 @@ import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
 import { getFirstLevelState } from '../../redux/selectors';
 import Loader from '../../components/Loader';
-import { formatNumber } from '../../shared/constants';
+import { formatNumber, dateToString } from '../../shared/constants';
 
 interface ITableColumnsProps {
   connectionName: string;
@@ -657,7 +657,9 @@ const TableColumns = ({
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">
           <div key={index} className="text-right float-right">
-            {cutString(String(column.minimalValue))}
+            {dateToString(String(column.minimalValue))
+              ? dateToString(String(column.minimalValue))
+              : cutString(String(column.minimalValue))}
           </div>
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">

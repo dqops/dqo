@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { ColumnStatisticsModel, TableStatisticsModel } from '../../api';
 import { CheckTypes } from '../../shared/routes';
 import { AxiosResponse } from 'axios';
-import { formatNumber } from '../../shared/constants';
+import { formatNumber, dateToString } from '../../shared/constants';
 
 const ColumnStatisticsView = () => {
   const {
@@ -83,17 +83,6 @@ const ColumnStatisticsView = () => {
       return value.toString();
     }
     return value;
-  };
-  const dateToString = (k: string) => {
-    if (k === '') {
-      return false;
-    }
-
-    if (isNaN(Date.parse(k))) {
-      return false;
-    }
-    const a = k.replace(/T/g, ' ');
-    return a;
   };
 
   return (
@@ -362,7 +351,7 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
         </div>
-        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 inline">
+        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200">
           {statistics &&
             statistics.statistics?.map((x, index) =>
               x.category === 'sampling' ? (
