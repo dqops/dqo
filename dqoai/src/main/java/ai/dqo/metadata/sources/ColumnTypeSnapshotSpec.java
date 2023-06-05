@@ -89,6 +89,20 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
         this.length = length;
     }
 
+    /**
+     * Creates a column type.
+     * @param columnType Column type.
+     * @param nullable Is nullable.
+     * @param scale Decimal numeric scale.
+     * @param precision Decimal numeric precision.
+     */
+    public ColumnTypeSnapshotSpec(String columnType, Boolean nullable, Integer scale, Integer precision) {
+        this.columnType = columnType;
+        this.nullable = nullable;
+        this.scale = scale;
+        this.precision = precision;
+    }
+
     @JsonPropertyDescription("Column data type using the monitored database type names.")
     private String columnType;
 

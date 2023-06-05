@@ -20,8 +20,6 @@ import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.connectors.AbstractSqlConnectionProvider;
 import ai.dqo.connectors.ProviderDialectSettings;
-import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
-import ai.dqo.connectors.postgresql.PostgresqlSourceConnection;
 import ai.dqo.metadata.sources.ColumnTypeSnapshotSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import org.apache.parquet.Strings;
@@ -149,10 +147,10 @@ public class OracleConnectionProvider extends AbstractSqlConnectionProvider {
      */
     @Override
     public String formatConstant(Object constant, ColumnTypeSnapshotSpec columnType) {
-        if(constant instanceof Boolean){
-                Boolean asBoolean = (Boolean)constant;
-                return asBoolean ? "true" : "false";
-            }
+        if (constant instanceof Boolean) {
+            Boolean asBoolean = (Boolean)constant;
+            return asBoolean ? "1" : "0";
+        }
         return super.formatConstant(constant, columnType);
     }
 
@@ -167,40 +165,40 @@ public class OracleConnectionProvider extends AbstractSqlConnectionProvider {
         ColumnType columnType = dataColumn.type();
 
         if (columnType == ColumnType.SHORT) {
-            return new ColumnTypeSnapshotSpec("number(38)");
+            return new ColumnTypeSnapshotSpec("NUMBER", null, 10, 0);
         }
         else if (columnType == ColumnType.INTEGER) {
-            return new ColumnTypeSnapshotSpec("number(38)");
+            return new ColumnTypeSnapshotSpec("NUMBER", null, 20, 0);
         }
         else if (columnType == ColumnType.LONG) {
-            return new ColumnTypeSnapshotSpec("long");
+            return new ColumnTypeSnapshotSpec("NUMBER", null, 38, 0);
         }
         else if (columnType == ColumnType.FLOAT) {
-            return new ColumnTypeSnapshotSpec("float");
+            return new ColumnTypeSnapshotSpec("BINARY_FLOAT");
         }
         else if (columnType == ColumnType.BOOLEAN) {
-            return new ColumnTypeSnapshotSpec("boolean");
+            return new ColumnTypeSnapshotSpec("NUMBER", null, 1, 0);
         }
         else if (columnType == ColumnType.STRING) {
-            return new ColumnTypeSnapshotSpec("varchar2");
+            return new ColumnTypeSnapshotSpec("NVARCHAR2", 255);
         }
         else if (columnType == ColumnType.DOUBLE) {
-            return new ColumnTypeSnapshotSpec("double precision");
+            return new ColumnTypeSnapshotSpec("BINARY_DOUBLE");
         }
         else if (columnType == ColumnType.LOCAL_DATE) {
-            return new ColumnTypeSnapshotSpec("date");
+            return new ColumnTypeSnapshotSpec("DATE");
         }
         else if (columnType == ColumnType.LOCAL_TIME) {
-            return new ColumnTypeSnapshotSpec("time without time zone");
+            return new ColumnTypeSnapshotSpec("TIMESTAMP");
         }
         else if (columnType == ColumnType.LOCAL_DATE_TIME) {
-            return new ColumnTypeSnapshotSpec("timestamp without time zone");
+            return new ColumnTypeSnapshotSpec("TIMESTAMP");
         }
         else if (columnType == ColumnType.INSTANT) {
-            return new ColumnTypeSnapshotSpec("timestamp with time zone");
+            return new ColumnTypeSnapshotSpec("TIMESTAMP WITH TIME ZONE");
         }
         else if (columnType == ColumnType.TEXT) {
-            return new ColumnTypeSnapshotSpec("text");
+            return new ColumnTypeSnapshotSpec("NCLOB");
         }
         else {
             throw new NoSuchElementException("Unsupported column type: " + columnType.name());
