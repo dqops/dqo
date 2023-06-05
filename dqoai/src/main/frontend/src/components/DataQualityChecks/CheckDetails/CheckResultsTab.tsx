@@ -1,9 +1,12 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { CheckResultDetailedSingleModel, CheckResultsDetailedDataModel } from "../../../api";
 import Select from "../../Select";
 import { Table } from "../../Table";
 import { useTree } from "../../../contexts/treeContext";
 import moment from "moment";
+import SvgIcon from "../../SvgIcon";
+import clsx from "clsx";
+import { ChartView } from "./ChartView";
 
 interface CheckResultsTabProps {
   results: CheckResultsDetailedDataModel[];
@@ -15,6 +18,7 @@ interface CheckResultsTabProps {
 
 const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChangeDataStream }: CheckResultsTabProps) => {
   const { sidebarWidth } = useTree();
+  const [mode, setMode] = useState('table');
 
   const getSeverityClass = (row: CheckResultDetailedSingleModel) => {
     if (row.severity === 1) return 'bg-yellow-100';
@@ -155,6 +159,7 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
     }))
   }, []);
 
+  console.log('results', results);
   return (
     <div className="py-3 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
       <div className="flex space-x-8 items-center">
@@ -174,22 +179,49 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
             onChange={onChangeMonth}
           />
         </div>
+        <div className="flex space-x-4 items-center">
+          <SvgIcon
+            name="table"
+            className={clsx("w-5 h-5 cursor-pointer", mode === "table" ? "font-bold" : "text-gray-400")}
+            onClick={() => setMode("table")}
+          />
+          <SvgIcon
+            name="chart-line"
+            className={clsx("w-5 h-5 cursor-pointer", mode === "chart" ? "font-bold" : "text-gray-400")}
+            onClick={() => setMode("chart")}
+          />
+        </div>
       </div>
       {results.length === 0 && (
         <div className="text-gray-700 mt-5">No Data</div>
       )}
 
-      {results.map((result, index) => (
-        <div key={index}>
-          <Table
-            className="mt-4 w-full"
-            columns={columns}
-            data={(result.singleCheckResults || []).map((item) => ({ ...item, checkName: result.checkName }))}
-            emptyMessage="No Data"
-            getRowClass={getSeverityClass}
-          />
-        </div>
-      ))}
+      {mode === 'table' && (
+        <>
+          {results.map((result, index) => (
+            <div key={index}>
+              <Table
+                className="mt-4 w-full"
+                columns={columns}
+                data={(result.singleCheckResults || []).map((item) => ({ ...item, checkName: result.checkName }))}
+                emptyMessage="No Data"
+                getRowClass={getSeverityClass}
+              />
+            </div>
+          ))}
+        </>
+      )}
+      {mode === 'chart' && (
+        <>
+          {results.map((result, index) => (
+            <div key={index}>
+              <ChartView
+                data={(result.singleCheckResults || []).map((item) => ({ ...item, checkName: result.checkName }))}
+              />
+            </div>
+          ))}
+        </>
+      )}
     </div>
   );
 };

@@ -80,7 +80,6 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
   } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
-  console.log('resultsData', resultsData)
   const checkResults = resultsData
     ? resultsData[check?.check_name ?? ''] || []
     : [];
