@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { ColumnApiClient, TableApiClient } from '../../services/apiClient';
 import { useParams } from 'react-router-dom';
-import { ColumnStatisticsModel, TableStatisticsModel } from '../../api';
+import {
+  ColumnStatisticsModel,
+  StatisticsMetricModel,
+  TableStatisticsModel
+} from '../../api';
 import { CheckTypes } from '../../shared/routes';
 import { AxiosResponse } from 'axios';
 
@@ -130,6 +134,13 @@ const ColumnStatisticsView = () => {
   };
 
   const dateToString = (k: string) => {
+    if (k === '') {
+      return false;
+    }
+
+    if (isNaN(Date.parse(k))) {
+      return false;
+    }
     const a = k.replace(/T/g, ' ');
     return a;
   };
@@ -400,7 +411,7 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
         </div>
-        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 inline-block w-100">
+        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 inline-block ">
           {statistics &&
             statistics.statistics?.map((x, index) =>
               x.category === 'sampling' ? (
@@ -415,6 +426,32 @@ const ColumnStatisticsView = () => {
                       : `""`}
                   </div>
                   <div>Sample Count {x.sampleCount}</div>
+                  <div
+                    className=" h-3 border border-gray-100 flex ml-5"
+                    style={{ width: '200px' }}
+                  >
+                    {statistics.statistics?.map((y) =>
+                      y.collector === 'not_nulls_count' ? (
+                        <div
+                          key={index}
+                          className="h-3 bg-green-700 gap-x-5"
+                          style={{
+                            width: `${
+                              x.sampleCount !== null
+                                ? (Number(renderValue(x.sampleCount)) * 200) /
+                                  Number(renderValue(y.result))
+                                : 0
+                            }px`
+                          }}
+                        >
+                          not nulls: {Number(renderValue(y.result))}
+                          result: {Number(renderValue(x.sampleCount))}
+                        </div>
+                      ) : (
+                        ''
+                      )
+                    )}
+                  </div>
                 </div>
               ) : (
                 <></>
