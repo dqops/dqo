@@ -400,6 +400,27 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
         </div>
+        <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 inline-block w-100">
+          {statistics &&
+            statistics.statistics?.map((x, index) =>
+              x.category === 'sampling' ? (
+                <div
+                  key={index}
+                  className="h-10 flex justify-between items-center gap-x-36"
+                >
+                  <div className="ml-2 font-light">
+                    Result{' '}
+                    {renderValue(x.result) !== ''
+                      ? renderValue(x.result)
+                      : `""`}
+                  </div>
+                  <div>Sample Count {x.sampleCount}</div>
+                </div>
+              ) : (
+                <></>
+              )
+            )}
+        </div>
       </div>
     </div>
   );
