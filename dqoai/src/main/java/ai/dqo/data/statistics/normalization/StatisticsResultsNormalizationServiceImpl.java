@@ -29,6 +29,7 @@ import tech.tablesaw.api.*;
 import tech.tablesaw.columns.AbstractColumn;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.columns.strings.AbstractStringColumn;
+import tech.tablesaw.selection.Selection;
 
 import java.time.LocalDateTime;
 
@@ -326,6 +327,11 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         TextColumn idColumn = this.commonNormalizationService.createRowIdColumnAndUpdateIndexes(dataStreamHashColumn, executedAtColumn, sampleIndexColumn,
                 collectorHash, tableHash, columnHash != null ? columnHash.longValue() : 0L, resultRowCount);
         normalizedResults.insertColumn(0, idColumn);
+
+        Selection statisticResultWithNulls = normalizedResultColumn != null ? normalizedResultColumn.isMissing() : Selection.with();
+        if (!statisticResultWithNulls.isEmpty()) {
+            normalizedResults = normalizedResults.dropWhere(statisticResultWithNulls);
+        }
 
         StatisticsResultsNormalizedResult datasetMetadata = new StatisticsResultsNormalizedResult(normalizedResults);
         return datasetMetadata;
