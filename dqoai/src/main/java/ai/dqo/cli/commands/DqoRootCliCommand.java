@@ -183,6 +183,10 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "GCP project name with a GCP secret manager enabled to pull the secrets.", defaultValue = "true")
     private Boolean dqoSecretsGcpProjectId;
 
+    @CommandLine.Option(names = {"--dqo.cli.terminal.width"},
+            description = "Width of the terminal when no terminal window is available, e.g. in one-shot running mode.", defaultValue = "100")
+    private Integer dqoCliTerminalWidth;
+
     @CommandLine.Option(names = {"--dqo.core.print-stack-trace"},
             description = "Prints a full stack trace for errors on the console.", defaultValue = "true")
     private Boolean dqoCorePrintStackTrace;
