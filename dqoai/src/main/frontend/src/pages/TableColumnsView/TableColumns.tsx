@@ -12,6 +12,7 @@ import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
 import { getFirstLevelState } from '../../redux/selectors';
 import Loader from '../../components/Loader';
+import { formatNumber, dateToString } from '../../shared/constants';
 
 interface ITableColumnsProps {
   connectionName: string;
@@ -229,43 +230,6 @@ const TableColumns = ({
     return color;
   };
 
-  const formatNumber = (k: number) => {
-    if (k > 1000 && k < 1000000) {
-      if (k > Math.pow(10, 3) && k < Math.pow(10, 4)) {
-        return (k / Math.pow(10, 3)).toFixed(3) + 'k';
-      } else if (k > Math.pow(10, 4) && k < Math.pow(10, 5)) {
-        return (k / Math.pow(10, 3)).toFixed(2) + 'k';
-      } else {
-        return (k / Math.pow(10, 3)).toFixed(1) + 'k';
-      }
-    } else if (k > Math.pow(10, 6) && k < Math.pow(10, 9)) {
-      if (k > Math.pow(10, 6) && k < Math.pow(10, 7)) {
-        return (k / Math.pow(10, 6)).toFixed(3) + 'M';
-      } else if (k > Math.pow(10, 7) && k < Math.pow(10, 8)) {
-        return (k / Math.pow(10, 6)).toFixed(2) + 'M';
-      } else {
-        return (k / Math.pow(10, 6)).toFixed(1) + 'M';
-      }
-    } else if (k > Math.pow(10, 9) && k < Math.pow(10, 12)) {
-      if (k > Math.pow(10, 9) && k < Math.pow(10, 10)) {
-        return (k / Math.pow(10, 9)).toFixed(3) + 'G';
-      } else if (k > Math.pow(10, 10) && k < Math.pow(10, 11)) {
-        return (k / Math.pow(10, 9)).toFixed(2) + 'G';
-      } else {
-        return (k / Math.pow(10, 9)).toFixed(1) + 'G';
-      }
-    } else if (k > Math.pow(10, 12) && k < Math.pow(10, 15)) {
-      if (k > Math.pow(10, 12) && k < Math.pow(10, 13)) {
-        return (k / Math.pow(10, 12)).toFixed(3) + 'T';
-      } else if (k > Math.pow(10, 13) && k < Math.pow(10, 14)) {
-        return (k / Math.pow(10, 12)).toFixed(2) + 'T';
-      } else {
-        return (k / Math.pow(10, 12)).toFixed(1) + 'T';
-      }
-    } else {
-      return k;
-    }
-  };
   const nullPercentData = statistics?.column_statistics?.map((x) =>
     x.statistics
       ?.filter((item) => item.collector === 'nulls_percent')
@@ -693,7 +657,9 @@ const TableColumns = ({
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">
           <div key={index} className="text-right float-right">
-            {cutString(String(column.minimalValue))}
+            {dateToString(String(column.minimalValue))
+              ? dateToString(String(column.minimalValue))
+              : cutString(String(column.minimalValue))}
           </div>
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">
@@ -703,7 +669,10 @@ const TableColumns = ({
         </td>
         <td className="border-b border-gray-100 text-right px-4 py-2">
           <div className="flex justify-center items-center">
-            <div>{Number(column.null_percent).toFixed(2)}%</div>
+            <div className="flex justify-center items-center">
+              <div>{Number(column.null_percent).toFixed(2)}</div>
+              <div>{isNaN(Number(column.null_percent)) ? '' : '%'}</div>
+            </div>
             <div
               className=" h-3 border border-gray-100 flex ml-5"
               style={{ width: '66.66px' }}
