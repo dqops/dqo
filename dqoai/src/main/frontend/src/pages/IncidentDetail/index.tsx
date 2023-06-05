@@ -26,6 +26,7 @@ import IncidentNavigation from "./IncidentNavigation";
 import Button from "../../components/Button";
 import { HistogramChart } from "./HistogramChart";
 import SectionWrapper from "../../components/Dashboard/SectionWrapper";
+import { Warning } from "postcss";
 
 const statusOptions = [
   {
@@ -138,6 +139,20 @@ export const IncidentDetail = () => {
     })
   }, [debouncedSearchTerm]);
 
+  const getWarnings = (minimumSeverity?: number) => {
+    if (!minimumSeverity) return '';
+    if (minimumSeverity > 1) return `${minimumSeverity} Warnings`;
+
+    return 'Warning';
+  };
+
+  const getSeverity = (highestSeverity?: number) => {
+    if (!highestSeverity || highestSeverity / 3 < 1) return '';
+    if (Math.floor(highestSeverity / 3) > 1) return `${highestSeverity} Fatals`;
+
+    return 'Fatal';
+  }
+
   return (
     <IncidentsLayout>
       <div className="relative">
@@ -225,15 +240,15 @@ export const IncidentDetail = () => {
           <SectionWrapper title="Severity statistics">
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-[2]">Minimum issue severity:</div>
-              <div className="flex-[1] text-right font-bold">{incidentDetail?.minimumSeverity} Warning</div>
+              <div className="flex-[1] text-right font-bold">{getWarnings(incidentDetail?.minimumSeverity)}</div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-[2]">Highest detected issue severity:</div>
-              <div className="flex-[1] text-right font-bold">{incidentDetail?.highestSeverity} Error</div>
+              <div className="flex-[1] text-right font-bold">{getSeverity(incidentDetail?.highestSeverity)} Fatal</div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-[2]">Total data quality issues:</div>
-              <div className="flex-[1] text-right font-bold">{incidentDetail?.failedChecksCount} Fatal</div>
+              <div className="flex-[1] text-right font-bold">{incidentDetail?.failedChecksCount}</div>
             </div>
             <div className="flex gap-3 items-center">
               <div className="flex-[2]">Issue url:</div>
