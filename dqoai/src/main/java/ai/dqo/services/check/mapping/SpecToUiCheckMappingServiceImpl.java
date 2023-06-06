@@ -385,7 +385,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
 
         RecurringScheduleSpec scheduleOverride = checkSpec.getScheduleOverride();
         checkModel.setScheduleOverride(scheduleOverride);
-        if (scheduleOverride != null && !scheduleOverride.isDisabled()) {
+        if (scheduleOverride != null && !scheduleOverride.isDisabled() && !scheduleOverride.isDefault()) { // bug #7380, to fix
                 checkModel.setEffectiveSchedule(
                         UIEffectiveScheduleModel.fromRecurringScheduleSpec(
                                 scheduleOverride,
@@ -675,7 +675,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 ? schedulesSpec.getScheduleForCheckSchedulingGroup(scheduleGroup)
                 : null;
 
-        if (scheduleSpec != null && !scheduleSpec.isDisabled()) {
+        if (scheduleSpec != null && !scheduleSpec.isDisabled() && !scheduleSpec.isDefault()) {
             return UIEffectiveScheduleModel.fromRecurringScheduleSpec(
                     scheduleSpec,
                     scheduleGroup,
