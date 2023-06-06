@@ -1,93 +1,96 @@
-import React, { useMemo, useRef } from 'react';
-import * as Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
+import React, { useMemo } from 'react';
 import moment from "moment/moment";
 import { CheckResultDetailedSingleModel } from "../../../api";
+import { Line } from "react-chartjs-2";
 
 type ChartViewProps = {
   data: CheckResultDetailedSingleModel[];
 };
 
 export const ChartView = ({ data }: ChartViewProps) => {
-  const chartComponentRef = useRef<HighchartsReact.RefObject>(null);
-
-  console.log('data', data);
-  const options = useMemo(() => ({
-    chart: {
-      type: 'area',
-      marginLeft: 10,
-      marginRight: 10,
-    },
-
-    title: {
-      text: '',
-    },
-    credits: {
-      enabled: false,
-    },
-    xAxis: {
-      categories: data.map((item) => moment(item.executedAt).format('YYYY-MM-DD')),
-    },
-    yAxis: {
-      allowDecimals: false,
-      min: 0,
-      title: {
-        text: ''
-      }
-    },
-    plotOptions: {
-      series: {
-        pointStart: 2012
+  const dataSource = {
+    labels: data.map((item) => moment(item.executedAt).format('YYYY-MM-DD')),
+    datasets: [
+      {
+        label: 'WARNING_LOWER_BOUND',
+        data: data.map((item) => item.errorLowerBound),
+        fill: true,
+        borderColor: '#EBE51E',
+        backgroundColor: '#EBE51E30',
       },
-      area: {
-        stacking: 'normal',
-        lineColor: '#666666',
-        lineWidth: 1,
-        marker: {
-          lineWidth: 1,
-          lineColor: '#666666'
-        }
+      {
+        label: 'ERROR_LOWER_BOUND',
+        data: data.map((item) => item.errorLowerBound),
+        fill: true,
+        borderColor: '#FF9900',
+        backgroundColor: '#FF990030',
+      },
+      {
+        label: 'FATAL_LOWER_BOUND',
+        data: data.map((item) => item.fatalLowerBound),
+        fill: true,
+        borderColor: '#E3170A',
+        backgroundColor: '#E3170A30',
+      },
+      {
+        label: 'WARNING_UPPER_BOUND',
+        data: data.map((item) => item.warningUpperBound),
+        fill: true,
+        borderColor: '#EBE51E',
+        backgroundColor: '#EBE51E30',
+      },
+      {
+        label: 'ERROR_UPPER_BOUND',
+        data: data.map((item) => item.errorUpperBound),
+        fill: true,
+        borderColor: '#FF9900',
+        backgroundColor: '#FF990030',
+      },
+      {
+        label: 'FATAL_UPPER_BOUND',
+        data: data.map((item) => item.fatalUpperBound),
+        fill: true,
+        borderColor: '#E3170A',
+        backgroundColor: '#E3170A30',
+      },
+    ]
+  };
+
+  const options = {
+    plugins: {
+      title: {
+        display: false,
+      },
+      legend: {
+        display: false
       }
-    },    series: [{
-      name: 'WARNING_LOWER_BOUND',
-      color: '#EBE51E',
-      opacity: 0.5,
-      data: data.map((item) => item.warningLowerBound),
-    }, {
-      name: 'ERROR_LOWER_BOUND',
-      color: '#FF9900',
-      opacity: 0.5,
-      data: data.map((item) => item.errorLowerBound),
-    }, {
-      name: 'FATAL_LOWER_BOUND',
-      color: '#E3170A',
-      opacity: 0.5,
-      data: data.map((item) => item.fatalLowerBound),
-    },{
-      name: 'WARNING_UPPER_BOUND',
-      color: '#EBE51E',
-      opacity: 0.8,
-      data: data.map((item) => item.warningUpperBound),
-    }, {
-      name: 'ERROR_UPPER_BOUND',
-      opacity: 0.8,
-      color: '#FF9900',
-      data: data.map((item) => item.errorUpperBound),
-    }, {
-      name: 'FATAL_UPPER_BOUND',
-      color: '#E3170A',
-      opacity: 0.8,
-      data: data.map((item) => item.fatalUpperBound),
-    }]
-  }), [data]);
+    },
+    scales: {
+      x: {
+        stacked: true,
+        grid: {
+          lineWidth: 0,
+        }
+      },
+      y: {
+        stacked: true,
+        grid: {
+          lineWidth: 0,
+          drawTicks: false,
+        },
+        title: {
+          display: false,
+        },
+        ticks: {
+          display: false
+        }
+      },
+    }
+  };
 
   return (
-    <div>
-      <HighchartsReact
-        highcharts={Highcharts}
-        options={options}
-        ref={chartComponentRef}
-      />
+    <div className="max-h-80 my-8">
+      <Line data={dataSource} options={options} />
     </div>
-  )
+  );
 }
