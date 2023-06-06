@@ -24,6 +24,7 @@ import ai.dqo.connectors.bigquery.BigQueryConnectionProvider;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.mysql.MysqlConnectionProvider;
 import ai.dqo.connectors.mysql.MysqlParametersSpec;
+import ai.dqo.connectors.oracle.OracleConnectionProvider;
 import ai.dqo.connectors.oracle.OracleParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlConnectionProvider;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
@@ -554,6 +555,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return SqlServerConnectionProvider.DIALECT_SETTINGS;
             case mysql:
                 return MysqlConnectionProvider.DIALECT_SETTINGS;
+            case oracle:
+                return OracleConnectionProvider.DIALECT_SETTINGS;
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }

@@ -39,5 +39,8 @@ public enum ProviderType {
 
     @JsonProperty("mysql")
     mysql,
+
+    @JsonProperty("oracle")
+    oracle,
     // TODO: add more connectors
 }
