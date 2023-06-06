@@ -24,6 +24,7 @@ import ai.dqo.connectors.bigquery.BigQueryConnectionProvider;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.mysql.MysqlConnectionProvider;
 import ai.dqo.connectors.mysql.MysqlParametersSpec;
+import ai.dqo.connectors.oracle.OracleParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlConnectionProvider;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.redshift.RedshiftConnectionProvider;
@@ -490,6 +491,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 }});
                 connectionSpec.setMysql(new MysqlParametersSpec() {{
                     setDatabase("your_my_sql_database");
+                }});
+                connectionSpec.setOracle(new OracleParametersSpec() {{
+                    setDatabase("your_oracle_database");
                 }});
                 connectionSpec.setProviderType(providerType);
 

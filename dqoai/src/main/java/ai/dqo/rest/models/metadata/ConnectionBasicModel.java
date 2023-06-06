@@ -19,6 +19,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.mysql.MysqlParametersSpec;
+import ai.dqo.connectors.oracle.OracleParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
@@ -103,6 +104,12 @@ public class ConnectionBasicModel {
     private MysqlParametersSpec mysql;
 
     /**
+     * Oracle connection parameters.
+     */
+    @JsonPropertyDescription("Oracle connection parameters.")
+    private OracleParametersSpec oracle;
+
+    /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.
      */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.")
@@ -156,6 +163,7 @@ public class ConnectionBasicModel {
             setRedshift(connectionSpec.getRedshift());
             setSqlserver(connectionSpec.getSqlserver());
             setMysql(connectionSpec.getMysql());
+            setOracle(connectionSpec.getOracle());
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
