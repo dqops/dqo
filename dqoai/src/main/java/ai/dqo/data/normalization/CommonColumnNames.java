@@ -124,4 +124,24 @@ public final class CommonColumnNames {
      * Column name for an error message.
      */
     public static final String ERROR_MESSAGE_COLUMN_NAME = "error_message";
+
+    /**
+     * Timestamp when the row was created at.
+     */
+    public static final String CREATED_AT_COLUMN_NAME = "created_at";
+
+    /**
+     * Timestamp when the row was updated at.
+     */
+    public static final String UPDATED_AT_COLUMN_NAME = "updated_at";
+
+    /**
+     * User that created the row.
+     */
+    public static final String CREATED_BY_COLUMN_NAME = "created_by";
+
+    /**
+     * User that updated the row.
+     */
+    public static final String UPDATED_BY_COLUMN_NAME = "updated_by";
 }

@@ -5,5 +5,5 @@ spec:
   fields:
   - field_name: percentile_value
     display_name: percentile_value
-    help_text: "Median (50th percentile), must equals to 0.5"
+    help_text: "Median (50th percentile), must equal 0.5"
     data_type: double

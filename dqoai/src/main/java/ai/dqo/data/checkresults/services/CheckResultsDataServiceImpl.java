@@ -17,30 +17,35 @@ package ai.dqo.data.checkresults.services;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.core.configuration.DqoIncidentsConfigurationProperties;
 import ai.dqo.data.checkresults.factory.CheckResultsColumnNames;
-import ai.dqo.data.checkresults.services.models.CheckResultDetailedSingleModel;
-import ai.dqo.data.checkresults.services.models.CheckResultStatus;
-import ai.dqo.data.checkresults.services.models.CheckResultsDetailedDataModel;
-import ai.dqo.data.checkresults.services.models.CheckResultsOverviewDataModel;
+import ai.dqo.data.checkresults.services.models.*;
 import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
 import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactory;
+import ai.dqo.data.checkresults.services.models.IncidentIssueHistogramModel;
 import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
+import ai.dqo.data.storage.LoadedMonthlyPartition;
+import ai.dqo.data.storage.ParquetPartitionId;
 import ai.dqo.metadata.groupings.TimePeriodGradient;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.rest.models.common.SortDirection;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.utils.tables.TableRowUtility;
+import com.google.common.base.Strings;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
+import tech.tablesaw.columns.instant.PackedInstant;
 import tech.tablesaw.selection.Selection;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -52,14 +57,17 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
     private CheckResultsSnapshotFactory checkResultsSnapshotFactory;
     private ErrorsSnapshotFactory errorsSnapshotFactory;
     private DefaultTimeZoneProvider defaultTimeZoneProvider;
+    private DqoIncidentsConfigurationProperties dqoIncidentsConfigurationProperties;
 
     @Autowired
     public CheckResultsDataServiceImpl(CheckResultsSnapshotFactory checkResultsSnapshotFactory,
                                        ErrorsSnapshotFactory errorsSnapshotFactory,
-                                       DefaultTimeZoneProvider defaultTimeZoneProvider) {
+                                       DefaultTimeZoneProvider defaultTimeZoneProvider,
+                                       DqoIncidentsConfigurationProperties dqoIncidentsConfigurationProperties) {
         this.checkResultsSnapshotFactory = checkResultsSnapshotFactory;
         this.errorsSnapshotFactory = errorsSnapshotFactory;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
+        this.dqoIncidentsConfigurationProperties = dqoIncidentsConfigurationProperties;
     }
 
     /**
@@ -186,83 +194,330 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         }
 
         for (Row row : workingTable) {
-            String id = row.getString(SensorReadoutsColumnNames.ID_COLUMN_NAME);
-            Double actualValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
-            Double expectedValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
-            Double warningLowerBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.WARNING_LOWER_BOUND_COLUMN_NAME);
-            Double warningUpperBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.WARNING_UPPER_BOUND_COLUMN_NAME);
-            Double errorLowerBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.ERROR_LOWER_BOUND_COLUMN_NAME);
-            Double errorUpperBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.ERROR_UPPER_BOUND_COLUMN_NAME);
-            Double fatalLowerBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME);
-            Double fatalUpperBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.FATAL_UPPER_BOUND_COLUMN_NAME);
-            Integer severity = row.getInt(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+            CheckResultDetailedSingleModel singleModel = createSingleCheckResultDetailedModel(row);
 
-            String checkCategory = row.getString(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
-            String checkDisplayName = row.getString(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
-            Long checkHash = row.getLong(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
-            String checkName = row.getString(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
-            String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
-
-            String columnName = TableRowUtility.getSanitizedStringValue(row, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
-            String dataStream = row.getString(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
-
-            Integer durationMs = row.getInt(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
-            Instant executedAt = row.getInstant(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
-            String timeGradient = row.getString(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
-            LocalDateTime timePeriod = row.getDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
-
-            Boolean includeInKpi = row.getBoolean(CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME);
-            Boolean includeInSla = row.getBoolean(CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME);
-            String provider = row.getString(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME);
-            String qualityDimension = row.getString(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
-            String sensorName = row.getString(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME);
-
-            CheckResultDetailedSingleModel singleModel = new CheckResultDetailedSingleModel() {{
-                setId(id);
-                setActualValue(actualValue);
-                setExpectedValue(expectedValue);
-                setWarningLowerBound(warningLowerBound);
-                setWarningUpperBound(warningUpperBound);
-                setErrorLowerBound(errorLowerBound);
-                setErrorUpperBound(errorUpperBound);
-                setFatalLowerBound(fatalLowerBound);
-                setFatalUpperBound(fatalUpperBound);
-                setSeverity(severity);
-
-                setColumnName(columnName);
-                setDataStream(dataStream);
-
-                setDurationMs(durationMs);
-                setExecutedAt(executedAt);
-                setTimeGradient(timeGradient);
-                setTimePeriod(timePeriod);
-
-                setIncludeInKpi(includeInKpi);
-                setIncludeInSla(includeInSla);
-                setProvider(provider);
-                setQualityDimension(qualityDimension);
-                setSensorName(sensorName);
-            }};
-            
-            CheckResultsDetailedDataModel checkResultsDetailedDataModel = resultMap.get(checkHash);
+            CheckResultsDetailedDataModel checkResultsDetailedDataModel = resultMap.get(singleModel.getCheckHash());
             if (checkResultsDetailedDataModel == null) {
                 checkResultsDetailedDataModel = new CheckResultsDetailedDataModel() {{
-                    setCheckCategory(checkCategory);
-                    setCheckName(checkName);
-                    setCheckHash(checkHash);
-                    setCheckType(checkType);
-                    setCheckDisplayName(checkDisplayName);
+                    setCheckCategory(singleModel.getCheckCategory());
+                    setCheckName(singleModel.getCheckName());
+                    setCheckHash(singleModel.getCheckHash());
+                    setCheckType(singleModel.getCheckType());
+                    setCheckDisplayName(singleModel.getCheckDisplayName());
                     setDataStreamNames(dataStreams);
-                    setDataStream(selectedDataStream);
+                    setDataStream(singleModel.getDataStream());
                     setSingleCheckResults(new ArrayList<>());
                 }};
-                resultMap.put(checkHash, checkResultsDetailedDataModel);
+                resultMap.put(singleModel.getCheckHash(), checkResultsDetailedDataModel);
             }
 
             checkResultsDetailedDataModel.getSingleCheckResults().add(singleModel);
         }
 
         return resultMap.values().toArray(CheckResultsDetailedDataModel[]::new);
+    }
+
+    /**
+     * Creates a data model that returns the result of a single check.
+     * @param row Row from the data quality result table.
+     * @return Model with all information for a single check result.
+     */
+    @NotNull
+    protected CheckResultDetailedSingleModel createSingleCheckResultDetailedModel(Row row) {
+        String id = row.getString(SensorReadoutsColumnNames.ID_COLUMN_NAME);
+        Double actualValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        Double expectedValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+        Double warningLowerBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.WARNING_LOWER_BOUND_COLUMN_NAME);
+        Double warningUpperBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.WARNING_UPPER_BOUND_COLUMN_NAME);
+        Double errorLowerBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.ERROR_LOWER_BOUND_COLUMN_NAME);
+        Double errorUpperBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.ERROR_UPPER_BOUND_COLUMN_NAME);
+        Double fatalLowerBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME);
+        Double fatalUpperBound = TableRowUtility.getSanitizedDoubleValue(row, CheckResultsColumnNames.FATAL_UPPER_BOUND_COLUMN_NAME);
+        Integer severity = row.getInt(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+
+        String checkCategory = row.getString(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+        String checkDisplayName = row.getString(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
+        Long checkHash = row.getLong(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
+        String checkName = row.getString(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
+        String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
+
+        String columnName = TableRowUtility.getSanitizedStringValue(row, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        String dataStream = row.getString(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
+
+        Integer durationMs = row.getInt(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
+        Instant executedAt = row.getInstant(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
+        String timeGradient = row.getString(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+        LocalDateTime timePeriod = row.getDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+
+        Boolean includeInKpi = row.getBoolean(CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME);
+        Boolean includeInSla = row.getBoolean(CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME);
+        String provider = row.getString(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME);
+        String qualityDimension = row.getString(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
+        String sensorName = row.getString(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME);
+
+        CheckResultDetailedSingleModel singleModel = new CheckResultDetailedSingleModel() {{
+            setId(id);
+            setActualValue(actualValue);
+            setExpectedValue(expectedValue);
+            setWarningLowerBound(warningLowerBound);
+            setWarningUpperBound(warningUpperBound);
+            setErrorLowerBound(errorLowerBound);
+            setErrorUpperBound(errorUpperBound);
+            setFatalLowerBound(fatalLowerBound);
+            setFatalUpperBound(fatalUpperBound);
+            setSeverity(severity);
+
+            setCheckCategory(checkCategory);
+            setCheckName(checkName);
+            setCheckHash(checkHash);
+            setCheckType(checkType);
+            setCheckDisplayName(checkDisplayName);
+
+            setColumnName(columnName);
+            setDataStream(dataStream);
+
+            setDurationMs(durationMs);
+            setExecutedAt(executedAt);
+            setTimeGradient(timeGradient);
+            setTimePeriod(timePeriod);
+
+            setIncludeInKpi(includeInKpi);
+            setIncludeInSla(includeInSla);
+            setProvider(provider);
+            setQualityDimension(qualityDimension);
+            setSensorName(sensorName);
+        }};
+        return singleModel;
+    }
+
+    /**
+     * Loads the results of failed data quality checks that are attached to the given incident, identified by the incident hash, first seen and incident until timestamps.
+     * Returns only check results with a minimum severity.
+     *
+     * @param connectionName    Connection name.
+     * @param physicalTableName Physical table name.
+     * @param incidentHash      Incident hash.
+     * @param firstSeen         The timestamp when the incident was first seen.
+     * @param incidentUntil     The timestamp when the incident was closed or expired, returns check results up to this timestamp.
+     * @param minSeverity       Minimum check issue severity that is returned.
+     * @param filterParameters  Filter parameters.
+     * @return An array of matching check results.
+     */
+    @Override
+    public CheckResultDetailedSingleModel[] loadCheckResultsRelatedToIncident(String connectionName,
+                                                                              PhysicalTableName physicalTableName,
+                                                                              long incidentHash,
+                                                                              Instant firstSeen,
+                                                                              Instant incidentUntil,
+                                                                              int minSeverity,
+                                                                              CheckResultListFilterParameters filterParameters) {
+        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
+        CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
+                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS);
+        LocalDate startMonth;
+        if (filterParameters.getDays() != null) {
+            startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
+        }
+        else {
+            startMonth = Instant.now().atZone(defaultTimeZoneId).toLocalDate().minus(filterParameters.getDays(), ChronoUnit.DAYS);
+        }
+
+        LocalDate endMonth = incidentUntil.plus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
+        if (!checkResultsSnapshot.ensureMonthsAreLoaded(startMonth, endMonth)) {
+            return new CheckResultDetailedSingleModel[0];
+        }
+
+        Instant startTimestamp = firstSeen;
+        Instant endTimestamp = incidentUntil;
+        if (filterParameters.getDate() != null) {
+            startTimestamp = filterParameters.getDate().atTime(0, 0).atZone(defaultTimeZoneId).toInstant();
+            endTimestamp = startTimestamp.plus(1L, ChronoUnit.DAYS).minus(1L, ChronoUnit.MILLIS);
+        } else {
+            if (filterParameters.getDays() != null) {
+                startTimestamp = Instant.now().atZone(defaultTimeZoneId).toLocalDate()
+                        .minus(filterParameters.getDays(), ChronoUnit.DAYS).atTime(0, 0).atZone(defaultTimeZoneId)
+                        .toInstant();
+            }
+        }
+
+        List<CheckResultDetailedSingleModel> resultsList = new ArrayList<>();
+
+        Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = checkResultsSnapshot.getLoadedMonthlyPartitions();
+        for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry : loadedMonthlyPartitions.entrySet()) {
+            Table partitionData = loadedPartitionEntry.getValue().getData();
+            if (partitionData == null || partitionData.rowCount() == 0) {
+                continue;
+            }
+
+            Selection minSeveritySelection = partitionData.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME).isGreaterThanOrEqualTo(minSeverity);
+            InstantColumn partitionExecutedAtColumn = partitionData.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+            Selection issuesInTimeRange = partitionExecutedAtColumn.isBetweenIncluding(
+                    PackedInstant.pack(startTimestamp), PackedInstant.pack(endTimestamp));
+            Selection incidentHashSelection = partitionData.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME).isIn(incidentHash);
+
+            Selection selectionOfMatchingIssues = minSeveritySelection.and(issuesInTimeRange).and(incidentHashSelection);
+            if (!Strings.isNullOrEmpty(filterParameters.getColumn())) {
+                TextColumn partitionColumnNameColumn = partitionData.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
+                if (Objects.equals(CheckResultsDataService.COLUMN_NAME_TABLE_CHECKS_PLACEHOLDER, filterParameters.getColumn())) {
+                    selectionOfMatchingIssues = selectionOfMatchingIssues.and(partitionColumnNameColumn.isMissing()); // table level sensors
+                } else {
+                    selectionOfMatchingIssues = selectionOfMatchingIssues.and(partitionColumnNameColumn.isEqualTo(filterParameters.getColumn()));
+                }
+            }
+
+            if (!Strings.isNullOrEmpty(filterParameters.getCheck())) {
+                TextColumn partitionCheckNameColumn = partitionData.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+                selectionOfMatchingIssues = selectionOfMatchingIssues.and(partitionCheckNameColumn.isEqualTo(filterParameters.getCheck()));
+            }
+
+            if (selectionOfMatchingIssues.size() == 0) {
+                continue;
+            }
+
+            for (Integer rowIndex : selectionOfMatchingIssues) {
+                Row row = partitionData.row(rowIndex);
+                CheckResultDetailedSingleModel singleCheckResultDetailedModel = createSingleCheckResultDetailedModel(row);
+
+                if (!Strings.isNullOrEmpty(filterParameters.getFilter()) &&
+                        !singleCheckResultDetailedModel.matchesFilter(filterParameters.getFilter())) {
+                    continue;
+                }
+
+                resultsList.add(singleCheckResultDetailedModel);
+            }
+        }
+
+        Comparator<CheckResultDetailedSingleModel> sortComparator = CheckResultDetailedSingleModel.makeSortComparator(filterParameters.getOrder());
+        if (filterParameters.getSortDirection() == SortDirection.asc) {
+            resultsList.sort(sortComparator);
+        }
+        else {
+            resultsList.sort(sortComparator.reversed());
+        }
+
+        int startRowIndexInPage = (filterParameters.getPage() - 1) * filterParameters.getLimit();
+        int untilRowIndexInPage = filterParameters.getPage() * filterParameters.getLimit();
+
+        if (startRowIndexInPage >= resultsList.size()) {
+            return new CheckResultDetailedSingleModel[0]; // no results
+        }
+
+        List<CheckResultDetailedSingleModel> pageResults = resultsList.subList(startRowIndexInPage, Math.min(untilRowIndexInPage, resultsList.size()));
+        CheckResultDetailedSingleModel[] resultsArray = pageResults.toArray(CheckResultDetailedSingleModel[]::new);
+        return resultsArray;
+    }
+
+    /**
+     * Builds a histogram of data quality issues for an incident. The histogram returns daily counts of data quality issues,
+     * also counting occurrences of data quality issues at various severity levels.
+     *
+     * @param connectionName    Connection name.
+     * @param physicalTableName Physical table name.
+     * @param incidentHash      Incident hash.
+     * @param firstSeen         The timestamp when the incident was first seen.
+     * @param incidentUntil     The timestamp when the incident was closed or expired, returns check results up to this timestamp.
+     * @param minSeverity       Minimum check issue severity that is returned.
+     * @param filterParameters  Optional filter to limit the issues included in the histogram.
+     * @return Daily histogram of failed data quality checks.
+     */
+    @Override
+    public IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
+                                                                           PhysicalTableName physicalTableName,
+                                                                           long incidentHash,
+                                                                           Instant firstSeen,
+                                                                           Instant incidentUntil,
+                                                                           int minSeverity,
+                                                                            IncidentHistogramFilterParameters filterParameters) {
+        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
+
+        CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
+                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS);
+        LocalDate startMonth;
+        if (filterParameters.getDays() != null) {
+            startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
+        }
+        else {
+            startMonth = Instant.now().atZone(defaultTimeZoneId).toLocalDate().minus(filterParameters.getDays(), ChronoUnit.DAYS);
+        }
+        LocalDate endMonth = incidentUntil.plus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
+        if (!checkResultsSnapshot.ensureMonthsAreLoaded(startMonth, endMonth)) {
+            return new IncidentIssueHistogramModel();
+        }
+
+        IncidentIssueHistogramModel histogramModel = new IncidentIssueHistogramModel();
+
+        Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = checkResultsSnapshot.getLoadedMonthlyPartitions();
+        for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry : loadedMonthlyPartitions.entrySet()) {
+            Table partitionData = loadedPartitionEntry.getValue().getData();
+            if (partitionData == null || partitionData.rowCount() == 0) {
+                continue;
+            }
+
+            IntColumn severityColumn = partitionData.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+            Selection minSeveritySelection = severityColumn.isGreaterThanOrEqualTo(minSeverity);
+
+            InstantColumn executedAtColumn = partitionData.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+            Instant startTimestamp = firstSeen;
+            if (filterParameters.getDays() != null) {
+                startTimestamp = Instant.now().atZone(defaultTimeZoneId).toLocalDate()
+                        .minus(filterParameters.getDays(), ChronoUnit.DAYS).atTime(0, 0).atZone(defaultTimeZoneId)
+                        .toInstant();
+            }
+
+            Selection issuesInTimeRange = executedAtColumn.isBetweenIncluding(
+                    PackedInstant.pack(startTimestamp), PackedInstant.pack(incidentUntil));
+            Selection incidentHashSelection = partitionData.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME).isIn(incidentHash);
+
+            Selection selectionOfMatchingIssues = minSeveritySelection.and(issuesInTimeRange).and(incidentHashSelection);
+            if (selectionOfMatchingIssues.size() == 0) {
+                continue;
+            }
+
+            TextColumn columnNameColumn = partitionData.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
+            TextColumn checkNameColumn = partitionData.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+
+            for (Integer rowIndex : selectionOfMatchingIssues) {
+                Row row = partitionData.row(rowIndex);
+
+                if (!Strings.isNullOrEmpty(filterParameters.getFilter())) {
+                    CheckResultDetailedSingleModel singleCheckResultDetailedModel = createSingleCheckResultDetailedModel(row);
+                    if (!singleCheckResultDetailedModel.matchesFilter(filterParameters.getFilter())) {
+                        continue;
+                    }
+                }
+
+                Integer severity = severityColumn.get(rowIndex);
+                Instant executedAt = executedAtColumn.get(rowIndex);
+                LocalDate executedAtDate = executedAt.atZone(defaultTimeZoneId).toLocalDate();
+                String columnName = columnNameColumn.get(rowIndex);
+                String checkName = checkNameColumn.get(rowIndex);
+                if (columnName == null) {
+                    columnName = CheckResultsDataService.COLUMN_NAME_TABLE_CHECKS_PLACEHOLDER;
+                }
+
+                boolean dateMatch = filterParameters.getDate() == null || Objects.equals(filterParameters.getDate(), executedAtDate);
+                boolean columnMatch = Strings.isNullOrEmpty(filterParameters.getColumn()) || Objects.equals(filterParameters.getColumn(), columnName);
+                boolean checkMatch = Strings.isNullOrEmpty(filterParameters.getCheck()) || Objects.equals(filterParameters.getCheck(), checkName);
+
+                if (columnMatch && checkMatch) {
+                    histogramModel.incrementSeverityForDay(executedAtDate, severity);
+                }
+
+                if (dateMatch && checkMatch) {
+                    histogramModel.incrementCountForColumn(columnName);
+                }
+
+                if (dateMatch && columnMatch) {
+                    histogramModel.incrementCountForCheck(checkName);
+                }
+            }
+        }
+
+        histogramModel.addMissingDaysInRange();
+        histogramModel.sortAndTruncateColumnHistogram(this.dqoIncidentsConfigurationProperties.getColumnHistogramSize());
+        histogramModel.sortAndTruncateCheckHistogram(this.dqoIncidentsConfigurationProperties.getCheckHistogramSize());
+
+        return histogramModel;
     }
 
     /**

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { AxiosResponse } from 'axios';
 import {
@@ -28,7 +28,7 @@ import { getFirstLevelActiveTab } from "../redux/selectors";
 
 const TreeContext = React.createContext({} as any);
 
-const checkTypesToJobTemplateKey= {
+export const checkTypesToJobTemplateKey= {
   [CheckTypes.SOURCES]: 'run_checks_job_template',
   [CheckTypes.PROFILING]: 'run_profiling_checks_job_template',
   [CheckTypes.RECURRING]: 'run_recurring_checks_job_template',
@@ -44,62 +44,68 @@ const checkTypesToHasConfiguredCheckKey = {
 
 function TreeProvider(props: any) {
   const [treeDataMaps, setTreeDataMaps] = useState<Record<string, CustomTreeNode[]>>({});
-  const [sourceRoute, setSourceRoute] = useState<CheckTypes>(CheckTypes.SOURCES);
-  const treeData = useMemo(() => treeDataMaps[sourceRoute] ?? [], [treeDataMaps, sourceRoute]);
+  const location = useLocation();
+  const initialPathName = location.pathname;
+  const activeSourceRoute = (initialPathName.split('/')[1] ?? CheckTypes.SOURCES) as CheckTypes;
+  const checkTypes: CheckTypes = [CheckTypes.RECURRING, CheckTypes.SOURCES, CheckTypes.PROFILING, CheckTypes.PARTITIONED].includes(activeSourceRoute) ? activeSourceRoute : CheckTypes.SOURCES;
+  const treeData = useMemo(() => treeDataMaps[checkTypes] ?? [], [treeDataMaps, checkTypes]);
   const setTreeData = useCallback((_treeData: CustomTreeNode[]) => {
     setTreeDataMaps(prev => ({
       ...prev,
-      [sourceRoute]: _treeData
+      [checkTypes]: _treeData
     }));
-  }, [sourceRoute]);
+  }, [checkTypes]);
   const [openNodes, setOpenNodes] = useState<CustomTreeNode[]>([]);
   const [tabMaps, setTabMaps] = useState<Record<string, ITab[]>>({}); // `blue box tab level`
   const [subTabMap, setSubTabMap] = useState<{[key: string]: string}>({}); // sub tab under `blue box tab level`
-  const tabs = useMemo(() => tabMaps[sourceRoute] ?? [], [tabMaps, sourceRoute]);
+  const tabs = useMemo(() => tabMaps[checkTypes] ?? [], [tabMaps, checkTypes]);
   const setTabs = useCallback((_tabMaps: ITab[]) => {
     setTabMaps(prev => ({
       ...prev,
-      [sourceRoute]: _tabMaps
+      [checkTypes]: _tabMaps
     }));
-  }, [sourceRoute]);
+  }, [checkTypes]);
 
   const [activeNode, setActiveNode] = useState<CustomTreeNode>();
   const [activeTabMaps, setActiveTabMaps] = useState<Record<string, string>>({});
-  const activeTab = activeTabMaps[sourceRoute];
+  const activeTab = activeTabMaps[checkTypes];
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const [selectedTreeNode, setSelectedTreeNode] = useState<CustomTreeNode>();
   const history = useHistory();
   const dispatch = useDispatch();
   const [loadingNodes, setLoadingNodes] = useState<Record<string, boolean>>({});
-  const location = useLocation();
-  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(sourceRoute));
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getConnections = async () => {
-    const res: AxiosResponse<ConnectionBasicModel[]> =
-      await ConnectionApiClient.getAllConnections();
-    const mappedConnectionsToTreeData = res.data.map((item) => ({
-      id: item.connection_name ?? '',
-      parentId: null,
-      label: item.connection_name ?? '',
-      items: [],
-      level: TREE_LEVEL.DATABASE,
-      tooltip: item.connection_name,
-      run_checks_job_template: item[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof ConnectionBasicModel],
-      collect_statistics_job_template: item.collect_statistics_job_template,
-      data_clean_job_template: item.data_clean_job_template,
-      open: false
-    }));
-    const treeDataMaps = [
-      CheckTypes.RECURRING,
-      CheckTypes.SOURCES,
-      CheckTypes.PROFILING,
-      CheckTypes.PARTITIONED,
-    ].reduce((acc, cur) => ({
-      ...acc,
-      [cur]: mappedConnectionsToTreeData
-    }), {});
-    setTreeDataMaps(treeDataMaps);
+    try {
+      const res: AxiosResponse<ConnectionBasicModel[]> =
+        await ConnectionApiClient.getAllConnections();
+      const mappedConnectionsToTreeData = res.data.map((item) => ({
+        id: item.connection_name ?? '',
+        parentId: null,
+        label: item.connection_name ?? '',
+        items: [],
+        level: TREE_LEVEL.DATABASE,
+        tooltip: item.connection_name,
+        run_checks_job_template: item[checkTypesToJobTemplateKey[checkTypes as keyof typeof checkTypesToJobTemplateKey] as keyof ConnectionBasicModel],
+        collect_statistics_job_template: item.collect_statistics_job_template,
+        data_clean_job_template: item.data_clean_job_template,
+        open: false
+      }));
+      const treeDataMaps = [
+        CheckTypes.RECURRING,
+        CheckTypes.SOURCES,
+        CheckTypes.PROFILING,
+        CheckTypes.PARTITIONED,
+      ].reduce((acc, cur) => ({
+        ...acc,
+        [cur]: mappedConnectionsToTreeData
+      }), {});
+      setTreeDataMaps(treeDataMaps);
+    } catch (err) {
+      console.warn(err);
+    }
   };
 
   const addConnection = async (connection: ConnectionBasicModel) => {
@@ -110,7 +116,7 @@ function TreeProvider(props: any) {
       items: [],
       level: TREE_LEVEL.DATABASE,
       tooltip: connection.connection_name,
-      run_checks_job_template: connection[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof ConnectionBasicModel] as CheckSearchFilters,
+      run_checks_job_template: connection[checkTypesToJobTemplateKey[checkTypes as keyof typeof checkTypesToJobTemplateKey] as keyof ConnectionBasicModel] as CheckSearchFilters,
       collect_statistics_job_template: connection.collect_statistics_job_template,
       data_clean_job_template: connection.data_clean_job_template,
       open: false
@@ -130,22 +136,20 @@ function TreeProvider(props: any) {
 
     dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
       url: `${ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection.connection_name ?? '', 'schemas')}?import_schema=true&create_success=true`,
-      value: ROUTES.CONNECTION_LEVEL_VALUE(sourceRoute, connection.connection_name ?? ''),
+      value: ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, connection.connection_name ?? ''),
       state: {},
       label: connection.connection_name ?? ''
     }));
-    pushHistory(`${ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection.connection_name ?? '', 'schemas')}?import_schema=true&create_success=true`);
+    history.push(`${ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection.connection_name ?? '', 'schemas')}?import_schema=true&create_success=true`);
   };
 
   useEffect(() => {
-    (async () => {
-      await getConnections();
-    })();
+    getConnections();
   }, []);
 
   const resetTreeData = (node: CustomTreeNode, items: CustomTreeNode[]) => {
-    setOpenNodes([
-      ...openNodes.filter(
+    setOpenNodes(prev =>[
+      ...prev.filter(
         (item) => item.id.toString().indexOf(node.id.toString()) !== 0
       ),
       node
@@ -163,7 +167,7 @@ function TreeProvider(props: any) {
     setTreeData([...newTreeData, ...items]);
   };
 
-  const refreshDatabaseNode = async (node: CustomTreeNode) => {
+  const refreshDatabaseNode = async (node: CustomTreeNode, reset = true): Promise<CustomTreeNode[]> => {
     const res: AxiosResponse<SchemaModel[]> = await SchemaApiClient.getSchemas(
       node.label
     );
@@ -175,13 +179,15 @@ function TreeProvider(props: any) {
       parentId: node.id,
       items: [],
       tooltip: `${node?.label}.${schema.schema_name}`,
-      run_checks_job_template: schema[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof SchemaModel] as CheckSearchFilters,
+      run_checks_job_template: schema[checkTypesToJobTemplateKey[checkTypes as keyof typeof checkTypesToJobTemplateKey] as keyof SchemaModel] as CheckSearchFilters,
       collect_statistics_job_template: schema.collect_statistics_job_template,
       data_clean_job_template: schema.data_clean_job_template,
       open: false
     }));
 
-    resetTreeData(node, items);
+    if (reset) {
+      resetTreeData(node, items);
+    }
 
     return items;
   };
@@ -199,28 +205,31 @@ function TreeProvider(props: any) {
     setTreeData([...treeData, newNode]);
   }
 
-  const refreshSchemaNode = async (node: CustomTreeNode) => {
-    const connectionNode = findTreeNode(treeData, node.parentId ?? '');
+  const refreshSchemaNode = async (node: CustomTreeNode, reset = true): Promise<CustomTreeNode[]> => {
     const res: AxiosResponse<TableBasicModel[]> =
-      await TableApiClient.getTables(connectionNode?.label ?? '', node.label);
+      await TableApiClient.getTables(node.parentId?.toString() || "", node.label);
     const items = res.data.map((table) => ({
       id: `${node.id}.${table.target?.table_name}`,
       label: table.target?.table_name || '',
       level: TREE_LEVEL.TABLE,
       parentId: node.id,
       items: [],
-      tooltip: `${connectionNode?.label}.${node.label}.${table.target?.table_name}`,
-      hasCheck: !!table?.[checkTypesToHasConfiguredCheckKey[sourceRoute as keyof typeof checkTypesToHasConfiguredCheckKey] as keyof TableBasicModel],
-      run_checks_job_template: table[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof TableBasicModel] as CheckSearchFilters,
+      tooltip: `${node.parentId?.toString() || ""}.${node.label}.${table.target?.table_name}`,
+      hasCheck: !!table?.[checkTypesToHasConfiguredCheckKey[checkTypes as keyof typeof checkTypesToHasConfiguredCheckKey] as keyof TableBasicModel],
+      run_checks_job_template: table[checkTypesToJobTemplateKey[checkTypes as keyof typeof checkTypesToJobTemplateKey] as keyof TableBasicModel] as CheckSearchFilters,
       collect_statistics_job_template: table.collect_statistics_job_template,
       data_clean_job_template: table.data_clean_job_template,
       open: false,
       configured: table.partitioning_configuration_missing
     }));
-    resetTreeData(node, items);
+    if (reset) {
+      resetTreeData(node, items);
+    }
+
+    return items;
   };
 
-  const refreshTableNode = async (node: CustomTreeNode) => {
+  const refreshTableNode = async (node: CustomTreeNode, reset = true) => {
     const schemaNode = findTreeNode(treeData, node?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
     const items = [
@@ -234,7 +243,7 @@ function TreeProvider(props: any) {
         open: false
       }
     ];
-    if (sourceRoute === CheckTypes.PROFILING) {
+    if (checkTypes === CheckTypes.PROFILING) {
       items.push(
         {
           id: `${node.id}.checks`,
@@ -246,7 +255,7 @@ function TreeProvider(props: any) {
           open: false
         });
     }
-    if (sourceRoute === CheckTypes.RECURRING) {
+    if (checkTypes === CheckTypes.RECURRING) {
       items.push(
         {
           id: `${node.id}.dailyCheck`,
@@ -268,7 +277,7 @@ function TreeProvider(props: any) {
         }
       )
     }
-    if (sourceRoute === CheckTypes.PARTITIONED) {
+    if (checkTypes === CheckTypes.PARTITIONED) {
       items.push(
         {
           id: `${node.id}.dailyPartitionedChecks`,
@@ -291,27 +300,29 @@ function TreeProvider(props: any) {
       )
     }
 
-    resetTreeData(node, items);
+    if (reset) {
+      resetTreeData(node, items);
+    }
+
+    return items;
   };
 
-  const refreshColumnNode = async (node: CustomTreeNode) => {
-    const columnsNode = findTreeNode(treeData, node?.parentId ?? '');
-    const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
-    const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
-    const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+  const refreshColumnNode = async (node: CustomTreeNode, reset = true) => {
+    const { connection, table, schema } = parseNodeId(node.id);
+
     const items = [];
-    if (sourceRoute === CheckTypes.PROFILING) {
+    if (checkTypes === CheckTypes.PROFILING) {
       items.push({
         id: `${node.id}.checks`,
         label: `Profiling checks`,
         level: TREE_LEVEL.COLUMN_CHECKS,
         parentId: node.id,
         items: [],
-        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label} checks`,
+        tooltip: `${connection}.${schema}.${table}.${node.label} checks`,
         open: false
       });
     }
-    if (sourceRoute === CheckTypes.RECURRING) {
+    if (checkTypes === CheckTypes.RECURRING) {
       items.push(
         {
           id: `${node.id}.dailyCheck`,
@@ -319,7 +330,7 @@ function TreeProvider(props: any) {
           level: TREE_LEVEL.COLUMN_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} daily recurring`,
+          tooltip: `${connection}.${schema}.${table}.${node?.label} daily recurring`,
           open: false
         },
         {
@@ -328,12 +339,12 @@ function TreeProvider(props: any) {
           level: TREE_LEVEL.COLUMN_MONTHLY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} monthly recurring`,
+          tooltip: `${connection}.${schema}.${table}.${node?.label} monthly recurring`,
           open: false
         }
       );
     }
-    if (sourceRoute === CheckTypes.PARTITIONED) {
+    if (checkTypes === CheckTypes.PARTITIONED) {
       items.push(
         {
           id: `${node.id}.dailyPartitionedChecks`,
@@ -341,7 +352,7 @@ function TreeProvider(props: any) {
           level: TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} day period checks`,
+          tooltip: `${connection}.${schema}.${table}.${node?.label} day period checks`,
           open: false
         },
         {
@@ -350,23 +361,36 @@ function TreeProvider(props: any) {
           level: TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} month period checks`,
+          tooltip: `${connection}.${schema}.${table}.${node?.label} month period checks`,
           open: false
         }
       );
     }
-    resetTreeData(node, items);
+    if (reset) {
+      resetTreeData(node, items);
+    }
+
+    return items;
   };
 
-  const refreshColumnsNode = async (node: CustomTreeNode) => {
-    const tableNode = findTreeNode(treeData, node.parentId ?? '');
-    const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
-    const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+  const parseNodeId = (id: TreeNodeId) => {
+    const terms = id.toString().split('.');
+
+    const table = terms[2];
+    const schema = terms[1];
+    const connection = terms[0];
+
+    return { connection, schema, table};
+  };
+
+  const refreshColumnsNode = async (node: CustomTreeNode, reset = true) => {
+    const { connection, schema, table } = parseNodeId(node.id);
+
     const res: AxiosResponse<ColumnBasicModel[]> =
       await ColumnApiClient.getColumns(
-        connectionNode?.label ?? '',
-        schemaNode?.label ?? '',
-        tableNode?.label ?? ''
+        connection ?? '',
+        schema ?? '',
+        table ?? ''
       );
     const items = res.data.map((column) => ({
       id: `${node.id}.${column.column_name}`,
@@ -374,105 +398,91 @@ function TreeProvider(props: any) {
       level: TREE_LEVEL.COLUMN,
       parentId: node.id,
       items: [],
-      tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${column.column_name}`,
-      hasCheck: !!column?.[checkTypesToHasConfiguredCheckKey[sourceRoute as keyof typeof checkTypesToHasConfiguredCheckKey] as keyof ColumnBasicModel],
-      run_checks_job_template: column[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof ColumnBasicModel] as CheckSearchFilters,
+      tooltip: `${connection}.${schema}.${table}.${column.column_name}`,
+      hasCheck: !!column?.[checkTypesToHasConfiguredCheckKey[checkTypes as keyof typeof checkTypesToHasConfiguredCheckKey] as keyof ColumnBasicModel],
+      run_checks_job_template: column[checkTypesToJobTemplateKey[checkTypes as keyof typeof checkTypesToJobTemplateKey] as keyof ColumnBasicModel] as CheckSearchFilters,
       collect_statistics_job_template: column.collect_statistics_job_template,
       data_clean_job_template: column.data_clean_job_template,
       open: false,
       configured: column.has_any_configured_checks || column.has_any_configured_partition_checks || column.has_any_configured_profiling_checks || column.has_any_configured_recurring_checks
     }));
-    resetTreeData(node, items);
+    if (reset) {
+      resetTreeData(node, items);
+    }
+
+    return items;
   };
 
-  const refreshTableChecksNode = async (node: CustomTreeNode) => {
-    const tableNode = findTreeNode(treeData, node.parentId ?? '');
-    const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
-    const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+  const refreshTableChecksNode = async (node: CustomTreeNode, reset = true) => {
+    const { connection, schema, table } = parseNodeId(node.id);
     const res = await TableApiClient.getTableProfilingChecksUIBasic(
-      connectionNode?.label ?? '',
-      schemaNode?.label ?? '',
-      tableNode?.label ?? ''
+      connection ?? '',
+      schema ?? '',
+      table ?? ''
     );
-    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
+    return addChecks(res.data.checks || [], node, `${connection}.${schema}.${table}`, reset);
   };
 
-  const refreshTableRecurringNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
-    const tableNode = findTreeNode(treeData, node.parentId ?? '');
-    const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
-    const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+  const refreshTableRecurringNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly', reset = true) => {
+    const { connection, schema, table } = parseNodeId(node.id);
 
     const res = await TableApiClient.getTableRecurringChecksUIBasic(
-      connectionNode?.label ?? '',
-      schemaNode?.label ?? '',
-      tableNode?.label ?? '',
+      connection ?? '',
+      schema ?? '',
+      table ?? '',
       timePartitioned
     );
-    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
+    return addChecks(res.data.checks || [], node, `${connection}.${schema}.${table}`, reset);
   };
   
-  const refreshTablePartitionedRecurringNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
-    const tableNode = findTreeNode(treeData, node.parentId ?? '');
-    const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
-    const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+  const refreshTablePartitionedRecurringNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly', reset = true) => {
+    const { connection, schema, table } = parseNodeId(node.id);
     
     const res = await TableApiClient.getTablePartitionedChecksUIBasic(
-      connectionNode?.label ?? '',
-      schemaNode?.label ?? '',
-      tableNode?.label ?? '',
+      connection ?? '',
+      schema ?? '',
+      table ?? '',
       timePartitioned
     );
-    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
+    return addChecks(res.data.checks || [], node, `${connection}.${schema}.${table}`, reset);
   };
   
-  const refreshColumnChecksNode = async (node: CustomTreeNode) => {
-    const columnNode = findTreeNode(treeData, node.parentId ?? '');
-    const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
-    const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
-    const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
-    const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+  const refreshColumnChecksNode = async (node: CustomTreeNode, reset = true) => {
+    const { connection, schema, table } = parseNodeId(node.id);
     const res = await ColumnApiClient.getColumnProfilingChecksUIBasic(
-      connectionNode?.label ?? '',
-      schemaNode?.label ?? '',
-      tableNode?.label ?? '',
-      columnNode?.label ?? ''
+      connection ?? '',
+      schema ?? '',
+      table ?? '',
+      node?.label ?? ''
     );
-    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
+    return addChecks(res.data.checks || [], node, `${connection}.${schema}.${table}.${node.label}`, reset);
   };
 
-  const refreshColumnRecurringNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
-    const columnNode = findTreeNode(treeData, node.parentId ?? '');
-    const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
-    const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
-    const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
-    const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+  const refreshColumnRecurringNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly', reset = true) => {
+    const { connection, schema, table } = parseNodeId(node.id);
     const res = await ColumnApiClient.getColumnRecurringChecksUIBasic(
-      connectionNode?.label ?? '',
-      schemaNode?.label ?? '',
-      tableNode?.label ?? '',
-      columnNode?.label ?? '',
+      connection ?? '',
+      schema ?? '',
+      table ?? '',
+      node.label ?? '',
       timePartitioned
     );
-    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
+    return addChecks(res.data.checks || [], node, `${connection}.${schema}.${table}.${node.label}`, reset);
   };
   
-  const refreshColumnPartitionedChecksNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
-    const columnNode = findTreeNode(treeData, node.parentId ?? '');
-    const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
-    const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
-    const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
-    const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+  const refreshColumnPartitionedChecksNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly', reset = true) => {
+    const { connection, schema, table } = parseNodeId(node.id);
     const res = await ColumnApiClient.getColumnPartitionedChecksUIBasic(
-      connectionNode?.label ?? '',
-      schemaNode?.label ?? '',
-      tableNode?.label ?? '',
-      columnNode?.label ?? '',
+      connection ?? '',
+      schema ?? '',
+      table ?? '',
+      node?.label ?? '',
       timePartitioned
     );
-    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
+    return addChecks(res.data.checks || [], node, `${connection}.${schema}.${table}.${node.label}`, reset);
   };
   
-  const addChecks = (checks: UICheckBasicModel[], node: CustomTreeNode, tooltipSuffix: string) => {
+  const addChecks = (checks: UICheckBasicModel[], node: CustomTreeNode, tooltipSuffix: string, reset = true): CustomTreeNode[] => {
     const items: CustomTreeNode[] = [];
     checks?.forEach((check) => {
       items.push({
@@ -487,7 +497,11 @@ function TreeProvider(props: any) {
         open: false
       });
     });
-    resetTreeData(node, items);
+    if (reset) {
+      resetTreeData(node, items);
+    }
+
+    return items;
   }
 
   const toggleOpenNode = async (id: TreeNodeId) => {
@@ -511,7 +525,7 @@ function TreeProvider(props: any) {
   const updateActiveTabMap = (activeTabId: string) => {
     setActiveTabMaps(prev => ({
       ...prev,
-      [sourceRoute]: activeTabId
+      [checkTypes]: activeTabId
     }));
   }
 
@@ -642,48 +656,51 @@ function TreeProvider(props: any) {
     }
   };
 
-  const refreshNode = async (node: CustomTreeNode) => {
-    if (!node) return;
+  const refreshNode = async (node: CustomTreeNode, reset = true): Promise<CustomTreeNode[]> => {
+    if (!node) return [];
     setLoadingNodes(prev => ({
       ...prev,
       [node.id]: true
     }));
+    let newItems: CustomTreeNode[] = [];
     if (node.level === TREE_LEVEL.DATABASE) {
-      await refreshDatabaseNode(node);
+      newItems = await refreshDatabaseNode(node, reset);
     } else if (node.level === TREE_LEVEL.SCHEMA) {
-      await refreshSchemaNode(node);
+      newItems = await refreshSchemaNode(node, reset);
     } else if (node.level === TREE_LEVEL.TABLE) {
-      await refreshTableNode(node);
+      newItems = await refreshTableNode(node, reset);
     } else if (node.level === TREE_LEVEL.COLUMNS) {
-      await refreshColumnsNode(node);
+      newItems =  await refreshColumnsNode(node, reset);
     } else if (node.level === TREE_LEVEL.TABLE_CHECKS) {
-      await refreshTableChecksNode(node);
+      newItems = await refreshTableChecksNode(node, reset);
     } else if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
-      await refreshTableRecurringNode(node, 'daily');
+      newItems = await refreshTableRecurringNode(node, 'daily', reset);
     } else if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
-      await refreshTableRecurringNode(node, 'monthly');
+      newItems = await refreshTableRecurringNode(node, 'monthly', reset);
     }  else if (node.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS) {
-      await refreshTablePartitionedRecurringNode(node, 'daily');
+      newItems = await refreshTablePartitionedRecurringNode(node, 'daily', reset);
     } else if (node.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS) {
-      await refreshTablePartitionedRecurringNode(node, 'monthly');
+      newItems = await refreshTablePartitionedRecurringNode(node, 'monthly', reset);
     } else if (node.level === TREE_LEVEL.COLUMN) {
-      await refreshColumnNode(node);
+      newItems = await refreshColumnNode(node, reset);
     } else if (node.level === TREE_LEVEL.COLUMN_CHECKS) {
-      await refreshColumnChecksNode(node);
+      newItems = await refreshColumnChecksNode(node, reset);
     } else if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
-      await refreshColumnRecurringNode(node, 'daily');
+      newItems = await refreshColumnRecurringNode(node, 'daily', reset);
     } else if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
-      await refreshColumnRecurringNode(node, 'monthly');
+      newItems = await refreshColumnRecurringNode(node, 'monthly', reset);
     } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS) {
-      await refreshColumnPartitionedChecksNode(node, 'daily');
+      newItems = await refreshColumnPartitionedChecksNode(node, 'daily', reset);
     } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
-      await refreshColumnPartitionedChecksNode(node, 'monthly');
+      newItems = await refreshColumnPartitionedChecksNode(node, 'monthly', reset);
     }
 
     setLoadingNodes(prev => ({
       ...prev,
       [node.id]: false
     }));
+
+    return newItems;
   };
 
   const runChecks = async (node: CustomTreeNode) => {
@@ -861,7 +878,7 @@ function TreeProvider(props: any) {
   const deleteStoredData = async (node: CustomTreeNode, params: { [key: string]: string | boolean }) => {
     if (node.data_clean_job_template) {
       let checkType;
-      switch (sourceRoute) {
+      switch (checkTypes) {
         case CheckTypes.RECURRING:
           checkType = 'recurring';
           break;
@@ -890,66 +907,62 @@ function TreeProvider(props: any) {
     setActiveNode(newActiveNode);
   };
 
-  const pushHistory = (path: string) => {
-    history.push(path);
-  }
-
-  const switchTab = async (node: CustomTreeNode, sourceRoute: CheckTypes) => {
+  const switchTab = async (node: CustomTreeNode, checkType: CheckTypes) => {
     if (!node) return;
 
     setSelectedTreeNode(node);
-    const defaultConnectionTab = sourceRoute === CheckTypes.SOURCES ? 'detail' : 'schedule';
+    const defaultConnectionTab = checkType === CheckTypes.SOURCES ? 'detail' : 'schedule';
     if (node.level === TREE_LEVEL.DATABASE) {
-      const url = ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, defaultConnectionTab);
+      const url = ROUTES.CONNECTION_DETAIL(checkType, node.label, defaultConnectionTab);
       if (firstLevelActiveTab === url) {
         return;
       }
-      dispatch(addFirstLevelTab(sourceRoute, {
+      dispatch(addFirstLevelTab(checkType, {
         url,
-        value: ROUTES.CONNECTION_LEVEL_VALUE(sourceRoute, node.label),
+        value: ROUTES.CONNECTION_LEVEL_VALUE(checkType, node.label),
         state: {},
         label: node.label
       }));
-      pushHistory(url);
+      history.push(url);
     } else if (node.level === TREE_LEVEL.SCHEMA) {
       const connectionNode = findTreeNode(treeData, node.parentId ?? '');
-      const url = ROUTES.SCHEMA_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', node.label, 'tables');
+      const url = ROUTES.SCHEMA_LEVEL_PAGE(checkType, connectionNode?.label ?? '', node.label, 'tables');
 
       if (firstLevelActiveTab === url) {
         return;
       }
 
-      dispatch(addFirstLevelTab(sourceRoute, {
+      dispatch(addFirstLevelTab(checkType, {
         url,
-        value: ROUTES.SCHEMA_LEVEL_VALUE(sourceRoute, connectionNode?.label ?? '', node.label),
+        value: ROUTES.SCHEMA_LEVEL_VALUE(checkType, connectionNode?.label ?? '', node.label),
         state: {},
         label: node.label
       }));
-      pushHistory(ROUTES.SCHEMA_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', node.label, 'tables'));
+      history.push(ROUTES.SCHEMA_LEVEL_PAGE(checkType, connectionNode?.label ?? '', node.label, 'tables'));
     } else if (node.level === TREE_LEVEL.TABLE) {
       const schemaNode = findTreeNode(treeData, node?.parentId ?? '');
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
       let tab = subTabMap[node.id];
-      if (sourceRoute === CheckTypes.RECURRING || sourceRoute === CheckTypes.PARTITIONED) {
+      if (checkType === CheckTypes.RECURRING || checkType === CheckTypes.PARTITIONED) {
         tab = tab || 'daily';
       } else {
         tab = tab || 'detail'
       }
 
-      const url = ROUTES.TABLE_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', node.label, tab);
+      const url = ROUTES.TABLE_LEVEL_PAGE(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', node.label, tab);
 
       if (firstLevelActiveTab === url) {
         return;
       }
 
-      dispatch(addFirstLevelTab(sourceRoute, {
+      dispatch(addFirstLevelTab(checkType, {
         url,
-        value: ROUTES.TABLE_LEVEL_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', node.label),
+        value: ROUTES.TABLE_LEVEL_VALUE(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', node.label),
         state: {},
         label: node.label
       }));
-      pushHistory(ROUTES.TABLE_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', node.label, tab));
+      history.push(ROUTES.TABLE_LEVEL_PAGE(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', node.label, tab));
     } else if ([TREE_LEVEL.TABLE_CHECKS, TREE_LEVEL.TABLE_DAILY_CHECKS, TREE_LEVEL.TABLE_MONTHLY_CHECKS, TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS, TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS].includes(node.level)) {
       const tableNode = findTreeNode(treeData, node.parentId ?? '');
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
@@ -959,32 +972,32 @@ function TreeProvider(props: any) {
       let url = '';
       let value = '';
       if (node.level === TREE_LEVEL.TABLE_CHECKS) {
-        url = ROUTES.TABLE_PROFILING(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
-        value = ROUTES.TABLE_PROFILING_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
+        url = ROUTES.TABLE_PROFILING(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
+        value = ROUTES.TABLE_PROFILING_VALUE(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
       } else if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
-        url = ROUTES.TABLE_RECURRING(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily');
-        value = ROUTES.TABLE_RECURRING_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
+        url = ROUTES.TABLE_RECURRING(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily');
+        value = ROUTES.TABLE_RECURRING_VALUE(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
       } else if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
-        url = ROUTES.TABLE_RECURRING(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly');
-        value = ROUTES.TABLE_RECURRING_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
+        url = ROUTES.TABLE_RECURRING(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly');
+        value = ROUTES.TABLE_RECURRING_VALUE(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
       } else if (node.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS) {
-        url = ROUTES.TABLE_PARTITIONED(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily');
-        value = ROUTES.TABLE_PARTITIONED_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
+        url = ROUTES.TABLE_PARTITIONED(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily');
+        value = ROUTES.TABLE_PARTITIONED_VALUE(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
       } else if (node.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS) {
-        url = ROUTES.TABLE_PARTITIONED(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly');
-        value = ROUTES.TABLE_PARTITIONED_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
+        url = ROUTES.TABLE_PARTITIONED(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly');
+        value = ROUTES.TABLE_PARTITIONED_VALUE(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
       }
 
       if (firstLevelActiveTab === url) {
         return;
       }
-      dispatch(addFirstLevelTab(sourceRoute, {
+      dispatch(addFirstLevelTab(checkType, {
         url: url,
         value,
         state: {},
         label: node.label
       }));
-      pushHistory(url);
+      history.push(url);
     } else if ([TREE_LEVEL.COLUMN_CHECKS, TREE_LEVEL.COLUMN_DAILY_CHECKS, TREE_LEVEL.COLUMN_MONTHLY_CHECKS, TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS, TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS].includes(node.level)) {
       const columnNode = findTreeNode(treeData, node?.parentId ?? '');
       const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
@@ -995,33 +1008,33 @@ function TreeProvider(props: any) {
       let url = '';
       let value = '';
       if (node?.level === TREE_LEVEL.COLUMN_CHECKS) {
-        url = ROUTES.COLUMN_PROFILING(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
-        value = ROUTES.COLUMN_PROFILING_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
+        url = ROUTES.COLUMN_PROFILING(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
+        value = ROUTES.COLUMN_PROFILING_VALUE(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
       } else if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
-        url = ROUTES.COLUMN_RECURRING(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily');
-        value = ROUTES.COLUMN_RECURRING_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
+        url = ROUTES.COLUMN_RECURRING(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily');
+        value = ROUTES.COLUMN_RECURRING_VALUE(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
       } else if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
-        url = ROUTES.COLUMN_RECURRING(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly');
-        value = ROUTES.COLUMN_RECURRING_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
+        url = ROUTES.COLUMN_RECURRING(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly');
+        value = ROUTES.COLUMN_RECURRING_VALUE(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
       } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS) {
-        url = ROUTES.COLUMN_PARTITIONED(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily');
-        value = ROUTES.COLUMN_PARTITIONED_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
+        url = ROUTES.COLUMN_PARTITIONED(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily');
+        value = ROUTES.COLUMN_PARTITIONED_VALUE(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
       } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
-        url = ROUTES.COLUMN_PARTITIONED(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly');
-        value = ROUTES.COLUMN_PARTITIONED_VALUE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
+        url = ROUTES.COLUMN_PARTITIONED(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly');
+        value = ROUTES.COLUMN_PARTITIONED_VALUE(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '');
       }
 
       if (url === firstLevelActiveTab) {
         return;
       }
 
-      dispatch(addFirstLevelTab(sourceRoute, {
+      dispatch(addFirstLevelTab(checkType, {
         url,
         value,
         state: {},
         label: node.label
       }));
-      pushHistory(url);
+      history.push(url);
     } else if (node.level === TREE_LEVEL.CHECK) {
       const parentNode = findTreeNode(treeData, node.parentId ?? '');
       if (!parentNode) {
@@ -1034,27 +1047,27 @@ function TreeProvider(props: any) {
 
         let url = '';
         if (parentNode?.level === TREE_LEVEL.TABLE_CHECKS) {
-          url = ROUTES.TABLE_PROFILING_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.category ?? '', node.label);
+          url = ROUTES.TABLE_PROFILING_UI_FILTER(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.category ?? '', node.label);
         } else if (parentNode.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
-          url = ROUTES.TABLE_RECURRING_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily', node.category ?? '', node.label);
+          url = ROUTES.TABLE_RECURRING_UI_FILTER(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily', node.category ?? '', node.label);
         } else if (parentNode.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
-          url = ROUTES.TABLE_RECURRING_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly', node.category ?? '', node.label);
+          url = ROUTES.TABLE_RECURRING_UI_FILTER(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly', node.category ?? '', node.label);
         } else if (parentNode.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS) {
-          url = ROUTES.TABLE_PARTITIONED_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily', node.category ?? '', node.label);
+          url = ROUTES.TABLE_PARTITIONED_UI_FILTER(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily', node.category ?? '', node.label);
         } else if (parentNode.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS) {
-          url = ROUTES.TABLE_PARTITIONED_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly', node.category ?? '', node.label);
+          url = ROUTES.TABLE_PARTITIONED_UI_FILTER(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly', node.category ?? '', node.label);
         }
 
         if (firstLevelActiveTab === url) {
           return;
         }
-        dispatch(addFirstLevelTab(sourceRoute, {
+        dispatch(addFirstLevelTab(checkType, {
           url,
           value: url,
           state: {},
           label: node.label
         }));
-        pushHistory(url);
+        history.push(url);
       } else if ([TREE_LEVEL.COLUMN_CHECKS, TREE_LEVEL.COLUMN_DAILY_CHECKS, TREE_LEVEL.COLUMN_MONTHLY_CHECKS, TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS, TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS].includes(parentNode.level)) {
         const columnNode = findTreeNode(treeData, parentNode?.parentId ?? '');
         const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
@@ -1064,43 +1077,43 @@ function TreeProvider(props: any) {
 
         let url = '';
         if (parentNode?.level === TREE_LEVEL.COLUMN_CHECKS) {
-          url = ROUTES.COLUMN_PROFILING_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', node.category ?? '', node.label);
+          url = ROUTES.COLUMN_PROFILING_UI_FILTER(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', node.category ?? '', node.label);
         } else if (parentNode.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
-          url = ROUTES.COLUMN_RECURRING_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily', node.category ?? '', node.label)
+          url = ROUTES.COLUMN_RECURRING_UI_FILTER(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily', node.category ?? '', node.label)
         } else if (parentNode.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
-          url = ROUTES.COLUMN_RECURRING_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly', node.category ?? '', node.label);
+          url = ROUTES.COLUMN_RECURRING_UI_FILTER(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly', node.category ?? '', node.label);
         } else if (parentNode.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS) {
-          url = ROUTES.COLUMN_PARTITIONED_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily', node.category ?? '', node.label);
+          url = ROUTES.COLUMN_PARTITIONED_UI_FILTER(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily', node.category ?? '', node.label);
         } else if (parentNode.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
-          url = ROUTES.COLUMN_PARTITIONED_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly', node.category ?? '', node.label);
+          url = ROUTES.COLUMN_PARTITIONED_UI_FILTER(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly', node.category ?? '', node.label);
         }
         if (firstLevelActiveTab === url) {
           return;
         }
-        dispatch(addFirstLevelTab(sourceRoute, {
+        dispatch(addFirstLevelTab(checkType, {
           url: url,
           value: url,
           state: {},
           label: node.label
         }));
-        pushHistory(url);
+        history.push(url);
       }
     } else if (node.level === TREE_LEVEL.COLUMNS) {
       const tableNode = findTreeNode(treeData, node.parentId ?? '');
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
-      const url = ROUTES.TABLE_COLUMNS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
+      const url = ROUTES.TABLE_COLUMNS(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
       if (firstLevelActiveTab === url) {
         return;
       }
-      dispatch(addFirstLevelTab(sourceRoute, {
+      dispatch(addFirstLevelTab(checkType, {
         url,
         value: url,
         state: {},
         label: node.label
       }));
-      pushHistory(ROUTES.TABLE_COLUMNS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? ''));
+      history.push(ROUTES.TABLE_COLUMNS(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? ''));
     } else if (node.level === TREE_LEVEL.COLUMN) {
       const columnsNode = findTreeNode(treeData, node?.parentId ?? '');
       const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
@@ -1108,46 +1121,38 @@ function TreeProvider(props: any) {
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
       let tab = subTabMap[node.id];
-      if (sourceRoute === CheckTypes.RECURRING || sourceRoute === CheckTypes.PARTITIONED) {
+      if (checkType === CheckTypes.RECURRING || checkType === CheckTypes.PARTITIONED) {
         tab = tab || 'daily';
       } else {
         tab = tab || 'detail'
       }
 
-      const url = ROUTES.COLUMN_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.label, tab);
+      const url = ROUTES.COLUMN_LEVEL_PAGE(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.label, tab);
       if (url === firstLevelActiveTab) {
         return;
       }
 
-      dispatch(addFirstLevelTab(sourceRoute, {
+      dispatch(addFirstLevelTab(checkType, {
         url,
-        value: `/${sourceRoute}/connection/${connectionNode?.label ?? ''}/schema/${schemaNode?.label ?? ''}/table/${tableNode?.label ?? ''}/columns/${node.label}`,
+        value: `/${checkType}/connection/${connectionNode?.label ?? ''}/schema/${schemaNode?.label ?? ''}/table/${tableNode?.label ?? ''}/columns/${node.label}`,
         state: {},
         label: node.label
       }));
-      pushHistory(ROUTES.COLUMN_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.label, tab));
+      history.push(ROUTES.COLUMN_LEVEL_PAGE(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.label, tab));
     } else {
-      pushHistory('/checks');
+      history.push('/checks');
     }
   }
 
   // useEffect(() => {
-  //   const _activeTab = activeTabMaps[sourceRoute];
+  //   const _activeTab = activeTabMaps[checkType];
   //   if (_activeTab) {
   //     const node = findTreeNode(treeData, _activeTab);
   //     if (node) {
-  //       switchTab(node, sourceRoute as CheckTypes);
+  //       switchTab(node, checkType as CheckTypes);
   //     }
   //   }
-  // }, [sourceRoute]);
-
-  useLayoutEffect(() => {
-    const initialPathName = location.pathname;
-    const activeSourceRoute = initialPathName.split('/')[1] ?? '';
-    if ([CheckTypes.RECURRING, CheckTypes.SOURCES, CheckTypes.PROFILING, CheckTypes.PARTITIONED].includes(activeSourceRoute as CheckTypes)) {
-      setSourceRoute(activeSourceRoute as CheckTypes);
-    }
-  }, [location]);
+  // }, [checkType]);
 
   const deleteData = (identify: string) => {
     const newTabMaps = {...tabMaps};
@@ -1157,7 +1162,7 @@ function TreeProvider(props: any) {
       newTabMaps[key] = valueTabs.filter((item) => item.value.toString().indexOf(identify) === -1);
     }
 
-    if (!newTabMaps[sourceRoute].length) {
+    if (!newTabMaps[checkTypes].length) {
       const arr = tabs
         .filter((item) => item.type === 'editor')
         .map((item) => parseInt(item.value, 10));
@@ -1169,7 +1174,7 @@ function TreeProvider(props: any) {
         type: 'editor'
       };
 
-      newTabMaps[sourceRoute] = [newTab];
+      newTabMaps[checkTypes] = [newTab];
     }
 
     const newTreeDataMaps = [
@@ -1187,7 +1192,7 @@ function TreeProvider(props: any) {
 
     setActiveTabMaps(prev => ({
       ...prev,
-      [sourceRoute]: newTabMaps[sourceRoute][0].value
+      [checkTypes]: newTabMaps[checkTypes][0].value
     }));
 
     setTabMaps(newTabMaps);
@@ -1220,14 +1225,13 @@ function TreeProvider(props: any) {
         addConnection,
         switchTab,
         activeNode,
-        setSourceRoute,
         deleteStoredData,
-        sourceRoute,
         deleteData,
         selectedTreeNode,
         setSelectedTreeNode,
         loadingNodes,
         addSchema,
+        refreshDatabaseNode,
       }}
       {...props}
     />

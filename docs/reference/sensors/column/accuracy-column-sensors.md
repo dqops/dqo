@@ -20,7 +20,7 @@ Column level sensor that calculates percentage of the difference in average of a
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -40,9 +40,31 @@ Column level sensor that calculates percentage of the difference in average of a
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "mysql"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+      {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -64,7 +86,7 @@ Column level sensor that calculates percentage of the difference in average of a
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -87,7 +109,7 @@ Column level sensor that calculates percentage of the difference in average of a
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -110,7 +132,7 @@ Column level sensor that calculates percentage of the difference in average of a
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -154,7 +176,7 @@ Column level sensor that calculates percentage of the difference in max of a col
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -174,9 +196,31 @@ Column level sensor that calculates percentage of the difference in max of a col
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "mysql"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -198,7 +242,7 @@ Column level sensor that calculates percentage of the difference in max of a col
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -220,7 +264,7 @@ Column level sensor that calculates percentage of the difference in max of a col
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -242,7 +286,7 @@ Column level sensor that calculates percentage of the difference in max of a col
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -285,7 +329,7 @@ Column level sensor that calculates percentage of the difference in min of a col
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -305,9 +349,31 @@ Column level sensor that calculates percentage of the difference in min of a col
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "mysql"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -329,7 +395,7 @@ Column level sensor that calculates percentage of the difference in min of a col
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -351,7 +417,7 @@ Column level sensor that calculates percentage of the difference in min of a col
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -373,7 +439,7 @@ Column level sensor that calculates percentage of the difference in min of a col
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -416,7 +482,7 @@ Column level sensor that calculates percentage of the difference in row count of
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -436,9 +502,31 @@ Column level sensor that calculates percentage of the difference in row count of
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "mysql"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+       {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -460,7 +548,7 @@ Column level sensor that calculates percentage of the difference in row count of
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -482,7 +570,7 @@ Column level sensor that calculates percentage of the difference in row count of
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -504,7 +592,7 @@ Column level sensor that calculates percentage of the difference in row count of
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -547,7 +635,7 @@ Column level sensor that calculates percentage of the difference in sum of a col
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -567,9 +655,31 @@ Column level sensor that calculates percentage of the difference in sum of a col
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
+=== "mysql"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_referenced_table(referenced_table) -%}
+    {%- if referenced_table.find(".") < 0 -%}
+      {{- lib.quote_identifier(referenced_table) -}}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        (SELECT
+            SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -591,7 +701,7 @@ Column level sensor that calculates percentage of the difference in sum of a col
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -613,7 +723,7 @@ Column level sensor that calculates percentage of the difference in sum of a col
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}
@@ -635,7 +745,7 @@ Column level sensor that calculates percentage of the difference in sum of a col
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_referenced_table(referenced_table) -%}

@@ -19,9 +19,9 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MinPercentRule1ParametersSpec;
-import ai.dqo.rules.comparison.MinPercentRule2ParametersSpec;
-import ai.dqo.rules.comparison.MinPercentRule5ParametersSpec;
+import ai.dqo.rules.comparison.MinPercentRule100ParametersSpec;
+import ai.dqo.rules.comparison.MinPercentRule95ParametersSpec;
+import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
 import ai.dqo.sensors.column.numeric.ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnValuesInRangeIntegersPercentCheckSpec
-        extends AbstractCheckSpec<ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec, MinPercentRule1ParametersSpec, MinPercentRule2ParametersSpec, MinPercentRule5ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec, MinPercentRule100ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnValuesInRangeIntegersPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,17 +54,17 @@ public class ColumnValuesInRangeIntegersPercentCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule1ParametersSpec warning;
+    private MinPercentRule100ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of values from range in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule2ParametersSpec error;
+    private MinPercentRule99ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule5ParametersSpec fatal;
+    private MinPercentRule95ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -91,7 +91,7 @@ public class ColumnValuesInRangeIntegersPercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinPercentRule1ParametersSpec getWarning() {
+    public MinPercentRule100ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +99,7 @@ public class ColumnValuesInRangeIntegersPercentCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinPercentRule1ParametersSpec warning) {
+    public void setWarning(MinPercentRule100ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -111,7 +111,7 @@ public class ColumnValuesInRangeIntegersPercentCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinPercentRule2ParametersSpec getError() {
+    public MinPercentRule99ParametersSpec getError() {
         return this.error;
     }
 
@@ -119,7 +119,7 @@ public class ColumnValuesInRangeIntegersPercentCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinPercentRule2ParametersSpec error) {
+    public void setError(MinPercentRule99ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -131,7 +131,7 @@ public class ColumnValuesInRangeIntegersPercentCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinPercentRule5ParametersSpec getFatal() {
+    public MinPercentRule95ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -139,7 +139,7 @@ public class ColumnValuesInRangeIntegersPercentCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinPercentRule5ParametersSpec fatal) {
+    public void setFatal(MinPercentRule95ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

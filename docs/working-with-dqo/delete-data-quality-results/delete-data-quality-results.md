@@ -21,35 +21,49 @@ To delete the data quality results at the connection, table or column level foll
 
 1. In DQO graphical interface, click on the three-dot icon next to the name of a connection, table or column in the tree view.
 
-    ![Click three-dot icon](https://dqo.ai/docs/images/working-with-dqo/delete-data-quality-results/click-three-dot-icon.jpg)
+    ![Click three-dot icon](https://dqops.com/docs/images/working-with-dqo/delete-data-quality-results/click-three-dot-icon.jpg)
 
 2. From the drop-down menu select the **Delete data** command.
 
-    ![Select Delete data command](https://dqo.ai/docs/images/working-with-dqo/delete-data-quality-results/delete-data-command.jpg)
+    ![Select Delete data command](https://dqops.com/docs/images/working-with-dqo/delete-data-quality-results/delete-data-command.jpg)
    
 3. In the modal window, you can specify whether you want to delete all data, data for a specific time range or a specific category.
 
-    ![Delete data modal window](https://dqo.ai/docs/images/working-with-dqo/delete-data-quality-results/delete-data-modal-window.jpg)
+    ![Delete data modal window](https://dqops.com/docs/images/working-with-dqo/delete-data-quality-results/delete-data-modal-window.jpg)
 
 4. Click the **Delete** button to delete the selected data.
 
 
 ##  Delete data quality results using the DQO Shell
 
-To delete data quality results using the DQO Shell, use the [data delete command](https://dqo.ai/docs/command-line-interface/data/#dqo-data-delete). 
+To delete data quality results using the DQO Shell, use the [data delete command](../../command-line-interface/data.md). 
 
-Data delete command requires the following arguments:
-
-- Connection name `--connection=<connection>`
-- Full table name (schema.table), supports wildcard patterns 'sch*.tab*' `--table=<table>`
-- Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD `--begin=<begin>`
-- End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD `--end=<en`
-
-For example toTo delete all data from May 2023 for the connection "testconnection", table "austin_crime.crime" run the 
-following command in DQO Shell:
+To delete all the data for a connection run the following command
 
 ```
- dqo.ai> data delete --connection=testconnection --table=austin_crime.crime --begin=2023.05 --end=2023.05
+date delete
 ```
-   
-For a full description of the `data delete` command see the [Command-line interface section](https://dqo.ai/docs/command-line-interface/data/#dqo-data-delete).
+
+Type the name of the connection you want to delete e.g. 
+
+```
+Connection name (--connection): **testconnection**
+```
+
+A summary of deleted data similar to the following table will be displayed.
+
+```
+3 affected partitions.
++--------------------+--------------+------------------+----------+-------------+-----------------+
+|Data type           |Connection    |Table             |Month     |Affected rows|Partition deleted|
++--------------------+--------------+------------------+----------+-------------+-----------------+
+|data_sensor_readouts|testconnection|austin_crime.crime|2023-05-01|2            |true             |
++--------------------+--------------+------------------+----------+-------------+-----------------+
+|data_check_results  |testconnection|austin_crime.crime|2023-05-01|2            |true             |
++--------------------+--------------+------------------+----------+-------------+-----------------+
+|data_statistics     |testconnection|austin_crime.crime|2023-05-01|131          |true             |
++--------------------+--------------+------------------+----------+-------------+-----------------+
+```
+
+Using various parameters, you can limit the data that will be deleted to a specific table, column, time period, data type,
+check name, check category type, and more. For a full description of the `data delete` command and its parameters, see the [Command-line interface section](../../command-line-interface/data.md).

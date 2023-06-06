@@ -92,6 +92,9 @@ public class DqoJobQueueImpl extends BaseDqoJobQueueImpl implements DqoJobQueue 
     public <T> ChildDqoQueueJobsContainer<T> pushChildJobs(Collection<DqoQueueJob<T>> childJobs, DqoQueueJobId parentJobId) {
         assert parentJobId != null;
         ChildDqoQueueJobsContainer<T> childDqoQueueJobsContainer = new ChildDqoQueueJobsContainer<T>(childJobs);
+        if (childJobs.isEmpty()) {
+            return childDqoQueueJobsContainer;
+        }
         int maxDegreeOfParallelism = this.parallelJobLimitProvider.getMaxDegreeOfParallelism();
 
         BiConsumer<DqoQueueJob<?>, DqoJobCompletionStatus> childJobFinishedHandler =

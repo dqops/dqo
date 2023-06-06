@@ -12,29 +12,29 @@ Verifies that the number of invalid UUID in a column does not exceed the maximum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_invalid_uuid_count|profiling| |[string_invalid_uuid_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-uuid-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|string_invalid_uuid_count|profiling| |[string_invalid_uuid_count](../../../../reference/sensors/Column/strings-column-sensors/#string-invalid-uuid-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=string_invalid_uuid_count
+dqo> check enable -c=connection_name -ch=string_invalid_uuid_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=string_invalid_uuid_count
+dqo> check run -ch=string_invalid_uuid_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=string_invalid_uuid_count
+dqo> check run -c=connection_name -ch=string_invalid_uuid_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=string_invalid_uuid_count
+dqo> check run -c=connection_name -t=table_name -ch=string_invalid_uuid_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_invalid_uuid_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=string_invalid_uuid_count
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -84,7 +84,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -103,7 +103,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -121,7 +121,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -140,7 +140,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -158,7 +158,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -177,7 +177,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -195,7 +195,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -214,7 +214,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -232,7 +232,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -251,7 +251,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -315,7 +315,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -333,7 +333,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -353,7 +353,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -371,7 +371,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -391,7 +391,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -409,7 +409,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -429,7 +429,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -447,7 +447,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -467,7 +467,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -485,7 +485,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -498,9 +498,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -518,33 +517,33 @@ ___
 ## **daily string invalid uuid count**  
   
 **Check description**  
-Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_invalid_uuid_count|recurring|daily|[string_invalid_uuid_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-uuid-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_string_invalid_uuid_count|recurring|daily|[string_invalid_uuid_count](../../../../reference/sensors/Column/strings-column-sensors/#string-invalid-uuid-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_string_invalid_uuid_count
+dqo> check enable -c=connection_name -ch=daily_string_invalid_uuid_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_string_invalid_uuid_count
+dqo> check run -ch=daily_string_invalid_uuid_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_string_invalid_uuid_count
+dqo> check run -c=connection_name -ch=daily_string_invalid_uuid_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_string_invalid_uuid_count
+dqo> check run -c=connection_name -t=table_name -ch=daily_string_invalid_uuid_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_string_invalid_uuid_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_string_invalid_uuid_count
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -596,7 +595,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -615,7 +614,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -633,7 +632,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -652,7 +651,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -670,7 +669,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -689,7 +688,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -707,7 +706,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -726,7 +725,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -744,7 +743,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -763,7 +762,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -828,7 +827,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -846,7 +845,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -866,7 +865,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -884,7 +883,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -904,7 +903,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -922,7 +921,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -942,7 +941,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -960,7 +959,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -980,7 +979,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -998,7 +997,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1011,9 +1010,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1035,29 +1033,29 @@ Verifies that the number of invalid UUID in a column does not exceed the maximum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_invalid_uuid_count|recurring|monthly|[string_invalid_uuid_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-uuid-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_string_invalid_uuid_count|recurring|monthly|[string_invalid_uuid_count](../../../../reference/sensors/Column/strings-column-sensors/#string-invalid-uuid-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_string_invalid_uuid_count
+dqo> check enable -c=connection_name -ch=monthly_string_invalid_uuid_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_string_invalid_uuid_count
+dqo> check run -ch=monthly_string_invalid_uuid_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_string_invalid_uuid_count
+dqo> check run -c=connection_name -ch=monthly_string_invalid_uuid_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_string_invalid_uuid_count
+dqo> check run -c=connection_name -t=table_name -ch=monthly_string_invalid_uuid_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_string_invalid_uuid_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_string_invalid_uuid_count
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1109,7 +1107,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1128,7 +1126,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1146,7 +1144,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1165,7 +1163,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1183,7 +1181,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1202,7 +1200,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1220,7 +1218,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1239,7 +1237,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1257,7 +1255,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1276,7 +1274,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1341,7 +1339,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1359,7 +1357,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1379,7 +1377,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1397,7 +1395,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1417,7 +1415,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1435,7 +1433,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1455,7 +1453,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1473,7 +1471,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1493,7 +1491,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1511,7 +1509,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1524,9 +1522,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1548,29 +1545,29 @@ Verifies that the number of invalid UUID in a column does not exceed the maximum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_invalid_uuid_count|partitioned|daily|[string_invalid_uuid_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-uuid-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_partition_string_invalid_uuid_count|partitioned|daily|[string_invalid_uuid_count](../../../../reference/sensors/Column/strings-column-sensors/#string-invalid-uuid-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_string_invalid_uuid_count
+dqo> check enable -c=connection_name -ch=daily_partition_string_invalid_uuid_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_string_invalid_uuid_count
+dqo> check run -ch=daily_partition_string_invalid_uuid_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_string_invalid_uuid_count
+dqo> check run -c=connection_name -ch=daily_partition_string_invalid_uuid_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_string_invalid_uuid_count
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_string_invalid_uuid_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_invalid_uuid_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_invalid_uuid_count
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1622,7 +1619,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1641,7 +1638,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1659,7 +1656,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1678,7 +1675,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1696,7 +1693,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1715,7 +1712,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1733,7 +1730,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1752,7 +1749,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1770,7 +1767,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1789,7 +1786,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -1858,7 +1855,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1876,7 +1873,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1896,7 +1893,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1914,7 +1911,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1934,7 +1931,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1952,7 +1949,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -1972,7 +1969,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -1990,7 +1987,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2010,7 +2007,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2028,7 +2025,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2041,8 +2038,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST([] AS date) AS time_period,
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY CAST([] AS date), CAST([] AS date)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
         ORDER BY level_1, level_2CAST([] AS date)
         
             
@@ -2062,29 +2059,29 @@ Verifies that the number of invalid UUID in a column does not exceed the maximum
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_invalid_uuid_count|partitioned|monthly|[string_invalid_uuid_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-uuid-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_partition_string_invalid_uuid_count|partitioned|monthly|[string_invalid_uuid_count](../../../../reference/sensors/Column/strings-column-sensors/#string-invalid-uuid-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_invalid_uuid_count
+dqo> check enable -c=connection_name -ch=monthly_partition_string_invalid_uuid_count
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_string_invalid_uuid_count
+dqo> check run -ch=monthly_partition_string_invalid_uuid_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_string_invalid_uuid_count
+dqo> check run -c=connection_name -ch=monthly_partition_string_invalid_uuid_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_string_invalid_uuid_count
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_string_invalid_uuid_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_invalid_uuid_count
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_invalid_uuid_count
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2136,7 +2133,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2155,7 +2152,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2173,7 +2170,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2192,7 +2189,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2210,7 +2207,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2229,7 +2226,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2247,7 +2244,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2266,7 +2263,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2284,7 +2281,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2303,7 +2300,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         SUM(
             CASE
@@ -2372,7 +2369,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2390,7 +2387,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2410,7 +2407,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2428,7 +2425,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2448,7 +2445,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2466,7 +2463,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2486,7 +2483,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2504,7 +2501,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2524,7 +2521,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             SUM(
@@ -2542,7 +2539,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             SUM(
                 CASE
@@ -2555,8 +2552,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             

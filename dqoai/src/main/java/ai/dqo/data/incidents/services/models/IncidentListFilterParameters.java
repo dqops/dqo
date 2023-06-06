@@ -17,6 +17,7 @@
 package ai.dqo.data.incidents.services.models;
 
 import ai.dqo.data.incidents.factory.IncidentStatus;
+import ai.dqo.rest.models.common.SortDirection;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -90,7 +91,7 @@ public class IncidentListFilterParameters {
      * Sort direction.
      */
     @JsonPropertyDescription("Sort direction.")
-    private IncidentSortDirection sortDirection = IncidentSortDirection.asc;
+    private SortDirection sortDirection = SortDirection.asc;
 
     /**
      * Checks if the given incident status is on the list of accepted incident statuses that should be returned.

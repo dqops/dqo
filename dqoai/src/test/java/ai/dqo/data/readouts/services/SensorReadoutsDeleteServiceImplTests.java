@@ -25,8 +25,13 @@ import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceImpl;
 import ai.dqo.core.synchronization.status.SynchronizationStatusTrackerStub;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
+import ai.dqo.data.checkresults.factory.CheckResultsColumnNames;
+import ai.dqo.data.checkresults.models.CheckResultsFragmentFilter;
+import ai.dqo.data.errors.factory.ErrorsColumnNames;
+import ai.dqo.data.errors.models.ErrorsFragmentFilter;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
+import ai.dqo.data.models.DataDeleteResult;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactory;
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactoryImpl;
@@ -321,6 +326,129 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
     }
 
+    @Test
+    void deleteSelectedSensorReadoutsFragment_whenDataAlreadyEmpty_thenPassWithSuccess() {
+        String connectionName = "connection";
+        String tableName = "tab1";
+        String id_prefix1 = "1";
+        String id_prefix2 = "2";
+        PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
+
+        LocalDate month1 = LocalDate.of(2023, 1, 1);
+        LocalDate month2 = LocalDate.of(2023, 2, 1);
+        LocalDateTime startDate1 = month1.atStartOfDay().plusDays(14);
+        LocalDateTime startDate2 = month2.atStartOfDay().plusDays(14);
+
+        Table table1 = prepareSimplePartitionTable(tableName, startDate1, id_prefix1);
+        Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
+
+        ParquetPartitionId partitionId1 = new ParquetPartitionId(
+                this.sensorReadoutsStorageSettings.getTableType(),
+                connectionName,
+                physicalTableName,
+                month1);
+        ParquetPartitionId partitionId2 = new ParquetPartitionId(
+                this.sensorReadoutsStorageSettings.getTableType(),
+                connectionName,
+                physicalTableName,
+                month2);
+
+        this.parquetPartitionStorageService.savePartition(
+                new LoadedMonthlyPartition(partitionId1),
+                new TableDataChanges(table1),
+                this.sensorReadoutsStorageSettings);
+        this.parquetPartitionStorageService.savePartition(
+                new LoadedMonthlyPartition(partitionId2),
+                new TableDataChanges(table2),
+                this.sensorReadoutsStorageSettings);
+
+        SensorReadoutsFragmentFilter filter = new SensorReadoutsFragmentFilter(){{
+            setTableSearchFilters(new TableSearchFilters(){{
+                setConnectionName(connectionName);
+                setSchemaTableName("sch.nonexistent_table");
+            }});
+        }};
+
+        DataDeleteResult result = this.sut.deleteSelectedSensorReadoutsFragment(filter);
+        Assertions.assertTrue(result.getPartitionResults().isEmpty());
+
+        LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
+                partitionId1, this.sensorReadoutsStorageSettings, null);
+        Assertions.assertNotNull(partition1AfterDelete.getData());
+        Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id1"));
+        Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id2"));
+        Assertions.assertTrue(partition1AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix1 + "id3"));
+        Assertions.assertNotEquals(0L, partition1AfterDelete.getLastModified());
+
+        LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
+                partitionId2, this.sensorReadoutsStorageSettings, null);
+        Assertions.assertNotNull(partition2AfterDelete.getData());
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(ErrorsColumnNames.ID_COLUMN_NAME).contains(id_prefix2 + "id3"));
+        Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
+    }
+
+    @Test
+    void deleteSelectedSensorReadoutsFragment_whenSearchPatternOnSchemaTable_thenDeleteResultsForMatchingTables() {
+        String connectionName = "connection";
+        String tableName1 = "tab1";
+        String tableName2 = "tab2";
+        PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
+        PhysicalTableName physicalTableName2 = new PhysicalTableName("sch", tableName2);
+
+        LocalDate month1 = LocalDate.of(2023, 1, 1);
+        LocalDate month2 = LocalDate.of(2023, 2, 1);
+        LocalDateTime startDate1 = month1.atStartOfDay().plusDays(14);
+        LocalDateTime startDate2 = month2.atStartOfDay().plusDays(14);
+
+        Table table1 = prepareSimplePartitionTable(tableName1, startDate1, "");
+        Table table2 = prepareSimplePartitionTable(tableName2, startDate2, "");
+
+        ParquetPartitionId partitionId1 = new ParquetPartitionId(
+                this.sensorReadoutsStorageSettings.getTableType(),
+                connectionName,
+                physicalTableName1,
+                month1);
+        ParquetPartitionId partitionId2 = new ParquetPartitionId(
+                this.sensorReadoutsStorageSettings.getTableType(),
+                connectionName,
+                physicalTableName2,
+                month2);
+
+        this.parquetPartitionStorageService.savePartition(
+                new LoadedMonthlyPartition(partitionId1),
+                new TableDataChanges(table1),
+                this.sensorReadoutsStorageSettings);
+        this.parquetPartitionStorageService.savePartition(
+                new LoadedMonthlyPartition(partitionId2),
+                new TableDataChanges(table2),
+                this.sensorReadoutsStorageSettings);
+
+        SensorReadoutsFragmentFilter filter = new SensorReadoutsFragmentFilter(){{
+            setTableSearchFilters(new TableSearchFilters(){{
+                setConnectionName(connectionName);
+                setSchemaTableName("*ch.*tab1");
+            }});
+        }};
+
+        DataDeleteResult result = this.sut.deleteSelectedSensorReadoutsFragment(filter);
+        Assertions.assertFalse(result.getPartitionResults().isEmpty());
+
+        LoadedMonthlyPartition partition1AfterDelete = this.parquetPartitionStorageService.loadPartition(
+                partitionId1, this.sensorReadoutsStorageSettings, null);
+        Assertions.assertNull(partition1AfterDelete.getData());
+        Assertions.assertEquals(0L, partition1AfterDelete.getLastModified());
+
+        LoadedMonthlyPartition partition2AfterDelete = this.parquetPartitionStorageService.loadPartition(
+                partitionId2, this.sensorReadoutsStorageSettings, null);
+        Assertions.assertNotNull(partition2AfterDelete.getData());
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partition2AfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertNotEquals(0L, partition2AfterDelete.getLastModified());
+    }
+
 
     private Table prepareComplexPartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {
         Table sensorReadoutsTable = this.sensorReadoutsTableFactory.createEmptySensorReadoutsTable(tableName);
@@ -595,6 +723,47 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
         Assertions.assertFalse(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id4"));
         Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id5"));
+        Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
+    }
+
+    @Test
+    void deleteSelectedSensorReadoutsFragment_whenFilterBySensorName_thenDeleteCapturedRows() {
+        String connectionName = "connection";
+        String tableName = "tab";
+        PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
+
+        LocalDate month = LocalDate.of(2023, 1, 1);
+        Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
+
+        ParquetPartitionId partitionId = new ParquetPartitionId(
+                this.sensorReadoutsStorageSettings.getTableType(),
+                connectionName,
+                physicalTableName,
+                month);
+
+        this.parquetPartitionStorageService.savePartition(
+                new LoadedMonthlyPartition(partitionId),
+                new TableDataChanges(table),
+                this.sensorReadoutsStorageSettings);
+
+        SensorReadoutsFragmentFilter filter = new SensorReadoutsFragmentFilter(){{
+            setTableSearchFilters(new TableSearchFilters(){{
+                setConnectionName(connectionName);
+                setSchemaTableName(physicalTableName.toTableSearchFilter());
+            }});
+            setSensorName("s1");
+        }};
+
+        this.sut.deleteSelectedSensorReadoutsFragment(filter);
+
+        LoadedMonthlyPartition partitionAfterDelete = this.parquetPartitionStorageService.loadPartition(
+                partitionId, this.sensorReadoutsStorageSettings, null);
+        Assertions.assertNotNull(partitionAfterDelete.getData());
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id1"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id2"));
+        Assertions.assertTrue(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id3"));
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id4"));
+        Assertions.assertFalse(partitionAfterDelete.getData().textColumn(SensorReadoutsColumnNames.ID_COLUMN_NAME).contains("id5"));
         Assertions.assertNotEquals(0L, partitionAfterDelete.getLastModified());
     }
 }

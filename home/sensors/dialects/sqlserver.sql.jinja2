@@ -309,40 +309,27 @@
     {%- endwith -%}
 {% endmacro %}
 
-{% macro render_grouping_column_names() %}
+{% macro render_grouping_column_names(table_alias_prefix = 'analyzed_table') %}
     {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
         {%- for attribute in data_streams -%}
             {%- if not loop.first -%}
                 {{ ', ' }}
             {%- endif -%}
-            {%- if (data_stream_level.source == 'column_value') -%}
-                {{ eol() }}{{ indentation }}{{ quote_identifier(data_stream_level.column) }}
-            {%- endif -%}
+                {{ table_alias_prefix }}.{{ quote_identifier(data_streams[attribute].column) }}
         {%- endfor -%}
     {%- endif -%}
-    {%- if time_series is not none and time_series.mode != 'current_time' %}
-    {{ render_time_dimension_expression(table_alias_prefix) }}, {{ render_time_dimension_expression_utc(table_alias_prefix) }}
-    {%- elif (data_streams is not none and (data_streams | length()) > 0) %}
-        {{ ', ' }}
-    {% endif %}
+    {%- if time_series is not none and time_series.mode != 'current_time' -%}
+        {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+            {{ ', ' }}
+        {%- endif -%}
+            {{ render_time_dimension_expression(table_alias_prefix) }}, {{ render_time_dimension_expression_utc(table_alias_prefix) }}
+    {%- endif -%}
 {% endmacro %}
 
-{% macro render_group_by() %}
-    {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-        {%- for attribute in data_streams -%}
-            {%- if not loop.first -%}
-                {{ ', ' }}
-            {%- endif -%}
-            {%- if (data_stream_level.source == 'column_value') -%}
-                {{ eol() }}{{ indentation }}{{ quote_identifier(data_stream_level.column) }}
-            {%- endif -%}
-        {%- endfor -%}
+{% macro render_group_by(table_alias_prefix = 'analyzed_table', indentation = '') %}
+    {%- if (data_streams is not none and (data_streams | length()) > 0) or (time_series.mode is not none and time_series.mode != 'current_time') %}
+{{ indentation }}GROUP BY {{ render_grouping_column_names(table_alias_prefix) }}
     {%- endif -%}
-    {%- if time_series is not none and time_series.mode != 'current_time' %}
-GROUP BY {{ render_time_dimension_expression(table_alias_prefix) }}, {{ render_time_dimension_expression_utc(table_alias_prefix) }}
-    {%- elif (data_streams is not none and (data_streams | length()) > 0) %}
-        {{ ', ' }}
-    {% endif %}
 {% endmacro %}
 
 {% macro render_ordering_column_names() %}
@@ -361,8 +348,8 @@ GROUP BY {{ render_time_dimension_expression(table_alias_prefix) }}, {{ render_t
     {% endif %}
 {% endmacro %}
 
-{% macro render_order_by() %}
-    {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series.mode != 'current_time' -%}
-ORDER BY {{ render_ordering_column_names() }}
+{% macro render_order_by(indentation = '') %}
+    {%- if (data_streams is not none and (data_streams | length()) > 0) or (time_series.mode is not none and time_series.mode != 'current_time')  %}
+{{ indentation }}ORDER BY {{ render_ordering_column_names() }}
     {% endif %}
 {% endmacro %}

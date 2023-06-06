@@ -12,25 +12,28 @@ import { useTree } from '../../contexts/treeContext';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTES } from '../../shared/routes';
 import DeleteOnlyDataDialog from './DeleteOnlyDataDialog';
-import AddColumnDialog from './AddColumnDialog';
-import AddTableDialog from './AddTableDialog';
-import AddSchemaDialog from './AddSchemaDialog';
 
 interface ContextMenuProps {
   node: CustomTreeNode;
   openConfirm: (node: CustomTreeNode) => void;
+  openAddColumnDialog: (node: CustomTreeNode) => void;
+  openAddTableDialog: (node: CustomTreeNode) => void;
+  openAddSchemaDialog: (node: CustomTreeNode) => void;
 }
 
-const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
+const ContextMenu = ({
+  node,
+  openConfirm,
+  openAddColumnDialog,
+  openAddTableDialog,
+  openAddSchemaDialog
+}: ContextMenuProps) => {
   const { checkTypes }: { checkTypes: any } = useParams();
   const { refreshNode, runChecks, collectStatisticsOnTable, deleteStoredData } =
     useTree();
   const [open, setOpen] = useState(false);
   const history = useHistory();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
-  const [addColumnDialogOpen, setAddColumnDialogOpen] = useState(false);
-  const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
-  const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
 
   const handleRefresh = () => {
     refreshNode(node);
@@ -45,11 +48,6 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
   const handleCollectStatisticsOnTable = () => {
     collectStatisticsOnTable(node);
     setOpen(false);
-  };
-
-  const openPopover = (e: MouseEvent) => {
-    setOpen(!open);
-    e.stopPropagation();
   };
 
   const copyToClipboard = (e: any) => {
@@ -68,23 +66,14 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
     );
     setOpen(false);
   };
+
   const importTables = () => {
     setOpen(false);
   };
 
-  const closeAddColumnDialog = () => {
-    setAddColumnDialogOpen(false);
-    setOpen(false);
-  };
-
-  const closeAddTableDialog = () => {
-    setAddTableDialogOpen(false);
-    setOpen(false);
-  };
-
-  const closeAddSchemaDialog = () => {
-    setAddSchemaDialogOpen(false);
-    setOpen(false);
+  const openPopover = (e: MouseEvent) => {
+    setOpen(!open);
+    e.stopPropagation();
   };
 
   return (
@@ -94,7 +83,7 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
           <SvgIcon name="options" className="w-5 h-5 text-gray-500" />
         </div>
       </PopoverHandler>
-      <PopoverContent className="z-50 min-w-50 max-w-50 border-gray-500 p-2">
+      <PopoverContent className="z-50 min-w-50 max-w-50 border-gray-500 p-2" onClick={(e) => e.stopPropagation()}>
         <div onClick={(e) => e.stopPropagation()}>
           {node.level !== TREE_LEVEL.COLUMNS && (
             <div
@@ -128,9 +117,9 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
           {node.level === TREE_LEVEL.DATABASE && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() => setAddSchemaDialogOpen(true)}
+              onClick={() => openAddSchemaDialog(node)}
             >
-              Add Schema
+              Add schema
             </div>
           )}
           {node.level === TREE_LEVEL.SCHEMA && (
@@ -185,18 +174,18 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
           {node.level === TREE_LEVEL.SCHEMA && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() => setAddTableDialogOpen(true)}
+              onClick={() => openAddTableDialog(node)}
             >
-              Add Table
+              Add table
             </div>
           )}
           {(node.level === TREE_LEVEL.TABLE ||
             node.level === TREE_LEVEL.COLUMN) && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() => setAddColumnDialogOpen(true)}
+              onClick={() => openAddColumnDialog(node)}
             >
-              Add Column
+              Add column
             </div>
           )}
           {(node.level === TREE_LEVEL.DATABASE ||
@@ -222,21 +211,6 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
             </>
           )}
         </div>
-        <AddColumnDialog
-          open={addColumnDialogOpen}
-          onClose={closeAddColumnDialog}
-          node={node}
-        />
-        <AddTableDialog
-          open={addTableDialogOpen}
-          onClose={closeAddTableDialog}
-          node={node}
-        />
-        <AddSchemaDialog
-          open={addSchemaDialogOpen}
-          onClose={closeAddSchemaDialog}
-          node={node}
-        />
       </PopoverContent>
     </Popover>
   );

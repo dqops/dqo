@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import Button from '../../Button';
 import ConfirmDialog from './ConfirmDialog';
-import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import { ConnectionApiClient } from '../../../services/apiClient';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from "../../../shared/routes";
-import { useTree } from "../../../contexts/treeContext";
 import AddSchemaDialog from "../../CustomTree/AddSchemaDialog";
 
 interface IConnectionActionGroupProps {
@@ -27,22 +24,16 @@ const ConnectionActionGroup = ({
   const { connection: connectionName, checkTypes, tab }: { connection: any; checkTypes: any; tab: any } = useParams();
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const [isOpen, setIsOpen] = useState(false);
-  const { connectionBasic } = useSelector(
-    (state: IRootState) => state.connection
-  );
   const history = useHistory();
-  const { sourceRoute } = useTree();
   const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
 
   const removeConnection = async () => {
-    if (connectionBasic) {
-      await ConnectionApiClient.deleteConnection(
-        connectionBasic.connection_name ?? ''
-      );
-    }
+    await ConnectionApiClient.deleteConnection(
+      connectionName ?? ''
+    );
   };
   const goToSchemas = (isImport = true) => {
-    history.push(`${ROUTES.CONNECTION_DETAIL(sourceRoute, connectionName, 'schemas')}${isImport ? '?import_schema=true' : ''}`)
+    history.push(`${ROUTES.CONNECTION_DETAIL(checkTypes, connectionName, 'schemas')}${isImport ? '?import_schema=true' : ''}`)
 
     if (onImport) {
       onImport();
@@ -101,7 +92,7 @@ const ConnectionActionGroup = ({
       <ConfirmDialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        connection={connectionBasic}
+        connection={connectionName}
         onConfirm={removeConnection}
       />
       <AddSchemaDialog

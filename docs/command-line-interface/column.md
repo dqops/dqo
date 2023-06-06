@@ -19,7 +19,7 @@ $ dqo [dqo options...] column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<co
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+dqo> column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
             [-d=<dataType>] [-e=<sqlExpression>] [-of=<outputFormat>]
             [-t=<fullTableName>]
 
@@ -60,7 +60,7 @@ $ dqo [dqo options...] column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+dqo> column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
@@ -99,7 +99,7 @@ $ dqo [dqo options...] column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+dqo> column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-d=<dataType>] [-e=<sqlExpression>] [-of=<outputFormat>]
                [-t=<fullTableName>]
 
@@ -141,7 +141,7 @@ $ dqo [dqo options...] column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<c
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+dqo> column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
              [-of=<outputFormat>] [-t=<fullTableName>] [-l=<labels>]...
              [-tg=<tags>]...
 
@@ -182,7 +182,7 @@ $ dqo [dqo options...] column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+dqo> column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
@@ -220,7 +220,7 @@ $ dqo [dqo options...] column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+dqo> column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                 [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
@@ -258,7 +258,7 @@ $ dqo [dqo options...] column rename [-h] [-fw] [-hl] [-c=<connectionName>] [-C=
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> column rename [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+dqo> column rename [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-n=<newColumnName>] [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```

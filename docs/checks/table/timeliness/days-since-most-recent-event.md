@@ -12,29 +12,29 @@ Calculates the number of days since the most recent event timestamp (freshness)
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|days_since_most_recent_event|profiling| |[days_since_most_recent_event](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|days_since_most_recent_event|profiling| |[days_since_most_recent_event](../../../../reference/sensors/Table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=days_since_most_recent_event
+dqo> check enable -c=connection_name -ch=days_since_most_recent_event
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=days_since_most_recent_event
+dqo> check run -ch=days_since_most_recent_event
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=days_since_most_recent_event
+dqo> check run -c=connection_name -ch=days_since_most_recent_event
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -ch=days_since_most_recent_event
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=days_since_most_recent_event
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -81,7 +81,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -125,7 +125,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
@@ -143,7 +143,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -186,7 +186,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         TIMESTAMPDIFF(
             MILLISECOND,
@@ -204,7 +204,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -236,7 +236,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         EXTRACT(EPOCH FROM (
             CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -250,7 +250,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -282,7 +282,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         EXTRACT(EPOCH FROM (
             CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -296,7 +296,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -334,7 +334,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         DATEDIFF(SECOND,
                 MAX(analyzed_table.[col_event_timestamp]),
@@ -392,7 +392,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -435,7 +435,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
@@ -455,7 +455,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -497,7 +497,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             TIMESTAMPDIFF(
                 MILLISECOND,
@@ -517,7 +517,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -548,7 +548,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             EXTRACT(EPOCH FROM (
                 CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -564,7 +564,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -595,7 +595,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             EXTRACT(EPOCH FROM (
                 CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -611,7 +611,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -648,7 +648,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             DATEDIFF(SECOND,
                     MAX(analyzed_table.[col_event_timestamp]),
@@ -658,9 +658,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -682,29 +681,29 @@ Daily  calculating the number of days since the most recent event timestamp (fre
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_days_since_most_recent_event|recurring|daily|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|daily_days_since_most_recent_event|recurring|daily|[days_since_most_recent_event](../../../../reference/sensors/Table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_days_since_most_recent_event
+dqo> check enable -c=connection_name -ch=daily_days_since_most_recent_event
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_days_since_most_recent_event
+dqo> check run -ch=daily_days_since_most_recent_event
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_days_since_most_recent_event
+dqo> check run -c=connection_name -ch=daily_days_since_most_recent_event
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -ch=daily_days_since_most_recent_event
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_days_since_most_recent_event
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -753,7 +752,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -797,7 +796,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
@@ -815,7 +814,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -858,7 +857,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         TIMESTAMPDIFF(
             MILLISECOND,
@@ -876,7 +875,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -908,7 +907,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         EXTRACT(EPOCH FROM (
             CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -922,7 +921,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -954,7 +953,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         EXTRACT(EPOCH FROM (
             CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -968,7 +967,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -1006,7 +1005,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         DATEDIFF(SECOND,
                 MAX(analyzed_table.[col_event_timestamp]),
@@ -1065,7 +1064,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -1108,7 +1107,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
@@ -1128,7 +1127,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -1170,7 +1169,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             TIMESTAMPDIFF(
                 MILLISECOND,
@@ -1190,7 +1189,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -1221,7 +1220,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             EXTRACT(EPOCH FROM (
                 CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -1237,7 +1236,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -1268,7 +1267,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             EXTRACT(EPOCH FROM (
                 CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -1284,7 +1283,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -1321,7 +1320,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             DATEDIFF(SECOND,
                     MAX(analyzed_table.[col_event_timestamp]),
@@ -1331,9 +1330,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1355,29 +1353,29 @@ Monthly recurring calculating the number of days since the most recent event tim
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_days_since_most_recent_event|recurring|monthly|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|monthly_days_since_most_recent_event|recurring|monthly|[days_since_most_recent_event](../../../../reference/sensors/Table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_days_since_most_recent_event
+dqo> check enable -c=connection_name -ch=monthly_days_since_most_recent_event
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_days_since_most_recent_event
+dqo> check run -ch=monthly_days_since_most_recent_event
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_days_since_most_recent_event
+dqo> check run -c=connection_name -ch=monthly_days_since_most_recent_event
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -ch=monthly_days_since_most_recent_event
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_days_since_most_recent_event
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1426,7 +1424,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -1470,7 +1468,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
@@ -1488,7 +1486,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -1531,7 +1529,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         TIMESTAMPDIFF(
             MILLISECOND,
@@ -1549,7 +1547,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -1581,7 +1579,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         EXTRACT(EPOCH FROM (
             CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -1595,7 +1593,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -1627,7 +1625,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         EXTRACT(EPOCH FROM (
             CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -1641,7 +1639,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -1679,7 +1677,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         DATEDIFF(SECOND,
                 MAX(analyzed_table.[col_event_timestamp]),
@@ -1738,7 +1736,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -1781,7 +1779,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
@@ -1801,7 +1799,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -1843,7 +1841,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             TIMESTAMPDIFF(
                 MILLISECOND,
@@ -1863,7 +1861,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -1894,7 +1892,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             EXTRACT(EPOCH FROM (
                 CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -1910,7 +1908,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -1941,7 +1939,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             EXTRACT(EPOCH FROM (
                 CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -1957,7 +1955,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -1994,7 +1992,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             DATEDIFF(SECOND,
                     MAX(analyzed_table.[col_event_timestamp]),
@@ -2004,9 +2002,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -2028,29 +2025,29 @@ Daily partitioned check calculating the number of days since the most recent eve
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_days_since_most_recent_event|partitioned|daily|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|daily_partition_days_since_most_recent_event|partitioned|daily|[days_since_most_recent_event](../../../../reference/sensors/Table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_days_since_most_recent_event
+dqo> check enable -c=connection_name -ch=daily_partition_days_since_most_recent_event
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_days_since_most_recent_event
+dqo> check run -ch=daily_partition_days_since_most_recent_event
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_days_since_most_recent_event
+dqo> check run -c=connection_name -ch=daily_partition_days_since_most_recent_event
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_days_since_most_recent_event
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_days_since_most_recent_event
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2099,7 +2096,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -2143,7 +2140,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
@@ -2161,7 +2158,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -2204,7 +2201,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         TIMESTAMPDIFF(
             MILLISECOND,
@@ -2222,7 +2219,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -2254,7 +2251,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         EXTRACT(EPOCH FROM (
             CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -2268,7 +2265,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -2300,7 +2297,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         EXTRACT(EPOCH FROM (
             CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -2314,7 +2311,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -2352,7 +2349,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         DATEDIFF(SECOND,
                 MAX(analyzed_table.[col_event_timestamp]),
@@ -2415,7 +2412,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -2458,7 +2455,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
@@ -2478,7 +2475,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -2520,7 +2517,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             TIMESTAMPDIFF(
                 MILLISECOND,
@@ -2540,7 +2537,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -2571,7 +2568,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             EXTRACT(EPOCH FROM (
                 CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -2587,7 +2584,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -2618,7 +2615,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             EXTRACT(EPOCH FROM (
                 CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -2634,7 +2631,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -2671,7 +2668,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             DATEDIFF(SECOND,
                     MAX(analyzed_table.[col_event_timestamp]),
@@ -2681,8 +2678,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST([] AS date) AS time_period,
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY CAST([] AS date), CAST([] AS date)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
         ORDER BY level_1, level_2CAST([] AS date)
         
             
@@ -2702,29 +2699,29 @@ Monthly partitioned check calculating the number of days since the most recent e
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_days_since_most_recent_event|partitioned|monthly|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|monthly_partition_days_since_most_recent_event|partitioned|monthly|[days_since_most_recent_event](../../../../reference/sensors/Table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_days_since_most_recent_event
+dqo> check enable -c=connection_name -ch=monthly_partition_days_since_most_recent_event
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_days_since_most_recent_event
+dqo> check run -ch=monthly_partition_days_since_most_recent_event
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_days_since_most_recent_event
+dqo> check run -c=connection_name -ch=monthly_partition_days_since_most_recent_event
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_days_since_most_recent_event
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_days_since_most_recent_event
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_days_since_most_recent_event
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2773,7 +2770,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -2817,7 +2814,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
@@ -2835,7 +2832,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -2878,7 +2875,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         TIMESTAMPDIFF(
             MILLISECOND,
@@ -2896,7 +2893,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -2928,7 +2925,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         EXTRACT(EPOCH FROM (
             CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -2942,7 +2939,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -2974,7 +2971,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         EXTRACT(EPOCH FROM (
             CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -2988,7 +2985,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -3026,7 +3023,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         DATEDIFF(SECOND,
                 MAX(analyzed_table.[col_event_timestamp]),
@@ -3089,7 +3086,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -3132,7 +3129,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             TIMESTAMP_DIFF(
                 CURRENT_TIMESTAMP(),
@@ -3152,7 +3149,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -3194,7 +3191,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             TIMESTAMPDIFF(
                 MILLISECOND,
@@ -3214,7 +3211,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -3245,7 +3242,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             EXTRACT(EPOCH FROM (
                 CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -3261,7 +3258,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -3292,7 +3289,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             EXTRACT(EPOCH FROM (
                 CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
@@ -3308,7 +3305,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {% macro render_current_event_diff() -%}
@@ -3345,7 +3342,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             DATEDIFF(SECOND,
                     MAX(analyzed_table.[col_event_timestamp]),
@@ -3355,8 +3352,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             

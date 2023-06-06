@@ -29,6 +29,7 @@ import tech.tablesaw.api.*;
 import tech.tablesaw.columns.AbstractColumn;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.columns.strings.AbstractStringColumn;
+import tech.tablesaw.selection.Selection;
 
 import java.time.LocalDateTime;
 
@@ -189,6 +190,18 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
             normalizedResults.addColumns(resultTimeColumn);
         }
 
+        IntColumn sampleIndexColumn = this.normalizeSampleIndex(resultsTable, StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME);
+        if (sampleIndexColumn == null) {
+            sampleIndexColumn = IntColumn.create(StatisticsColumnNames.SAMPLE_INDEX_COLUMN_NAME, resultRowCount);
+        }
+        normalizedResults.addColumns(sampleIndexColumn);
+
+        LongColumn sampleCountColumn = this.normalizeSampleCount(resultsTable, StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME);
+        if (sampleCountColumn == null) {
+            sampleCountColumn = LongColumn.create(StatisticsColumnNames.SAMPLE_COUNT_COLUMN_NAME, resultRowCount);
+        }
+        normalizedResults.addColumns(sampleCountColumn);
+
         TextColumn scopeColumn = TextColumn.create(StatisticsColumnNames.SCOPE_COLUMN_NAME, resultRowCount);
         if (sensorRunParameters.getColumn() != null) {
             scopeColumn.setMissingTo(sensorRunParameters.getDataStreams() != null ? StatisticsDataScope.data_stream.name() : StatisticsDataScope.table.name());
@@ -302,9 +315,23 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         }
         normalizedResults.addColumns(errorMessageColumn);
 
-        TextColumn idColumn = this.commonNormalizationService.createRowIdColumn(dataStreamHashColumn, executedAtColumn, collectorHash, tableHash,
-                columnHash != null ? columnHash.longValue() : 0L, resultRowCount);
+        InstantColumn createdAtColumn = InstantColumn.create(StatisticsColumnNames.CREATED_AT_COLUMN_NAME, resultRowCount);
+        normalizedResults.addColumns(createdAtColumn);
+        InstantColumn updatedAtColumn = InstantColumn.create(StatisticsColumnNames.UPDATED_AT_COLUMN_NAME, resultRowCount);
+        normalizedResults.addColumns(updatedAtColumn);
+        TextColumn createdByColumn = TextColumn.create(StatisticsColumnNames.CREATED_BY_COLUMN_NAME, resultRowCount);
+        normalizedResults.addColumns(createdByColumn);
+        TextColumn updatedByColumn = TextColumn.create(StatisticsColumnNames.UPDATED_BY_COLUMN_NAME, resultRowCount);
+        normalizedResults.addColumns(updatedByColumn);
+
+        TextColumn idColumn = this.commonNormalizationService.createRowIdColumnAndUpdateIndexes(dataStreamHashColumn, executedAtColumn, sampleIndexColumn,
+                collectorHash, tableHash, columnHash != null ? columnHash.longValue() : 0L, resultRowCount);
         normalizedResults.insertColumn(0, idColumn);
+
+        Selection statisticResultWithNulls = normalizedResultColumn != null ? normalizedResultColumn.isMissing() : Selection.with();
+        if (!statisticResultWithNulls.isEmpty()) {
+            normalizedResults = normalizedResults.dropWhere(statisticResultWithNulls);
+        }
 
         StatisticsResultsNormalizedResult datasetMetadata = new StatisticsResultsNormalizedResult(normalizedResults);
         return datasetMetadata;
@@ -387,5 +414,53 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
 
 
         throw new SensorResultNormalizeException(resultsTable, "Cannot detect an " + columnName + " column data type");
+    }
+
+    /**
+     * Finds and normalizes the sample_index column.
+     * @param resultsTable Resul table.
+     * @param columnName Column name to find.
+     * @return A normalized sample index column or null, when the column was not found.
+     */
+    public IntColumn normalizeSampleIndex(Table resultsTable, String columnName) {
+        if (resultsTable == null) {
+            // the collector returned with an error, we don't have a result column
+            return null;
+        }
+
+        Column<?> currentColumn = TableColumnUtility.findColumn(resultsTable, columnName);
+        if (currentColumn == null) {
+            return null;
+        }
+
+        IntColumn resultColumn = TableColumnUtility.convertToIntColumn(currentColumn);
+        if (resultColumn == currentColumn) {
+            resultColumn = resultColumn.copy();
+        }
+        return resultColumn;
+    }
+
+    /**
+     * Finds and normalizes the sample_count column.
+     * @param resultsTable Resul table.
+     * @param columnName Column name to find.
+     * @return A normalized sample count column or null, when the column was not found.
+     */
+    public LongColumn normalizeSampleCount(Table resultsTable, String columnName) {
+        if (resultsTable == null) {
+            // the collector returned with an error, we don't have a result column
+            return null;
+        }
+
+        Column<?> currentColumn = TableColumnUtility.findColumn(resultsTable, columnName);
+        if (currentColumn == null) {
+            return null;
+        }
+
+        LongColumn resultColumn = TableColumnUtility.convertToLongColumn(currentColumn);
+        if (resultColumn == currentColumn) {
+            resultColumn = resultColumn.copy();
+        }
+        return resultColumn;
     }
 }

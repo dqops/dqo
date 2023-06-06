@@ -20,10 +20,7 @@ import ai.dqo.core.jobqueue.exceptions.DqoQueueJobCancelledException;
 import ai.dqo.core.jobqueue.exceptions.DqoQueueJobExecutionException;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.function.BiConsumer;
 
 /**
@@ -130,6 +127,10 @@ public abstract class DqoQueueJob<T> {
         catch (DqoQueueJobCancelledException cex) {
             assert this.finishedFuture.isCancelled();
             throw cex;
+        }
+        catch (CancellationException jcex) {
+            assert this.finishedFuture.isCancelled();
+            throw new DqoQueueJobCancelledException(jobExecutionContext.getJobId());
         }
         catch (Exception ex) {
             this.finishedFuture.completeExceptionally(ex);

@@ -55,10 +55,10 @@ public class SchedulerStartCliCommand extends BaseCommand implements ICommand {
     }
 
     @CommandLine.Option(names = {"-sm", "--synchronization-mode"}, description = "Reporting mode for the DQO cloud synchronization (silent, summary, debug)")
-    private FileSystemSynchronizationReportingMode synchronizationMode;
+    private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
 
     @CommandLine.Option(names = {"-crm", "--check-run-mode"}, description = "Check execution reporting mode (silent, summary, info, debug)")
-    private CheckRunReportingMode checkRunMode;
+    private CheckRunReportingMode checkRunMode = CheckRunReportingMode.silent;
 
     /**
      * Returns the synchronization logging mode.

@@ -19,8 +19,8 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.partitioned.sql.TableSqlMonthlyPartitionedSpec;
-import ai.dqo.checks.table.partitioned.standard.TableStandardMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.table.partitioned.sql.TableSqlMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.table.partitioned.volume.TableVolumeMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.table.partitioned.timeliness.TableTimelinessMonthlyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -50,7 +50,7 @@ import java.util.Objects;
 public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<TableMonthlyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-            put("standard", o -> o.standard);
+            put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
             put("sql", o -> o.sql);
 
@@ -58,10 +58,10 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
         }
     };
 
-    @JsonPropertyDescription("Standard monthly partitioned data quality checks that verify the quality of every month of data separately")
+    @JsonPropertyDescription("Volume monthly partitioned data quality checks that verify the quality of every month of data separately")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardMonthlyPartitionedChecksSpec standard;
+    private TableVolumeMonthlyPartitionedChecksSpec volume;
 
     @JsonPropertyDescription("Monthly partitioned timeliness checks")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -71,24 +71,25 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @JsonPropertyDescription("Custom SQL monthly partitioned data quality checks that verify the quality of every month of data separately")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableSqlMonthlyPartitionedSpec sql;
+    private TableSqlMonthlyPartitionedChecksSpec sql;
+
 
     /**
-     * Returns the container of monthly partitioned checks for standard data quality checks.
-     * @return Container of row standard data quality checks.
+     * Returns the container of monthly partitioned checks for volume data quality checks.
+     * @return Container of row volume data quality checks.
      */
-    public TableStandardMonthlyPartitionedChecksSpec getStandard() {
-        return standard;
+    public TableVolumeMonthlyPartitionedChecksSpec getVolume() {
+        return volume;
     }
 
     /**
-     * Sets the container of standard data quality checks.
-     * @param standard New standard checks.
+     * Sets the container of volume data quality checks.
+     * @param volume New volume checks.
      */
-    public void setStandard(TableStandardMonthlyPartitionedChecksSpec standard) {
-        this.setDirtyIf(!Objects.equals(this.standard, standard));
-        this.standard = standard;
-        this.propagateHierarchyIdToField(standard, "standard");
+    public void setVolume(TableVolumeMonthlyPartitionedChecksSpec volume) {
+        this.setDirtyIf(!Objects.equals(this.volume, volume));
+        this.volume = volume;
+        this.propagateHierarchyIdToField(volume, "volume");
     }
 
     /**
@@ -113,7 +114,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
      * Returns the container of custom SQL checks.
      * @return Custom sql checks.
      */
-    public TableSqlMonthlyPartitionedSpec getSql() {
+    public TableSqlMonthlyPartitionedChecksSpec getSql() {
         return sql;
     }
 
@@ -121,7 +122,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
      * Sets a reference to a container of custom SQL checks.
      * @param sql Container of custom SQL checks.
      */
-    public void setSql(TableSqlMonthlyPartitionedSpec sql) {
+    public void setSql(TableSqlMonthlyPartitionedChecksSpec sql) {
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");

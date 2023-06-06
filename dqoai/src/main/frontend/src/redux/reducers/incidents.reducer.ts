@@ -14,11 +14,9 @@
 /// limitations under the License.
 ///
 
-import {
-  IncidentModel, IncidentsPerConnectionModel,
-} from '../../api';
+import { IncidentsPerConnectionModel } from '../../api';
 import { INCIDENTS_ACTION } from '../types';
-import { Action, INestTab } from "./source.reducer";
+import { Action, INestTab } from './source.reducer';
 
 export interface IncidentFilter {
   connection: string;
@@ -30,14 +28,66 @@ export interface IncidentFilter {
   page?: number;
   pageSize?: number;
   optionalFilter?: string;
-  sortBy?: 'table' | 'tablePriority' | 'firstSeen' | 'lastSeen' | 'dataStreamName' | 'qualityDimension' | 'checkName' | 'highestSeverity' | 'failedChecksCount';
+  sortBy?:
+    | 'table'
+    | 'tablePriority'
+    | 'firstSeen'
+    | 'lastSeen'
+    | 'dataStreamName'
+    | 'qualityDimension'
+    | 'checkName'
+    | 'highestSeverity'
+    | 'failedChecksCount';
   sortDirection?: 'asc' | 'desc';
+}
+
+export interface IncidentIssueFilter {
+  connection: string;
+  year: number;
+  month: number;
+  incidentId: string;
+  page?: number;
+  pageSize?: number;
+  filter?: string;
+  days?: number;
+  date?: string;
+  column?: string;
+  check?: string;
+  order?:
+    | 'executedAt'
+    | 'checkHash'
+    | 'checkCategory'
+    | 'checkName'
+    | 'checkDisplayName'
+    | 'checkType'
+    | 'actualValue'
+    | 'expectedValue'
+    | 'severity'
+    | 'columnName'
+    | 'dataStream'
+    | 'timeGradient'
+    | 'timePeriod'
+    | 'qualityDimension'
+    | 'sensorName';
+  direction?: any;
+}
+
+export interface IncidentHistogramFilter {
+  connection: string;
+  year: number;
+  month: number;
+  incidentId: string;
+  filter?: string;
+  days?: number;
+  date?: string;
+  column?: string;
+  check?: string;
 }
 
 export interface IIncidentsState {
   connections: IncidentsPerConnectionModel[];
-  loading: boolean;
-  error: any;
+  loading?: boolean;
+  error?: any;
   tabs: INestTab[];
   activeTab?: string;
 }
@@ -46,20 +96,28 @@ const initialState: IIncidentsState = {
   connections: [],
   loading: false,
   error: null,
-  tabs: [],
+  tabs: []
 };
 
-const setActiveTabState = (state: IIncidentsState, action: Action, data: Record<string, unknown>) => {
+const setActiveTabState = (
+  state: IIncidentsState,
+  action: Action,
+  data: Record<string, unknown>
+) => {
   return {
     ...state,
-    tabs: state.tabs.map((item) => item.url === state.activeTab ? ({
-      ...item,
-      state: {
-        ...item.state,
-        ...data
-      }
-    }) : item)
-  }
+    tabs: state.tabs.map((item) =>
+      item.url === state.activeTab
+        ? {
+            ...item,
+            state: {
+              ...item.state,
+              ...data
+            }
+          }
+        : item
+    )
+  };
 };
 
 const incidentsReducer = (state = initialState, action: any) => {
@@ -84,33 +142,36 @@ const incidentsReducer = (state = initialState, action: any) => {
       };
 
     case INCIDENTS_ACTION.ADD_FIRST_LEVEL_TAB: {
-      const existing = state.tabs?.find((item) => item.value === action.data.value);
+      const existing = state.tabs?.find(
+        (item) => item.value === action.data.value
+      );
 
       if (existing) {
         return {
           ...state,
           activeTab: action.data.url,
-          tabs: state.tabs.map((item) => item.value === action.data.value ? ({
-            ...item,
-            ...action.data,
-          }) : item)
+          tabs: state.tabs.map((item) =>
+            item.value === action.data.value
+              ? {
+                  ...item,
+                  ...action.data
+                }
+              : item
+          )
         };
       }
 
       return {
         ...state,
         activeTab: action.data.url,
-        tabs: [
-          ...state.tabs || [],
-          action.data,
-        ]
+        tabs: [...(state.tabs || []), action.data]
       };
     }
     case INCIDENTS_ACTION.SET_ACTIVE_FIRST_LEVEL_TAB: {
       return {
         ...state,
-        activeTab: action.data,
-      }
+        activeTab: action.data
+      };
     }
     case INCIDENTS_ACTION.CLOSE_FIRST_LEVEL_TAB: {
       const index = state.tabs?.findIndex((item) => item.url === action.data);
@@ -118,9 +179,11 @@ const incidentsReducer = (state = initialState, action: any) => {
 
       if (state.activeTab === action.data) {
         if (index > 0) {
-          activeTab = state.tabs[index-1].url;
+          activeTab = state.tabs[index - 1].url;
         } else if (index < state.tabs.length - 1) {
-          activeTab = state.tabs[index+1].url;
+          activeTab = state.tabs[index + 1].url;
+        } else {
+          activeTab = '';
         }
       }
 
@@ -128,20 +191,54 @@ const incidentsReducer = (state = initialState, action: any) => {
         ...state,
         tabs: state.tabs.filter((item) => item.url !== action.data),
         activeTab
-      }
+      };
     }
     case INCIDENTS_ACTION.GET_INCIDENTS_BY_CONNECTION: {
       return setActiveTabState(state, action, {
-        loading: true,
+        loading: true
       });
     }
     case INCIDENTS_ACTION.GET_INCIDENTS_BY_CONNECTION_SUCCESS: {
       return setActiveTabState(state, action, {
         incidents: action.data,
+        isEnd: action.isEnd,
         loading: false
       });
     }
     case INCIDENTS_ACTION.GET_INCIDENTS_BY_CONNECTION_ERROR: {
+      return setActiveTabState(state, action, {
+        loading: false
+      });
+    }
+    case INCIDENTS_ACTION.GET_INCIDENTS_ISSUES: {
+      return setActiveTabState(state, action, {
+        loading: true
+      });
+    }
+    case INCIDENTS_ACTION.GET_INCIDENTS_ISSUES_SUCCESS: {
+      return setActiveTabState(state, action, {
+        issues: action.data,
+        loading: false,
+        isEnd: action.isEnd,
+      });
+    }
+    case INCIDENTS_ACTION.GET_INCIDENTS_ISSUES_ERROR: {
+      return setActiveTabState(state, action, {
+        loading: false
+      });
+    }
+    case INCIDENTS_ACTION.GET_INCIDENTS_HISTOGRAMS: {
+      return setActiveTabState(state, action, {
+        loading: true
+      });
+    }
+    case INCIDENTS_ACTION.GET_INCIDENTS_HISTOGRAMS_SUCCESS: {
+      return setActiveTabState(state, action, {
+        histograms: action.data,
+        loading: false
+      });
+    }
+    case INCIDENTS_ACTION.GET_INCIDENTS_HISTOGRAMS_ERROR: {
       return setActiveTabState(state, action, {
         loading: false
       });
@@ -151,7 +248,17 @@ const incidentsReducer = (state = initialState, action: any) => {
         filters: action.data
       });
     }
+    case INCIDENTS_ACTION.UPDATE_INCIDENT: {
+      return setActiveTabState(state, action, {
+        incidents: action.data
+      });
+    }
 
+    case INCIDENTS_ACTION.SET_INCIDENTS_HISTOGRAM_FILTER: {
+      return setActiveTabState(state, action, {
+        histogramFilter: action.data
+      });
+    }
     default:
       return state;
   }

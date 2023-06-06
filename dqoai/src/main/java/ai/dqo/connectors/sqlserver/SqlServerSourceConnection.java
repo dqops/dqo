@@ -134,7 +134,7 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
                                      cancellationToken -> RunSilently.run(statement::cancel))) {
                     try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
                         try (SqlServerResultSet sqlServerResultSet = new SqlServerResultSet(results)) {
-                            Table resultTable = Table.read().db(sqlServerResultSet, "query_result");
+                            Table resultTable = Table.read().db(sqlServerResultSet, sqlQueryStatement);
                             for (Column<?> column : resultTable.columns()) {
                                 if (column.name() != null) {
                                     column.setName(column.name().toLowerCase(Locale.ROOT));

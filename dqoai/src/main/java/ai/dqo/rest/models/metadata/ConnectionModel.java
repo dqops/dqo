@@ -31,12 +31,21 @@ import lombok.Data;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "ConnectionModel", description = "Full connection model")
 public class ConnectionModel {
+    /**
+     * Connection name.
+     */
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
+    /**
+     * Connection hash that identifies the connection using a unique hash code.
+     */
     @JsonPropertyDescription("Connection hash that identifies the connection using a unique hash code.")
     private Long connectionHash;
 
+    /**
+     * Full connection specification, including all nested objects (but not a list of tables).
+     */
     @JsonPropertyDescription("Full connection specification, including all nested objects (but not a list of tables).")
     private ConnectionSpec spec;
 }

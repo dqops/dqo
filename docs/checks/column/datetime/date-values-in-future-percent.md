@@ -12,29 +12,29 @@ Verifies that the percentage of date values in future in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|date_values_in_future_percent|profiling| |[date_values_in_future_percent](../../../../reference/sensors/column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|date_values_in_future_percent|profiling| |[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=date_values_in_future_percent
+dqo> check enable -c=connection_name -ch=date_values_in_future_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=date_values_in_future_percent
+dqo> check run -ch=date_values_in_future_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=date_values_in_future_percent
+dqo> check run -c=connection_name -ch=date_values_in_future_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=date_values_in_future_percent
+dqo> check run -c=connection_name -t=table_name -ch=date_values_in_future_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=date_values_in_future_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=date_values_in_future_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -84,7 +84,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -131,7 +131,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -152,7 +152,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     {% macro render_value_in_future() -%}
         {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
@@ -198,7 +198,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -219,7 +219,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -266,7 +266,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -287,7 +287,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -334,7 +334,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -355,7 +355,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -402,7 +402,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -417,6 +417,74 @@ spec:
         SYSDATETIMEOFFSET() AS time_period,
         CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -469,7 +537,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -515,7 +583,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -538,7 +606,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         {% macro render_value_in_future() -%}
             {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
@@ -583,7 +651,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -606,7 +674,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -652,7 +720,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -675,7 +743,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -721,7 +789,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -744,7 +812,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -790,7 +858,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -806,14 +874,82 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        
+        {% macro render_value_in_future() -%}
+            {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- else -%}
+                    CASE
+                        WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    {{ render_value_in_future() }}
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            LOCALTIMESTAMP AS time_period,
+            CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -826,33 +962,33 @@ ___
 ## **daily date values in future percent**  
   
 **Check description**  
-Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_date_values_in_future_percent|recurring|daily|[date_values_in_future_percent](../../../../reference/sensors/column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_date_values_in_future_percent|recurring|daily|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_date_values_in_future_percent
+dqo> check enable -c=connection_name -ch=daily_date_values_in_future_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_date_values_in_future_percent
+dqo> check run -ch=daily_date_values_in_future_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_date_values_in_future_percent
+dqo> check run -c=connection_name -ch=daily_date_values_in_future_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_date_values_in_future_percent
+dqo> check run -c=connection_name -t=table_name -ch=daily_date_values_in_future_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_date_values_in_future_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_date_values_in_future_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -904,7 +1040,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -951,7 +1087,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -972,7 +1108,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     {% macro render_value_in_future() -%}
         {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
@@ -1018,7 +1154,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1039,7 +1175,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -1086,7 +1222,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1107,7 +1243,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -1154,7 +1290,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1175,7 +1311,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -1222,7 +1358,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1237,6 +1373,74 @@ spec:
         CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -1290,7 +1494,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -1336,7 +1540,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -1359,7 +1563,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         {% macro render_value_in_future() -%}
             {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
@@ -1404,7 +1608,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -1427,7 +1631,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -1473,7 +1677,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -1496,7 +1700,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -1542,7 +1746,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -1565,7 +1769,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -1611,7 +1815,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -1627,14 +1831,82 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        
+        {% macro render_value_in_future() -%}
+            {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- else -%}
+                    CASE
+                        WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    {{ render_value_in_future() }}
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            LOCALTIMESTAMP AS time_period,
+            CONVERT_TZ(LOCALTIMESTAMP, @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -1651,29 +1923,29 @@ Verifies that the percentage of date values in future in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_date_values_in_future_percent|recurring|monthly|[date_values_in_future_percent](../../../../reference/sensors/column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_date_values_in_future_percent|recurring|monthly|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_date_values_in_future_percent
+dqo> check enable -c=connection_name -ch=monthly_date_values_in_future_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_date_values_in_future_percent
+dqo> check run -ch=monthly_date_values_in_future_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_date_values_in_future_percent
+dqo> check run -c=connection_name -ch=monthly_date_values_in_future_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_date_values_in_future_percent
+dqo> check run -c=connection_name -t=table_name -ch=monthly_date_values_in_future_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_date_values_in_future_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_date_values_in_future_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1725,7 +1997,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -1772,7 +2044,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1793,7 +2065,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     {% macro render_value_in_future() -%}
         {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
@@ -1839,7 +2111,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1860,7 +2132,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -1907,7 +2179,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1928,7 +2200,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -1975,7 +2247,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1996,7 +2268,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -2043,7 +2315,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -2058,6 +2330,74 @@ spec:
         DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
     FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+        CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -2111,7 +2451,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -2157,7 +2497,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -2180,7 +2520,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         {% macro render_value_in_future() -%}
             {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
@@ -2225,7 +2565,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -2248,7 +2588,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -2294,7 +2634,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -2317,7 +2657,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -2363,7 +2703,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -2386,7 +2726,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -2432,7 +2772,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -2448,14 +2788,82 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        
+        {% macro render_value_in_future() -%}
+            {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- else -%}
+                    CASE
+                        WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    {{ render_value_in_future() }}
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+            CONVERT_TZ(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -2472,29 +2880,29 @@ Verifies that the percentage of date values in future in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_date_values_in_future_percent|partitioned|daily|[date_values_in_future_percent](../../../../reference/sensors/column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_partition_date_values_in_future_percent|partitioned|daily|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_date_values_in_future_percent
+dqo> check enable -c=connection_name -ch=daily_partition_date_values_in_future_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_date_values_in_future_percent
+dqo> check run -ch=daily_partition_date_values_in_future_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_date_values_in_future_percent
+dqo> check run -c=connection_name -ch=daily_partition_date_values_in_future_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_date_values_in_future_percent
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_date_values_in_future_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_date_values_in_future_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_date_values_in_future_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2546,7 +2954,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -2593,7 +3001,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -2614,7 +3022,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     {% macro render_value_in_future() -%}
         {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
@@ -2660,7 +3068,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -2681,7 +3089,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -2728,7 +3136,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -2749,7 +3157,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -2796,7 +3204,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -2817,7 +3225,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -2864,7 +3272,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -2883,6 +3291,74 @@ spec:
     ORDER BY CAST([] AS date)
     
         
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table.`` AS time_period,
+        CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -2936,7 +3412,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -2982,7 +3458,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -3005,7 +3481,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         {% macro render_value_in_future() -%}
             {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
@@ -3050,7 +3526,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -3073,7 +3549,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -3119,7 +3595,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -3142,7 +3618,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -3188,7 +3664,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -3211,7 +3687,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -3257,7 +3733,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -3273,11 +3749,80 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST([] AS date) AS time_period,
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY CAST([] AS date), CAST([] AS date)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
         ORDER BY level_1, level_2CAST([] AS date)
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        
+        {% macro render_value_in_future() -%}
+            {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- else -%}
+                    CASE
+                        WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    {{ render_value_in_future() }}
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            analyzed_table.`` AS time_period,
+            CONVERT_TZ(analyzed_table.``, @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 
@@ -3294,29 +3839,29 @@ Verifies that the percentage of date values in future in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_date_values_in_future_percent|partitioned|monthly|[date_values_in_future_percent](../../../../reference/sensors/column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_partition_date_values_in_future_percent|partitioned|monthly|[date_values_in_future_percent](../../../../reference/sensors/Column/datetime-column-sensors/#date-values-in-future-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_date_values_in_future_percent
+dqo> check enable -c=connection_name -ch=monthly_partition_date_values_in_future_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_date_values_in_future_percent
+dqo> check run -ch=monthly_partition_date_values_in_future_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_date_values_in_future_percent
+dqo> check run -c=connection_name -ch=monthly_partition_date_values_in_future_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_date_values_in_future_percent
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_date_values_in_future_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_date_values_in_future_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_date_values_in_future_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -3368,7 +3913,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -3415,7 +3960,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -3436,7 +3981,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     {% macro render_value_in_future() -%}
         {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
@@ -3482,7 +4027,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -3503,7 +4048,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -3550,7 +4095,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -3571,7 +4116,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -3618,7 +4163,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -3639,7 +4184,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -3686,7 +4231,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -3705,6 +4250,74 @@ spec:
     ORDER BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
     
         
+    ```
+### **MySQL**
+=== "Sensor template for MySQL"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for MySQL"
+      
+    ```sql
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
+        CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+    FROM `<target_table>` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
     ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
@@ -3758,7 +4371,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -3804,7 +4417,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -3827,7 +4440,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         {% macro render_value_in_future() -%}
             {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
@@ -3872,7 +4485,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -3895,7 +4508,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -3941,7 +4554,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -3964,7 +4577,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -4010,7 +4623,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -4033,7 +4646,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {% macro render_value_in_future() -%}
@@ -4079,7 +4692,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -4095,11 +4708,80 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             
+        ```
+    **MySQL**  
+      
+    === "Sensor template for MySQL"
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        
+        {% macro render_value_in_future() -%}
+            {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- else -%}
+                    CASE
+                        WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            THEN 1
+                        ELSE 0
+                    END
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    {{ render_value_in_future() }}
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for MySQL"
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            analyzed_table.`country` AS stream_level_1,
+            analyzed_table.`state` AS stream_level_2,
+            DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00') AS time_period,
+            CONVERT_TZ(DATE_FORMAT(analyzed_table.``, '%Y-%m-01 00:00:00'), @@session.time_zone, '+00:00') AS time_period_utc
+        FROM `<target_table>` AS analyzed_table
+        GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
         ```
     
 

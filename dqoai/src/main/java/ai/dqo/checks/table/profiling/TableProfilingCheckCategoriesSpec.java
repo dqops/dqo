@@ -47,65 +47,68 @@ import java.util.Objects;
 public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
     public static final ChildHierarchyNodeFieldMapImpl<TableProfilingCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
-            put("standard", o -> o.standard);
+            put("volume", o -> o.volume);
             put("timeliness", o -> o.timeliness);
             put("accuracy", o -> o.accuracy);
             put("sql", o -> o.sql);
             put("availability", o -> o.availability);
-//          put("consistency", o -> o.consistency);
-//          put("custom", o -> o.custom);
+            put("schema", o -> o.schema);
         }
     };
 
-    @JsonPropertyDescription("Configuration of standard data quality checks on a table level.")
+    @JsonPropertyDescription("Configuration of volume data quality checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableProfilingStandardChecksSpec standard;
+    private TableVolumeProfilingChecksSpec volume;
 
     @JsonPropertyDescription("Configuration of timeliness checks on a table level. Timeliness checks detect anomalies like rapid row count changes.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableProfilingTimelinessChecksSpec timeliness;
+    private TableTimelinessProfilingChecksSpec timeliness;
 
     @JsonPropertyDescription("Configuration of accuracy checks on a table level. Accuracy checks compare the tested table with another reference table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableProfilingAccuracyChecksSpec accuracy;
+    private TableAccuracyProfilingChecksSpec accuracy;
 
     @JsonPropertyDescription("Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableProfilingSqlChecksSpec sql;
+    private TableSqlProfilingChecksSpec sql;
 
-    @JsonPropertyDescription("Configuration of standard data quality checks on a table level.")
+    @JsonPropertyDescription("Configuration of the table availability data quality checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableProfilingAvailabilityChecksSpec availability;
+    private TableAvailabilityProfilingChecksSpec availability;
 
+    @JsonPropertyDescription("Configuration of schema (column count and schema) data quality checks on a table level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TableSchemaProfilingChecksSpec schema;
 
     /**
-     * Returns a container of standard check configuration on a table level.
-     * @return Standard checks configuration.
+     * Returns a container of volume check configuration on a table level.
+     * @return Volume checks configuration.
      */
-    public TableProfilingStandardChecksSpec getStandard() {
-        return standard;
+    public TableVolumeProfilingChecksSpec getVolume() {
+        return volume;
     }
 
     /**
-     * Sets a reference to a standard checks container.
-     * @param standard New standard checks configuration.
+     * Sets a reference to a volume checks container.
+     * @param volume New volume checks configuration.
      */
-    public void setStandard(TableProfilingStandardChecksSpec standard) {
-        this.setDirtyIf(!Objects.equals(this.standard, standard));
-        this.standard = standard;
-        this.propagateHierarchyIdToField(standard, "standard");
+    public void setVolume(TableVolumeProfilingChecksSpec volume) {
+        this.setDirtyIf(!Objects.equals(this.volume, volume));
+        this.volume = volume;
+        this.propagateHierarchyIdToField(volume, "volume");
     }
 
     /**
      * Returns a container of timeliness checks.
      * @return Timeliness data quality checks on a table level configuration.
      */
-    public TableProfilingTimelinessChecksSpec getTimeliness() {
+    public TableTimelinessProfilingChecksSpec getTimeliness() {
         return timeliness;
     }
 
@@ -113,7 +116,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      * Sets a reference to a timeliness table level checks container.
      * @param timeliness New timeliness checks.
      */
-    public void setTimeliness(TableProfilingTimelinessChecksSpec timeliness) {
+    public void setTimeliness(TableTimelinessProfilingChecksSpec timeliness) {
         this.setDirtyIf(!Objects.equals(this.timeliness, timeliness));
         this.timeliness = timeliness;
         this.propagateHierarchyIdToField(timeliness, "timeliness");
@@ -123,7 +126,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      * Returns the configuration of accuracy checks.
      * @return Accuracy checks.
      */
-    public TableProfilingAccuracyChecksSpec getAccuracy() {
+    public TableAccuracyProfilingChecksSpec getAccuracy() {
         return accuracy;
     }
 
@@ -131,7 +134,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      * Sets the configuration of accuracy checks.
      * @param accuracy Accuracy checks.
      */
-    public void setAccuracy(TableProfilingAccuracyChecksSpec accuracy) {
+    public void setAccuracy(TableAccuracyProfilingChecksSpec accuracy) {
         this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
         this.accuracy = accuracy;
         this.propagateHierarchyIdToField(accuracy, "accuracy");
@@ -141,7 +144,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      * Returns a container of custom sql checks.
      * @return Custom sql checks.
      */
-    public TableProfilingSqlChecksSpec getSql() {
+    public TableSqlProfilingChecksSpec getSql() {
         return sql;
     }
 
@@ -149,28 +152,46 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
      * Sets a reference to a custom sql checks container.
      * @param sql Custom sql checks.
      */
-    public void setSql(TableProfilingSqlChecksSpec sql) {
+    public void setSql(TableSqlProfilingChecksSpec sql) {
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
     }
 
     /**
-     * Returns a container of custom sql checks.
-     * @return Custom sql checks.
+     * Returns a container of the table availability checks.
+     * @return Table availability checks.
      */
-    public TableProfilingAvailabilityChecksSpec getAvailability() {
+    public TableAvailabilityProfilingChecksSpec getAvailability() {
         return availability;
     }
 
     /**
-     * Sets a reference to a custom sql checks container.
-     * @param availability Custom sql checks.
+     * Sets a reference to an availability checks container.
+     * @param availability Table availability checks.
      */
-    public void setAvailability(TableProfilingAvailabilityChecksSpec availability) {
+    public void setAvailability(TableAvailabilityProfilingChecksSpec availability) {
         this.setDirtyIf(!Objects.equals(this.availability, availability));
         this.availability = availability;
         this.propagateHierarchyIdToField(availability, "availability");
+    }
+
+    /**
+     * Returns a container of table schema checks.
+     * @return Table schema checks.
+     */
+    public TableSchemaProfilingChecksSpec getSchema() {
+        return schema;
+    }
+
+    /**
+     * Sets the reference to the table schema checks.
+     * @param schema Table schema checks container.
+     */
+    public void setSchema(TableSchemaProfilingChecksSpec schema) {
+        this.setDirtyIf(!Objects.equals(this.schema, schema));
+        this.schema = schema;
+        this.propagateHierarchyIdToField(schema, "schema");
     }
 
     /**

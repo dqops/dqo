@@ -31,6 +31,7 @@ import ai.dqo.cli.commands.utility.ClearScreenCliCommand;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.configuration.DqoLoggingConfigurationProperties;
 import ai.dqo.core.scheduler.JobSchedulerService;
+import ai.dqo.core.scheduler.synchronize.ScheduledSynchronizationFolderSelectionMode;
 import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import org.springframework.beans.factory.BeanFactory;
@@ -158,6 +159,14 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "The number of days since today that are scanned for open incidents first seen in since this number of days.", defaultValue = "15")
     private Integer dqoIncidentsCountOpenIncidentsDays;
 
+    @CommandLine.Option(names = {"--dqo.incidents.column-histogram-size"},
+            description = "The size of the column histogram that is generated for a preview of a data quality incident.", defaultValue = "10")
+    private Integer dqoIncidentsColumnHistogramSize;
+
+    @CommandLine.Option(names = {"--dqo.incidents.check-histogram-size"},
+            description = "The size of the data quality check histogram that is generated for a preview of a data quality incident.", defaultValue = "10")
+    private Integer dqoIncidentsCheckHistogramSize;
+
     @CommandLine.Option(names = {"--dqo.jdbc.max-connection-in-pool"},
             description = "Sets the maximum number of connections in the JDBC connection pool, shared across all data sources using JDBC drivers.", defaultValue = "1000")
     private Integer dqoJdbcMaxConnectionInPool;
@@ -173,6 +182,10 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"--dqo.secrets.gcp-project-id"},
             description = "GCP project name with a GCP secret manager enabled to pull the secrets.", defaultValue = "true")
     private Boolean dqoSecretsGcpProjectId;
+
+    @CommandLine.Option(names = {"--dqo.cli.terminal.width"},
+            description = "Width of the terminal when no terminal window is available, e.g. in one-shot running mode.", defaultValue = "100")
+    private Integer dqoCliTerminalWidth;
 
     @CommandLine.Option(names = {"--dqo.core.print-stack-trace"},
             description = "Prints a full stack trace for errors on the console.", defaultValue = "true")
@@ -202,9 +215,13 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Enable synchronization of metadata and results with DQO Cloud in the job scheduler.", defaultValue = "true")
     private Boolean dqoSchedulerEnableCloudSync;
 
-    @CommandLine.Option(names = {"--dqo.scheduler.scan-metadata-cron-schedule"},
-            description = "Unix cron expression to configure how often the scheduler will synchronize the local copy of the metadata with DQO Cloud and detect new schedules.", defaultValue = "*/10 * * * *")
-    private String dqoSchedulerScanMetadataCronSchedule;
+    @CommandLine.Option(names = {"--dqo.scheduler.synchronize-cron-schedule"},
+            description = "Unix cron expression to configure how often the scheduler will synchronize the local copy of the metadata with DQO Cloud and detect new cron schedules. Synchronization with DQO cloud could be disabled by setting --dqo.scheduler.enable-cloud-sync=false.", defaultValue = "*/10 * * * *")
+    private String dqoSchedulerSynchronizeCronSchedule;
+
+    @CommandLine.Option(names = {"--dqo.scheduler.synchronized-folders"},
+            description = "Configures which folders from the DQO user home folder are synchronized to DQO Cloud during a recurring synchronization (triggered by a cron schedule configured by --dqo.scheduler.synchronize-cron-schedule). By default, DQO synchronizes (pushes) only changes from folders that have local changes.", defaultValue = "locally_changed")
+    private ScheduledSynchronizationFolderSelectionMode dqoSchedulerSynchronizedFolders = ScheduledSynchronizationFolderSelectionMode.locally_changed;
 
     @CommandLine.Option(names = {"--dqo.scheduler.synchronization-mode"},
             description = "Configures the console logging mode for the '\"cloud sync all\" operations performed by the job scheduler in the background.", defaultValue = "silent")
@@ -213,6 +230,10 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"--dqo.scheduler.check-run-mode"},
             description = "Configures the console logging mode for the '\"check run\" jobs performed by the job scheduler in the background.", defaultValue = "silent")
     private CheckRunReportingMode dqoSchedulerCheckRunMode;
+
+    @CommandLine.Option(names = {"--dqo.docker.userhome.allow-unmounted"},
+            description = "When running DQO in a docker container, allow DQO user home folder to be initialized inside the container's filesystem if the folder hasn't been mounted to an external volume.", defaultValue = "false")
+    private Boolean dqoDockerUserhomeAllowUnmounted;
 
     @CommandLine.Option(names = {"--spring.config.location"},
             description = "Sets a path to the folder that has the spring configuration files (application.properties or application.yml) or directly to an application.properties or application.yml file. " +

@@ -39,7 +39,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('data-streams');
   const [tabs, setTabs] = useState<ITab[]>([]);
-  const { jobs } = useSelector((state: IRootState) => state.job);
+  const { jobs } = useSelector((state: IRootState) => state.job || {});
   const [showDetails, setShowDetails] = useState(false);
 
   const job = jobs?.jobs?.find((item) =>
@@ -324,7 +324,10 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                 ))}
               </div>
             )}
-            <div className="text-sm">{check.check_name}</div>
+            <div className="text-sm relative">
+              <p>{check.check_name}</p>
+              <p className="absolute left-0 top-full text-xxs">{check.quality_dimension}</p>
+            </div>
           </div>
         </td>
         <td className="py-2 px-4 min-w-120 max-w-120">

@@ -15,6 +15,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
 
   const { tabs: pageTabs, activeTab } = useSelector((state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]);
+
   const dispatch= useDispatch();
   const history = useHistory();
   const location = useLocation();

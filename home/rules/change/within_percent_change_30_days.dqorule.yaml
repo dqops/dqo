@@ -1,0 +1,27 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 1
+    historic_data_point_grouping: day
+  fields:
+  - field_name: max_percent_within
+    display_name: max_percent_within
+    help_text: Absolute value of the maximal accepted change relative to the previous
+      readout (inclusive).
+    data_type: double
+    sample_values:
+    - 5
+  - field_name: exact
+    display_name: exact
+    help_text: "Whether to compare the actual value to the readout exactly 7 days\
+      \ in the past. If the flag is false, the rule searches for the newest readout,\
+      \ 60 days in the past, having skipped the readouts for the last 7 days."
+    data_type: boolean
+    sample_values:
+    - "false"

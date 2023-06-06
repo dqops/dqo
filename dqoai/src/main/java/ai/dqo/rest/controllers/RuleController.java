@@ -24,15 +24,16 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.rest.models.metadata.RuleModel;
-import ai.dqo.rest.models.metadata.RuleBasicFolderModel;
+import ai.dqo.rest.models.metadata.*;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import autovalue.shaded.com.google.common.base.Strings;
 import io.swagger.annotations.*;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.*;
@@ -42,7 +43,7 @@ import java.util.stream.Collectors;
  * REST api controller to manage the list of rules.
  */
 @RestController
-@RequestMapping("/api/rules")
+@RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Rules", description = "Rule management")
 public class RuleController {
@@ -66,7 +67,7 @@ public class RuleController {
      * @param fullRuleName Full rule name.
      * @return Model of the rule with specific rule name.
      */
-    @GetMapping("/{fullRuleName}")
+    @GetMapping("/rules/{fullRuleName}")
     @ApiOperation(value = "getRule", notes = "Returns a rule definition", response = RuleModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -104,12 +105,12 @@ public class RuleController {
 
     /**
      * Creates (adds) a new custom rule given sensor information.
-     * @param ruleModel List of rule definitions.
+     * @param ruleModel Rule model.
      * @param fullRuleName Full rule name.
      * @return Empty response.
      */
-    @PostMapping("/{fullRuleName}")
-    @ApiOperation(value = "createRule", notes = "Creates (adds) a new custom rule given sensor information.")
+    @PostMapping("/rules/{fullRuleName}")
+    @ApiOperation(value = "createRule", notes = "Creates (adds) a new custom rule given the rule definition.")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New custom rule successfully created"),
@@ -120,7 +121,7 @@ public class RuleController {
     })
     public ResponseEntity<Mono<?>> createRule(
             @ApiParam("Full rule name") @PathVariable String fullRuleName,
-            @ApiParam("Rule basic model") @RequestBody RuleModel ruleModel) {
+            @ApiParam("Rule model") @RequestBody RuleModel ruleModel) {
         if (ruleModel == null || Strings.isNullOrEmpty(fullRuleName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
@@ -149,7 +150,7 @@ public class RuleController {
      * @param fullRuleName Full rule name.
      * @return Empty response.
      */
-    @PutMapping("/{fullRuleName}")
+    @PutMapping("/rules/{fullRuleName}")
     @ApiOperation(value = "updateRule", notes = "Updates an existing rule, making a custom rule definition if it is not present")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -209,7 +210,7 @@ public class RuleController {
      * @param fullRuleName  Full rule name.
      * @return Empty response.
      */
-    @DeleteMapping("/{fullRuleName}")
+    @DeleteMapping("/rules/{fullRuleName}")
     @ApiOperation(value = "deleteRule", notes = "Deletes a custom rule definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -244,7 +245,7 @@ public class RuleController {
      * Returns all combined rule folder model.
      * @return rule basic tree model.
      */
-    @GetMapping()
+    @GetMapping("/definitions/rules")
     @ApiOperation(value = "getRuleFolderTree", notes = "Returns a tree of all rules available in DQO, both built-in rules and user defined or customized rules.",
             response = RuleBasicFolderModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -253,6 +254,17 @@ public class RuleController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     public ResponseEntity<Mono<RuleBasicFolderModel>> getRuleFolderTree() {
+        RuleBasicFolderModel ruleBasicFolderModel = createRuleTreeModel();
+
+        return new ResponseEntity<>(Mono.just(ruleBasicFolderModel), HttpStatus.OK);
+    }
+
+    /**
+     * Creates a tree with all rules that are defined.
+     * @return A tree with all rules.
+     */
+    @NotNull
+    private RuleBasicFolderModel createRuleTreeModel() {
         RuleBasicFolderModel ruleBasicFolderModel = new RuleBasicFolderModel();
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
@@ -274,13 +286,27 @@ public class RuleController {
 
         for (RuleDefinitionWrapper ruleDefinitionWrapperDqoHome : ruleDefinitionWrapperListDqoHome) {
             String ruleNameDqoHome = ruleDefinitionWrapperDqoHome.getRuleName();
-            if (customRuleNames.contains(ruleNameDqoHome)) {
-                continue; // already added
-            }
-
-            ruleBasicFolderModel.addRule(ruleNameDqoHome, false, true);
+            ruleBasicFolderModel.addRule(ruleNameDqoHome, customRuleNames.contains(ruleNameDqoHome), true);
         }
+        return ruleBasicFolderModel;
+    }
 
-        return new ResponseEntity<>(Mono.just(ruleBasicFolderModel), HttpStatus.OK);
+    /**
+     * Returns a flat list of all rules.
+     * @return List of all rules.
+     */
+    @GetMapping("/rules")
+    @ApiOperation(value = "getAllRules", notes = "Returns a flat list of all rules available in DQO, both built-in rules and user defined or customized rules.",
+            response = RuleBasicModel[].class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = RuleBasicModel[].class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    public ResponseEntity<Flux<RuleBasicModel>> getAllRules() {
+        RuleBasicFolderModel ruleBasicFolderModel = createRuleTreeModel();
+        List<RuleBasicModel> allRules = ruleBasicFolderModel.getAllRules();
+
+        return new ResponseEntity<>(Flux.fromStream(allRules.stream()), HttpStatus.OK);
     }
 }

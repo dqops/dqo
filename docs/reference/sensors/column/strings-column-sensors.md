@@ -1,4 +1,785 @@
 
+## **expected strings in top values count**
+**Full sensor name**
+```
+column/strings/expected_strings_in_top_values_count
+```
+**Description**  
+Column level sensor that counts how many expected string values are among the TOP most popular values in the column.
+ The sensor will first count the number of occurrences of each column&#x27;s value and will pick the TOP X most popular values (configurable by the &#x27;top&#x27; parameter).
+ Then, it will compare the list of most popular values to the given list of expected values that should be most popular.
+ This sensor will return the number of expected values that were found within the &#x27;top&#x27; most popular column values.
+ This sensor is useful for analyzing string columns that have several very popular values, these could be the country codes of the countries with the most number of customers.
+ The sensor can detect if any of the most popular value (an expected value) is no longer one of the top X most popular values.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|expected_values|List of expected string values that should be found in the tested column among the TOP most popular (highest distinct count) column values.|string_list| ||
+|top|The number of the most popular values (with the highest distinct count) that are analyzed to find the expected values.|long| ||
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```sql+jinja
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro render_from_subquery() -%}
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+        FROM
+        (
+            SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+            FROM
+                {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_group_by(indentation = '        ') }}, top_value
+            {{- lib.render_order_by(indentation = '        ') }}, total_values
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= {{ parameters.top }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ',' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+        NULL AS actual_value,
+        MAX(0) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else %}
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+    {{ render_from_subquery() }}
+    {%- endif -%}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "mysql"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro render_from_subquery() -%}
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+        FROM
+        (
+            SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+            FROM
+                {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_group_by(indentation = '        ') }}, top_value
+            {{- lib.render_order_by(indentation = '        ') }}, total_values
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= {{ parameters.top }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ',' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+        NULL AS actual_value,
+        MAX(0) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else %}
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+    {{ render_from_subquery() }}
+    {%- endif -%}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```sql+jinja
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro render_from_subquery() -%}
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+        FROM
+        (
+            SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+            FROM
+                {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_group_by(indentation = '        ') }}, top_value
+            {{- lib.render_order_by(indentation = '        ') }}, total_values
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= {{ parameters.top }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ',' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+        NULL AS actual_value,
+        MAX(0) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else %}
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+    {{ render_from_subquery() }}
+    {%- endif -%}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```sql+jinja
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro render_from_subquery() -%}
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+        FROM
+        (
+            SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+            FROM
+                {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_group_by(indentation = '        ') }}, top_value
+            {{- lib.render_order_by(indentation = '        ') }}, total_values
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= {{ parameters.top }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ',' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+        NULL AS actual_value,
+        MAX(0) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else %}
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+    {{ render_from_subquery() }}
+    {%- endif -%}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro render_from_subquery() -%}
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+        FROM
+        (
+            SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+            FROM
+                {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_group_by(indentation = '        ') }}, top_value
+            {{- lib.render_order_by(indentation = '        ') }}, total_values
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= {{ parameters.top }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ',' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+        NULL AS actual_value,
+        MAX(0) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else %}
+        COUNT(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value,
+        top_values.time_period,
+        top_values.time_period_utc
+        {{- render_data_stream('top_values', indentation = lib.eol() ~ '    ') }}
+    {{ render_from_subquery() }}
+    {%- endif -%}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "sqlserver"
+      
+    ```sql+jinja
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro render_from_subquery() -%}
+    FROM
+    (
+        SELECT
+            top_col_values.top_value as top_value,
+            top_col_values.time_period as time_period,
+            top_col_values.time_period_utc as time_period_utc,
+            RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_stream('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_stream('top_col_values', indentation = ' ') }}
+        FROM
+        (
+            SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                COUNT_BIG(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table', indentation = '            ') }}
+                {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+            FROM
+                {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '        ') }}
+            {%- if (lib.data_streams is not none and (lib.data_streams | length()) > 0) or (lib.time_series.mode is not none and lib.time_series.mode != 'current_time') -%}
+                {{- lib.render_group_by(indentation = '        ') }}, {{ lib.render_target_column('analyzed_table') }}
+            {%- else %}
+            GROUP BY {{ lib.render_target_column('analyzed_table') }}
+            {%- endif %}
+        ) AS top_col_values
+    ) AS top_values
+    WHERE top_values_rank <= {{ parameters.top }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '', indentation = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ',' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ indentation }}{{ lib.make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+        NULL AS actual_value,
+        MAX(0) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else %}
+        COUNT_BIG(DISTINCT
+            CASE
+                WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                ELSE NULL
+            END
+        ) AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value,
+        {%- if (lib.data_streams is not none and (lib.data_streams | length) > 0) -%}
+            {%- for attribute in lib.data_streams -%}
+                top_values.stream_{{ attribute }}{{ ', ' }}
+            {%- endfor -%}
+        {%- endif -%}
+        top_values.time_period,
+        top_values.time_period_utc
+    {{ render_from_subquery() }}
+    {%- endif %}
+    GROUP BY time_period, time_period_utc
+    {%- if (lib.data_streams is not none and (lib.data_streams | length) > 0) -%}
+        {%- for attribute in lib.data_streams -%}
+            {{ ', ' }}top_values.stream_{{ attribute }}
+        {%- endfor -%}
+    {%- endif -%}
+    ```
+___
+
+## **expected strings in use count**
+**Full sensor name**
+```
+column/strings/expected_strings_in_use_count
+```
+**Description**  
+Column level sensor that counts how many expected string values are used in a tested column. Finds unique column values from the set of expected string values and counts them.
+ This sensor is useful to analyze string columns that have a low number of unique values and it should be tested if all possible values from the list of expected values are used in any row.
+ The typical type of columns analyzed using this sensor are currency, country, status or gender columns.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|expected_values|List of expected string values that should be found in the tested column.|string_list| ||
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```sql+jinja
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        NULL
+        {%- else -%}
+        COUNT(DISTINCT
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN {{ lib.render_target_column('analyzed_table') }}
+                ELSE NULL
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        {{ actual_value() }} AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "mysql"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            NULL
+        {%- else -%}
+        COUNT(DISTINCT
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN {{ lib.render_target_column('analyzed_table') }}
+                ELSE NULL
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```sql+jinja
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            NULL
+        {%- else -%}
+        COUNT(DISTINCT
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN {{ lib.render_target_column('analyzed_table') }}
+                ELSE NULL
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```sql+jinja
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            NULL
+        {%- else -%}
+        COUNT(DISTINCT
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN {{ lib.render_target_column('analyzed_table') }}
+                ELSE NULL
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            NULL
+        {%- else -%}
+        COUNT(DISTINCT
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN {{ lib.render_target_column('analyzed_table') }}
+                ELSE NULL
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "sqlserver"
+      
+    ```sql+jinja
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro render_else() -%}
+        {%- if parameters.expected_values|length == 0 -%}
+            NULL
+        {%- else -%}
+        COUNT_BIG(DISTINCT
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                    THEN {{ lib.render_target_column('analyzed_table') }}
+                ELSE NULL
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT_BIG(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value,
+        MAX({{ parameters.expected_values | length }}) AS expected_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
 ## **string boolean placeholder percent**
 **Full sensor name**
 ```
@@ -13,7 +794,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -35,7 +816,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -57,7 +838,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -79,7 +860,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -101,7 +882,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -138,7 +919,7 @@ Column level sensor that analyzes all values in a text column and detects the da
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -216,7 +997,7 @@ Column level sensor that analyzes all values in a text column and detects the da
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -294,7 +1075,7 @@ Column level sensor that analyzes all values in a text column and detects the da
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -372,7 +1153,7 @@ Column level sensor that analyzes all values in a text column and detects the da
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -450,7 +1231,7 @@ Column level sensor that analyzes all values in a text column and detects the da
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro make_text_constant(string) -%}
         {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
@@ -549,7 +1330,7 @@ Column level sensor that calculates the number of rows with an empty string.
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -612,7 +1393,7 @@ Column level sensor that calculates the number of rows with an empty string.
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -632,7 +1413,7 @@ Column level sensor that calculates the number of rows with an empty string.
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -652,7 +1433,7 @@ Column level sensor that calculates the number of rows with an empty string.
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -672,7 +1453,7 @@ Column level sensor that calculates the number of rows with an empty string.
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -706,7 +1487,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -772,7 +1553,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -795,7 +1576,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -818,7 +1599,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -841,7 +1622,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -855,452 +1636,6 @@ Column level sensor that calculates the percentage of rows with an empty string.
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-___
-
-## **string in set count**
-**Full sensor name**
-```
-column/strings/string_in_set_count
-```
-**Description**  
-Column level sensor that calculates the number of strings from a set in a column does not exceed the minimum accepted count.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|values|Provided list of values to match the data.|string_list| ||
-
-
-
-
-**SQL Template (Jinja2)**  
-=== "bigquery"
-      
-    ```
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {%- macro actual_value() -%}
-        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
-        NULL
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                    THEN 1
-                ELSE 0
-            END
-        )
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "postgresql"
-      
-    ```
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            NULL
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                    THEN 1
-                ELSE 0
-            END
-        )
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN NULL
-            ELSE {{render_else()}}
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "redshift"
-      
-    ```
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            NULL
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                    THEN 1
-                ELSE 0
-            END
-        )
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN NULL
-            ELSE {{render_else()}}
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            NULL
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                    THEN 1
-                ELSE 0
-            END
-        )
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN NULL
-            ELSE {{render_else()}}
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "sqlserver"
-      
-    ```
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            NULL
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                    THEN 1
-                ELSE 0
-            END
-        )
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT_BIG(*) = 0 THEN NULL
-            ELSE {{render_else()}}
-        END AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-___
-
-## **string in set percent**
-**Full sensor name**
-```
-column/strings/string_in_set_percent
-```
-**Description**  
-Column level sensor that calculates the percent of strings from a set in a column does not exceed the minimum accepted percentage.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|values|Provided list of values to match the data.|string_list| ||
-
-
-
-
-**SQL Template (Jinja2)**  
-=== "bigquery"
-      
-    ```
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {%- macro actual_value() -%}
-        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
-        0.0
-        {%- else -%}
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                        THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "postgresql"
-      
-    ```
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {%- macro actual_value() -%}
-        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
-        0.0
-        {%- else -%}
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                        THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "redshift"
-      
-    ```
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {%- macro actual_value() -%}
-        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
-        0.0
-        {%- else -%}
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                        THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {%- macro actual_value() -%}
-        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
-        0.0
-        {%- else -%}
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                        THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        {{ actual_value() }} AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "sqlserver"
-      
-    ```
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {%- macro actual_value() -%}
-        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
-        0.0
-        {%- else -%}
-        CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
-                        THEN 1
-                    ELSE 0
-                END
-            ) / COUNT(*)
-        END
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        {{ actual_value() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1324,7 +1659,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1343,7 +1678,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1362,7 +1697,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1381,7 +1716,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1400,7 +1735,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1433,7 +1768,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1452,7 +1787,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1471,7 +1806,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1490,7 +1825,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1509,7 +1844,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1547,7 +1882,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1566,7 +1901,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1585,7 +1920,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1604,7 +1939,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1623,7 +1958,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1656,7 +1991,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1675,7 +2010,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1694,7 +2029,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1713,7 +2048,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1732,7 +2067,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1771,7 +2106,7 @@ Column level sensor that calculates the count of values that are longer than a g
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -1833,7 +2168,7 @@ Column level sensor that calculates the count of values that are longer than a g
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1852,7 +2187,7 @@ Column level sensor that calculates the count of values that are longer than a g
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1871,7 +2206,7 @@ Column level sensor that calculates the count of values that are longer than a g
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -1891,7 +2226,7 @@ Column level sensor that calculates the count of values that are longer than a g
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1930,7 +2265,7 @@ Column level sensor that calculates the percentage of values that are longer tha
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -1995,7 +2330,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2017,7 +2352,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2039,7 +2374,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -2062,7 +2397,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2104,7 +2439,7 @@ Column level sensor that calculates the count of values that are shorter than a 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -2166,7 +2501,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2185,7 +2520,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2204,7 +2539,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -2224,7 +2559,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2263,7 +2598,7 @@ Column level sensor that calculates the percentage of values that are shorter th
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -2328,7 +2663,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2350,7 +2685,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2372,7 +2707,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -2395,7 +2730,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2438,7 +2773,7 @@ Column level sensor that calculates percentage of strings with a length below th
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -2493,7 +2828,7 @@ Column level sensor that calculates percentage of strings with a length below th
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2515,7 +2850,7 @@ Column level sensor that calculates percentage of strings with a length below th
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -2538,7 +2873,7 @@ Column level sensor that calculates percentage of strings with a length below th
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -2561,7 +2896,7 @@ Column level sensor that calculates percentage of strings with a length below th
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2603,7 +2938,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -2640,7 +2975,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
@@ -2676,7 +3011,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
@@ -2712,7 +3047,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -2749,7 +3084,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -2800,7 +3135,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2822,7 +3157,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2844,7 +3179,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2866,7 +3201,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2888,7 +3223,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2930,7 +3265,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro make_text_constant(string) -%}
@@ -2961,7 +3296,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro make_text_constant(string) -%}
@@ -2992,7 +3327,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro make_text_constant(string) -%}
@@ -3023,7 +3358,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro make_text_constant(string) -%}
@@ -3054,7 +3389,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     {% macro make_text_constant(string) -%}
         {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
@@ -3098,7 +3433,7 @@ Column level sensor that ensures that the length of string in a column does not 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -3156,7 +3491,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
@@ -3171,7 +3506,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
@@ -3186,7 +3521,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
@@ -3201,7 +3536,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
@@ -3230,7 +3565,7 @@ Column level sensor that ensures that the length of string in a column does not 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -3288,7 +3623,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
@@ -3303,7 +3638,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
@@ -3318,7 +3653,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
@@ -3333,7 +3668,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
@@ -3362,7 +3697,7 @@ Column level sensor that ensures that the length of string in a column does not 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -3420,7 +3755,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
@@ -3435,7 +3770,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
@@ -3450,7 +3785,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
@@ -3465,7 +3800,7 @@ Column level sensor that ensures that the length of string in a column does not 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
@@ -3475,416 +3810,6 @@ Column level sensor that ensures that the length of string in a column does not 
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-___
-
-## **string most popular values**
-**Full sensor name**
-```
-column/strings/string_most_popular_values
-```
-**Description**  
-Column level sensor that counts how many expected values are present in the top most popular values in the column.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|expected_values|Provided list of values to match the data.|string_list| ||
-|top_values|Provided limit of top popular values.|long| ||
-
-
-
-
-**SQL Template (Jinja2)**  
-=== "bigquery"
-      
-    ```
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    
-    {%- macro top_value() -%}
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        NULL AS actual_value,
-        {{parameters.expected_values|length}}
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
-                ELSE 0
-            END
-        ) AS actual_value,
-        time_period
-    {{ top_values_column() }}
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro top_values_column() -%}
-    FROM(
-        SELECT
-            top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period, time_period_utc,
-            RANK() OVER(partition by top_col_values.time_period
-            {{- render_data_stream('top_col_values') }}
-            ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }}
-        FROM (
-            SELECT
-            {{ lib.render_target_column('analyzed_table') }} AS top_values,
-            COUNT(*) AS total_values
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause() }}
-            {{- lib.render_group_by() }}, top_values
-            {{- lib.render_order_by() }}, total_values
-        ) top_col_values
-    )
-    WHERE top_values_rank <= {{ parameters.top_values }}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        {{ top_value() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "postgresql"
-      
-    ```
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    
-    {%- macro top_value() -%}
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        NULL AS actual_value,
-        {{parameters.expected_values|length}}
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
-                ELSE 0
-            END
-        ) AS actual_value,
-        time_period
-    {{ top_values_column() }}
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro top_values_column() -%}
-    FROM(
-        SELECT
-            top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period, time_period_utc,
-            RANK() OVER(partition by top_col_values.time_period
-            {{- render_data_stream('top_col_values') }}
-            ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }}
-        FROM (
-            SELECT
-            {{ lib.render_target_column('analyzed_table') }} AS top_values,
-            COUNT(*) AS total_values
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause() }}
-            {{- lib.render_group_by() }}, top_values
-            {{- lib.render_order_by() }}, total_values
-        ) AS top_col_values
-    ) AS  top_values
-    WHERE top_values_rank <= {{ parameters.top_values }}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        {{ top_value() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "redshift"
-      
-    ```
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {% macro render_data_stream(table_alias_prefix = '') %}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {% endmacro %}
-    
-    {%- macro top_value() -%}
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        NULL AS actual_value,
-        {{parameters.expected_values|length}}
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
-                ELSE 0
-            END
-        ) AS actual_value,
-        time_period
-    {{ top_values_column() }}
-        {%- endif -%}
-    {% endmacro -%}
-    
-    {%- macro top_values_column() -%}
-    FROM(
-        SELECT
-            top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
-            RANK() OVER(partition by top_col_values.time_period
-            {{- render_data_stream('top_col_values') }}
-            ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }}
-        FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) AS top_col_values
-        ) AS  top_values
-    WHERE top_values_rank <= {{ parameters.top_values }}
-    {%- endmacro -%}
-    
-    SELECT
-        {{ top_value() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro top_value() -%}
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        NULL AS actual_value,
-        {{parameters.expected_values|length}}
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
-                ELSE 0
-            END
-        ) AS actual_value,
-        time_period
-    {{ top_values_column() }}
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro top_values_column() -%}
-    FROM(
-        SELECT
-            top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period, time_period_utc,
-            RANK() OVER(partition by top_col_values.time_period
-            {{- render_data_stream('top_col_values') }}
-            ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }}
-        FROM (
-            SELECT
-            {{ lib.render_target_column('analyzed_table') }} AS top_values,
-            COUNT(*) AS total_values
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause() }}
-            {{- lib.render_group_by() }}, top_values
-            {{- lib.render_order_by() }}, total_values
-        ) top_col_values
-    )
-    WHERE top_values_rank <= {{ parameters.top_values }}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        {{ top_value() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "sqlserver"
-      
-    ```
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    {%- macro top_value() -%}
-        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        NULL AS actual_value,
-        {{parameters.expected_values|length}}
-        {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-        FROM {{ lib.render_target_table() }} AS analyzed_table
-        {%- else -%}
-        SUM(
-            CASE
-                WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
-                ELSE 0
-            END
-        ) AS actual_value,
-        time_period
-    {{ top_values_column() }}
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro top_values_column() -%}
-    FROM(
-        SELECT
-            top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period, time_period_utc,
-            RANK() OVER(partition by top_col_values.time_period
-            {{- render_data_stream('top_col_values') }}
-            ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }}
-        FROM (
-            SELECT
-            {{ lib.render_target_column('analyzed_table') }} AS top_values,
-            COUNT(*) AS total_values
-            {{- lib.render_data_stream_projections('analyzed_table') }}
-            {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause() }}
-            {{- lib.render_group_by() }}, top_values
-            {{- lib.render_order_by() }}, total_values
-        ) top_col_values
-    )
-    WHERE top_values_rank <= {{ parameters.top_values }}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        {{ top_value() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -3910,7 +3835,7 @@ Column level sensor that calculates the number of values that does not fit to a 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -3947,7 +3872,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
@@ -3983,7 +3908,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
@@ -4019,7 +3944,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -4056,7 +3981,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
@@ -4112,7 +4037,7 @@ Column level sensor that calculates the number of values that does not fit to a 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro make_text_constant(string) -%}
@@ -4143,7 +4068,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro make_text_constant(string) -%}
@@ -4174,7 +4099,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro make_text_constant(string) -%}
@@ -4205,7 +4130,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro make_text_constant(string) -%}
@@ -4236,7 +4161,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     {%- macro make_text_constant(string) -%}
         {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
@@ -4280,7 +4205,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -4342,7 +4267,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4362,7 +4287,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4382,7 +4307,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4402,7 +4327,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4435,7 +4360,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -4500,7 +4425,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4523,7 +4448,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4546,7 +4471,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4569,7 +4494,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4606,7 +4531,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
@@ -4625,7 +4550,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4643,7 +4568,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4661,7 +4586,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
@@ -4680,7 +4605,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4712,7 +4637,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
@@ -4731,7 +4656,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4749,7 +4674,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4767,7 +4692,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
@@ -4786,7 +4711,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4818,7 +4743,7 @@ Column level sensor that calculates the number of rows with string surrounded by
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -4882,7 +4807,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4903,7 +4828,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4924,7 +4849,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -4946,7 +4871,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4981,7 +4906,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -5048,7 +4973,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5072,7 +4997,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5096,7 +5021,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -5121,7 +5046,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -5160,7 +5085,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5182,7 +5107,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5204,7 +5129,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5226,7 +5151,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5248,7 +5173,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5284,7 +5209,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -5349,7 +5274,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5371,7 +5296,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5393,7 +5318,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5415,7 +5340,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5451,7 +5376,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -5516,7 +5441,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5538,7 +5463,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -5563,7 +5488,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5585,7 +5510,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5621,7 +5546,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5643,7 +5568,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5665,7 +5590,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5687,7 +5612,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5709,7 +5634,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5722,6 +5647,274 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
                 END
             ) / COUNT_BIG(*)
         END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
+## **string value in set percent**
+**Full sensor name**
+```
+column/strings/string_value_in_set_percent
+```
+**Description**  
+Column level sensor that calculates the percentage of rows for which the tested string (text) column contains a value from the list of expected values.
+ Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value).
+ This sensor is useful for testing that a string column with a low number of unique values (country, currency, state, gender, etc.) contains only values from a set of expected values.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|expected_values|A list of expected values that must be present in a string column, only values from this list are accepted and rows having these values in the tested column are counted as valid rows.|string_list| ||
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```sql+jinja
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        0.0
+        {%- else -%}
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        {{ actual_value() }} AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "mysql"
+      
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        0.0
+        {%- else -%}
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        {{ actual_value() }} AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```sql+jinja
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        0.0
+        {%- else -%}
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        {{ actual_value() }} AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```sql+jinja
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        0.0
+        {%- else -%}
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        {{ actual_value() }} AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        0.0
+        {%- else -%}
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        {{ actual_value() }} AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "sqlserver"
+      
+    ```sql+jinja
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro actual_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        0.0
+        {%- else -%}
+        CASE
+            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5745,7 +5938,7 @@ Column level sensor that calculates the number of rows with an whitespace string
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -5809,7 +6002,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5830,7 +6023,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5851,7 +6044,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5872,7 +6065,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5907,7 +6100,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
 **SQL Template (Jinja2)**  
 === "bigquery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
@@ -5974,7 +6167,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     ```
 === "postgresql"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5998,7 +6191,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     ```
 === "redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -6022,7 +6215,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     ```
 === "snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -6047,7 +6240,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     ```
 === "sqlserver"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE

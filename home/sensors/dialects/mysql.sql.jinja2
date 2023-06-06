@@ -358,10 +358,12 @@
                     CAST(DATE_SUB({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }}, INTERVAL {{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS DATETIME)
                 {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                    CAST(DATE_SUB({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }}, INTERVAL {{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS DATE)
+                    DATE_SUB(DATE_FORMAT({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }},'%Y-%m-01') INTERVAL {{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS DATE)
                 {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                     CAST(DATE_SUB({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }}, INTERVAL {{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS DATETIME)
+                    CAST(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL {{ time_window_filter.monthly_partitioning_recent_months }} MONTH) AS DATETIME)
+
                 {%- else -%}
                     CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
                     CAST(DATE_SUB({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }}, INTERVAL {{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS DATE)
@@ -408,14 +410,14 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_group_by() %}
+{% macro render_group_by(indentation = '') %}
     {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series is not none %}
-GROUP BY {{ render_grouping_column_names() }}
+{{ indentation }}GROUP BY {{ render_grouping_column_names() }}
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_order_by() %}
+{% macro render_order_by(indentation = '') %}
     {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series is not none %}
-ORDER BY {{ render_grouping_column_names() }}
+{{ indentation }}ORDER BY {{ render_grouping_column_names() }}
     {%- endif -%}
 {% endmacro %}

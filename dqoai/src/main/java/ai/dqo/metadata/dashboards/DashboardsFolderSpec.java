@@ -191,7 +191,6 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
             setUrl(url);
             setWidth(width);
             setHeight(height);
-            setDqoCloudCredentials(true);
         }};
         this.dashboards.add(dashboardSpec);
 
@@ -218,7 +217,6 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
             setUrl(url);
             setWidth(width);
             setHeight(height);
-            setDqoCloudCredentials(true);
             setParameters(parameters);
         }};
         this.dashboards.add(dashboardSpec);

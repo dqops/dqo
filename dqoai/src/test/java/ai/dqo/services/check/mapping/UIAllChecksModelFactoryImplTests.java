@@ -30,6 +30,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectM
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.services.check.mapping.models.UIAllChecksModel;
+import ai.dqo.services.check.matching.SimilarCheckCacheImpl;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
@@ -58,11 +59,14 @@ public class UIAllChecksModelFactoryImplTests extends BaseTest {
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(
                 triggerFactory,
                 defaultTimeZoneProvider);
-        
+
+        ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
+        SensorDefinitionFindServiceImpl sensorDefinitionFindService = new SensorDefinitionFindServiceImpl();
         SpecToUiCheckMappingService specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(
-                new ReflectionServiceImpl(),
-                new SensorDefinitionFindServiceImpl(),
-                schedulesUtilityService);
+                reflectionService,
+                sensorDefinitionFindService,
+                schedulesUtilityService,
+                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService));
 
         ExecutionContextFactory executionContextFactory = new ExecutionContextFactoryImpl(
                 UserHomeContextFactoryObjectMother.createWithInMemoryContext(),

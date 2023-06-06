@@ -53,9 +53,20 @@ public class CliCommandDocumentationGeneratorImpl implements CliCommandDocumenta
         cliFolder.setLinkName("Command-line interface");
         cliFolder.setDirectPath(projectRootPath.resolve("../docs/command-line-interface").toAbsolutePath().normalize());
 
+        List<CliRootCommandDocumentationModel> commandModels = new ArrayList<>(createCommandModels());
+
+        MainPageCliCommandDocumentationModel mainPageCliCommandDocumentationModel = new MainPageCliCommandDocumentationModel();
+        mainPageCliCommandDocumentationModel.setAllCommands(commandModels);
+
+        Template main_page_template = HandlebarsDocumentationUtilities.compileTemplate("cli/main_page_documentation");
+        DocumentationMarkdownFile mainPageDocumentationMarkdownFile = cliFolder.addNestedFile("index" + ".md");
+        mainPageDocumentationMarkdownFile.setRenderContext(mainPageCliCommandDocumentationModel);
+
+        String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(main_page_template, mainPageCliCommandDocumentationModel);
+        mainPageDocumentationMarkdownFile.setFileContent(renderedMainPageDocument);
+
         Template template = HandlebarsDocumentationUtilities.compileTemplate("cli/cli_documentation");
 
-        List<CliRootCommandDocumentationModel> commandModels = new ArrayList<>(createCommandModels());
         for (CliRootCommandDocumentationModel command : commandModels) {
 
             DocumentationMarkdownFile documentationMarkdownFile = cliFolder.addNestedFile(command.getRootCommandName() + ".md");

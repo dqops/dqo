@@ -32,7 +32,7 @@ DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
     ```
     MacOS/Linux
     ```
-    pip install dqops
+    pip3 install dqops
     ```
 
    If you prefer to work with the source code, just clone our GitHub repository [https://github.com/dqops/dqo](https://github.com/dqops/dqo)

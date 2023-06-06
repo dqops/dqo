@@ -23,7 +23,7 @@ import { CheckTypes } from "../../shared/routes";
 import {
   CheckResultsDetailedDataModel,
   ErrorsDetailedDataModel,
-  IncidentGroupingSpec,
+  ConnectionIncidentGroupingSpec,
   SensorReadoutsDetailedDataModel
 } from "../../api";
 import { Dispatch } from "redux";
@@ -48,28 +48,31 @@ export const closeFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   data,
 });
 
-export const setCheckResults = (checkType: CheckTypes, checkName: string, checkResults: CheckResultsDetailedDataModel[]) => ({
+export const setCheckResults = (checkType: CheckTypes, activeTab: string, checkName: string, checkResults: CheckResultsDetailedDataModel[]) => ({
   type: SOURCE_ACTION.SET_CHECK_RESULTS,
   checkType,
+  activeTab,
   data: {
     checkName,
     checkResults
   }
 });
 
-export const setSensorReadouts = (checkType: CheckTypes, checkName: string, sensorReadouts: SensorReadoutsDetailedDataModel[]) => ({
+export const setSensorReadouts = (checkType: CheckTypes, activeTab: string, checkName: string, sensorReadouts: SensorReadoutsDetailedDataModel[]) => ({
   type: SOURCE_ACTION.SET_SENSOR_READOUTS,
   checkType,
+  activeTab,
   data: {
     checkName,
     sensorReadouts
   }
 });
 
-export const setSensorErrors = (checkType: CheckTypes, checkName: string, errors: ErrorsDetailedDataModel[]) => {
+export const setSensorErrors = (checkType: CheckTypes, activeTab: string, checkName: string, errors: ErrorsDetailedDataModel[]) => {
   return ({
     type: SOURCE_ACTION.SET_SENSOR_ERRORS,
     checkType,
+    activeTab,
     data: {
       checkName,
       sensorErrors: errors
@@ -77,10 +80,11 @@ export const setSensorErrors = (checkType: CheckTypes, checkName: string, errors
   });
 }
 
-export const setCheckFilters = (checkType: CheckTypes, checkName: string, filters: any) => {
+export const setCheckFilters = (checkType: CheckTypes, activeTab: string, checkName: string, filters: any) => {
   return ({
     type: SOURCE_ACTION.SET_CHECK_FILTERS,
     checkType,
+    activeTab,
     data: {
       checkName,
       filters,
@@ -94,7 +98,7 @@ export const getConnectionIncidentGroupingRequest = (checkType: CheckTypes, acti
   activeTab
 });
 
-export const getConnectionIncidentGroupingSuccess = (checkType: CheckTypes, activeTab: string, data: IncidentGroupingSpec) => ({
+export const getConnectionIncidentGroupingSuccess = (checkType: CheckTypes, activeTab: string, data: ConnectionIncidentGroupingSpec) => ({
   type: SOURCE_ACTION.GET_CONNECTION_INCIDENT_GROUPING_SUCCESS,
   data,
   checkType,
@@ -111,7 +115,7 @@ export const getConnectionIncidentGroupingFailed = (checkType: CheckTypes, activ
 export const getConnectionIncidentGrouping = (checkType: CheckTypes, activeTab: string, connection: string) => async (dispatch: Dispatch) => {
   dispatch(getConnectionIncidentGroupingRequest(checkType, activeTab));
   try {
-    const res: AxiosResponse<IncidentGroupingSpec> =
+    const res: AxiosResponse<ConnectionIncidentGroupingSpec> =
       await ConnectionApiClient.getConnectionIncidentGrouping(connection);
     dispatch(getConnectionIncidentGroupingSuccess(checkType, activeTab, res.data));
   } catch (err) {
@@ -119,7 +123,7 @@ export const getConnectionIncidentGrouping = (checkType: CheckTypes, activeTab: 
   }
 };
 
-export const setUpdateIncidentGroup = (checkType: CheckTypes, activeTab: string, data: IncidentGroupingSpec) => ({
+export const setUpdateIncidentGroup = (checkType: CheckTypes, activeTab: string, data: ConnectionIncidentGroupingSpec) => ({
   type: SOURCE_ACTION.SET_CONNECTION_INCIDENT_GROUPING,
   data,
   checkType,
@@ -145,7 +149,7 @@ export const updateConnectionIncidentGroupingFailed = (checkType: CheckTypes, ac
   activeTab
 });
 
-export const updateConnectionIncidentGrouping = (checkType: CheckTypes, activeTab: string, connection: string, data: IncidentGroupingSpec) => async (dispatch: any) => {
+export const updateConnectionIncidentGrouping = (checkType: CheckTypes, activeTab: string, connection: string, data: ConnectionIncidentGroupingSpec) => async (dispatch: any) => {
   dispatch(updateConnectionIncidentGroupingRequest(checkType, activeTab));
   try {
     await ConnectionApiClient.updateConnectionIncidentGrouping(connection, data);

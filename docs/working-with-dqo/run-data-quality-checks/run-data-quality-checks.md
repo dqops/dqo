@@ -13,24 +13,24 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
 
 1. In DQO graphical interface navigate to the check section Profiling, Recurring Checks or Partition Checks at the top of the screen.
 
-    ![Navigate to check section](https://dqo.ai/docs/images/working-with-dqo/run-data-quality-checks/navigate-to-the-check-section.jpg)
+    ![Navigate to check section](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/navigate-to-the-check-section.jpg)
    
 2. On the tree view on the left, select a table or column of interest by expanding the connection.
 
-    ![Select a table or column of interest](https://dqo.ai/docs/images/working-with-dqo/run-data-quality-checks/select-a-table-or-colum-of-interest.jpg)
+    ![Select a table or column of interest](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/select-a-table-or-colum-of-interest.jpg)
 
 4. Enable the check of interest by clicking the switch button next to the name of the check in the list on the right.
 
-    ![Enable check](https://dqo.ai/docs/images/working-with-dqo/run-data-quality-checks/enable-check.jpg)
+    ![Enable check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/enable-check.jpg)
 
 5. Set the threshold levels or leave default values. Set parameters if the check has any. Click the Save button in the upper right corner.
     You can read more about threshold severity levels in [DQO concepts section](../../dqo-concepts/checks/#severity-levels).
 
-    ![Set threshold levels](https://dqo.ai/docs/images/working-with-dqo/run-data-quality-checks//set-threshold-levels.jpg)
+    ![Set threshold levels](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks//set-threshold-levels.jpg)
 
 3. Run data quality check by clicking the Run Check icon
 
-    ![Enable check](https://dqo.ai/docs/images/working-with-dqo/run-data-quality-checks/run-check.jpg)
+    ![Enable check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/run-check.jpg)
 
     A square should appear next to the name of the checks indicating the results of the run check:
     - green for a valid result
@@ -42,7 +42,7 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
 
 4. Click the "Check Details" icon to view more details of the results.
 
-    ![Checking results](https://dqo.ai/docs/images/working-with-dqo/run-data-quality-checks/check-results.jpg)
+    ![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/check-results.jpg)
 
     A table will appear with more details about the run check.
 
@@ -68,7 +68,7 @@ To configure the date or datetime colum:
 3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "DATE or DATETIME 
     column name for partition checks" input field.
 
-    ![Checking results](https://dqo.ai/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks.jpg)
+    ![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks.jpg)
 
 4. Click the Save button in the upper right corner.
 
@@ -86,7 +86,7 @@ To configure the event and/or ingestion timestamp columns:
 3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "Event timestamp column name 
     for timeliness checks" and/or "Ingestion timestamp column name for timeliness checks" input fields.
 
-    ![Checking results](https://dqo.ai/docs/images/working-with-dqo/run-data-quality-checks/even-and-ingestion-columns-configuration-for-timeliness-checks.jpg)
+    ![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/even-and-ingestion-columns-configuration-for-timeliness-checks.jpg)
 
 4. Click the Save button in the upper right corner.
 
@@ -103,7 +103,7 @@ To add and run data quality checks using the DQO Shell, follow the steps below.
 
 1. Run the following command in DQO Shell to edit YAMl configuration file and define data quality checks.
     ```
-    dqo.ai> table edit
+    dqo> table edit
     ```
    
 2. Provide the connection name and full table name in a schema.table format.
@@ -112,7 +112,7 @@ To add and run data quality checks using the DQO Shell, follow the steps below.
     Connection name (--connection): testconnection
     Full table name (schema.table), supports wildcard patterns 'sch*.tab*': austin_crime.crime
     ```
-    After providing the above data Visual Studio Code will be automatically launched.
+    After entering the above data, Visual Studio Code will be automatically launched.
 
 3. Add the check to the YAML file using Visual Studio Code editor and save the file. 
 
@@ -129,7 +129,7 @@ To add and run data quality checks using the DQO Shell, follow the steps below.
           daily_partitioning_recent_days: 7
           monthly_partitioning_recent_months: 1
        profiling_checks:
-          standard:
+          volume:
              row_count:
                 error:
                    min_count: 0
@@ -155,7 +155,7 @@ To add and run data quality checks using the DQO Shell, follow the steps below.
 4. To execute the check, run the following command in DQO Shell:
 
     ```
-    dqo.ai> check run
+    dqo> check run
     ```
    
     You can execute the check run for the whole connection, table or specyfic check type using additional parameters. 

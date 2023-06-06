@@ -28,7 +28,7 @@ import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.*;
-import ai.dqo.metadata.incidents.IncidentGroupingSpec;
+import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -95,7 +95,7 @@ public class ConnectionSpec extends AbstractSpec {
     @JsonPropertyDescription("MySQL connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).")
     private MysqlParametersSpec mysql;
 
-    @JsonPropertyDescription("The concurrency limit for the maximum number of parallel executions of checks on this connection.")
+    @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
     private Integer parallelRunsLimit;
 
     @JsonPropertyDescription("Default data streams configuration for all tables. The configuration may be overridden on table, column and check level. Data streams are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
@@ -114,7 +114,7 @@ public class ConnectionSpec extends AbstractSpec {
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private IncidentGroupingSpec incidentGrouping = new IncidentGroupingSpec();
+    private ConnectionIncidentGroupingSpec incidentGrouping = new ConnectionIncidentGroupingSpec();
 
     @JsonPropertyDescription("Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).")
     @ToString.Exclude
@@ -304,7 +304,7 @@ public class ConnectionSpec extends AbstractSpec {
      * Returns the configuration of grouping failed data quality checks into data quality incidents.
      * @return Grouping of failed data quality checks into incidents.
      */
-    public IncidentGroupingSpec getIncidentGrouping() {
+    public ConnectionIncidentGroupingSpec getIncidentGrouping() {
         return incidentGrouping;
     }
 
@@ -312,7 +312,7 @@ public class ConnectionSpec extends AbstractSpec {
      * Sets the configuration of data quality issued into incidents.
      * @param incidentGrouping New configuration of data quality issue grouping into incidents.
      */
-    public void setIncidentGrouping(IncidentGroupingSpec incidentGrouping) {
+    public void setIncidentGrouping(ConnectionIncidentGroupingSpec incidentGrouping) {
         setDirtyIf(!Objects.equals(this.incidentGrouping, incidentGrouping));
         this.incidentGrouping = incidentGrouping;
         propagateHierarchyIdToField(incidentGrouping, "incident_grouping");

@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 20
+    historic_data_point_grouping: day
+  fields:
+  - field_name: percentile_within
+    display_name: percentile_within
+    help_text: "Probability that the current sensor readout will achieve values within\
+      \ the mean according to the distribution of the previous values gathered within\
+      \ the time window. In other words, the inter-quantile range around the mean\
+      \ of the estimated normal distribution. Set the time window at the threshold\
+      \ level for all severity levels (warning, error, fatal) at once. The default\
+      \ is a 60 time periods (days, etc.) time window, but at least 20 readouts must\
+      \ exist to run the calculation."
+    data_type: double
+    sample_values:
+    - 95

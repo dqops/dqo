@@ -81,6 +81,9 @@ import { ReactComponent as AzureSqlManagedInstanceSvg } from './svg/azure-sql-ma
 import { ReactComponent as AzureSynapseAnalyticsSvg } from './svg/azure-synapse-analytics.svg';
 import { ReactComponent as AlloyDbSvg } from './svg/alloy-db.svg';
 import { ReactComponent as YugabyteDbSvg } from './svg/yugabyte-db.svg';
+import { ReactComponent as UserProfileSvg } from './svg/user-profile.svg';
+import { ReactComponent as BoxPlotSvg } from './svg/box-plot.svg';
+import { ReactComponent as CancelJobsSvg } from './svg/cancel-job.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -169,7 +172,10 @@ const iconsMap: any = {
   amazonrdsforsqlserver: AmazonRdsSvg,
   cloudsqlforpostgresql: CloudSqlSvg,
   cloudsqlforsqlserver: CloudSqlSvg,
-  yugabytedb: YugabyteDbSvg
+  yugabytedb: YugabyteDbSvg,
+  userprofile: UserProfileSvg,
+  boxplot: BoxPlotSvg,
+  canceljobs: CancelJobsSvg
 };
 
 interface SvgIconProps {

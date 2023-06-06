@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SourceSchemasApi } from '../../services/apiClient';
+import { DataSourcesApi } from '../../services/apiClient';
 import Button from '../Button';
 import SvgIcon from '../SvgIcon';
 import Tabs from '../Tabs';
@@ -27,7 +27,7 @@ const ImportSchemas = ({
   const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([]);
 
   useEffect(() => {
-    SourceSchemasApi.getRemoteSchemas(connectionName).then((res) => {
+    DataSourcesApi.getRemoteDataSourceSchemas(connectionName).then((res) => {
       setSchemas(res.data);
     });
   }, [connectionName]);

@@ -30,7 +30,7 @@ export const DefinitionTree = () => {
     (state: IRootState) => state.sensor
   );
   const { ruleFolderTree, ruleState } = useSelector(
-    (state: IRootState) => state.rule
+    (state: IRootState) => state.rule || {}
   );
   const [selected, setSelected] = useState('');
   useEffect(() => {

@@ -31,6 +31,8 @@ import com.github.therapi.runtimejavadoc.ClassJavadoc;
 import com.github.therapi.runtimejavadoc.CommentFormatter;
 import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -103,6 +105,14 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
                 }
             }
 
+            if (targetClass.getSuperclass() != null) {
+                Class<?> superClass = targetClass.getSuperclass();
+                if (isGenericSuperclass(superClass)) {
+                    Type genericSuperclass = targetClass.getGenericSuperclass();
+                    processGenericTypes(genericSuperclass, visitedObjects);
+                }
+            }
+
             ClassInfo classInfo = reflectionService.getClassInfoForClass(targetClass);
             List<FieldInfo> infoFields = classInfo.getFields();
 
@@ -136,6 +146,39 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
             yamlObjectDocumentationModel.setObjectFields(yamlFieldsDocumentationModels);
             visitedObjects.put(targetClass, yamlObjectDocumentationModel);
         }
+    }
+
+    /**
+     * Checks if the specified class is a generic superclass.
+     */
+    private boolean isGenericSuperclass(Class<?> clazz) {
+        Type genericSuperclass = clazz.getGenericSuperclass();
+        return genericSuperclass instanceof ParameterizedType;
+    }
+
+    /**
+     * Process and parse generic types, and then invoke appropriate actions on those types in a recursive.
+     */
+    private void processGenericTypes(Type type, Map<Class<?>, YamlObjectDocumentationModel> visitedObjects) {
+        if (type instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) type;
+            Type[] typeArguments = parameterizedType.getActualTypeArguments();
+            for (Type typeArgument : typeArguments) {
+                if (typeArgument instanceof Class) {
+                    Class<?> genericClass = (Class<?>) typeArgument;
+                    if (!isJavaClass(genericClass)) {
+                        generateYamlObjectDocumentationModelRecursive(genericClass, visitedObjects);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Checks if the specified class is a java inbuilt class
+     */
+    private boolean isJavaClass(Class<?> clazz) {
+        return clazz.getClassLoader() == null;
     }
 }
 

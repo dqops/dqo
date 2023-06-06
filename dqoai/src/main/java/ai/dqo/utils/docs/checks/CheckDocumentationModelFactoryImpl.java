@@ -77,11 +77,13 @@ import java.util.*;
 @Component
 public class CheckDocumentationModelFactoryImpl implements CheckDocumentationModelFactory {
     private static final Map<String, String> TABLE_CATEGORY_HELP = new LinkedHashMap<>() {{
-        put("standard", "Evaluates the overall quality of the table by verifying the number of rows.");
+        put("volume", "Evaluates the overall quality of the table by verifying the number of rows.");
         put("timeliness", "Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.");
         put("accuracy", "Compares the tested table with another (reference) table.");
         put("sql", "Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
         put("availability", "Checks whether the table is accessible and available for use.");
+        put("anomaly", "Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.");
+        put("schema", "Detects schema drifts such as columns added, removed, reordered or the data types of columns have changed.");
     }};
 
     private static final Map<String, String> COLUMN_CATEGORY_HELP = new LinkedHashMap<>() {{
@@ -94,6 +96,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         put("sql", "Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
         put("bool", "Calculates the percentage of data in a Boolean format.");
         put("integrity", "Checks the referential integrity of a column against a column in another table.");
+        put("anomaly", "Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.");
+        put("schema", "Detects schema drifts such as a column is missing or the data type has changed.");
     }};
 
     private static final CommentFormatter commentFormatter = new CommentFormatter();
@@ -460,10 +464,10 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             CheckProviderRenderedSqlDocumentationModel providerDocModel = new CheckProviderRenderedSqlDocumentationModel();
             providerDocModel.setProviderType(providerType);
             String sqlTemplate = providerSensorDefinitionWrapper.getSqlTemplate();
-            providerDocModel.setJinjaTemplate(sqlTemplate);
-            providerDocModel.setListOfJinjaTemplate(splitStringByEndOfLine(sqlTemplate));
-
             if (sqlTemplate != null) {
+                providerDocModel.setJinjaTemplate(sqlTemplate);
+                providerDocModel.setListOfJinjaTemplate(splitStringByEndOfLine(sqlTemplate));
+
                 SensorDefinitionFindResult sensorDefinitionFindResult = new SensorDefinitionFindResult(sensorDefinitionWrapper.getSpec(),
                         providerSensorDefinitionWrapper.getSpec(), sqlTemplate,
                         providerType, HomeType.DQO_HOME, null);

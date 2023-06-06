@@ -16,7 +16,9 @@
 package ai.dqo.utils.reflection;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
+import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.table.checkspecs.volume.TableAnomalyRowCountChange7DaysCheckSpec;
+import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
@@ -25,11 +27,15 @@ import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.rules.averages.PercentMovingAverageRuleParametersSpec;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
-import ai.dqo.sensors.column.numeric.ColumnNumericNumbersInSetCountSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
 import ai.dqo.sensors.column.strings.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
 import ai.dqo.sensors.column.strings.StringsBuiltInDateFormats;
 import ai.dqo.sensors.column.datetime.ColumnDatetimeValueInRangeDatePercentSensorParametersSpec;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -295,14 +301,14 @@ public class ReflectionServiceImplTests extends BaseTest {
 
     @Test
     void makeFieldInfo_whenFieldIsListOfLongs_thenReturnsFieldInfo() throws Exception {
-        Field field = ColumnNumericNumbersInSetCountSensorParametersSpec.class.getDeclaredField("values");
+        Field field = ColumnNumericExpectedNumbersInUseCountSensorParametersSpec.class.getDeclaredField("expectedValues");
         FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
         Assertions.assertNotNull(fieldInfo);
         Assertions.assertSame(field.getType(), fieldInfo.getClazz());
         Assertions.assertEquals(ParameterDataType.integer_list_type, fieldInfo.getDataType());
-        Assertions.assertEquals("values", fieldInfo.getClassFieldName());
-        Assertions.assertEquals("values", fieldInfo.getYamlFieldName());
-        Assertions.assertEquals("values", fieldInfo.getDisplayName());
+        Assertions.assertEquals("expectedValues", fieldInfo.getClassFieldName());
+        Assertions.assertEquals("expected_values", fieldInfo.getYamlFieldName());
+        Assertions.assertEquals("expected_values", fieldInfo.getDisplayName());
         Assertions.assertNotNull(fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
@@ -345,5 +351,54 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Assertions.assertEquals(null, fieldInfo.getDefaultValue());
         Assertions.assertEquals(null, fieldInfo.getConstructor());
+    }
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    @EqualsAndHashCode(callSuper = true)
+    public static class CustomJsonPropertyChecksSpec extends AbstractCheckCategorySpec {
+        public static final ChildHierarchyNodeFieldMapImpl<CustomJsonPropertyChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+            {
+                put("customSerialization_option（笑）", o -> o.ordinarilyNamedCheck);
+            }
+        };
+
+        @JsonProperty("customSerialization_option（笑）")
+        @JsonPropertyDescription("Some description.")
+        private TableAnomalyRowCountChange7DaysCheckSpec ordinarilyNamedCheck;
+
+
+        public TableAnomalyRowCountChange7DaysCheckSpec getOrdinarilyNamedCheck() {
+            return ordinarilyNamedCheck;
+        }
+
+        public void setOrdinarilyNamedCheck(TableAnomalyRowCountChange7DaysCheckSpec ordinarilyNamedCheck) {
+            this.ordinarilyNamedCheck = ordinarilyNamedCheck;
+        }
+
+        /**
+         * Returns the child map on the spec class with all fields.
+         *
+         * @return Return the field map.
+         */
+        @Override
+        protected ChildHierarchyNodeFieldMap getChildMap() {
+            return FIELDS;
+        }
+    }
+
+    @Test
+    void makeFieldInfo_whenFieldHasJsonProperty_thenReturnsFieldInfoWithCorrespondingYamlName() throws Exception {
+        Field field = CustomJsonPropertyChecksSpec.class.getDeclaredField("ordinarilyNamedCheck");
+        FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
+        Assertions.assertNotNull(fieldInfo);
+        Assertions.assertSame(field.getType(), fieldInfo.getClazz());
+        Assertions.assertEquals("ordinarilyNamedCheck", fieldInfo.getClassFieldName());
+        Assertions.assertEquals("customSerialization_option（笑）", fieldInfo.getYamlFieldName());
+        Assertions.assertEquals("customSerialization_option（笑）", fieldInfo.getDisplayName());
+        Assertions.assertEquals("Some description.", fieldInfo.getHelpText());
+        Assertions.assertNotNull(fieldInfo.getGetterMethod());
+        Assertions.assertNotNull(fieldInfo.getSetterMethod());
+        Assertions.assertEquals(null, fieldInfo.getDefaultValue());
     }
 }

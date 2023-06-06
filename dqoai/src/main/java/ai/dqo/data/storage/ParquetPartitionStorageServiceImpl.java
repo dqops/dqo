@@ -26,6 +26,7 @@ import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.core.synchronization.status.FolderSynchronizationStatus;
 import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
+import ai.dqo.data.normalization.CommonColumnNames;
 import ai.dqo.data.storage.parquet.DqoTablesawParquetReader;
 import ai.dqo.data.storage.parquet.DqoTablesawParquetWriteOptions;
 import ai.dqo.data.storage.parquet.DqoTablesawParquetWriter;
@@ -53,10 +54,7 @@ import tech.tablesaw.selection.Selection;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -258,8 +256,8 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * @param storageSettings Storage settings to identify the target folder, file names and column names used for matching.
      */
     private boolean savePartitionInternal(LoadedMonthlyPartition loadedPartition,
-                              TableDataChanges tableDataChanges,
-                              FileStorageSettings storageSettings) {
+                                          TableDataChanges tableDataChanges,
+                                          FileStorageSettings storageSettings) {
         try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType())) {
             Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
@@ -319,6 +317,8 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             if (newOrChangedDataPartitionMonth != null) {
                 if (partitionDataOld == null) {
                     dataToSave = newOrChangedDataPartitionMonth;
+                    InstantColumn createdAtColumn = dataToSave.instantColumn(CommonColumnNames.CREATED_AT_COLUMN_NAME);
+                    createdAtColumn.setMissingTo(Instant.now());
                 } else {
                     String[] joinColumns = {
                             storageSettings.getIdStringColumnName()

@@ -16,6 +16,7 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
+import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
@@ -26,7 +27,9 @@ import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobResult;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueIncrementalSnapshotModel;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueInitialSnapshotModel;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
+import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.core.synchronization.jobs.*;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.execution.checks.CheckExecutionSummary;
@@ -64,10 +67,12 @@ public class JobsController {
     private DqoQueueJobFactory dqoQueueJobFactory;
     private DqoJobQueue dqoJobQueue;
     private ParentDqoJobQueue parentDqoJobQueue;
+    private JobSchedulerService jobSchedulerService;
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider;
     private final DqoJobQueueMonitoringService jobQueueMonitoringService;
     private final DqoQueueConfigurationProperties queueConfigurationProperties;
+    private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
     private SynchronizationStatusTracker synchronizationStatusTracker;
 
     /**
@@ -75,28 +80,34 @@ public class JobsController {
      * @param dqoQueueJobFactory DQO queue job factory used to create new instances of jobs.
      * @param dqoJobQueue Job queue used to publish or review running jobs.
      * @param parentDqoJobQueue Job queue for managing parent jobs (jobs that will start other child jobs).
+     * @param jobSchedulerService Job scheduler service used to start and stop the scheduler.
      * @param checkExecutionProgressListenerProvider Check execution progress listener provider used to create a valid progress listener when starting a "runchecks" job.
      * @param statisticsCollectorExecutionProgressListenerProvider Profiler execution progress listener provider used to create a valid progress listener when starting a "runprofilers" job.
      * @param jobQueueMonitoringService Job queue monitoring service.
      * @param queueConfigurationProperties Queue configuration parameters.
+     * @param dqoSchedulerConfigurationProperties DQO job scheduler configuration properties.
      * @param synchronizationStatusTracker Synchronization change tracker.
      */
     @Autowired
     public JobsController(DqoQueueJobFactory dqoQueueJobFactory,
                           DqoJobQueue dqoJobQueue,
                           ParentDqoJobQueue parentDqoJobQueue,
+                          JobSchedulerService jobSchedulerService,
                           CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
                           StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider,
                           DqoJobQueueMonitoringService jobQueueMonitoringService,
                           DqoQueueConfigurationProperties queueConfigurationProperties,
+                          DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties,
                           SynchronizationStatusTracker synchronizationStatusTracker) {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
         this.parentDqoJobQueue = parentDqoJobQueue;
+        this.jobSchedulerService = jobSchedulerService;
         this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
         this.statisticsCollectorExecutionProgressListenerProvider = statisticsCollectorExecutionProgressListenerProvider;
         this.jobQueueMonitoringService = jobQueueMonitoringService;
         this.queueConfigurationProperties = queueConfigurationProperties;
+        this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
         this.synchronizationStatusTracker = synchronizationStatusTracker;
     }
 
@@ -317,5 +328,66 @@ public class JobsController {
         PushJobResult<Void> jobPushResult = this.parentDqoJobQueue.pushJob(synchronizeMultipleFoldersJob);
 
         return new ResponseEntity<>(Mono.just(jobPushResult.getJobId()), HttpStatus.CREATED); // 201
+    }
+
+    /**
+     * Retrieves the state of the job scheduler.
+     * @return true when the cron scheduler is running, false when it is stopped.
+     */
+    @GetMapping("/scheduler/isrunning")
+    @ApiOperation(value = "isCronSchedulerRunning", notes = "Checks if the DQO internal CRON scheduler is running and processing jobs scheduled using cron expressions.",
+            response = Boolean.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "The cron scheduler status was checked and returned",
+                    response = Boolean.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<Boolean>> isCronSchedulerRunning() {
+        Boolean started = this.jobSchedulerService.isStarted();
+        return new ResponseEntity<>(Mono.just(started), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Starts the cron job scheduler (when it is not running).
+     * @return Nothing.
+     */
+    @PostMapping("/scheduler/status/start")
+    @ApiOperation(value = "startCronScheduler", notes = "Starts the job scheduler that runs recurring jobs that are scheduled by assigning cron expressions.",
+            response = Void.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "The cron scheduler was started or was already running",
+                    response = Boolean.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> startCronScheduler() {
+        if (!this.jobSchedulerService.isStarted()) {
+            this.jobSchedulerService.start(
+                    this.dqoSchedulerConfigurationProperties.getSynchronizationMode(),
+                    this.dqoSchedulerConfigurationProperties.getCheckRunMode());
+            this.jobSchedulerService.triggerMetadataSynchronization();
+        }
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Stops the cron job scheduler (when it is not running).
+     * @return Nothing.
+     */
+    @PostMapping("/scheduler/status/stop")
+    @ApiOperation(value = "stopCronScheduler", notes = "Stops the job scheduler that runs recurring jobs that are scheduled by assigning cron expressions.",
+            response = Void.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "The cron scheduler was stopped or was already not running",
+                    response = Boolean.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> stopCronScheduler() {
+        if (this.jobSchedulerService.isStarted()) {
+            this.jobSchedulerService.shutdown();
+        }
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
     }
 }

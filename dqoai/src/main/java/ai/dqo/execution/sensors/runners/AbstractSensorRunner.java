@@ -16,30 +16,142 @@
 package ai.dqo.execution.sensors.runners;
 
 import ai.dqo.core.jobqueue.JobCancellationToken;
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
+import ai.dqo.execution.sensors.SensorPrepareResult;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
+import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.services.timezone.DefaultTimeZoneProvider;
+import tech.tablesaw.api.*;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 /**
  * Base abstract class for sensor runners. Executes a sensor given a target data quality check.
  */
 public abstract class AbstractSensorRunner {
+    private DefaultTimeZoneProvider defaultTimeZoneProvider;
+
+    /**
+     * Dependency injection constructor.
+     * @param defaultTimeZoneProvider The default time zone provider.
+     */
+    protected AbstractSensorRunner(DefaultTimeZoneProvider defaultTimeZoneProvider) {
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
+    }
+
     /**
      * Executes a sensor and returns the sensor result.
-     * @param executionContext Check execution context with access to the dqo home and user home, if any metadata is needed.
-     * @param sensorRunParameters   Sensor run parameters - connection, table, column, sensor parameters.
-     * @param sensorDefinition      Sensor definition (both the core sensor definition and the provider specific sensor definition).
+     * @param executionContext      Check execution context with access to the dqo home and user home, if any metadata is needed.
+     * @param sensorPrepareResult   Sensor preparation result, contains the sensor definition, rendered SQL template, sensor run parameters (connection, table, etc.).
      * @param progressListener      Progress listener that receives events when the sensor is executed.
      * @param dummySensorExecution  When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param jobCancellationToken  Job cancellation token, may cancel a running query.
      * @return Sensor result.
      */
     public abstract SensorExecutionResult executeSensor(ExecutionContext executionContext,
-                                                        SensorExecutionRunParameters sensorRunParameters,
-                                                        SensorDefinitionFindResult sensorDefinition,
+                                                        SensorPrepareResult sensorPrepareResult,
                                                         SensorExecutionProgressListener progressListener,
                                                         boolean dummySensorExecution,
                                                         JobCancellationToken jobCancellationToken);
+
+    /**
+     * Prepares a sensor for execution. SQL templated sensors will render the SQL template, filled with the table and column names.
+     * @param executionContext    Check execution context with access to the dqo home and user home, if any metadata is needed.
+     * @param sensorPrepareResult Sensor prepare result with additional sensor run parameters. The prepareSensor method should fill additional values in this object that will be used when the sensor is executed.
+     * @param progressListener    Progress listener that receives events when the sensor is executed.
+     */
+    public abstract void prepareSensor(ExecutionContext executionContext,
+                                       SensorPrepareResult sensorPrepareResult,
+                                       SensorExecutionProgressListener progressListener);
+
+    /**
+     * Creates a local date time of NOW, using the default configured time zone.
+     * @return The local date time of NOW, based on the configured default time zone.
+     */
+    protected LocalDateTime getNowAtDefaultTimeZone() {
+        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
+        return Instant.now().atZone(defaultTimeZoneId).toLocalDateTime();
+    }
+
+    /**
+     * Creates a result table given a single result to be stored.
+     * @param actualValue Sensor execution actual value.
+     * @return Dummy result table.
+     */
+    public Table createResultTableWithResult(Integer actualValue) {
+        Table dummyResultTable = Table.create("dummy_results",
+                IntColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME),
+                DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
+                InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME));
+        Row row = dummyResultTable.appendRow();
+        row.setInt(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
+        row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, getNowAtDefaultTimeZone());
+        row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, Instant.now());
+
+        return dummyResultTable;
+    }
+
+    /**
+     * Creates a result table given a single result to be stored.
+     * @param actualValue Sensor execution actual value.
+     * @return Dummy result table.
+     */
+    public Table createResultTableWithResult(Long actualValue) {
+        Table dummyResultTable = Table.create("dummy_results",
+                LongColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME),
+                DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
+                InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME));
+        Row row = dummyResultTable.appendRow();
+        row.setLong(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
+        row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, getNowAtDefaultTimeZone());
+        row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, Instant.now());
+
+        return dummyResultTable;
+    }
+
+    /**
+     * Creates a result table given a single result to be stored.
+     * @param actualValue Sensor execution actual value.
+     * @return Dummy result table.
+     */
+    public Table createResultTableWithResult(Double actualValue) {
+        Table dummyResultTable = Table.create("dummy_results",
+                DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME),
+                DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
+                InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME));
+        Row row = dummyResultTable.appendRow();
+        row.setDouble(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
+        row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, getNowAtDefaultTimeZone());
+        row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, Instant.now());
+
+        return dummyResultTable;
+    }
+
+    /**
+     * Creates a one row dummy result table, used when a dummy sensor run is requested (without running the query on the data source).
+     * @param sensorRunParameters Sensor execution run parameters.
+     * @return Dummy result table.
+     */
+    public Table createDummyResultTable(SensorExecutionRunParameters sensorRunParameters) {
+        Table dummyResultTable = Table.create("dummy_results",
+                DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME),
+                DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
+                InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME));
+        Row row = dummyResultTable.appendRow();
+        row.setDouble(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, 10.0);
+
+        TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getTimeSeries();
+        if (effectiveTimeSeries != null && effectiveTimeSeries.getMode() != null) {
+            row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, getNowAtDefaultTimeZone());
+            row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, Instant.now());
+        }
+
+        return dummyResultTable;
+    }
 }

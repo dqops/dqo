@@ -104,12 +104,15 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
-                    END
-                ) / COUNT(*) AS actual_value
+                        END
+                    ) / COUNT(*)
+                END AS actual_value
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s""";
         
@@ -136,12 +139,15 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
-                    END
-                ) / COUNT(*) AS actual_value
+                        END
+                    ) / COUNT(*)
+                END AS actual_value
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s""";
 
@@ -172,12 +178,15 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    100.0 * SUM(
-                        CASE
-                            WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                    CASE
+                        WHEN COUNT(%1$s) = 0 THEN NULL
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                             ELSE 0
-                        END
-                    ) / COUNT(*) AS actual_value,
+                            END
+                        ) / COUNT(*)
+                    END AS actual_value,
                     CAST(analyzed_table.`date1` AS DATE) AS time_period,
                     TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc 
                 FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
@@ -207,12 +216,15 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
-                    END
-                ) / COUNT(*) AS actual_value,
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
@@ -242,12 +254,15 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
-                    END
-                ) / COUNT(*) AS actual_value,
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
@@ -284,12 +299,15 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
-                    END
-                ) / COUNT(*) AS actual_value,
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
                 analyzed_table.`date2` AS stream_level_1
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s
@@ -321,12 +339,15 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
-                    END
-                ) / COUNT(*) AS actual_value,
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
                 analyzed_table.`date2` AS stream_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
@@ -360,12 +381,15 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
                 SELECT
-                    100.0 * SUM(
-                        CASE
-                            WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                    CASE
+                        WHEN COUNT(%1$s) = 0 THEN NULL
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                             ELSE 0
-                        END
-                    ) / COUNT(*) AS actual_value,
+                            END
+                        ) / COUNT(*)
+                    END AS actual_value,
                     analyzed_table.`date2` AS stream_level_1,
                     CAST(analyzed_table.`date1` AS DATE) AS time_period,
                     TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
@@ -408,12 +432,15 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
-                    END
-                ) / COUNT(*) AS actual_value,
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
                 analyzed_table.`date2` AS stream_level_1,
                 analyzed_table.`date3` AS stream_level_2,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
@@ -449,12 +476,15 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
-                    END
-                ) / COUNT(*) AS actual_value,
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
                 analyzed_table.`date2` AS stream_level_1,
                 analyzed_table.`date3` AS stream_level_2,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
@@ -490,12 +520,15 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
-                    END
-                ) / COUNT(*) AS actual_value,
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
                 analyzed_table.`date2` AS stream_level_1,
                 analyzed_table.`date3` AS stream_level_2,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,

@@ -17,7 +17,7 @@ package ai.dqo.cli;
 
 import ai.dqo.cli.commands.DqoRootCliCommand;
 import ai.dqo.cli.completion.InputCapturingCompleter;
-import ai.dqo.cli.configuration.DqoCliOneshotConfigurationProperties;
+import ai.dqo.core.configuration.DqoCliTerminalConfigurationProperties;
 import ai.dqo.cli.exceptions.CommandExecutionErrorHandler;
 import ai.dqo.cli.terminal.*;
 import ai.dqo.cli.terminal.ansi.UrlFormatter;
@@ -75,14 +75,14 @@ public class CliConfiguration {
 
     /**
      * Creates a configuration of terminal writer based on application's running mode.
-     * @param dqoCliOneshotConfigurationProperties Properties for CLI if running in one-shot mode.
+     * @param dqoCliTerminalConfigurationProperties Properties for CLI if running in one-shot mode.
      * @return Terminal writer applicable to the application's running mode.
      */
     @Lazy
     @Bean(name = "terminalWriter")
-    public TerminalWriter terminalWriter(DqoCliOneshotConfigurationProperties dqoCliOneshotConfigurationProperties) {
+    public TerminalWriter terminalWriter(DqoCliTerminalConfigurationProperties dqoCliTerminalConfigurationProperties) {
         if (CliApplication.isRunningOneShotMode()) {
-            return new TerminalWriterSystemImpl(dqoCliOneshotConfigurationProperties.getTerminalWidth());
+            return new TerminalWriterSystemImpl(dqoCliTerminalConfigurationProperties.getWidth());
         }
 
         Terminal terminal = StaticBeanFactory.getBeanFactory().getBean(Terminal.class);
@@ -95,14 +95,14 @@ public class CliConfiguration {
      * @param rootShellCommand Root cli command.
      * @param factory Picocli command factory (default).
      * @param terminalFactory Terminal reader and writer factory, used to delay the instance creation.
-     * @param coreConfigurationProperties Core configuration properties.
+     * @param coreConfigurationProperties DQO Core configuration properties.
      * @return Command line.
      */
     @Bean(name = "commandLine")
     public CommandLine commandLine(DqoRootCliCommand rootShellCommand,
-								   CommandLine.IFactory factory,
+                                   CommandLine.IFactory factory,
                                    TerminalFactory terminalFactory,
-								   DqoCoreConfigurationProperties coreConfigurationProperties) {
+                                   DqoCoreConfigurationProperties coreConfigurationProperties) {
         PicocliCommands.PicocliCommandsFactory shellCommandFactory = new PicocliCommands.PicocliCommandsFactory(factory);
         if (!CliApplication.isRunningOneShotMode()) {
             Terminal terminal = StaticBeanFactory.getBeanFactory().getBean(Terminal.class);

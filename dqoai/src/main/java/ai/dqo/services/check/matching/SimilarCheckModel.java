@@ -19,16 +19,60 @@ import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.services.check.mapping.models.UICheckModel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import io.swagger.annotations.ApiModel;
+import lombok.Data;
 
 /**
  * Describes a single check that is similar to other checks in other check types.
  */
+@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@ApiModel(value = "SimilarCheckModel", description = "Model that identifies a similar check in another category or another type of check (recurring, partition).")
 public class SimilarCheckModel {
+    /**
+     * The check target (table or column).
+     */
+    @JsonPropertyDescription("The check target (table or column).")
     private CheckTarget checkTarget;
+
+    /**
+     * The check type.
+     */
+    @JsonPropertyDescription("The check type.")
     private CheckType checkType;
+
+    /**
+     * The time scale (daily, monthly). The time scale is optional and could be null (for profiling checks).
+     */
+    @JsonPropertyDescription("The time scale (daily, monthly). The time scale is optional and could be null (for profiling checks).")
     private CheckTimeScale timeScale;
+
+    /**
+     * The check's category.
+     */
+    @JsonPropertyDescription("The check's category.")
     private String category;
+
+    /**
+     * The similar check name in another category.
+     */
+    @JsonPropertyDescription("The similar check name in another category.")
+    private String checkName;
+
+    /**
+     * A check model.
+     */
+    @JsonIgnore
     private UICheckModel checkModel;
+
+    public SimilarCheckModel() {
+    }
 
     /**
      * Creates a similar check model.
@@ -47,46 +91,7 @@ public class SimilarCheckModel {
         this.checkType = checkType;
         this.timeScale = timeScale;
         this.category = category;
+        this.checkName = checkModel.getCheckName();
         this.checkModel = checkModel;
-    }
-
-    /**
-     * Returns the check target (table or column).
-     * @return Check target.
-     */
-    public CheckTarget getCheckTarget() {
-        return checkTarget;
-    }
-
-    /**
-     * Return the check type.
-     * @return Check type.
-     */
-    public CheckType getCheckType() {
-        return checkType;
-    }
-
-    /**
-     * Return the time scale. The time scale is optional and maybe null.
-     * @return Time scale or null.
-     */
-    public CheckTimeScale getTimeScale() {
-        return timeScale;
-    }
-
-    /**
-     * Return the category name that is used in YAML.
-     * @return Category name.
-     */
-    public String getCategory() {
-        return category;
-    }
-
-    /**
-     * Return the check UI model with more information about the check.
-     * @return Full check model.
-     */
-    public UICheckModel getCheckModel() {
-        return checkModel;
     }
 }

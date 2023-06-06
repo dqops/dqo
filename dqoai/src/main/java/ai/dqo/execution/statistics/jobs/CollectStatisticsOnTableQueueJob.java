@@ -83,6 +83,13 @@ public class CollectStatisticsOnTableQueueJob extends DqoQueueJob<StatisticsColl
                 this.parameters.getDataScope(),
                 this.parameters.isDummySensorExecution(),
                 jobExecutionContext.getCancellationToken());
+
+        CollectStatisticsQueueJobResult collectStatisticsQueueJobResult =
+                CollectStatisticsQueueJobResult.fromStatisticsExecutionSummary(statisticsCollectionExecutionSummary);
+        CollectStatisticsOnTableQueueJobParameters clonedParameters = this.getParameters().clone();
+        clonedParameters.setCollectStatisticsResult(collectStatisticsQueueJobResult);
+        setParameters(clonedParameters);
+
         return statisticsCollectionExecutionSummary;
     }
 

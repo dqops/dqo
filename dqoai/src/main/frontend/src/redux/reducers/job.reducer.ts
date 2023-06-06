@@ -30,13 +30,22 @@ export interface IJobsState {
   isOpen: boolean;
   folderSynchronizationStatus?: CloudSynchronizationFoldersStatusModel;
   isCleared: boolean;
+  wasOpen?: boolean;
+  amounthOfElems?: number;
+  amounthOfElements: number;
+  isProfileOpen: boolean;
+  areSettingsOpen: boolean;
 }
 
 const initialState: IJobsState = {
   loading: false,
   error: null,
   isOpen: false,
-  isCleared: false
+  isCleared: false,
+  wasOpen: false,
+  amounthOfElements: 0,
+  isProfileOpen: false,
+  areSettingsOpen: false
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -116,6 +125,26 @@ const schemaReducer = (state = initialState, action: any) => {
       return {
         ...state,
         isOpen: action.isOpen
+      };
+    case JOB_ACTION.REDUCE_COUNTER:
+      return {
+        ...state,
+        wasOpen: action.wasOpen
+      };
+    case JOB_ACTION.NOTIFICATION_NUMBER:
+      return {
+        ...state,
+        wasOpen: action.wasOpen
+      };
+    case JOB_ACTION.TOGGLE_PROFILE:
+      return {
+        ...state,
+        isProfileOpen: action.isProfileOpen
+      };
+    case JOB_ACTION.TOGGLE_SETTINGS:
+      return {
+        ...state,
+        areSettingsOpen: action.areSettingsOpen
       };
     default:
       return state;

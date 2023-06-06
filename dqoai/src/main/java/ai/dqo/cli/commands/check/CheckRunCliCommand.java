@@ -28,6 +28,7 @@ import ai.dqo.cli.terminal.FileWritter;
 import ai.dqo.cli.terminal.TablesawDatasetTableModel;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.execution.checks.CheckExecutionErrorSummary;
 import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
@@ -114,7 +115,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-ts", "--time-scale"}, description = "Time scale for recurring and partitioned checks (daily, monthly, etc.)")
     private CheckTimeScale timeScale;
 
-    @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (standard, nulls, numeric, etc.)")
+    @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (volume, nulls, numeric, etc.)")
     private String checkCategory;
 
     @CommandLine.Option(names = {"-d", "--dummy"}, description = "Runs data quality check in a dummy mode, sensors are not executed on the target database, but the rest of the process is performed", defaultValue = "false")
@@ -384,6 +385,11 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode, false);
         CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, this.timeWindowFilterParameters, progressListener, this.dummyRun);
 
+        if (checkExecutionSummary.getTotalChecksExecutedCount() == 0) {
+            this.terminalWriter.writeLine("No checks with these filters were found.");
+            return 0;
+        }
+
         if (this.mode != CheckRunReportingMode.silent) {
             TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());
 			this.terminalWriter.writeLine("Check evaluation summary per table:");
@@ -423,6 +429,15 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
                         this.terminalTableWritter.writeTable(tablesawDatasetTableModel, true);
                     }
                     break;
+                }
+            }
+
+            CheckExecutionErrorSummary checkExecutionErrorSummary = checkExecutionSummary.getCheckExecutionErrorSummary();
+            if (checkExecutionErrorSummary != null) {
+                if (this.mode == CheckRunReportingMode.debug) {
+                    this.terminalWriter.writeLine(checkExecutionErrorSummary.getDebugMessage());
+                } else {
+                    this.terminalWriter.writeLine(checkExecutionErrorSummary.getSummaryMessage());
                 }
             }
         }

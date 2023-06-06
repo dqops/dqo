@@ -37,7 +37,7 @@ public class DqoShellRunnerServiceImpl implements DqoShellRunnerService {
     /**
      * Prompt string shown in the shell.
      */
-    public static final String DQO_PROMPT = "dqo.ai> ";
+    public static final String DQO_PROMPT = "dqo> ";
 
     private final SystemRegistry systemRegistry;
     private final LineReader cliLineReader;
@@ -81,6 +81,7 @@ public class DqoShellRunnerServiceImpl implements DqoShellRunnerService {
                 // Ignore
                 continue;
             } catch (EndOfFileException e) {
+                log.info("EndOfFile reached, closing...");
                 return 0;
             } catch (Exception e) {
                 log.error("Command failed: " + line + ", error message: " + e.getMessage(), e);

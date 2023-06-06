@@ -16,13 +16,20 @@
 package ai.dqo.data.checkresults.services;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
-import ai.dqo.data.checkresults.services.models.CheckResultsDetailedDataModel;
-import ai.dqo.data.checkresults.services.models.CheckResultsOverviewDataModel;
+import ai.dqo.data.checkresults.services.models.*;
+import ai.dqo.metadata.sources.PhysicalTableName;
+
+import java.time.Instant;
 
 /**
  * Service that returns data from the check results.
  */
 public interface CheckResultsDataService {
+    /**
+     * The name of a fake column name used as a placeholder for table level checks.
+     */
+    String COLUMN_NAME_TABLE_CHECKS_PLACEHOLDER = "(table)";
+
     /**
      * Retrieves the overall status of the recent check executions for the given root checks container (group of checks).
      *
@@ -42,4 +49,46 @@ public interface CheckResultsDataService {
      */
     CheckResultsDetailedDataModel[] readCheckStatusesDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
                                                               CheckResultsDetailedParameters loadParameters);
+
+    /**
+     * Loads the results of failed data quality checks that are attached to the given incident, identified by the incident hash, first seen and incident until timestamps.
+     * Returns only check results with a minimum severity.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @param incidentHash Incident hash.
+     * @param firstSeen The timestamp when the incident was first seen.
+     * @param incidentUntil The timestamp when the incident was closed or expired, returns check results up to this timestamp.
+     * @param minSeverity Minimum check issue severity that is returned.
+     * @param filterParameters Filter parameters.
+     * @return An array of matching check results.
+     */
+    CheckResultDetailedSingleModel[] loadCheckResultsRelatedToIncident(String connectionName,
+                                                                       PhysicalTableName physicalTableName,
+                                                                       long incidentHash,
+                                                                       Instant firstSeen,
+                                                                       Instant incidentUntil,
+                                                                       int minSeverity,
+                                                                       CheckResultListFilterParameters filterParameters);
+
+    /**
+     * Builds a histogram of data quality issues for an incident. The histogram returns daily counts of data quality issues,
+     * also counting occurrences of data quality issues at various severity levels. The histogram also returns the counts
+     * of issues per column and per check name.
+     *
+     * @param connectionName    Connection name.
+     * @param physicalTableName Physical table name.
+     * @param incidentHash      Incident hash.
+     * @param firstSeen         The timestamp when the incident was first seen.
+     * @param incidentUntil     The timestamp when the incident was closed or expired, returns check results up to this timestamp.
+     * @param minSeverity       Minimum check issue severity that is returned.
+     * @param filterParameters  Optional filter to limit the issues included in the histogram.
+     * @return Daily histogram of failed data quality checks.
+     */
+    IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
+                                                                     PhysicalTableName physicalTableName,
+                                                                     long incidentHash,
+                                                                     Instant firstSeen,
+                                                                     Instant incidentUntil,
+                                                                     int minSeverity,
+                                                                     IncidentHistogramFilterParameters filterParameters);
 }

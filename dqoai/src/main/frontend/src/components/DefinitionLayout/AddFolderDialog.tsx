@@ -27,7 +27,7 @@ const AddFolderDialog = ({
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const { sensorFolderTree } = useSelector((state: IRootState) => state.sensor);
-  const { ruleFolderTree } = useSelector((state: IRootState) => state.rule);
+  const { ruleFolderTree } = useSelector((state: IRootState) => state.rule || {});
   const dispatch = useActionDispatch();
 
   const handleSubmit = async () => {

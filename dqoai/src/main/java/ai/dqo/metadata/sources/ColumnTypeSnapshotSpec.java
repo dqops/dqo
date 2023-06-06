@@ -25,9 +25,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.google.common.base.Strings;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 
-import java.util.Locale;
-import java.util.Objects;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Stores the column data type captured at the time of the table metadata import.
@@ -238,6 +241,22 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
     @Override
     public int hashCode() {
         return Objects.hash(columnType, nullable, length, scale, precision);
+    }
+
+    /**
+     * Calculate a 64-bit hash of the data type, including all values.
+     * @return 64-bit hash.
+     */
+    public long hashCode64() {
+        List<HashCode> hashCodes = new ArrayList<>() {{
+            add(getColumnType() != null ? Hashing.farmHashFingerprint64().hashString(getColumnType(), StandardCharsets.UTF_8) : HashCode.fromLong(-1L));
+            add(getLength() != null ? HashCode.fromLong(getLength()) : HashCode.fromLong(-1L));
+            add(getScale() != null ? HashCode.fromLong(getScale()) : HashCode.fromLong(-1L));
+            add(getPrecision() != null ? HashCode.fromLong(getPrecision()) : HashCode.fromLong(-1L));
+            add(getNullable() != null ? HashCode.fromLong(getNullable() ? 1L : 0L) : HashCode.fromLong(-1L));
+        }};
+
+        return Math.abs(Hashing.combineOrdered(hashCodes).asLong()); // we return only positive hashes which limits the hash space to 2^63, but positive hashes are easier for users
     }
 
     /**

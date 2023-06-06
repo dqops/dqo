@@ -23,18 +23,19 @@ import {
   TablesApiFactory,
   ColumnsApiFactory,
   JobsApiFactory,
-  SourceSchemasApiFactory,
-  SourceTablesApiFactory,
+  DataSourcesApiFactory,
   DataStreamsApiFactory,
   CheckResultsOverviewApiFactory,
   DashboardsApiFactory,
   TimezonesApiFactory,
-  SourceConnectionControllerApiFactory,
   CheckResultsApiFactory,
   SensorReadoutsApiFactory,
   ErrorsApiFactory,
   SensorsApiFactory,
-  RulesApiFactory, IncidentsApiFactory
+  RulesApiFactory,
+  IncidentsApiFactory,
+  LogShippingApiFactory,
+  EnvironmentApiFactory, ChecksApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -49,7 +50,11 @@ export const SchemaApiClient = SchemasApiFactory(
   axios
 );
 
-export const TableApiClient = TablesApiFactory(new Configuration(), '', axios);
+export const TableApiClient = TablesApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
 
 export const ColumnApiClient = ColumnsApiFactory(
   new Configuration(),
@@ -57,15 +62,13 @@ export const ColumnApiClient = ColumnsApiFactory(
   axios
 );
 
-export const JobApiClient = JobsApiFactory(new Configuration(), '', axios);
-
-export const SourceSchemasApi = SourceSchemasApiFactory(
+export const JobApiClient = JobsApiFactory(
   new Configuration(),
   '',
   axios
 );
 
-export const SourceTableApi = SourceTablesApiFactory(
+export const DataSourcesApi = DataSourcesApiFactory(
   new Configuration(),
   '',
   axios
@@ -101,12 +104,6 @@ export const TimezonesApi = TimezonesApiFactory(
   axios
 );
 
-export const SourceConnectionApi = SourceConnectionControllerApiFactory(
-  new Configuration(),
-  '',
-  axios
-);
-
 export const SensorReadoutsApi = SensorReadoutsApiFactory(
   new Configuration(),
   '',
@@ -132,6 +129,24 @@ export const RulesApi = RulesApiFactory(
 );
 
 export const IncidentsApi = IncidentsApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
+
+export const EnviromentApiClient = EnvironmentApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
+
+export const LogErrorsApi = LogShippingApiFactory(
+  new Configuration(),
+  '',
+  axios,
+);
+
+export const ChecksApi = ChecksApiFactory(
   new Configuration(),
   '',
   axios,

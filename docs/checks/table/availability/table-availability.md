@@ -12,29 +12,29 @@ Verifies availability of the table in a database using a simple row count.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|table_availability|profiling| |[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
+|table_availability|profiling| |[table_availability](../../../../reference/sensors/Table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=table_availability
+dqo> check enable -c=connection_name -ch=table_availability
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=table_availability
+dqo> check run -ch=table_availability
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=table_availability
+dqo> check run -c=connection_name -ch=table_availability
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=table_availability
+dqo> check run -c=connection_name -t=table_name -ch=table_availability
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=table_availability
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=table_availability
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -81,7 +81,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -103,7 +103,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         CASE
            WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -127,7 +127,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -149,7 +149,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         CASE
            WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -173,7 +173,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -195,7 +195,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         CASE
            WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -219,7 +219,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -241,7 +241,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         CASE
            WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -265,7 +265,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -283,7 +283,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         CASE
            WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -346,7 +346,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -367,7 +367,7 @@ spec:
         ORDER BY time_period
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             CASE
                WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -391,7 +391,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -412,7 +412,7 @@ spec:
         ORDER BY time_period
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             CASE
                WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -436,7 +436,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -457,7 +457,7 @@ spec:
         ORDER BY time_period
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             CASE
                WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -481,7 +481,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -502,7 +502,7 @@ spec:
         ORDER BY time_period
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             CASE
                WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -526,7 +526,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -543,7 +543,7 @@ spec:
             ) AS tab_scan
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             CASE
                WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -569,33 +569,33 @@ ___
 ## **daily table availability**  
   
 **Check description**  
-Verifies availability on table in database using simple row count. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies availability on table in database using simple row count. Stores the most recent table availability status for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_table_availability|recurring|daily|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
+|daily_table_availability|recurring|daily|[table_availability](../../../../reference/sensors/Table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_table_availability
+dqo> check enable -c=connection_name -ch=daily_table_availability
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_table_availability
+dqo> check run -ch=daily_table_availability
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_table_availability
+dqo> check run -c=connection_name -ch=daily_table_availability
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_table_availability
+dqo> check run -c=connection_name -t=table_name -ch=daily_table_availability
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_table_availability
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_table_availability
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -644,7 +644,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -666,7 +666,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         CASE
            WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -690,7 +690,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -712,7 +712,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         CASE
            WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -736,7 +736,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -758,7 +758,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         CASE
            WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -782,7 +782,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -804,7 +804,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         CASE
            WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -828,7 +828,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -846,7 +846,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         CASE
            WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -910,7 +910,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -931,7 +931,7 @@ spec:
         ORDER BY time_period
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             CASE
                WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -955,7 +955,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -976,7 +976,7 @@ spec:
         ORDER BY time_period
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             CASE
                WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -1000,7 +1000,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1021,7 +1021,7 @@ spec:
         ORDER BY time_period
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             CASE
                WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -1045,7 +1045,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1066,7 +1066,7 @@ spec:
         ORDER BY time_period
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             CASE
                WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -1090,7 +1090,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1107,7 +1107,7 @@ spec:
             ) AS tab_scan
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             CASE
                WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -1133,33 +1133,33 @@ ___
 ## **monthly table availability**  
   
 **Check description**  
-Verifies availability on table in database using simple row count. Stores the most recent row count for each month when the data quality check was evaluated.  
+Verifies availability on table in database using simple row count. Stores the most recent table availability status for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_table_availability|recurring|monthly|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
+|monthly_table_availability|recurring|monthly|[table_availability](../../../../reference/sensors/Table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_table_availability
+dqo> check enable -c=connection_name -ch=monthly_table_availability
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_table_availability
+dqo> check run -ch=monthly_table_availability
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_table_availability
+dqo> check run -c=connection_name -ch=monthly_table_availability
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_table_availability
+dqo> check run -c=connection_name -t=table_name -ch=monthly_table_availability
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_table_availability
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_table_availability
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1208,7 +1208,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1230,7 +1230,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         CASE
            WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -1254,7 +1254,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1276,7 +1276,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         CASE
            WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -1300,7 +1300,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1322,7 +1322,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         CASE
            WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -1346,7 +1346,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1368,7 +1368,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         CASE
            WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -1392,7 +1392,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1410,7 +1410,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         CASE
            WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -1474,7 +1474,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1495,7 +1495,7 @@ spec:
         ORDER BY time_period
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             CASE
                WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -1519,7 +1519,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1540,7 +1540,7 @@ spec:
         ORDER BY time_period
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             CASE
                WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -1564,7 +1564,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1585,7 +1585,7 @@ spec:
         ORDER BY time_period
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             CASE
                WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -1609,7 +1609,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1630,7 +1630,7 @@ spec:
         ORDER BY time_period
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             CASE
                WHEN COUNT(*) > 0 THEN COUNT(*)
@@ -1654,7 +1654,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         SELECT
             CASE
@@ -1671,7 +1671,7 @@ spec:
             ) AS tab_scan
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             CASE
                WHEN COUNT(*) > 0 THEN COUNT(*)

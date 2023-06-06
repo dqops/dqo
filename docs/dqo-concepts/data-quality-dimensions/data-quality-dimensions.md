@@ -35,8 +35,8 @@ define the expectations of data consumers regarding the condition of the data, t
 It is also a good idea to review the list of previous data quality issues that the Data Owner would like to eliminate in the future.
 
 Only after completing the previous steps you can assess data quality dimensions which are important for your company.
-For example If the data must arrive on time and without delays - the company should prioritize timeliness. If it is more
+For example, if the data must arrive on time and without delays - the company should prioritize timeliness. If it is more
 important that the data arrives in a certain format - the company should prioritize validity.
 
 You can learn more about defining data quality requirements and how to set up the whole data quality monitoring process in our eBook 
-["A step-by-step guide to improve data quality"](https://dqo.ai/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/).
+["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/).

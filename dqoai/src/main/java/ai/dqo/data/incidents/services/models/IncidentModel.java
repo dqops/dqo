@@ -24,9 +24,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.parquet.Strings;
 import tech.tablesaw.api.Row;
 
 import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoField;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
@@ -141,6 +145,12 @@ public class IncidentModel {
     private int highestSeverity;
 
     /**
+     * The minimum severity of the data quality incident, copied from the incident configuration at a connection or table at the time when the incident was first seen. Possible values are: 1 - warning, 2 - error, 3 - fatal.
+     */
+    @JsonPropertyDescription("The minimum severity of the data quality incident, copied from the incident configuration at a connection or table at the time when the incident was first seen. Possible values are: 1 - warning, 2 - error, 3 - fatal.")
+    private int minimumSeverity;
+
+    /**
      * The total number of failed data quality checks that were seen when the incident was raised for the first time.
      */
     @JsonPropertyDescription("The total number of failed data quality checks that were seen when the incident was raised for the first time.")
@@ -176,8 +186,9 @@ public class IncidentModel {
         model.setIncidentHash(incidentRow.getLong(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME));
         Instant firstSeen = incidentRow.getInstant(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME);
         model.setFirstSeen(firstSeen);
-        model.setYear(firstSeen.get(ChronoField.YEAR));
-        model.setMonth(firstSeen.get(ChronoField.MONTH_OF_YEAR));
+        ZonedDateTime zonedFirstSeen = firstSeen.atZone(ZoneOffset.UTC);
+        model.setYear(zonedFirstSeen.get(ChronoField.YEAR));
+        model.setMonth(zonedFirstSeen.get(ChronoField.MONTH_OF_YEAR));
         model.setLastSeen(incidentRow.getInstant(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME));
         model.setIncidentUntil(incidentRow.getInstant(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME));
         if (!incidentRow.isMissing(IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME)) {
@@ -199,6 +210,9 @@ public class IncidentModel {
             model.setIssueUrl(incidentRow.getString(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME));
         }
         model.setHighestSeverity(incidentRow.getInt(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME));
+        if (!incidentRow.isMissing(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME)) {
+            model.setMinimumSeverity(incidentRow.getInt(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME));
+        }
         model.setFailedChecksCount(incidentRow.getInt(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME));
         model.setStatus(IncidentStatus.valueOf(incidentRow.getString(IncidentsColumnNames.STATUS_COLUMN_NAME)));
 
@@ -211,6 +225,22 @@ public class IncidentModel {
      * @return True when the incident matches a pattern.
      */
     public boolean matchesFilter(String filter) {
+        if (filter.indexOf(' ') >= 0) {
+            String[] strings = StringUtils.split(filter, ' ');
+            for (int i = 0; i < strings.length; i++) {
+                String filterElement = strings[i];
+                if (Strings.isNullOrEmpty(filterElement)) {
+                    continue;
+                }
+
+                if (!matchesFilter(filterElement)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         return StringPatternComparer.matchSearchPattern(this.incidentId, filter) ||
                 StringPatternComparer.matchSearchPattern(this.schema, filter) ||
                 StringPatternComparer.matchSearchPattern(this.table, filter) ||

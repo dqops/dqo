@@ -21,11 +21,11 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import ai.dqo.checks.column.profiling.ColumnProfilingNullsChecksSpec;
+import ai.dqo.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
+import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
+import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.sources.*;
@@ -207,7 +207,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
     private void structure1Setup() {
         // Check attached to table.
         this.tableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec() {{
-            setStandard(new TableProfilingStandardChecksSpec() {{
+            setVolume(new TableVolumeProfilingChecksSpec() {{
                 setRowCount(new TableRowCountCheckSpec() {{
                     setError(new MinCountRule0ParametersSpec(10L));
                 }});
@@ -216,7 +216,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
 
         // Check attached to column.
         this.columnSpec.setProfilingChecks(new ColumnProfilingCheckCategoriesSpec() {{
-            setNulls(new ColumnProfilingNullsChecksSpec() {{
+            setNulls(new ColumnNullsProfilingChecksSpec() {{
                 setNullsCount(new ColumnNullsCountCheckSpec() {{
                     setError(new MaxCountRule10ParametersSpec(20L));
                 }});

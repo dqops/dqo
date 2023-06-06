@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ErrorModal from '../components/ErrorModal';
+import { LogErrorsApi } from "../services/apiClient";
+import { LogShippingApi } from "../api";
 
 const ErrorContext = React.createContext({} as any);
 
@@ -30,6 +32,14 @@ function ErrorProvider({ children }: any) {
       
       if (response.status > 500) {
         setIsOpen(true);
+      }
+      if (response.status < 500) {
+        if (response.request.responseURL.indexOf("api/logs/error") < 0) {
+          LogErrorsApi.logError({
+            window_location: window.location.href,
+            message: response?.data?.trace
+          })
+        }
       }
       return Promise.reject(error);
     });

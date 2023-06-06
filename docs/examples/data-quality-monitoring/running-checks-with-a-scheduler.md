@@ -41,7 +41,7 @@ We will set six data quality recurring checks on `bigquery-public-data.thelook_e
     - error: 98.0%
     - fatal: 95.0%
 
-5.  [daily_string_in_set_percent](../../checks/column/strings/string-in-set-percent.md) check on `gender` column with values parameters "F" and "M" and minimum percent thresholds levels
+5.  [daily_string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md) check on `gender` column with values parameters "F" and "M" and minimum percent thresholds levels
     - warning: 99.0%
     - error: 98.0%
     - fatal: 95.0%
@@ -211,7 +211,7 @@ spec:
       recurring_checks:
         daily:
           strings:
-            daily_string_in_set_percent:
+            daily_string_value_in_set_percent:
               parameters:
                 values:
                 - F

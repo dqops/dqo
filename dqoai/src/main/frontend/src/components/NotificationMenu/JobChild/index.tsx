@@ -10,6 +10,7 @@ import {
   AccordionHeader
 } from '@material-tailwind/react';
 import moment from 'moment';
+import { JobApiClient } from '../../../services/apiClient';
 
 const JobChild = ({
   job,
@@ -49,23 +50,37 @@ const JobChild = ({
       return <SvgIcon name="running" className="w-4 h-4 text-orange-700" />;
     }
   };
+  const cancelJob = async (jobId: number) => {
+    await JobApiClient.cancelJob(jobId);
+  };
 
   return (
     <Accordion open={open}>
-      {(job.jobId?.parentJobId?.jobId === parentId &&
-        succeededCounter &&
-        succeededCounter < 30) ||
-      job.status !== 'succeeded' ? (
+      {job.jobId?.parentJobId?.jobId === parentId &&
+      ((succeededCounter && succeededCounter < 30) ||
+        job.status !== 'succeeded') ? (
         <AccordionHeader onClick={() => setOpen(!open)}>
           <div className="flex flex-wrap justify-between items-center text-sm w-full text-gray-700">
             <div className="flex flex-wrap space-x-1 items-center">
-              <div>
-                {job.jobType}
-              </div>
+              <div className="px-2">{job.jobType}</div>
+
               {renderStatus()}
             </div>
-            <div>
-              {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+            <div className="flex items-center gap-x-2">
+              {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
+                <div
+                  onClick={() =>
+                    cancelJob(job.jobId?.jobId ? Number(job.jobId?.jobId) : 0)
+                  }
+                >
+                  <SvgIcon name="canceljobs" />
+                </div>
+              ) : (
+                <div></div>
+              )}
+              <div>
+                {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+              </div>
             </div>
           </div>
         </AccordionHeader>
@@ -111,7 +126,9 @@ const JobChild = ({
                 </tr>
                 <tr>
                   <td className="px-2">Schema Name</td>
-                  <td className="px-2">{job?.parameters?.importSchemaParameters?.schemaName}</td>
+                  <td className="px-2">
+                    {job?.parameters?.importSchemaParameters?.schemaName}
+                  </td>
                 </tr>
                 <tr>
                   <td className="px-2 capitalize align-top">Tables pattern</td>
@@ -164,7 +181,9 @@ const JobChild = ({
                 </tr>
                 <tr>
                   <td className="px-2">Schema Name</td>
-                  <td className="px-2">{job?.parameters?.importTableParameters?.schemaName}</td>
+                  <td className="px-2">
+                    {job?.parameters?.importTableParameters?.schemaName}
+                  </td>
                 </tr>
                 <tr>
                   <td className="px-2 capitalize align-top">Tables</td>

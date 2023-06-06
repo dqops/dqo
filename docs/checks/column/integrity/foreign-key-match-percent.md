@@ -12,29 +12,29 @@ Verifies that the percentage of values in a column that matches values in anothe
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|foreign_key_match_percent|profiling| |[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|foreign_key_match_percent|profiling| |[foreign_key_match_percent](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=foreign_key_match_percent
+dqo> check enable -c=connection_name -ch=foreign_key_match_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=foreign_key_match_percent
+dqo> check run -ch=foreign_key_match_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=foreign_key_match_percent
+dqo> check run -c=connection_name -ch=foreign_key_match_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=foreign_key_match_percent
+dqo> check run -c=connection_name -t=table_name -ch=foreign_key_match_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=foreign_key_match_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=foreign_key_match_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -45,9 +45,9 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=foreign_
               foreign_table: dim_customer
               foreign_column: customer_id
             warning:
-              min_percent: 99.0
+              min_percent: 100.0
             error:
-              min_percent: 98.0
+              min_percent: 99.0
             fatal:
               min_percent: 95.0
 ```
@@ -72,9 +72,9 @@ spec:
               foreign_table: dim_customer
               foreign_column: customer_id
             warning:
-              min_percent: 99.0
+              min_percent: 100.0
             error:
-              min_percent: 98.0
+              min_percent: 99.0
             fatal:
               min_percent: 95.0
       labels:
@@ -90,7 +90,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -120,7 +120,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -140,7 +140,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -170,7 +170,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -190,7 +190,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -220,7 +220,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -240,7 +240,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -270,7 +270,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -290,7 +290,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -320,7 +320,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -366,9 +366,9 @@ spec:
                   foreign_table: dim_customer
                   foreign_column: customer_id
                 warning:
-                  min_percent: 99.0
+                  min_percent: 100.0
                 error:
-                  min_percent: 98.0
+                  min_percent: 99.0
                 fatal:
                   min_percent: 95.0
           labels:
@@ -389,7 +389,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -418,7 +418,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -440,7 +440,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -469,7 +469,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -491,7 +491,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -520,7 +520,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -542,7 +542,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -571,7 +571,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -593,7 +593,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -622,7 +622,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -637,9 +637,8 @@ spec:
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
-        ON analyzed_table.[target_column] = foreign_table.[customer_id], 
-                , 
-            
+        ON analyzed_table.[target_column] = foreign_table.[customer_id]
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -657,33 +656,33 @@ ___
 ## **daily foreign key match percent**  
   
 **Check description**  
-Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_foreign_key_match_percent|recurring|daily|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_foreign_key_match_percent|recurring|daily|[foreign_key_match_percent](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_foreign_key_match_percent
+dqo> check enable -c=connection_name -ch=daily_foreign_key_match_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_foreign_key_match_percent
+dqo> check run -ch=daily_foreign_key_match_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_foreign_key_match_percent
+dqo> check run -c=connection_name -ch=daily_foreign_key_match_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_foreign_key_match_percent
+dqo> check run -c=connection_name -t=table_name -ch=daily_foreign_key_match_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_foreign_key_match_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_foreign_key_match_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -695,9 +694,9 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_fo
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -723,9 +722,9 @@ spec:
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -741,7 +740,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -771,7 +770,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -791,7 +790,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -821,7 +820,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -841,7 +840,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -871,7 +870,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -891,7 +890,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -921,7 +920,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -941,7 +940,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -971,7 +970,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1018,9 +1017,9 @@ spec:
                     foreign_table: dim_customer
                     foreign_column: customer_id
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -1041,7 +1040,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -1070,7 +1069,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1092,7 +1091,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -1121,7 +1120,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1143,7 +1142,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -1172,7 +1171,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1194,7 +1193,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -1223,7 +1222,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1245,7 +1244,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -1274,7 +1273,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1289,9 +1288,8 @@ spec:
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
-        ON analyzed_table.[target_column] = foreign_table.[customer_id], 
-                , 
-            
+        ON analyzed_table.[target_column] = foreign_table.[customer_id]
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1313,29 +1311,29 @@ Verifies that the percentage of values in a column that matches values in anothe
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_foreign_key_match_percent|recurring|monthly|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_foreign_key_match_percent|recurring|monthly|[foreign_key_match_percent](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_foreign_key_match_percent
+dqo> check enable -c=connection_name -ch=monthly_foreign_key_match_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_foreign_key_match_percent
+dqo> check run -ch=monthly_foreign_key_match_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_foreign_key_match_percent
+dqo> check run -c=connection_name -ch=monthly_foreign_key_match_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_foreign_key_match_percent
+dqo> check run -c=connection_name -t=table_name -ch=monthly_foreign_key_match_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_foreign_key_match_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_foreign_key_match_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1347,9 +1345,9 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -1375,9 +1373,9 @@ spec:
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -1393,7 +1391,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -1423,7 +1421,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1443,7 +1441,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -1473,7 +1471,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1493,7 +1491,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -1523,7 +1521,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1543,7 +1541,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -1573,7 +1571,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1593,7 +1591,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -1623,7 +1621,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -1670,9 +1668,9 @@ spec:
                     foreign_table: dim_customer
                     foreign_column: customer_id
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -1693,7 +1691,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -1722,7 +1720,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1744,7 +1742,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -1773,7 +1771,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1795,7 +1793,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -1824,7 +1822,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1846,7 +1844,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -1875,7 +1873,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1897,7 +1895,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -1926,7 +1924,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -1941,9 +1939,8 @@ spec:
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
-        ON analyzed_table.[target_column] = foreign_table.[customer_id], 
-                , 
-            
+        ON analyzed_table.[target_column] = foreign_table.[customer_id]
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1965,29 +1962,29 @@ Verifies that the percentage of values in a column that matches values in anothe
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_foreign_key_match_percent|partitioned|daily|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_foreign_key_match_percent|partitioned|daily|[foreign_key_match_percent](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_partition_foreign_key_match_percent
+dqo> check enable -c=connection_name -ch=daily_partition_foreign_key_match_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_foreign_key_match_percent
+dqo> check run -ch=daily_partition_foreign_key_match_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_foreign_key_match_percent
+dqo> check run -c=connection_name -ch=daily_partition_foreign_key_match_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_foreign_key_match_percent
+dqo> check run -c=connection_name -t=table_name -ch=daily_partition_foreign_key_match_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_foreign_key_match_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_foreign_key_match_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -1999,9 +1996,9 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_pa
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -2027,9 +2024,9 @@ spec:
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -2045,7 +2042,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -2075,7 +2072,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -2095,7 +2092,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -2125,7 +2122,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -2145,7 +2142,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -2175,7 +2172,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -2195,7 +2192,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -2225,7 +2222,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -2245,7 +2242,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -2275,7 +2272,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -2326,9 +2323,9 @@ spec:
                     foreign_table: dim_customer
                     foreign_column: customer_id
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -2349,7 +2346,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -2378,7 +2375,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -2400,7 +2397,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -2429,7 +2426,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -2451,7 +2448,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -2480,7 +2477,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -2502,7 +2499,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -2531,7 +2528,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -2553,7 +2550,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -2582,7 +2579,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -2597,8 +2594,8 @@ spec:
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
-        ON analyzed_table.[target_column] = foreign_table.[customer_id], 
-        GROUP BY CAST([] AS date), CAST([] AS date)
+        ON analyzed_table.[target_column] = foreign_table.[customer_id]
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
         ORDER BY level_1, level_2CAST([] AS date)
         
             
@@ -2618,29 +2615,29 @@ Verifies that the percentage of values in a column that matches values in anothe
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_foreign_key_match_percent|partitioned|monthly|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_foreign_key_match_percent|partitioned|monthly|[foreign_key_match_percent](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-match-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_partition_foreign_key_match_percent
+dqo> check enable -c=connection_name -ch=monthly_partition_foreign_key_match_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_foreign_key_match_percent
+dqo> check run -ch=monthly_partition_foreign_key_match_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_foreign_key_match_percent
+dqo> check run -c=connection_name -ch=monthly_partition_foreign_key_match_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_foreign_key_match_percent
+dqo> check run -c=connection_name -t=table_name -ch=monthly_partition_foreign_key_match_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_foreign_key_match_percent
+dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_foreign_key_match_percent
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -2652,9 +2649,9 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -2680,9 +2677,9 @@ spec:
                 foreign_table: dim_customer
                 foreign_column: customer_id
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -2698,7 +2695,7 @@ spec:
 ### **BigQuery**
 === "Sensor template for BigQuery"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -2728,7 +2725,7 @@ spec:
     ```
 === "Rendered SQL for BigQuery"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -2748,7 +2745,7 @@ spec:
 ### **Snowflake**
 === "Sensor template for Snowflake"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -2778,7 +2775,7 @@ spec:
     ```
 === "Rendered SQL for Snowflake"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -2798,7 +2795,7 @@ spec:
 ### **PostgreSQL**
 === "Sensor template for PostgreSQL"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -2828,7 +2825,7 @@ spec:
     ```
 === "Rendered SQL for PostgreSQL"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -2848,7 +2845,7 @@ spec:
 ### **Redshift**
 === "Sensor template for Redshift"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -2878,7 +2875,7 @@ spec:
     ```
 === "Rendered SQL for Redshift"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -2898,7 +2895,7 @@ spec:
 ### **SQL Server**
 === "Sensor template for SQL Server"
       
-    ```
+    ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     {%- macro render_foreign_table(foreign_table) -%}
@@ -2928,7 +2925,7 @@ spec:
     ```
 === "Rendered SQL for SQL Server"
       
-    ```
+    ```sql
     SELECT
         100.0 * SUM(
             CASE
@@ -2979,9 +2976,9 @@ spec:
                     foreign_table: dim_customer
                     foreign_column: customer_id
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -3002,7 +2999,7 @@ spec:
     **BigQuery**  
       
     === "Sensor template for BigQuery"
-        ```
+        ```sql+jinja
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -3031,7 +3028,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for BigQuery"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -3053,7 +3050,7 @@ spec:
     **Snowflake**  
       
     === "Sensor template for Snowflake"
-        ```
+        ```sql+jinja
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -3082,7 +3079,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Snowflake"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -3104,7 +3101,7 @@ spec:
     **PostgreSQL**  
       
     === "Sensor template for PostgreSQL"
-        ```
+        ```sql+jinja
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -3133,7 +3130,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for PostgreSQL"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -3155,7 +3152,7 @@ spec:
     **Redshift**  
       
     === "Sensor template for Redshift"
-        ```
+        ```sql+jinja
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -3184,7 +3181,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for Redshift"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -3206,7 +3203,7 @@ spec:
     **SQL Server**  
       
     === "Sensor template for SQL Server"
-        ```
+        ```sql+jinja
         {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
         
         {%- macro render_foreign_table(foreign_table) -%}
@@ -3235,7 +3232,7 @@ spec:
         {{- lib.render_order_by() -}}
         ```
     === "Rendered SQL for SQL Server"
-        ```
+        ```sql
         SELECT
             100.0 * SUM(
                 CASE
@@ -3250,8 +3247,8 @@ spec:
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
-        ON analyzed_table.[target_column] = foreign_table.[customer_id], 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        ON analyzed_table.[target_column] = foreign_table.[customer_id]
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             

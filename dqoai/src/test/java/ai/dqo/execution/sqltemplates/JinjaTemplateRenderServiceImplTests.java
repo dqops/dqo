@@ -31,7 +31,7 @@ import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
+import ai.dqo.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
 import ai.dqo.utils.python.PythonCallerServiceImpl;
 import ai.dqo.utils.python.PythonVirtualEnvService;
 import ai.dqo.utils.python.PythonVirtualEnvServiceObjectMother;
@@ -62,7 +62,7 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
                 table,
                 new ColumnSpec(),
                 null,
-                new TableStandardRowCountSensorParametersSpec(),
+                new TableVolumeRowCountSensorParametersSpec(),
                 TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
                 new TimeWindowFilterParameters(),
                 new DataStreamMappingSpec(),

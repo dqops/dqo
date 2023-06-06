@@ -38,7 +38,9 @@ public class ColumnRangeStatisticsCollectorsSpec extends AbstractStatisticsColle
     public static final ChildHierarchyNodeFieldMapImpl<ColumnRangeStatisticsCollectorsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorCategorySpec.FIELDS) {
         {
             put("min_value", o -> o.minValue);
+            put("median_value", o -> o.medianValue);
             put("max_value", o -> o.maxValue);
+            put("sum_value", o -> o.sumValue);
         }
     };
 
@@ -47,10 +49,20 @@ public class ColumnRangeStatisticsCollectorsSpec extends AbstractStatisticsColle
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnRangeMinValueStatisticsCollectorSpec minValue = new ColumnRangeMinValueStatisticsCollectorSpec();
 
+    @JsonPropertyDescription("Configuration of the profiler that finds the median value in the column.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnRangeMedianValueStatisticsCollectorSpec medianValue = new ColumnRangeMedianValueStatisticsCollectorSpec();
+
     @JsonPropertyDescription("Configuration of the profiler that finds the maximum value in the column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnRangeMaxValueStatisticsCollectorSpec maxValue = new ColumnRangeMaxValueStatisticsCollectorSpec();
+
+    @JsonPropertyDescription("Configuration of the profiler that finds the sum value in the column.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnRangeSumValueStatisticsCollectorSpec sumValue = new ColumnRangeSumValueStatisticsCollectorSpec();
 
     /**
      * Returns the configuration of the profiler that finds the minimum value in the column.
@@ -71,6 +83,24 @@ public class ColumnRangeStatisticsCollectorsSpec extends AbstractStatisticsColle
     }
 
     /**
+     * Returns the configuration of the profiler that finds the median value in the column.
+     * @return Median value profiler.
+     */
+    public ColumnRangeMedianValueStatisticsCollectorSpec getMedianValue() {
+        return medianValue;
+    }
+
+    /**
+     * Sets a reference to a profiler that finds the median value in a column.
+     * @param medianValue Median value profiler.
+     */
+    public void setMedianValue(ColumnRangeMedianValueStatisticsCollectorSpec medianValue) {
+        this.setDirtyIf(!Objects.equals(this.medianValue, medianValue));
+        this.medianValue = medianValue;
+        this.propagateHierarchyIdToField(medianValue, "median_value");
+    }
+
+    /**
      * Returns the configuration of the profiler that finds the maximum value in the column.
      * @return Maximum value profiler.
      */
@@ -86,6 +116,24 @@ public class ColumnRangeStatisticsCollectorsSpec extends AbstractStatisticsColle
         this.setDirtyIf(!Objects.equals(this.maxValue, maxValue));
         this.maxValue = maxValue;
         this.propagateHierarchyIdToField(maxValue, "max_value");
+    }
+
+    /**
+     * Returns the configuration of the profiler that finds the sum value in the column.
+     * @return Sum value profiler.
+     */
+    public ColumnRangeSumValueStatisticsCollectorSpec getSumValue() {
+        return sumValue;
+    }
+
+    /**
+     * Sets a reference to a profiler that finds the sum value in a column.
+     * @param sumValue Sum value profiler.
+     */
+    public void setSumValue(ColumnRangeSumValueStatisticsCollectorSpec sumValue) {
+        this.setDirtyIf(!Objects.equals(this.sumValue, sumValue));
+        this.sumValue = sumValue;
+        this.propagateHierarchyIdToField(sumValue, "sum_value");
     }
 
     /**

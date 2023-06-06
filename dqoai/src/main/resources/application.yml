@@ -9,6 +9,8 @@ spring:
     name: dqo
   lifecycle:
     timeout-per-shutdown-phase: 10s
+  codec:
+    max-in-memory-size: 10MB
   mvc:
     async:
       request-timeout: 60000
@@ -21,6 +23,10 @@ server:
   shutdown: graceful
   error:
     include-stacktrace: always
+  compression:
+     enabled: true
+     mime-types: application/json,application/xml,text/html,image/jpeg,image/x-png,image/svg+xm
+
 
 logging:
   level:
@@ -70,6 +76,10 @@ dqo:
       http2: true
       http2-max-concurrent-streams: 2000
       parallel-delete-operations: 2000
+  spring:
+    shell:
+      interactive:
+        enabled: true
   yaml-schema-server: https://cloud.dqo.ai/dqo-yaml-schema/
   cloud:
     ui-base-url: https://cloud.dqo.ai
@@ -88,13 +98,15 @@ dqo:
     enable-gcp-secret-manager: true
     gcp-project-id: ${GOOGLE_CLOUD_PROJECT}
   core:
-    print-stack-trace: true
     lock-wait-timeout-seconds: 900
+    print-stack-trace: false
   statistics:
     truncated-strings-length: 50
     viewed-statistics-age-months: 3
   incidents:
     count-open-incidents-days: 15
+    column-histogram-size: 10
+    check-histogram-size: 10
   jdbc:
     max-connection-in-pool: 1000
     expire-after-access-seconds: 1800
@@ -106,5 +118,12 @@ dqo:
     #start: true
     synchronization-mode: silent
     check-run-mode: silent
-    scan-metadata-cron-schedule: "*/10 * * * *"   # every 10 minutes
+    synchronize-cron-schedule: "*/10 * * * *"   # every 10 minutes
+    synchronized-folders: locally_changed
     enable-cloud-sync: true
+  cli:
+    oneshot:
+      terminal-width: 150
+  docker:
+    userhome:
+      allow-unmounted: false

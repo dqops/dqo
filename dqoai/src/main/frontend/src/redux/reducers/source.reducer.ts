@@ -73,19 +73,19 @@ export type Action = BasicAction & {
 
 const setActiveTabState = (state: ISourceState, action: Action, data: Record<string, unknown>) => {
   const newState = state ? structuredClone(state) : state;
-  const activeTab = action.activeTab || newState[action.checkType].activeTab;
+  const activeTab = action?.activeTab || newState[action.checkType]?.activeTab;
 
   return {
     ...newState,
     [action.checkType]: {
       ...newState[action.checkType],
-      tabs: newState[action.checkType].tabs.map((item) => item.url === activeTab ? ({
+      tabs: newState[action.checkType]?.tabs?.map((item) => item.url === activeTab ? ({
         ...item,
         state: {
           ...item.state,
           ...data
         }
-      }) : item)
+      }) : item) || []
     }
   }
 };

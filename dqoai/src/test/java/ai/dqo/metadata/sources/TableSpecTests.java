@@ -17,13 +17,13 @@ package ai.dqo.metadata.sources;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import ai.dqo.checks.table.recurring.TableRecurringChecksSpec;
 import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
 import ai.dqo.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
-import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringSpec;
-import ai.dqo.checks.table.recurring.standard.TableStandardMonthlyRecurringSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
+import ai.dqo.checks.table.recurring.volume.TableVolumeDailyRecurringChecksSpec;
+import ai.dqo.checks.table.recurring.volume.TableVolumeMonthlyRecurringChecksSpec;
+import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.metadata.groupings.DataStreamLevelSpecObjectMother;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.utils.serialization.YamlSerializer;
@@ -120,8 +120,8 @@ public class TableSpecTests extends BaseTest {
     @Test
     void isDirty_whenDefaultChecksSpecSet_thenIsDirtyIsTrue() {
         TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
-        profilingChecks.setStandard(new TableProfilingStandardChecksSpec());
-        profilingChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
+        profilingChecks.setVolume(new TableVolumeProfilingChecksSpec());
+        profilingChecks.getVolume().setRowCount(new TableRowCountCheckSpec());
 		this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertEquals(this.sut.getProfilingChecks(), profilingChecks);
         Assertions.assertTrue(this.sut.isDirty());
@@ -130,8 +130,8 @@ public class TableSpecTests extends BaseTest {
     @Test
     void isDirty_whenSameDefaultChecksSpecObjectAsCurrentSet_thenIsDirtyIsFalse() {
         TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
-        profilingChecks.setStandard(new TableProfilingStandardChecksSpec());
-        profilingChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
+        profilingChecks.setVolume(new TableVolumeProfilingChecksSpec());
+        profilingChecks.getVolume().setRowCount(new TableRowCountCheckSpec());
 		this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
@@ -148,8 +148,8 @@ public class TableSpecTests extends BaseTest {
     @Test
     void hasAnyChecksConfigured_whenOneProfilingCheckConfigured_thenReturnsTrue() {
         TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
-        profilingChecks.setStandard(new TableProfilingStandardChecksSpec());
-        profilingChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
+        profilingChecks.setVolume(new TableVolumeProfilingChecksSpec());
+        profilingChecks.getVolume().setRowCount(new TableRowCountCheckSpec());
         this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
     }
@@ -158,9 +158,9 @@ public class TableSpecTests extends BaseTest {
     void hasAnyChecksConfigured_whenOneDailyRecurringCheckConfigured_thenReturnsTrue() {
         TableRecurringChecksSpec recurring = new TableRecurringChecksSpec();
         TableDailyRecurringCategoriesSpec daily = new TableDailyRecurringCategoriesSpec();
-        TableStandardDailyRecurringSpec standard = new TableStandardDailyRecurringSpec();
-        standard.setDailyRowCount(new TableRowCountCheckSpec());
-        daily.setStandard(standard);
+        TableVolumeDailyRecurringChecksSpec volume = new TableVolumeDailyRecurringChecksSpec();
+        volume.setDailyRowCount(new TableRowCountCheckSpec());
+        daily.setVolume(volume);
         recurring.setDaily(daily);
         this.sut.setRecurringChecks(recurring);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
@@ -170,9 +170,9 @@ public class TableSpecTests extends BaseTest {
     void hasAnyChecksConfigured_whenOneMonthlyRecurringCheckConfigured_thenReturnsTrue() {
         TableRecurringChecksSpec recurring = new TableRecurringChecksSpec();
         TableMonthlyRecurringCheckCategoriesSpec daily = new TableMonthlyRecurringCheckCategoriesSpec();
-        TableStandardMonthlyRecurringSpec standard = new TableStandardMonthlyRecurringSpec();
-        standard.setMonthlyRowCount(new TableRowCountCheckSpec());
-        daily.setStandard(standard);
+        TableVolumeMonthlyRecurringChecksSpec volume = new TableVolumeMonthlyRecurringChecksSpec();
+        volume.setMonthlyRowCount(new TableRowCountCheckSpec());
+        daily.setVolume(volume);
         recurring.setMonthly(daily);
         this.sut.setRecurringChecks(recurring);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());

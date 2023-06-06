@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../../Button';
 import ConfirmDialog from './ConfirmDialog';
-import { useSelector } from 'react-redux';
-import { TableApiClient } from '../../../services/apiClient';
-import { useTree } from "../../../contexts/treeContext";
-import { getFirstLevelState } from "../../../redux/selectors";
-import { useParams } from "react-router-dom";
-import { CheckTypes } from "../../../shared/routes";
+import {
+  ColumnApiClient,
+  JobApiClient,
+  TableApiClient
+} from '../../../services/apiClient';
+import { useTree } from '../../../contexts/treeContext';
+import { useParams } from 'react-router-dom';
+import { CheckTypes } from '../../../shared/routes';
 import AddColumnDialog from '../../CustomTree/AddColumnDialog';
+import { AxiosResponse } from 'axios';
+import { TableColumnsStatisticsModel } from '../../../api';
 
 interface ITableActionGroupProps {
   isDisabled?: boolean;
@@ -15,6 +19,8 @@ interface ITableActionGroupProps {
   isUpdating?: boolean;
   isUpdated?: boolean;
   shouldDelete?: boolean;
+  collectStatistic?: boolean;
+  addSaveButton?: boolean;
 }
 
 const TableActionGroup = ({
@@ -22,25 +28,61 @@ const TableActionGroup = ({
   isUpdating,
   isDisabled,
   onUpdate,
-  shouldDelete = true
+  shouldDelete = true,
+  collectStatistic,
+  addSaveButton = true
 }: ITableActionGroupProps) => {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams()
+  const {
+    checkTypes,
+    connection,
+    schema,
+    table
+  }: {
+    checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
+    table: string;
+  } = useParams();
   const [isOpen, setIsOpen] = useState(false);
-  const { tableBasic } = useSelector(getFirstLevelState(checkTypes));
   const { deleteData } = useTree();
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
+  const [loadingJob, setLoadingJob] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
 
-  const removeTable = async () => {
-    if (tableBasic) {
-      await TableApiClient.deleteTable(
-        tableBasic.connection_name ?? '',
-        tableBasic.target?.schema_name ?? '',
-        tableBasic.target?.table_name ?? ''
-      );
+  const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
+  const fetchColumns = async () => {
+    try {
+      const res: AxiosResponse<TableColumnsStatisticsModel> =
+        await ColumnApiClient.getColumnsStatistics(connection, schema, table);
+      setStatistics(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-      const identify = `${tableBasic?.connection_name}.${tableBasic?.target?.schema_name}.${tableBasic?.target?.table_name}`;
-      deleteData(identify);
+  useEffect(() => {
+    fetchColumns().then();
+  }, [connection, schema, table]);
+  const fullPath = `${connection}.${schema}.${table}`;
+
+  const removeTable = async () => {
+    await TableApiClient.deleteTable(
+      connection ?? '',
+      schema ?? '',
+      table ?? ''
+    );
+
+    deleteData(fullPath);
+  };
+
+  const collectStatistics = async () => {
+    try {
+      setLoadingJob(true);
+      await JobApiClient.collectStatisticsOnTable(
+        statistics?.collect_column_statistics_job_template
+      );
+    } finally {
+      setLoadingJob(false);
     }
   };
 
@@ -64,19 +106,29 @@ const TableActionGroup = ({
           onClick={() => setIsOpen(true)}
         />
       )}
-      <Button
-        color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
-        variant="contained"
-        label="Save"
-        className="w-40 !h-10"
-        onClick={onUpdate}
-        loading={isUpdating}
-        disabled={isDisabled}
-      />
+      {collectStatistic && (
+        <Button
+          label="Collect Statistic"
+          color="primary"
+          onClick={collectStatistics}
+          loading={loadingJob}
+        />
+      )}
+      {addSaveButton && (
+        <Button
+          color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
+          variant="contained"
+          label="Save"
+          className="w-40 !h-10"
+          onClick={onUpdate}
+          loading={isUpdating}
+          disabled={isDisabled}
+        />
+      )}
       <ConfirmDialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        table={tableBasic}
+        tablePath={fullPath}
         onConfirm={removeTable}
       />
       <AddColumnDialog

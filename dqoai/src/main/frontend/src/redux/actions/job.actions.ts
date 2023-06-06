@@ -71,23 +71,41 @@ export const getJobsChangesFailed = (error: unknown) => ({
   error
 });
 
+let timerId: any = 0;
+
 export const getJobsChanges =
   (sequenceNumber: number) => async (dispatch: Dispatch) => {
-    dispatch(getJobsChangesRequest());
-    try {
-      const res: AxiosResponse<DqoJobQueueIncrementalSnapshotModel> =
-        await JobApiClient.getJobChangesSince(sequenceNumber);
-      dispatch(getJobsChangesSuccess(res.data));
-    } catch (err) {
-      dispatch(getJobsChangesFailed(err));
-      setTimeout(() => {
-        dispatch(getJobsChanges(sequenceNumber) as any);
-        return;
-      }, JOB_CHANGES_RETRY_INTERVAL);
+    if (timerId) {
+      clearTimeout(timerId);
     }
+    dispatch(getJobsChangesRequest());
+    JobApiClient.getJobChangesSince(sequenceNumber)
+      .then((res: AxiosResponse<DqoJobQueueIncrementalSnapshotModel>) => {
+        dispatch(getJobsChangesSuccess(res.data));
+      })
+      .catch(err => {
+        dispatch(getJobsChangesFailed(err));
+        timerId = setTimeout(() => {
+          dispatch(getJobsChanges(sequenceNumber) as any);
+          return;
+        }, JOB_CHANGES_RETRY_INTERVAL);
+      })
   };
 
 export const toggleMenu = (isOpen: boolean) => ({
   type: JOB_ACTION.TOGGLE_MENU,
   isOpen
+});
+export const reduceCounter = (wasOpen: boolean, amountOfElems?: number) => ({
+  type: JOB_ACTION.REDUCE_COUNTER,
+  wasOpen,
+  amountOfElems
+});
+export const toggleProfile = (isProfileOpen: boolean) => ({
+  type: JOB_ACTION.TOGGLE_PROFILE,
+  isProfileOpen
+});
+export const toggleSettings = (areSettingsOpen: boolean) => ({
+  type: JOB_ACTION.TOGGLE_SETTINGS,
+  areSettingsOpen
 });

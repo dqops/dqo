@@ -22,7 +22,7 @@ interface CheckCategoriesViewProps {
   getCheckOverview: () => void;
 }
 const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataDataStreams, onUpdate, getCheckOverview }: CheckCategoriesViewProps) => {
-  const { jobs } = useSelector((state: IRootState) => state.job);
+  const { jobs } = useSelector((state: IRootState) => state.job || {});
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
 
   const job = jobs?.jobs?.find((item) =>
@@ -36,6 +36,10 @@ const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataD
     await JobApiClient.runChecks({
       checkSearchFilters: category?.run_checks_job_template
     });
+
+    if (getCheckOverview) {
+      getCheckOverview();
+    }
   };
 
   return (

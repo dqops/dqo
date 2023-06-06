@@ -22,13 +22,13 @@ import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
 import ai.dqo.checks.column.checkspecs.strings.ColumnStringLengthAboveMaxLengthCountCheckSpec;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import ai.dqo.checks.column.profiling.ColumnProfilingStringsChecksSpec;
+import ai.dqo.checks.column.profiling.ColumnStringsProfilingChecksSpec;
 import ai.dqo.checks.column.recurring.ColumnDailyRecurringCheckCategoriesSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringChecksRootSpec;
-import ai.dqo.checks.column.recurring.numeric.ColumnNumericDailyRecurringSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
+import ai.dqo.checks.column.recurring.numeric.ColumnNumericDailyRecurringChecksSpec;
+import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.scheduler.quartz.*;
 import ai.dqo.execution.ExecutionContext;
@@ -51,6 +51,7 @@ import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rules.comparison.*;
 import ai.dqo.services.check.mapping.*;
 import ai.dqo.services.check.mapping.models.*;
+import ai.dqo.services.check.matching.SimilarCheckCacheImpl;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import ai.dqo.services.check.models.BulkCheckDisableParameters;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
@@ -91,7 +92,8 @@ public class CheckServiceImplTests extends BaseTest {
         JobDataMapAdapter jobDataMapAdapter = new JobDataMapAdapterImpl(new JsonSerializerImpl());
         TriggerFactory triggerFactory = new TriggerFactoryImpl(jobDataMapAdapter, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(triggerFactory, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
-        this.specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService, schedulesUtilityService);
+        this.specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService, schedulesUtilityService,
+                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService));
         this.uiAllChecksModelFactory = new UIAllChecksModelFactoryImpl(executionContextFactory, hierarchyNodeTreeSearcher, specToUiCheckMappingService);
 
         UiToSpecCheckMappingService uiToSpecCheckMappingService = new UiToSpecCheckMappingServiceImpl(reflectionService);
@@ -137,7 +139,7 @@ public class CheckServiceImplTests extends BaseTest {
         table2.getSpec().getColumns().put("col3", col23);
 
         TableProfilingCheckCategoriesSpec t1categoriesSpec = new TableProfilingCheckCategoriesSpec();
-        TableProfilingStandardChecksSpec t1standardChecksSpec = new TableProfilingStandardChecksSpec();
+        TableVolumeProfilingChecksSpec t1volumeChecksSpec = new TableVolumeProfilingChecksSpec();
         TableRowCountCheckSpec t1rowCountSpec = new TableRowCountCheckSpec();
         MinCountRule0ParametersSpec t1rowCountErrorSpec = new MinCountRule0ParametersSpec();
         MinCountRuleFatalParametersSpec t1rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
@@ -145,12 +147,12 @@ public class CheckServiceImplTests extends BaseTest {
         t1rowCountFatalSpec.setMinCount(20L);
         t1rowCountSpec.setError(t1rowCountErrorSpec);
         t1rowCountSpec.setFatal(t1rowCountFatalSpec);
-        t1standardChecksSpec.setRowCount(t1rowCountSpec);
-        t1categoriesSpec.setStandard(t1standardChecksSpec);
+        t1volumeChecksSpec.setRowCount(t1rowCountSpec);
+        t1categoriesSpec.setVolume(t1volumeChecksSpec);
         table1.getSpec().setProfilingChecks(t1categoriesSpec);
 
         TableProfilingCheckCategoriesSpec t2categoriesSpec = new TableProfilingCheckCategoriesSpec();
-        TableProfilingStandardChecksSpec t2standardChecksSpec = new TableProfilingStandardChecksSpec();
+        TableVolumeProfilingChecksSpec t2volumeChecksSpec = new TableVolumeProfilingChecksSpec();
         TableRowCountCheckSpec t2rowCountSpec = new TableRowCountCheckSpec();
         MinCountRule0ParametersSpec t2rowCountErrorSpec = new MinCountRule0ParametersSpec();
         MinCountRuleFatalParametersSpec t2rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
@@ -158,12 +160,12 @@ public class CheckServiceImplTests extends BaseTest {
         t2rowCountFatalSpec.setMinCount(10L);
         t2rowCountSpec.setError(t2rowCountErrorSpec);
         t2rowCountSpec.setFatal(t2rowCountFatalSpec);
-        t2standardChecksSpec.setRowCount(t2rowCountSpec);
-        t2categoriesSpec.setStandard(t2standardChecksSpec);
+        t2volumeChecksSpec.setRowCount(t2rowCountSpec);
+        t2categoriesSpec.setVolume(t2volumeChecksSpec);
         table2.getSpec().setProfilingChecks(t2categoriesSpec);
 
         ColumnProfilingCheckCategoriesSpec col21categoriesSpec = new ColumnProfilingCheckCategoriesSpec();
-        ColumnProfilingStringsChecksSpec col21stringChecksSpec = new ColumnProfilingStringsChecksSpec();
+        ColumnStringsProfilingChecksSpec col21stringChecksSpec = new ColumnStringsProfilingChecksSpec();
         ColumnStringLengthAboveMaxLengthCountCheckSpec col21stringLengthAboveCheckSpec = new ColumnStringLengthAboveMaxLengthCountCheckSpec();
         MaxCountRule10ParametersSpec countRule0ParametersSpec = new MaxCountRule10ParametersSpec();
         countRule0ParametersSpec.setMaxCount(40L);
@@ -179,7 +181,7 @@ public class CheckServiceImplTests extends BaseTest {
         col23.setRecurringChecks(col23recurringSpec);
         ColumnDailyRecurringCheckCategoriesSpec col23categoriesSpec = new ColumnDailyRecurringCheckCategoriesSpec();
         col23recurringSpec.setDaily(col23categoriesSpec);
-        ColumnNumericDailyRecurringSpec col23numericChecksSpec = new ColumnNumericDailyRecurringSpec();
+        ColumnNumericDailyRecurringChecksSpec col23numericChecksSpec = new ColumnNumericDailyRecurringChecksSpec();
         col23categoriesSpec.setNumeric(col23numericChecksSpec);
         ColumnNegativeCountCheckSpec columnNegativeCountCheckSpec = new ColumnNegativeCountCheckSpec();
         col23numericChecksSpec.setDailyNegativeCount(columnNegativeCountCheckSpec);
@@ -276,7 +278,7 @@ public class CheckServiceImplTests extends BaseTest {
         TableRowCountCheckSpec tableRowCountCheckSpec = userHome
                 .getConnections().getByObjectName("conn", true)
                 .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
-                .getProfilingChecks().getStandard().getRowCount();
+                .getProfilingChecks().getVolume().getRowCount();
 
         Assertions.assertNull(tableRowCountCheckSpec.getWarning());
         Assertions.assertNotNull(tableRowCountCheckSpec.getError());
@@ -306,7 +308,7 @@ public class CheckServiceImplTests extends BaseTest {
         tableRowCountCheckSpec = userHome
                 .getConnections().getByObjectName("conn", true)
                 .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
-                .getProfilingChecks().getStandard().getRowCount();
+                .getProfilingChecks().getVolume().getRowCount();
         Assertions.assertNull(tableRowCountCheckSpec.getWarning());
         Assertions.assertNotNull(tableRowCountCheckSpec.getError());
         Assertions.assertNotNull(tableRowCountCheckSpec.getFatal());
@@ -329,7 +331,7 @@ public class CheckServiceImplTests extends BaseTest {
         TableRowCountCheckSpec tableRowCountCheckSpec = userHome
                 .getConnections().getByObjectName("conn", true)
                 .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
-                .getProfilingChecks().getStandard().getRowCount();
+                .getProfilingChecks().getVolume().getRowCount();
 
         Assertions.assertNull(tableRowCountCheckSpec.getWarning());
         Assertions.assertNotNull(tableRowCountCheckSpec.getError());
@@ -362,7 +364,7 @@ public class CheckServiceImplTests extends BaseTest {
         tableRowCountCheckSpec = userHome
                 .getConnections().getByObjectName("conn", true)
                 .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
-                .getProfilingChecks().getStandard().getRowCount();
+                .getProfilingChecks().getVolume().getRowCount();
         Assertions.assertNull(tableRowCountCheckSpec.getWarning());
         Assertions.assertNotNull(tableRowCountCheckSpec.getError());
         Assertions.assertNotNull(tableRowCountCheckSpec.getFatal());

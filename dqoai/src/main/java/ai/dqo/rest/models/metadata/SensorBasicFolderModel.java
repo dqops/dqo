@@ -22,10 +22,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Sensor basic folder model that is returned by the REST API.
@@ -55,8 +52,12 @@ public class SensorBasicFolderModel {
     /**
      * Adds a sensor to this folder based on the given path.
      * @param fullSensorName the path of the sensor
+     * @param providerSensorBasicModelList  List of provider specific sensor definitions.
+     * @param sensorDefinitionSource Sensor source (custom or built-in).
      */
-    public void addSensor(String fullSensorName, List<ProviderSensorBasicModel> providerSensorBasicModelList, boolean isCustom) {
+    public void addSensor(String fullSensorName,
+                          List<ProviderSensorBasicModel> providerSensorBasicModelList,
+                          SensorDefinitionSource sensorDefinitionSource) {
 
         String[] sensorFolders = fullSensorName.split("/");
         String sensorName = sensorFolders[sensorFolders.length - 1];
@@ -65,19 +66,19 @@ public class SensorBasicFolderModel {
 
         for (int i = 0; i < sensorFolders.length - 1; i++) {
             String name = sensorFolders[i];
-            SensorBasicFolderModel nextRuleFolder = folderModel.folders.get(name);
-            if (nextRuleFolder == null) {
-                nextRuleFolder = new SensorBasicFolderModel();
-                folderModel.folders.put(name, nextRuleFolder);
+            SensorBasicFolderModel nextSensorFolder = folderModel.folders.get(name);
+            if (nextSensorFolder == null) {
+                nextSensorFolder = new SensorBasicFolderModel();
+                folderModel.folders.put(name, nextSensorFolder);
             }
-            folderModel = nextRuleFolder;
+            folderModel = nextSensorFolder;
         }
 
         boolean sensorExists = false;
         if (folderModel.sensors != null) {
             for (SensorBasicModel sensor : folderModel.sensors) {
-                if (sensor.getSensorName().equals(sensorName)) {
-                    sensor.setCustom(isCustom);
+                if (Objects.equals(sensor.getSensorName(), sensorName)) {
+                    sensor.setSensorSource(sensorDefinitionSource);
                     sensor.addProviderSensorBasicModel(providerSensorBasicModelList);
                     sensorExists = true;
                     break;
@@ -86,13 +87,27 @@ public class SensorBasicFolderModel {
         } else {
             folderModel.sensors = new ArrayList<>();
         }
+
         if (!sensorExists) {
             SensorBasicModel sensorBasicModel = new SensorBasicModel();
             sensorBasicModel.setSensorName(sensorName);
             sensorBasicModel.setFullSensorName(fullSensorName);
-            sensorBasicModel.setCustom(isCustom);
+            sensorBasicModel.setSensorSource(sensorDefinitionSource);
             sensorBasicModel.setProviderSensorBasicModels(providerSensorBasicModelList);
             folderModel.sensors.add(sensorBasicModel);
         }
+    }
+
+    /**
+     * Collects all sensors from all tree levels.
+     * @return A list of all sensors.
+     */
+    public List<SensorBasicModel> getAllSensors() {
+        List<SensorBasicModel> allSensors = new ArrayList<>(this.getSensors());
+        for (SensorBasicFolderModel folder : this.folders.values()) {
+            allSensors.addAll(folder.getAllSensors());
+        }
+
+        return allSensors;
     }
 }

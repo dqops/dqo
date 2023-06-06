@@ -12,15 +12,15 @@ policies that restrict this communication. In case of restrictions you need to a
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://dqo.ai/docs/images/working-with-dqo/adding-connections/adding-connection.jpg)
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.jpg)
 
 2. Select Snowflake database type.
 
-     ![Selecting Snowflake database type](https://dqo.ai/docs/images/working-with-dqo/adding-connections/adding-connection-snowflake.jpg)
+     ![Selecting Snowflake database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-snowflake.jpg)
 
 3. Add connection settings.
 
-    ![Adding connection settings](https://dqo.ai/docs/images/working-with-dqo/adding-connections/connection-settings-snowflake.jpg)
+    ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-snowflake.jpg)
 
     | Snowflake connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                              | 
     |-------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -37,13 +37,13 @@ policies that restrict this communication. In case of restrictions you need to a
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
 
     For example:
-    ![Adding connection settings - environmnetal variables](https://dqo.ai/docs/images/working-with-dqo/adding-connections/connection-settings-snowflake-envvar.jpg)
+    ![Adding connection settings - environmnetal variables](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-snowflake-envvar.jpg)
 
     To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value 
     can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.   
     
     For example:
-    ![Adding connection JDBC settings](https://dqo.ai/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties.jpg)
+    ![Adding connection JDBC settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-JDBC-properties.jpg)
 
     To remove the property click on the trash icon add the end of the input field. 
 
@@ -53,17 +53,17 @@ policies that restrict this communication. In case of restrictions you need to a
 6. Import the selected data resources (source schemas and tables) by clicking on the **Import Tables** button next to
    the name of the source schema from which you want to import tables.
 
-    ![Adding connection](https://dqo.ai/docs/images/working-with-dqo/adding-connections/importing-schemas.jpg)
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-schemas.jpg)
 
 7. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-    ![Adding connection](https://dqo.ai/docs/images/working-with-dqo/adding-connections/importing-tables.jpg)
+    ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.jpg)
 
 ## Adding Snowflake connection using DQO Shell
 
 To add a connection run the following command in DQO Shell.
 ```
-dqo.ai> connection add
+dqo> connection add
 ```
 
 Fill in the data you will be asked for.
@@ -90,7 +90,7 @@ Run 'table import -c=connection1' to import tables.
 You can also run the command with parameters to add a connection in just a single step.
 
 ```
-dqo.ai> connection add --name=connection1 
+dqo> connection add --name=connection1 
 --provider=snowflake 
 --snowflake-account=xx-kh8138 
 --snowflake-warehouse=COMPUTE_WH
@@ -106,7 +106,7 @@ DQO will ask you to select the schema from which the tables will be imported.
 You can also add the schema and table name as a parameter to import tables in just a single step.
 
 ```
-dqo.ai> table import --connection={connection name} 
+dqo> table import --connection={connection name} 
 --schema={schema name}
 --table={table name}
 ```

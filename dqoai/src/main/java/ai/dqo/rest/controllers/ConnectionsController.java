@@ -20,7 +20,7 @@ import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
-import ai.dqo.metadata.incidents.IncidentGroupingSpec;
+import ai.dqo.metadata.incidents.ConnectionIncidentGroupingSpec;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
@@ -290,14 +290,14 @@ public class ConnectionsController {
      */
     @GetMapping("/{connectionName}/incidentgrouping")
     @ApiOperation(value = "getConnectionIncidentGrouping", notes = "Retrieves the configuration of data quality incident grouping and incident notifications",
-            response = IncidentGroupingSpec.class)
+            response = ConnectionIncidentGroupingSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Connection's incident grouping configuration returned", response = IncidentGroupingSpec.class),
+            @ApiResponse(code = 200, message = "Connection's incident grouping configuration returned", response = ConnectionIncidentGroupingSpec.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<IncidentGroupingSpec>> getConnectionIncidentGrouping(
+    public ResponseEntity<Mono<ConnectionIncidentGroupingSpec>> getConnectionIncidentGrouping(
             @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
@@ -309,7 +309,7 @@ public class ConnectionsController {
         }
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
 
-        IncidentGroupingSpec incidentGrouping = connectionSpec.getIncidentGrouping();
+        ConnectionIncidentGroupingSpec incidentGrouping = connectionSpec.getIncidentGrouping();
 
         return new ResponseEntity<>(Mono.justOrEmpty(incidentGrouping), HttpStatus.OK); // 200
     }
@@ -715,7 +715,7 @@ public class ConnectionsController {
     })
     public ResponseEntity<Mono<?>> updateConnectionIncidentGrouping(
             @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Incident grouping and notification configuration") @RequestBody Optional<IncidentGroupingSpec> incidentGroupingSpec) {
+            @ApiParam("Incident grouping and notification configuration") @RequestBody Optional<ConnectionIncidentGroupingSpec> incidentGroupingSpec) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 

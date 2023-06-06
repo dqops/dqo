@@ -1,20 +1,25 @@
 import React, { useEffect, useMemo } from 'react';
 
-import Header from "../Header";
-import IncidentsTree from "./IncidentsTree";
-import { useDispatch, useSelector } from "react-redux";
-import { IRootState } from "../../redux/reducers";
-import PageTabs from "../PageTabs";
-import { useHistory } from "react-router-dom";
-import { closeFirstLevelTab, setActiveFirstLevelTab } from '../../redux/actions/incidents.actions';
+import Header from '../Header';
+import IncidentsTree from './IncidentsTree';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
+import PageTabs from '../PageTabs';
+import { useHistory } from 'react-router-dom';
+import {
+  closeFirstLevelTab,
+  setActiveFirstLevelTab
+} from '../../redux/actions/incidents.actions';
 
 interface LayoutProps {
   children?: any;
 }
 
 const IncidentsLayout = ({ children }: LayoutProps) => {
-  const { tabs: pageTabs, activeTab } = useSelector((state: IRootState) => state.incidents);
-  const dispatch= useDispatch();
+  const { tabs: pageTabs, activeTab } = useSelector(
+    (state: IRootState) => state.incidents
+  );
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const handleChange = (value: string) => {
@@ -23,21 +28,23 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
   };
 
   const closeTab = (value: string) => {
-    dispatch(closeFirstLevelTab(value))
+    dispatch(closeFirstLevelTab(value));
   };
 
   const tabOptions = useMemo(() => {
-    return pageTabs?.map((item) => ({
-      value: item.url,
-      label: item.label
-    })) || [];
+    return (
+      pageTabs?.map((item) => ({
+        value: item.url,
+        label: item.label
+      })) || []
+    );
   }, [pageTabs]);
 
   useEffect(() => {
     if (activeTab) {
       history.push(activeTab);
     }
-  }, [activeTab])
+  }, [activeTab]);
 
   return (
     <div className="flex min-h-screen overflow-hidden">
@@ -61,13 +68,9 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
             />
             <div
               className="flex-1 bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
-              style={{ maxHeight: "calc(100vh - 80px)" }}
+              style={{ maxHeight: 'calc(100vh - 80px)' }}
             >
-              {!!activeTab && (
-                <div>
-                  {children}
-                </div>
-              )}
+              {!!activeTab && <div>{children}</div>}
             </div>
           </div>
         </div>

@@ -43,10 +43,13 @@ public class ErrorsTableFactoryImpl implements ErrorsTableFactory {
     @Override
     public Table createEmptyErrorsTable(String tableName) {
         Table table = this.sensorReadoutsTableFactory.createEmptySensorReadoutsTable(tableName);
-        table.addColumns(TextColumn.create(ErrorsColumnNames.READOUT_ID_COLUMN_NAME));
-        table.addColumns(TextColumn.create(ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME));
-        table.addColumns(TextColumn.create(ErrorsColumnNames.ERROR_SOURCE_COLUMN_NAME));
-        table.addColumns(DateTimeColumn.create(ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME));
+        table.addColumns(
+                TextColumn.create(ErrorsColumnNames.READOUT_ID_COLUMN_NAME),
+                TextColumn.create(ErrorsColumnNames.ERROR_MESSAGE_COLUMN_NAME),
+                TextColumn.create(ErrorsColumnNames.ERROR_SOURCE_COLUMN_NAME),
+                DateTimeColumn.create(ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME)
+        );
+
         return table;
     }
 }

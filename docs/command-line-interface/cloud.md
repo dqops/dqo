@@ -17,7 +17,7 @@ $ dqo [dqo options...] cloud login [-h] [-fw] [-hl] [-of=<outputFormat>]
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> cloud login [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo> cloud login [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
@@ -51,7 +51,7 @@ $ dqo [dqo options...] cloud sync data [-hr] [-fw] [-hl] [-d=<direction>] [-m=<m
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> cloud sync data [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+dqo> cloud sync data [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                  [-of=<outputFormat>]
 
 ```
@@ -89,7 +89,7 @@ $ dqo [dqo options...] cloud sync sources [-h] [-fw] [-hl] [-d=<direction>] [-m=
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> cloud sync sources [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+dqo> cloud sync sources [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                     [-of=<outputFormat>]
 
 ```
@@ -126,7 +126,7 @@ $ dqo [dqo options...] cloud sync sensors [-h] [-fw] [-hl] [-d=<direction>] [-m=
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> cloud sync sensors [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+dqo> cloud sync sensors [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                     [-of=<outputFormat>]
 
 ```
@@ -163,7 +163,7 @@ $ dqo [dqo options...] cloud sync rules [-h] [-fw] [-hl] [-d=<direction>] [-m=<m
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> cloud sync rules [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+dqo> cloud sync rules [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                   [-of=<outputFormat>]
 
 ```
@@ -200,7 +200,7 @@ $ dqo [dqo options...] cloud sync checks [-h] [-fw] [-hl] [-d=<direction>] [-m=<
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> cloud sync checks [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+dqo> cloud sync checks [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                    [-of=<outputFormat>]
 
 ```
@@ -237,7 +237,7 @@ $ dqo [dqo options...] cloud sync all [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mo
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> cloud sync all [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+dqo> cloud sync all [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                 [-of=<outputFormat>]
 
 ```

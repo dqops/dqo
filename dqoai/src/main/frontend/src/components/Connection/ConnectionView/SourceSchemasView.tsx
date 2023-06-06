@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SourceSchemasApi } from '../../../services/apiClient';
+import { DataSourcesApi } from '../../../services/apiClient';
 import {
   DqoJobHistoryEntryModelStatusEnum,
   SchemaRemoteModel
@@ -31,11 +31,11 @@ const SourceSchemasView = () => {
   ]);
 
   const [selectedSchema, setSelectedSchema] = useState<SchemaRemoteModel>();
-  const { jobs } = useSelector((state: IRootState) => state.job);
+  const { jobs } = useSelector((state: IRootState) => state.job || {});
 
   useEffect(() => {
     setLoading(true);
-    SourceSchemasApi.getRemoteSchemas(connection)
+    DataSourcesApi.getRemoteDataSourceSchemas(connection)
       .then((res) => {
         setSchemas(res.data);
       })

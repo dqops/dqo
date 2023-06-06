@@ -341,62 +341,6 @@ public class DataStreamMappingSpec extends AbstractSpec {
     }
 
     /**
-     * Merges the configuration of this data streams mapping with default mappings retrieved from the base level (connection).
-     * When the default data stream mapping is empty then returns self, otherwise returns a deep clone that returns level mappings
-     * from the default data stream mapping for all levels that are not configured in the current data stream mapping (self).
-     * @param defaultDataStreamMapping Default data stream mapping with default levels.
-     * @return Effective data stream mapping combined with default levels from the default data stream mapping.
-     */
-    public DataStreamMappingSpec getEffectiveDataStreamMapping(DataStreamMappingSpec defaultDataStreamMapping) {
-        if (defaultDataStreamMapping == null) {
-            return this;
-        }
-
-        if (defaultDataStreamMapping.isDefault()) {
-            return this; // no data stream levels configured in the defaults
-        }
-
-        DataStreamMappingSpec effectiveDataStreamMappings = this.deepClone();
-        if (this.getLevel1() == null && defaultDataStreamMapping.getLevel1() != null) {
-            effectiveDataStreamMappings.setLevel1(defaultDataStreamMapping.getLevel1().deepClone());
-        }
-
-        if (this.getLevel2() == null && defaultDataStreamMapping.getLevel2() != null) {
-            effectiveDataStreamMappings.setLevel2(defaultDataStreamMapping.getLevel2().deepClone());
-        }
-
-        if (this.getLevel3() == null && defaultDataStreamMapping.getLevel3() != null) {
-            effectiveDataStreamMappings.setLevel3(defaultDataStreamMapping.getLevel3().deepClone());
-        }
-
-        if (this.getLevel4() == null && defaultDataStreamMapping.getLevel4() != null) {
-            effectiveDataStreamMappings.setLevel4(defaultDataStreamMapping.getLevel4().deepClone());
-        }
-
-        if (this.getLevel5() == null && defaultDataStreamMapping.getLevel5() != null) {
-            effectiveDataStreamMappings.setLevel5(defaultDataStreamMapping.getLevel5().deepClone());
-        }
-
-        if (this.getLevel6() == null && defaultDataStreamMapping.getLevel6() != null) {
-            effectiveDataStreamMappings.setLevel6(defaultDataStreamMapping.getLevel6().deepClone());
-        }
-
-        if (this.getLevel7() == null && defaultDataStreamMapping.getLevel7() != null) {
-            effectiveDataStreamMappings.setLevel7(defaultDataStreamMapping.getLevel7().deepClone());
-        }
-
-        if (this.getLevel8() == null && defaultDataStreamMapping.getLevel8() != null) {
-            effectiveDataStreamMappings.setLevel8(defaultDataStreamMapping.getLevel8().deepClone());
-        }
-
-        if (this.getLevel9() == null && defaultDataStreamMapping.getLevel9() != null) {
-            effectiveDataStreamMappings.setLevel9(defaultDataStreamMapping.getLevel9().deepClone());
-        }
-
-        return effectiveDataStreamMappings;
-    }
-
-    /**
      * Finds the index of the last configured data stream level.
      * @return 0 - no data stream levels are configured, 1 - only level_1 is configured, 2 - level_2 is configured (and maybe also level_1), ...
      */
@@ -469,5 +413,51 @@ public class DataStreamMappingSpec extends AbstractSpec {
         }
 
         throw new IllegalArgumentException("Data stream level out of range, must be 1..9, but was: " + levelIndex);
+    }
+
+    /**
+     * Creates a truncated data stream mapping to be used by the Jinja2 renderer. Contains only data stream level configuration that are valid and reference columns.
+     * @return Cloned data stream mapping with only valid entries.
+     */
+    public DataStreamMappingSpec truncateToColumns() {
+        DataStreamMappingSpec truncated = new DataStreamMappingSpec();
+
+        if (this.level1 != null) {
+            truncated.setLevel1(this.level1.truncateForSqlRendering());
+        }
+
+        if (this.level2 != null) {
+            truncated.setLevel2(this.level2.truncateForSqlRendering());
+        }
+
+        if (this.level3 != null) {
+            truncated.setLevel3(this.level3.truncateForSqlRendering());
+        }
+
+        if (this.level4 != null) {
+            truncated.setLevel4(this.level4.truncateForSqlRendering());
+        }
+
+        if (this.level5 != null) {
+            truncated.setLevel5(this.level5.truncateForSqlRendering());
+        }
+
+        if (this.level6 != null) {
+            truncated.setLevel6(this.level6.truncateForSqlRendering());
+        }
+
+        if (this.level7!= null) {
+            truncated.setLevel7(this.level7.truncateForSqlRendering());
+        }
+
+        if (this.level8 != null) {
+            truncated.setLevel8(this.level8.truncateForSqlRendering());
+        }
+
+        if (this.level9 != null) {
+            truncated.setLevel9(this.level9.truncateForSqlRendering());
+        }
+
+        return truncated;
     }
 }

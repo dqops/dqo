@@ -27,9 +27,11 @@ const JdbcPropertiesView = ({ properties, onChange }: IJdbcPropertiesViewProps) 
     <div className="py-4">
       <table className="my-3 w-full">
         <thead>
-          <th className="text-left min-w-40 pr-4 py-2">JDBC connection property</th>
-          <th className="text-left min-w-40 pr-4 py-2">Value</th>
-          <th className="px-8 min-w-40 py-2">Action</th>
+          <tr>
+            <th className="text-left min-w-40 pr-4 py-2">JDBC connection property</th>
+            <th className="text-left min-w-40 pr-4 py-2">Value</th>
+            <th className="px-8 min-w-40 py-2">Action</th>
+          </tr>
         </thead>
         <tbody>
           {entries.map(([key, value], index) => (

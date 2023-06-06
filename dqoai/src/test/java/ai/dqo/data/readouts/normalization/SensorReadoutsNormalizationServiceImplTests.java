@@ -17,8 +17,8 @@ package ai.dqo.data.readouts.normalization;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
+import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
+import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.data.normalization.CommonTableNormalizationServiceImpl;
@@ -72,8 +72,8 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab1"));
 		tableSpec = tableWrapper.getSpec();
 		checkSpec = new TableRowCountCheckSpec();
-        tableSpec.getProfilingChecks().setStandard(new TableProfilingStandardChecksSpec());
-		tableSpec.getProfilingChecks().getStandard().setRowCount(checkSpec);
+        tableSpec.getProfilingChecks().setVolume(new TableVolumeProfilingChecksSpec());
+		tableSpec.getProfilingChecks().getVolume().setRowCount(checkSpec);
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
                 null,
@@ -218,8 +218,8 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertEquals(expectedTimePeriod, results.getTimePeriodColumn().get(0));
         Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
         Assertions.assertEquals("all data", results.getDataStreamNameColumn().get(0));
-        Assertions.assertEquals("05fc3e30-ca9d-957f-7741-4bd9eede5d4e", results.getTimeSeriesIdColumn().get(0));
-        Assertions.assertEquals("72102c0a-ddf4-05f1-ff52-a61c0648323f", results.getIdColumn().get(0));
+        Assertions.assertEquals("5e66efdc-b585-6460-7741-4bd9eede5d4e", results.getTimeSeriesIdColumn().get(0));
+        Assertions.assertEquals("298afde6-a2ec-f4ee-ff52-a61c0648323f", results.getIdColumn().get(0));
     }
 
     @Test
@@ -244,7 +244,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
     void analyzeAndPrepareResults_whenActualValueAndTimePeriodGradientDayAndDimension1_thenCreatesDatasetWithTimePeriodTodayAndDataStreamHashNot0() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.5));
 		this.table.addColumns(DateTimeColumn.create("time_period", LocalDateTime.now(this.utcZone).minus(Period.ofDays(2)).truncatedTo(ChronoUnit.DAYS)));
-		this.table.addColumns(StringColumn.create("stream_level_1", "US"));
+		this.table.addColumns(TextColumn.create("stream_level_1", "US"));
         SensorReadoutsNormalizedResult results = this.sut.normalizeResults(this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
         Assertions.assertNotNull(results.getTable());
         Assertions.assertEquals(1, results.getTable().rowCount());
@@ -263,7 +263,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
     void analyzeAndPrepareResults_whenActualValueAndTimePeriodGradientDayAndDimension2_thenCreatesDatasetWithTimePeriodTodayAndDataStreamHashNot0() {
 		this.table.addColumns(DoubleColumn.create("actual_value", 12.5));
 		this.table.addColumns(DateTimeColumn.create("time_period", LocalDateTime.now(this.utcZone).minus(Period.ofDays(2)).truncatedTo(ChronoUnit.DAYS)));
-		this.table.addColumns(StringColumn.create("stream_level_2", "US"));
+		this.table.addColumns(TextColumn.create("stream_level_2", "US"));
         SensorReadoutsNormalizedResult results = this.sut.normalizeResults(this.sensorExecutionResult, TimePeriodGradient.day, this.sensorExecutionRunParameters);
         Assertions.assertNotNull(results.getTable());
         Assertions.assertEquals(1, results.getTable().rowCount());

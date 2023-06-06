@@ -19,6 +19,7 @@ import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.SilentCheckExecutionProgressListener;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -31,7 +32,7 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "RunChecksQueueJobParameters", description = "Run checks configuration, specifies the target checks that should be executed and an optional time window.")
 @EqualsAndHashCode(callSuper = false)
-public class RunChecksQueueJobParameters {
+public class RunChecksQueueJobParameters implements Cloneable {
     /**
      * Target data quality checks filter.
      */
@@ -61,7 +62,7 @@ public class RunChecksQueueJobParameters {
      * The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
      */
     @JsonPropertyDescription("The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.")
-    private volatile RunChecksQueueJobResult runChecksResult;
+    private RunChecksQueueJobResult runChecksResult;
 
     /**
      * Default constructor.
@@ -164,5 +165,18 @@ public class RunChecksQueueJobParameters {
      */
     public void setRunChecksResult(RunChecksQueueJobResult runChecksResult) {
         this.runChecksResult = runChecksResult;
+    }
+
+    /**
+     * Creates and returns a copy of this object.
+     */
+    @Override
+    public RunChecksQueueJobParameters clone() {
+        try {
+            return (RunChecksQueueJobParameters)super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new DqoRuntimeException("Clone not supported", ex);
+        }
     }
 }

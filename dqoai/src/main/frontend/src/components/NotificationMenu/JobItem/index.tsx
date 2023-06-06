@@ -14,22 +14,31 @@ import JobChild from '../JobChild';
 import { useSelector } from 'react-redux';
 import { useError, IError } from '../../../contexts/errrorContext';
 import { IRootState } from '../../../redux/reducers';
+import { reduceCounter } from '../../../redux/actions/job.actions';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { JobApiClient } from '../../../services/apiClient';
 
 const JobItem = ({
   job,
-  counter
+  notifnumber
 }: {
   job: DqoJobHistoryEntryModel;
-  counter?: number;
+  notifnumber?: number;
 }) => {
-  const { jobs } = useSelector((state: IRootState) => state.job);
+  const { jobs } = useSelector((state: IRootState) => state.job || {});
   const { errors } = useError();
+  const dispatch = useActionDispatch();
 
   const getNotificationDate = (notification: any) => {
     if (notification.type === 'job') {
       return notification.item.jobId?.createdAt;
     }
     return notification.item.date;
+  };
+
+  const [sizeOfNot, setSizeOfNot] = useState<number | undefined>(notifnumber);
+  const reduceCount = () => {
+    dispatch(reduceCounter(true, sizeOfNot));
   };
 
   const data = useMemo(() => {
@@ -68,6 +77,10 @@ const JobItem = ({
     return value;
   };
 
+  const cancelJob = async (jobId: number) => {
+    await JobApiClient.cancelJob(jobId);
+  };
+
   const renderStatus = () => {
     if (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
       return <SvgIcon name="success" className="w-4 h-4 text-primary" />;
@@ -84,23 +97,38 @@ const JobItem = ({
     if (job.status === DqoJobHistoryEntryModelStatusEnum.running) {
       return <SvgIcon name="running" className="w-4 h-4 text-orange-700" />;
     }
+    if (job.status === DqoJobHistoryEntryModelStatusEnum.cancelled) {
+      return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
+    }
   };
 
   return (
     <Accordion open={open}>
       {job.jobId?.parentJobId?.jobId === undefined ? (
-        <AccordionHeader className="!outline-none" onClick={() => setOpen(!open)}>
+        <AccordionHeader
+          className="!outline-none"
+          onClick={() => setOpen(!open)}
+        >
           <div className="flex justify-between items-center text-sm w-full text-gray-700">
             <div className="flex space-x-1 items-center">
-              <div>
-                {job.jobType}
-                {counter}
-                {/* {job.jobId?.jobId} */}
-              </div>
+              <div>{job.jobType}</div>
               {renderStatus()}
             </div>
-            <div>
-              {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+            <div className="flex items-center gap-x-2">
+              {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
+                <div
+                  onClick={() =>
+                    cancelJob(job.jobId?.jobId ? Number(job.jobId?.jobId) : 0)
+                  }
+                >
+                  <SvgIcon name="canceljobs" />
+                </div>
+              ) : (
+                <div></div>
+              )}
+              <div>
+                {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+              </div>
             </div>
           </div>
         </AccordionHeader>
@@ -121,14 +149,6 @@ const JobItem = ({
               </td>
             </tr>
 
-            {job?.errorMessage && (
-              <>
-                <tr>
-                  <td className="px-2 capitalize">Error Message</td>
-                  <td className="px-2 max-w-76">{job?.errorMessage}</td>
-                </tr>
-              </>
-            )}
             {job?.parameters?.runChecksParameters?.checkSearchFilters &&
               Object.entries(
                 job?.parameters?.runChecksParameters?.checkSearchFilters
@@ -215,10 +235,25 @@ const JobItem = ({
                 </tr>
               </>
             )}
+            {job?.errorMessage && (
+              <>
+                <tr className="flex flex-col w-108">
+                  <td className="capitalize">Error Message:</td>
+                  <td className="px-2 ">{job?.errorMessage}</td>
+                </tr>
+              </>
+            )}
             {job.jobId?.parentJobId?.jobId === undefined ? (
               <Accordion open={open2} className="min-w-100">
-                <AccordionHeader onClick={() => setOpen2(!open2)}>
-                  <div className=" flex justify-between items-center text-sm w-full text-gray-700">
+                <AccordionHeader
+                  onClick={() => {
+                    setOpen2(!open2), reduceCount();
+                  }}
+                >
+                  <div
+                    className=" flex justify-between items-center text-sm w-full text-gray-700"
+                    onClick={() => setSizeOfNot(sizeOfNot && sizeOfNot - 6)}
+                  >
                     Tasks{' '}
                   </div>
                 </AccordionHeader>

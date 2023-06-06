@@ -19,6 +19,8 @@ import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import ai.dqo.data.errors.models.ErrorsFragmentFilter;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactory;
+import ai.dqo.data.models.DataDeleteResult;
+import ai.dqo.data.storage.FileStorageSettings;
 import ai.dqo.data.storage.ParquetPartitionMetadataService;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +45,10 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
     /**
      * Deletes the errors from a table, applying specific filters to get the fragment (if necessary).
      * @param filter Filter for the errors fragment that is of interest.
+     * @return Data delete operation summary.
      */
     @Override
-    public void deleteSelectedErrorsFragment(ErrorsFragmentFilter filter) {
+    public DataDeleteResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
         Map<String, Set<String>> conditions = new HashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
@@ -54,38 +57,60 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
             Set<String> wrappedValue = new HashSet<>(){{add(columnValue);}};
             conditions.put(columnName, wrappedValue);
         }
+
         if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
             conditions.put(ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
         }
 
-        Collection<PhysicalTableName> tablesToDelete;
-        if (filter.getTableSearchFilters().getSchemaTableName() == null) {
-            tablesToDelete = this.parquetPartitionMetadataService.listTablesForConnection(
-                    filter.getTableSearchFilters().getConnectionName(),
-                    ErrorsSnapshot.createErrorsStorageSettings()
-            );
-        } else {
-            tablesToDelete = new LinkedList<>();
-            tablesToDelete.add(PhysicalTableName.fromSchemaTableFilter(filter.getTableSearchFilters().getSchemaTableName()));
+        DataDeleteResult dataDeleteResult = new DataDeleteResult();
+
+        FileStorageSettings fileStorageSettings = ErrorsSnapshot.createErrorsStorageSettings();
+        List<String> connections = this.parquetPartitionMetadataService.listConnections(fileStorageSettings);
+        if (connections == null) {
+            // No connections present.
+            return dataDeleteResult;
         }
 
-        if (tablesToDelete == null) {
-            // No matching tables specified or found.
-            return;
+        List<String> filteredConnections = connections.stream()
+                .filter(filter.getTableSearchFilters().getConnectionNameSearchPattern()::match)
+                .collect(Collectors.toList());
+
+        for (String connectionName: filteredConnections) {
+            List<PhysicalTableName> tables = this.parquetPartitionMetadataService.listTablesForConnection(
+                    connectionName, fileStorageSettings);
+
+            if (tables == null) {
+                // No tables present for this connection.
+                continue;
+            }
+
+            Collection<ErrorsSnapshot> errorsSnapshots = tables.stream()
+                    .filter(schemaTableName ->
+                            filter.getTableSearchFilters().getSchemaNameSearchPattern().match(schemaTableName.getSchemaName())
+                                    && filter.getTableSearchFilters().gettableNameSearchPattern().match(schemaTableName.getTableName()))
+                    .map(tableName -> this.errorsSnapshotFactory.createSnapshot(
+                            filter.getTableSearchFilters().getConnectionName(),
+                            tableName
+                    ))
+                    .collect(Collectors.toList());
+
+            for (ErrorsSnapshot currentSnapshot: errorsSnapshots) {
+                LocalDate startDeletionRange = filter.getDateStart();
+                LocalDate endDeletionRange = filter.getDateEnd();
+
+                currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
+
+                if (currentSnapshot.getLoadedMonthlyPartitions() == null) {
+                    continue;
+                }
+
+                DataDeleteResult snapshotDataDeleteResult = currentSnapshot.getDeleteResults();
+                dataDeleteResult.concat(snapshotDataDeleteResult);
+
+                currentSnapshot.save();
+            }
         }
 
-        Collection<ErrorsSnapshot> errorsSnapshots = tablesToDelete.stream()
-                .map(tableName -> this.errorsSnapshotFactory.createSnapshot(
-                        filter.getTableSearchFilters().getConnectionName(),
-                        tableName
-                )).collect(Collectors.toList());
-
-        for (ErrorsSnapshot currentSnapshot: errorsSnapshots) {
-            LocalDate startDeletionRange = filter.getDateStart();
-            LocalDate endDeletionRange = filter.getDateEnd();
-
-            currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
-            currentSnapshot.save();
-        }
+        return dataDeleteResult;
     }
 }

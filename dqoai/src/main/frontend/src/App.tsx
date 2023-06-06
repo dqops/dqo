@@ -11,17 +11,34 @@ import { useSelector } from 'react-redux';
 import { IRootState } from './redux/reducers';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { LogErrorsApi } from "./services/apiClient";
 
 const App = () => {
   const dispatch = useActionDispatch();
-  const { lastSequenceNumber } = useSelector((state: IRootState) => state.job);
+  const { lastSequenceNumber, loading } = useSelector((state: IRootState) => state.job || {});
 
   useEffect(() => {
     dispatch(getAllJobs());
+
+    window.onunhandledrejection = event => {
+      if (event?.reason?.request?.responseURL?.indexOf("api/logs/error") < 0) {
+        LogErrorsApi.logError({
+          window_location: window.location.href,
+          message: event.reason
+        })
+      }
+    };
+
+    window.onerror = function(message) {
+      LogErrorsApi.logError({
+        window_location: window.location.href,
+        message: message.toString()
+      })
+    };
   }, []);
 
   useEffect(() => {
-    if (!lastSequenceNumber) return;
+    if (!lastSequenceNumber || loading) return;
 
     dispatch(getJobsChanges(lastSequenceNumber));
   }, [lastSequenceNumber]);

@@ -7,7 +7,7 @@ import { JobApiClient } from "../../services/apiClient";
 import clsx from "clsx";
 
 export const SynchronizeButton = () => {
-  const { folderSynchronizationStatus } = useSelector((state: IRootState) => state.job);
+  const { folderSynchronizationStatus } = useSelector((state: IRootState) => state.job || {});
   const [loading, setLoading] = useState(false);
 
   const syncAllFolders = async () => {

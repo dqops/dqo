@@ -58,8 +58,8 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_parsable_to_integer_percent", o -> o.monthlyPartitionStringParsableToIntegerPercent);
             put("monthly_partition_string_parsable_to_float_percent", o -> o.monthlyPartitionStringParsableToFloatPercent);
             
-            put("monthly_partition_string_in_set_count", o -> o.monthlyPartitionStringInSetCount);
-            put("monthly_partition_string_in_set_percent", o -> o.monthlyPartitionStringInSetPercent);
+            put("monthly_partition_expected_strings_in_use_count", o -> o.monthlyPartitionExpectedStringsInUseCount);
+            put("monthly_partition_string_value_in_set_percent", o -> o.monthlyPartitionStringValueInSetPercent);
 
             put("monthly_partition_string_valid_dates_percent", o -> o.monthlyPartitionStringValidDatesPercent);
             put("monthly_partition_string_valid_country_code_percent", o -> o.monthlyPartitionStringValidCountryCodePercent);
@@ -76,7 +76,7 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_match_date_regex_percent", o -> o.monthlyPartitionStringMatchDateRegexPercent);
             put("monthly_partition_string_match_name_regex_percent", o -> o.monthlyPartitionStringMatchNameRegexPercent);
 
-            put("monthly_partition_string_most_popular_values", o -> o.monthlyPartitionStringMostPopularValues);
+            put("monthly_partition_expected_strings_in_top_values_count", o -> o.monthlyPartitionExpectedStringsInTopValuesCount);
 
             put("monthly_partition_string_datatype_detected", o -> o.monthlyPartitionStringDatatypeDetected);
 
@@ -140,11 +140,11 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringParsableToFloatPercentCheckSpec monthlyPartitionStringParsableToFloatPercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings from set in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringInSetCountCheckSpec monthlyPartitionStringInSetCount;
+    @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnExpectedStringsInUseCountCheckSpec monthlyPartitionExpectedStringsInUseCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings from set in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringInSetPercentCheckSpec monthlyPartitionStringInSetPercent;
+    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnStringValueInSetPercentCheckSpec monthlyPartitionStringValueInSetPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringValidDatesPercentCheckSpec monthlyPartitionStringValidDatesPercent;
@@ -185,8 +185,8 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name format regex in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringMatchNameRegexPercentCheckSpec monthlyPartitionStringMatchNameRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not fall below the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringMostPopularValuesCheckSpec monthlyPartitionStringMostPopularValues;
+    @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnExpectedStringsInTopValuesCountCheckSpec monthlyPartitionExpectedStringsInTopValuesCount;
 
     @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringDatatypeDetectedCheckSpec monthlyPartitionStringDatatypeDetected;
@@ -542,36 +542,36 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnStringInSetCountCheckSpec getMonthlyPartitionStringInSetCount() {
-        return monthlyPartitionStringInSetCount;
+    public ColumnExpectedStringsInUseCountCheckSpec getMonthlyPartitionExpectedStringsInUseCount() {
+        return monthlyPartitionExpectedStringsInUseCount;
     }
 
     /**
      * Sets a new definition of a minimum strings in set count check.
-     * @param monthlyPartitionStringInSetCount Minimum strings in set count check.
+     * @param monthlyPartitionExpectedStringsInUseCount Minimum strings in set count check.
      */
-    public void setMonthlyPartitionStringInSetCount(ColumnStringInSetCountCheckSpec monthlyPartitionStringInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringInSetCount, monthlyPartitionStringInSetCount));
-        this.monthlyPartitionStringInSetCount = monthlyPartitionStringInSetCount;
-        propagateHierarchyIdToField(monthlyPartitionStringInSetCount, "monthly_partition_string_in_set_count");
+    public void setMonthlyPartitionExpectedStringsInUseCount(ColumnExpectedStringsInUseCountCheckSpec monthlyPartitionExpectedStringsInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionExpectedStringsInUseCount, monthlyPartitionExpectedStringsInUseCount));
+        this.monthlyPartitionExpectedStringsInUseCount = monthlyPartitionExpectedStringsInUseCount;
+        propagateHierarchyIdToField(monthlyPartitionExpectedStringsInUseCount, "monthly_partition_expected_strings_in_use_count");
     }
 
     /**
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnStringInSetPercentCheckSpec getMonthlyPartitionStringInSetPercent() {
-        return monthlyPartitionStringInSetPercent;
+    public ColumnStringValueInSetPercentCheckSpec getMonthlyPartitionStringValueInSetPercent() {
+        return monthlyPartitionStringValueInSetPercent;
     }
 
     /**
      * Sets a new definition of a minimum strings in set percent check.
-     * @param monthlyPartitionStringInSetPercent Minimum strings in set percent check.
+     * @param monthlyPartitionStringValueInSetPercent Minimum strings in set percent check.
      */
-    public void setMonthlyPartitionStringInSetPercent(ColumnStringInSetPercentCheckSpec monthlyPartitionStringInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringInSetPercent, monthlyPartitionStringInSetPercent));
-        this.monthlyPartitionStringInSetPercent = monthlyPartitionStringInSetPercent;
-        propagateHierarchyIdToField(monthlyPartitionStringInSetPercent, "monthly_partition_string_in_set_percent");
+    public void setMonthlyPartitionStringValueInSetPercent(ColumnStringValueInSetPercentCheckSpec monthlyPartitionStringValueInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValueInSetPercent, monthlyPartitionStringValueInSetPercent));
+        this.monthlyPartitionStringValueInSetPercent = monthlyPartitionStringValueInSetPercent;
+        propagateHierarchyIdToField(monthlyPartitionStringValueInSetPercent, "monthly_partition_string_value_in_set_percent");
     }
 
     /**
@@ -812,18 +812,18 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
      * Returns a count of expected values in most popular values set count check.
      * @return Most popular values count check.
      */
-    public ColumnStringMostPopularValuesCheckSpec getMonthlyPartitionStringMostPopularValues() {
-        return monthlyPartitionStringMostPopularValues;
+    public ColumnExpectedStringsInTopValuesCountCheckSpec getMonthlyPartitionExpectedStringsInTopValuesCount() {
+        return monthlyPartitionExpectedStringsInTopValuesCount;
     }
 
     /**
      * Sets a new definition of a most popular values count check.
-     * @param monthlyPartitionStringMostPopularValues Most popular values count check.
+     * @param monthlyPartitionExpectedStringsInTopValuesCount Most popular values count check.
      */
-    public void setMonthlyPartitionStringMostPopularValues(ColumnStringMostPopularValuesCheckSpec monthlyPartitionStringMostPopularValues) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringMostPopularValues, monthlyPartitionStringMostPopularValues));
-        this.monthlyPartitionStringMostPopularValues = monthlyPartitionStringMostPopularValues;
-        propagateHierarchyIdToField(monthlyPartitionStringMostPopularValues, "monthly_partition_string_most_popular_values");
+    public void setMonthlyPartitionExpectedStringsInTopValuesCount(ColumnExpectedStringsInTopValuesCountCheckSpec monthlyPartitionExpectedStringsInTopValuesCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionExpectedStringsInTopValuesCount, monthlyPartitionExpectedStringsInTopValuesCount));
+        this.monthlyPartitionExpectedStringsInTopValuesCount = monthlyPartitionExpectedStringsInTopValuesCount;
+        propagateHierarchyIdToField(monthlyPartitionExpectedStringsInTopValuesCount, "monthly_partition_expected_strings_in_top_values_count");
     }
 
     /**

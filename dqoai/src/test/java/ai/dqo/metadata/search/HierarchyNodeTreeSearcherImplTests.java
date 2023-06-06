@@ -17,8 +17,8 @@ package ai.dqo.metadata.search;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
+import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
+import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
@@ -212,10 +212,10 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
     void findChecks_whenCalledForAll_thenReturnsNonEmptyArray() {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         checkSearchFilters.setCheckName("*");
-        TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
-        tableSpec.getProfilingChecks().setStandard(standard);
+        TableVolumeProfilingChecksSpec volume = new TableVolumeProfilingChecksSpec();
+        tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
-        standard.setRowCount(check);
+        volume.setRowCount(check);
         table.setSpec(tableSpec);
         ArrayList<TableRowCountCheckSpec> expectedList = new ArrayList<>();
         expectedList.add(check);
@@ -227,10 +227,10 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
     @Test
     void findChecks_whenCalledForNonFilters_thenReturnsAll() {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
-        TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
-        tableSpec.getProfilingChecks().setStandard(standard);
+        TableVolumeProfilingChecksSpec volume = new TableVolumeProfilingChecksSpec();
+        tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
-        standard.setRowCount(check);
+        volume.setRowCount(check);
         table.setSpec(tableSpec);
         ArrayList<TableRowCountCheckSpec> expectedList = new ArrayList<>();
         expectedList.add(check);
@@ -243,10 +243,10 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
     void findChecks_whenCalledForNotExistingName_thenReturnsEmptyArray() {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         checkSearchFilters.setCheckName("test");
-        TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
-        tableSpec.getProfilingChecks().setStandard(standard);
+        TableVolumeProfilingChecksSpec volume = new TableVolumeProfilingChecksSpec();
+        tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
-        standard.setRowCount(check);
+        volume.setRowCount(check);
 		table.setSpec(tableSpec);
 
         ArrayList<AbstractCheckSpec<?,?,?,?>> expectedList = new ArrayList<>();

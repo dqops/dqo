@@ -21,6 +21,7 @@ import ai.dqo.statistics.AbstractRootStatisticsCollectorsContainerSpec;
 import ai.dqo.statistics.StatisticsCollectorTarget;
 import ai.dqo.statistics.column.nulls.ColumnNullsStatisticsCollectorsSpec;
 import ai.dqo.statistics.column.range.ColumnRangeStatisticsCollectorsSpec;
+import ai.dqo.statistics.column.sampling.ColumnSamplingStatisticsCollectorsSpec;
 import ai.dqo.statistics.column.strings.ColumnStringsStatisticsCollectorsSpec;
 import ai.dqo.statistics.column.uniqueness.ColumnUniquenessStatisticsCollectorsSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -46,6 +47,7 @@ public class ColumnStatisticsCollectorsRootCategoriesSpec extends AbstractRootSt
             put("strings", o -> o.strings);
             put("uniqueness", o -> o.uniqueness);
             put("range", o -> o.range);
+            put("sampling", o -> o.sampling);
         }
     };
 
@@ -68,6 +70,11 @@ public class ColumnStatisticsCollectorsRootCategoriesSpec extends AbstractRootSt
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnRangeStatisticsCollectorsSpec range = new ColumnRangeStatisticsCollectorsSpec();
+
+    @JsonPropertyDescription("Configuration of profilers that collect the column samples.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnSamplingStatisticsCollectorsSpec sampling = new ColumnSamplingStatisticsCollectorsSpec();
 
     /**
      * Returns the configuration of null detection profilers.
@@ -139,6 +146,24 @@ public class ColumnStatisticsCollectorsRootCategoriesSpec extends AbstractRootSt
         this.setDirtyIf(!Objects.equals(this.range, range));
         this.range = range;
         this.propagateHierarchyIdToField(range, "range");
+    }
+
+    /**
+     * Returns the reference to a container of column sampling profilers category.
+     * @return The container of data sampling profilers.
+     */
+    public ColumnSamplingStatisticsCollectorsSpec getSampling() {
+        return sampling;
+    }
+
+    /**
+     * Sets a reference to a container of data sampling profiler category.
+     * @param sampling Data sampling profiler category.
+     */
+    public void setSampling(ColumnSamplingStatisticsCollectorsSpec sampling) {
+        this.setDirtyIf(!Objects.equals(this.sampling, sampling));
+        this.sampling = sampling;
+        this.propagateHierarchyIdToField(sampling, "sampling");
     }
 
     /**

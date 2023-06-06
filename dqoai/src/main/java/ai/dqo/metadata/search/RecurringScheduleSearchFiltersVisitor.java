@@ -45,11 +45,11 @@ public class RecurringScheduleSearchFiltersVisitor extends AbstractSearchVisitor
         if (enabledFilter != null) {
             boolean mustBeDisabled = !enabledFilter;
             if (recurringScheduleSpec.isDisabled() != mustBeDisabled) {
-                return TreeNodeTraversalResult.STOP_TRAVERSAL; // no children possible
+                return TreeNodeTraversalResult.SKIP_CHILDREN; // no children possible
             }
         }
 
         parameter.getNodes().add(recurringScheduleSpec);
-        return TreeNodeTraversalResult.STOP_TRAVERSAL; // no children possible
+        return TreeNodeTraversalResult.SKIP_CHILDREN; // no children possible
     }
 }

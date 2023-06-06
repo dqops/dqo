@@ -39,27 +39,55 @@ public class SensorBasicModel {
     @JsonPropertyDescription("Full sensor name")
     private String fullSensorName;
 
-    @JsonPropertyDescription("This sensor has is a built-in sensor.")
+    @JsonPropertyDescription("This sensor has is a custom sensor or was customized by the user.")
     private boolean custom;
+
+    @JsonPropertyDescription("This sensor is provided with DQO as a built-in sensor.")
+    private boolean builtIn;
 
     @JsonPropertyDescription("Provider sensor basic model list")
     private List<ProviderSensorBasicModel> providerSensorBasicModels;
 
-    public SensorBasicModel(){}
+    public SensorBasicModel() {
+    }
 
-    public SensorBasicModel(String sensorName, String fullSensorName, boolean custom, List<ProviderSensorBasicModel> providerSensorBasicModels) {
+    public SensorBasicModel(String sensorName, String fullSensorName, boolean custom, boolean builtIn,
+                            List<ProviderSensorBasicModel> providerSensorBasicModels) {
         this.sensorName = sensorName;
         this.fullSensorName = fullSensorName;
         this.custom = custom;
+        this.builtIn = builtIn;
         this.providerSensorBasicModels = providerSensorBasicModels;
     }
 
+    /**
+     * Sets the custom or builtIn flag to true to match the source of the sensor definition.
+     * @param sensorDefinitionSource Source sensor definition.
+     */
+    public void setSensorSource(SensorDefinitionSource sensorDefinitionSource) {
+        if (sensorDefinitionSource == SensorDefinitionSource.CUSTOM) {
+            this.setCustom(true);
+        }
+        else if (sensorDefinitionSource == SensorDefinitionSource.BUILT_IN) {
+            this.setBuiltIn(true);
+        }
+    }
+
+    /**
+     * Adds a list of provider specific sensor definitions (sensor templates).
+     * @param providerSensorBasicModels List of sensor templates.
+     */
     public void addProviderSensorBasicModel(List<ProviderSensorBasicModel> providerSensorBasicModels) {
         for (ProviderSensorBasicModel newModel : providerSensorBasicModels) {
             boolean modelExists = false;
             for (ProviderSensorBasicModel model : this.providerSensorBasicModels) {
                 if (model.getProviderType() == newModel.getProviderType()) {
-                    model.setCustom(newModel.isCustom());
+                    if (newModel.isCustom()) {
+                        model.setCustom(newModel.isCustom());
+                    }
+                    if (newModel.isBuiltIn()) {
+                        model.setBuiltIn(newModel.isBuiltIn());
+                    }
                     modelExists = true;
                     break;
                 }

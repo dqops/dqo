@@ -20,7 +20,7 @@ const CategoryMenu = ({ onRunChecks, onDeleteChecks }: CategoryMenuProps) => {
   return (
     <Popover placement="bottom-start" open={isOpen} handler={toggleOpen}>
       <PopoverHandler>
-        <IconButton className="!mr-3 !bg-transparent" variant="text" ripple={false}>
+        <IconButton className="!mr-3 !bg-transparent h-6 w-6" variant="text" ripple={false}>
           <div className="relative">
             <SvgIcon name="chevron-down" className="w-5 h-5 text-gray-700" />
           </div>

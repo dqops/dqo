@@ -1,8 +1,13 @@
-import React, { useState } from "react";
-import { IconButton, Popover, PopoverContent, PopoverHandler } from "@material-tailwind/react";
-import SvgIcon from "../SvgIcon";
+import React, { useState } from 'react';
+import {
+  IconButton,
+  Popover,
+  PopoverContent,
+  PopoverHandler
+} from '@material-tailwind/react';
+import SvgIcon from '../SvgIcon';
 import GitHubButton from 'react-github-btn';
-
+import SettingsPopUp from '../SettingsPopUp';
 const HelpMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -13,7 +18,11 @@ const HelpMenu = () => {
   return (
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
       <PopoverHandler>
-        <IconButton className="!mr-3 !bg-transparent" variant="text" ripple={false}>
+        <IconButton
+          className="!mr-3 !bg-transparent"
+          variant="text"
+          ripple={false}
+        >
           <div className="relative">
             <SvgIcon name="help-circle" className="w-5 h-5 text-gray-700" />
           </div>
@@ -22,7 +31,7 @@ const HelpMenu = () => {
       <PopoverContent className="z-50 px-0">
         <div className="px-4">
           <a
-            href="https://dqo.ai/support/"
+            href="https://dqops.com/support/"
             target="_blank"
             rel="noreferrer"
             className="block mb-3 text-gray-700"
@@ -30,7 +39,7 @@ const HelpMenu = () => {
             Get support
           </a>
           <a
-            href="https://docs.dqo.ai/latest"
+            href="https://dqops.com/docs/"
             target="_blank"
             rel="noreferrer"
             className="block mb-3 text-gray-700"
@@ -45,6 +54,7 @@ const HelpMenu = () => {
           >
             Manage cloud account
           </a>
+          <SettingsPopUp />
         </div>
         <div className="px-4 pt-3 border-t border-gray-300">
           <h6 className="mb-3">Promote DQO on GitHub</h6>
