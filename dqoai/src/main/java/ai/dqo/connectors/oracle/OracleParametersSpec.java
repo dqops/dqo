@@ -72,7 +72,7 @@ public class OracleParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Connect to Oracle using SSL. The default value is false.")
     private Boolean ssl;
 
-    @CommandLine.Option(names = {"-P"}, description = "Oracle's additional properties that are added to the JDBC connection string")
+    @CommandLine.Option(names = {"-O"}, description = "Oracle's additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
 

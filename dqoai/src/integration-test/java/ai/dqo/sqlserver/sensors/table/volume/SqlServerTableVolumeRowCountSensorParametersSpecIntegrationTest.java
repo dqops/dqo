@@ -38,7 +38,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class SqlServerTableVolumeRowCountSensorParametersSpecSqlServerIntegrationTest extends BaseSqlServerIntegrationTest {
+public class SqlServerTableVolumeRowCountSensorParametersSpecIntegrationTest extends BaseSqlServerIntegrationTest {
     private TableVolumeRowCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TableRowCountCheckSpec checkSpec;
