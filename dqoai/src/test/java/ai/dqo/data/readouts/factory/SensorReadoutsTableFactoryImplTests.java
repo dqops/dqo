@@ -41,7 +41,7 @@ public class SensorReadoutsTableFactoryImplTests extends BaseTest {
     @Test
     void createEmptySensorReadoutsTable_whenCalled_thenCreatesTableWithSchema() {
         Table table = this.sut.createEmptySensorReadoutsTable("empty");
-        Assertions.assertEquals(43, table.columnCount());
+        Assertions.assertEquals(44, table.columnCount());
 
         int columnIndex = 0;
         Assertions.assertEquals(SensorReadoutsColumnNames.ID_COLUMN_NAME, table.column(columnIndex++).name());
@@ -61,6 +61,7 @@ public class SensorReadoutsTableFactoryImplTests extends BaseTest {
         Assertions.assertEquals(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "9", table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME, table.column(columnIndex++).name());
+        Assertions.assertEquals(SensorReadoutsColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.CONNECTION_NAME_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME, table.column(columnIndex++).name());

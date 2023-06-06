@@ -227,6 +227,12 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         TextColumn dataStreamNameColumn = this.commonNormalizationService.createDataStreamNameColumn(dataStreamLevelColumns, resultRowCount);
         normalizedResults.addColumns(dataStreamNameColumn);
 
+        TextColumn dataStreamMappingNameColumn = TextColumn.create(SensorReadoutsColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME, resultRowCount);
+        if (sensorRunParameters.getDataStreams() != null) {
+            dataStreamMappingNameColumn.setMissingTo(sensorRunParameters.getDataStreams().getDataStreamMappingName());
+        }
+        normalizedResults.addColumns(dataStreamMappingNameColumn);
+
         LongColumn connectionHashColumn = LongColumn.create(StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME, resultRowCount);
         connectionHashColumn.setMissingTo(sensorRunParameters.getConnection().getHierarchyId().hashCode64());
         normalizedResults.addColumns(connectionHashColumn);

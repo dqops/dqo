@@ -59,6 +59,7 @@ public class StatisticsResultsTableFactoryImpl implements StatisticsResultsTable
                 TextColumn.create(StatisticsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "9"),
                 LongColumn.create(StatisticsColumnNames.DATA_STREAM_HASH_COLUMN_NAME),
                 TextColumn.create(StatisticsColumnNames.DATA_STREAM_NAME_COLUMN_NAME),
+                TextColumn.create(StatisticsColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME),
                 LongColumn.create(StatisticsColumnNames.CONNECTION_HASH_COLUMN_NAME),
                 TextColumn.create(StatisticsColumnNames.CONNECTION_NAME_COLUMN_NAME),
                 TextColumn.create(StatisticsColumnNames.PROVIDER_COLUMN_NAME),

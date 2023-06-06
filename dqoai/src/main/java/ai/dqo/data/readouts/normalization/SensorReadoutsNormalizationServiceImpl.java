@@ -110,6 +110,12 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         TextColumn dataStreamNameColumn = this.commonNormalizationService.createDataStreamNameColumn(dataStreamLevelColumns, resultsRowCount);
         normalizedResults.addColumns(dataStreamNameColumn);
 
+        TextColumn dataStreamMappingNameColumn = TextColumn.create(SensorReadoutsColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME, resultsRowCount);
+        if (sensorRunParameters.getDataStreams() != null) {
+            dataStreamMappingNameColumn.setMissingTo(sensorRunParameters.getDataStreams().getDataStreamMappingName());
+        }
+        normalizedResults.addColumns(dataStreamMappingNameColumn);
+
         // sort the columns to make any continuous time series value extraction faster
         String[] sortableColumnNames = Arrays.stream(dataStreamLevelColumns)
                 .filter(d -> d != null)

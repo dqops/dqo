@@ -19,7 +19,9 @@ import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -459,5 +461,19 @@ public class DataStreamMappingSpec extends AbstractSpec {
         }
 
         return truncated;
+    }
+
+    /**
+     * Retrieves the name of the data stream mapping.
+     * @return The name of the data stream mapping.
+     */
+    @JsonIgnore
+    public String getDataStreamMappingName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return DataStreamMappingSpecMap.DEFAULT_MAPPING_NAME;
+        }
+
+        return hierarchyId.getLast().toString();
     }
 }

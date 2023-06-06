@@ -68,6 +68,11 @@ public class SensorReadoutsColumnNames {
     public static final String DATA_STREAM_NAME_COLUMN_NAME = CommonColumnNames.DATA_STREAM_NAME_COLUMN_NAME;
 
     /**
+     * The data stream configuration name, it is a name of the named data stream mapping configuration that was used to run the data quality check.
+     */
+    public static final String DATA_STREAM_MAPPING_NAME_COLUMN_NAME = CommonColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME;
+
+    /**
      * A hash calculated from the connection name (the data source name).
      */
     public static final String CONNECTION_HASH_COLUMN_NAME = CommonColumnNames.CONNECTION_HASH_COLUMN_NAME;
