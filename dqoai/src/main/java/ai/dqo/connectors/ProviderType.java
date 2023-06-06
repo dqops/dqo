@@ -43,4 +43,26 @@ public enum ProviderType {
     @JsonProperty("oracle")
     oracle,
     // TODO: add more connectors
+
+    ;
+    public String getDisplayName() {
+        switch (this) {
+            case bigquery:
+                return "BigQuery";
+            case snowflake:
+                return "Snowflake";
+            case postgresql:
+                return "PostgreSQL";
+            case redshift:
+                return "Redshift";
+            case sqlserver:
+                return "SQL Server";
+            case mysql:
+                return "MySQL";
+            case oracle:
+                return "Oracle";
+            default:
+                throw new RuntimeException("Unsupported enum: " + this.name());
+        }
+    }
 }

@@ -93,14 +93,14 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
      * Creates a column type.
      * @param columnType Column type.
      * @param nullable Is nullable.
-     * @param scale Decimal numeric scale.
      * @param precision Decimal numeric precision.
+     * @param scale Decimal numeric scale.
      */
-    public ColumnTypeSnapshotSpec(String columnType, Boolean nullable, Integer scale, Integer precision) {
+    public ColumnTypeSnapshotSpec(String columnType, Boolean nullable, Integer precision, Integer scale) {
         this.columnType = columnType;
         this.nullable = nullable;
-        this.scale = scale;
         this.precision = precision;
+        this.scale = scale;
     }
 
     @JsonPropertyDescription("Column data type using the monitored database type names.")
@@ -112,11 +112,11 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
     @JsonPropertyDescription("Maximum length of text and binary columns.")
     private Integer length;
 
-    @JsonPropertyDescription("Scale of a numeric (decimal) data type.")
-    private Integer scale;
-
     @JsonPropertyDescription("Precision of a numeric (decimal) data type.")
     private Integer precision;
+
+    @JsonPropertyDescription("Scale of a numeric (decimal) data type.")
+    private Integer scale;
 
     /**
      * Creates a column type snapshot given a database column type with a possible length and precision/scale.
@@ -211,6 +211,23 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
     }
 
     /**
+     * Returns a precision of decimal columns.
+     * @return Column precision.
+     */
+    public Integer getPrecision() {
+        return precision;
+    }
+
+    /**
+     * Sets the column precision.
+     * @param precision Column precision.
+     */
+    public void setPrecision(Integer precision) {
+        this.setDirtyIf(!Objects.equals(this.precision, precision));
+        this.precision = precision;
+    }
+
+    /**
      * Returns a scale of a column (used for decimal columns and some high resolution datetime or time columns).
      * @return Column scale.
      */
@@ -225,23 +242,6 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
     public void setScale(Integer scale) {
 		this.setDirtyIf(!Objects.equals(this.scale, scale));
         this.scale = scale;
-    }
-
-    /**
-     * Returns a precision of decimal columns.
-     * @return Column precision.
-     */
-    public Integer getPrecision() {
-        return precision;
-    }
-
-    /**
-     * Sets the column precision.
-     * @param precision Column precision.
-     */
-    public void setPrecision(Integer precision) {
-		this.setDirtyIf(!Objects.equals(this.precision, precision));
-        this.precision = precision;
     }
 
     @Override
