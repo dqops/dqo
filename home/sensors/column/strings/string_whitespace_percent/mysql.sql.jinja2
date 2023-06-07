@@ -1,55 +1,13 @@
 {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
 
-{% macro render_column_cast_to_string(analyzed_table_to_render) -%}
-    {%- if (lib.target_column_data_type == 'STRING') -%}
-        {{ lib.render_target_column(analyzed_table_to_render) }}
-    {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
-        CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
-            CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
-            CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
-            CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'INT64') -%}
-            CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
-            CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'INT') -%}
-                CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
-                CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'INTEGER') -%}
-                CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'BIGINT') -%}
-                CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'TINYINT') -%}
-                CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
-                CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'DATE') -%}
-                CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'DATETIME') -%}
-                CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'TIME') -%}
-                CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
-                CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
-                CONVERT({{ lib.render_target_column(analyzed_table_to_render) }}, CHAR)
-    {%- else -%}
-        {{ lib.render_target_column(analyzed_table_to_render) }}
-    {%- endif -%}
-{% endmacro -%}
-
 SELECT
     CASE
         WHEN COUNT(*) = 0 THEN 100.0
         ELSE 100.0 * SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND {{ render_column_cast_to_string('analyzed_table')}} <> ''
-                AND TRIM({{ render_column_cast_to_string('analyzed_table')}}) = ''
+                AND {{ lib.render_target_column('analyzed_table') }} <> ''
+                AND TRIM({{ lib.render_target_column('analyzed_table') }}) = ''
                     THEN 1
                 ELSE 0
             END
