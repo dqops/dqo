@@ -24,11 +24,14 @@ import {
   CheckResultsDetailedDataModel,
   ErrorsDetailedDataModel,
   ConnectionIncidentGroupingSpec,
-  SensorReadoutsDetailedDataModel, TableIncidentGroupingSpec
+  SensorReadoutsDetailedDataModel,
+  UICheckModel,
+  CheckSearchFiltersCheckTypeEnum,
+  TableIncidentGroupingSpec
 } from "../../api";
 import { Dispatch } from "redux";
 import { AxiosResponse } from "axios";
-import { ConnectionApiClient, TableApiClient } from "../../services/apiClient";
+import { CheckResultApi, ConnectionApiClient, ErrorsApi, SensorReadoutsApi, TableApiClient } from "../../services/apiClient";
 
 export const addFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   type: SOURCE_ACTION.ADD_FIRST_LEVEL_TAB,
@@ -160,6 +163,415 @@ export const updateConnectionIncidentGrouping = (checkType: CheckTypes, activeTa
   }
 };
 
+export const getCheckResultsRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_CHECK_RESULTS_REQUEST,
+  checkType,
+  activeTab,
+});
+
+export const getCheckResultsSuccess = (checkType: CheckTypes, activeTab: string, checkName: string, checkResults: CheckResultsDetailedDataModel[]) => ({
+  type: SOURCE_ACTION.GET_CHECK_RESULTS_SUCCESS,
+  checkType,
+  activeTab,
+  data: {
+    checkName,
+    checkResults
+  }
+});
+
+export const getCheckResultsError = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_CHECK_RESULTS_ERROR,
+  checkType,
+  activeTab,
+});
+
+export const getCheckResults = (
+  checkType: CheckTypes,
+  activeTab: string,
+  {
+    connection,
+    schema,
+    table,
+    column,
+    dataStreamName,
+    check,
+    startDate,
+    endDate,
+  } : {
+    connection: string;
+    schema: string;
+    table: string;
+    column?: string;
+    dataStreamName?: string;
+    check?: UICheckModel;
+    startDate: string;
+    endDate: string;
+  }) => (dispatch: any) => {
+  dispatch(getCheckResultsRequest(checkType, activeTab));
+
+  const successCallback = (res: AxiosResponse<CheckResultsDetailedDataModel[]>) => {
+    dispatch(
+      getCheckResultsSuccess(
+        checkType,
+        activeTab,
+        check?.check_name ?? '',
+        res.data.filter((item) => item.checkName === check?.check_name)
+      )
+    );
+
+    dispatch(
+      setCheckResults(
+        checkType,
+        activeTab,
+        check?.check_name ?? '',
+        res.data.filter((item) => item.checkName === check?.check_name)
+      )
+    );
+  };
+  const errCallback = () => {
+    dispatch(
+      getCheckResultsError(
+        checkType,
+        activeTab,
+      )
+    );
+  }
+
+  if (column) {
+    if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
+      CheckResultApi.getColumnProfilingChecksResults(
+        connection,
+        schema,
+        table,
+        column,
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.recurring) {
+      CheckResultApi.getColumnRecurringChecksResults(
+        connection,
+        schema,
+        table,
+        column,
+        check?.run_checks_job_template?.timeScale || 'daily',
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+      CheckResultApi.getColumnPartitionedChecksResults(
+        connection,
+        schema,
+        table,
+        column,
+        check?.run_checks_job_template?.timeScale || 'daily',
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    }
+  } else {
+    if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
+      CheckResultApi.getTableProfilingChecksResults(
+        connection,
+        schema,
+        table,
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.recurring) {
+      CheckResultApi.getTableRecurringChecksResults(
+        connection,
+        schema,
+        table,
+        check?.run_checks_job_template?.timeScale || 'daily',
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+      CheckResultApi.getTablePartitionedChecksResults(
+        connection,
+        schema,
+        table,
+        check?.run_checks_job_template?.timeScale || 'daily',
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    }
+  }
+};
+
+
+export const getCheckReadoutsRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_CHECK_READOUTS_REQUEST,
+  checkType,
+  activeTab,
+});
+
+export const getCheckReadoutsSuccess = (checkType: CheckTypes, activeTab: string, checkName: string, checkResults: CheckResultsDetailedDataModel[]) => ({
+  type: SOURCE_ACTION.GET_CHECK_READOUTS_SUCCESS,
+  checkType,
+  activeTab,
+  data: {
+    checkName,
+    checkResults
+  }
+});
+
+export const getCheckReadoutsError = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_CHECK_READOUTS_ERROR,
+  checkType,
+  activeTab,
+});
+
+export const getCheckReadouts = (
+  checkType: CheckTypes,
+  activeTab: string,
+  {
+    connection,
+    schema,
+    table,
+    column,
+    dataStreamName,
+    check,
+    startDate,
+    endDate,
+  } : {
+    connection: string;
+    schema: string;
+    table: string;
+    column?: string;
+    dataStreamName?: string;
+    check?: UICheckModel;
+    startDate: string;
+    endDate: string;
+  }) => (dispatch: any) => {
+  dispatch(getCheckReadoutsRequest(checkType, activeTab));
+
+  const successCallback = (res: AxiosResponse<SensorReadoutsDetailedDataModel[]>) => {
+    dispatch(
+      setSensorReadouts(
+        checkType,
+        activeTab,
+        check?.check_name ?? '',
+        res.data.filter((item) =>item.singleSensorReadouts && item.singleSensorReadouts[0]?.checkName === check?.check_name)
+      )
+    );
+  };
+  const errCallback = () => {
+    dispatch(
+      getCheckReadoutsError(
+        checkType,
+        activeTab,
+      )
+    );
+  }
+
+  if (column) {
+    if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
+      SensorReadoutsApi.getColumnProfilingSensorReadouts(
+        connection,
+        schema,
+        table,
+        column,
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.recurring) {
+      SensorReadoutsApi.getColumnRecurringSensorReadouts(
+        connection,
+        schema,
+        table,
+        column,
+        check?.run_checks_job_template?.timeScale || 'daily',
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+      SensorReadoutsApi.getColumnPartitionedSensorReadouts(
+        connection,
+        schema,
+        table,
+        column,
+        check?.run_checks_job_template?.timeScale || 'daily',
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    }
+  } else {
+    if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
+      SensorReadoutsApi.getTableProfilingSensorReadouts(
+        connection,
+        schema,
+        table,
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.recurring) {
+      SensorReadoutsApi.getTableRecurringSensorReadouts(
+        connection,
+        schema,
+        table,
+        check?.run_checks_job_template?.timeScale || 'daily',
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+      SensorReadoutsApi.getTablePartitionedSensorReadouts(
+        connection,
+        schema,
+        table,
+        check?.run_checks_job_template?.timeScale || 'daily',
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    }
+  }
+};
+
+
+export const getCheckErrorsRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_CHECK_ERROR_REQUEST,
+  checkType,
+  activeTab,
+});
+
+export const getCheckErrorsSuccess = (checkType: CheckTypes, activeTab: string, checkName: string, checkResults: CheckResultsDetailedDataModel[]) => ({
+  type: SOURCE_ACTION.GET_CHECK_ERROR_SUCCESS,
+  checkType,
+  activeTab,
+  data: {
+    checkName,
+    checkResults
+  }
+});
+
+export const getCheckErrorsError = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_CHECK_ERROR_ERROR,
+  checkType,
+  activeTab,
+});
+
+export const getCheckErrors = (
+  checkType: CheckTypes,
+  activeTab: string,
+  {
+    connection,
+    schema,
+    table,
+    column,
+    dataStreamName,
+    check,
+    startDate,
+    endDate,
+  } : {
+    connection: string;
+    schema: string;
+    table: string;
+    column?: string;
+    dataStreamName?: string;
+    check?: UICheckModel;
+    startDate: string;
+    endDate: string;
+  }) => (dispatch: any) => {
+  dispatch(getCheckErrorsRequest(checkType, activeTab));
+
+  const successCallback = (res: AxiosResponse<ErrorsDetailedDataModel[]>) => {
+    dispatch(
+      setSensorErrors(
+        checkType,
+        activeTab,
+        check?.check_name ?? '',
+        res.data.filter((item) => item.checkName === check?.check_name)
+      )
+    )
+  };
+  const errCallback = () => {
+    dispatch(
+      getCheckErrorsError(
+        checkType,
+        activeTab,
+      )
+    );
+  }
+
+  if (column) {
+    if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
+      ErrorsApi.getColumnProfilingErrors(
+        connection,
+        schema,
+        table,
+        column,
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.recurring) {
+      ErrorsApi.getColumnRecurringErrors(
+        connection,
+        schema,
+        table,
+        column,
+        check?.run_checks_job_template?.timeScale || 'daily',
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+      ErrorsApi.getColumnPartitionedErrors(
+        connection,
+        schema,
+        table,
+        column,
+        check?.run_checks_job_template?.timeScale || 'daily',
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    }
+  } else {
+    if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
+      ErrorsApi.getTableProfilingErrors(
+        connection,
+        schema,
+        table,
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.recurring) {
+      ErrorsApi.getTableRecurringErrors(
+        connection,
+        schema,
+        table,
+        check?.run_checks_job_template?.timeScale || 'daily',
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    } else if (check?.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
+      ErrorsApi.getTablePartitionedErrors(
+        connection,
+        schema,
+        table,
+        check?.run_checks_job_template?.timeScale || 'daily',
+        dataStreamName,
+        startDate,
+        endDate
+      ).then(successCallback).catch(errCallback);
+    }
+  }
+};
 
 export const getTableIncidentGroupingRequest = (checkType: CheckTypes, activeTab: string) => ({
   type: SOURCE_ACTION.GET_TABLE_INCIDENT_GROUPING,
