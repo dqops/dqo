@@ -48,6 +48,7 @@ public class SensorReadoutsTableFactoryImpl implements SensorReadoutsTableFactor
                 TextColumn.create(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "9"),
                 LongColumn.create(SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME),
                 TextColumn.create(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME),
+                TextColumn.create(SensorReadoutsColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME),
                 LongColumn.create(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME),
                 TextColumn.create(SensorReadoutsColumnNames.CONNECTION_NAME_COLUMN_NAME),
                 TextColumn.create(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME),

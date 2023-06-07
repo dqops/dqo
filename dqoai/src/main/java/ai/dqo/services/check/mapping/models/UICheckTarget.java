@@ -15,6 +15,7 @@
  */
 package ai.dqo.services.check.mapping.models;
 
+import ai.dqo.checks.CheckTarget;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
@@ -28,9 +29,21 @@ public enum UICheckTarget {
 
     @JsonProperty("column")
     @JsonPropertyDescription("The check is assigned to a column.")
-    column,
+    column;
 
-    @JsonProperty("target")
-    @JsonPropertyDescription("Requesting agent knows the target, whatever that could be.")
-    target,
+    /**
+     * Creates a UI check target from a backend check target.
+     * @param checkTarget Check target.
+     * @return UI Check target.
+     */
+    public static UICheckTarget fromCheckTarget(CheckTarget checkTarget) {
+        switch (checkTarget) {
+            case table:
+                return table;
+            case column:
+                return column;
+            default:
+                throw new IllegalArgumentException("Unknown check target: " + checkTarget);
+        }
+    }
 }

@@ -88,7 +88,7 @@ public class SynchronizeMetadataSchedulerJob implements Job {
             synchronizeMultipleFoldersJob.setParameters(jobParameters);
 
             PushJobResult<Void> pushJobResult = this.dqoJobQueue.pushJob(synchronizeMultipleFoldersJob);
-            pushJobResult.getFinishedFuture().wait();
+            pushJobResult.getFinishedFuture().get();
         }
         catch (Exception ex) {
             log.error("Failed to execute a metadata synchronization job", ex);

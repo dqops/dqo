@@ -42,6 +42,7 @@ public class ErrorSamplesTableFactoryImpl implements ErrorSamplesTableFactory {
                 TextColumn.create(ErrorSamplesColumnNames.ID_COLUMN_NAME),
                 LongColumn.create(ErrorSamplesColumnNames.DATA_STREAM_HASH_COLUMN_NAME),
                 TextColumn.create(ErrorSamplesColumnNames.DATA_STREAM_NAME_COLUMN_NAME),
+                TextColumn.create(ErrorSamplesColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME),
                 LongColumn.create(ErrorSamplesColumnNames.CONNECTION_HASH_COLUMN_NAME),
                 TextColumn.create(ErrorSamplesColumnNames.CONNECTION_NAME_COLUMN_NAME),
                 TextColumn.create(ErrorSamplesColumnNames.PROVIDER_COLUMN_NAME),

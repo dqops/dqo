@@ -22,6 +22,7 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
+import ai.dqo.services.check.matching.SimilarCheckModel;
 import ai.dqo.services.check.matching.SimilarCheckSensorRuleKey;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -50,12 +51,21 @@ public class UICheckModel implements Cloneable {
     @JsonPropertyDescription("Data quality check name that is used in YAML.")
     private String checkName;
 
+    /**
+     * Help text that describes the data quality check.
+     */
     @JsonPropertyDescription("Help text that describes the data quality check.")
     private String helpText;
 
+    /**
+     * List of fields for editing the sensor parameters.
+     */
     @JsonPropertyDescription("List of fields for editing the sensor parameters.")
     private List<UIFieldModel> sensorParameters = new ArrayList<>();
 
+    /**
+     * Full sensor name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality sensor.
+     */
     @JsonPropertyDescription("Full sensor name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality sensor.")
     private String sensorName;
 
@@ -77,57 +87,113 @@ public class UICheckModel implements Cloneable {
     @JsonIgnore
     private AbstractCheckSpec<?, ?, ?, ?> checkSpec;
 
+    /**
+     * Threshold (alerting) rules defined for a check.
+     */
     @JsonPropertyDescription("Threshold (alerting) rules defined for a check.")
     private UIRuleThresholdsModel rule;
 
+    /**
+     * The data quality check supports a custom data stream mapping configuration.
+     */
     @JsonPropertyDescription("The data quality check supports a custom data stream mapping configuration.")
     private boolean supportsDataStreams;
 
+    /**
+     * Data streams configuration for a sensor query. When a data stream configuration is assigned at a sensor level, it overrides any data stream settings from the connection, table or column levels. Data streams are configured in two cases: (1) a static data stream level is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.
+     */
     @JsonPropertyDescription("Data streams configuration for a sensor query. When a data stream configuration is assigned at a sensor level, it overrides any data stream settings from the connection, table or column levels. Data streams are configured in two cases: (1) a static data stream level is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
     private DataStreamMappingSpec dataStreamsOverride;
 
+    /**
+     * Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.
+     */
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     private RecurringScheduleSpec scheduleOverride;
 
+    /**
+     * Model of configured schedule enabled on the check level.
+     */
     @JsonPropertyDescription("Model of configured schedule enabled on the check level.")
     private UIEffectiveScheduleModel effectiveSchedule;
 
+    /**
+     * State of the scheduling override for this check.
+     */
     @JsonPropertyDescription("State of the scheduling override for this check.")
     private UIScheduleEnabledStatus scheduleEnabledStatus;
 
+    /**
+     * Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).
+     */
     @JsonPropertyDescription("Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).")
     private CommentsListSpec comments;
 
+    /**
+     * Disables the data quality check. Only enabled checks are executed. The sensor should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.
+     */
     @JsonPropertyDescription("Disables the data quality check. Only enabled checks are executed. The sensor should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
     private boolean disabled;
 
+    /**
+     * Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.
+     */
     @JsonPropertyDescription("Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.")
     private boolean excludeFromKpi;
 
+    /**
+     * Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.
+     */
     @JsonPropertyDescription("Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.")
     private boolean includeInSla;
 
+    /**
+     * True if the data quality check is configured (not null). When saving the data quality check configuration, set the flag to true for storing the check.
+     */
     @JsonPropertyDescription("True if the data quality check is configured (not null). When saving the data quality check configuration, set the flag to true for storing the check.")
     private boolean configured;
 
+    /**
+     * SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.
+     */
     @JsonPropertyDescription("SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.")
     private String filter;
 
+    /**
+     * Configured parameters for the "check run" job that should be pushed to the job queue in order to start the job.
+     */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;
 
+    /**
+     * Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check.
+     */
     @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check.")
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
-    @JsonPropertyDescription("Name of a data stream mapping defined at a table that should be used for this check.")
+    /**
+     * The name of a data stream mapping defined at a table that should be used for this check.
+     */
+    @JsonPropertyDescription("The name of a data stream mapping defined at a table that should be used for this check.")
     private String dataStream;
 
-    @JsonPropertyDescription("Type of the check's target (column, table, target).")
+    /**
+     * Type of the check's target (column, table).
+     */
+    @JsonPropertyDescription("Type of the check's target (column, table).")
     private UICheckTarget checkTarget;
 
+    /**
+     * List of configuration errors that must be fixed before the data quality check could be executed.
+     */
     @JsonPropertyDescription("List of configuration errors that must be fixed before the data quality check could be executed.")
     private List<CheckConfigurationRequirementsError> configurationRequirementsErrors;
 
+    /**
+     * List of similar checks in other check types or in other time scales.
+     */
+    @JsonPropertyDescription("List of similar checks in other check types or in other time scales.")
+    private List<SimilarCheckModel> similarChecks;
     /**
      * Create a matching key with the sensor name and rule names. Used to match similar checks that are based on the same sensor and rules.
      * @return Check sensor rule key.

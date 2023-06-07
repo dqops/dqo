@@ -70,6 +70,7 @@ nav:
       - PostgreSQL: 'working-with-dqo/adding-data-source-connection/postgresql.md'
       - SQL Server: 'working-with-dqo/adding-data-source-connection/sql-server.md'
       - MySQL: 'working-with-dqo/adding-data-source-connection/mysql.md'
+    - Basic data statistics: 'working-with-dqo/basic-data-statistics/basic-data-statistics.md'
     - Run data quality checks: 'working-with-dqo/run-data-quality-checks/run-data-quality-checks.md'
     - Delete data quality results: 'working-with-dqo/delete-data-quality-results/delete-data-quality-results.md'
     - Schedules:
@@ -77,6 +78,7 @@ nav:
       - Configuring the schedules by modifying the YAML files: 'working-with-dqo/schedules/configuring-schedules-by-modifying-yaml-file.md'
       - Time zone configuration: 'working-with-dqo/schedules/timezone-configuration.md'
       - Cron formatting: 'working-with-dqo/schedules/cron-formatting.md'
+    - Incidents and notifications: 'working-with-dqo/incidents-and-notifications/incidents-and-notifications.md'
     - Set up data stream segmentation: 'working-with-dqo/set-up-data-streams/set-up-data-stream.md'
     - Working with DQO Shell: 'working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
@@ -390,6 +392,7 @@ extra:
       We use cookies to recognize repeat visits and user preferences, as well
       as to measure the effectiveness of our documentation and whether users
       find what they are looking for. With your consent, you help us improve our documentation.
+  homepage: https://dqops.com/
 
 # TODO Tags
 # TODO Footer

@@ -3819,6 +3819,7 @@ public class MysqlResultSet implements ResultSet {
      * or {@code getBigDecimal(String columnLabel)}
      */
     @Override
+    @Deprecated
     public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException {
         return resultSet.getBigDecimal(columnIndex, scale);
     }

@@ -29,7 +29,7 @@ To set up a data stream at the data source level, follow the steps below.
 2. In the **Default Data Stream Template** tab, write a tag for a data source or select the discriminator column that would
     identify the data source. You can configure up to 9 different data streams.
 
-   ![Adding data stream](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/adding-data-stream.jpg)
+    ![Adding data stream](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/adding-data-stream.jpg)
 
 3. Once you have set the data stream, click on the **Save** button to save your changes.
 
@@ -47,7 +47,7 @@ To set up data stream at the table level:
 
 3. Write a **Data stream name** and select a tag for a data stream or select the discriminator column that would identify the data source.
 
-   ![Table-level data stream configuration](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/table-level-data-stream-configuration.jpg)
+    ![Table-level data stream configuration](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/table-level-data-stream-configuration.jpg)
 
 4. Once you have set the data stream, click on the **Save** button to save your changes.
 

@@ -22,7 +22,7 @@ import TableStatisticsView from '../../../pages/TableStatisticsView';
 
 const tabs = [
   {
-    label: 'Statistics',
+    label: 'Basic data statistics',
     value: 'statistics'
   },
   {

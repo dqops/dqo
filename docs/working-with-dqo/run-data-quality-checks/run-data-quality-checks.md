@@ -26,7 +26,7 @@ For more information about checks, see [DQO concepts section](../../dqo-concepts
 5. Set the threshold levels or leave default values. Set parameters if the check has any. Click the Save button in the upper right corner.
     You can read more about threshold severity levels in [DQO concepts section](../../dqo-concepts/checks/#severity-levels).
 
-    ![Set threshold levels](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks//set-threshold-levels.jpg)
+    ![Set threshold levels](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/set-threshold-levels.jpg)
 
 3. Run data quality check by clicking the Run Check icon
 

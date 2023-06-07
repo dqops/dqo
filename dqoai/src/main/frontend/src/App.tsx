@@ -12,6 +12,10 @@ import { IRootState } from './redux/reducers';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LogErrorsApi } from "./services/apiClient";
+import Chart from "chart.js/auto";
+import { CategoryScale } from "chart.js";
+
+Chart.register(CategoryScale);
 
 const App = () => {
   const dispatch = useActionDispatch();

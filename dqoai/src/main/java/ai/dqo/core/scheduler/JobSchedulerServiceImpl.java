@@ -52,8 +52,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     private ScheduledJobListener scheduledJobListener;
     private JobDetail runChecksJob;
     private JobDetail synchronizeMetadataJob;
-    private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.summary;
-    private CheckRunReportingMode checkRunReportingMode = CheckRunReportingMode.summary;
+    private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
+    private CheckRunReportingMode checkRunReportingMode = CheckRunReportingMode.silent;
 
     /**
      * Job scheduler service constructor.

@@ -98,25 +98,25 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
               <Checkbox
                 checked={params.deleteProfilingResults}
                 onChange={(deleteProfilingResults) => onChangeParams({ deleteProfilingResults })}
-                label="Statistics Results"
+                label="Basic statistics results"
                 checkClassName="bg-teal-500"
               />
               <Checkbox
                 checked={params.deleteRuleResults}
                 onChange={(deleteRuleResults) => onChangeParams({ deleteRuleResults })}
-                label="Check Results"
+                label="Check results"
                 checkClassName="bg-teal-500"
               />
               <Checkbox
                 checked={params.deleteSensorReadouts}
                 onChange={(deleteSensorReadouts) => onChangeParams({ deleteSensorReadouts })}
-                label="Sensor Readouts"
+                label="Sensor readouts"
                 checkClassName="bg-teal-500"
               />
               <Checkbox
                 checked={params.deleteErrors}
                 onChange={(deleteErrors) => onChangeParams({ deleteErrors })}
-                label="Execution Errors"
+                label="Execution errors"
                 checkClassName="bg-teal-500"
               />
             </div>
