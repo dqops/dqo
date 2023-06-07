@@ -47,7 +47,7 @@ const initTabs = [
 
 const tabs = [
   {
-    label: 'Statistics',
+    label: 'Basic Statistics',
     value: 'statistics'
   },
   {
