@@ -18,7 +18,7 @@ import ColumnStatisticsView from "./ColumnStatisticsView";
 
 const tabs = [
   {
-    label: 'Statistics',
+    label: 'Basic data statistics',
     value: 'statistics'
   },
   {

@@ -1,6 +1,8 @@
 # Basic data statistics
 
-DQO provides you with summary information about your tables and columns through basic statistics.
+DQO provides you with summary information about your tables and columns through basic statistics. This information is 
+valuable in deciding which data quality checks and threshold levels should be set to monitor data quality.
+
 You have the option to collect statistics either on the table or column summary view or on an individual column level.
 
 The table or column summary statistics include the following fields:
@@ -31,12 +33,13 @@ Note that the results displayed may vary depending on the data type.
 
 To collect and view statistics follow these steps:
 
-1. Navigate to the **Profiling** section
+1. Navigate to the **Profiling** section. 
+
 2. Select the desired data source from the tree view on the left.
 
     ![Navigate to statistics section](https://dqops.com/docs/images/working-with-dqo/statistics/table-statistics.png)
 
-3. Choose a table or column for which you wish to collect statistics.
+3. Choose a table or column for which you wish to collect statistics. The **Basic data statistics** tab is the default for this section. 
 
 4. To collect statistics for the entire table, click the **Collect statistics** button in the upper right-hand corner. 
     To collect statistics for a single column, click the **bar chart icon** located in the **Action** column.
@@ -51,3 +54,8 @@ To collect and view statistics follow these steps:
 6. To view detailed statistics, click on the name of the column or navigate to the single column on the tree view.
 
     ![Navigate to detailed statistics](https://dqops.com/docs/images/working-with-dqo/statistics/view-detailed-statistics.png)
+
+
+## What's next
+
+- [Learn how to run data quality checks](../run-data-quality-checks/run-data-quality-checks.md).
