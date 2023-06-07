@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import IncidentsLayout from "../../components/IncidentsLayout";
 import SvgIcon from "../../components/SvgIcon";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import Input from "../../components/Input";
 import { useSelector } from "react-redux";
 import { getFirstLevelIncidentsState } from "../../redux/selectors";
@@ -27,6 +27,8 @@ import Button from "../../components/Button";
 import { HistogramChart } from "./HistogramChart";
 import SectionWrapper from "../../components/Dashboard/SectionWrapper";
 import { Warning } from "postcss";
+import { addFirstLevelTab as addSourceFirstLevelTab } from "../../redux/actions/source.actions";
+import { CheckTypes, ROUTES } from "../../shared/routes";
 
 const statusOptions = [
   {
@@ -81,6 +83,7 @@ export const IncidentDetail = () => {
   const dispatch = useActionDispatch();
   const { sidebarWidth } = useTree();
   const { issues, isEnd, filters = {} } = useSelector(getFirstLevelIncidentsState);
+  const history = useHistory();
 
   useEffect(() => {
     IncidentsApi.getIncident(connection, year, month, incidentId).then(res => {
@@ -153,6 +156,25 @@ export const IncidentDetail = () => {
     return 'Fatal';
   }
 
+  const goToConfigure = () => {
+    const schema = incidentDetail?.schema || '';
+    const table = incidentDetail?.table || '';
+    dispatch(addSourceFirstLevelTab(CheckTypes.SOURCES, {
+      url: ROUTES.TABLE_INCIDENTS_NOTIFICATION(
+        CheckTypes.SOURCES,
+        connection,
+        schema,
+        table
+      ),
+      value: ROUTES.TABLE_INCIDENTS_NOTIFICATION_VALUE(CheckTypes.SOURCES, connection, schema, table),
+      state: {},
+      label: 'Incident Configuration'
+    }));
+    history.push(ROUTES.TABLE_INCIDENTS_NOTIFICATION(CheckTypes.SOURCES, connection, schema, table));
+  };
+
+  console.log('incidentDetail', incidentDetail);
+
   return (
     <IncidentsLayout>
       <div className="relative">
@@ -162,7 +184,11 @@ export const IncidentDetail = () => {
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
             <div className="text-xl font-semibold truncate">Data quality incident {`${year}/${month}/${incidentId}`}</div>
           </div>
-          <Button label="Configure table notification" color="primary"></Button>
+          <Button
+            label="Configure table notification"
+            color="primary"
+            onClick={goToConfigure}
+          ></Button>
         </div>
         <div className="flex items-center p-4 gap-6 mb-4">
           <div className="grow">
