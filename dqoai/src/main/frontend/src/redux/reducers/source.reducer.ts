@@ -1184,6 +1184,38 @@ const connectionReducer = (state = initialState, action: Action) => {
         isUpdating: false,
       })
     }
+    case SOURCE_ACTION.GET_TABLE_INCIDENT_GROUPING: {
+      return setActiveTabState(state, action, {
+        loading: true,
+      })
+    }
+    case SOURCE_ACTION.GET_TABLE_INCIDENT_GROUPING_SUCCESS: {
+      return setActiveTabState(state, action, {
+        incidentGrouping: action.data,
+        loading: false,
+        isUpdatedIncidentGroup: false,
+      })
+    }
+    case SOURCE_ACTION.GET_TABLE_INCIDENT_GROUPING_ERROR: {
+      return setActiveTabState(state, action, {
+        loading: false,
+      })
+    }
+    case SOURCE_ACTION.UPDATE_TABLE_INCIDENT_GROUPING: {
+      return setActiveTabState(state, action, {
+        isUpdating: true,
+      })
+    }
+    case SOURCE_ACTION.UPDATE_TABLE_INCIDENT_GROUPING_SUCCESS: {
+      return setActiveTabState(state, action, {
+        isUpdating: false,
+      })
+    }
+    case SOURCE_ACTION.UPDATE_TABLE_INCIDENT_GROUPING_ERROR: {
+      return setActiveTabState(state, action, {
+        isUpdating: false,
+      })
+    }
     default:
       return state;
   }

@@ -70,6 +70,7 @@ nav:
       - PostgreSQL: 'working-with-dqo/adding-data-source-connection/postgresql.md'
       - SQL Server: 'working-with-dqo/adding-data-source-connection/sql-server.md'
       - MySQL: 'working-with-dqo/adding-data-source-connection/mysql.md'
+    - Basic data statistics: 'working-with-dqo/basic-data-statistics/basic-data-statistics.md'
     - Run data quality checks: 'working-with-dqo/run-data-quality-checks/run-data-quality-checks.md'
     - Delete data quality results: 'working-with-dqo/delete-data-quality-results/delete-data-quality-results.md'
     - Schedules:

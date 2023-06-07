@@ -16,7 +16,6 @@ RUN ./mvnw.sh frontend:install-node-and-npm -pl dqoai
 
 # npm install
 COPY dqoai/src/main/frontend/package.json dqoai/src/main/frontend/
-COPY dqoai/src/main/frontend/package-lock.json dqoai/src/main/frontend/
 ENV PATH="/workspace/app/dqoai/src/main/frontend/node:${PATH}"
 WORKDIR /workspace/app/dqoai/src/main/frontend
 RUN npm install --legacy-peer-deps

@@ -243,7 +243,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
         for (int i = 0; i < rowCount ; i++) {
             Long dataStreamHash = sortedDataStreamHashColumn.get(i);
             long timePeriodLong = sortedTimePeriodColumn.getLongInternal(i);
-            long timePeriodHashed = Hashing.sipHash24().hashLong(timePeriodLong).asLong();
+            long timePeriodHashed = Hashing.farmHashFingerprint64().hashLong(timePeriodLong).asLong();
             UUID uuid = new UUID(checkHash ^ timePeriodHashed, dataStreamHash ^ tableHash ^ columnHash ^ ~timePeriodHashed);
             String idString = uuid.toString();
             idColumn.set(i, idString);
@@ -278,9 +278,9 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
         for (int i = 0; i < rowCount ; i++) {
             Long dataStreamHash = sortedDataStreamHashColumn.get(i);
             long timePeriodLong = sortedTimePeriodColumn.getLongInternal(i);
-            long timePeriodHashed = Hashing.sipHash24().hashLong(timePeriodLong).asLong();
+            long timePeriodHashed = Hashing.farmHashFingerprint64().hashLong(timePeriodLong).asLong();
             long sampleIndexHashed = sampleIndexColumn == null || sampleIndexColumn.isMissing(i) ? 0L :
-                    Hashing.sipHash24().hashInt(sampleIndexColumn.get(i) + 1).asLong();
+                    Hashing.farmHashFingerprint64().hashInt(sampleIndexColumn.get(i) + 1).asLong();
             UUID uuid = new UUID(checkHash ^ timePeriodHashed ^ sampleIndexHashed,
                     dataStreamHash ^ tableHash ^ columnHash ^ ~timePeriodHashed ^ ~sampleIndexHashed);
             Integer lastSampleIndexForUuid = idsGenerated.get(uuid);
@@ -290,7 +290,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
                 lastSampleIndexForUuid = lastSampleIndexForUuid + 1;
                 idsGenerated.put(uuid, lastSampleIndexForUuid);
                 sampleIndexColumn.set(i, lastSampleIndexForUuid);
-                long newSampleIndexHashed = Hashing.sipHash24().hashInt(lastSampleIndexForUuid + 1).asLong();
+                long newSampleIndexHashed = Hashing.farmHashFingerprint64().hashInt(lastSampleIndexForUuid + 1).asLong();
                 uuid = new UUID(checkHash ^ timePeriodHashed ^ newSampleIndexHashed,
                         dataStreamHash ^ tableHash ^ columnHash ^ ~timePeriodHashed ^ ~newSampleIndexHashed);
             }

@@ -24,11 +24,14 @@ import {
   CheckResultsDetailedDataModel,
   ErrorsDetailedDataModel,
   ConnectionIncidentGroupingSpec,
-  SensorReadoutsDetailedDataModel, UICheckModel, CheckSearchFiltersCheckTypeEnum
+  SensorReadoutsDetailedDataModel,
+  UICheckModel,
+  CheckSearchFiltersCheckTypeEnum,
+  TableIncidentGroupingSpec
 } from "../../api";
 import { Dispatch } from "redux";
 import { AxiosResponse } from "axios";
-import { CheckResultApi, ConnectionApiClient, ErrorsApi, SensorReadoutsApi } from "../../services/apiClient";
+import { CheckResultApi, ConnectionApiClient, ErrorsApi, SensorReadoutsApi, TableApiClient } from "../../services/apiClient";
 
 export const addFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   type: SOURCE_ACTION.ADD_FIRST_LEVEL_TAB,
@@ -567,5 +570,66 @@ export const getCheckErrors = (
         endDate
       ).then(successCallback).catch(errCallback);
     }
+  }
+};
+
+export const getTableIncidentGroupingRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_INCIDENT_GROUPING,
+  checkType,
+  activeTab
+});
+
+export const getTableIncidentGroupingSuccess = (checkType: CheckTypes, activeTab: string, data: ConnectionIncidentGroupingSpec) => ({
+  type: SOURCE_ACTION.GET_TABLE_INCIDENT_GROUPING_SUCCESS,
+  data,
+  checkType,
+  activeTab
+});
+
+export const getTableIncidentGroupingFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
+  type: SOURCE_ACTION.GET_TABLE_INCIDENT_GROUPING_ERROR,
+  error,
+  checkType,
+  activeTab
+});
+
+export const getTableIncidentGrouping = (checkType: CheckTypes, activeTab: string, connection: string, schema: string, table: string) => async (dispatch: Dispatch) => {
+  dispatch(getTableIncidentGroupingRequest(checkType, activeTab));
+  try {
+    const res: AxiosResponse<ConnectionIncidentGroupingSpec> =
+      await TableApiClient.getTableIncidentGrouping(connection, schema, table);
+    dispatch(getTableIncidentGroupingSuccess(checkType, activeTab, res.data));
+  } catch (err) {
+    dispatch(getTableIncidentGroupingFailed(checkType, activeTab, err));
+  }
+};
+
+export const updateTableIncidentGroupingRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_INCIDENT_GROUPING,
+  checkType,
+  activeTab
+});
+
+export const updateTableIncidentGroupingSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_INCIDENT_GROUPING_SUCCESS,
+  checkType,
+  activeTab
+});
+
+export const updateTableIncidentGroupingFailed = (checkType: CheckTypes, activeTab: string, error: unknown) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_INCIDENT_GROUPING_ERROR,
+  error,
+  checkType,
+  activeTab
+});
+
+export const updateTableIncidentGrouping = (checkType: CheckTypes, activeTab: string, connection: string, schema: string, table: string, data: TableIncidentGroupingSpec) => async (dispatch: any) => {
+  dispatch(updateTableIncidentGroupingRequest(checkType, activeTab));
+  try {
+    await TableApiClient.updateTableIncidentGrouping(connection, schema, table, data);
+    dispatch(updateTableIncidentGroupingSuccess(checkType, activeTab));
+    dispatch(getTableIncidentGrouping(checkType, activeTab, connection, schema, table));
+  } catch (err) {
+    dispatch(updateTableIncidentGroupingFailed(checkType, activeTab, err));
   }
 };

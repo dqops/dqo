@@ -115,6 +115,10 @@ const Tree = () => {
         setActiveTab(`${tableNode?.id || ""}.columns`);
       }
 
+      if (match.path === ROUTES.PATTERNS.TABLE_INCIDENTS_NOTIFICATION) {
+        setActiveTab(`${tableNode?.id || ""}.incidents`);
+      }
+
       if (match.path === ROUTES.PATTERNS.TABLE_RECURRING_DAILY) {
         setActiveTab(`${tableNode?.id || ""}.dailyCheck`);
       }
