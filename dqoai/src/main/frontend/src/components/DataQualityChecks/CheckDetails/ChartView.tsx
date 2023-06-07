@@ -7,48 +7,14 @@ type ChartViewProps = {
 };
 
 export const ChartView = ({ data }: ChartViewProps) => {
-  const dataSource = {
+  const isFatalLowerExist = data.find(item => item.fatalLowerBound);
+  const isErrorLowerExist = data.find(item => item.errorLowerBound);
+
+  const isFatalUpperExist = data.find(item => item.fatalUpperBound);
+  const isErrorUpperExist = data.find(item => item.errorUpperBound);
+
+  const dataSource: any = {
     datasets: [
-      {
-        label: 'ACTUAL VALUE',
-        data: data.map((item) => ({
-          x: item.timePeriod,
-          y: item.actualValue
-        })),
-        fill: -1,
-        borderColor: 'rgb(54, 162, 235)',
-        backgroundColor: 'rgb(54, 162, 235)',
-      },
-      {
-        label: 'Expected VALUE',
-        data: data.map((item) => ({
-          x: item.timePeriod,
-          y: item.expectedValue
-        })),
-        fill: -1,
-        borderColor: 'rgb(201, 203, 207)',
-        backgroundColor: 'rgb(201, 203, 207)',
-      },
-      {
-        label: 'WARNING_LOWER_BOUND',
-        data: data.map((item) => ({
-          x: item.timePeriod,
-          y: item.errorLowerBound
-        })),
-        fill: 'start',
-        borderColor: '#EBE51E',
-        backgroundColor: '#EBE51E30',
-      },
-      {
-        label: 'ERROR_LOWER_BOUND',
-        data: data.map((item) => ({
-          x: item.timePeriod,
-          y: item.errorLowerBound
-        })),
-        fill: 'start',
-        borderColor: '#FF9900',
-        backgroundColor: '#FF990030',
-      },
       {
         label: 'FATAL_LOWER_BOUND',
         data: data.map((item) => ({
@@ -60,12 +26,52 @@ export const ChartView = ({ data }: ChartViewProps) => {
         backgroundColor: '#E3170A30',
       },
       {
+        label: 'ERROR_LOWER_BOUND',
+        data: data.map((item) => ({
+          x: item.timePeriod,
+          y: item.errorLowerBound
+        })),
+        fill: isFatalLowerExist ? '-1' : 'start',
+        borderColor: '#FF9900',
+        backgroundColor: '#FF990030',
+      },
+      {
+        label: 'WARNING_LOWER_BOUND',
+        data: data.map((item) => ({
+          x: item.timePeriod,
+          y: item.errorLowerBound
+        })),
+        fill: isFatalLowerExist || isErrorLowerExist ? '-1' : 'start',
+        borderColor: '#EBE51E',
+        backgroundColor: '#EBE51E30',
+      },
+      {
+        label: 'ACTUAL VALUE',
+        data: data.map((item) => ({
+          x: item.timePeriod,
+          y: item.actualValue
+        })),
+        fill: false,
+        borderColor: 'rgb(54, 162, 235)',
+        backgroundColor: 'rgb(54, 162, 235)',
+      },
+      {
+        label: 'Expected VALUE',
+        data: data.map((item) => ({
+          x: item.timePeriod,
+          y: item.expectedValue
+        })),
+        fill: false,
+        borderColor: 'rgb(201, 203, 207)',
+        backgroundColor: 'rgb(201, 203, 207)',
+      },
+      {
         label: 'WARNING_UPPER_BOUND',
         data: data.map((item) => ({
           x: item.timePeriod,
           y: item.warningUpperBound
         })),
-        fill: 'end',
+        fill: isErrorUpperExist || isFatalUpperExist ? '+1' : 'end',
         borderColor: '#EBE51E',
         backgroundColor: '#EBE51E30',
       },
@@ -75,7 +81,7 @@ export const ChartView = ({ data }: ChartViewProps) => {
           x: item.timePeriod,
           y: item.errorUpperBound
         })),
-        fill: 'end',
+        fill: isFatalUpperExist ? '+1' : 'end',
         borderColor: '#FF9900',
         backgroundColor: '#FF990030',
       },
@@ -88,10 +94,9 @@ export const ChartView = ({ data }: ChartViewProps) => {
         fill: 'end',
         borderColor: '#E3170A',
         backgroundColor: '#E3170A30',
-      },
+      }
     ]
   };
-
 
   const options = {
     plugins: {
@@ -118,6 +123,7 @@ export const ChartView = ({ data }: ChartViewProps) => {
     }
   };
 
+  console.log('data', dataSource);
   return (
     <div className="my-8">
       <Line data={dataSource} options={options as any} />
