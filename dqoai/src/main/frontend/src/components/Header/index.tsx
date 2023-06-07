@@ -99,6 +99,14 @@ const Header = () => {
         schema,
         table
       );
+    } else if (match.path === ROUTES.PATTERNS.TABLE_INCIDENTS_NOTIFICATION) {
+      url = ROUTES.TABLE_INCIDENTS_NOTIFICATION(newCheckTypes, connection, schema, table);
+      value = ROUTES.TABLE_INCIDENTS_NOTIFICATION_VALUE(
+        newCheckTypes,
+        connection,
+        schema,
+        table
+      );
     } else if (match.path === ROUTES.PATTERNS.COLUMN) {
       let newTab = COLUMN_LEVEL_TABS[newCheckTypes].find(
         (item: PageTab) => item.value === tab

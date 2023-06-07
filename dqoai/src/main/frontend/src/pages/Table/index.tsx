@@ -17,6 +17,7 @@ import TableDataStream from '../../components/Connection/TableView/TableDataStre
 import TimestampsView from '../../components/Connection/TableView/TimestampsView';
 import { getFirstLevelState } from '../../redux/selectors';
 import TableNavigation from '../../components/TableNavigation';
+import TableIncidentsNotificationsView from "../../components/Connection/TableView/TableIncidentsNotificationsView";
 
 const initTabs = [
   {
@@ -42,17 +43,10 @@ const initTabs = [
   {
     label: 'Date and time columns',
     value: 'timestamps'
-  }
-];
-
-const tabs = [
-  {
-    label: 'Basic Statistics',
-    value: 'statistics'
   },
   {
-    label: 'Advanced Profiling',
-    value: 'advanced'
+    label: 'Incident Configuration',
+    value: 'incident_configuration'
   }
 ];
 
@@ -252,6 +246,7 @@ const TablePage = () => {
             <div>{activeTab === 'labels' && <TableLabelsView />}</div>
             <div>{activeTab === 'data-streams' && <TableDataStream />}</div>
             <div>{activeTab === 'timestamps' && <TimestampsView />}</div>
+            <div>{activeTab === 'incident_configuration' && <TableIncidentsNotificationsView />}</div>
           </>
         )}
       </div>

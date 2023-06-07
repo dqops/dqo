@@ -243,6 +243,17 @@ function TreeProvider(props: any) {
         open: false
       }
     ];
+    if (checkTypes === CheckTypes.SOURCES) {
+      items.push({
+        id: `${node.id}.incidents`,
+        label: `Incident Configuration`,
+        level: TREE_LEVEL.TABLE_INCIDENTS,
+        parentId: node.id,
+        items: [],
+        tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} incidents`,
+        open: false
+      })
+    }
     if (checkTypes === CheckTypes.PROFILING) {
       items.push(
         {
@@ -1114,6 +1125,22 @@ function TreeProvider(props: any) {
         label: node.label
       }));
       history.push(ROUTES.TABLE_COLUMNS(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? ''));
+    } else if (node.level === TREE_LEVEL.TABLE_INCIDENTS) {
+      const tableNode = findTreeNode(treeData, node.parentId ?? '');
+      const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+      const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
+
+      const url = ROUTES.TABLE_INCIDENTS_NOTIFICATION(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '');
+      if (firstLevelActiveTab === url) {
+        return;
+      }
+      dispatch(addFirstLevelTab(checkType, {
+        url,
+        value: url,
+        state: {},
+        label: node.label
+      }));
+      history.push(ROUTES.TABLE_INCIDENTS_NOTIFICATION(checkType, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? ''));
     } else if (node.level === TREE_LEVEL.COLUMN) {
       const columnsNode = findTreeNode(treeData, node?.parentId ?? '');
       const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
