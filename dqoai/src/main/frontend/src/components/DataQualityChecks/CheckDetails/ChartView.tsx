@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react';
-import moment from "moment/moment";
+import React from 'react';
 import { CheckResultDetailedSingleModel } from "../../../api";
 import { Line } from "react-chartjs-2";
 
@@ -9,88 +8,119 @@ type ChartViewProps = {
 
 export const ChartView = ({ data }: ChartViewProps) => {
   const dataSource = {
-    labels: data.map((item) => moment(item.executedAt).format('YYYY-MM-DD')),
     datasets: [
       {
+        label: 'ACTUAL VALUE',
+        data: data.map((item) => ({
+          x: item.timePeriod,
+          y: item.actualValue
+        })),
+        fill: -1,
+        borderColor: 'rgb(54, 162, 235)',
+        backgroundColor: 'rgb(54, 162, 235)',
+      },
+      {
+        label: 'Expected VALUE',
+        data: data.map((item) => ({
+          x: item.timePeriod,
+          y: item.expectedValue
+        })),
+        fill: -1,
+        borderColor: 'rgb(201, 203, 207)',
+        backgroundColor: 'rgb(201, 203, 207)',
+      },
+      {
         label: 'WARNING_LOWER_BOUND',
-        data: data.map((item) => item.errorLowerBound),
-        fill: true,
+        data: data.map((item) => ({
+          x: item.timePeriod,
+          y: item.errorLowerBound
+        })),
+        fill: 'start',
         borderColor: '#EBE51E',
         backgroundColor: '#EBE51E30',
       },
       {
         label: 'ERROR_LOWER_BOUND',
-        data: data.map((item) => item.errorLowerBound),
-        fill: true,
+        data: data.map((item) => ({
+          x: item.timePeriod,
+          y: item.errorLowerBound
+        })),
+        fill: 'start',
         borderColor: '#FF9900',
         backgroundColor: '#FF990030',
       },
       {
         label: 'FATAL_LOWER_BOUND',
-        data: data.map((item) => item.fatalLowerBound),
-        fill: true,
+        data: data.map((item) => ({
+          x: item.timePeriod,
+          y: item.fatalLowerBound
+        })),
+        fill: 'start',
         borderColor: '#E3170A',
         backgroundColor: '#E3170A30',
       },
       {
         label: 'WARNING_UPPER_BOUND',
-        data: data.map((item) => item.warningUpperBound),
-        fill: true,
+        data: data.map((item) => ({
+          x: item.timePeriod,
+          y: item.warningUpperBound
+        })),
+        fill: 'end',
         borderColor: '#EBE51E',
         backgroundColor: '#EBE51E30',
       },
       {
         label: 'ERROR_UPPER_BOUND',
-        data: data.map((item) => item.errorUpperBound),
-        fill: true,
+        data: data.map((item) => ({
+          x: item.timePeriod,
+          y: item.errorUpperBound
+        })),
+        fill: 'end',
         borderColor: '#FF9900',
         backgroundColor: '#FF990030',
       },
       {
         label: 'FATAL_UPPER_BOUND',
-        data: data.map((item) => item.fatalUpperBound),
-        fill: true,
+        data: data.map((item) => ({
+          x: item.timePeriod,
+          y: item.fatalUpperBound
+        })),
+        fill: 'end',
         borderColor: '#E3170A',
         backgroundColor: '#E3170A30',
       },
     ]
   };
 
+
   const options = {
     plugins: {
       title: {
         display: false,
       },
-      legend: {
-        display: false
+      filler: {
+        propagate: false
+      },
+      'samples-filler-analyser': {
+        target: 'chart-analyser'
       }
+    },
+    interaction: {
+      intersect: false,
     },
     scales: {
       x: {
-        stacked: true,
-        grid: {
-          lineWidth: 0,
-        }
+        type: 'time',
       },
       y: {
         stacked: true,
-        grid: {
-          lineWidth: 0,
-          drawTicks: false,
-        },
-        title: {
-          display: false,
-        },
-        ticks: {
-          display: false
-        }
       },
     }
   };
 
   return (
-    <div className="max-h-80 my-8">
-      <Line data={dataSource} options={options} />
+    <div className="my-8">
+      <Line data={dataSource} options={options as any} />
     </div>
   );
 }
