@@ -61,12 +61,12 @@ const TableColumns = ({
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
 
   const labels = [
-    'Name',
-    'Detected Datatype',
-    'Imported Type',
+    'Column name',
+    'Detected data type',
+    'Imported data type',
     'Length',
     'Scale',
-    'Minimal Value',
+    'Minimal value',
     'Null count'
   ];
 
@@ -596,10 +596,10 @@ const TableColumns = ({
       case 'Name':
         sortAlphabetictly();
         break;
-      case 'Detected Datatype':
+      case 'Detected data type':
         sortDataByDetectedtype();
         break;
-      case 'Imported Type':
+      case 'Imported type':
         sortDataByImportedtype();
         break;
       case 'Length':
@@ -611,7 +611,7 @@ const TableColumns = ({
       case 'Null count':
         sortDataByNullCount();
         break;
-      case 'Minimal Value':
+      case 'Minimal value':
         sortDataByMinimalValue();
         break;
     }
@@ -715,7 +715,7 @@ const TableColumns = ({
           >
             <SvgIcon name="boxplot" className="w-4 white" />
             <div className="hidden absolute right-0 bottom-6 p-1 bg-black text-white normal-case rounded-md group-hover:block whitespace-nowrap">
-              Collect statistic
+              Collect statistics
             </div>
           </IconButton>
 
@@ -729,7 +729,7 @@ const TableColumns = ({
             <SvgIcon name="delete" className="w-4" />
 
             <span className="hidden absolute right-0 bottom-6 p-1 normal-case bg-black text-white rounded-md group-hover:block whitespace-nowrap">
-              Click to delete
+              Delete column
             </span>
           </IconButton>
         </td>

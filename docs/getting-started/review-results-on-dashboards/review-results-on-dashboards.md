@@ -20,7 +20,7 @@ You can read more about the data quality dashboards in [Concept section](../../d
 ## Prerequisite
 
 To be able to display results on data quality dashboards you need to synchronize locally stored results with your DQO Cloud account.  
-To synchronize all the data just run `cloud sync all` command in DQO Shell.
+To synchronize all the data just click on the **Synchronize** button in the upper right corner or run `cloud sync all` command in DQO Shell.
 
 You can read more about `cloud` command in [Command-line specification section](../../command-line-interface/cloud.md).
 
