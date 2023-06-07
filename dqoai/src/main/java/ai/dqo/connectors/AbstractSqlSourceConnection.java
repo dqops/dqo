@@ -128,7 +128,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken());
 
         List<SourceSchemaModel> results = new ArrayList<>();
-        for (int rowIndex = 0; rowIndex < schemaRows.rowCount() ; rowIndex++) {
+        for (int rowIndex = 0; rowIndex < schemaRows.rowCount(); rowIndex++) {
             String schemaName = schemaRows.getString(rowIndex, "schema_name");
             SourceSchemaModel schemaModel = new SourceSchemaModel(schemaName);
             results.add(schemaModel);
