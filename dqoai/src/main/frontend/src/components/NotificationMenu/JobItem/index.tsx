@@ -2,7 +2,7 @@ import {
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import SvgIcon from '../../SvgIcon';
 import {
   Accordion,
@@ -40,6 +40,10 @@ const JobItem = ({
   const reduceCount = () => {
     dispatch(reduceCounter(true, sizeOfNot));
   };
+
+  useEffect(() => {
+    firstMatchingItem();
+  }, []);
 
   const data = useMemo(() => {
     const jobsData = jobs?.jobs
@@ -100,6 +104,15 @@ const JobItem = ({
     if (job.status === DqoJobHistoryEntryModelStatusEnum.cancelled) {
       return <SvgIcon name="failed" className="w-4 h-4 text-red-700" />;
     }
+  };
+  const firstMatchingItem = (): boolean => {
+    for (const x of data) {
+      if (x.item.jobId?.parentJobId?.jobId === job.jobId?.jobId) {
+        return true;
+      }
+    }
+
+    return false;
   };
 
   return (
@@ -243,7 +256,8 @@ const JobItem = ({
                 </tr>
               </>
             )}
-            {job.jobId?.parentJobId?.jobId === undefined ? (
+            {job.jobId?.parentJobId?.jobId === undefined &&
+            firstMatchingItem() ? (
               <Accordion open={open2} className="min-w-100">
                 <AccordionHeader
                   onClick={() => {
