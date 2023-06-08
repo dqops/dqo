@@ -21,6 +21,7 @@ const ColumnStatisticsView = () => {
   } = useParams();
   const [statistics, setStatistics] = useState<ColumnStatisticsModel>();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
+  const [isStringBool, setIsStringBool] = useState<boolean>(false);
 
   const fetchColumns = async () => {
     try {
@@ -45,10 +46,25 @@ const ColumnStatisticsView = () => {
       console.error(err);
     }
   };
+  const isString = async () => {
+    if (statistics?.statistics && statistics.statistics.length > 0) {
+      for (const x of statistics.statistics) {
+        if (
+          x.collector === 'string_min_length' ||
+          x.collector === 'string_mean_length' ||
+          x.collector === 'string_max_length'
+        ) {
+          setIsStringBool(true);
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     fetchColumns();
     fetchRows();
+
+    isString();
   }, [connection, schema, table, column]);
 
   const datatype_detected = (numberForFile: any) => {
@@ -84,6 +100,9 @@ const ColumnStatisticsView = () => {
     }
     return value;
   };
+  useEffect(() => {}, []);
+
+  console.log(isStringBool);
 
   return (
     <div className="p-4">
@@ -194,7 +213,7 @@ const ColumnStatisticsView = () => {
         </div>
         <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
           <div className="h-10 flex justify-between items-center gap-x-36">
-            <div className="ml-2 font-light">Unique count</div>
+            <div className="ml-2 font-light">Distinct count</div>
             <div>
               {statistics &&
                 statistics?.statistics?.map((x, index) => (
@@ -207,7 +226,7 @@ const ColumnStatisticsView = () => {
             </div>
           </div>
           <div className="h-10 flex justify-between items-center gap-x-36">
-            <div className="ml-2 font-light">Unique percent</div>
+            <div className="ml-2 font-light">Distinct percent</div>
             <div>
               {statistics &&
                 statistics?.statistics?.map((x, index) => (
@@ -315,39 +334,57 @@ const ColumnStatisticsView = () => {
             <div className="ml-2 font-light">Minimum string length</div>
             <div>
               {statistics &&
+              statistics?.statistics?.filter(
+                (x) => x.collector === 'string_min_length'
+              ).length === 0 ? (
+                <div className="mr-2 font-bold">No string data type</div>
+              ) : (
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2 font-bold" key={index}>
                     {x.collector === 'string_min_length'
                       ? renderValue(x.result)
                       : ''}
                   </div>
-                ))}
+                ))
+              )}
             </div>
           </div>
           <div className="h-10 flex justify-between items-center gap-x-36">
             <div className="ml-2 font-light">Mean string length</div>
             <div>
               {statistics &&
+              statistics?.statistics?.filter(
+                (x) => x.collector === 'string_mean_length'
+              ).length === 0 ? (
+                <div className="mr-2 font-bold">No string data type</div>
+              ) : (
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2 font-bold" key={index}>
                     {x.collector === 'string_mean_length'
                       ? Number(renderValue(x.result)).toFixed(2)
                       : ''}
                   </div>
-                ))}
+                ))
+              )}
             </div>
           </div>
           <div className="h-10 flex justify-between items-center gap-x-36">
             <div className="ml-2 font-light">Maximum string length</div>
             <div>
               {statistics &&
+              statistics?.statistics?.filter(
+                (x) => x.collector === 'string_max_length'
+              ).length === 0 ? (
+                <div className="mr-2 font-bold">No string data type</div>
+              ) : (
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2 font-bold" key={index}>
                     {x.collector === 'string_max_length'
                       ? renderValue(x.result)
                       : ''}
                   </div>
-                ))}
+                ))
+              )}
             </div>
           </div>
         </div>
