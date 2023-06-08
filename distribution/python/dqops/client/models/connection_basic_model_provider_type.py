@@ -1,0 +1,13 @@
+from enum import Enum
+
+
+class ConnectionBasicModelProviderType(str, Enum):
+    BIGQUERY = "bigquery"
+    MYSQL = "mysql"
+    POSTGRESQL = "postgresql"
+    REDSHIFT = "redshift"
+    SNOWFLAKE = "snowflake"
+    SQLSERVER = "sqlserver"
+
+    def __str__(self) -> str:
+        return str(self.value)

@@ -74,7 +74,7 @@ public class SchemasController {
      * @param connectionName Connection name.
      * @return List of schemas inside a connection.
      */
-    @GetMapping("/{connectionName}/schemas")
+    @GetMapping(value = "/{connectionName}/schemas", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getSchemas", notes = "Returns a list of schemas inside a connection", response = SchemaModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -119,7 +119,7 @@ public class SchemasController {
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @return UI friendly data quality profiling check configuration list on a requested schema.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/profiling/ui")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/profiling/ui", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getSchemaProfilingChecksUI", notes = "Return a UI friendly model of configurations for data quality profiling checks on a schema", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -190,7 +190,7 @@ public class SchemasController {
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @return UI friendly data quality recurring check configuration list on a requested schema.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/recurring/{timeScale}/ui")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/recurring/{timeScale}/ui", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getSchemaRecurringChecksUI", notes = "Return a UI friendly model of configurations for data quality recurring checks on a schema", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -263,7 +263,7 @@ public class SchemasController {
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @return UI friendly data quality partitioned check configuration list on a requested schema.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/partitioned/{timeScale}/ui")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/partitioned/{timeScale}/ui", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getSchemaPartitionedChecksUI", notes = "Return a UI friendly model of configurations for data quality partitioned checks on a schema", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -331,7 +331,7 @@ public class SchemasController {
      * @param checkName      (Optional) Filter on check name.
      * @return Data quality checks templates on a requested schema.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/bulkenable/profiling")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/bulkenable/profiling", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getSchemaProfilingChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -370,7 +370,7 @@ public class SchemasController {
      * @param checkName      (Optional) Filter on check name.
      * @return Data quality checks templates on a requested schema.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/bulkenable/recurring/{timeScale}")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/bulkenable/recurring/{timeScale}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getSchemaRecurringChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -410,7 +410,7 @@ public class SchemasController {
      * @param checkName      (Optional) Filter on check name.
      * @return Data quality checks templates on a requested schema.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/bulkenable/partitioned/{timeScale}")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/bulkenable/partitioned/{timeScale}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getSchemaPartitionedChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {

@@ -53,30 +53,30 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.openapitools</groupId>
-				<artifactId>openapi-generator-maven-plugin</artifactId>
-				<version>6.6.0</version>
-				<executions>
-					<execution>
-						<id>generate-python-client</id>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<phase>compile</phase>
-						<configuration>
-							<inputSpec>${project.basedir}/../dqoai/target/swagger/dqo-ui-swagger-3.json</inputSpec>
-							<generatorName>python</generatorName>
-							<engine>handlebars</engine>
-							<output>${project.basedir}/python/dqops/client</output>
-							<configOptions>
-								<packageName>client</packageName>
-								<projectName>dqo</projectName>
-							</configOptions>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.openapitools</groupId>-->
+<!--				<artifactId>openapi-generator-maven-plugin</artifactId>-->
+<!--				<version>6.6.0</version>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<id>generate-python-client</id>-->
+<!--						<goals>-->
+<!--							<goal>generate</goal>-->
+<!--						</goals>-->
+<!--						<phase>compile</phase>-->
+<!--						<configuration>-->
+<!--							<inputSpec>${project.basedir}/../dqoai/target/swagger/dqo-ui-swagger-3.json</inputSpec>-->
+<!--							<generatorName>python</generatorName>-->
+<!--							<engine>handlebars</engine>-->
+<!--							<output>${project.basedir}/python/dqops/client</output>-->
+<!--							<configOptions>-->
+<!--								<packageName>client</packageName>-->
+<!--								<projectName>dqo</projectName>-->
+<!--							</configOptions>-->
+<!--						</configuration>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>

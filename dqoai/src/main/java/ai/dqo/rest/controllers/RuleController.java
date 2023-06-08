@@ -67,7 +67,7 @@ public class RuleController {
      * @param fullRuleName Full rule name.
      * @return Model of the rule with specific rule name.
      */
-    @GetMapping("/rules/{fullRuleName}")
+    @GetMapping(value = "/rules/{fullRuleName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getRule", notes = "Returns a rule definition", response = RuleModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -109,7 +109,7 @@ public class RuleController {
      * @param fullRuleName Full rule name.
      * @return Empty response.
      */
-    @PostMapping("/rules/{fullRuleName}")
+    @PostMapping(value = "/rules/{fullRuleName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "createRule", notes = "Creates (adds) a new custom rule given the rule definition.")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -150,7 +150,7 @@ public class RuleController {
      * @param fullRuleName Full rule name.
      * @return Empty response.
      */
-    @PutMapping("/rules/{fullRuleName}")
+    @PutMapping(value = "/rules/{fullRuleName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateRule", notes = "Updates an existing rule, making a custom rule definition if it is not present")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -210,7 +210,7 @@ public class RuleController {
      * @param fullRuleName  Full rule name.
      * @return Empty response.
      */
-    @DeleteMapping("/rules/{fullRuleName}")
+    @DeleteMapping(value = "/rules/{fullRuleName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "deleteRule", notes = "Deletes a custom rule definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -245,7 +245,7 @@ public class RuleController {
      * Returns all combined rule folder model.
      * @return rule basic tree model.
      */
-    @GetMapping("/definitions/rules")
+    @GetMapping(value = "/definitions/rules", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getRuleFolderTree", notes = "Returns a tree of all rules available in DQO, both built-in rules and user defined or customized rules.",
             response = RuleBasicFolderModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -295,7 +295,7 @@ public class RuleController {
      * Returns a flat list of all rules.
      * @return List of all rules.
      */
-    @GetMapping("/rules")
+    @GetMapping(value = "/rules", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getAllRules", notes = "Returns a flat list of all rules available in DQO, both built-in rules and user defined or customized rules.",
             response = RuleBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)

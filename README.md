@@ -70,7 +70,7 @@ DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
 
 ## Documentation
 
-For full documentation with guides and use cases, visit https://dqo.ai/docs
+For full documentation with guides and use cases, visit https://dqops.com/docs
 
 ## Contact and issues
 
@@ -78,4 +78,4 @@ If you find any issues with the tool, just post it here:
 
 https://github.com/dqops/dqo/issues
 
-or contact us via https://dqo.ai/
+or contact us via https://dqops.com/

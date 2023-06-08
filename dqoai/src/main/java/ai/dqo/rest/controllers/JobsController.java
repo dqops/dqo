@@ -116,7 +116,7 @@ public class JobsController {
      * @param runChecksParameters Run checks parameters with a check filter and an optional time range.
      * @return Job summary response with the identity of the started job.
      */
-    @PostMapping("/runchecks")
+    @PostMapping(value = "/runchecks", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "runChecks", notes = "Starts a new background job that will run selected data quality checks", response = DqoQueueJobId.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -143,7 +143,7 @@ public class JobsController {
      * @param statisticsCollectorSearchFilters Data statistics collector filters.
      * @return Job summary response with the identity of the started job.
      */
-    @PostMapping("/collectstatistics/table")
+    @PostMapping(value = "/collectstatistics/table", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "collectStatisticsOnTable", notes = "Starts a new background job that will run selected data statistics collectors on a whole table", response = DqoQueueJobId.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -172,7 +172,7 @@ public class JobsController {
      * @param statisticsCollectorSearchFilters Data statistics collectors filters.
      * @return Job summary response with the identity of the started job.
      */
-    @PostMapping("/collectstatistics/datastreams")
+    @PostMapping(value = "/collectstatistics/datastreams", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "collectStatisticsOnDataStreams", notes = "Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data stream", response = DqoQueueJobId.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -200,7 +200,7 @@ public class JobsController {
      * Retrieves a list of all queued and recently finished jobs.
      * @return List of all active or recently finished jobs on the queue.
      */
-    @GetMapping("/jobs")
+    @GetMapping(value = "/jobs", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getAllJobs", notes = "Retrieves a list of all queued and recently finished jobs.",
             response = DqoJobQueueInitialSnapshotModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -219,7 +219,7 @@ public class JobsController {
      * @param jobId Job id of a job to cancel.
      * @return Empty response.
      */
-    @DeleteMapping("/jobs/{jobId}")
+    @DeleteMapping(value = "/jobs/{jobId}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "cancelJob", notes = "Cancels a running job")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -239,7 +239,7 @@ public class JobsController {
      * Retrieves an incremental list of job changes (new jobs or job status changes).
      * @return List of jobs that have changed since the given sequence number.
      */
-    @GetMapping("/jobchangessince/{sequenceNumber}")
+    @GetMapping(value = "/jobchangessince/{sequenceNumber}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getJobChangesSince", notes = "Retrieves an incremental list of job changes (new jobs or job status changes)",
             response = DqoJobQueueIncrementalSnapshotModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -269,7 +269,7 @@ public class JobsController {
      * @param importParameters Import tables job parameters.
      * @return Job summary response with the identity of the started job.
      */
-    @PostMapping("/importtables")
+    @PostMapping(value = "/importtables",consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "importTables", notes = "Starts a new background job that will import selected tables.", response = DqoQueueJobId.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -291,7 +291,7 @@ public class JobsController {
      * @param deleteStoredDataParameters Delete stored data job parameters.
      * @return Job summary response with the identity of the started job.
      */
-    @PostMapping("/deletestoreddata")
+    @PostMapping(value = "/deletestoreddata", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "deleteStoredData", notes = "Starts a new background job that will delete stored data about check results, sensor readouts etc.", response = DqoQueueJobId.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -312,7 +312,7 @@ public class JobsController {
      * @param synchronizeFolderParameters Delete stored data job parameters.
      * @return Job summary response with the identity of the started jobs.
      */
-    @PostMapping("/synchronize")
+    @PostMapping(value = "/synchronize",consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "synchronizeFolders", notes = "Starts multiple file synchronization jobs that will synchronize files from selected DQO User home folders to the DQO Cloud. " +
             "The default synchronization mode is a full synchronization (upload local files, download new files from the cloud).", response = DqoQueueJobId.class)
     @ResponseStatus(HttpStatus.CREATED)
@@ -334,7 +334,7 @@ public class JobsController {
      * Retrieves the state of the job scheduler.
      * @return true when the cron scheduler is running, false when it is stopped.
      */
-    @GetMapping("/scheduler/isrunning")
+    @GetMapping(value = "/scheduler/isrunning", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "isCronSchedulerRunning", notes = "Checks if the DQO internal CRON scheduler is running and processing jobs scheduled using cron expressions.",
             response = Boolean.class)
     @ResponseStatus(HttpStatus.OK)
@@ -352,7 +352,7 @@ public class JobsController {
      * Starts the cron job scheduler (when it is not running).
      * @return Nothing.
      */
-    @PostMapping("/scheduler/status/start")
+    @PostMapping(value = "/scheduler/status/start", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "startCronScheduler", notes = "Starts the job scheduler that runs recurring jobs that are scheduled by assigning cron expressions.",
             response = Void.class)
     @ResponseStatus(HttpStatus.OK)
@@ -375,7 +375,7 @@ public class JobsController {
      * Stops the cron job scheduler (when it is not running).
      * @return Nothing.
      */
-    @PostMapping("/scheduler/status/stop")
+    @PostMapping(value = "/scheduler/status/stop", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "stopCronScheduler", notes = "Stops the job scheduler that runs recurring jobs that are scheduled by assigning cron expressions.",
             response = Void.class)
     @ResponseStatus(HttpStatus.OK)

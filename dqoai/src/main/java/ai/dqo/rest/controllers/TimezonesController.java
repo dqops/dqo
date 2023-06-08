@@ -41,8 +41,8 @@ import java.util.List;
 
 public class TimezonesController {
 
-    @GetMapping(produces = "application/json")
-    @ApiOperation(value = "getAvailableZoneIds", notes = "Returns a list of available zone ids", response = String[].class)
+    @GetMapping(consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "getAvailableZoneIds", notes = "Returns a list of available time zone ids", response = String[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = String[].class),

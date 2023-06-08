@@ -1,0 +1,82 @@
+from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+
+import attr
+
+from ..types import UNSET, Unset
+
+if TYPE_CHECKING:
+    from ..models.table_accuracy_row_count_match_percent_check_spec import (
+        TableAccuracyRowCountMatchPercentCheckSpec,
+    )
+
+
+T = TypeVar("T", bound="TableAccuracyProfilingChecksSpec")
+
+
+@attr.s(auto_attribs=True)
+class TableAccuracyProfilingChecksSpec:
+    """
+    Attributes:
+        row_count_match_percent (Union[Unset, TableAccuracyRowCountMatchPercentCheckSpec]):
+    """
+
+    row_count_match_percent: Union[
+        Unset, "TableAccuracyRowCountMatchPercentCheckSpec"
+    ] = UNSET
+    additional_properties: Dict[str, Any] = attr.ib(init=False, factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+        row_count_match_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.row_count_match_percent, Unset):
+            row_count_match_percent = self.row_count_match_percent.to_dict()
+
+        field_dict: Dict[str, Any] = {}
+        field_dict.update(self.additional_properties)
+        field_dict.update({})
+        if row_count_match_percent is not UNSET:
+            field_dict["row_count_match_percent"] = row_count_match_percent
+
+        return field_dict
+
+    @classmethod
+    def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.table_accuracy_row_count_match_percent_check_spec import (
+            TableAccuracyRowCountMatchPercentCheckSpec,
+        )
+
+        d = src_dict.copy()
+        _row_count_match_percent = d.pop("row_count_match_percent", UNSET)
+        row_count_match_percent: Union[
+            Unset, TableAccuracyRowCountMatchPercentCheckSpec
+        ]
+        if isinstance(_row_count_match_percent, Unset):
+            row_count_match_percent = UNSET
+        else:
+            row_count_match_percent = (
+                TableAccuracyRowCountMatchPercentCheckSpec.from_dict(
+                    _row_count_match_percent
+                )
+            )
+
+        table_accuracy_profiling_checks_spec = cls(
+            row_count_match_percent=row_count_match_percent,
+        )
+
+        table_accuracy_profiling_checks_spec.additional_properties = d
+        return table_accuracy_profiling_checks_spec
+
+    @property
+    def additional_keys(self) -> List[str]:
+        return list(self.additional_properties.keys())
+
+    def __getitem__(self, key: str) -> Any:
+        return self.additional_properties[key]
+
+    def __setitem__(self, key: str, value: Any) -> None:
+        self.additional_properties[key] = value
+
+    def __delitem__(self, key: str) -> None:
+        del self.additional_properties[key]
+
+    def __contains__(self, key: str) -> bool:
+        return key in self.additional_properties

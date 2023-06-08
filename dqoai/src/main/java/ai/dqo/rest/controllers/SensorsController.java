@@ -71,7 +71,7 @@ public class SensorsController {
      * @param fullSensorName Full sensor name.
      * @return Model of the sensor with specific sensor name.
      */
-    @GetMapping("/sensors/{fullSensorName}")
+    @GetMapping(value = "/sensors/{fullSensorName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getSensor", notes = "Returns a sensor model", response = SensorModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -144,7 +144,7 @@ public class SensorsController {
      * @param fullSensorName Full sensor name
      * @param sensorModel sensor model
      */
-    @PostMapping("/sensors/{fullSensorName}")
+    @PostMapping(value = "/sensors/{fullSensorName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "createSensor", notes = "Creates (adds) a new sensor given sensor information.")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -192,7 +192,7 @@ public class SensorsController {
      * or removes sensor if custom definition is same as Dqo Home sensor
      * @param sensorModel sensor model
      */
-    @PutMapping("/sensors/{fullSensorName}")
+    @PutMapping(value = "/sensors/{fullSensorName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateSensor", notes = "Updates an existing sensor, making a custom sensor definition if it is not present. \n" +
             "Removes sensor if custom definition is same as Dqo Home sensor")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -293,7 +293,7 @@ public class SensorsController {
      * @param fullSensorName  Full sensor name.
      * @return Empty response.
      */
-    @DeleteMapping("/sensors/{fullSensorName}")
+    @DeleteMapping(value = "/sensors/{fullSensorName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "deleteSensor", notes = "Deletes a custom sensor definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -328,7 +328,7 @@ public class SensorsController {
      * Returns all combined sensor folder model.
      * @return sensor basic folder model.
      */
-    @GetMapping("/definitions/sensors")
+    @GetMapping(value = "/definitions/sensors", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getSensorFolderTree", notes = "Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
             response = SensorBasicFolderModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -397,7 +397,7 @@ public class SensorsController {
      * Returns a flat list of all sensors.
      * @return List of all sensors.
      */
-    @GetMapping("/sensors")
+    @GetMapping(value = "/sensors", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getAllSensors", notes = "Returns a flat list of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
             response = SensorBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)

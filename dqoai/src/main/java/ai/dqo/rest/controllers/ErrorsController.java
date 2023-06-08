@@ -69,7 +69,7 @@ public class ErrorsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent errors.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/errors")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/errors", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getTableProfilingErrors", notes = "Returns the errors related to the most recent check executions for all table level data quality profiling checks on a table",
             response = ErrorsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -128,7 +128,7 @@ public class ErrorsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent errors.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/errors")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/errors", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getTableRecurringErrors", notes = "Returns the errors related to the most recent table level recurring executions for the recurring at a requested time scale",
             response = ErrorsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -188,7 +188,7 @@ public class ErrorsController {
      * @param monthEnd       Month end boundary.
      * @return View of the errors related to the recent partitioned checks results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/errors")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/errors", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getTablePartitionedErrors", notes = "Returns errors related to the recent table level partitioned checks executions for a requested time scale", response = ErrorsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -247,7 +247,7 @@ public class ErrorsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent errors.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/errors")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/errors", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getColumnProfilingErrors", notes = "Returns the errors related to the recent check executions for all column level data quality profiling checks on a column",
             response = ErrorsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -313,7 +313,7 @@ public class ErrorsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent errors.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/errors")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/errors", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getColumnRecurringErrors", notes = "Returns errors related to the recent column level recurring executions for the recurring at a requested time scale",
             response = ErrorsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -380,7 +380,7 @@ public class ErrorsController {
      * @param monthEnd       Month end boundary.
      * @return View of errors related to the recent partitioned checks results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/errors")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/errors", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedErrors", notes = "Returns the errors related to the recent column level partitioned checks executions for a requested time scale",
             response = ErrorsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)

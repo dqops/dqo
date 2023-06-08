@@ -867,10 +867,10 @@
 						</goals>
 						<phase>compile</phase>
 						<configuration>
-							<mainClass>ai.dqo.rest.server.openapi.Swagger2ToOpenApi3UpgradePostProcessor</mainClass>
+							<mainClass>ai.dqo.rest.server.openapi.PrepareOpenApiFileForPythonClientPostProcessor</mainClass>
 							<arguments>
 								<argument>${project.basedir}/target/swagger/dqo-ui-swagger-2.json</argument>
-								<argument>${project.basedir}/target/swagger/dqo-ui-swagger-3.json</argument>
+								<argument>${project.basedir}/target/swagger/dqo-ui-swagger-3-python-client.json</argument>
 							</arguments>
 						</configuration>
 					</execution>

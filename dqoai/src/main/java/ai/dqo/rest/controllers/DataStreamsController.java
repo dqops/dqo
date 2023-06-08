@@ -62,7 +62,7 @@ public class DataStreamsController {
      * @param tableName      Table name.
      * @return List of basic models of data streams on the table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getDataStreams", notes = "Returns a list of data streams on the table", response = DataStreamBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -105,7 +105,7 @@ public class DataStreamsController {
      * @param dataStreamName Data stream name.
      * @return Model of the data stream containing all configurations.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "getDataStream", notes = "Returns a model of the data stream", response = DataStreamModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -145,7 +145,7 @@ public class DataStreamsController {
      * @param dataStreamModel Data stream trimmed model.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateDataStream", notes = "Updates a data stream according to the provided model")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -202,7 +202,7 @@ public class DataStreamsController {
      * @param tableName       Table name.
      * @return Empty response.
      */
-    @PostMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams")
+    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "createDataStream", notes = "Creates a new data stream configuration")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -249,7 +249,7 @@ public class DataStreamsController {
      * @param dataStreamName  Data stream name.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}/setDefault")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}/setDefault", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "setDefaultDataStream", notes = "Sets a data stream as default")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -298,7 +298,7 @@ public class DataStreamsController {
      * @param dataStreamName Data stream name.
      * @return Empty response.
      */
-    @DeleteMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}")
+    @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/datastreams/{dataStreamName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "deleteDataStream", notes = "Deletes a data stream")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
