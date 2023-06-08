@@ -250,12 +250,19 @@ const JobItem = ({
                     setOpen2(!open2), reduceCount();
                   }}
                 >
-                  <div
-                    className=" flex justify-between items-center text-sm w-full text-gray-700"
-                    onClick={() => setSizeOfNot(sizeOfNot && sizeOfNot - 6)}
-                  >
-                    Tasks{' '}
-                  </div>
+                  {data.map((x, index) =>
+                    x.item.jobId?.parentJobId?.jobId !== job.jobId?.jobId ? (
+                      <div
+                        className=" flex justify-between items-center text-sm w-full text-gray-700"
+                        onClick={() => setSizeOfNot(sizeOfNot && sizeOfNot - 6)}
+                        key={index}
+                      >
+                        Tasks{' '}
+                      </div>
+                    ) : (
+                      <></>
+                    )
+                  )}
                 </AccordionHeader>
                 <AccordionBody className="py-0">
                   <div className="overflow-y-hidden">
