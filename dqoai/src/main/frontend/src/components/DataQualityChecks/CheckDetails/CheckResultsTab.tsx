@@ -191,6 +191,9 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
     }
   }, [mode]);
 
+  const allResults = results.map((result) => (result.singleCheckResults || []).map((item) => ({ ...item, checkName: result.checkName })))
+    .reduce((arr, el) => [...arr, ...el], []);
+
   return (
     <div className="py-3 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
       <div className="flex space-x-8 items-center">
@@ -229,28 +232,20 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
 
       {mode === 'table' && (
         <>
-          {results.map((result, index) => (
-            <div key={index}>
-              <Table
-                className="mt-4 w-full"
-                columns={columns}
-                data={(result.singleCheckResults || []).map((item) => ({ ...item, checkName: result.checkName }))}
-                emptyMessage="No Data"
-                getRowClass={getSeverityClass}
-              />
-            </div>
-          ))}
+          {results[0] && (
+            <Table
+              className="mt-4 w-full"
+              columns={columns}
+              data={(results[0].singleCheckResults || []).map((item) => ({ ...item, checkName: results[0].checkName }))}
+              emptyMessage="No Data"
+              getRowClass={getSeverityClass}
+            />
+          )}
         </>
       )}
       {mode === 'chart' && (
         <>
-          {results.map((result, index) => (
-            <div key={index}>
-              <ChartView
-                data={(result.singleCheckResults || []).map((item) => ({ ...item, checkName: result.checkName }))}
-              />
-            </div>
-          ))}
+          <ChartView data={allResults} />
         </>
       )}
     </div>
