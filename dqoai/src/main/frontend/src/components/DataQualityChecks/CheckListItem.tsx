@@ -115,7 +115,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
       return;
     }
     await onUpdate();
-    JobApiClient.runChecks({
+    JobApiClient.runChecks(false, undefined, {
       checkSearchFilters: check?.run_checks_job_template
     });
   };

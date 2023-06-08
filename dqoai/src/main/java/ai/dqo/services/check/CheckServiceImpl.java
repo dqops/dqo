@@ -20,7 +20,7 @@ import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.ParentDqoJobQueue;
 import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.jobs.RunChecksQueueJob;
-import ai.dqo.execution.checks.jobs.RunChecksQueueJobParameters;
+import ai.dqo.execution.checks.jobs.RunChecksParameters;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
@@ -95,7 +95,7 @@ public class CheckServiceImpl implements CheckService {
                                            CheckExecutionProgressListener checkExecutionProgressListener,
 										   boolean dummyRun) {
         RunChecksQueueJob runChecksJob = this.dqoQueueJobFactory.createRunChecksJob();
-        RunChecksQueueJobParameters parameters = new RunChecksQueueJobParameters(checkSearchFilters, timeWindowFilterParameters,
+        RunChecksParameters parameters = new RunChecksParameters(checkSearchFilters, timeWindowFilterParameters,
                 checkExecutionProgressListener, dummyRun);
         runChecksJob.setParameters(parameters);
 

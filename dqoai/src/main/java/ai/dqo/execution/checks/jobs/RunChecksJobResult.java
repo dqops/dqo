@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 @ApiModel(value = "RunChecksQueueJobResult", description = "Returns the result (highest data quality check severity and the finished checks count) for the checks that were recently executed.")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class RunChecksQueueJobResult {
+public class RunChecksJobResult {
     /**
      * The highest check severity for the data quality checks executed in this batch.
      */
@@ -76,7 +76,7 @@ public class RunChecksQueueJobResult {
     /**
      * The default parameterless constructor.
      */
-    public RunChecksQueueJobResult() {
+    public RunChecksJobResult() {
     }
 
     /**
@@ -84,8 +84,12 @@ public class RunChecksQueueJobResult {
      * @param checkExecutionSummary Check execution summary.
      * @return The job result object.
      */
-    public static RunChecksQueueJobResult fromCheckExecutionSummary(CheckExecutionSummary checkExecutionSummary) {
-        RunChecksQueueJobResult runChecksQueueJobResult = new RunChecksQueueJobResult() {{
+    public static RunChecksJobResult fromCheckExecutionSummary(CheckExecutionSummary checkExecutionSummary) {
+        if (checkExecutionSummary == null) {
+            return null;
+        }
+
+        RunChecksJobResult runChecksJobResult = new RunChecksJobResult() {{
             setExecutedChecks(checkExecutionSummary.getTotalChecksExecutedCount());
             setValidResults(checkExecutionSummary.getValidResultsCount());
             setWarnings(checkExecutionSummary.getWarningSeverityIssuesCount());
@@ -94,18 +98,18 @@ public class RunChecksQueueJobResult {
             setExecutionErrors(checkExecutionSummary.getTotalExecutionErrorsCount());
         }};
 
-        if (runChecksQueueJobResult.getFatals() > 0) {
-            runChecksQueueJobResult.setHighestSeverity(RuleSeverityLevel.fatal);
+        if (runChecksJobResult.getFatals() > 0) {
+            runChecksJobResult.setHighestSeverity(RuleSeverityLevel.fatal);
         }
-        else if (runChecksQueueJobResult.getErrors() > 0) {
-            runChecksQueueJobResult.setHighestSeverity(RuleSeverityLevel.error);
+        else if (runChecksJobResult.getErrors() > 0) {
+            runChecksJobResult.setHighestSeverity(RuleSeverityLevel.error);
         }
-        else if (runChecksQueueJobResult.getWarnings() > 0) {
-            runChecksQueueJobResult.setHighestSeverity(RuleSeverityLevel.warning);
+        else if (runChecksJobResult.getWarnings() > 0) {
+            runChecksJobResult.setHighestSeverity(RuleSeverityLevel.warning);
         } else {
-            runChecksQueueJobResult.setHighestSeverity(RuleSeverityLevel.valid);
+            runChecksJobResult.setHighestSeverity(RuleSeverityLevel.valid);
         }
 
-        return runChecksQueueJobResult;
+        return runChecksJobResult;
     }
 }

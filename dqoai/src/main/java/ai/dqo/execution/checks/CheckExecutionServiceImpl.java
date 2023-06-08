@@ -38,7 +38,7 @@ import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJob;
-import ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJobParameters;
+import ai.dqo.execution.checks.jobs.RunChecksOnTableParameters;
 import ai.dqo.execution.checks.progress.*;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationResult;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationService;
@@ -73,7 +73,6 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 import tech.tablesaw.api.Table;
 
 import java.time.LocalDateTime;
@@ -184,7 +183,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             for (TableWrapper targetTable : targetTables) {
                 ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
 
-                RunChecksOnTableQueueJobParameters runChecksOnTableQueueJobParameters = new RunChecksOnTableQueueJobParameters() {{
+                RunChecksOnTableParameters runChecksOnTableParameters = new RunChecksOnTableParameters() {{
                    setConnection(connectionWrapper.getName());
                    setMaxJobsPerConnection(connectionWrapper.getSpec().getParallelRunsLimit());
                    setTable(targetTable.getPhysicalTableName());
@@ -194,7 +193,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                    setDummyExecution(dummySensorExecution);
                 }};
                 RunChecksOnTableQueueJob runChecksOnTableJob = this.dqoQueueJobFactory.createRunChecksOnTableJob();
-                runChecksOnTableJob.setParameters(runChecksOnTableQueueJobParameters);
+                runChecksOnTableJob.setParameters(runChecksOnTableParameters);
                 childTableJobs.add(runChecksOnTableJob);
             }
 
@@ -246,7 +245,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             checkSearchFilters.setSchemaTableName(targetTable.getPhysicalTableName().toTableSearchFilter());
             checkSearchFilters.setCheckHierarchyIds(scheduledChecksForTable.getChecks());
 
-            RunChecksOnTableQueueJobParameters runChecksOnTableQueueJobParameters = new RunChecksOnTableQueueJobParameters() {{
+            RunChecksOnTableParameters runChecksOnTableParameters = new RunChecksOnTableParameters() {{
                 setConnection(connectionWrapper.getName());
                 setMaxJobsPerConnection(connectionWrapper.getSpec().getParallelRunsLimit());
                 setTable(targetTable.getPhysicalTableName());
@@ -255,7 +254,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 setProgressListener(progressListener);
             }};
             RunChecksOnTableQueueJob runChecksOnTableJob = this.dqoQueueJobFactory.createRunChecksOnTableJob();
-            runChecksOnTableJob.setParameters(runChecksOnTableQueueJobParameters);
+            runChecksOnTableJob.setParameters(runChecksOnTableParameters);
             childTableJobs.add(runChecksOnTableJob);
         }
 

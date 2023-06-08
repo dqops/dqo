@@ -19,7 +19,6 @@ import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.SilentCheckExecutionProgressListener;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -28,31 +27,12 @@ import io.swagger.annotations.ApiModel;
 import lombok.EqualsAndHashCode;
 
 /**
- * Parameters object for the run checks on a single table job.
+ * Parameters object for the run checks job.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "RunChecksOnTableQueueJobParameters", description = "Run checks configuration for a job that will run checks on a single table, specifies the target table and the target checks that should be executed and an optional time window.")
+@ApiModel(value = "RunChecksQueueJobParameters", description = "Run checks configuration, specifies the target checks that should be executed and an optional time window.")
 @EqualsAndHashCode(callSuper = false)
-public class RunChecksOnTableQueueJobParameters implements Cloneable {
-    /**
-     * The name of the target connection.
-     */
-    @JsonPropertyDescription("The name of the target connection.")
-    private String connection;
-
-    /**
-     * The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs.
-     * Null value means that there are no limits applied.
-     */
-    @JsonPropertyDescription("The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs.")
-    private Integer maxJobsPerConnection;
-
-    /**
-     * The full name of a target table.
-     */
-    @JsonPropertyDescription("The full physical name (schema.table) of the target table.")
-    private PhysicalTableName table;
-
+public class RunChecksParameters implements Cloneable {
     /**
      * Target data quality checks filter.
      */
@@ -82,86 +62,29 @@ public class RunChecksOnTableQueueJobParameters implements Cloneable {
      * The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
      */
     @JsonPropertyDescription("The result of running the check, updated when the run checks job finishes. Contains the count of executed checks.")
-    private RunChecksQueueJobResult runChecksResult;
+    private RunChecksJobResult runChecksResult;
 
     /**
      * Default constructor.
      */
-    public RunChecksOnTableQueueJobParameters() {
+    public RunChecksParameters() {
     }
 
     /**
      * Creates a check run parameters.
-     * @param connection The name of the target connection.
-     * @param maxJobsPerConnection The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs.
-     * @param table The full physical name (schema.table) of the target table.
      * @param checkSearchFilters Check search filters.
      * @param timeWindowFilter Optional user provided time window filters, used to restrict the time range that is analyzed.
      * @param progressListener Progress listener to receive events during the check execution.
      * @param dummyExecution True when it is a dummy run, only for showing rendered sensor queries.
      */
-    public RunChecksOnTableQueueJobParameters(String connection,
-                                              Integer maxJobsPerConnection,
-                                              PhysicalTableName table,
-                                              CheckSearchFilters checkSearchFilters,
-                                              TimeWindowFilterParameters timeWindowFilter,
-                                              CheckExecutionProgressListener progressListener,
-                                              boolean dummyExecution) {
-        this.connection = connection;
-        this.maxJobsPerConnection = maxJobsPerConnection;
-        this.table = table;
+    public RunChecksParameters(CheckSearchFilters checkSearchFilters,
+                               TimeWindowFilterParameters timeWindowFilter,
+                               CheckExecutionProgressListener progressListener,
+                               boolean dummyExecution) {
         this.checkSearchFilters = checkSearchFilters;
         this.timeWindowFilter = timeWindowFilter;
         this.progressListener = progressListener;
         this.dummyExecution = dummyExecution;
-    }
-
-    /**
-     * Returns the name of the target connection.
-     * @return Target connection name.
-     */
-    public String getConnection() {
-        return connection;
-    }
-
-    /**
-     * Sets the name of the target connection.
-     * @param connection Target connection name.
-     */
-    public void setConnection(String connection) {
-        this.connection = connection;
-    }
-
-    /**
-     * Returns the limit of concurrent jobs (run checks on table) that could be executed in parallel on this connection.
-     * @return Maximum number of concurrent check executions on this connection.
-     */
-    public Integer getMaxJobsPerConnection() {
-        return maxJobsPerConnection;
-    }
-
-    /**
-     * Sets the limit of concurrent jobs (run checks on table) that could be executed in parallel on this connection.
-     * @param maxJobsPerConnection Maximum number of concurrent check executions on this connection.
-     */
-    public void setMaxJobsPerConnection(Integer maxJobsPerConnection) {
-        this.maxJobsPerConnection = maxJobsPerConnection;
-    }
-
-    /**
-     * Gets the full physical name (schema.table) of the target table.
-     * @return Physical name of the target table.
-     */
-    public PhysicalTableName getTable() {
-        return table;
-    }
-
-    /**
-     * Sets the full physical name (schema.table) of the target table.
-     * @param table Physical name of the target table.
-     */
-    public void setTable(PhysicalTableName table) {
-        this.table = table;
     }
 
     /**
@@ -232,7 +155,7 @@ public class RunChecksOnTableQueueJobParameters implements Cloneable {
      * Returns the result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
      * @return The job result object.
      */
-    public RunChecksQueueJobResult getRunChecksResult() {
+    public RunChecksJobResult getRunChecksResult() {
         return runChecksResult;
     }
 
@@ -240,7 +163,7 @@ public class RunChecksOnTableQueueJobParameters implements Cloneable {
      * Sets the result of running the check, updated when the run checks job finishes. Contains the count of executed checks.
      * @param runChecksResult The new job result object.
      */
-    public void setRunChecksResult(RunChecksQueueJobResult runChecksResult) {
+    public void setRunChecksResult(RunChecksJobResult runChecksResult) {
         this.runChecksResult = runChecksResult;
     }
 
@@ -248,9 +171,9 @@ public class RunChecksOnTableQueueJobParameters implements Cloneable {
      * Creates and returns a copy of this object.
      */
     @Override
-    public RunChecksOnTableQueueJobParameters clone() {
+    public RunChecksParameters clone() {
         try {
-            return (RunChecksOnTableQueueJobParameters)super.clone();
+            return (RunChecksParameters)super.clone();
         }
         catch (CloneNotSupportedException ex) {
             throw new DqoRuntimeException("Clone not supported", ex);

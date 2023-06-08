@@ -33,7 +33,7 @@ const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataD
   );
 
   const onRunChecks = async () => {
-    await JobApiClient.runChecks({
+    await JobApiClient.runChecks(false, undefined, {
       checkSearchFilters: category?.run_checks_job_template
     });
 

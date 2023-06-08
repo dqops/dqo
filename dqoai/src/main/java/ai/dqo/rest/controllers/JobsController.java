@@ -16,6 +16,7 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
+import ai.dqo.core.configuration.DqoQueueWaitTimeoutsConfigurationProperties;
 import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
@@ -29,12 +30,13 @@ import ai.dqo.core.jobqueue.monitoring.DqoJobQueueInitialSnapshotModel;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.core.synchronization.jobs.*;
-import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.jobs.RunChecksQueueJob;
-import ai.dqo.execution.checks.jobs.RunChecksQueueJobParameters;
+import ai.dqo.execution.checks.jobs.RunChecksParameters;
+import ai.dqo.execution.checks.jobs.RunChecksJobResult;
+import ai.dqo.execution.checks.jobs.RunChecksScheduleResult;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
@@ -54,6 +56,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -71,8 +75,9 @@ public class JobsController {
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider;
     private final DqoJobQueueMonitoringService jobQueueMonitoringService;
-    private final DqoQueueConfigurationProperties queueConfigurationProperties;
+    private final DqoQueueConfigurationProperties dqoQueueConfigurationProperties;
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
+    private DqoQueueWaitTimeoutsConfigurationProperties dqoQueueWaitTimeoutsConfigurationProperties;
     private SynchronizationStatusTracker synchronizationStatusTracker;
 
     /**
@@ -84,8 +89,9 @@ public class JobsController {
      * @param checkExecutionProgressListenerProvider Check execution progress listener provider used to create a valid progress listener when starting a "runchecks" job.
      * @param statisticsCollectorExecutionProgressListenerProvider Profiler execution progress listener provider used to create a valid progress listener when starting a "runprofilers" job.
      * @param jobQueueMonitoringService Job queue monitoring service.
-     * @param queueConfigurationProperties Queue configuration parameters.
+     * @param dqoQueueConfigurationProperties Queue configuration parameters.
      * @param dqoSchedulerConfigurationProperties DQO job scheduler configuration properties.
+     * @param dqoQueueWaitTimeoutsConfigurationProperties DQO queue default wait time parameters.
      * @param synchronizationStatusTracker Synchronization change tracker.
      */
     @Autowired
@@ -96,8 +102,9 @@ public class JobsController {
                           CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
                           StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider,
                           DqoJobQueueMonitoringService jobQueueMonitoringService,
-                          DqoQueueConfigurationProperties queueConfigurationProperties,
+                          DqoQueueConfigurationProperties dqoQueueConfigurationProperties,
                           DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties,
+                          DqoQueueWaitTimeoutsConfigurationProperties dqoQueueWaitTimeoutsConfigurationProperties,
                           SynchronizationStatusTracker synchronizationStatusTracker) {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
@@ -106,8 +113,9 @@ public class JobsController {
         this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
         this.statisticsCollectorExecutionProgressListenerProvider = statisticsCollectorExecutionProgressListenerProvider;
         this.jobQueueMonitoringService = jobQueueMonitoringService;
-        this.queueConfigurationProperties = queueConfigurationProperties;
+        this.dqoQueueConfigurationProperties = dqoQueueConfigurationProperties;
         this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
+        this.dqoQueueWaitTimeoutsConfigurationProperties = dqoQueueWaitTimeoutsConfigurationProperties;
         this.synchronizationStatusTracker = synchronizationStatusTracker;
     }
 
@@ -117,16 +125,20 @@ public class JobsController {
      * @return Job summary response with the identity of the started job.
      */
     @PostMapping(value = "/runchecks", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "runChecks", notes = "Starts a new background job that will run selected data quality checks", response = DqoQueueJobId.class)
+    @ApiOperation(value = "runChecks", notes = "Starts a new background job that will run selected data quality checks", response = RunChecksScheduleResult.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New job that will run data quality checks was added to the queue", response = DqoQueueJobId.class),
+            @ApiResponse(code = 201, message = "New job that will run data quality checks was added to the queue", response = RunChecksScheduleResult.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DqoQueueJobId>> runChecks(
+    public ResponseEntity<Mono<RunChecksScheduleResult>> runChecks(
             @ApiParam("Data quality check run configuration (target checks and an optional time range)")
-            @RequestBody RunChecksQueueJobParameters runChecksParameters) {
+            @RequestBody RunChecksParameters runChecksParameters,
+            @ApiParam(name = "wait", value = "Wait until the checks finish to run, the default value is false (queue a background job and return the job id)", required = false)
+            @RequestParam(required = false) Optional<Boolean> wait,
+            @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the checks are still running, only the job id is returned without the results. The default timeout is 120 seconds, but could be reconfigured (see the 'dqo' cli command documentation).", required = false)
+            @RequestParam(required = false) Optional<Integer> waitTimeout) {
         RunChecksQueueJob runChecksJob = this.dqoQueueJobFactory.createRunChecksJob();
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
                 CheckRunReportingMode.silent, false);
@@ -135,7 +147,24 @@ public class JobsController {
         runChecksJob.setParameters(runChecksParameters);
 
         PushJobResult<CheckExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runChecksJob);
-        return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
+
+        if (wait.isPresent() && wait.get()) {
+            // wait for the result
+            long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() :
+                    this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
+            CompletableFuture<CheckExecutionSummary> timeoutLimitedFuture = pushJobResult.getFinishedFuture()
+                    .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+            Mono<RunChecksScheduleResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
+                    .map(summary -> {
+                        RunChecksJobResult runChecksJobResult = RunChecksJobResult.fromCheckExecutionSummary(summary);
+                        return new RunChecksScheduleResult(pushJobResult.getJobId(), runChecksJobResult);
+                    });
+
+            return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
+        }
+
+        Mono<RunChecksScheduleResult> resultWithOnlyJobId = Mono.just(new RunChecksScheduleResult(pushJobResult.getJobId()));
+        return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
     }
 
     /**
@@ -252,7 +281,7 @@ public class JobsController {
             @ApiParam("Change sequence number to get job changes after that sequence") @PathVariable long sequenceNumber) {
         try {
             Mono<DqoJobQueueIncrementalSnapshotModel> incrementalJobChanges = this.jobQueueMonitoringService.getIncrementalJobChanges(
-                    sequenceNumber, this.queueConfigurationProperties.getGetJobChangesSinceWaitSeconds(), TimeUnit.SECONDS);
+                    sequenceNumber, this.dqoQueueConfigurationProperties.getGetJobChangesSinceWaitSeconds(), TimeUnit.SECONDS);
             Mono<DqoJobQueueIncrementalSnapshotModel> returnEmptyWhenError = incrementalJobChanges.doOnError(
                     error -> Mono.just(new DqoJobQueueIncrementalSnapshotModel(
                             new ArrayList<>(), this.synchronizationStatusTracker.getCurrentSynchronizationStatus(), sequenceNumber)));

@@ -716,7 +716,7 @@ function TreeProvider(props: any) {
 
   const runChecks = async (node: CustomTreeNode) => {
     if (node.run_checks_job_template) {
-      JobApiClient.runChecks({
+      JobApiClient.runChecks(false, undefined, {
         checkSearchFilters: node.run_checks_job_template
       });
       return;
@@ -759,7 +759,7 @@ function TreeProvider(props: any) {
         schemaNode?.label ?? '',
         tableNode?.label ?? ''
       );
-      JobApiClient.runChecks({
+      JobApiClient.runChecks(false, undefined, {
         checkSearchFilters: res.data.run_checks_job_template
       });
       return;
@@ -771,7 +771,7 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks({
+      JobApiClient.runChecks(false, undefined, {
         checkSearchFilters: res.data.run_checks_job_template
       });
       return;
@@ -783,7 +783,7 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'monthly'
       );
-      JobApiClient.runChecks({
+      JobApiClient.runChecks(false, undefined, {
         checkSearchFilters: res.data.run_checks_job_template
       });
       return;
@@ -795,7 +795,7 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks({
+      JobApiClient.runChecks(false, undefined, {
         checkSearchFilters: res.data.run_checks_job_template
       });
       return;
@@ -807,7 +807,7 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks({
+      JobApiClient.runChecks(false, undefined, {
         checkSearchFilters: res.data.run_checks_job_template
       });
       return;
@@ -820,7 +820,7 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         columnNode?.label ?? ''
       );
-      JobApiClient.runChecks({
+      JobApiClient.runChecks(false, undefined, {
         checkSearchFilters: res.data.run_checks_job_template
       });
       return;
@@ -833,7 +833,7 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks({
+      JobApiClient.runChecks(false, undefined, {
         checkSearchFilters: res.data.run_checks_job_template
       });
       return;
@@ -846,7 +846,7 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'monthly'
       );
-      JobApiClient.runChecks({
+      JobApiClient.runChecks(false, undefined, {
         checkSearchFilters: res.data.run_checks_job_template
       });
       return;
@@ -859,7 +859,7 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks({
+      JobApiClient.runChecks(false, undefined, {
         checkSearchFilters: res.data.run_checks_job_template
       });
       return;
@@ -872,7 +872,7 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'monthly'
       );
-      JobApiClient.runChecks({
+      JobApiClient.runChecks(false, undefined, {
         checkSearchFilters: res.data.run_checks_job_template
       });
       return;

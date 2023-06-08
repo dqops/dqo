@@ -39,7 +39,7 @@ import org.springframework.stereotype.Component;
 public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary> {
     private ExecutionContextFactory executionContextFactory;
     private CheckExecutionService checkExecutionService;
-    private RunChecksOnTableQueueJobParameters parameters;
+    private RunChecksOnTableParameters parameters;
 
     /**
      * Creates a job instance.
@@ -58,7 +58,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
      * Returns the job parameters.
      * @return Job parameters.
      */
-    public RunChecksOnTableQueueJobParameters getParameters() {
+    public RunChecksOnTableParameters getParameters() {
         return parameters;
     }
 
@@ -66,7 +66,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
      * Sets the job parameters.
      * @param parameters Job parameters.
      */
-    public void setParameters(RunChecksOnTableQueueJobParameters parameters) {
+    public void setParameters(RunChecksOnTableParameters parameters) {
         this.parameters = parameters;
     }
 
@@ -89,8 +89,8 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
                 this.parameters.isDummyExecution(),
                 jobExecutionContext.getCancellationToken());
 
-        RunChecksQueueJobResult jobResultSummary = RunChecksQueueJobResult.fromCheckExecutionSummary(checkExecutionSummary);
-        RunChecksOnTableQueueJobParameters clonedParameters = this.getParameters().clone();
+        RunChecksJobResult jobResultSummary = RunChecksJobResult.fromCheckExecutionSummary(checkExecutionSummary);
+        RunChecksOnTableParameters clonedParameters = this.getParameters().clone();
         clonedParameters.setRunChecksResult(jobResultSummary);
         this.setParameters(clonedParameters);
 

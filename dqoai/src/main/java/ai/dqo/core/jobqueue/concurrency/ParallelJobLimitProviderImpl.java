@@ -16,6 +16,7 @@
 
 package ai.dqo.core.jobqueue.concurrency;
 
+import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import ai.dqo.core.dqocloud.apikey.DqoCloudLimit;
@@ -28,10 +29,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class ParallelJobLimitProviderImpl implements ParallelJobLimitProvider {
     private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private DqoQueueConfigurationProperties dqoQueueConfigurationProperties;
 
+    /**
+     * Default dependency injection constructor.
+     * @param dqoCloudApiKeyProvider DQO Cloud api provider - used to retrieve the licensed limit of concurrent jobs.
+     * @param dqoQueueConfigurationProperties DQO Queue configuration parameters with a user-provided additional concurrency limit.
+     */
     @Autowired
-    public ParallelJobLimitProviderImpl(DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
+    public ParallelJobLimitProviderImpl(DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
+                                        DqoQueueConfigurationProperties dqoQueueConfigurationProperties) {
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
+        this.dqoQueueConfigurationProperties = dqoQueueConfigurationProperties;
     }
 
     /**
@@ -48,6 +57,10 @@ public class ParallelJobLimitProviderImpl implements ParallelJobLimitProvider {
         Integer jobLimits = apiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.JOBS_LIMIT);
         if (jobLimits == null) {
             return 1;
+        }
+
+        if (this.dqoQueueConfigurationProperties.getMaxConcurrentJobs() != null) {
+            return Math.min(this.dqoQueueConfigurationProperties.getMaxConcurrentJobs(), jobLimits);
         }
 
         return jobLimits;

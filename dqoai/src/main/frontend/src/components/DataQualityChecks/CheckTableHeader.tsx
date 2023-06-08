@@ -24,7 +24,7 @@ const TableHeader = ({ checksUI }: TableHeaderProps) => {
   );
 
   const onRunChecks = async () => {
-    await JobApiClient.runChecks({
+    await JobApiClient.runChecks(false, undefined, {
       checkSearchFilters: checksUI?.run_checks_job_template
     });
   };
