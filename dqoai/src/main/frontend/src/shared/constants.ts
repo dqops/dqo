@@ -170,8 +170,9 @@ export const COLUMN_LEVEL_TABS: {
 };
 
 export const RUN_CHECK_TIME_WINDOW_FILTERS: {
-  [key in string]: TimeWindowFilterParameters;
+  [key in string]: TimeWindowFilterParameters | null;
 } = {
+  'Default incremental time window': null,
   'Today only': {
     daily_partitioning_include_today: true,
     daily_partitioning_recent_days: 0
