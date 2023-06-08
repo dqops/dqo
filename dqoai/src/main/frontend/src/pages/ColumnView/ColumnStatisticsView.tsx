@@ -21,7 +21,6 @@ const ColumnStatisticsView = () => {
   } = useParams();
   const [statistics, setStatistics] = useState<ColumnStatisticsModel>();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
-  const [isStringBool, setIsStringBool] = useState<boolean>(false);
 
   const fetchColumns = async () => {
     try {
@@ -46,25 +45,10 @@ const ColumnStatisticsView = () => {
       console.error(err);
     }
   };
-  const isString = async () => {
-    if (statistics?.statistics && statistics.statistics.length > 0) {
-      for (const x of statistics.statistics) {
-        if (
-          x.collector === 'string_min_length' ||
-          x.collector === 'string_mean_length' ||
-          x.collector === 'string_max_length'
-        ) {
-          setIsStringBool(true);
-        }
-      }
-    }
-  };
 
   useEffect(() => {
     fetchColumns();
     fetchRows();
-
-    isString();
   }, [connection, schema, table, column]);
 
   const datatype_detected = (numberForFile: any) => {
@@ -100,9 +84,6 @@ const ColumnStatisticsView = () => {
     }
     return value;
   };
-  useEffect(() => {}, []);
-
-  console.log(isStringBool);
 
   return (
     <div className="p-4">
@@ -330,7 +311,7 @@ const ColumnStatisticsView = () => {
           </div>
         </div>
         <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
-          <div className="h-10 flex justify-between items-center gap-x-36">
+          <div className="h-10 flex justify-between items-center">
             <div className="ml-2 font-light">Minimum string length</div>
             <div>
               {statistics &&
@@ -349,7 +330,7 @@ const ColumnStatisticsView = () => {
               )}
             </div>
           </div>
-          <div className="h-10 flex justify-between items-center gap-x-36">
+          <div className="h-10 flex justify-between items-center">
             <div className="ml-2 font-light">Mean string length</div>
             <div>
               {statistics &&
@@ -368,7 +349,7 @@ const ColumnStatisticsView = () => {
               )}
             </div>
           </div>
-          <div className="h-10 flex justify-between items-center gap-x-36">
+          <div className="h-10 flex justify-between items-center">
             <div className="ml-2 font-light">Maximum string length</div>
             <div>
               {statistics &&
@@ -405,7 +386,7 @@ const ColumnStatisticsView = () => {
                   </div>
                   <div
                     className=" h-3 border border-gray-100 flex ml-5"
-                    style={{ width: '200px' }}
+                    style={{ width: '100px' }}
                   >
                     {statistics.statistics?.map((y) =>
                       y.collector === 'not_nulls_count' ? (
@@ -415,7 +396,7 @@ const ColumnStatisticsView = () => {
                           style={{
                             width: `${
                               x.sampleCount !== null
-                                ? (Number(renderValue(x.sampleCount)) * 200) /
+                                ? (Number(renderValue(x.sampleCount)) * 100) /
                                   Number(renderValue(y.result))
                                 : 0
                             }px`
