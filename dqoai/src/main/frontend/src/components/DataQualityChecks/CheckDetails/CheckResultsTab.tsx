@@ -188,6 +188,28 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
           endDate
         }
       ));
+    } else {
+      const startDate = month
+        ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD')
+        : '';
+      const endDate = month
+        ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD')
+        : '';
+
+      dispatch(getCheckResults(
+        checkTypes,
+        firstLevelActiveTab,
+        {
+          connection,
+          schema,
+          table,
+          column,
+          dataStreamName,
+          check,
+          startDate,
+          endDate
+        }
+      ));
     }
   }, [mode]);
 
