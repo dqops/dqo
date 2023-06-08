@@ -673,6 +673,10 @@
 			<artifactId>snowflake-jdbc</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.microsoft.sqlserver</groupId>
+			<artifactId>mssql-jdbc</artifactId>
+		</dependency>
 
 		<!-- test dependencies -->
 		<dependency>
@@ -723,10 +727,6 @@
 			<artifactId>mssqlserver</artifactId>
 			<scope>test</scope>
 		</dependency>
-        <dependency>
-            <groupId>com.microsoft.sqlserver</groupId>
-            <artifactId>mssql-jdbc</artifactId>
-        </dependency>
     </dependencies>
 
 	<build>
