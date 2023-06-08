@@ -9,6 +9,7 @@ import { getFirstLevelState } from '../../redux/selectors';
 import { CheckTypes } from '../../shared/routes';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
+import { IRootState } from '../../redux/reducers';
 
 export default function TableStatisticsView({
   connectionName,
@@ -22,6 +23,7 @@ export default function TableStatisticsView({
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [rowCount, setRowCount] = useState<TableStatisticsModel>();
   const { loading } = useSelector(getFirstLevelState(checkTypes));
+  const { jobs } = useSelector((state: IRootState) => state.job || {});
   const fetchRows = async () => {
     try {
       const res: AxiosResponse<TableStatisticsModel> =
@@ -48,7 +50,7 @@ export default function TableStatisticsView({
     }
     return value;
   };
-
+  console.log(jobs);
   if (loading) {
     return (
       <div className="flex justify-center min-h-80">

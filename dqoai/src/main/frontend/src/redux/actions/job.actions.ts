@@ -83,13 +83,13 @@ export const getJobsChanges =
       .then((res: AxiosResponse<DqoJobQueueIncrementalSnapshotModel>) => {
         dispatch(getJobsChangesSuccess(res.data));
       })
-      .catch(err => {
+      .catch((err) => {
         dispatch(getJobsChangesFailed(err));
         timerId = setTimeout(() => {
           dispatch(getJobsChanges(sequenceNumber) as any);
           return;
         }, JOB_CHANGES_RETRY_INTERVAL);
-      })
+      });
   };
 
 export const toggleMenu = (isOpen: boolean) => ({
@@ -108,4 +108,8 @@ export const toggleProfile = (isProfileOpen: boolean) => ({
 export const toggleSettings = (areSettingsOpen: boolean) => ({
   type: JOB_ACTION.TOGGLE_SETTINGS,
   areSettingsOpen
+});
+export const getCollectingJobs = (isCollecting: boolean) => ({
+  type: JOB_ACTION.GET_COLLECTING_JOBS,
+  isCollecting
 });
