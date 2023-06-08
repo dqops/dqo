@@ -6,11 +6,11 @@
 		<relativePath>../pom.xml</relativePath>
 		<groupId>ai.dqo</groupId>
 		<artifactId>dqo-data-quality-observer</artifactId>
-		<version>0.2.0-alpha0</version>
+		<version>0.2.0-beta1</version>
 	</parent>
 	<groupId>ai.dqo</groupId>
 	<artifactId>dqo-lib</artifactId>
-	<version>0.2.0-alpha0</version>
+	<version>0.2.0-beta1</version>
 	<name>lib</name>
 	<description>POM for a list of dependencies to libraries that should be distributed in the "lib" folder, especially all JDBC drivers.</description>
 	<packaging>jar</packaging>
@@ -64,6 +64,16 @@
 			<groupId>org.mariadb.jdbc</groupId>
 			<artifactId>mariadb-java-client</artifactId>
 			<scope>runtime</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>jcl-over-slf4j</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>

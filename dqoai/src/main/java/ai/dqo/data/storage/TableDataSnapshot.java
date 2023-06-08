@@ -21,6 +21,7 @@ import ai.dqo.data.normalization.CommonColumnNames;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
+import jakarta.validation.constraints.NotNull;
 import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.DateTimeColumn;
 import tech.tablesaw.api.InstantColumn;
@@ -28,7 +29,6 @@ import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.selection.Selection;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

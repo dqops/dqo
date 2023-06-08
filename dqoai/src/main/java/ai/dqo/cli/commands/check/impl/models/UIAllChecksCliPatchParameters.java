@@ -17,9 +17,9 @@
 package ai.dqo.cli.commands.check.impl.models;
 
 import ai.dqo.metadata.search.CheckSearchFilters;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 /**

@@ -5,7 +5,7 @@
 
     <groupId>ai.dqo</groupId>
     <artifactId>dqo-data-quality-observer</artifactId>
-    <version>0.2.0-alpha0</version>
+    <version>0.2.0-beta1</version>
     <packaging>pom</packaging>
     <description>DQO Data Quality Operations Center</description>
 
@@ -46,7 +46,7 @@
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>8.0.33</version>
+                <version>8.0.30</version>
             </dependency>
             <dependency>
                 <groupId>org.mariadb.jdbc</groupId>

@@ -33,8 +33,6 @@ import java.util.stream.Collectors;
  */
 @SpringBootApplication(scanBasePackages = "ai.dqo")
 public class CliApplication {
-	private static final Logger LOG = LoggerFactory.getLogger(CliApplication.class);
-
 	private static boolean runningOneShotMode;
 	private static boolean requiredWebServer;
 
@@ -105,9 +103,6 @@ public class CliApplication {
 	 */
 	public static void main(String[] args) {
 		try {
-			TablesawParquetSupportFix.ensureInitialized();
-			JdbcTypeColumnMapping.ensureInitializedJdbc();
-
 			requiredWebServer = isCommandThatRequiresWebServer(args);
 			runningOneShotMode = hasArgumentsForOneShot(args);
 
@@ -119,7 +114,8 @@ public class CliApplication {
 			// calls CliMainCommandRunner and calls commands in io.dqo.cli.command, find the right command there if you want to know what happens now
 		}
 	    catch (Throwable t) {
-			LOG.error("Error at starting the application: " + t.getMessage(), t);
+			Logger log = LoggerFactory.getLogger(CliApplication.class);
+			log.error("Error at starting the application: " + t.getMessage(), t);
 			t.printStackTrace();
 		}
 	}

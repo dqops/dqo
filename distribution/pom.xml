@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.6.2</version>
+		<version>3.1.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
 	<groupId>ai.dqo</groupId>
 	<artifactId>dqo-distribution</artifactId>
-	<version>0.2.0-alpha0</version>
+	<version>0.2.0-beta1</version>
 	<name>dqo-distribution</name>
 	<description>DQO Data Quality Operations Center final assembly</description>
 	<packaging>pom</packaging>

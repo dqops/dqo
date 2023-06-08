@@ -219,7 +219,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
         Assertions.assertEquals("all data", results.getDataStreamNameColumn().get(0));
         Assertions.assertEquals("5e66efdc-b585-6460-7741-4bd9eede5d4e", results.getTimeSeriesIdColumn().get(0));
-        Assertions.assertEquals("298afde6-a2ec-f4ee-ff52-a61c0648323f", results.getIdColumn().get(0));
+        Assertions.assertEquals("60685857-4b08-6610-b6b0-03adefaca0c1", results.getIdColumn().get(0));
     }
 
     @Test

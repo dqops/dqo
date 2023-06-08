@@ -146,16 +146,16 @@ public class WaitForCloseInputStream extends InputStream {
         }
     }
 
-    @Override
-    public void skipNBytes(long n) throws IOException {
-        try {
-            sourceStream.skipNBytes(n);
-        }
-        catch (IOException ex) {
-            this.finishedFuture.completeExceptionally(ex);
-            throw ex;
-        }
-    }
+//    @Override
+//    public void skipNBytes(long n) throws IOException {
+//        try {
+//            sourceStream.skipNBytes(n);
+//        }
+//        catch (IOException ex) {
+//            this.finishedFuture.completeExceptionally(ex);
+//            throw ex;
+//        }
+//    }
 
     @Override
     public int available() throws IOException {

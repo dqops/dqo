@@ -23,7 +23,8 @@ import ai.dqo.cli.terminal.*;
 import ai.dqo.cli.terminal.ansi.UrlFormatter;
 import ai.dqo.core.configuration.DqoCoreConfigurationProperties;
 import ai.dqo.utils.StaticBeanFactory;
-import org.jline.builtins.Nano.SyntaxHighlighter;
+import org.jline.builtins.ConfigurationPath;
+import org.jline.builtins.SyntaxHighlighter;
 import org.jline.console.SystemRegistry;
 import org.jline.console.impl.Builtins;
 import org.jline.console.impl.SystemHighlighter;
@@ -66,7 +67,7 @@ public class CliConfiguration {
     @Bean(name = "builtins")
     public Builtins builtins() {
         Supplier<Path> workDir = () -> Paths.get(System.getProperty("user.dir"));
-        Builtins builtins = new Builtins(workDir, null, null);
+        Builtins builtins = new Builtins(workDir, new ConfigurationPath(null, null), null);
         builtins.rename(Builtins.Command.TTOP, "top");
         builtins.alias("zle", "widget");
         builtins.alias("bindkey", "keymap");
