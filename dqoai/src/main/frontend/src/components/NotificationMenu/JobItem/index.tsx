@@ -114,7 +114,6 @@ const JobItem = ({
 
     return false;
   };
-  console.log(firstMatchingItem());
 
   return (
     <Accordion open={open}>
