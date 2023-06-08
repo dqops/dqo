@@ -99,13 +99,19 @@ const ColumnStatisticsView = () => {
           Detected Datatype
           <div className="font-bold ml-5">
             {statistics &&
+            statistics?.statistics?.filter(
+              (x) => x.collector === 'string_datatype_detect'
+            ).length === 0 ? (
+              <div className="mr-2 font-bold">No datatype detected</div>
+            ) : (
               statistics?.statistics?.map((x, index) => (
-                <div className="mr-2" key={index}>
+                <div className="mr-2 font-bold" key={index}>
                   {x.collector === 'string_datatype_detect'
                     ? datatype_detected(x.result)
                     : ''}
                 </div>
-              ))}
+              ))
+            )}
           </div>
         </div>
         <div className="w-1/5 flex font-light">
@@ -134,7 +140,7 @@ const ColumnStatisticsView = () => {
 
       <div className="w-full flex gap-8 flex-wrap">
         <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
-          <div className="h-10 flex justify-between items-center gap-x-36">
+          <div className="h-10 flex justify-between items-center">
             <div className="ml-2 font-light">Null count</div>
             <div>
               {statistics &&
@@ -147,7 +153,7 @@ const ColumnStatisticsView = () => {
                 ))}
             </div>
           </div>
-          <div className="h-10 flex justify-between items-center gap-x-36">
+          <div className="h-10 flex justify-between items-center ">
             <div className="ml-2 font-light">Null percent</div>
             <div>
               {statistics &&
@@ -163,7 +169,7 @@ const ColumnStatisticsView = () => {
                 ))}
             </div>
           </div>
-          <div className="h-10 flex justify-between items-center gap-x-36">
+          <div className="h-10 flex justify-between items-center">
             <div className="ml-2 font-light">Not-null</div>
             <div>
               {statistics &&
@@ -176,7 +182,7 @@ const ColumnStatisticsView = () => {
                 ))}
             </div>
           </div>
-          <div className="h-10 flex justify-between items-center gap-x-36">
+          <div className="h-10 flex justify-between items-center">
             <div className="ml-2 font-light">Not-null percent</div>
             <div>
               {statistics &&
@@ -194,8 +200,8 @@ const ColumnStatisticsView = () => {
           </div>
         </div>
         <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
-          <div className="h-10 flex justify-between items-center gap-x-36">
-            <div className="ml-2 font-light">Unique count</div>
+          <div className="h-10 flex justify-between items-center">
+            <div className="ml-2 font-light">Distinct count</div>
             <div>
               {statistics &&
                 statistics?.statistics?.map((x, index) => (
@@ -207,8 +213,8 @@ const ColumnStatisticsView = () => {
                 ))}
             </div>
           </div>
-          <div className="h-10 flex justify-between items-center gap-x-36">
-            <div className="ml-2 font-light">Unique percent</div>
+          <div className="h-10 flex justify-between items-center ">
+            <div className="ml-2 font-light">Distinct percent</div>
             <div>
               {statistics &&
                 statistics?.statistics?.map((x, index) => (
@@ -223,7 +229,7 @@ const ColumnStatisticsView = () => {
                 ))}
             </div>
           </div>
-          <div className="h-10 flex justify-between items-center gap-x-36">
+          <div className="h-10 flex justify-between items-center">
             <div className="ml-2 font-light">Duplicate count</div>
             <div>
               {statistics &&
@@ -236,7 +242,7 @@ const ColumnStatisticsView = () => {
                 ))}
             </div>
           </div>
-          <div className="h-10 flex justify-between items-center gap-x-36">
+          <div className="h-10 flex justify-between items-center ">
             <div className="ml-2 font-light">Duplicate percent</div>
             <div>
               {statistics &&
@@ -312,43 +318,61 @@ const ColumnStatisticsView = () => {
           </div>
         </div>
         <div className="text-sm bg-white rounded-lg p-4 border border-gray-200 h-50 w-100">
-          <div className="h-10 flex justify-between items-center gap-x-36">
+          <div className="h-10 flex justify-between items-center">
             <div className="ml-2 font-light">Minimum string length</div>
             <div>
               {statistics &&
+              statistics?.statistics?.filter(
+                (x) => x.collector === 'string_min_length'
+              ).length === 0 ? (
+                <div className="mr-2 font-bold">No string data type</div>
+              ) : (
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2 font-bold" key={index}>
                     {x.collector === 'string_min_length'
                       ? renderValue(x.result)
                       : ''}
                   </div>
-                ))}
+                ))
+              )}
             </div>
           </div>
-          <div className="h-10 flex justify-between items-center gap-x-36">
+          <div className="h-10 flex justify-between items-center">
             <div className="ml-2 font-light">Mean string length</div>
             <div>
               {statistics &&
+              statistics?.statistics?.filter(
+                (x) => x.collector === 'string_mean_length'
+              ).length === 0 ? (
+                <div className="mr-2 font-bold">No string data type</div>
+              ) : (
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2 font-bold" key={index}>
                     {x.collector === 'string_mean_length'
                       ? Number(renderValue(x.result)).toFixed(2)
                       : ''}
                   </div>
-                ))}
+                ))
+              )}
             </div>
           </div>
-          <div className="h-10 flex justify-between items-center gap-x-36">
+          <div className="h-10 flex justify-between items-center">
             <div className="ml-2 font-light">Maximum string length</div>
             <div>
               {statistics &&
+              statistics?.statistics?.filter(
+                (x) => x.collector === 'string_max_length'
+              ).length === 0 ? (
+                <div className="mr-2 font-bold">No string data type</div>
+              ) : (
                 statistics?.statistics?.map((x, index) => (
                   <div className="mr-2 font-bold" key={index}>
                     {x.collector === 'string_max_length'
                       ? renderValue(x.result)
                       : ''}
                   </div>
-                ))}
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -369,7 +393,7 @@ const ColumnStatisticsView = () => {
                   </div>
                   <div
                     className=" h-3 border border-gray-100 flex ml-5"
-                    style={{ width: '200px' }}
+                    style={{ width: '100px' }}
                   >
                     {statistics.statistics?.map((y) =>
                       y.collector === 'not_nulls_count' ? (
@@ -379,7 +403,7 @@ const ColumnStatisticsView = () => {
                           style={{
                             width: `${
                               x.sampleCount !== null
-                                ? (Number(renderValue(x.sampleCount)) * 200) /
+                                ? (Number(renderValue(x.sampleCount)) * 100) /
                                   Number(renderValue(y.result))
                                 : 0
                             }px`
