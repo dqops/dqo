@@ -15,8 +15,6 @@
  */
 package ai.dqo.cli;
 
-import ai.dqo.connectors.jdbc.JdbcTypeColumnMapping;
-import ai.dqo.data.storage.TablesawParquetSupportFix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -33,6 +31,8 @@ import java.util.stream.Collectors;
  */
 @SpringBootApplication(scanBasePackages = "ai.dqo")
 public class CliApplication {
+	private static final Logger LOG = LoggerFactory.getLogger(CliApplication.class);
+
 	private static boolean runningOneShotMode;
 	private static boolean requiredWebServer;
 
@@ -114,8 +114,7 @@ public class CliApplication {
 			// calls CliMainCommandRunner and calls commands in io.dqo.cli.command, find the right command there if you want to know what happens now
 		}
 	    catch (Throwable t) {
-			Logger log = LoggerFactory.getLogger(CliApplication.class);
-			log.error("Error at starting the application: " + t.getMessage(), t);
+			LOG.error("Error at starting the application: " + t.getMessage(), t);
 			t.printStackTrace();
 		}
 	}

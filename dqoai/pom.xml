@@ -534,6 +534,16 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>org.springdoc</groupId>-->
+<!--			<artifactId>springdoc-openapi-starter-webflux-ui</artifactId>-->
+<!--			<version>2.1.0</version>-->
+<!--		</dependency>-->
+		<dependency>
+			<groupId>io.swagger.parser.v3</groupId>
+			<artifactId>swagger-parser</artifactId>
+			<version>2.1.14</version>
+		</dependency>
 		<dependency>
 			<groupId>com.github.victools</groupId>
 			<artifactId>jsonschema-module-jackson</artifactId>
@@ -759,7 +769,8 @@
 						</path>
 					</annotationProcessorPaths>
 					<compilerArgs>
-						<arg>-Ajavadoc.packages=ai.dqo.sensors,ai.dqo.rules,ai.dqo.checks,ai.dqo.metadata,ai.dqo.data</arg>
+						<arg>-Ajavadoc.packages=ai.dqo.sensors,ai.dqo.rules,ai.dqo.checks,ai.dqo.metadata,ai.dqo.data,ai.dqo.rest</arg>
+						<arg>-parameters</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>
@@ -808,6 +819,23 @@
 					</execution>
 				</executions>
 			</plugin>
+
+
+
+
+<!--			<plugin>-->
+<!--				<groupId>org.springdoc</groupId>-->
+<!--				<artifactId>springdoc-openapi-maven-plugin</artifactId>-->
+<!--				<version>1.4</version>-->
+<!--				<executions>-->
+<!--					<execution>-->
+<!--						<phase>compile</phase>-->
+<!--						<goals>-->
+<!--							<goal>generate</goal>-->
+<!--						</goals>-->
+<!--					</execution>-->
+<!--				</executions>-->
+<!--			</plugin>-->
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>

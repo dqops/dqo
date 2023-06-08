@@ -27,7 +27,12 @@ server:
      enabled: true
      mime-types: application/json,application/xml,text/html,image/jpeg,image/x-png,image/svg+xm
 
-
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+  packagesToScan: ai.dqo.rest
 logging:
   level:
     root: WARN
