@@ -13,6 +13,7 @@ import { AxiosResponse } from 'axios';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { getCollectingJobs } from '../../redux/actions/job.actions';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 
 const TableColumnsView = () => {
   const {
@@ -23,8 +24,14 @@ const TableColumnsView = () => {
   const { jobs, isCollecting } = useSelector(
     (state: IRootState) => state.job || {}
   );
+  const dispatch = useActionDispatch();
   const [loadingJob, setLoadingJob] = useState(false);
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
+
+  const setCollecting = (bool: boolean) => {
+    dispatch(getCollectingJobs(bool));
+  };
+
   const fetchColumns = async () => {
     try {
       const res: AxiosResponse<TableColumnsStatisticsModel> =
@@ -42,7 +49,7 @@ const TableColumnsView = () => {
   useEffect(() => {
     fetchColumns();
     workInProgress2();
-  }, [connectionName, schemaName, tableName]);
+  }, [connectionName, schemaName, tableName, jobs?.jobs]);
 
   const collectStatistics = async () => {
     try {
@@ -87,10 +94,11 @@ const TableColumnsView = () => {
 
     if (filteredJobs && filteredJobs.length > 0) {
       console.log('in');
-      getCollectingJobs(true);
+      setCollecting(true);
       console.log(isCollecting);
     } else {
       console.log('out');
+      setCollecting(false);
     }
   };
   console.log(isCollecting);
@@ -107,8 +115,10 @@ const TableColumnsView = () => {
         </div>
         <Button
           label="Collect Statistic"
-          color="primary"
-          onClick={collectStatistics}
+          color={isCollecting ? 'secondary' : 'primary'}
+          onClick={() => {
+            collectStatistics(), workInProgress2();
+          }}
           loading={loadingJob}
         />
       </div>
