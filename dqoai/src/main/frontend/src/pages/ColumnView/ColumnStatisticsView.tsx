@@ -4,7 +4,8 @@ import { useParams } from 'react-router-dom';
 import { ColumnStatisticsModel, TableStatisticsModel } from '../../api';
 import { CheckTypes } from '../../shared/routes';
 import { AxiosResponse } from 'axios';
-import { formatNumber, dateToString } from '../../shared/constants';
+import { formatNumber } from '../../shared/constants';
+import moment from 'moment';
 
 const ColumnStatisticsView = () => {
   const {
@@ -124,8 +125,8 @@ const ColumnStatisticsView = () => {
           Collected at
           <div className="font-bold ml-5">
             {statistics?.statistics?.at(0)?.collectedAt &&
-              dateToString(
-                renderValue(statistics?.statistics?.at(0)?.collectedAt)
+              moment(statistics?.statistics?.at(0)?.collectedAt).format(
+                'YYYY-MM-DD HH:mm:ss'
               )}
           </div>
         </div>
