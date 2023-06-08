@@ -43,14 +43,16 @@ const DataQualityChecks = ({
     schema,
     table,
     column,
-    timeScale
+    timePartitioned,
+    tab,
   }: {
     checkTypes: CheckTypes;
     connection: string;
     schema: string;
     table: string;
     column: string;
-    timeScale: 'daily' | 'monthly';
+    timePartitioned: 'daily' | 'monthly';
+    tab: 'daily' | 'monthly';
   } = useParams();
   const history = useHistory();
   const dispatch = useActionDispatch();
@@ -82,7 +84,7 @@ const DataQualityChecks = ({
 
   useEffect(() => {
     getCheckOverview();
-  }, [checkTypes, connection, schema, table, column, timeScale]);
+  }, [checkTypes, connection, schema, table, column, timePartitioned]);
 
   const goToSchedule = () => {
     if (
@@ -143,11 +145,25 @@ const DataQualityChecks = ({
   };
 
   const goToConnectionSchedule = () => {
+    let activeTab = checksUI?.effective_schedule?.schedule_group;
+    if (!activeTab) {
+      if (checkTypes === CheckTypes.PROFILING) {
+        activeTab = checkTypes;
+      } else if (checkTypes !== CheckTypes.SOURCES) {
+        let timeScale = tab || timePartitioned;
+
+        if (!timeScale) {
+          timeScale = checksUI?.run_checks_job_template?.timeScale || 'daily';
+        }
+        activeTab = `${checkTypes}_${timeScale}`;
+      }
+    }
+
     const url = `${ROUTES.CONNECTION_DETAIL(
       CheckTypes.SOURCES,
       connection,
       'schedule'
-    )}?activeTab=${checksUI?.effective_schedule?.schedule_group}`;
+    )}?activeTab=${activeTab}`;
     dispatch(
       addFirstLevelTab(CheckTypes.SOURCES, {
         url,

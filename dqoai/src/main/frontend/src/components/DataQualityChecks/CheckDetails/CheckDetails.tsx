@@ -80,7 +80,11 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
   const sensorErrors = errorsData
     ? errorsData[check?.check_name ?? ''] || []
     : [];
-  const filters = filtersData ? filtersData[check?.check_name ?? ''] || {} : {};
+  const filters = filtersData ? filtersData[check?.check_name ?? ''] || {
+    month: moment().format('MMMM YYYY')
+  } : {
+    month: moment().format('MMMM YYYY')
+  };
 
   const dispatch = useActionDispatch();
 

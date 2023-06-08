@@ -1,7 +1,11 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import { ColumnApiClient, JobApiClient } from '../../services/apiClient';
 import { AxiosResponse } from 'axios';
-import { ColumnStatisticsModel, TableColumnsStatisticsModel } from '../../api';
+import {
+  ColumnStatisticsModel,
+  DqoJobHistoryEntryModelStatusEnum,
+  TableColumnsStatisticsModel
+} from '../../api';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../components/SvgIcon';
 import ConfirmDialog from './ConfirmDialog';
@@ -13,6 +17,7 @@ import { useSelector } from 'react-redux';
 import { getFirstLevelState } from '../../redux/selectors';
 import Loader from '../../components/Loader';
 import { formatNumber, dateToString } from '../../shared/constants';
+import { IRootState } from '../../redux/reducers';
 
 interface ITableColumnsProps {
   connectionName: string;
@@ -59,6 +64,8 @@ const TableColumns = ({
   } = useParams();
   const history = useHistory();
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
+
+  const { jobs } = useSelector((state: IRootState) => state.job || {});
 
   const labels = [
     'Column name',
@@ -209,6 +216,21 @@ const TableColumns = ({
 
     return max;
   };
+  const filteredJobs = jobs?.jobs?.filter(
+    (x) =>
+      x.jobType === 'collect statistics' &&
+      x.parameters?.collectStatisticsParameters
+        ?.statisticsCollectorSearchFilters?.schemaTableName ===
+        schemaName + '.' + tableName &&
+      (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+  );
+  const filteredColumns = filteredJobs?.map(
+    (x) =>
+      x.parameters?.collectStatisticsParameters
+        ?.statisticsCollectorSearchFilters?.columnName
+  );
 
   const calculate_color = (uniqueCount: number, maxUniqueCount: number) => {
     if (uniqueCount === 0) {
@@ -630,8 +652,6 @@ const TableColumns = ({
     }
   };
 
-  // console.log(loading);
-
   const mapFunc = (column: MyData, index: number): ReactNode => {
     return (
       <tr key={index}>
@@ -710,7 +730,11 @@ const TableColumns = ({
         <td className="border-b border-gray-100 text-right px-4 py-2 flex flex-nowrap justify-end items-end">
           <IconButton
             size="sm"
-            className="group bg-teal-500 ml-1.5"
+            className={
+              filteredColumns?.find((x) => x === column.nameOfCol)
+                ? 'group bg-gray-400 ml-1.5'
+                : 'group bg-teal-500 ml-1.5'
+            }
             onClick={() => collectStatistics(column.columnHash)}
           >
             <SvgIcon name="boxplot" className="w-4 white" />

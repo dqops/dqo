@@ -173,8 +173,6 @@ export const IncidentDetail = () => {
     history.push(ROUTES.TABLE_INCIDENTS_NOTIFICATION(CheckTypes.SOURCES, connection, schema, table));
   };
 
-  console.log('incidentDetail', incidentDetail);
-
   return (
     <IncidentsLayout>
       <div className="relative">

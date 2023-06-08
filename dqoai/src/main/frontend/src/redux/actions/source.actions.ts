@@ -45,6 +45,13 @@ export const setActiveFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   data
 });
 
+export const setActiveFirstLevelUrl = (checkType: CheckTypes, activeTab: string, newUrl: string) => ({
+  type: SOURCE_ACTION.SET_ACTIVE_FIRST_LEVEL_URL,
+  checkType,
+  activeTab,
+  data: newUrl
+});
+
 export const closeFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   type: SOURCE_ACTION.CLOSE_FIRST_LEVEL_TAB,
   checkType,

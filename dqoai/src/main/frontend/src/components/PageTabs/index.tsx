@@ -20,7 +20,7 @@ const PageTabs = ({
   limit = 10,
 }: IPageTabsProps) => {
   const onChangeTab = (tab: TabOption) => {
-    onChange(tab.value);
+    onChange(tab);
   };
 
   useMemo(() => {

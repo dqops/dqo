@@ -13,8 +13,10 @@ import SourceSchemasView from "../../components/Connection/ConnectionView/Source
 import SchemasView from "../../components/Connection/ConnectionView/SchemasView";
 import ConnectionDataStream from "../../components/Connection/ConnectionView/ConnectionDataStream";
 import qs from 'query-string';
-import { getFirstLevelState } from "../../redux/selectors";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { IncidentsNotificationsView } from "../../components/Connection/ConnectionView/IncidentsNotificationsView";
+import { useActionDispatch } from "../../hooks/useActionDispatch";
+import { setActiveFirstLevelUrl } from "../../redux/actions/source.actions";
 
 const initSourceTabs = [
   {
@@ -62,19 +64,19 @@ const ConnectionPage = () => {
 
   const {
     isUpdatedConnectionBasic,
-    isUpdatedSchedule,
-    isUpdatedComments,
-    isUpdatedLabels,
-    isUpdatedDataStreamsMapping
   } = useSelector(getFirstLevelState(checkTypes));
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+  const dispatch = useActionDispatch();
 
   const onChangeTab = (tab: string) => {
+    dispatch(
+      setActiveFirstLevelUrl(
+        checkTypes,
+        firstLevelActiveTab,
+        ROUTES.CONNECTION_DETAIL(checkTypes, connection, tab)
+      )
+    );
     history.push(ROUTES.CONNECTION_DETAIL(checkTypes, connection, tab));
-
-    // setTabMap({
-    //   ...tabMap,
-    //   [pageTab]: tab
-    // });
   };
 
   useEffect(() => {
