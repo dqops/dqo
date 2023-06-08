@@ -8,6 +8,8 @@ import { Tooltip } from '@material-tailwind/react';
 export interface TabOption {
   label: string;
   value: string;
+
+  url?: string;
   tooltip?: string;
 }
 

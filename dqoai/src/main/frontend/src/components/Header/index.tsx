@@ -49,7 +49,7 @@ const Header = () => {
   const { tabs, activeTab } = useSelector(
     (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
   );
-  const selectedTab = tabs?.find((item) => item.url === activeTab);
+  const selectedTab = tabs?.find((item) => item.value === activeTab);
   const match = useRouteMatch();
 
   const onClick = (newCheckTypes: CheckTypes) => () => {

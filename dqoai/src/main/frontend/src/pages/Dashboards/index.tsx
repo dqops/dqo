@@ -7,6 +7,7 @@ import { useDashboard } from "../../contexts/dashboardContext";
 import clsx from 'clsx';
 import { ITab } from "../../shared/interfaces";
 import { AuthenticatedDashboardModel } from "../../api";
+import { TabOption } from "../../components/PageTabs/tab";
 
 const Dashboards = () => {
   const dispatch = useActionDispatch();
@@ -22,7 +23,7 @@ const Dashboards = () => {
         <PageTabs
           tabs={tabs}
           activeTab={activeTab}
-          onChange={setActiveTab}
+          onChange={(tab: TabOption) => setActiveTab(tab.value)}
           onRemoveTab={closeTab}
           limit={8}
         />
