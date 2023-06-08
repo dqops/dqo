@@ -123,7 +123,6 @@ export const ChartView = ({ data }: ChartViewProps) => {
     }
   };
 
-  console.log('data', dataSource);
   return (
     <div className="my-8">
       <Line data={dataSource} options={options as any} />
