@@ -18,8 +18,6 @@ import {
 import SvgIcon from '../../SvgIcon';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import { getCollectingJobs } from '../../../redux/actions/job.actions';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
 
 interface ITableActionGroupProps {
   isDisabled?: boolean;
@@ -52,18 +50,12 @@ const TableActionGroup = ({
     table: string;
   } = useParams();
   const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useActionDispatch();
-  const setCollecting = (bool: boolean) => {
-    dispatch(getCollectingJobs(bool));
-  };
 
   const { deleteData } = useTree();
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const [loadingJob, setLoadingJob] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
-  const { jobs, isCollecting } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
+  const { jobs } = useSelector((state: IRootState) => state.job || {});
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const fetchColumns = async () => {
     try {
@@ -77,7 +69,6 @@ const TableActionGroup = ({
 
   useEffect(() => {
     fetchColumns();
-    filterJobs();
   }, [connection, schema, table, jobs?.jobs]);
   const fullPath = `${connection}.${schema}.${table}`;
 
@@ -94,7 +85,6 @@ const TableActionGroup = ({
   const collectStatistics = async () => {
     try {
       setLoadingJob(true);
-      setCollecting(true);
       await JobApiClient.collectStatisticsOnTable(
         statistics?.collect_column_statistics_job_template
       );
@@ -102,25 +92,18 @@ const TableActionGroup = ({
       setLoadingJob(false);
     }
   };
-  const filterJobs = () => {
-    const filteredJobs = jobs?.jobs?.filter(
-      (x) =>
-        x.jobType === 'collect statistics' &&
-        x.parameters?.collectStatisticsParameters
-          ?.statisticsCollectorSearchFilters?.schemaTableName ===
-          schema + '.' + table &&
-        (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
-          x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-          x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
-    );
 
-    if (filteredJobs && filteredJobs.length > 0) {
-      setCollecting(true);
-      console.log(isCollecting);
-    } else {
-      setCollecting(false);
-    }
-  };
+  const filteredJobs = jobs?.jobs?.filter(
+    (x) =>
+      x.jobType === 'collect statistics' &&
+      x.parameters?.collectStatisticsParameters
+        ?.statisticsCollectorSearchFilters?.schemaTableName ===
+        schema + '.' + table &&
+      (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+  );
+
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {isSourceScreen && (
@@ -144,10 +127,37 @@ const TableActionGroup = ({
       {collectStatistic && (
         <Button
           className="flex items-center gap-x-2 justify-center"
-          label={isCollecting ? 'Collecting...' : 'Collect Statistic'}
-          color={isCollecting ? 'secondary' : 'primary'}
+          label={
+            filteredJobs?.find(
+              (x) =>
+                x.parameters?.collectStatisticsParameters
+                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                schema + '.' + table
+            )
+              ? 'Collecting...'
+              : 'Collect Statistic'
+          }
+          color={
+            filteredJobs?.find(
+              (x) =>
+                x.parameters?.collectStatisticsParameters
+                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                schema + '.' + table
+            )
+              ? 'secondary'
+              : 'primary'
+          }
           leftIcon={
-            isCollecting ? <SvgIcon name="sync" className="w-4 h-4" /> : ''
+            filteredJobs?.find(
+              (x) =>
+                x.parameters?.collectStatisticsParameters
+                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                schema + '.' + table
+            ) ? (
+              <SvgIcon name="sync" className="w-4 h-4" />
+            ) : (
+              ''
+            )
           }
           onClick={() => {
             collectStatistics();

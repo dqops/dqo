@@ -109,7 +109,3 @@ export const toggleSettings = (areSettingsOpen: boolean) => ({
   type: JOB_ACTION.TOGGLE_SETTINGS,
   areSettingsOpen
 });
-export const getCollectingJobs = (isCollecting: boolean) => ({
-  type: JOB_ACTION.GET_COLLECTING_JOBS,
-  isCollecting
-});

@@ -35,7 +35,6 @@ export interface IJobsState {
   amounthOfElements: number;
   isProfileOpen: boolean;
   areSettingsOpen: boolean;
-  isCollecting: boolean;
 }
 
 const initialState: IJobsState = {
@@ -46,8 +45,7 @@ const initialState: IJobsState = {
   wasOpen: false,
   amounthOfElements: 0,
   isProfileOpen: false,
-  areSettingsOpen: false,
-  isCollecting: false
+  areSettingsOpen: false
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -147,11 +145,6 @@ const schemaReducer = (state = initialState, action: any) => {
       return {
         ...state,
         areSettingsOpen: action.areSettingsOpen
-      };
-    case JOB_ACTION.GET_COLLECTING_JOBS:
-      return {
-        ...state,
-        isCollecting: action.isCollecting
       };
 
     default:

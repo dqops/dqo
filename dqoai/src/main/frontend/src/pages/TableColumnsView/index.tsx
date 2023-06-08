@@ -12,8 +12,6 @@ import {
 import { AxiosResponse } from 'axios';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { getCollectingJobs } from '../../redux/actions/job.actions';
-import { useActionDispatch } from '../../hooks/useActionDispatch';
 
 const TableColumnsView = () => {
   const {
@@ -21,17 +19,10 @@ const TableColumnsView = () => {
     schema: schemaName,
     table: tableName
   }: { connection: string; schema: string; table: string } = useParams();
-  const { jobs, isCollecting } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
+  const { jobs } = useSelector((state: IRootState) => state.job || {});
 
-  const dispatch = useActionDispatch();
   const [loadingJob, setLoadingJob] = useState(false);
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
-
-  const setCollecting = (bool: boolean) => {
-    dispatch(getCollectingJobs(bool));
-  };
 
   const fetchColumns = async () => {
     try {
@@ -49,13 +40,12 @@ const TableColumnsView = () => {
 
   useEffect(() => {
     fetchColumns();
-    filterJobs();
   }, [connectionName, schemaName, tableName, jobs?.jobs]);
 
   const collectStatistics = async () => {
     try {
       setLoadingJob(true);
-      setCollecting(true);
+
       await JobApiClient.collectStatisticsOnTable(
         statistics?.collect_column_statistics_job_template
       );
@@ -64,25 +54,16 @@ const TableColumnsView = () => {
     }
   };
 
-  const filterJobs = () => {
-    const filteredJobs = jobs?.jobs?.filter(
-      (x) =>
-        x.jobType === 'collect statistics' &&
-        x.parameters?.collectStatisticsParameters
-          ?.statisticsCollectorSearchFilters?.schemaTableName ===
-          schemaName + '.' + tableName &&
-        (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
-          x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-          x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
-    );
-
-    if (filteredJobs && filteredJobs.length > 0) {
-      setCollecting(true);
-      console.log(isCollecting);
-    } else {
-      setCollecting(false);
-    }
-  };
+  const filteredJobs = jobs?.jobs?.filter(
+    (x) =>
+      x.jobType === 'collect statistics' &&
+      x.parameters?.collectStatisticsParameters
+        ?.statisticsCollectorSearchFilters?.schemaTableName ===
+        schemaName + '.' + tableName &&
+      (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+        x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+  );
 
   return (
     <ConnectionLayout>
@@ -93,10 +74,37 @@ const TableColumnsView = () => {
         </div>
         <Button
           className="flex items-center gap-x-2 justify-center"
-          label={isCollecting ? 'Collecting...' : 'Collect Statistic'}
-          color={isCollecting ? 'secondary' : 'primary'}
+          label={
+            filteredJobs?.find(
+              (x) =>
+                x.parameters?.collectStatisticsParameters
+                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                schemaName + '.' + tableName
+            )
+              ? 'Collecting...'
+              : 'Collect Statistic'
+          }
+          color={
+            filteredJobs?.find(
+              (x) =>
+                x.parameters?.collectStatisticsParameters
+                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                schemaName + '.' + tableName
+            )
+              ? 'secondary'
+              : 'primary'
+          }
           leftIcon={
-            isCollecting ? <SvgIcon name="sync" className="w-4 h-4" /> : ''
+            filteredJobs?.find(
+              (x) =>
+                x.parameters?.collectStatisticsParameters
+                  ?.statisticsCollectorSearchFilters?.schemaTableName ===
+                schemaName + '.' + tableName
+            ) ? (
+              <SvgIcon name="sync" className="w-4 h-4" />
+            ) : (
+              ''
+            )
           }
           onClick={() => {
             collectStatistics();

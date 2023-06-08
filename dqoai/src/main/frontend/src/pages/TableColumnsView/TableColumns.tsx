@@ -18,7 +18,6 @@ import { getFirstLevelState } from '../../redux/selectors';
 import Loader from '../../components/Loader';
 import { formatNumber, dateToString } from '../../shared/constants';
 import { IRootState } from '../../redux/reducers';
-import { getCollectingJobs } from '../../redux/actions/job.actions';
 
 interface ITableColumnsProps {
   connectionName: string;
@@ -65,12 +64,8 @@ const TableColumns = ({
   } = useParams();
   const history = useHistory();
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
-  const setCollecting = (bool: boolean) => {
-    dispatch(getCollectingJobs(bool));
-  };
-  const { jobs, isCollecting } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
+
+  const { jobs } = useSelector((state: IRootState) => state.job || {});
 
   const labels = [
     'Column name',
