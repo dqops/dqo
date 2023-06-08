@@ -11,7 +11,16 @@ import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../../shared/routes';
 import AddColumnDialog from '../../CustomTree/AddColumnDialog';
 import { AxiosResponse } from 'axios';
-import { TableColumnsStatisticsModel } from '../../../api';
+import {
+  DqoJobHistoryEntryModelStatusEnum,
+  TableColumnsStatisticsModel
+} from '../../../api';
+import SvgIcon from '../../SvgIcon';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
+import { filter } from 'lodash';
+import { getCollectingJobs } from '../../../redux/actions/job.actions';
+import { useActionDispatch } from '../../../hooks/useActionDispatch';
 
 interface ITableActionGroupProps {
   isDisabled?: boolean;
@@ -44,11 +53,18 @@ const TableActionGroup = ({
     table: string;
   } = useParams();
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useActionDispatch();
+  const setCollecting = (bool: boolean) => {
+    dispatch(getCollectingJobs(bool));
+  };
+
   const { deleteData } = useTree();
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const [loadingJob, setLoadingJob] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
-
+  const { jobs, isCollecting } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const fetchColumns = async () => {
     try {
@@ -61,8 +77,9 @@ const TableActionGroup = ({
   };
 
   useEffect(() => {
-    fetchColumns().then();
-  }, [connection, schema, table]);
+    fetchColumns();
+    filterJobs();
+  }, [connection, schema, table, jobs?.jobs]);
   const fullPath = `${connection}.${schema}.${table}`;
 
   const removeTable = async () => {
@@ -78,6 +95,7 @@ const TableActionGroup = ({
   const collectStatistics = async () => {
     try {
       setLoadingJob(true);
+      setCollecting(true);
       await JobApiClient.collectStatisticsOnTable(
         statistics?.collect_column_statistics_job_template
       );
@@ -85,7 +103,25 @@ const TableActionGroup = ({
       setLoadingJob(false);
     }
   };
+  const filterJobs = () => {
+    const filteredJobs = jobs?.jobs?.filter(
+      (x) =>
+        x.jobType === 'collect statistics' &&
+        x.parameters?.collectStatisticsParameters
+          ?.statisticsCollectorSearchFilters?.schemaTableName ===
+          schema + '.' + table &&
+        (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
+          x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+          x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+    );
 
+    if (filteredJobs && filteredJobs.length > 0) {
+      setCollecting(true);
+      console.log(isCollecting);
+    } else {
+      setCollecting(false);
+    }
+  };
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {isSourceScreen && (
@@ -108,9 +144,15 @@ const TableActionGroup = ({
       )}
       {collectStatistic && (
         <Button
-          label="Collect Statistic"
-          color="primary"
-          onClick={collectStatistics}
+          className="flex items-center gap-x-2 justify-center"
+          label={isCollecting ? 'Collecting...' : 'Collect Statistic'}
+          color={isCollecting ? 'secondary' : 'primary'}
+          leftIcon={
+            isCollecting ? <SvgIcon name="sync" className="w-4 h-4" /> : ''
+          }
+          onClick={() => {
+            collectStatistics();
+          }}
           loading={loadingJob}
         />
       )}

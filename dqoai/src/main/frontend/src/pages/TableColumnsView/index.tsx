@@ -24,6 +24,7 @@ const TableColumnsView = () => {
   const { jobs, isCollecting } = useSelector(
     (state: IRootState) => state.job || {}
   );
+
   const dispatch = useActionDispatch();
   const [loadingJob, setLoadingJob] = useState(false);
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
@@ -48,12 +49,13 @@ const TableColumnsView = () => {
 
   useEffect(() => {
     fetchColumns();
-    workInProgress2();
+    filterJobs();
   }, [connectionName, schemaName, tableName, jobs?.jobs]);
 
   const collectStatistics = async () => {
     try {
       setLoadingJob(true);
+      setCollecting(true);
       await JobApiClient.collectStatisticsOnTable(
         statistics?.collect_column_statistics_job_template
       );
@@ -61,26 +63,8 @@ const TableColumnsView = () => {
       setLoadingJob(false);
     }
   };
-  // console.log(jobs);
-  // console.log(tableName);
-  // console.log();
 
-  const workInProgress = () => {
-    jobs?.jobs &&
-      jobs?.jobs.map((x) =>
-        x.jobType === 'collect statistics' &&
-        x.parameters?.collectStatisticsParameters
-          ?.statisticsCollectorSearchFilters?.schemaTableName ===
-          schemaName + '.' + tableName &&
-        (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
-          x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-          x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
-          ? console.log('in')
-          : console.log('out')
-      );
-  };
-
-  const workInProgress2 = () => {
+  const filterJobs = () => {
     const filteredJobs = jobs?.jobs?.filter(
       (x) =>
         x.jobType === 'collect statistics' &&
@@ -101,23 +85,23 @@ const TableColumnsView = () => {
       setCollecting(false);
     }
   };
-  console.log(isCollecting);
 
   return (
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
         <div className="flex items-center space-x-2 max-w-full">
           <SvgIcon name="column" className="w-5 h-5 shrink-0" />
-          <div
-            className="text-xl font-semibold truncate"
-            onClick={() => workInProgress2()}
-          >{`${connectionName}.${schemaName}.${tableName} columns`}</div>
+          <div className="text-xl font-semibold truncate">{`${connectionName}.${schemaName}.${tableName} columns`}</div>
         </div>
         <Button
-          label="Collect Statistic"
+          className="flex items-center gap-x-2 justify-center"
+          label={isCollecting ? 'Collecting...' : 'Collect Statistic'}
           color={isCollecting ? 'secondary' : 'primary'}
+          leftIcon={
+            isCollecting ? <SvgIcon name="sync" className="w-4 h-4" /> : ''
+          }
           onClick={() => {
-            collectStatistics(), workInProgress2();
+            collectStatistics();
           }}
           loading={loadingJob}
         />
