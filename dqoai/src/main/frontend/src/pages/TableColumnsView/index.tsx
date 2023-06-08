@@ -77,14 +77,14 @@ const TableColumnsView = () => {
     );
 
     if (filteredJobs && filteredJobs.length > 0) {
-      console.log('in');
       setCollecting(true);
       console.log(isCollecting);
     } else {
-      console.log('out');
       setCollecting(false);
     }
   };
+
+  console.log(jobs?.jobs);
 
   return (
     <ConnectionLayout>

@@ -18,7 +18,6 @@ import {
 import SvgIcon from '../../SvgIcon';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import { filter } from 'lodash';
 import { getCollectingJobs } from '../../../redux/actions/job.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 
