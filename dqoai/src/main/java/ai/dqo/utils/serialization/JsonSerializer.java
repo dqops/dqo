@@ -35,6 +35,14 @@ public interface JsonSerializer {
     String serialize(Object source);
 
     /**
+     * Serializes an object as a JSON text, using a pretty print writer.
+     * @param source Source object to be serialized.
+     * @return Object serialized as a JSON string, formatted.
+     * @throws JsonSerializationException
+     */
+     String serializePrettyPrint(Object source);
+
+    /**
      * Deserializes a JSON string to a class instance.
      * @param json Json file as a string.
      * @param clazz Target class type.

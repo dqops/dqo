@@ -770,7 +770,6 @@
 					</annotationProcessorPaths>
 					<compilerArgs>
 						<arg>-Ajavadoc.packages=ai.dqo.sensors,ai.dqo.rules,ai.dqo.checks,ai.dqo.metadata,ai.dqo.data,ai.dqo.rest</arg>
-						<arg>-parameters</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>
@@ -785,7 +784,7 @@
 							<locations>ai.dqo.rest.controllers</locations>
 							<basePath>/</basePath>
 							<swaggerDirectory>${project.basedir}/target/swagger</swaggerDirectory>
-							<swaggerFileName>dqo-ui-swagger</swaggerFileName>
+							<swaggerFileName>dqo-ui-swagger-2</swaggerFileName>
 							<outputFormats>JSON,YAML</outputFormats>
 							<info>
 								<title>DQOps</title>
@@ -812,6 +811,7 @@
 				</configuration>
 				<executions>
 					<execution>
+						<id>generate-swagger-from-controllers</id>
 						<phase>compile</phase>
 						<goals>
 							<goal>generate</goal>
@@ -819,35 +819,19 @@
 					</execution>
 				</executions>
 			</plugin>
-
-
-
-
-<!--			<plugin>-->
-<!--				<groupId>org.springdoc</groupId>-->
-<!--				<artifactId>springdoc-openapi-maven-plugin</artifactId>-->
-<!--				<version>1.4</version>-->
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<phase>compile</phase>-->
-<!--						<goals>-->
-<!--							<goal>generate</goal>-->
-<!--						</goals>-->
-<!--					</execution>-->
-<!--				</executions>-->
-<!--			</plugin>-->
 			<plugin>
 				<groupId>org.openapitools</groupId>
 				<artifactId>openapi-generator-maven-plugin</artifactId>
 				<version>6.6.0</version>
 				<executions>
 					<execution>
+						<id>generate-typescript-client</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
 						<phase>compile</phase>
 						<configuration>
-							<inputSpec>${project.build.directory}/swagger/dqo-ui-swagger.json</inputSpec>
+							<inputSpec>${project.build.directory}/swagger/dqo-ui-swagger-2.json</inputSpec>
 							<generatorName>typescript-axios</generatorName>
 							<output>${project.basedir}/src/main/frontend/src/api</output>
 							<configOptions>
@@ -873,6 +857,20 @@
 							<mainClass>ai.dqo.rest.server.openapi.OpenApiTypescriptGeneratorPostProcessor</mainClass>
 							<arguments>
 								<argument>${project.basedir}/src/main/frontend/src/api</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>upgrade-swagger2-to-openapi3</id>
+						<goals>
+							<goal>java</goal>
+						</goals>
+						<phase>compile</phase>
+						<configuration>
+							<mainClass>ai.dqo.rest.server.openapi.Swagger2ToOpenApi3UpgradePostProcessor</mainClass>
+							<arguments>
+								<argument>${project.basedir}/target/swagger/dqo-ui-swagger-2.json</argument>
+								<argument>${project.basedir}/target/swagger/dqo-ui-swagger-3.json</argument>
 							</arguments>
 						</configuration>
 					</execution>
@@ -918,6 +916,7 @@
 				<version>2.4.32</version>
 				<executions>
 					<execution>
+						<id>generate-dqo-client-classes</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
@@ -1016,6 +1015,7 @@
 				<version>4.31.1</version>
 				<executions>
 					<execution>
+						<id>generate-yaml-files</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
@@ -1047,29 +1047,6 @@
 					</modules>
 				</configuration>
 			</plugin>
-<!--			<plugin>-->
-<!--				<groupId>org.openapitools</groupId>-->
-<!--				<artifactId>openapi-generator-maven-plugin</artifactId>-->
-<!--				<version>6.6.0</version>-->
-<!--				<executions>-->
-<!--					<execution>-->
-<!--						<goals>-->
-<!--							<goal>generate</goal>-->
-<!--						</goals>-->
-<!--						<phase>compile</phase>-->
-<!--						<configuration>-->
-<!--							<inputSpec>${project.build.directory}/swagger/dqo-ui-swagger.json</inputSpec>-->
-<!--							<generatorName>python</generatorName>-->
-<!--							<engine>handlebars</engine>-->
-<!--							<output>${project.basedir}../distribution/python/dqops/client</output>-->
-<!--							<configOptions>-->
-<!--								<packageName>client</packageName>-->
-<!--								<projectName>dqo</projectName>-->
-<!--							</configOptions>-->
-<!--						</configuration>-->
-<!--					</execution>-->
-<!--				</executions>-->
-<!--			</plugin>-->
 			<plugin>
 				<groupId>com.mycila</groupId>
 				<artifactId>license-maven-plugin</artifactId>

@@ -15,12 +15,10 @@
  */
 package ai.dqo.rest.server.openapi;
 
-import ai.dqo.core.configuration.DqoConfigurationProperties;
-import ai.dqo.utils.serialization.YamlSerializerImpl;
-import io.swagger.parser.OpenAPIParser;
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.parser.core.models.SwaggerParseResult;
-
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -34,26 +32,28 @@ public class Swagger2ToOpenApi3UpgradePostProcessor {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        if (args.length == 0) {
+        if (args.length != 2) {
             System.out.println("Swagger 2 to OpenAPI 3 upgrade utility");
-            System.out.println("Missing required parameter: <path to the swagger yaml file that will be upgraded in place>");
+            System.out.println("Missing required parameter: <path to the source swagger 2 yaml file> <path to the target swagger 3 yaml file>");
             return;
         }
 
-        Path pathToSwaggerFile = Path.of(args[0]);
-        OpenAPIParser openAPIParser = new OpenAPIParser();
-        String originalSwaggerContentAsString = Files.readString(pathToSwaggerFile);
-        SwaggerParseResult swaggerParseResult = openAPIParser.readContents(originalSwaggerContentAsString, null, null);
-        if (swaggerParseResult == null || swaggerParseResult.getOpenAPI() == null) {
-            String message = "File " + pathToSwaggerFile.toString() + " is invalid and was not parsed.";
-            System.err.println(message);
-            throw new RuntimeException(message);
-        }
+        Path pathToSourceSwaggerFile = Path.of(args[0]);
+        Path pathToTargetSwaggerFile = Path.of(args[1]);
 
-        OpenAPI openApi = swaggerParseResult.getOpenAPI();
-        YamlSerializerImpl yamlSerializer = new YamlSerializerImpl(new DqoConfigurationProperties());
-        String upgradedSwaggerContent = yamlSerializer.serialize(openApi);
+        HttpRequest converterRequest = HttpRequest.newBuilder()
+                .uri(new URI("https://converter.swagger.io/api/convert"))
+                .header("content-type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofFile(pathToSourceSwaggerFile))
+                .build();
 
-        Files.writeString(pathToSwaggerFile, upgradedSwaggerContent);
+        HttpClient httpClient = HttpClient.newBuilder()
+                .followRedirects(HttpClient.Redirect.ALWAYS)
+                .build();
+
+        HttpResponse<String> convertResponse = httpClient.send(converterRequest, HttpResponse.BodyHandlers.ofString());
+        String convertedSwaggerContent = convertResponse.body();
+
+        Files.writeString(pathToTargetSwaggerFile, convertedSwaggerContent);
     }
 }

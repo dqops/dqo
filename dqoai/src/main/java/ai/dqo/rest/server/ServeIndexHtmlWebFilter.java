@@ -37,12 +37,8 @@ public class ServeIndexHtmlWebFilter implements WebFilter {
     private static final Map<String, String> URL_REWRITES = new LinkedHashMap<>() {{
         put("/", "/index.html");
         put("/swagger-ui/", "/swagger-ui/index.html");
-        put("/v2/api-docs", "/dqo-ui-swagger.json");
+        put("/v2/api-docs", "/dqo-ui-swagger-2.json");
         put("/swagger-ui/swagger-initializer.js", "/swagger-ui-override/swagger-initializer.js");
-//        put("/v3/api-docs", "/v3/api-docs");
-//        put("/swagger-ui.html", "/swagger-ui.html");
-//        put("/api-docs", "/api-docs");
-//        put("/v3/api-docs/swagger-config", "/v3/api-docs/swagger-config");
     }};
 
     /**

@@ -15,6 +15,7 @@
  */
 package ai.dqo.utils.serialization;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -55,17 +56,35 @@ public class JsonSerializerImpl implements JsonSerializer {
 		this.mapper.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES);
 		this.mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		this.mapper.enable(DeserializationFeature.FAIL_ON_READING_DUP_TREE_KEY);
+
+        this.mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
     /**
-     * Serializes an object as a JOSN text.
+     * Serializes an object as a JSON text.
      * @param source Source object to be serialized.
      * @return Object serialized as a JSON string.
      * @throws JsonSerializationException
      */
+    @Override
     public String serialize(Object source) {
         try {
             return this.mapper.writeValueAsString(source);
+        } catch (JsonProcessingException e) {
+            throw new JsonSerializationException("JSON serialization failed", e);
+        }
+    }
+
+    /**
+     * Serializes an object as a JSON text, using a pretty print writer.
+     * @param source Source object to be serialized.
+     * @return Object serialized as a JSON string, formatted.
+     * @throws JsonSerializationException
+     */
+    @Override
+    public String serializePrettyPrint(Object source) {
+        try {
+            return this.mapper.writerWithDefaultPrettyPrinter().writeValueAsString(source);
         } catch (JsonProcessingException e) {
             throw new JsonSerializationException("JSON serialization failed", e);
         }
