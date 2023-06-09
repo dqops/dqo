@@ -37,7 +37,7 @@ import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.jobs.RunChecksQueueJob;
 import ai.dqo.execution.checks.jobs.RunChecksParameters;
 import ai.dqo.execution.checks.jobs.RunChecksJobResult;
-import ai.dqo.execution.checks.jobs.RunChecksScheduleResult;
+import ai.dqo.execution.checks.jobs.RunChecksQueueJobResult;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
@@ -126,14 +126,14 @@ public class JobsController {
      * @return Job summary response with the identity of the started job.
      */
     @PostMapping(value = "/runchecks", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "runChecks", notes = "Starts a new background job that will run selected data quality checks", response = RunChecksScheduleResult.class)
+    @ApiOperation(value = "runChecks", notes = "Starts a new background job that will run selected data quality checks", response = RunChecksQueueJobResult.class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New job that will run data quality checks was added to the queue", response = RunChecksScheduleResult.class),
+            @ApiResponse(code = 201, message = "New job that will run data quality checks was added to the queue", response = RunChecksQueueJobResult.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<RunChecksScheduleResult>> runChecks(
+    public ResponseEntity<Mono<RunChecksQueueJobResult>> runChecks(
             @ApiParam("Data quality check run configuration (target checks and an optional time range)")
             @RequestBody RunChecksParameters runChecksParameters,
             @ApiParam(name = "wait", value = "Wait until the checks finish to run, the default value is false (queue a background job and return the job id)", required = false)
@@ -144,7 +144,6 @@ public class JobsController {
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
                 CheckRunReportingMode.silent, false);
         runChecksParameters.setProgressListener(progressListener);
-
         runChecksJob.setParameters(runChecksParameters);
 
         PushJobResult<CheckExecutionSummary> pushJobResult = this.parentDqoJobQueue.pushJob(runChecksJob);
@@ -155,17 +154,66 @@ public class JobsController {
                     this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
             CompletableFuture<CheckExecutionSummary> timeoutLimitedFuture = pushJobResult.getFinishedFuture()
                     .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
-            Mono<RunChecksScheduleResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
+            Mono<RunChecksQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
                     .map(summary -> {
                         RunChecksJobResult runChecksJobResult = RunChecksJobResult.fromCheckExecutionSummary(summary);
-                        return new RunChecksScheduleResult(pushJobResult.getJobId(), runChecksJobResult);
+                        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(runChecksJob.getJobId());
+                        return new RunChecksQueueJobResult(pushJobResult.getJobId(), runChecksJobResult, jobHistoryEntryModel.getStatus());
                     });
 
             return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.CREATED); // 201
         }
 
-        Mono<RunChecksScheduleResult> resultWithOnlyJobId = Mono.just(new RunChecksScheduleResult(pushJobResult.getJobId()));
+        Mono<RunChecksQueueJobResult> resultWithOnlyJobId = Mono.just(new RunChecksQueueJobResult(pushJobResult.getJobId()));
         return new ResponseEntity<>(resultWithOnlyJobId, HttpStatus.CREATED); // 201
+    }
+
+    /**
+     * Waits for a previously submitted "run checks" job. Returns the result that may contain the result if the job finished before the timeout elapsed.
+     * @return Job summary response with the identity of the started job.
+     */
+    @GetMapping(value = "/runchecks/{jobId}/wait", produces = "application/json")
+    @ApiOperation(value = "waitForRunChecksJob", notes = "Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.",
+            response = RunChecksQueueJobResult.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Run checks job information returned. When the wait timeout has elapsed, the job status could be still queued or running and the result will be missing.",
+                    response = RunChecksQueueJobResult.class),
+            @ApiResponse(code = 404, message = "The job was not found or it has finished and was already been removed from the job history store.",
+                    response = Void.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<RunChecksQueueJobResult>> waitForRunChecksJob(
+            @ApiParam("Job id") @PathVariable long jobId,
+            @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but could be reconfigured (see the 'dqo' cli command documentation).", required = false)
+            @RequestParam(required = false) Optional<Integer> waitTimeout) {
+        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(new DqoQueueJobId(jobId));
+        if (jobHistoryEntryModel == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        CompletableFuture<?> jobFinishedFuture = jobHistoryEntryModel.getJobQueueEntry().getJob().getFinishedFuture();
+        long defaultWaitTimeout = this.dqoQueueWaitTimeoutsConfigurationProperties.getRunChecks();
+
+        long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() : defaultWaitTimeout;
+        CompletableFuture<?> timeoutLimitedFuture = jobFinishedFuture
+                .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+
+        Mono<RunChecksQueueJobResult> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
+                .map(_none -> {
+                    DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(new DqoQueueJobId(jobId));
+                    if (mostRecentJobModel == null) {
+                        return null;
+                    }
+
+                    RunChecksQueueJobResult jobResult = new RunChecksQueueJobResult(
+                            mostRecentJobModel.getJobId(),
+                            mostRecentJobModel.getParameters().getRunChecksParameters().getRunChecksResult(),
+                            mostRecentJobModel.getStatus());
+                    return jobResult;
+                });
+
+        return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.OK); // 200
     }
 
     /**
