@@ -56,7 +56,6 @@ const DeleteOnlyDataDialog = ({
         dateStart: toUTCString(startDate),
         dateEnd: toUTCString(endDate)
       });
-      console.log('else');
     }
   };
 
