@@ -1079,7 +1079,6 @@ function TreeProvider(props: any) {
       }
       if (colArr && colArr.length > 0) {
         node.data_clean_job_template.columnNames = colArr;
-        console.log('wroten');
       }
       JobApiClient.deleteStoredData({
         ...node.data_clean_job_template,

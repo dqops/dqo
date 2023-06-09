@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import {
   Popover,
@@ -75,20 +75,6 @@ const ContextMenu = ({
     setOpen(!open);
     e.stopPropagation();
   };
-  const myArr: string[] = [];
-  useEffect(() => {
-    if (node.collect_statistics_job_template?.columnName) {
-      myArr.push(node.collect_statistics_job_template?.columnName);
-      //  node.data_clean_job_template?.columnNames
-    }
-  }, []);
-  // console.log(node);
-  // console.log(node.collect_statistics_job_template?.columnName);
-  console.log(
-    node.collect_statistics_job_template?.columnName && [
-      node.collect_statistics_job_template?.columnName
-    ]
-  );
 
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
@@ -251,7 +237,6 @@ const ContextMenu = ({
                   setOpen(false);
                 }}
                 nameOfCol={node.collect_statistics_job_template?.columnName}
-                columnBool={true}
               />
             </>
           )}

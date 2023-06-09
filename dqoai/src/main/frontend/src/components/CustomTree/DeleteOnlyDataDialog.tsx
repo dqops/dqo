@@ -10,9 +10,6 @@ import Button from '../Button';
 import React, { useEffect, useMemo, useState } from 'react';
 import moment from 'moment';
 import Checkbox from '../Checkbox';
-import { JobApiClient } from '../../services/apiClient';
-import { CustomTreeNode } from '../../shared/interfaces';
-import { CheckTypes } from '../../shared/routes';
 
 type DeleteOnlyDataDialogProps = {
   open: boolean;
@@ -28,31 +25,17 @@ const DeleteOnlyDataDialog = ({
   open,
   onClose,
   onDelete,
-  columnBool,
   nameOfCol
 }: DeleteOnlyDataDialogProps) => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [mode, setMode] = useState('all');
-  const [arrayOfCol, setArrayOfCol] = useState<string[]>([]);
   const [params, setParams] = useState({
     deleteErrors: true,
     deleteProfilingResults: true,
     deleteRuleResults: true,
     deleteSensorReadouts: true
   });
-
-  // const deleteStoredData2 = async (node: CustomTreeNode, params: { [key: string]: string | boolean }) => {
-  //   if (node.data_clean_job_template) {
-
-  //     JobApiClient.deleteStoredData({
-  //       ...node.data_clean_job_template,
-  //       ...node.data_clean_job_template.columnNames = myArr,
-  //       ...params,
-  //     });
-  //     return;
-  //   }
-  // };
 
   const myArr: string[] = [];
   useEffect(() => {
@@ -61,18 +44,12 @@ const DeleteOnlyDataDialog = ({
     }
   }, [myArr]);
 
-  // console.log(myArr);
-  // console.log(columnBool);
   const toUTCString = (date: Date) => moment(date).utc().format('YYYY-MM-DD');
   const onConfirm = () => {
-    if (mode === 'all') {
-      onDelete({});
-      console.log('if');
-    }
     if (myArr.length === 1) {
-      console.log('delete column data');
-      console.log(myArr);
       onDelete({}, myArr);
+    } else if (mode === 'all') {
+      onDelete({});
     } else {
       onDelete({
         ...params,
