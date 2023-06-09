@@ -220,5 +220,6 @@ public class ConnectionBasicModel {
         targetConnectionSpec.setRedshift(this.getRedshift());
         targetConnectionSpec.setSqlserver(this.getSqlserver());
         targetConnectionSpec.setMysql(this.getMysql());
+        targetConnectionSpec.setOracle(this.getOracle());
     }
 }
