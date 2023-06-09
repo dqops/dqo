@@ -25,6 +25,7 @@ import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJob;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobResult;
+import ai.dqo.core.jobqueue.monitoring.DqoJobHistoryEntryModel;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueIncrementalSnapshotModel;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueInitialSnapshotModel;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
@@ -241,6 +242,71 @@ public class JobsController {
     public ResponseEntity<Mono<DqoJobQueueInitialSnapshotModel>> getAllJobs() {
         Mono<DqoJobQueueInitialSnapshotModel> initialJobList = this.jobQueueMonitoringService.getInitialJobList();
         return new ResponseEntity<>(initialJobList, HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves the status of a single job.
+     * @return Returns the model of a job.
+     */
+    @GetMapping(value = "/jobs/{jobId}", produces = "application/json")
+    @ApiOperation(value = "getJob", notes = "Retrieves the current status of a single job, identified by a job id.",
+            response = DqoJobHistoryEntryModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Retrieves the current status of a single job, identified by a job id.",
+                    response = DqoJobHistoryEntryModel.class),
+            @ApiResponse(code = 404, message = "The job was not found or it has finished and was already been removed from the job history store.",
+                    response = Void.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<DqoJobHistoryEntryModel>> getJob(
+            @ApiParam("Job id") @PathVariable long jobId) {
+        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(new DqoQueueJobId(jobId));
+        if (jobHistoryEntryModel == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        return new ResponseEntity<>(Mono.just(jobHistoryEntryModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.
+     * @return Returns the model of a job. The model contains the result if the job finished before the wait timeout elapsed.
+     */
+    @GetMapping(value = "/jobs/{jobId}/wait", produces = "application/json")
+    @ApiOperation(value = "waitForJob", notes = "Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.",
+            response = DqoJobHistoryEntryModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "The job status was returned. If the response is returned before the wait timeout, the response will contain information about a finished job. When the wait timeout has elapsed, the job status could be still queued or running.",
+                    response = DqoJobHistoryEntryModel.class),
+            @ApiResponse(code = 404, message = "The job was not found or it has finished and was already been removed from the job history store.",
+                    response = Void.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<DqoJobHistoryEntryModel>> waitForJob(
+            @ApiParam("Job id") @PathVariable long jobId,
+            @ApiParam(name = "waitTimeout", value = "The wait timeout in seconds, when the wait timeout elapses and the job is still running, the method returns the job model that is not yet finished and has no results. The default timeout is 120 seconds, but could be reconfigured (see the 'dqo' cli command documentation).", required = false)
+            @RequestParam(required = false) Optional<Integer> waitTimeout) {
+        DqoJobHistoryEntryModel jobHistoryEntryModel = this.jobQueueMonitoringService.getJob(new DqoQueueJobId(jobId));
+        if (jobHistoryEntryModel == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        CompletableFuture<?> jobFinishedFuture = jobHistoryEntryModel.getJobQueueEntry().getJob().getFinishedFuture();
+        long defaultWaitTimeout = this.dqoQueueWaitTimeoutsConfigurationProperties.getWaitTimeForJobType(jobHistoryEntryModel.getJobType());
+
+        long waitTimeoutSeconds = waitTimeout.isPresent() ? waitTimeout.get() : defaultWaitTimeout;
+        CompletableFuture<?> timeoutLimitedFuture = jobFinishedFuture
+                .completeOnTimeout(null, waitTimeoutSeconds, TimeUnit.SECONDS);
+
+        Mono<DqoJobHistoryEntryModel> monoWithResultAndTimeout = Mono.fromFuture(timeoutLimitedFuture)
+                .map(_none -> {
+                    DqoJobHistoryEntryModel mostRecentJobModel = this.jobQueueMonitoringService.getJob(new DqoQueueJobId(jobId));
+                    return mostRecentJobModel;
+                });
+
+        return new ResponseEntity<>(monoWithResultAndTimeout, HttpStatus.OK); // 200
     }
 
     /**

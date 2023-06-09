@@ -15,6 +15,7 @@
  */
 package ai.dqo.core.configuration;
 
+import ai.dqo.core.jobqueue.DqoJobType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -35,6 +36,11 @@ public class DqoQueueWaitTimeoutsConfigurationProperties implements Cloneable {
     private long runChecks = 120L;
 
     /**
+     * The default wait timeout for any kind of job.
+     */
+    private long defaultWaitTimeout = 120L;
+
+    /**
      * Clones the current object.
      * @return
      */
@@ -45,6 +51,23 @@ public class DqoQueueWaitTimeoutsConfigurationProperties implements Cloneable {
         }
         catch (Exception ex) {
             throw new RuntimeException(ex);
+        }
+    }
+
+    /**
+     * Retrieves a default job wait timeout for a given type of job.
+     * @param jobType Job type.
+     * @return Wait timeout in seconds.
+     */
+    public long getWaitTimeForJobType(DqoJobType jobType) {
+        switch (jobType) {
+            case RUN_CHECKS:
+            case RUN_CHECKS_ON_TABLE:
+            case RUN_SCHEDULED_CHECKS_CRON:
+                return this.runChecks;
+
+            default:
+                return this.defaultWaitTimeout;
         }
     }
 }
