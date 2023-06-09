@@ -17,7 +17,7 @@ package ai.dqo.data.readouts.normalization;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
+import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.ProviderType;
@@ -72,7 +72,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab1"));
 		tableSpec = tableWrapper.getSpec();
 		checkSpec = new TableRowCountCheckSpec();
-        tableSpec.getProfilingChecks().setVolume(new TableProfilingVolumeChecksSpec());
+        tableSpec.getProfilingChecks().setVolume(new TableVolumeProfilingChecksSpec());
 		tableSpec.getProfilingChecks().getVolume().setRowCount(checkSpec);
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
@@ -219,7 +219,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Assertions.assertEquals(0L, results.getDataStreamHashColumn().get(0));
         Assertions.assertEquals("all data", results.getDataStreamNameColumn().get(0));
         Assertions.assertEquals("5e66efdc-b585-6460-7741-4bd9eede5d4e", results.getTimeSeriesIdColumn().get(0));
-        Assertions.assertEquals("298afde6-a2ec-f4ee-ff52-a61c0648323f", results.getIdColumn().get(0));
+        Assertions.assertEquals("60685857-4b08-6610-b6b0-03adefaca0c1", results.getIdColumn().get(0));
     }
 
     @Test

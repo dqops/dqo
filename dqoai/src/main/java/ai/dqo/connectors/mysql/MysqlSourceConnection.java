@@ -190,7 +190,7 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
                                      cancellationToken -> RunSilently.run(statement::cancel))) {
                     try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
                         try (MysqlResultSet mysqlResultSet = new MysqlResultSet(results)) {
-                            Table resultTable = Table.read().db(mysqlResultSet, "query_result");
+                            Table resultTable = Table.read().db(mysqlResultSet, sqlQueryStatement);
                             for (Column<?> column : resultTable.columns()) {
                                 if (column.name() != null) {
                                     column.setName(column.name().toLowerCase(Locale.ROOT));

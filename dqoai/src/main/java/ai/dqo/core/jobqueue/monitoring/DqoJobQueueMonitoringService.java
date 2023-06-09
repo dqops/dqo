@@ -16,6 +16,7 @@
 package ai.dqo.core.jobqueue.monitoring;
 
 import ai.dqo.core.jobqueue.DqoJobQueueEntry;
+import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
 import reactor.core.publisher.Mono;
 
@@ -107,4 +108,11 @@ public interface DqoJobQueueMonitoringService {
      * @param synchronizationStatus Folder synchronization status.
      */
     void publishFolderSynchronizationStatus(CloudSynchronizationFoldersStatusModel synchronizationStatus);
+
+    /**
+     * Finds the job identified by a job id.
+     * @param jobId Job id to find.
+     * @return Job history entry model (with the most recent job's status) or null, when the job is no longer tracked or is missing.
+     */
+    DqoJobHistoryEntryModel getJob(DqoQueueJobId jobId);
 }

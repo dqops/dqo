@@ -12,7 +12,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|foreign_key_not_match_count|profiling| |[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|foreign_key_not_match_count|profiling| |[foreign_key_not_match_count](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -653,9 +653,8 @@ spec:
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
-        ON analyzed_table.[target_column] = foreign_table.[customer_id], 
-                , 
-            
+        ON analyzed_table.[target_column] = foreign_table.[customer_id]
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -673,11 +672,11 @@ ___
 ## **daily foreign key not match count**  
   
 **Check description**  
-Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_foreign_key_not_match_count|recurring|daily|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_foreign_key_not_match_count|recurring|daily|[foreign_key_not_match_count](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1321,9 +1320,8 @@ spec:
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
-        ON analyzed_table.[target_column] = foreign_table.[customer_id], 
-                , 
-            
+        ON analyzed_table.[target_column] = foreign_table.[customer_id]
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1345,7 +1343,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_foreign_key_not_match_count|recurring|monthly|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_foreign_key_not_match_count|recurring|monthly|[foreign_key_not_match_count](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1989,9 +1987,8 @@ spec:
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
-        ON analyzed_table.[target_column] = foreign_table.[customer_id], 
-                , 
-            
+        ON analyzed_table.[target_column] = foreign_table.[customer_id]
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -2013,7 +2010,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_foreign_key_not_match_count|partitioned|daily|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_partition_foreign_key_not_match_count|partitioned|daily|[foreign_key_not_match_count](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -2661,8 +2658,8 @@ spec:
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
-        ON analyzed_table.[target_column] = foreign_table.[customer_id], 
-        GROUP BY CAST([] AS date), CAST([] AS date)
+        ON analyzed_table.[target_column] = foreign_table.[customer_id]
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
         ORDER BY level_1, level_2CAST([] AS date)
         
             
@@ -2682,7 +2679,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_foreign_key_not_match_count|partitioned|monthly|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_partition_foreign_key_not_match_count|partitioned|monthly|[foreign_key_not_match_count](../../../../reference/sensors/Column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -3330,8 +3327,8 @@ spec:
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
-        ON analyzed_table.[target_column] = foreign_table.[customer_id], 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        ON analyzed_table.[target_column] = foreign_table.[customer_id]
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             

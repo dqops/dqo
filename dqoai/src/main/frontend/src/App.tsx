@@ -13,22 +13,31 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { LogErrorsApi } from "./services/apiClient";
 
+import Chart from "chart.js/auto";
+import { CategoryScale } from "chart.js";
+
+Chart.register(CategoryScale);
+// import { Chart as ChartJS, LinearScale, PointElement, Tooltip, Legend, TimeScale } from "chart.js";
+import 'chartjs-adapter-moment';
+// ChartJS.register(LinearScale, PointElement, Tooltip, Legend, TimeScale);
+
 const App = () => {
   const dispatch = useActionDispatch();
-  const { lastSequenceNumber, loading } = useSelector((state: IRootState) => state.job);
+  const { lastSequenceNumber, loading } = useSelector((state: IRootState) => state.job || {});
 
   useEffect(() => {
     dispatch(getAllJobs());
 
     window.onunhandledrejection = event => {
-      console.log('event', event);
-      LogErrorsApi.logError({
-        window_location: window.location.href,
-        message: event.reason
-      })
+      if (event?.reason?.request?.responseURL?.indexOf("api/logs/error") < 0) {
+        LogErrorsApi.logError({
+          window_location: window.location.href,
+          message: event.reason
+        })
+      }
     };
 
-    window.onerror = function(message, source, lineNumber, colno, error) {
+    window.onerror = function(message) {
       LogErrorsApi.logError({
         window_location: window.location.href,
         message: message.toString()

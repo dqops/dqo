@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import org.apache.parquet.Strings;
 
 import java.util.Objects;
 
@@ -189,5 +190,18 @@ public class DataStreamLevelSpec extends AbstractSpec {
         cloned.tag = cloned.source == DataStreamLevelSource.tag ? secretValueProvider.expandValue(cloned.tag) : null;
         cloned.column = cloned.source == DataStreamLevelSource.column_value ? secretValueProvider.expandValue(cloned.column) : null;
         return cloned;
+    }
+
+    /**
+     * Creates a clone of this data stream level configuration to be used by the Jinja2 renderer, but only if the data stream mapping references a column and the column is not empty.
+     * @return A clone of this object when it is a valid data stream level configuration that could be used in a Jinja2 template or null when the data stream configuration
+     * is a tag or the column name is not provided.
+     */
+    public DataStreamLevelSpec truncateForSqlRendering() {
+        if (this.source != DataStreamLevelSource.column_value || Strings.isNullOrEmpty(this.column)) {
+            return null;
+        }
+
+        return this.deepClone();
     }
 }

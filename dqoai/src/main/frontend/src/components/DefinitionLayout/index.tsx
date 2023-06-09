@@ -7,6 +7,7 @@ import { IRootState } from "../../redux/reducers";
 import PageTabs from "../PageTabs";
 import { useHistory, useLocation } from "react-router-dom";
 import { closeFirstLevelTab, setActiveFirstLevelTab } from "../../redux/actions/sensor.actions";
+import { TabOption } from "../PageTabs/tab";
 
 interface LayoutProps {
   children?: any;
@@ -18,9 +19,9 @@ const DefinitionLayout = ({ children }: LayoutProps) => {
   const history = useHistory();
   const location = useLocation();
 
-  const handleChange = (value: string) => {
-    dispatch(setActiveFirstLevelTab(value));
-    history.push(value);
+  const handleChange = (tab: TabOption) => {
+    dispatch(setActiveFirstLevelTab(tab.value));
+    history.push(tab?.url ?? '');
   };
 
   const closeTab = (value: string) => {
@@ -30,6 +31,7 @@ const DefinitionLayout = ({ children }: LayoutProps) => {
   const tabOptions = useMemo(() => {
     return pageTabs?.map((item) => ({
       value: item.url,
+      url: item.url,
       label: item.label
     })) || [];
   }, [pageTabs]);

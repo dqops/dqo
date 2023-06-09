@@ -33,7 +33,10 @@ import Definitions from "./pages/Definitions";
 import SensorDetail from "./pages/SensorDetail";
 import RuleDetail from "./pages/RuleDetail";
 import Incidents from "./pages/Incidents";
+import IncidentConnection from "./pages/IncidentConnection";
 import IncidentDetail from "./pages/IncidentDetail";
+import NotFound from "./pages/NotFound";
+import TableIncidents from "./pages/TableIncidents";
 
 const Routes = () => {
   return (
@@ -51,6 +54,7 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.TABLE_PARTITIONED_MONTHLY} component={TableMonthlyPartitionedChecksView} />
       <Route exact path={ROUTES.PATTERNS.TABLE_PARTITIONED_FILTER} component={TablePartitionedChecksUIFilterView} />
       <Route exact path={ROUTES.PATTERNS.TABLE_COLUMNS} component={TableColumnsView} />
+      <Route exact path={ROUTES.PATTERNS.TABLE_INCIDENTS_NOTIFICATION} component={TableIncidents} />
       <Route exact path={ROUTES.PATTERNS.COLUMN} component={ColumnView} />
       <Route exact path={ROUTES.PATTERNS.COLUMN_PROFILING} component={ColumnProfilingChecksView} />
       <Route exact path={ROUTES.PATTERNS.COLUMN_PROFILING_FILTER} component={ColumnProfilingChecksUIFilterView} />
@@ -66,10 +70,11 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.RULE_DETAIL} component={RuleDetail} />
       <Route exact path={ROUTES.PATTERNS.DEFINITIONS} component={Definitions} />
       <Route exact path={ROUTES.PATTERNS.INCIDENT_DETAIL} component={IncidentDetail} />
+      <Route exact path={ROUTES.PATTERNS.INCIDENT_CONNECTION} component={IncidentConnection} />
       <Route exact path={ROUTES.PATTERNS.INCIDENTS} component={Incidents} />
       <Route exact path={ROUTES.PATTERNS.QUALITY_CHECKS} component={ChecksPage} />
       <Redirect from={ROUTES.PATTERNS.INDEX} to={ROUTES.PATTERNS.HOME} />
-      <Route component={ChecksPage} />
+      <Route exact path="*" component={NotFound} />
     </Switch>
   );
 };

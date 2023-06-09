@@ -21,7 +21,7 @@ interface UserProfile {
 }
 
 export default function UserProfile({ name, email }: UserProfile) {
-  const { isProfileOpen } = useSelector((state: IRootState) => state.job);
+  const { isProfileOpen } = useSelector((state: IRootState) => state.job || {});
 
   const dispatch = useActionDispatch();
 
@@ -114,7 +114,7 @@ export default function UserProfile({ name, email }: UserProfile) {
             rel="noreferrer"
             className="block text-gray-700 mb-3"
           >
-            <Button label="Menage account" color="primary" />
+            <Button label="Manage account" color="primary" />
           </a>
         </div>
       </PopoverContent>

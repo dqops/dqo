@@ -21,6 +21,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.services.check.mapping.models.UICheckContainerModel;
 import ai.dqo.services.check.mapping.models.UICheckModel;
 import ai.dqo.services.check.mapping.models.UIQualityCategoryModel;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 
 import java.util.*;
 
@@ -29,6 +30,7 @@ import java.util.*;
  */
 public class SimilarChecksContainer {
     private Map<SimilarCheckSensorRuleKey, SimilarChecksGroup> checkGroups = new LinkedHashMap<>();
+    private Map<String, SimilarChecksGroup> similarChecksByCheckName = new HashMap<>();
 
     /**
      * Returns a similar check group for a given key (the key contains the sensor name and rule names).
@@ -69,6 +71,12 @@ public class SimilarChecksContainer {
                 SimilarChecksGroup similarCheckGroup = this.getSimilarCheckGroup(similarCheckMatchKey);
                 SimilarCheckModel similarCheckModel = new SimilarCheckModel(checkTarget, checkType, timeScale, categoryModel.getCategory(), checkModel);
                 similarCheckGroup.addSimilarCheck(similarCheckModel);
+
+                if (this.similarChecksByCheckName.containsKey(checkModel.getCheckName())) {
+                    throw new DqoRuntimeException("Duplicate check name found, the built-in data quality checks must have unique names, check name: " +
+                            checkModel.getCheckName());
+                }
+                this.similarChecksByCheckName.put(checkModel.getCheckName(), similarCheckGroup);
             }
         }
     }
@@ -91,5 +99,14 @@ public class SimilarChecksContainer {
         }
 
         return checksByCategory;
+    }
+
+    /**
+     * Finds a group of similar checks that are similar to a check in question.
+     * @param checkName Check name.
+     * @return A group of similar checks to this check. The check itself will also be included in the result.
+     */
+    public SimilarChecksGroup getSimilarChecksTo(String checkName) {
+        return this.similarChecksByCheckName.get(checkName);
     }
 }

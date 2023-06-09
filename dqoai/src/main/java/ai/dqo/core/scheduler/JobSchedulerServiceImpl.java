@@ -18,8 +18,8 @@ package ai.dqo.core.scheduler;
 import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
 import ai.dqo.core.scheduler.quartz.*;
 import ai.dqo.core.scheduler.runcheck.RunScheduledChecksSchedulerJob;
-import ai.dqo.core.scheduler.scan.JobSchedulesDelta;
-import ai.dqo.core.scheduler.scan.SynchronizeMetadataSchedulerJob;
+import ai.dqo.core.scheduler.synchronize.JobSchedulesDelta;
+import ai.dqo.core.scheduler.synchronize.SynchronizeMetadataSchedulerJob;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
 import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
@@ -52,8 +52,8 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     private ScheduledJobListener scheduledJobListener;
     private JobDetail runChecksJob;
     private JobDetail synchronizeMetadataJob;
-    private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.summary;
-    private CheckRunReportingMode checkRunReportingMode = CheckRunReportingMode.summary;
+    private FileSystemSynchronizationReportingMode synchronizationMode = FileSystemSynchronizationReportingMode.silent;
+    private CheckRunReportingMode checkRunReportingMode = CheckRunReportingMode.silent;
 
     /**
      * Job scheduler service constructor.
@@ -168,7 +168,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
                 this.scheduler.addJob(this.synchronizeMetadataJob, true);
             }
 
-            String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getScanMetadataCronSchedule();
+            String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getSynchronizeCronSchedule();
             RecurringScheduleSpec scanMetadataRecurringScheduleSpec = new RecurringScheduleSpec(scanMetadataCronSchedule);
             Trigger scanMetadataTrigger = this.triggerFactory.createTrigger(scanMetadataRecurringScheduleSpec, JobKeys.SYNCHRONIZE_METADATA);
 
@@ -254,8 +254,12 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     @Override
     public UniqueSchedulesCollection getActiveSchedules(JobKey jobKey) {
         try {
-            List<? extends Trigger> triggersOfJob = this.scheduler.getTriggersOfJob(jobKey);
             UniqueSchedulesCollection schedulesCollection = new UniqueSchedulesCollection();
+            if (this.scheduler == null) {
+                return schedulesCollection;
+            }
+
+            List<? extends Trigger> triggersOfJob = this.scheduler.getTriggersOfJob(jobKey);
 
             for (Trigger trigger : triggersOfJob) {
                 RecurringScheduleSpec schedule = this.jobDataMapAdapter.getSchedule(trigger.getJobDataMap());
@@ -279,6 +283,10 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
     public void applyScheduleDeltaToJob(JobSchedulesDelta schedulesDelta, JobKey jobKey) {
         Exception firstException = null;
         List<? extends Trigger> triggersOfJob = null;
+
+        if (this.scheduler == null) {
+            return; // the scheduler is not started yet
+        }
 
         try {
             triggersOfJob = this.scheduler.getTriggersOfJob(jobKey);

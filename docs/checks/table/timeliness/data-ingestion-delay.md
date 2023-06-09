@@ -12,7 +12,7 @@ Calculates the time difference in days between the most recent event timestamp a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|data_ingestion_delay|profiling| |[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|data_ingestion_delay|profiling| |[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -688,9 +688,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -712,7 +711,7 @@ Daily  calculating the time difference in days between the most recent event tim
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_data_ingestion_delay|recurring|daily|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|daily_data_ingestion_delay|recurring|daily|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1391,9 +1390,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1415,7 +1413,7 @@ Monthly recurring calculating the time difference in days between the most recen
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_data_ingestion_delay|recurring|monthly|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|monthly_data_ingestion_delay|recurring|monthly|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -2094,9 +2092,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -2118,7 +2115,7 @@ Daily partitioned check calculating the time difference in days between the most
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_data_ingestion_delay|partitioned|daily|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|daily_partition_data_ingestion_delay|partitioned|daily|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -2801,8 +2798,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST([] AS date) AS time_period,
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY CAST([] AS date), CAST([] AS date)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
         ORDER BY level_1, level_2CAST([] AS date)
         
             
@@ -2822,7 +2819,7 @@ Monthly partitioned check calculating the time difference in days between the mo
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_data_ingestion_delay|partitioned|monthly|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|monthly_partition_data_ingestion_delay|partitioned|monthly|[data_ingestion_delay](../../../../reference/sensors/Table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -3505,8 +3502,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             

@@ -12,7 +12,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|sql_aggregate_expr_table|profiling| |[sql_aggregated_expression](../../../../reference/sensors/table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/comparison/#max-value)|
+|sql_aggregate_expr_table|profiling| |[sql_aggregated_expression](../../../../reference/sensors/Table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -388,9 +388,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -408,11 +407,11 @@ ___
 ## **daily sql aggregate expr table**  
   
 **Check description**  
-Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_sql_aggregate_expr_table|recurring|daily|[sql_aggregated_expression](../../../../reference/sensors/table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/comparison/#max-value)|
+|daily_sql_aggregate_expr_table|recurring|daily|[sql_aggregated_expression](../../../../reference/sensors/Table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -791,9 +790,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -815,7 +813,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_sql_aggregate_expr_table|recurring|monthly|[sql_aggregated_expression](../../../../reference/sensors/table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/comparison/#max-value)|
+|monthly_sql_aggregate_expr_table|recurring|monthly|[sql_aggregated_expression](../../../../reference/sensors/Table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1194,9 +1192,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1218,7 +1215,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sql_aggregate_expr_table|partitioned|daily|[sql_aggregated_expression](../../../../reference/sensors/table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/comparison/#max-value)|
+|daily_partition_sql_aggregate_expr_table|partitioned|daily|[sql_aggregated_expression](../../../../reference/sensors/Table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1601,8 +1598,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST([] AS date) AS time_period,
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY CAST([] AS date), CAST([] AS date)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
         ORDER BY level_1, level_2CAST([] AS date)
         
             
@@ -1622,7 +1619,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_sql_aggregate_expr_table|partitioned|monthly|[sql_aggregated_expression](../../../../reference/sensors/table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/comparison/#max-value)|
+|monthly_partition_sql_aggregate_expr_table|partitioned|monthly|[sql_aggregated_expression](../../../../reference/sensors/Table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/Comparison/#max-value)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -2005,8 +2002,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             

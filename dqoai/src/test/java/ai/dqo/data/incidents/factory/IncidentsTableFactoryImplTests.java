@@ -41,7 +41,7 @@ public class IncidentsTableFactoryImplTests extends BaseTest {
     @Test
     void createEmptySensorReadoutsTable_whenCalled_thenCreatesTableWithSchema() {
         Table table = this.sut.createEmptyIncidentsTable("empty");
-        Assertions.assertEquals(20, table.columnCount());
+        Assertions.assertEquals(23, table.columnCount());
 
         int columnIndex = 0;
         Assertions.assertEquals(IncidentsColumnNames.ID_COLUMN_NAME, table.column(columnIndex++).name());
@@ -55,15 +55,18 @@ public class IncidentsTableFactoryImplTests extends BaseTest {
         Assertions.assertEquals(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME, table.column(columnIndex++).name());
-        Assertions.assertEquals(IncidentsColumnNames.MIN_SEVERITY_COLUMN_NAME, table.column(columnIndex++).name());
+        Assertions.assertEquals(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.LAST_SEEN_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.INCIDENT_UNTIL_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.FAILED_CHECKS_COUNT_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME, table.column(columnIndex++).name());
-        Assertions.assertEquals(IncidentsColumnNames.CREATED_BY_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.RESOLVED_BY_COLUMN_NAME , table.column(columnIndex++).name());
         Assertions.assertEquals(IncidentsColumnNames.STATUS_COLUMN_NAME, table.column(columnIndex++).name());
+        Assertions.assertEquals(IncidentsColumnNames.CREATED_AT_COLUMN_NAME, table.column(columnIndex++).name());
+        Assertions.assertEquals(IncidentsColumnNames.UPDATED_AT_COLUMN_NAME, table.column(columnIndex++).name());
+        Assertions.assertEquals(IncidentsColumnNames.CREATED_BY_COLUMN_NAME, table.column(columnIndex++).name());
+        Assertions.assertEquals(IncidentsColumnNames.UPDATED_BY_COLUMN_NAME, table.column(columnIndex++).name());
     }
 
     // This is a special test, it produces an empty incidents parquet file in the target/parquet-samples/incidents-empty.parquet file

@@ -38,7 +38,7 @@ import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJob;
-import ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJobParameters;
+import ai.dqo.execution.checks.jobs.RunChecksOnTableParameters;
 import ai.dqo.execution.checks.progress.*;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationResult;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationService;
@@ -49,6 +49,7 @@ import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindService;
 import ai.dqo.execution.sensors.*;
 import ai.dqo.execution.sensors.progress.ExecutingSensorEvent;
+import ai.dqo.execution.sensors.progress.PreparingSensorEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutedEvent;
 import ai.dqo.execution.sensors.progress.SensorFailedEvent;
 import ai.dqo.metadata.definitions.checks.CheckDefinitionSpec;
@@ -72,7 +73,6 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 import tech.tablesaw.api.Table;
 
 import java.time.LocalDateTime;
@@ -183,7 +183,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             for (TableWrapper targetTable : targetTables) {
                 ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
 
-                RunChecksOnTableQueueJobParameters runChecksOnTableQueueJobParameters = new RunChecksOnTableQueueJobParameters() {{
+                RunChecksOnTableParameters runChecksOnTableParameters = new RunChecksOnTableParameters() {{
                    setConnection(connectionWrapper.getName());
                    setMaxJobsPerConnection(connectionWrapper.getSpec().getParallelRunsLimit());
                    setTable(targetTable.getPhysicalTableName());
@@ -193,13 +193,13 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                    setDummyExecution(dummySensorExecution);
                 }};
                 RunChecksOnTableQueueJob runChecksOnTableJob = this.dqoQueueJobFactory.createRunChecksOnTableJob();
-                runChecksOnTableJob.setParameters(runChecksOnTableQueueJobParameters);
+                runChecksOnTableJob.setParameters(runChecksOnTableParameters);
                 childTableJobs.add(runChecksOnTableJob);
             }
 
             ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId);
             List<CheckExecutionSummary> checkExecutionSummaries = childTableJobsContainer.waitForChildResults(jobCancellationToken);
-            checkExecutionSummaries.forEach(tableSummary -> checkExecutionSummary.append(tableSummary));
+            checkExecutionSummaries.forEach(checkExecutionSummary::append);
         }
         else {
             for (TableWrapper targetTable : targetTables) {
@@ -245,7 +245,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             checkSearchFilters.setSchemaTableName(targetTable.getPhysicalTableName().toTableSearchFilter());
             checkSearchFilters.setCheckHierarchyIds(scheduledChecksForTable.getChecks());
 
-            RunChecksOnTableQueueJobParameters runChecksOnTableQueueJobParameters = new RunChecksOnTableQueueJobParameters() {{
+            RunChecksOnTableParameters runChecksOnTableParameters = new RunChecksOnTableParameters() {{
                 setConnection(connectionWrapper.getName());
                 setMaxJobsPerConnection(connectionWrapper.getSpec().getParallelRunsLimit());
                 setTable(targetTable.getPhysicalTableName());
@@ -254,13 +254,13 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 setProgressListener(progressListener);
             }};
             RunChecksOnTableQueueJob runChecksOnTableJob = this.dqoQueueJobFactory.createRunChecksOnTableJob();
-            runChecksOnTableJob.setParameters(runChecksOnTableQueueJobParameters);
+            runChecksOnTableJob.setParameters(runChecksOnTableParameters);
             childTableJobs.add(runChecksOnTableJob);
         }
 
         ChildDqoQueueJobsContainer<CheckExecutionSummary> childTableJobsContainer = this.dqoJobQueue.pushChildJobs(childTableJobs, parentJobId);
         List<CheckExecutionSummary> checkExecutionSummaries = childTableJobsContainer.waitForChildResults(jobCancellationToken);
-        checkExecutionSummaries.forEach(tableSummary -> checkExecutionSummary.append(tableSummary));
+        checkExecutionSummaries.forEach(checkExecutionSummary::append);
 
         progressListener.onCheckExecutionFinished(new CheckExecutionFinishedEvent(checkExecutionSummary));
 
@@ -335,8 +335,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
 
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = this.hierarchyNodeTreeSearcher.findChecks(targetTable, checkSearchFilters);
         if (checks.size() == 0) {
-            checkExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0,
-                    0, 0, 0, 0);
+            // checkExecutionSummary.reportTableStats(connectionWrapper, targetTable.getSpec(), 0, 0, 0, 0, 0, 0, 0);
             return; // no checks for this table
         }
         jobCancellationToken.throwIfCancelled();
@@ -379,6 +378,14 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getTimeSeries();
                 TimePeriodGradient timeGradient = effectiveTimeSeries.getTimeGradient();
 
+                CheckSearchFilters exactCheckSearchFilters = checkSearchFilters.clone();
+                exactCheckSearchFilters.setConnectionName(connectionName);
+                exactCheckSearchFilters.setSchemaTableName(physicalTableName.toTableSearchFilter());
+                exactCheckSearchFilters.setColumnName(sensorRunParameters.getColumn() == null ? null : sensorRunParameters.getColumn().getColumnName());
+                exactCheckSearchFilters.setCheckCategory(checkSpec.getCategoryName());
+                exactCheckSearchFilters.setCheckName(checkSpec.getCheckName());
+                exactCheckSearchFilters.setSensorName(sensorRunParameters.getEffectiveSensorRuleNames().getSensorName());
+
                 if (sensorRunParameters.getTimeSeries().getMode() == TimeSeriesMode.timestamp_column &&
                         Strings.isNullOrEmpty(sensorRunParameters.getTimeSeries().getTimestampColumn())) {
                     // timestamp column not configured, date/time partitioned data quality checks cannot be evaluated
@@ -392,13 +399,18 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                             sensorExecutionResultWithError, timeGradient, sensorRunParameters);
                     allErrorsTable.append(normalizedSensorErrorResults.getTable());
                     progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters, sensorExecutionResultWithError, missingTimestampException));
+                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(missingTimestampException, exactCheckSearchFilters));
                     continue;
                 }
 
                 jobCancellationToken.throwIfCancelled();
-                progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorRunParameters));
+                progressListener.onPreparingSensor(new PreparingSensorEvent(tableSpec, sensorRunParameters));
+                SensorPrepareResult sensorPrepareResult = this.dataQualitySensorRunner.prepareSensor(executionContext, sensorRunParameters, progressListener);
+
+                jobCancellationToken.throwIfCancelled();
+                progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorPrepareResult));
                 SensorExecutionResult sensorResult = this.dataQualitySensorRunner.executeSensor(executionContext,
-                        sensorRunParameters, progressListener, dummySensorExecution, jobCancellationToken);
+                        sensorPrepareResult, progressListener, dummySensorExecution, jobCancellationToken);
                 jobCancellationToken.throwIfCancelled();
 
                 if (!sensorResult.isSuccess()) {
@@ -407,7 +419,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                             sensorResult, timeGradient, sensorRunParameters);
                     allErrorsTable.append(normalizedSensorErrorResults.getTable());
                     progressListener.onSensorFailed(new SensorFailedEvent(tableSpec, sensorRunParameters, sensorResult, sensorResult.getException()));
-
+                    checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(sensorResult.getException(), exactCheckSearchFilters));
                     continue;
                 }
 
@@ -466,6 +478,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                 sensorResult, timeGradient, sensorRunParameters, ex);
                         allErrorsTable.append(normalizedRuleErrorResults.getTable());
                         progressListener.onRuleFailed(new RuleFailedEvent(tableSpec, sensorRunParameters, sensorResult, ex, ruleDefinitionName));
+                        checkExecutionSummary.updateCheckExecutionErrorSummary(new CheckExecutionErrorSummary(ex, exactCheckSearchFilters));
                     }
                 }
             }

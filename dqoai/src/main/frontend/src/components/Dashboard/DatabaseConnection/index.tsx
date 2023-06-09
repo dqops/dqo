@@ -11,7 +11,7 @@ import {
 } from '../../../api';
 import {
   ConnectionApiClient,
-  SourceConnectionApi
+  DataSourcesApi
 } from '../../../services/apiClient';
 import { useTree } from '../../../contexts/treeContext';
 import Loader from '../../Loader';
@@ -91,7 +91,7 @@ const DatabaseConnection = ({
     setIsTesting(true);
     let testRes;
     try {
-      testRes = await SourceConnectionApi.testConnection(true, database);
+      testRes = await DataSourcesApi.testConnection(true, database);
       setIsTesting(false);
     } catch (err) {
       setIsTesting(false);
@@ -111,7 +111,7 @@ const DatabaseConnection = ({
   const onTestConnection = async () => {
     try {
       setIsTesting(true);
-      const res = await SourceConnectionApi.testConnection(true, database);
+      const res = await DataSourcesApi.testConnection(true, database);
       setTestResult(res.data);
     } catch (err) {
       console.error(err);

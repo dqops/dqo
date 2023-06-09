@@ -17,7 +17,7 @@ package ai.dqo.metadata.search;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
+import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
@@ -212,7 +212,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
     void findChecks_whenCalledForAll_thenReturnsNonEmptyArray() {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         checkSearchFilters.setCheckName("*");
-        TableProfilingVolumeChecksSpec volume = new TableProfilingVolumeChecksSpec();
+        TableVolumeProfilingChecksSpec volume = new TableVolumeProfilingChecksSpec();
         tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         volume.setRowCount(check);
@@ -227,7 +227,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
     @Test
     void findChecks_whenCalledForNonFilters_thenReturnsAll() {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
-        TableProfilingVolumeChecksSpec volume = new TableProfilingVolumeChecksSpec();
+        TableVolumeProfilingChecksSpec volume = new TableVolumeProfilingChecksSpec();
         tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         volume.setRowCount(check);
@@ -243,7 +243,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
     void findChecks_whenCalledForNotExistingName_thenReturnsEmptyArray() {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         checkSearchFilters.setCheckName("test");
-        TableProfilingVolumeChecksSpec volume = new TableProfilingVolumeChecksSpec();
+        TableVolumeProfilingChecksSpec volume = new TableVolumeProfilingChecksSpec();
         tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         volume.setRowCount(check);

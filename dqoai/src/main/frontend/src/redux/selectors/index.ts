@@ -20,7 +20,7 @@ import { CheckTypes } from "../../shared/routes";
 export const getFirstLevelState = (checkType: CheckTypes) => (state: IRootState) => {
   const { tabs, activeTab = ''} = state.source[checkType || CheckTypes.SOURCES] || {};
 
-  return tabs.find((item) => item.url === activeTab)?.state || {} as any;
+  return tabs.find((item) => item.value === activeTab)?.state || {} as any;
 };
 
 export const getFirstLevelActiveTab = (checkType: CheckTypes) => (state: IRootState) => {

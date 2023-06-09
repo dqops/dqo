@@ -72,7 +72,7 @@ public class CheckController {
      * @param fullCheckName Full check name.
      * @return Model of the check with specific check name.
      */
-    @GetMapping("/checks/{fullCheckName}")
+    @GetMapping(value = "/checks/{fullCheckName}", produces = "application/json")
     @ApiOperation(value = "getCheck", notes = "Returns a check definition", response = CheckModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -114,7 +114,7 @@ public class CheckController {
      * @param fullCheckName Full check name.
      * @return Empty response.
      */
-    @PostMapping("/checks/{fullCheckName}")
+    @PostMapping(value = "/checks/{fullCheckName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "createCheck", notes = "Creates (adds) a new custom check that is a pair of a sensor name and a rule name.")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -154,7 +154,7 @@ public class CheckController {
      * @param fullCheckName Full check name.
      * @return Empty response.
      */
-    @PutMapping("/checks/{fullCheckName}")
+    @PutMapping(value = "/checks/{fullCheckName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateCheck", notes = "Updates an existing check, making a custom check definition if it is not present")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -217,7 +217,7 @@ public class CheckController {
      * @param fullCheckName  Full check name.
      * @return Empty response.
      */
-    @DeleteMapping("/checks/{fullCheckName}")
+    @DeleteMapping(value = "/checks/{fullCheckName}", produces = "application/json")
     @ApiOperation(value = "deleteCheck", notes = "Deletes a custom check definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -252,7 +252,7 @@ public class CheckController {
      * Returns all combined check folder model.
      * @return check basic tree model.
      */
-    @GetMapping("/definitions/checks")
+    @GetMapping(value = "/definitions/checks", produces = "application/json")
     @ApiOperation(value = "getCheckFolderTree", notes = "Returns a tree of all checks available in DQO, both built-in checks and user defined or customized checks.",
             response = CheckBasicFolderModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -302,7 +302,7 @@ public class CheckController {
      * Returns a flat list of all checks
      * @return List of all checks
      */
-    @GetMapping("/checks")
+    @GetMapping(value = "/checks", produces = "application/json")
     @ApiOperation(value = "getAllChecks", notes = "Returns a flat list of all checks available in DQO, both built-in checks and user defined or customized checks.",
             response = CheckBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)

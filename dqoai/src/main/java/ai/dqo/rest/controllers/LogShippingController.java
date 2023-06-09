@@ -43,7 +43,7 @@ public class LogShippingController {
      * @param logEntry Log entry to be logged on the serer.
      * @return Empty response.
      */
-    @PostMapping("/debug")
+    @PostMapping(value = "/debug", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "logDebug", notes = "Logs an information message in the server's logs as a debug severity log entry.", response = Void.class)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -66,7 +66,7 @@ public class LogShippingController {
      * @param logEntry Log entry to be logged on the serer.
      * @return Empty response.
      */
-    @PostMapping("/info")
+    @PostMapping(value = "/info",consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "logInfo", notes = "Logs an information message in the server's logs as an info severity log entry.", response = Void.class)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -89,7 +89,7 @@ public class LogShippingController {
      * @param logEntry Log entry to be logged on the serer.
      * @return Empty response.
      */
-    @PostMapping("/warn")
+    @PostMapping(value = "/warn", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "logWarn", notes = "Logs an information message in the server's logs as a warn severity log entry.", response = Void.class)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -112,7 +112,7 @@ public class LogShippingController {
      * @param logEntry Log entry to be logged on the serer.
      * @return Empty response.
      */
-    @PostMapping("/error")
+    @PostMapping(value = "/error", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "logError", notes = "Logs an information message in the server's logs as an error severity log entry.", response = Void.class)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {

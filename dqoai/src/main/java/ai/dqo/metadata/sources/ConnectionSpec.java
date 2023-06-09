@@ -95,7 +95,7 @@ public class ConnectionSpec extends AbstractSpec {
     @JsonPropertyDescription("MySQL connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).")
     private MysqlParametersSpec mysql;
 
-    @JsonPropertyDescription("The concurrency limit for the maximum number of parallel executions of checks on this connection.")
+    @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
     private Integer parallelRunsLimit;
 
     @JsonPropertyDescription("Default data streams configuration for all tables. The configuration may be overridden on table, column and check level. Data streams are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")

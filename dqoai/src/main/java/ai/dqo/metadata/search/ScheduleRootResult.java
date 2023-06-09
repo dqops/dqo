@@ -16,6 +16,7 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.metadata.basespecs.AbstractSpec;
+import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
 
 /**
@@ -25,14 +26,14 @@ import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
  */
 public class ScheduleRootResult {
     private CheckRunRecurringScheduleGroup scheduleGroup;
-    private AbstractSpec scheduleRootNode;
+    private HierarchyNode scheduleRootNode;
 
     /**
      * Creates a schedule root find result.
      * @param scheduleGroup Scheduling group that identifies the type of schedule to use.
      * @param scheduleRootNode Metadata root node ({@link ai.dqo.metadata.sources.ConnectionSpec}, {@link ai.dqo.metadata.sources.TableSpec} or {@link ai.dqo.checks.AbstractCheckSpec}) that has a schedule defined.
      */
-    public ScheduleRootResult(CheckRunRecurringScheduleGroup scheduleGroup, AbstractSpec scheduleRootNode) {
+    public ScheduleRootResult(CheckRunRecurringScheduleGroup scheduleGroup, HierarchyNode scheduleRootNode) {
         this.scheduleGroup = scheduleGroup;
         this.scheduleRootNode = scheduleRootNode;
     }
@@ -49,7 +50,7 @@ public class ScheduleRootResult {
      * Returns the metadata node do be scheduled.
      * @return Metadata root node ({@link ai.dqo.metadata.sources.ConnectionSpec}, {@link ai.dqo.metadata.sources.TableSpec} or {@link ai.dqo.checks.AbstractCheckSpec}) that has a schedule defined.
      */
-    public AbstractSpec getScheduleRootNode() {
+    public HierarchyNode getScheduleRootNode() {
         return scheduleRootNode;
     }
 }

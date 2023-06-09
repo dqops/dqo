@@ -13,7 +13,7 @@ Detects the data type of text values stored in the column. The sensor returns th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_datatype_detected|profiling| |[string_datatype_detect](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/comparison/#datatype-equals)|
+|string_datatype_detected|profiling| |[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1700,11 +1700,11 @@ ___
 ## **daily string datatype detected**  
   
 **Check description**  
-Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each day when the data quality check was evaluated.  
+Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_datatype_detected|recurring|daily|[string_datatype_detect](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/comparison/#datatype-equals)|
+|daily_string_datatype_detected|recurring|daily|[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -3398,7 +3398,7 @@ Detects the data type of text values stored in the column. The sensor returns th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_datatype_detected|recurring|monthly|[string_datatype_detect](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/comparison/#datatype-equals)|
+|monthly_string_datatype_detected|recurring|monthly|[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -5092,7 +5092,7 @@ Detects the data type of text values stored in the column. The sensor returns th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_datatype_detected|partitioned|daily|[string_datatype_detect](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/comparison/#datatype-equals)|
+|daily_partition_string_datatype_detected|partitioned|daily|[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -6786,7 +6786,7 @@ Detects the data type of text values stored in the column. The sensor returns th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_datatype_detected|partitioned|monthly|[string_datatype_detect](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/comparison/#datatype-equals)|
+|monthly_partition_string_datatype_detected|partitioned|monthly|[string_datatype_detect](../../../../reference/sensors/Column/strings-column-sensors/#string-datatype-detect)|[datatype_equals](../../../../reference/rules/Comparison/#datatype-equals)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)

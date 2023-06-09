@@ -79,7 +79,7 @@ const setActiveTabState = (state: ISourceState, action: Action, data: Record<str
     ...newState,
     [action.checkType]: {
       ...newState[action.checkType],
-      tabs: newState[action.checkType]?.tabs?.map((item) => item.url === activeTab ? ({
+      tabs: newState[action.checkType]?.tabs?.map((item) => item.value === activeTab ? ({
         ...item,
         state: {
           ...item.state,
@@ -94,16 +94,17 @@ const connectionReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case SOURCE_ACTION.ADD_FIRST_LEVEL_TAB: {
       const existing = state[action.checkType].tabs.find((item) => item.value === action.data.value);
+      const { state: actionState, ...data } = action.data;
 
       if (existing) {
         return {
           ...state,
           [action.checkType]: {
             ...state[action.checkType],
-            activeTab: action.data.url,
+            activeTab: action.data.value,
             tabs: state[action.checkType].tabs.map((item) => item.value === action.data.value ? ({
               ...item,
-              ...action.data,
+              ...data,
             }) : item)
           }
         };
@@ -112,7 +113,7 @@ const connectionReducer = (state = initialState, action: Action) => {
         ...state,
         [action.checkType]: {
           ...state[action.checkType],
-          activeTab: action.data.url,
+          activeTab: action.data.value,
           tabs: [
             ...state[action.checkType].tabs,
             action.data,
@@ -128,6 +129,21 @@ const connectionReducer = (state = initialState, action: Action) => {
           activeTab: action.data,
         }
       }
+    case SOURCE_ACTION.SET_ACTIVE_FIRST_LEVEL_URL: {
+      const newTabs = state[action.checkType].tabs.map((item) => item.value === action.activeTab ? ({
+        ...item,
+        url: action.data
+      }) : item);
+
+      console.log('SOURCE_ACTION.SET_ACTIVE_FIRST_LEVEL_URL', action, newTabs);
+      return {
+        ...state,
+        [action.checkType]: {
+          ...state[action.checkType],
+          tabs: newTabs
+        }
+      }
+    }
     case SOURCE_ACTION.GET_CONNECTION_BASIC_SUCCESS: {
       return setActiveTabState(state, action, {
         loading: false,
@@ -160,14 +176,14 @@ const connectionReducer = (state = initialState, action: Action) => {
     }
 
     case SOURCE_ACTION.CLOSE_FIRST_LEVEL_TAB: {
-      const index = state[action.checkType].tabs.findIndex((item) => item.url === action.data);
+      const index = state[action.checkType].tabs.findIndex((item) => item.value === action.data);
       let activeTab = state[action.checkType].activeTab;
 
       if (state[action.checkType].activeTab === action.data) {
         if (index > 0) {
-          activeTab = state[action.checkType].tabs[index-1].url;
+          activeTab = state[action.checkType].tabs[index-1].value;
         } else if (index < state[action.checkType].tabs.length - 1) {
-          activeTab = state[action.checkType].tabs[index+1].url;
+          activeTab = state[action.checkType].tabs[index+1].value;
         }
       }
 
@@ -175,7 +191,7 @@ const connectionReducer = (state = initialState, action: Action) => {
         ...state,
         [action.checkType]: {
           ...state[action.checkType],
-          tabs: state[action.checkType].tabs.filter((item) => item.url !== action.data),
+          tabs: state[action.checkType].tabs.filter((item) => item.value !== action.data),
           activeTab
         }
       }
@@ -187,7 +203,7 @@ const connectionReducer = (state = initialState, action: Action) => {
     }
 
     case SOURCE_ACTION.GET_CONNECTION_SCHEDULE_GROUP_SUCCESS: {
-      const firstState = state[action.checkType].tabs.find((item) => item.url === action.activeTab)?.state || {};
+      const firstState = state[action.checkType].tabs.find((item) => item.value === action.activeTab)?.state || {};
 
       return setActiveTabState(state, action, {
         loading: false,
@@ -295,7 +311,7 @@ const connectionReducer = (state = initialState, action: Action) => {
         error: null
       });
     case SOURCE_ACTION.SET_UPDATED_SCHEDULE_GROUP: {
-      const firstState = state[action.checkType].tabs.find((item) => item.url === action.activeTab)?.state || {};
+      const firstState = state[action.checkType].tabs.find((item) => item.value === action.activeTab)?.state || {};
 
       const actionSchedulingGroup = action.data.schedulingGroup;
       const stateScheduleGroups = firstState.scheduleGroups || {};
@@ -311,7 +327,7 @@ const connectionReducer = (state = initialState, action: Action) => {
     }
 
     case SOURCE_ACTION.SET_IS_UPDATED_SCHEDULE_GROUP: {
-      const firstState = state[action.checkType].tabs.find((item) => item.url === action.activeTab)?.state || {};
+      const firstState = state[action.checkType].tabs.find((item) => item.value === action.activeTab)?.state || {};
 
       const actionSchedulingGroup = action.data.schedulingGroup;
       const stateScheduleGroups = firstState.scheduleGroups ?? {};
@@ -391,7 +407,7 @@ const connectionReducer = (state = initialState, action: Action) => {
         loading: true
       });
     case SOURCE_ACTION.GET_TABLE_SCHEDULE_GROUP_SUCCESS: {
-      const firstState = state[action.checkType].tabs.find((item) => item.url === action.activeTab)?.state || {};
+      const firstState = state[action.checkType].tabs.find((item) => item.value === action.activeTab)?.state || {};
 
       return setActiveTabState(state, action,{
         loading: false,
@@ -1104,7 +1120,7 @@ const connectionReducer = (state = initialState, action: Action) => {
         error: action.error
       });
     case SOURCE_ACTION.SET_CHECK_RESULTS: {
-      const firstState = state[action.checkType].tabs.find((item) => item.url === action.activeTab)?.state || {};
+      const firstState = state[action.checkType].tabs.find((item) => item.value === action.activeTab)?.state || {};
 
       return setActiveTabState(state, action, {
         checkResults: {
@@ -1114,7 +1130,7 @@ const connectionReducer = (state = initialState, action: Action) => {
       });
     }
     case SOURCE_ACTION.SET_SENSOR_READOUTS: {
-      const firstState = state[action.checkType].tabs.find((item) => item.url === action.activeTab)?.state || {};
+      const firstState = state[action.checkType].tabs.find((item) => item.value === action.activeTab)?.state || {};
 
       return setActiveTabState(state, action, {
         sensorReadouts: {
@@ -1124,7 +1140,7 @@ const connectionReducer = (state = initialState, action: Action) => {
       });
     }
     case SOURCE_ACTION.SET_SENSOR_ERRORS: {
-      const firstState = state[action.checkType].tabs.find((item) => item.url === action.activeTab)?.state || {};
+      const firstState = state[action.checkType].tabs.find((item) => item.value === action.activeTab)?.state || {};
 
       const newSensors = {
         ...firstState.sensorErrors || {},
@@ -1135,7 +1151,7 @@ const connectionReducer = (state = initialState, action: Action) => {
       });
     }
     case SOURCE_ACTION.SET_CHECK_FILTERS: {
-      const firstState = state[action.checkType].tabs.find((item) => item.url === action.activeTab)?.state || {};
+      const firstState = state[action.checkType].tabs.find((item) => item.value === action.activeTab)?.state || {};
 
       const newCheckFilters = {
         ...firstState.checkFilters || {},
@@ -1180,6 +1196,38 @@ const connectionReducer = (state = initialState, action: Action) => {
       })
     }
     case SOURCE_ACTION.UPDATE_CONNECTION_INCIDENT_GROUPING_ERROR: {
+      return setActiveTabState(state, action, {
+        isUpdating: false,
+      })
+    }
+    case SOURCE_ACTION.GET_TABLE_INCIDENT_GROUPING: {
+      return setActiveTabState(state, action, {
+        loading: true,
+      })
+    }
+    case SOURCE_ACTION.GET_TABLE_INCIDENT_GROUPING_SUCCESS: {
+      return setActiveTabState(state, action, {
+        incidentGrouping: action.data,
+        loading: false,
+        isUpdatedIncidentGroup: false,
+      })
+    }
+    case SOURCE_ACTION.GET_TABLE_INCIDENT_GROUPING_ERROR: {
+      return setActiveTabState(state, action, {
+        loading: false,
+      })
+    }
+    case SOURCE_ACTION.UPDATE_TABLE_INCIDENT_GROUPING: {
+      return setActiveTabState(state, action, {
+        isUpdating: true,
+      })
+    }
+    case SOURCE_ACTION.UPDATE_TABLE_INCIDENT_GROUPING_SUCCESS: {
+      return setActiveTabState(state, action, {
+        isUpdating: false,
+      })
+    }
+    case SOURCE_ACTION.UPDATE_TABLE_INCIDENT_GROUPING_ERROR: {
       return setActiveTabState(state, action, {
         isUpdating: false,
       })

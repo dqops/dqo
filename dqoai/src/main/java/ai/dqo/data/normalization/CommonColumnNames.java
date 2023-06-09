@@ -21,12 +21,12 @@ package ai.dqo.data.normalization;
  */
 public final class CommonColumnNames {
     /**
-     * Column name for a primary key, it is a uuid of the check hash, time period and the data stream id. This value identifies a single row.
+     * The row's primary key, it is a uuid of the check hash, time period and the data stream id. This value identifies a single row.
      */
     public static final String ID_COLUMN_NAME = "id";
 
     /**
-     * Column name for a sensor executed at timestamp.
+     * The timestamp when the sensor was executed at (UTC).
      */
     public static final String EXECUTED_AT_COLUMN_NAME = "executed_at";
 
@@ -36,14 +36,19 @@ public final class CommonColumnNames {
     public static final String DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX = "stream_level_";
 
     /**
-     * Column name for a data stream hash, it is a hash of the data stream level names.
+     * The data stream hash, it is a hash of the data stream level names.
      */
     public static final String DATA_STREAM_HASH_COLUMN_NAME = "data_stream_hash";
 
     /**
-     * Column name for a data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ...
+     * The data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ...
      */
     public static final String DATA_STREAM_NAME_COLUMN_NAME = "data_stream_name";
+
+    /**
+     * The data stream configuration name, it is a name of the named data stream mapping configuration that was used to run the data quality check.
+     */
+    public static final String DATA_STREAM_MAPPING_NAME_COLUMN_NAME = "data_stream_mapping_name";
 
     /**
      * Column name for a connection hash.
@@ -124,4 +129,24 @@ public final class CommonColumnNames {
      * Column name for an error message.
      */
     public static final String ERROR_MESSAGE_COLUMN_NAME = "error_message";
+
+    /**
+     * Timestamp when the row was created at.
+     */
+    public static final String CREATED_AT_COLUMN_NAME = "created_at";
+
+    /**
+     * Timestamp when the row was updated at.
+     */
+    public static final String UPDATED_AT_COLUMN_NAME = "updated_at";
+
+    /**
+     * User that created the row.
+     */
+    public static final String CREATED_BY_COLUMN_NAME = "created_by";
+
+    /**
+     * User that updated the row.
+     */
+    public static final String UPDATED_BY_COLUMN_NAME = "updated_by";
 }

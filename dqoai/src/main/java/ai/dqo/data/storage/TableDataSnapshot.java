@@ -15,9 +15,13 @@
  */
 package ai.dqo.data.storage;
 
+import ai.dqo.data.models.DataDeleteResult;
+import ai.dqo.data.models.DataDeleteResultPartition;
+import ai.dqo.data.normalization.CommonColumnNames;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
+import jakarta.validation.constraints.NotNull;
 import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.DateTimeColumn;
 import tech.tablesaw.api.InstantColumn;
@@ -25,7 +29,6 @@ import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.selection.Selection;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -467,6 +470,30 @@ public class TableDataSnapshot {
 
         // Assuming not read-only.
         tableDataChanges.getDeletedIds().addAll(idsToDelete);
+    }
+
+    public DataDeleteResult getDeleteResults() {
+        DataDeleteResult dataDeleteResult = new DataDeleteResult();
+        Set<String> deletedIds = this.getTableDataChanges().getDeletedIds();
+
+        for (Map.Entry<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitionEntry:
+                this.getLoadedMonthlyPartitions().entrySet()) {
+            ParquetPartitionId partitionId = loadedPartitionEntry.getKey();
+            Table loadedPartitionTable = loadedPartitionEntry.getValue().getData();
+            if (loadedPartitionTable == null) {
+                continue;
+            }
+
+            int deletedRows = loadedPartitionTable
+                    .textColumn(CommonColumnNames.ID_COLUMN_NAME)
+                    .isIn(deletedIds)
+                    .size();
+            boolean allRowsDeleted = deletedRows == loadedPartitionTable.rowCount();
+            DataDeleteResultPartition partitionResult = new DataDeleteResultPartition(deletedRows, allRowsDeleted);
+
+            dataDeleteResult.getPartitionResults().put(partitionId, partitionResult);
+        }
+        return dataDeleteResult;
     }
 
     /**

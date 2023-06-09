@@ -40,8 +40,8 @@ public class ColumnNumericDailyRecurringChecksSpec extends AbstractCheckCategory
             put("daily_negative_percent", o -> o.dailyNegativePercent);
             put("daily_non_negative_count", o -> o.dailyNonNegativeCount);
             put("daily_non_negative_percent", o -> o.dailyNonNegativePercent);
-            put("daily_numbers_in_set_count", o -> o.dailyNumbersInSetCount);
-            put("daily_numbers_in_set_percent", o -> o.dailyNumbersInSetPercent);
+            put("daily_expected_numbers_in_use_count", o -> o.dailyExpectedNumbersInUseCount);
+            put("daily_number_value_in_set_percent", o -> o.dailyNumberValueInSetPercent);
             put("daily_values_in_range_numeric_percent", o -> o.dailyValuesInRangeNumericPercent);
             put("daily_values_in_range_integers_percent", o -> o.dailyValuesInRangeIntegersPercent);
             put("daily_value_below_min_value_count", o -> o.dailyValueBelowMinValueCount);
@@ -70,94 +70,94 @@ public class ColumnNumericDailyRecurringChecksSpec extends AbstractCheckCategory
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNegativeCountCheckSpec dailyNegativeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNegativePercentCheckSpec dailyNegativePercent;
 
-    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNonNegativeCountCheckSpec dailyNonNegativeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNonNegativePercentCheckSpec dailyNonNegativePercent;
 
-    @JsonPropertyDescription("Verifies that the number of numbers from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnNumbersInSetCountCheckSpec dailyNumbersInSetCount;
+    @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnExpectedNumbersInUseCountCheckSpec dailyExpectedNumbersInUseCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of numbers from set in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnNumbersInSetPercentCheckSpec dailyNumbersInSetPercent;
+    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnNumberValueInSetPercentCheckSpec dailyNumberValueInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnValuesInRangeNumericPercentCheckSpec dailyValuesInRangeNumericPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnValuesInRangeIntegersPercentCheckSpec dailyValuesInRangeIntegersPercent;
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnValueBelowMinValueCountCheckSpec dailyValueBelowMinValueCount;
 
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnValueBelowMinValuePercentCheckSpec dailyValueBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnValueAboveMaxValueCountCheckSpec dailyValueAboveMaxValueCount;
 
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnValueAboveMaxValuePercentCheckSpec dailyValueAboveMaxValuePercent;
 
-    @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnMaxInRangeCheckSpec dailyMaxInRange;
 
-    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnMinInRangeCheckSpec dailyMinInRange;
 
-    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnMeanInRangeCheckSpec dailyMeanInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnPercentileInRangeCheckSpec dailyPercentileInRange;
 
     @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMedianInRangeCheckSpec dailyMedianInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnPercentile10InRangeCheckSpec dailyPercentile_10InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnPercentile25InRangeCheckSpec dailyPercentile_25InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnPercentile75InRangeCheckSpec dailyPercentile_75InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnPercentile90InRangeCheckSpec dailyPercentile_90InRange;
 
-    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnSampleStddevInRangeCheckSpec dailySampleStddevInRange;
 
-    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnPopulationStddevInRangeCheckSpec dailyPopulationStddevInRange;
 
-    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnSampleVarianceInRangeCheckSpec dailySampleVarianceInRange;
 
-    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnPopulationVarianceInRangeCheckSpec dailyPopulationVarianceInRange;
 
-    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnSumInRangeCheckSpec dailySumInRange;
 
-    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnInvalidLatitudeCountCheckSpec dailyInvalidLatitudeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnValidLatitudePercentCheckSpec dailyValidLatitudePercent;
 
-    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnInvalidLongitudeCountCheckSpec dailyInvalidLongitudeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnValidLongitudePercentCheckSpec dailyValidLongitudePercent;
 
     /**
@@ -233,39 +233,39 @@ public class ColumnNumericDailyRecurringChecksSpec extends AbstractCheckCategory
     }
 
     /**
-     * Returns a numbers in set count check specification.
-     * @return Numbers in set count check specification.
+     * Returns a numbers found count check specification.
+     * @return Numbers found count check specification.
      */
-    public ColumnNumbersInSetCountCheckSpec getDailyNumbersInSetCount() {
-        return dailyNumbersInSetCount;
+    public ColumnExpectedNumbersInUseCountCheckSpec getDailyExpectedNumbersInUseCount() {
+        return dailyExpectedNumbersInUseCount;
     }
 
     /**
-     * Sets a new specification of a numbers in set count check.
-     * @param dailyNumbersInSetCount Numbers in set count check.
+     * Sets a new specification of a numbers found count check.
+     * @param dailyExpectedNumbersInUseCount Numbers found count check.
      */
-    public void setDailyNumbersInSetCount(ColumnNumbersInSetCountCheckSpec dailyNumbersInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyNumbersInSetCount, dailyNumbersInSetCount));
-        this.dailyNumbersInSetCount = dailyNumbersInSetCount;
-        propagateHierarchyIdToField(dailyNumbersInSetCount, "daily_numbers_in_set_count");
+    public void setDailyExpectedNumbersInUseCount(ColumnExpectedNumbersInUseCountCheckSpec dailyExpectedNumbersInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyExpectedNumbersInUseCount, dailyExpectedNumbersInUseCount));
+        this.dailyExpectedNumbersInUseCount = dailyExpectedNumbersInUseCount;
+        propagateHierarchyIdToField(dailyExpectedNumbersInUseCount, "daily_expected_numbers_in_use_count");
     }
 
     /**
-     * Returns a numbers in set percent check specification.
-     * @return Numbers in set percent check specification.
+     * Returns a numbers valid percent check specification.
+     * @return Numbers valid percent check specification.
      */
-    public ColumnNumbersInSetPercentCheckSpec getDailyNumbersInSetPercent() {
-        return dailyNumbersInSetPercent;
+    public ColumnNumberValueInSetPercentCheckSpec getDailyNumberValueInSetPercent() {
+        return dailyNumberValueInSetPercent;
     }
 
     /**
-     * Sets a new specification of a numbers in set percent check.
-     * @param dailyNumbersInSetPercent Numbers in set percent check specification.
+     * Sets a new specification of a numbers valid percent check.
+     * @param dailyNumberValueInSetPercent Number valid percent check specification.
      */
-    public void setDailyNumbersInSetPercent(ColumnNumbersInSetPercentCheckSpec dailyNumbersInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyNumbersInSetPercent, dailyNumbersInSetPercent));
-        this.dailyNumbersInSetPercent = dailyNumbersInSetPercent;
-        propagateHierarchyIdToField(dailyNumbersInSetPercent, "daily_numbers_in_set_percent");
+    public void setDailyNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec dailyNumberValueInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyNumberValueInSetPercent, dailyNumberValueInSetPercent));
+        this.dailyNumberValueInSetPercent = dailyNumberValueInSetPercent;
+        propagateHierarchyIdToField(dailyNumberValueInSetPercent, "daily_number_value_in_set_percent");
     }
 
     /**

@@ -79,7 +79,7 @@ public final class IncidentsColumnNames {
     /**
      * Minimum severity of data quality issues (data quality check results) that are included in the incident. It is copied from the incident configuration at a connection or table level at the time when the incident is first seen. The values are 0, 1, 2, 3 for none, warning, error and fatal severity alerts.
      */
-    public static final String MIN_SEVERITY_COLUMN_NAME = "min_severity";
+    public static final String MINIMUM_SEVERITY_COLUMN_NAME = "minimum_severity";
 
     /**
      * Column name that stores the exact time when the incident was raised (seen) for the first time, as a UTC timestamp: first_seen.
@@ -107,9 +107,24 @@ public final class IncidentsColumnNames {
     public static final String ISSUE_URL_COLUMN_NAME = "issue_url";
 
     /**
+     * The timestamp when the row was created at.
+     */
+    public static final String CREATED_AT_COLUMN_NAME = CommonColumnNames.CREATED_AT_COLUMN_NAME;
+
+    /**
+     * The timestamp when the row was updated at.
+     */
+    public static final String UPDATED_AT_COLUMN_NAME = CommonColumnNames.UPDATED_AT_COLUMN_NAME;
+
+    /**
      * Column name that stores the login of the user who created the incident by running a check.
      */
-    public static final String CREATED_BY_COLUMN_NAME = "created_by";
+    public static final String CREATED_BY_COLUMN_NAME = CommonColumnNames.CREATED_BY_COLUMN_NAME;
+
+    /**
+     * The login of the user that updated the row.
+     */
+    public static final String UPDATED_BY_COLUMN_NAME = CommonColumnNames.UPDATED_BY_COLUMN_NAME;
 
     /**
      * Column name that stores the login of the user who resolved the incident.

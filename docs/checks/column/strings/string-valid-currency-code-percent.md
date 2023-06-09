@@ -12,7 +12,7 @@ Verifies that the percentage of valid currency code in a column does not fall be
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_valid_currency_code_percent|profiling| |[string_valid_currency_code_percent](../../../../reference/sensors/column/strings-column-sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|string_valid_currency_code_percent|profiling| |[string_valid_currency_code_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -42,9 +42,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=string_vali
         strings:
           string_valid_currency_code_percent:
             warning:
-              min_percent: 99.0
+              min_percent: 100.0
             error:
-              min_percent: 98.0
+              min_percent: 99.0
             fatal:
               min_percent: 95.0
 ```
@@ -66,9 +66,9 @@ spec:
         strings:
           string_valid_currency_code_percent:
             warning:
-              min_percent: 99.0
+              min_percent: 100.0
             error:
-              min_percent: 98.0
+              min_percent: 99.0
             fatal:
               min_percent: 95.0
       labels:
@@ -365,9 +365,9 @@ spec:
             strings:
               string_valid_currency_code_percent:
                 warning:
-                  min_percent: 99.0
+                  min_percent: 100.0
                 error:
-                  min_percent: 98.0
+                  min_percent: 99.0
                 fatal:
                   min_percent: 95.0
           labels:
@@ -644,9 +644,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -664,11 +663,11 @@ ___
 ## **daily string valid currency code percent**  
   
 **Check description**  
-Verifies that the percentage of valid currency code in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the percentage of valid currency code in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_string_valid_currency_code_percent|recurring|daily|[string_valid_currency_code_percent](../../../../reference/sensors/column/strings-column-sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_string_valid_currency_code_percent|recurring|daily|[string_valid_currency_code_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -699,9 +698,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_strin
           strings:
             daily_string_valid_currency_code_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -724,9 +723,9 @@ spec:
           strings:
             daily_string_valid_currency_code_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -1024,9 +1023,9 @@ spec:
               strings:
                 daily_string_valid_currency_code_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -1303,9 +1302,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1327,7 +1325,7 @@ Verifies that the percentage of valid currency code in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_string_valid_currency_code_percent|recurring|monthly|[string_valid_currency_code_percent](../../../../reference/sensors/column/strings-column-sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_string_valid_currency_code_percent|recurring|monthly|[string_valid_currency_code_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1358,9 +1356,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_str
           strings:
             monthly_string_valid_currency_code_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -1383,9 +1381,9 @@ spec:
           strings:
             monthly_string_valid_currency_code_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -1683,9 +1681,9 @@ spec:
               strings:
                 monthly_string_valid_currency_code_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -1962,9 +1960,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1986,7 +1983,7 @@ Verifies that the percentage of valid currency code in a column does not fall be
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_valid_currency_code_percent|partitioned|daily|[string_valid_currency_code_percent](../../../../reference/sensors/column/strings-column-sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_string_valid_currency_code_percent|partitioned|daily|[string_valid_currency_code_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -2017,9 +2014,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           strings:
             daily_partition_string_valid_currency_code_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -2042,9 +2039,9 @@ spec:
           strings:
             daily_partition_string_valid_currency_code_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -2346,9 +2343,9 @@ spec:
               strings:
                 daily_partition_string_valid_currency_code_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -2625,8 +2622,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST([] AS date) AS time_period,
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY CAST([] AS date), CAST([] AS date)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
         ORDER BY level_1, level_2CAST([] AS date)
         
             
@@ -2646,7 +2643,7 @@ Verifies that the percentage of valid currency code in a column does not fall be
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_valid_currency_code_percent|partitioned|monthly|[string_valid_currency_code_percent](../../../../reference/sensors/column/strings-column-sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_string_valid_currency_code_percent|partitioned|monthly|[string_valid_currency_code_percent](../../../../reference/sensors/Column/strings-column-sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -2677,9 +2674,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
           strings:
             monthly_partition_string_valid_currency_code_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -2702,9 +2699,9 @@ spec:
           strings:
             monthly_partition_string_valid_currency_code_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -3006,9 +3003,9 @@ spec:
               strings:
                 monthly_partition_string_valid_currency_code_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -3285,8 +3282,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             

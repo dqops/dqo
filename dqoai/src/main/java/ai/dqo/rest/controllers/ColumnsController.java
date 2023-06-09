@@ -111,7 +111,7 @@ public class ColumnsController {
      * @param tableName      Table name
      * @return List of columns inside a table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns", produces = "application/json")
     @ApiOperation(value = "getColumns", notes = "Returns a list of columns inside a table", response = ColumnBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -147,7 +147,7 @@ public class ColumnsController {
      * @param tableName      Table name
      * @return List of columns inside a table with additional summary of the most recent profiler session.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/statistics")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/statistics", produces = "application/json")
     @ApiOperation(value = "getColumnsStatistics",
             notes = "Returns a list of columns inside a table with the metrics captured by the most recent statistics collection.",
             response = TableColumnsStatisticsModel.class)
@@ -216,7 +216,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Column full specification for the requested column.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}", produces = "application/json")
     @ApiOperation(value = "getColumn", notes = "Returns the full column specification", response = ColumnModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -261,7 +261,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Basic column details for the requested column.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basic")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basic", produces = "application/json")
     @ApiOperation(value = "getColumnBasic", notes = "Returns the column specification", response = ColumnBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -301,7 +301,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Basic column details for the requested column with a summary of the most recent profiler session.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/statistics")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/statistics", produces = "application/json")
     @ApiOperation(value = "getColumnStatistics",
             notes = "Returns the column specification with the metrics captured by the most recent statistics collection.",
             response = ColumnStatisticsModel.class)
@@ -349,7 +349,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return List of labels assigned to a column.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/labels")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/labels", produces = "application/json")
     @ApiOperation(value = "getColumnLabels", notes = "Return the list of labels assigned to a column", response = LabelSetSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -380,7 +380,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return List of comments assigned to a column.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments", produces = "application/json")
     @ApiOperation(value = "getColumnComments", notes = "Return the list of comments assigned to a column", response = CommentsListSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -411,7 +411,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Data quality profiling checks on a requested column of the table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling", produces = "application/json")
     @ApiOperation(value = "getColumnProfilingChecks", notes = "Return the configuration of column level data quality profiling checks on a column", response = ColumnProfilingCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -442,7 +442,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Daily data quality recurring on a requested column of the table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/daily")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/daily", produces = "application/json")
     @ApiOperation(value = "getColumnRecurringChecksDaily", notes = "Return the configuration of daily column level data quality recurring on a column", response = ColumnRecurringChecksRootSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -478,7 +478,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Monthly data quality recurring on a requested column of the table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/monthly")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/monthly", produces = "application/json")
     @ApiOperation(value = "getColumnRecurringChecksMonthly", notes = "Return the configuration of monthly column level data quality recurring on a column", response = ColumnRecurringChecksRootSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -514,7 +514,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Daily data quality partitioned checks on a requested column of the table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedChecksDaily", notes = "Return the configuration of daily column level data quality partitioned checks on a column", response = ColumnDailyPartitionedCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -550,7 +550,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Monthly data quality partitioned checks on a requested column of the table.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedChecksMonthly", notes = "Return the configuration of monthly column level data quality partitioned checks on a column", response = ColumnMonthlyPartitionedCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -587,7 +587,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return UI friendly model of data quality profiling checks on a requested column.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui", produces = "application/json")
     @ApiOperation(value = "getColumnProfilingChecksUI", notes = "Return a UI friendly model of data quality profiling checks on a column", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -652,7 +652,7 @@ public class ColumnsController {
      * @param timeScale  Time scale.
      * @return UI friendly model of data quality recurring on a requested column for a requested time scale.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/ui")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/ui", produces = "application/json")
     @ApiOperation(value = "getColumnRecurringChecksUI", notes = "Return a UI friendly model of column level data quality recurring on a column", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -717,7 +717,7 @@ public class ColumnsController {
      * @param timeScale  Time scale.
      * @return UI friendly model of data quality partitioned checks on a requested column for a requested time scale.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedChecksUI", notes = "Return a UI friendly model of column level data quality partitioned checks on a column", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -783,7 +783,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Simplistic UI friendly data quality profiling check list on a requested column.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui/basic")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui/basic", produces = "application/json")
     @ApiOperation(value = "getColumnProfilingChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality profiling checks on a column", response = UICheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -835,7 +835,7 @@ public class ColumnsController {
      * @param timeScale  Time scale.
      * @return Simplistic UI friendly data quality recurring list on a requested column for a requested time scale.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/ui/basic")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/ui/basic", produces = "application/json")
     @ApiOperation(value = "getColumnRecurringChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality recurring on a column", response = UICheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -888,7 +888,7 @@ public class ColumnsController {
      * @param timeScale  Time scale.
      * @return Simplistic UI friendly data quality partitioned checks list on a requested column for a requested time scale.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui/basic")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui/basic", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality partitioned checks on a column", response = UICheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -942,7 +942,7 @@ public class ColumnsController {
      * @param checkName      Check name.
      * @return UI friendly model of data quality profiling checks on a requested column.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui/filter/{checkCategory}/{checkName}")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui/filter/{checkCategory}/{checkName}", produces = "application/json")
     @ApiOperation(value = "getColumnProfilingChecksUIFilter", notes = "Return a UI friendly model of data quality profiling checks on a column filtered by category and check name", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1013,7 +1013,7 @@ public class ColumnsController {
      * @param checkName      Check name.
      * @return UI friendly model of data quality recurring on a requested column for a requested time scale, filtered by category and check name.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/ui/filter/{checkCategory}/{checkName}")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/ui/filter/{checkCategory}/{checkName}", produces = "application/json")
     @ApiOperation(value = "getColumnRecurringChecksUIFilter", notes = "Return a UI friendly model of column level data quality recurring on a column filtered by category and check name", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1084,7 +1084,7 @@ public class ColumnsController {
      * @param checkName      Check name.
      * @return UI friendly model of data quality partitioned checks on a requested column for a requested time scale, filtered by category and check name.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui/filter/{checkCategory}/{checkName}")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui/filter/{checkCategory}/{checkName}", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedChecksUIFilter", notes = "Return a UI friendly model of column level data quality partitioned checks on a column, filtered by category and check name", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1152,7 +1152,7 @@ public class ColumnsController {
      * @param columnSpec     Column specification.
      * @return Empty response.
      */
-    @PostMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}")
+    @PostMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "createColumn", notes = "Creates a new column (adds a column metadata to the table)")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -1203,7 +1203,7 @@ public class ColumnsController {
      * @param columnSpec     Full column specification.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateColumn", notes = "Updates an existing column specification, changing all the fields (even the column level data quality checks).")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1255,7 +1255,7 @@ public class ColumnsController {
      * @param columnBasicModel New column basic information to store.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basic")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basic", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateColumnBasic", notes = "Updates an existing column, changing only the basic information like the expected data type (the data type snapshot).")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1313,7 +1313,7 @@ public class ColumnsController {
      * @param labelSetSpec   New list of labels to store on a column or an empty optional to clear the labels.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/labels")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/labels", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateColumnLabels", notes = "Updates the list of labels assigned to a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1363,7 +1363,7 @@ public class ColumnsController {
      * @param commentsListSpec New list of comments to store on a column or an empty optional to clear the comments.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/comments", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateColumnComments", notes = "Updates the list of comments assigned to a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1413,7 +1413,7 @@ public class ColumnsController {
      * @param columnCheckCategoriesSpec New configuration of the column level data quality profiling checks to configure on a column or an empty optional to clear the list of profiling checks.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateColumnProfilingChecks", notes = "Updates configuration of column level data quality profiling checks on a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1462,7 +1462,7 @@ public class ColumnsController {
      * @param columnDailyRecurringSpec New configuration of the daily column level data quality recurring checks to configure on a column or an empty optional to clear the list of daily recurring.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/daily")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/daily", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateColumnRecurringChecksDaily", notes = "Updates configuration of daily column level data quality recurring on a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1519,7 +1519,7 @@ public class ColumnsController {
      * @param columnMonthlyRecurringSpec New configuration of the monthly column level data quality recurring checks to configure on a column or an empty optional to clear the list of monthly recurring.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/monthly")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/monthly", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateColumnRecurringChecksMonthly", notes = "Updates configuration of monthly column level data quality recurring checks on a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1576,7 +1576,7 @@ public class ColumnsController {
      * @param columnDailyPartitionedSpec New configuration of the daily column level data quality partitioned checks to configure on a column or an empty optional to clear the list of daily partitioned checks.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/daily", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateColumnPartitionedChecksDaily", notes = "Updates configuration of daily column level data quality partitioned checks on a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1633,7 +1633,7 @@ public class ColumnsController {
      * @param columnMonthlyPartitionedSpec New configuration of the monthly column level data quality partitioned checks to configure on a column or an empty optional to clear the list of monthly partitioned checks.
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/monthly", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateColumnPartitionedChecksMonthly", notes = "Updates configuration of monthly column level data quality partitioned checks on a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1691,7 +1691,7 @@ public class ColumnsController {
      * @param uiCheckContainerModel     UI model of the column level data quality checks to be applied on the configuration of the data quality profiling checks on a column. Only data quality dimensions and data quality checks that are present in the UI model are updated (patched).
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateColumnProfilingChecksUI", notes = "Updates configuration of column level data quality profiling checks on a column from a UI friendly model.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1747,7 +1747,7 @@ public class ColumnsController {
      * @param uiCheckContainerModel          UI model of the column level data quality checks to be applied on the configuration of the data quality recurring on a column, for a given time scale. Only data quality dimensions and data quality checks that are present in the UI model are updated (patched).
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/ui")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/ui", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateColumnRecurringChecksUI", notes = "Updates configuration of column level data quality recurring on a column, for a given time scale, from a UI friendly model.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1804,7 +1804,7 @@ public class ColumnsController {
      * @param uiAllChecksModel          UI model of the column level data quality checks to be applied on the configuration of the data quality partitioned checks on a column, for a given time scale. Only data quality dimensions and data quality checks that are present in the UI model are updated (patched).
      * @return Empty response.
      */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui")
+    @PutMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "updateColumnPartitionedChecksUI", notes = "Updates configuration of column level data quality partitioned checks on a column, for a given time scale, from a UI friendly model.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -1859,7 +1859,7 @@ public class ColumnsController {
      * @param columnName     Column name.
      * @return Deferred operations job id.
      */
-    @DeleteMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}")
+    @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}", produces = "application/json")
     @ApiOperation(value = "deleteColumn", notes = "Deletes a column from the table")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {

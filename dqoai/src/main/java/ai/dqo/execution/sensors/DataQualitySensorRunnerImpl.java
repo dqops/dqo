@@ -24,6 +24,7 @@ import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.execution.sensors.runners.SensorRunnerFactory;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Component;
  * Data quality sensor run service. Executes a sensor, reads the sensor values and returns it for further processing (rule evaluation).
  */
 @Component
+@Slf4j
 public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
     private final SensorDefinitionFindService sensorDefinitionFindService;
     private final SensorRunnerFactory sensorRunnerFactory;
@@ -46,19 +48,16 @@ public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
     }
 
     /**
-     * Executes a sensor and returns the sensor result as a table returned from the query.
-     * @param executionContext Check execution context that provides access to the user home and dqo home.
+     * Prepare the sensor before it is executed on the data source.
+     * @param executionContext DQO execution context that provides access to the DQO and user home.
      * @param sensorRunParameters Sensor run parameters (connection, table, column, sensor parameters).
      * @param progressListener Progress lister that receives information about the progress of a sensor execution.
-     * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
-     * @param jobCancellationToken Job cancellation token, used to cancel a running sensor query.
-     * @return Sensor execution result with the query result from the sensor.
+     * @return Sensor preparation result with a rendered sensor.
      */
-    public SensorExecutionResult executeSensor(ExecutionContext executionContext,
-                                               SensorExecutionRunParameters sensorRunParameters,
-                                               SensorExecutionProgressListener progressListener,
-                                               boolean dummySensorExecution,
-                                               JobCancellationToken jobCancellationToken) {
+    @Override
+    public SensorPrepareResult prepareSensor(ExecutionContext executionContext,
+                                             SensorExecutionRunParameters sensorRunParameters,
+                                             SensorExecutionProgressListener progressListener) {
         String sensorName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
         ProviderType providerType = sensorRunParameters.getConnection().getProviderType();
 
@@ -68,8 +67,38 @@ public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
         AbstractSensorRunner sensorRunner = this.sensorRunnerFactory.getSensorRunner(providerSensorSpec.getType(),
                 providerSensorSpec.getJavaClassName());
 
-        SensorExecutionResult result = sensorRunner.executeSensor(executionContext, sensorRunParameters,
-                sensorDefinition, progressListener, dummySensorExecution, jobCancellationToken);
+        SensorPrepareResult sensorPrepareResult = new SensorPrepareResult(sensorRunParameters, sensorDefinition, sensorRunner);
+
+        try {
+            sensorRunner.prepareSensor(executionContext, sensorPrepareResult, progressListener);
+        }
+        catch (Throwable ex) {
+            log.error("Sensor failed to render, sensor name: " + sensorName, ex);
+            sensorPrepareResult.setPrepareException(ex);
+        }
+
+        return sensorPrepareResult;
+    }
+
+    /**
+     * Executes a sensor and returns the sensor result as a table returned from the query.
+     * @param executionContext Check execution context that provides access to the user home and dqo home.
+     * @param sensorPrepareResult Sensor preparation object with the information prepared by the sensor runner before it can execute the sensor.
+     * @param progressListener Progress lister that receives information about the progress of a sensor execution.
+     * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
+     * @param jobCancellationToken Job cancellation token, used to cancel a running sensor query.
+     * @return Sensor execution result with the query result from the sensor.
+     */
+    @Override
+    public SensorExecutionResult executeSensor(ExecutionContext executionContext,
+                                               SensorPrepareResult sensorPrepareResult,
+                                               SensorExecutionProgressListener progressListener,
+                                               boolean dummySensorExecution,
+                                               JobCancellationToken jobCancellationToken) {
+        AbstractSensorRunner sensorRunner = sensorPrepareResult.getSensorRunner();
+
+        SensorExecutionResult result = sensorRunner.executeSensor(executionContext, sensorPrepareResult,
+                progressListener, dummySensorExecution, jobCancellationToken);
         return result;
     }
 }

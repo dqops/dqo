@@ -15,6 +15,7 @@
  */
 package ai.dqo.utils.specs;
 
+import ai.dqo.connectors.ProviderType;
 import ai.dqo.metadata.definitions.sensors.*;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
@@ -78,22 +79,47 @@ public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefin
 
             SensorDefinitionWrapper sensorDefinitionWrapper = dqoHome.getSensors().getByObjectName(sensorDefinitionName, true);
             if (sensorDefinitionWrapper == null) {
-                System.err.println("Missing sensor definition for " + sensorDefinitionName);
-                continue;
+                if (abstractSensorParametersSpec.getAlwaysSupportedOnAllProviders()) {
+                    sensorDefinitionWrapper = dqoHome.getSensors().createAndAddNew(sensorDefinitionName);
+                    sensorDefinitionWrapper.setSpec(new SensorDefinitionSpec());
+                } else {
+                    System.err.println("Missing sensor definition for " + sensorDefinitionName);
+                    continue;
+                }
             }
 
             ProviderSensorDefinitionList providerSensors = sensorDefinitionWrapper.getProviderSensors();
             for (ProviderSensorDefinitionWrapper providerSensorWrapper : providerSensors) {
                 String sqlTemplate = providerSensorWrapper.getSqlTemplate();
                 if (sqlTemplate == null) {
-                    continue;
+                    sqlTemplate = ""; // fake SQL template, only to avoid issues for sensors that do not have a template
                 }
 
                 ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorWrapper.getSpec();
+                providerSensorDefinitionSpec.setJavaClassName(abstractSensorParametersSpec.getSensorRunnerClass().getName());
                 providerSensorDefinitionSpec.setSupportsGroupingByDataStream(
-                        sqlTemplate.contains("lib.render_data_stream_projections"));
+                        sqlTemplate.contains("lib.render_data_stream_projections") &&
+                                abstractSensorParametersSpec.getSupportsDataStreams());
                 providerSensorDefinitionSpec.setSupportsPartitionedChecks(
-                        sqlTemplate.contains("lib.render_time_dimension_projection") && !sensorDefinitionWrapper.getName().equals("table/availability/table_availability"));
+                        sqlTemplate.contains("lib.render_time_dimension_projection") &&
+                                abstractSensorParametersSpec.getSupportsPartitionedChecks());
+            }
+
+            if (abstractSensorParametersSpec.getAlwaysSupportedOnAllProviders()) {
+                ProviderType[] allProviderTypes = ProviderType.values();
+                for (ProviderType providerType : allProviderTypes) {
+                    ProviderSensorDefinitionWrapper providerSensorWrapper = providerSensors.getByObjectName(providerType, true);
+                    if (providerSensorWrapper != null) {
+                        continue; // the sensor is already configured
+                    }
+
+                    providerSensorWrapper = providerSensors.createAndAddNew(providerType);
+                    providerSensorWrapper.setSpec(new ProviderSensorDefinitionSpec());
+                    ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorWrapper.getSpec();
+                    providerSensorDefinitionSpec.setJavaClassName(abstractSensorParametersSpec.getSensorRunnerClass().getName());
+                    providerSensorDefinitionSpec.setSupportsGroupingByDataStream(abstractSensorParametersSpec.getSupportsDataStreams());
+                    providerSensorDefinitionSpec.setSupportsPartitionedChecks(abstractSensorParametersSpec.getSupportsPartitionedChecks());
+                }
             }
 
             SensorDefinitionSpec sensorDefinitionSpec = sensorDefinitionWrapper.getSpec();

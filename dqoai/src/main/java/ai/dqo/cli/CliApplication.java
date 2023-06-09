@@ -15,8 +15,6 @@
  */
 package ai.dqo.cli;
 
-import ai.dqo.connectors.jdbc.JdbcTypeColumnMapping;
-import ai.dqo.data.storage.TablesawParquetSupportFix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -105,9 +103,6 @@ public class CliApplication {
 	 */
 	public static void main(String[] args) {
 		try {
-			TablesawParquetSupportFix.ensureInitialized();
-			JdbcTypeColumnMapping.ensureInitializedJdbc();
-
 			requiredWebServer = isCommandThatRequiresWebServer(args);
 			runningOneShotMode = hasArgumentsForOneShot(args);
 

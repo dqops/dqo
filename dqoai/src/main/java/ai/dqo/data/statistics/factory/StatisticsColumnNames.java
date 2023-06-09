@@ -82,6 +82,16 @@ public final class StatisticsColumnNames {
     public static final String RESULT_TIME_COLUMN_NAME = "result_time";
 
     /**
+     * The index of the sample for statistics collector that collect data samples.
+     */
+    public static final String SAMPLE_INDEX_COLUMN_NAME = "sample_index";
+
+    /**
+     * The count of the samples for statistics collector that collect data samples.
+     */
+    public static final String SAMPLE_COUNT_COLUMN_NAME = "sample_count";
+
+    /**
      * Column name for a statistics collector executed at timestamp.
      */
     public static final String EXECUTED_AT_COLUMN_NAME = CommonColumnNames.EXECUTED_AT_COLUMN_NAME;
@@ -105,6 +115,11 @@ public final class StatisticsColumnNames {
      * Column name for a data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ...
      */
     public static final String DATA_STREAM_NAME_COLUMN_NAME = CommonColumnNames.DATA_STREAM_NAME_COLUMN_NAME;
+
+    /**
+     * The data stream configuration name, it is a name of the named data stream mapping configuration that was used to run the data quality check.
+     */
+    public static final String DATA_STREAM_MAPPING_NAME_COLUMN_NAME = CommonColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME;
 
     /**
      * Column name for a connection hash.
@@ -190,4 +205,24 @@ public final class StatisticsColumnNames {
      * Column name for an optional error message when the status is 'error'.
      */
     public static final String ERROR_MESSAGE_COLUMN_NAME = CommonColumnNames.ERROR_MESSAGE_COLUMN_NAME;
+
+    /**
+     * The timestamp when the row was created at.
+     */
+    public static final String CREATED_AT_COLUMN_NAME = CommonColumnNames.CREATED_AT_COLUMN_NAME;
+
+    /**
+     * The timestamp when the row was updated at.
+     */
+    public static final String UPDATED_AT_COLUMN_NAME = CommonColumnNames.UPDATED_AT_COLUMN_NAME;
+
+    /**
+     * The login of the user that created the row.
+     */
+    public static final String CREATED_BY_COLUMN_NAME = CommonColumnNames.CREATED_BY_COLUMN_NAME;
+
+    /**
+     * The login of the user that updated the row.
+     */
+    public static final String UPDATED_BY_COLUMN_NAME = CommonColumnNames.UPDATED_BY_COLUMN_NAME;
 }

@@ -3,46 +3,32 @@ import IncidentsLayout from "../../components/IncidentsLayout";
 import SvgIcon from "../../components/SvgIcon";
 import { useHistory, useParams } from "react-router-dom";
 import Input from "../../components/Input";
-import Button from "../../components/Button";
-import StatusSelect from "./StatusSelect";
 import { useSelector } from "react-redux";
 import { getFirstLevelIncidentsState } from "../../redux/selectors";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { getIncidentsByConnection, setIncidentsFilter, updateIncident } from "../../redux/actions/incidents.actions";
-import { Table } from "../../components/Table";
-import { CheckTypes, ROUTES } from "../../shared/routes";
+import {
+  getIncidentsIssues,
+  setIncidentsFilter,
+} from "../../redux/actions/incidents.actions";
 import { Pagination } from "../../components/Pagination";
 import moment from "moment";
 import useDebounce from "../../hooks/useDebounce";
-import { IncidentFilter } from "../../redux/reducers/incidents.reducer";
+import { IncidentIssueFilter } from "../../redux/reducers/incidents.reducer";
 import { IncidentModel, IncidentModelStatusEnum } from "../../api";
 import Select from "../../components/Select";
 import { IncidentsApi } from "../../services/apiClient";
 import { IconButton, Tooltip } from "@material-tailwind/react";
-import AddIssueUrlDialog from "./AddIssueUrlDialog";
-
-const getDaysString = (value: string) => {
-  const daysDiff = moment().diff(moment(value), 'day');
-  if (daysDiff === 0) return 'Today';
-  if (daysDiff === 1) return '1 day ago';
-
-  return `${daysDiff} days ago`;
-}
-
-const options = [
-  {
-    label: 'Current month',
-    value: 1
-  },
-  {
-    label: 'Last 2 months',
-    value: 2
-  },
-  {
-    label: 'Last 3 months',
-    value: 3
-  }
-];
+import { getDaysString } from "../../utils";
+import AddIssueUrlDialog from "../IncidentConnection/AddIssueUrlDialog";
+import { IncidentIssueList } from "./IncidentIssueList";
+import { useTree } from "../../contexts/treeContext";
+import IncidentNavigation from "./IncidentNavigation";
+import Button from "../../components/Button";
+import { HistogramChart } from "./HistogramChart";
+import SectionWrapper from "../../components/Dashboard/SectionWrapper";
+import { Warning } from "postcss";
+import { addFirstLevelTab as addSourceFirstLevelTab } from "../../redux/actions/source.actions";
+import { CheckTypes, ROUTES } from "../../shared/routes";
 
 const statusOptions = [
   {
@@ -67,207 +53,147 @@ const statusOptions = [
   }
 ];
 
+const options = [
+  {
+    label: '1 Day',
+    value: 1
+  },
+  {
+    label: '7 Days',
+    value: 7
+  },
+  {
+    label: '30 Days',
+    value: 30
+  },
+  {
+    label: 'All issues',
+    value: undefined
+  },
+];
+
 export const IncidentDetail = () => {
-  const { connection }: { connection: string } = useParams();
-  const { incidents, filters = {} } = useSelector(getFirstLevelIncidentsState);
-  const dispatch = useActionDispatch();
-  const history = useHistory();
+  const { connection, year: strYear, month: strMonth, id: incidentId }: { connection: string, year: string, month: string, id: string } = useParams();
+  const year = parseInt(strYear, 10);
+  const month = parseInt(strMonth, 10);
+  const [incidentDetail, setIncidentDetail] = useState<IncidentModel>();
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [open, setOpen] = useState(false);
-  const [selectedIncident, setSelectedIncident] = useState<IncidentModel>();
+  const dispatch = useActionDispatch();
+  const { sidebarWidth } = useTree();
+  const { issues, isEnd, filters = {} } = useSelector(getFirstLevelIncidentsState);
+  const history = useHistory();
 
-  const onChangeIncidentStatus = async (row: IncidentModel, status: IncidentModelStatusEnum) => {
-    dispatch(updateIncident(incidents.map((item: IncidentModel) => item.incidentId === row.incidentId ? ({
-      ...row,
-      status
-    }) : item)));
-    await IncidentsApi.setIncidentStatus(row.connection || "", row.year || 0, row.month || 0, row.incidentId || "", status);
+  useEffect(() => {
+    IncidentsApi.getIncident(connection, year, month, incidentId).then(res => {
+      setIncidentDetail(res.data);
+    });
+
+    dispatch(getIncidentsIssues({
+      connection,
+      year,
+      month,
+      incidentId
+    }));
+  }, []);
+
+  const onChangeIncidentStatus = async (status: IncidentModelStatusEnum) => {
+    if (!incidentDetail) return;
+
+    setIncidentDetail({
+      ...incidentDetail,
+      status,
+    });
+
+    await IncidentsApi.setIncidentStatus(incidentDetail.connection || "", incidentDetail.year || 0, incidentDetail.month || 0, incidentDetail.incidentId || "", status);
   };
 
   const handleAddIssueUrl = async (issueUrl: string) => {
-    dispatch(updateIncident(incidents.map((item: IncidentModel) => item.incidentId === selectedIncident?.incidentId ? ({
-      ...selectedIncident,
-      issueUrl
-    }) : item)));
-    await IncidentsApi.setIncidentIssueUrl(selectedIncident?.connection || "", selectedIncident?.year || 0, selectedIncident?.month || 0, selectedIncident?.incidentId || "", issueUrl);
+    if (!incidentDetail) return;
+
+    setIncidentDetail({
+      ...incidentDetail,
+      issueUrl,
+    });
+    await IncidentsApi.setIncidentIssueUrl(incidentDetail?.connection || "", incidentDetail?.year || 0, incidentDetail?.month || 0, incidentDetail?.incidentId || "", issueUrl);
   };
 
-  const addIssueUrl = (row: IncidentModel) => {
-    setSelectedIncident(row);
-    setOpen(true);
-  };
-
-  const columns = [
-    {
-      label: 'Resolution status',
-      className: 'text-left py-2 px-4',
-      value: 'status',
-      render: (value: string, row: IncidentModel) => {
-        return (
-          <div className="flex items-center">
-            <Select
-              value={value}
-              options={statusOptions}
-              onChange={(status) => onChangeIncidentStatus(row, status)}
-            />
-          </div>
-        )
-      }
-    },
-    {
-      label: 'Failed checks count',
-      className: 'text-left text-sm py-2 px-4',
-      value: 'failedChecksCount'
-    },
-    {
-      label: 'Schema',
-      className: 'text-left text-sm py-2 px-4',
-      value: 'schema'
-    },
-    {
-      label: 'Table',
-      className: 'text-left text-sm py-2 px-4',
-      value: 'table'
-    },
-    {
-      label: 'Checks',
-      className: 'text-left py-2 px-4',
-      value: 'checkName',
-      render: (value: string, row: IncidentModel) => {
-        const values = [row.qualityDimension, row.checkCategory, row.checkType, row.checkName].filter((item) => !!item);
-
-        return (
-          <div className="text-sm">{values.join(", ")}</div>
-        )
-      }
-    },
-    {
-      label: 'First seen',
-      className: 'text-left py-2 px-4',
-      value: 'firstSeen',
-      render: (value: string) => (
-        <div className="text-sm">
-          <div>{moment(value).format("YYYY-MM-DD")}</div>
-          {getDaysString(value)}
-        </div>
-      )
-    },
-    {
-      label: 'Last seen',
-      className: 'text-left py-2 px-4',
-      value: 'lastSeen',
-      render: (value: string) => (
-        <div className="text-sm">
-          <div>{moment(value).format("YYYY-MM-DD")}</div>
-          {getDaysString(value)}
-        </div>
-      )
-    },
-    {
-      label: 'Issue Link',
-      className: 'text-left issueUrl py-2 px-4',
-      value: 'issueUrl',
-      render: (value: string, row: IncidentModel) => {
-        return (
-          <div>
-            {value ? (
-              <div className="flex items-center space-x-2">
-                <a
-                  href={value}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-blue-600 underline"
-                >
-                  <Tooltip
-                    content={value}
-                    className="max-w-80 py-4 px-4 bg-gray-800 delay-300"
-                    placement="top-start"
-                  >
-                    {value.length > 15 ? '...' + value.substring(value.length - 15) : value}
-                  </Tooltip>
-                </a>
-                <IconButton
-                  color="teal"
-                  size="sm"
-                  onClick={() => addIssueUrl(row)}
-                  className="!shadow-none"
-                >
-                  <SvgIcon name="edit" className="w-4" />
-                </IconButton>
-              </div>
-            ) : (
-              <IconButton
-                color="teal"
-                size="sm"
-                onClick={() => addIssueUrl(row)}
-                className="!shadow-none"
-              >
-                <SvgIcon name="add" className="w-4" />
-              </IconButton>
-            )}
-          </div>
-        )
-      }
-    }
-  ];
-
-
-  useEffect(() => {
-    dispatch(getIncidentsByConnection({
-      connection,
-    }));
-  }, [connection]);
-
-  useEffect(() => {
-    onChangeFilter({
-      optionalFilter: debouncedSearchTerm,
-      page: 1
-    })
-  }, [debouncedSearchTerm]);
-
-  const onChangeFilter = (obj: Partial<IncidentFilter>) => {
+  const onChangeFilter = (obj: Partial<IncidentIssueFilter>) => {
     dispatch(setIncidentsFilter({
       ...filters || {},
       ...obj
     }));
-    dispatch(getIncidentsByConnection({
+    dispatch(getIncidentsIssues({
       ...filters || {},
       ...obj,
       connection,
+      year,
+      month,
+      incidentId
     }));
   };
 
+
+  useEffect(() => {
+    onChangeFilter({
+      filter: debouncedSearchTerm,
+      page: 1
+    })
+  }, [debouncedSearchTerm]);
+
+  const getWarnings = (minimumSeverity?: number) => {
+    if (!minimumSeverity) return '';
+    if (minimumSeverity > 1) return `${minimumSeverity} Warnings`;
+
+    return 'Warning';
+  };
+
+  const getSeverity = (highestSeverity?: number) => {
+    if (!highestSeverity || highestSeverity / 3 < 1) return '';
+    if (Math.floor(highestSeverity / 3) > 1) return `${highestSeverity} Fatals`;
+
+    return 'Fatal';
+  }
+
   const goToConfigure = () => {
-    history.push(ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'incidents'));
+    const schema = incidentDetail?.schema || '';
+    const table = incidentDetail?.table || '';
+    dispatch(addSourceFirstLevelTab(CheckTypes.SOURCES, {
+      url: ROUTES.TABLE_INCIDENTS_NOTIFICATION(
+        CheckTypes.SOURCES,
+        connection,
+        schema,
+        table
+      ),
+      value: ROUTES.TABLE_INCIDENTS_NOTIFICATION_VALUE(CheckTypes.SOURCES, connection, schema, table),
+      state: {},
+      label: 'Incident Configuration'
+    }));
+    history.push(ROUTES.TABLE_INCIDENTS_NOTIFICATION(CheckTypes.SOURCES, connection, schema, table));
   };
 
   return (
     <IncidentsLayout>
       <div className="relative">
+        <IncidentNavigation incident={incidentDetail} />
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
-            <div className="text-xl font-semibold truncate">Data quality incidents on {connection || ''}</div>
+            <div className="text-xl font-semibold truncate">Data quality incident {`${year}/${month}/${incidentId}`}</div>
           </div>
-          <div className="flex items-center">
-            <div className="mr-20">
-              <StatusSelect onChangeFilter={onChangeFilter} />
-            </div>
-            <Button
-              onClick={goToConfigure}
-              color="primary"
-              label="Configure"
-            />
-          </div>
+          <Button
+            label="Configure table notification"
+            color="primary"
+            onClick={goToConfigure}
+          ></Button>
         </div>
-
         <div className="flex items-center p-4 gap-6 mb-4">
           <div className="grow">
             <Input
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Filter incidents"
+              placeholder="Filter errors: col*"
               className="!h-12"
             />
           </div>
@@ -277,23 +203,160 @@ export const IncidentDetail = () => {
               <Button
                 key={index}
                 label={o.label}
-                color={o.value === (filters?.numberOfMonth || 3) ? 'primary' : undefined}
-                onClick={() => onChangeFilter({ numberOfMonth: o.value, page: 1 })}
+                color={o.value === filters?.days ? 'primary' : undefined}
+                onClick={() => onChangeFilter({ days: o.value, page: 1 })}
               />
             ))}
           </div>
         </div>
-        <div className="p-4">
-          <Table
-            columns={columns}
-            data={incidents || []}
-            className="w-full"
-          />
+        <div className="grid grid-cols-4 gap-4 px-4">
+          <SectionWrapper title="Table">
+            <div className="flex gap-3 mb-3 items-center">
+              <div className="flex-1">Connection</div>
+              <div className="flex-[2] font-bold">{incidentDetail?.connection}</div>
+            </div>
+            <div className="flex gap-3 mb-3 items-center">
+              <div className="flex-1">Schema</div>
+              <div className="flex-[2] font-bold">{incidentDetail?.schema}</div>
+            </div>
+            <div className="flex gap-3 mb-3 items-center">
+              <div className="flex-1">Table</div>
+              <div className="flex-[2] font-bold">{incidentDetail?.table}</div>
+            </div>
+            <div className="flex gap-3 mb-3 items-center">
+              <div className="flex-1">Table priority</div>
+              <div className="flex-[2] font-bold">{incidentDetail?.tablePriority}</div>
+            </div>
+          </SectionWrapper>
+          <SectionWrapper title="Status and time range">
+            <div className="flex gap-3 mb-3 items-center">
+              <div className="flex-1">Status:</div>
+              <div className="flex-[2] font-bold">
+                <Select
+                  value={incidentDetail?.status}
+                  options={statusOptions}
+                  onChange={onChangeIncidentStatus}
+                />
+              </div>
+            </div>
+            <div className="flex gap-3 mb-3 items-center">
+              <div className="flex-1">First seen:</div>
+              <div className="flex-[2] font-bold">
+                <span className="mr-2">{moment(incidentDetail?.firstSeen).format("YYYY-MM-DD")}</span>
+                ({getDaysString(incidentDetail?.firstSeen || 0)})
+              </div>
+            </div>
+            <div className="flex gap-3 mb-3 items-center">
+              <div className="flex-1">Last seen:</div>
+              <div className="flex-[2] font-bold">
+                <span className="mr-2">{moment(incidentDetail?.lastSeen).format("YYYY-MM-DD")}</span>
+                ({getDaysString(incidentDetail?.lastSeen || 0)})
+              </div>
+            </div>
+            <div className="flex gap-3 mb-3 items-center">
+              <div className="flex-1">Valid until</div>
+              <div className="flex-[2] font-bold">
+                <span className="mr-2">{moment(incidentDetail?.incidentUntil).format("YYYY-MM-DD")}</span>
+                ({getDaysString(incidentDetail?.incidentUntil || 0)})
+              </div>
+            </div>
+          </SectionWrapper>
+          <SectionWrapper title="Severity statistics">
+            <div className="flex gap-3 mb-3 items-center">
+              <div className="flex-[2]">Minimum issue severity:</div>
+              <div className="flex-[1] text-right font-bold">{getWarnings(incidentDetail?.minimumSeverity)}</div>
+            </div>
+            <div className="flex gap-3 mb-3 items-center">
+              <div className="flex-[2]">Highest detected issue severity:</div>
+              <div className="flex-[1] text-right font-bold">{getSeverity(incidentDetail?.highestSeverity)} Fatal</div>
+            </div>
+            <div className="flex gap-3 mb-3 items-center">
+              <div className="flex-[2]">Total data quality issues:</div>
+              <div className="flex-[1] text-right font-bold">{incidentDetail?.failedChecksCount}</div>
+            </div>
+            <div className="flex gap-3 items-center">
+              <div className="flex-[2]">Issue url:</div>
+              <div className="flex-[1] text-right font-bold">
+                <div>
+                  {incidentDetail?.issueUrl ? (
+                    <div className="flex items-center space-x-2">
+                      <a
+                        href={incidentDetail?.issueUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-600 underline"
+                      >
+                        <Tooltip
+                          content={incidentDetail?.issueUrl}
+                          className="max-w-80 py-4 px-4 bg-gray-800 delay-300"
+                          placement="top-start"
+                        >
+                          {incidentDetail?.issueUrl.length > 15 ? '...' + incidentDetail?.issueUrl.substring(incidentDetail?.issueUrl.length - 15) : incidentDetail?.issueUrl}
+                        </Tooltip>
+                      </a>
+                      <IconButton
+                        color="teal"
+                        size="sm"
+                        onClick={() => () => setOpen(true)}
+                        className="!shadow-none"
+                      >
+                        <SvgIcon name="edit" className="w-4" />
+                      </IconButton>
+                    </div>
+                  ) : (
+                    <IconButton
+                      color="teal"
+                      size="sm"
+                      onClick={() => setOpen(true)}
+                      className="!shadow-none"
+                    >
+                      <SvgIcon name="add" className="w-4" />
+                    </IconButton>
+                  )}
+                </div>
+              </div>
+            </div>
+          </SectionWrapper>
+          <SectionWrapper title="Data quality issue grouping">
+            <div className="flex gap-3 mb-3 items-center">
+              <div className="flex-1">Quality dimension:</div>
+              <div className="flex-1 font-bold">{incidentDetail?.qualityDimension}</div>
+            </div>
+            <div className="flex gap-3 mb-3 items-center">
+              <div className="flex-1">Category:</div>
+              <div className="flex-1 font-bold">{incidentDetail?.checkCategory}</div>
+            </div>
+            <div className="flex gap-3 mb-3 items-center">
+              <div className="flex-1">Check type:</div>
+              <div className="flex-1 font-bold">{incidentDetail?.checkType}</div>
+            </div>
+            <div className="flex gap-3 mb-3 items-center">
+              <div className="flex-1">Check name:</div>
+              <div className="flex-1 font-bold">{incidentDetail?.checkName}</div>
+            </div>
+            <div className="flex gap-3 items-center">
+              <div className="flex-1">Data stream:</div>
+              <div className="flex-1 font-bold">{incidentDetail?.dataStreamName}</div>
+            </div>
+          </SectionWrapper>
+        </div>
+
+        <HistogramChart />
+        <div className="px-4 ">
+          <div className="py-3 mb-5 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
+            <IncidentIssueList
+              incidentDetail={incidentDetail}
+              filters={filters}
+              issues={issues || []}
+              onChangeFilter={onChangeFilter}
+            />
+          </div>
 
           <Pagination
             page={filters.page || 1}
             pageSize={filters.pageSize || 50}
             totalPages={10}
+            isEnd={isEnd}
             onChange={(page, pageSize) => onChangeFilter({
               page,
               pageSize
@@ -306,7 +369,7 @@ export const IncidentDetail = () => {
         open={open}
         onClose={() => setOpen(false)}
         onSubmit={handleAddIssueUrl}
-        incident={selectedIncident}
+        incident={incidentDetail}
       />
     </IncidentsLayout>
   );

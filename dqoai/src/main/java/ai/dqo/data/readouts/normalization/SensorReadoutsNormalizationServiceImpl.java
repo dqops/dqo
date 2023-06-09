@@ -110,6 +110,12 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         TextColumn dataStreamNameColumn = this.commonNormalizationService.createDataStreamNameColumn(dataStreamLevelColumns, resultsRowCount);
         normalizedResults.addColumns(dataStreamNameColumn);
 
+        TextColumn dataStreamMappingNameColumn = TextColumn.create(SensorReadoutsColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME, resultsRowCount);
+        if (sensorRunParameters.getDataStreams() != null) {
+            dataStreamMappingNameColumn.setMissingTo(sensorRunParameters.getDataStreams().getDataStreamMappingName());
+        }
+        normalizedResults.addColumns(dataStreamMappingNameColumn);
+
         // sort the columns to make any continuous time series value extraction faster
         String[] sortableColumnNames = Arrays.stream(dataStreamLevelColumns)
                 .filter(d -> d != null)
@@ -235,8 +241,17 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         durationMsColumn.setMissingTo(sensorExecutionResult.getSensorDurationMs());
         sortedNormalizedTable.addColumns(durationMsColumn);
 
+        InstantColumn createdAtColumn = InstantColumn.create(SensorReadoutsColumnNames.CREATED_AT_COLUMN_NAME, resultsRowCount);
+        sortedNormalizedTable.addColumns(createdAtColumn);
+        InstantColumn updatedAtColumn = InstantColumn.create(SensorReadoutsColumnNames.UPDATED_AT_COLUMN_NAME, resultsRowCount);
+        sortedNormalizedTable.addColumns(updatedAtColumn);
+        TextColumn createdByColumn = TextColumn.create(SensorReadoutsColumnNames.CREATED_BY_COLUMN_NAME, resultsRowCount);
+        sortedNormalizedTable.addColumns(createdByColumn);
+        TextColumn updatedByColumn = TextColumn.create(SensorReadoutsColumnNames.UPDATED_BY_COLUMN_NAME, resultsRowCount);
+        sortedNormalizedTable.addColumns(updatedByColumn);
+
         DateTimeColumn sortedTimePeriodColumn = (DateTimeColumn) sortedNormalizedTable.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
-        TextColumn idColumn = this.commonNormalizationService.createRowIdColumn(sortedDataStreamHashColumn, sortedTimePeriodColumn, checkHash, tableHash,
+        TextColumn idColumn = this.commonNormalizationService.createRowIdColumnAndUpdateIndexes(sortedDataStreamHashColumn, sortedTimePeriodColumn, checkHash, tableHash,
                 columnHash != null ? columnHash.longValue() : 0L, resultsRowCount);
         sortedNormalizedTable.insertColumn(0, idColumn);
 

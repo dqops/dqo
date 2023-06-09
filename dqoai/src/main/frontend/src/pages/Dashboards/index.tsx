@@ -7,6 +7,7 @@ import { useDashboard } from "../../contexts/dashboardContext";
 import clsx from 'clsx';
 import { ITab } from "../../shared/interfaces";
 import { AuthenticatedDashboardModel } from "../../api";
+import { TabOption } from "../../components/PageTabs/tab";
 
 const Dashboards = () => {
   const dispatch = useActionDispatch();
@@ -22,7 +23,7 @@ const Dashboards = () => {
         <PageTabs
           tabs={tabs}
           activeTab={activeTab}
-          onChange={setActiveTab}
+          onChange={(tab: TabOption) => setActiveTab(tab.value)}
           onRemoveTab={closeTab}
           limit={8}
         />
@@ -34,14 +35,14 @@ const Dashboards = () => {
           )}
           {
             tabs.map((tab: ITab) => {
-              const dashboard = openedDashboards?.find((item: AuthenticatedDashboardModel) => item.dashboard?.dashboard_name === tab.value);
+              const dashboard = openedDashboards?.find((item: AuthenticatedDashboardModel) => (item.folder_path || '').split('/').concat(item.dashboard?.dashboard_name || '').join('-') === tab.value);
 
               return (
                 <div
                   key={tab.value}
                   className={clsx('bg-white absolute top-0 left-0 w-full h-full flex items-center justify-center overflow-auto', activeTab === tab.value ? 'z-50' : 'z-0')}
                 >
-                  {dashboard ? (
+                  {dashboard?.authenticated_dashboard_url ? (
                     <iframe
                       className="absolute top-0 left-0"
                       key={tab.value}

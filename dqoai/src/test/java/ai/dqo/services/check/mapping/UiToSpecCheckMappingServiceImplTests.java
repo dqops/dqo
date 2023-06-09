@@ -27,6 +27,7 @@ import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.sources.TableSpecObjectMother;
 import ai.dqo.services.check.mapping.models.UICheckContainerModel;
+import ai.dqo.services.check.matching.SimilarCheckCacheImpl;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
@@ -56,7 +57,8 @@ public class UiToSpecCheckMappingServiceImplTests extends BaseTest {
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         SensorDefinitionFindServiceImpl sensorDefinitionFindService = new SensorDefinitionFindServiceImpl();
         this.specToUiMapper = new SpecToUiCheckMappingServiceImpl(
-                reflectionService, sensorDefinitionFindService, schedulesUtilityService);
+                reflectionService, sensorDefinitionFindService, schedulesUtilityService,
+                new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService));
 
         this.bigQueryConnectionSpec = BigQueryConnectionSpecObjectMother.create();
         

@@ -419,7 +419,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                     String incidentId = incidentIdUuid.toString();
                     newIncidentRow.setString(IncidentsColumnNames.ID_COLUMN_NAME, incidentId);
                     newIncidentRow.setLong(IncidentsColumnNames.INCIDENT_HASH_COLUMN_NAME, incidentHash);
-                    newIncidentRow.setInt(IncidentsColumnNames.MIN_SEVERITY_COLUMN_NAME, minimumSeverityLevel);
+                    newIncidentRow.setInt(IncidentsColumnNames.MINIMUM_SEVERITY_COLUMN_NAME, minimumSeverityLevel);
 
                     PhysicalTableName physicalTableName = nextTableImportBatch.getTable().getPhysicalTableName();
                     newIncidentRow.setString(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME, physicalTableName.getSchemaName());

@@ -12,7 +12,7 @@ The check counts the percentage of values in the column that is above the value 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|value_above_max_value_percent|profiling| |[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|value_above_max_value_percent|profiling| |[value_above_max_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -42,11 +42,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=value_above
         numeric:
           value_above_max_value_percent:
             warning:
-              min_percent: 1.0
+              max_percent: 100.0
             error:
-              min_percent: 2.0
+              max_percent: 99.0
             fatal:
-              min_percent: 5.0
+              max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-21"
@@ -66,11 +66,11 @@ spec:
         numeric:
           value_above_max_value_percent:
             warning:
-              min_percent: 1.0
+              max_percent: 100.0
             error:
-              min_percent: 2.0
+              max_percent: 99.0
             fatal:
-              min_percent: 5.0
+              max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -329,11 +329,11 @@ spec:
             numeric:
               value_above_max_value_percent:
                 warning:
-                  min_percent: 1.0
+                  max_percent: 100.0
                 error:
-                  min_percent: 2.0
+                  max_percent: 99.0
                 fatal:
-                  min_percent: 5.0
+                  max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -535,9 +535,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -593,11 +592,11 @@ ___
 ## **daily value above max value percent**  
   
 **Check description**  
-The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.  
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_value_above_max_value_percent|recurring|daily|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_value_above_max_value_percent|recurring|daily|[value_above_max_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -628,11 +627,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_value
           numeric:
             daily_value_above_max_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -653,11 +652,11 @@ spec:
           numeric:
             daily_value_above_max_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -917,11 +916,11 @@ spec:
               numeric:
                 daily_value_above_max_value_percent:
                   warning:
-                    min_percent: 1.0
+                    max_percent: 100.0
                   error:
-                    min_percent: 2.0
+                    max_percent: 99.0
                   fatal:
-                    min_percent: 5.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1123,9 +1122,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1185,7 +1183,7 @@ The check counts the percentage of values in the column that is above the value 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_value_above_max_value_percent|recurring|monthly|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_value_above_max_value_percent|recurring|monthly|[value_above_max_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1216,11 +1214,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_val
           numeric:
             monthly_value_above_max_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1241,11 +1239,11 @@ spec:
           numeric:
             monthly_value_above_max_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1505,11 +1503,11 @@ spec:
               numeric:
                 monthly_value_above_max_value_percent:
                   warning:
-                    min_percent: 1.0
+                    max_percent: 100.0
                   error:
-                    min_percent: 2.0
+                    max_percent: 99.0
                   fatal:
-                    min_percent: 5.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1711,9 +1709,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1773,7 +1770,7 @@ The check counts the percentage of values in the column that is above the value 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_value_above_max_value_percent|partitioned|daily|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_value_above_max_value_percent|partitioned|daily|[value_above_max_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1804,11 +1801,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           numeric:
             daily_partition_value_above_max_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -1829,11 +1826,11 @@ spec:
           numeric:
             daily_partition_value_above_max_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2097,11 +2094,11 @@ spec:
               numeric:
                 daily_partition_value_above_max_value_percent:
                   warning:
-                    min_percent: 1.0
+                    max_percent: 100.0
                   error:
-                    min_percent: 2.0
+                    max_percent: 99.0
                   fatal:
-                    min_percent: 5.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -2303,8 +2300,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST([] AS date) AS time_period,
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY CAST([] AS date), CAST([] AS date)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
         ORDER BY level_1, level_2CAST([] AS date)
         
             
@@ -2362,7 +2359,7 @@ The check counts the percentage of values in the column that is above the value 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_value_above_max_value_percent|partitioned|monthly|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_value_above_max_value_percent|partitioned|monthly|[value_above_max_value_percent](../../../../reference/sensors/Column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -2393,11 +2390,11 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
           numeric:
             monthly_partition_value_above_max_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
 ```
 **Sample configuration (Yaml)**  
 ```yaml hl_lines="13-22"
@@ -2418,11 +2415,11 @@ spec:
           numeric:
             monthly_partition_value_above_max_value_percent:
               warning:
-                min_percent: 1.0
+                max_percent: 100.0
               error:
-                min_percent: 2.0
+                max_percent: 99.0
               fatal:
-                min_percent: 5.0
+                max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2686,11 +2683,11 @@ spec:
               numeric:
                 monthly_partition_value_above_max_value_percent:
                   warning:
-                    min_percent: 1.0
+                    max_percent: 100.0
                   error:
-                    min_percent: 2.0
+                    max_percent: 99.0
                   fatal:
-                    min_percent: 5.0
+                    max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -2892,8 +2889,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             

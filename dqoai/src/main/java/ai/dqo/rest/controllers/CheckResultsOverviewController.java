@@ -63,7 +63,7 @@ public class CheckResultsOverviewController {
      * @param tableName      Table name.
      * @return Overview of the most recent check results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/overview")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/overview", produces = "application/json")
     @ApiOperation(value = "getTableProfilingChecksOverview", notes = "Returns an overview of the most recent check executions for all table level data quality profiling checks on a table",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -112,7 +112,7 @@ public class CheckResultsOverviewController {
      * @param timeScale      Time scale.
      * @return Overview of the most recent recurring results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/overview")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/overview", produces = "application/json")
     @ApiOperation(value = "getTableRecurringChecksOverview", notes = "Returns an overview of the most recent table level recurring executions for the recurring at a requested time scale",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -162,7 +162,7 @@ public class CheckResultsOverviewController {
      * @param timeScale      Time scale.
      * @return Overview of the most recent partitioned checks results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/overview")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/overview", produces = "application/json")
     @ApiOperation(value = "getTablePartitionedChecksOverview", notes = "Returns an overview of the most recent table level partitioned checks executions for a requested time scale",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -212,7 +212,7 @@ public class CheckResultsOverviewController {
      * @param columnName     Column name.
      * @return Overview of the most recent check results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/overview")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/overview", produces = "application/json")
     @ApiOperation(value = "getColumnProfilingChecksOverview", notes = "Returns an overview of the most recent check executions for all column level data quality profiling checks on a column",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -268,7 +268,7 @@ public class CheckResultsOverviewController {
      * @param timeScale      Time scale.
      * @return Overview of the most recent recurring results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/overview")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/overview", produces = "application/json")
     @ApiOperation(value = "getColumnRecurringChecksOverview", notes = "Returns an overview of the most recent column level recurring executions for the recurring at a requested time scale",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -325,7 +325,7 @@ public class CheckResultsOverviewController {
      * @param timeScale      Time scale.
      * @return Overview of the most recent partitioned checks results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/overview")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/overview", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedChecksOverview", notes = "Returns an overview of the most recent column level partitioned checks executions for a requested time scale",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)

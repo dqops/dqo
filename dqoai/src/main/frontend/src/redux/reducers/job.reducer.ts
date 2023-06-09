@@ -146,6 +146,7 @@ const schemaReducer = (state = initialState, action: any) => {
         ...state,
         areSettingsOpen: action.areSettingsOpen
       };
+
     default:
       return state;
   }

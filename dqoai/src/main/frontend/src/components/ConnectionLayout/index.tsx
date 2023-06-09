@@ -6,6 +6,7 @@ import { CheckTypes } from "../../shared/routes";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
 import { closeFirstLevelTab, setActiveFirstLevelTab } from "../../redux/actions/source.actions";
+import { TabOption } from "../PageTabs/tab";
 
 interface ConnectionLayoutProps {
   children: any;
@@ -15,13 +16,16 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
 
   const { tabs: pageTabs, activeTab } = useSelector((state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]);
+
   const dispatch= useDispatch();
   const history = useHistory();
   const location = useLocation();
 
-  const handleChange = (value: string) => {
-    dispatch(setActiveFirstLevelTab(checkTypes, value));
-    history.push(value);
+  const handleChange = (tab: TabOption) => {
+    dispatch(setActiveFirstLevelTab(checkTypes, tab.value));
+    if (tab.url && tab.url !== location.pathname) {
+      history.push(tab.url);
+    }
   };
 
   const closeTab = (value: string) => {
@@ -30,14 +34,18 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
 
   const tabOptions = useMemo(() => {
     return pageTabs.map((item) => ({
-      value: item.url,
+      value: item.value,
+      url: item.url,
       label: item.label
     }))
   }, [pageTabs]);
 
   useEffect(() => {
-    if (activeTab && activeTab !== location.pathname) {
-      history.push(activeTab);
+    if (activeTab) {
+      const activeUrl = pageTabs.find((item) => item.value === activeTab)?.url;
+      if (activeUrl && activeUrl !== location.pathname) {
+        history.push(activeUrl);
+      }
     }
   }, [activeTab]);
 

@@ -12,7 +12,7 @@ Verifies that the percent of not null values in a column does not exceed the min
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|not_nulls_percent|profiling| |[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|not_nulls_percent|profiling| |[not_null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -42,9 +42,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=not_nulls_p
         nulls:
           not_nulls_percent:
             warning:
-              min_percent: 99.0
+              min_percent: 100.0
             error:
-              min_percent: 98.0
+              min_percent: 99.0
             fatal:
               min_percent: 95.0
 ```
@@ -66,9 +66,9 @@ spec:
         nulls:
           not_nulls_percent:
             warning:
-              min_percent: 99.0
+              min_percent: 100.0
             error:
-              min_percent: 98.0
+              min_percent: 99.0
             fatal:
               min_percent: 95.0
       labels:
@@ -293,9 +293,9 @@ spec:
             nulls:
               not_nulls_percent:
                 warning:
-                  min_percent: 99.0
+                  min_percent: 100.0
                 error:
-                  min_percent: 98.0
+                  min_percent: 99.0
                 fatal:
                   min_percent: 95.0
           labels:
@@ -469,9 +469,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -521,11 +520,11 @@ ___
 ## **daily not nulls percent**  
   
 **Check description**  
-Verifies that the percentage of not nulls in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the percentage of not nulls in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_not_nulls_percent|recurring|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_not_nulls_percent|recurring|daily|[not_null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -556,9 +555,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_not_n
           nulls:
             daily_not_nulls_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -581,9 +580,9 @@ spec:
           nulls:
             daily_not_nulls_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -809,9 +808,9 @@ spec:
               nulls:
                 daily_not_nulls_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -985,9 +984,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1041,7 +1039,7 @@ Verifies that the percentage of not nulls in a column does not fall below the mi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_not_nulls_percent|recurring|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_not_nulls_percent|recurring|monthly|[not_null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1072,9 +1070,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_not
           nulls:
             monthly_not_nulls_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -1097,9 +1095,9 @@ spec:
           nulls:
             monthly_not_nulls_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -1325,9 +1323,9 @@ spec:
               nulls:
                 monthly_not_nulls_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -1501,9 +1499,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1557,7 +1554,7 @@ Verifies that the percentage of not null values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_not_nulls_percent|partitioned|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_not_nulls_percent|partitioned|daily|[not_null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1588,9 +1585,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           nulls:
             daily_partition_not_nulls_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -1613,9 +1610,9 @@ spec:
           nulls:
             daily_partition_not_nulls_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -1845,9 +1842,9 @@ spec:
               nulls:
                 daily_partition_not_nulls_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -2021,8 +2018,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST([] AS date) AS time_period,
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY CAST([] AS date), CAST([] AS date)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
         ORDER BY level_1, level_2CAST([] AS date)
         
             
@@ -2074,7 +2071,7 @@ Verifies that the percentage of not null values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_not_nulls_percent|partitioned|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_not_nulls_percent|partitioned|monthly|[not_null_percent](../../../../reference/sensors/Column/nulls-column-sensors/#not-null-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -2105,9 +2102,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
           nulls:
             monthly_partition_not_nulls_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
 ```
@@ -2130,9 +2127,9 @@ spec:
           nulls:
             monthly_partition_not_nulls_percent:
               warning:
-                min_percent: 99.0
+                min_percent: 100.0
               error:
-                min_percent: 98.0
+                min_percent: 99.0
               fatal:
                 min_percent: 95.0
       labels:
@@ -2362,9 +2359,9 @@ spec:
               nulls:
                 monthly_partition_not_nulls_percent:
                   warning:
-                    min_percent: 99.0
+                    min_percent: 100.0
                   error:
-                    min_percent: 98.0
+                    min_percent: 99.0
                   fatal:
                     min_percent: 95.0
           labels:
@@ -2538,8 +2535,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             

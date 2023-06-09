@@ -31,6 +31,7 @@ export const ROUTES = {
   TABLE_PARTITIONED: (checkTypes: string, connection: string, schema: string, table: string, timePartitioned: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/partitioned/${timePartitioned}`,
   TABLE_PARTITIONED_UI_FILTER: (checkTypes: string, connection: string, schema: string, table: string, timePartitioned: string, category: string, checkName: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/partitioned/${timePartitioned}/${category}/${checkName}`,
   TABLE_COLUMNS: (checkTypes: string, connection: string, schema: string, table: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/all`,
+  TABLE_INCIDENTS_NOTIFICATION: (checkTypes: string, connection: string, schema: string, table: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/incidents/configuration`,
   COLUMN_LEVEL_PAGE: (checkTypes: string, connection: string, schema: string, table: string, column: string, tab: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}/${tab}`,
   COLUMN_PROFILING: (checkTypes: string, connection: string, schema: string, table: string, column: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}/checks/advanced-profiling`,
   COLUMN_PROFILING_UI_FILTER: (checkTypes: string, connection: string, schema: string, table: string, column: string, category: string, checkName: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}/checks/advanced-profiling/${category}/${checkName}`,
@@ -40,7 +41,8 @@ export const ROUTES = {
   COLUMN_PARTITIONED_UI_FILTER: (checkTypes: string, connection: string, schema: string, table: string, column: string, timePartitioned: string, category: string, checkName: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}/partitioned/${timePartitioned}/${category}/${checkName}`,
   SENSOR_DETAIL: (sensor: string) => `/definitions/sensors/${sensor}`,
   RULE_DETAIL: (rule: string) => `/definitions/rules/${rule}`,
-  INCIDENT_DETAIL: (name: string) => `/incidents/${name}`,
+  INCIDENT_CONNECTION: (name: string) => `/incidents/${name}`,
+  INCIDENT_DETAIL: (name: string, year: number, month: number, id: string) => `/incidents/${name}/${year}/${month}/${id}`,
 
   CONNECTION_LEVEL_VALUE: (checkTypes: string, connection: string) => `/${checkTypes}/connection/${connection}`,
   SCHEMA_LEVEL_VALUE: (checkTypes: string, connection: string, schema: string) => `/${checkTypes}/connection/${connection}/schema/${schema}`,
@@ -49,13 +51,15 @@ export const ROUTES = {
   TABLE_RECURRING_VALUE: (checkTypes: string, connection: string, schema: string, table: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/recurring`,
   TABLE_PARTITIONED_VALUE: (checkTypes: string, connection: string, schema: string, table: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/partitioned`,
   TABLE_COLUMNS_VALUE: (checkTypes: string, connection: string, schema: string, table: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/all`,
+  TABLE_INCIDENTS_NOTIFICATION_VALUE: (checkTypes: string, connection: string, schema: string, table: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/incidents/configuration`,
   COLUMN_PROFILING_VALUE: (checkTypes: string, connection: string, schema: string, table: string, column: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}/checks/advanced-profiling`,
   COLUMN_RECURRING_VALUE: (checkTypes: string, connection: string, schema: string, table: string, column: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}/recurring`,
   COLUMN_PARTITIONED_VALUE: (checkTypes: string, connection: string, schema: string, table: string, column: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}/partitioned`,
   COLUMN_LEVEL_VALUE: (checkTypes: string, connection: string, schema: string, table: string, column: string) => `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}/columns/${column}`,
   SENSOR_DETAIL_VALUE: (sensor: string) => `/definitions/sensors/${sensor}`,
   RULE_DETAIL_VALUE: (rule: string) => `/definitions/rules/${rule}`,
-  INCIDENT_DETAIL_VALUE: (name: string) => `/incidents/${name}`,
+  INCIDENT_CONNECTION_VALUE: (name: string) => `/incidents/${name}`,
+  INCIDENT_DETAIL_VALUE: (name: string, year: number, month: number, id: string) => `/incidents/${name}/${year}/${month}/${id}`,
 
   PATTERNS: {
     INDEX: '/',
@@ -71,6 +75,7 @@ export const ROUTES = {
     TABLE_PARTITIONED_MONTHLY: '/:checkTypes/connection/:connection/schema/:schema/table/:table/partitioned/monthly',
     TABLE_PARTITIONED_FILTER: '/:checkTypes/connection/:connection/schema/:schema/table/:table/partitioned/:timePartitioned/:category/:checkName',
     TABLE_COLUMNS: '/:checkTypes/connection/:connection/schema/:schema/table/:table/columns/all',
+    TABLE_INCIDENTS_NOTIFICATION: '/:checkTypes/connection/:connection/schema/:schema/table/:table/incidents/configuration',
     COLUMN: '/:checkTypes/connection/:connection/schema/:schema/table/:table/columns/:column/:tab',
     COLUMN_PROFILING: '/:checkTypes/connection/:connection/schema/:schema/table/:table/columns/:column/checks/advanced-profiling',
     COLUMN_PROFILING_FILTER: '/:checkTypes/connection/:connection/schema/:schema/table/:table/columns/:column/checks/advanced-profiling/:category/:checkName',
@@ -88,6 +93,7 @@ export const ROUTES = {
     INCIDENTS: '/incidents',
     SENSOR_DETAIL: '/definitions/sensors/:sensor',
     RULE_DETAIL: '/definitions/rules/:rule',
-    INCIDENT_DETAIL: '/incidents/:connection',
+    INCIDENT_CONNECTION: '/incidents/:connection',
+    INCIDENT_DETAIL: '/incidents/:connection/:year/:month/:id',
   }
 };

@@ -18,6 +18,7 @@ package ai.dqo.execution.checks.ruleeval;
 import ai.dqo.data.checkresults.factory.CheckResultsColumnNames;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;
@@ -33,6 +34,9 @@ public class RuleEvaluationResult {
     private final DoubleColumn expectedValueColumn;
     private final IntColumn severityColumn;
     private final LongColumn incidentHashColumn;
+    private final TextColumn referenceConnection;
+    private final TextColumn referenceSchema;
+    private final TextColumn referenceTable;
     private final BooleanColumn includeInKpiColumn;
     private final BooleanColumn includeInSlaColumn;
 
@@ -53,6 +57,9 @@ public class RuleEvaluationResult {
         this.expectedValueColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
 		this.severityColumn = TableColumnUtility.getOrAddIntColumn(ruleResultsTable, CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
         this.incidentHashColumn = TableColumnUtility.getOrAddLongColumn(ruleResultsTable, CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME);
+        this.referenceConnection = TableColumnUtility.getOrAddTextColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_CONNECTION_COLUMN_NAME);
+        this.referenceSchema = TableColumnUtility.getOrAddTextColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_SCHEMA_COLUMN_NAME);
+        this.referenceTable = TableColumnUtility.getOrAddTextColumn(ruleResultsTable, CheckResultsColumnNames.REFERENCE_TABLE_COLUMN_NAME);
         this.includeInKpiColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, CheckResultsColumnNames.INCLUDE_IN_KPI_COLUMN_NAME);
         this.includeInSlaColumn = TableColumnUtility.getOrAddBooleanColumn(ruleResultsTable, CheckResultsColumnNames.INCLUDE_IN_SLA_COLUMN_NAME);
 		this.fatalLowerBoundColumn = TableColumnUtility.getOrAddDoubleColumn(ruleResultsTable, CheckResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME);
@@ -97,6 +104,30 @@ public class RuleEvaluationResult {
      */
     public LongColumn getIncidentHashColumn() {
         return incidentHashColumn;
+    }
+
+    /**
+     * Returns the column that stores the name of a reference connection name for accuracy checks.
+     * @return Reference connection name column.
+     */
+    public TextColumn getReferenceConnection() {
+        return referenceConnection;
+    }
+
+    /**
+     * Returns the column that stores the name of a reference schema name for accuracy checks.
+     * @return Reference schema name column.
+     */
+    public TextColumn getReferenceSchema() {
+        return referenceSchema;
+    }
+
+    /**
+     * Returns the column that stores the name of a reference table name for accuracy checks.
+     * @return Reference table name column.
+     */
+    public TextColumn getReferenceTable() {
+        return referenceTable;
     }
 
     /**
@@ -199,7 +230,13 @@ public class RuleEvaluationResult {
         for (int colIndex = 0; colIndex < sourceTable.columnCount() ; colIndex++) {
             Column<Object> sourceColumn = (Column<Object>) sourceTable.column(colIndex);
             Column<Object> targetColumn = (Column<Object>) this.ruleResultsTable.column(colIndex);
-            assert Objects.equals(sourceColumn.name(), targetColumn.name());
+            String columnName = sourceColumn.name();
+            if (!Objects.equals(columnName, targetColumn.name())) {
+                targetColumn = (Column<Object>) TableColumnUtility.findColumn(this.ruleResultsTable, columnName);
+                if (targetColumn == null) {
+                    throw new DqoRuntimeException("Cannot find the target column named " + columnName + " when copying columns");
+                }
+            }
             targetColumn.set(targetRowIndex, sourceColumn, sourceRowIndex);
         }
     }

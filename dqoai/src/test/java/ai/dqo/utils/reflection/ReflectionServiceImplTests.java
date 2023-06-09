@@ -27,7 +27,7 @@ import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.rules.averages.PercentMovingAverageRuleParametersSpec;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
-import ai.dqo.sensors.column.numeric.ColumnNumericNumbersInSetCountSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
 import ai.dqo.sensors.column.strings.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
 import ai.dqo.sensors.column.strings.StringsBuiltInDateFormats;
 import ai.dqo.sensors.column.datetime.ColumnDatetimeValueInRangeDatePercentSensorParametersSpec;
@@ -301,14 +301,14 @@ public class ReflectionServiceImplTests extends BaseTest {
 
     @Test
     void makeFieldInfo_whenFieldIsListOfLongs_thenReturnsFieldInfo() throws Exception {
-        Field field = ColumnNumericNumbersInSetCountSensorParametersSpec.class.getDeclaredField("values");
+        Field field = ColumnNumericExpectedNumbersInUseCountSensorParametersSpec.class.getDeclaredField("expectedValues");
         FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
         Assertions.assertNotNull(fieldInfo);
         Assertions.assertSame(field.getType(), fieldInfo.getClazz());
         Assertions.assertEquals(ParameterDataType.integer_list_type, fieldInfo.getDataType());
-        Assertions.assertEquals("values", fieldInfo.getClassFieldName());
-        Assertions.assertEquals("values", fieldInfo.getYamlFieldName());
-        Assertions.assertEquals("values", fieldInfo.getDisplayName());
+        Assertions.assertEquals("expectedValues", fieldInfo.getClassFieldName());
+        Assertions.assertEquals("expected_values", fieldInfo.getYamlFieldName());
+        Assertions.assertEquals("expected_values", fieldInfo.getDisplayName());
         Assertions.assertNotNull(fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());

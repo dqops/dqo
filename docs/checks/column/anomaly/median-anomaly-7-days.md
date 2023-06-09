@@ -12,7 +12,7 @@ Verifies that the median in a column changes in a rate within a percentile bound
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|median_anomaly_7_days|profiling| |[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percentile_moving_within_7_days](../../../../reference/rules/stdev/#change-percentile-moving-within-7-days)|
+|median_anomaly_7_days|profiling| |[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percentile_moving_within_7_days](../../../../reference/rules/Percentile/#change-percentile-moving-within-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -670,7 +670,7 @@ Verifies that the median in a column changes in a rate within a percentile bound
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_median_anomaly_7_days|recurring|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percentile_moving_within_7_days](../../../../reference/rules/stdev/#change-percentile-moving-within-7-days)|
+|daily_median_anomaly_7_days|recurring|daily|[percentile](../../../../reference/sensors/Column/numeric-column-sensors/#percentile)|[change_percentile_moving_within_7_days](../../../../reference/rules/Percentile/#change-percentile-moving-within-7-days)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)

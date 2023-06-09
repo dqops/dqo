@@ -55,6 +55,31 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
     }
 
     /**
+     * Lists all connections present in the directory under specific storage settings.
+     *
+     * @param storageSettings Storage settings that identify the target partition type.
+     * @return Returns a list of connection names that are currently stored for this storage type.
+     */
+    @Override
+    public List<String> listConnections(FileStorageSettings storageSettings) {
+        Path homeRelativeStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
+
+        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
+            List<HomeFolderPath> storageStoredFolders = this.localUserHomeFileStorageService.listFolders(
+                    HomeFolderPathUtility.createFromFilesystemPath(homeRelativeStoragePath));
+            if (storageStoredFolders == null) {
+                return new ArrayList<>();
+            }
+
+            return storageStoredFolders.stream()
+                    .map(homeFolderPath -> homeFolderPath.getTopFolder().getFileSystemName())
+                    .filter(HivePartitionPathUtility::validHivePartitionConnectionFolderName)
+                    .map(HivePartitionPathUtility::connectionFromHivePartitionFolderName)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    /**
      * Lists all tables present in the directory dedicated to the connection under specific storage settings.
      *
      * @param connectionName  Connection name.

@@ -77,7 +77,7 @@ public class IncidentsController {
      * @param incidentId Incident id.
      * @return Incident model of the loaded incident.
      */
-    @GetMapping("/incidents/{connectionName}/{year}/{month}/{incidentId}")
+    @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}", produces = "application/json")
     @ApiOperation(value = "getIncident", notes = "Return a single data quality incident's details.", response = IncidentModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -108,6 +108,7 @@ public class IncidentsController {
      * @param limit Page size.
      * @param page Page number.
      * @param filter Optional filter.
+     * @param days Optional filter for a number of recent days to read the related issues.
      * @param date Optional filter for a date.
      * @param column Optional column name to filter.
      * @param check Optional check name to filter.
@@ -115,7 +116,7 @@ public class IncidentsController {
      * @param direction Sort direction.
      * @return Incident model of the loaded incident.
      */
-    @GetMapping("/incidents/{connectionName}/{year}/{month}/{incidentId}/issues")
+    @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/issues", produces = "application/json")
     @ApiOperation(value = "getIncidentIssues", notes = "Return a paged list of failed data quality check results that are related to an incident.",
             response = CheckResultDetailedSingleModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -135,6 +136,8 @@ public class IncidentsController {
             @RequestParam(required = false) Optional<Integer> limit,
             @ApiParam(name = "filter", value = "Optional filter", required = false)
             @RequestParam(required = false) Optional<String> filter,
+            @ApiParam(name = "days", value = "Optional filter for a number of recent days to read the related issues", required = false)
+            @RequestParam(required = false) Optional<Integer> days,
             @ApiParam(name = "date", value = "Optional filter to return data quality issues only for a given date. The date should be an ISO8601 formatted date, it is treated as the timezone of the DQO server.", required = false)
             @RequestParam(required = false) Optional<LocalDate> date,
             @ApiParam(name = "column", value = "Optional column name filter", required = false)
@@ -155,6 +158,9 @@ public class IncidentsController {
         }
         if (filter.isPresent()) {
             filterParameters.setFilter(filter.get());
+        }
+        if (days.isPresent()) {
+            filterParameters.setDays(days.get());
         }
         if (date.isPresent()) {
             filterParameters.setDate(date.get());
@@ -190,12 +196,13 @@ public class IncidentsController {
      * @param month Month when the incident was first seen.
      * @param incidentId Incident id.
      * @param filter Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions.
+     * @param days Optional filter for a number of recent days to read the related issues.
      * @param date Optional date filter.
      * @param column Optional column name filter.
      * @param check Optional check name filter.
      * @return Incident histogram of data quality issues.
      */
-    @GetMapping("/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram")
+    @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram", produces = "application/json")
     @ApiOperation(value = "getIncidentHistogram", notes = "Generates histograms of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.",
             response = IncidentIssueHistogramModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -211,6 +218,8 @@ public class IncidentsController {
             @ApiParam("Incident id") @PathVariable String incidentId,
             @ApiParam(name = "filter", value = "Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions", required = false)
             @RequestParam(required = false) Optional<String> filter,
+            @ApiParam(name = "days", value = "Optional filter for a number of recent days to read the related issues", required = false)
+            @RequestParam(required = false) Optional<Integer> days,
             @ApiParam(name = "date", value = "Optional date filter", required = false)
             @RequestParam(required = false) Optional<LocalDate> date,
             @ApiParam(name = "column", value = "Optional column name filter", required = false)
@@ -220,6 +229,9 @@ public class IncidentsController {
         IncidentHistogramFilterParameters filterParameters = new IncidentHistogramFilterParameters();
         if (filter.isPresent()) {
             filterParameters.setFilter(filter.get());
+        }
+        if (days.isPresent()) {
+            filterParameters.setDays(days.get());
         }
         if (date.isPresent()) {
             filterParameters.setDate(date.get());
@@ -256,7 +268,7 @@ public class IncidentsController {
      * @param direction Sort direction.
      * @return List of incidents.
      */
-    @GetMapping("/incidents/{connectionName}")
+    @GetMapping(value = "/incidents/{connectionName}", produces = "application/json")
     @ApiOperation(value = "findRecentIncidentsOnConnection", notes = "Returns a list of recent data quality incidents.",
             response = IncidentModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -321,7 +333,7 @@ public class IncidentsController {
      * Lists connections with their recent open incidents stats.
      * @return List of connections with their incidents counts.
      */
-    @GetMapping("/incidentstat")
+    @GetMapping(value = "/incidentstat", produces = "application/json")
     @ApiOperation(value = "findConnectionIncidentStats", notes = "Returns a list of connection names with incident statistics - the count of recent open incidents.",
             response = IncidentsPerConnectionModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -343,7 +355,7 @@ public class IncidentsController {
      * @param status New incident status to set.
      * @return None.
      */
-    @PostMapping("/incidents/{connectionName}/{year}/{month}/{incidentId}/status")
+    @PostMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/status", produces = "application/json")
     @ApiOperation(value = "setIncidentStatus", notes = "Changes the incident's status to a new status.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -384,7 +396,7 @@ public class IncidentsController {
      * @param issueUrl New incident's issueUrl to set.
      * @return None.
      */
-    @PostMapping("/incidents/{connectionName}/{year}/{month}/{incidentId}/issueurl")
+    @PostMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/issueurl", produces = "application/json")
     @ApiOperation(value = "setIncidentIssueUrl", notes = "Changes the incident's issueUrl to a new status.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {

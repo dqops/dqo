@@ -20,8 +20,8 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxPercentRule95ParametersSpec;
-import ai.dqo.rules.comparison.MaxPercentRule98ParametersSpec;
 import ai.dqo.rules.comparison.MaxPercentRule99ParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule100ParametersSpec;
 import ai.dqo.sensors.column.numeric.ColumnNumericNonNegativePercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnNonNegativePercentCheckSpec
-        extends AbstractCheckSpec<ColumnNumericNonNegativePercentSensorParametersSpec, MaxPercentRule99ParametersSpec, MaxPercentRule98ParametersSpec, MaxPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericNonNegativePercentSensorParametersSpec, MaxPercentRule100ParametersSpec, MaxPercentRule99ParametersSpec, MaxPercentRule95ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNonNegativePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,12 +54,12 @@ public class ColumnNonNegativePercentCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule99ParametersSpec warning;
+    private MaxPercentRule100ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set percentage of rows with non-negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule98ParametersSpec error;
+    private MaxPercentRule99ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -93,7 +93,7 @@ public class ColumnNonNegativePercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxPercentRule99ParametersSpec getWarning() {
+    public MaxPercentRule100ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -102,7 +102,7 @@ public class ColumnNonNegativePercentCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxPercentRule99ParametersSpec warning) {
+    public void setWarning(MaxPercentRule100ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -114,7 +114,7 @@ public class ColumnNonNegativePercentCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public MaxPercentRule98ParametersSpec getError() {
+    public MaxPercentRule99ParametersSpec getError() {
         return this.error;
     }
 
@@ -123,7 +123,7 @@ public class ColumnNonNegativePercentCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxPercentRule98ParametersSpec error) {
+    public void setError(MaxPercentRule99ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");

@@ -16,21 +16,13 @@
 
 import { combineReducers } from 'redux';
 
-import connectionReducer, { IConnectionState } from './connection.reducer';
-import schemaReducer, { ISchemaState } from './schema.reducer';
-import tableReducer, { ITableState } from './table.reducer';
-import columnReducer, { IColumnState } from './column.reducer';
 import jobReducer, { IJobsState } from './job.reducer';
 import dashboardReducer, { IDashboardState } from "./dashboard.reducer";
-import sourceReducer, { ISourceState } from "./source.reducer";
+import sourceReducer, { INestTab, ISourceState } from "./source.reducer";
 import sensorReducer, { ISensorState } from "./sensor.reducer";
 import ruleReducer, { IRuleState } from "./rule.reducer";
 import incidentsReducer , { IIncidentsState } from "./incidents.reducer";
 export interface IRootState {
-  connection: IConnectionState;
-  schema: ISchemaState;
-  table: ITableState;
-  column: IColumnState;
   job: IJobsState;
   dashboard: IDashboardState;
   source: ISourceState;
@@ -40,11 +32,7 @@ export interface IRootState {
   incidents: IIncidentsState;
 }
 
-const rootReducer = combineReducers<IRootState>({
-  connection: connectionReducer,
-  schema: schemaReducer,
-  table: tableReducer,
-  column: columnReducer,
+const rootReducer = combineReducers({
   job: jobReducer,
   dashboard: dashboardReducer,
   source: sourceReducer,

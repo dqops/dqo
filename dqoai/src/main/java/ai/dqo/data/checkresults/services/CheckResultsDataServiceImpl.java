@@ -311,19 +311,33 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                                                                               Instant incidentUntil,
                                                                               int minSeverity,
                                                                               CheckResultListFilterParameters filterParameters) {
+        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS);
-        LocalDate startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
+        LocalDate startMonth;
+        if (filterParameters.getDays() != null) {
+            startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
+        }
+        else {
+            startMonth = Instant.now().atZone(defaultTimeZoneId).toLocalDate().minus(filterParameters.getDays(), ChronoUnit.DAYS);
+        }
+
         LocalDate endMonth = incidentUntil.plus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
         if (!checkResultsSnapshot.ensureMonthsAreLoaded(startMonth, endMonth)) {
             return new CheckResultDetailedSingleModel[0];
         }
-        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
+
         Instant startTimestamp = firstSeen;
         Instant endTimestamp = incidentUntil;
         if (filterParameters.getDate() != null) {
             startTimestamp = filterParameters.getDate().atTime(0, 0).atZone(defaultTimeZoneId).toInstant();
             endTimestamp = startTimestamp.plus(1L, ChronoUnit.DAYS).minus(1L, ChronoUnit.MILLIS);
+        } else {
+            if (filterParameters.getDays() != null) {
+                startTimestamp = Instant.now().atZone(defaultTimeZoneId).toLocalDate()
+                        .minus(filterParameters.getDays(), ChronoUnit.DAYS).atTime(0, 0).atZone(defaultTimeZoneId)
+                        .toInstant();
+            }
         }
 
         List<CheckResultDetailedSingleModel> resultsList = new ArrayList<>();
@@ -414,15 +428,22 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                                                                            Instant incidentUntil,
                                                                            int minSeverity,
                                                                             IncidentHistogramFilterParameters filterParameters) {
+        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
+
         CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
                 physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_INCIDENT_RELATED_RESULTS);
-        LocalDate startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
+        LocalDate startMonth;
+        if (filterParameters.getDays() != null) {
+            startMonth = firstSeen.minus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
+        }
+        else {
+            startMonth = Instant.now().atZone(defaultTimeZoneId).toLocalDate().minus(filterParameters.getDays(), ChronoUnit.DAYS);
+        }
         LocalDate endMonth = incidentUntil.plus(12L, ChronoUnit.HOURS).atZone(ZoneOffset.UTC).toLocalDate();
         if (!checkResultsSnapshot.ensureMonthsAreLoaded(startMonth, endMonth)) {
             return new IncidentIssueHistogramModel();
         }
 
-        ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
         IncidentIssueHistogramModel histogramModel = new IncidentIssueHistogramModel();
 
         Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions = checkResultsSnapshot.getLoadedMonthlyPartitions();
@@ -436,8 +457,15 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             Selection minSeveritySelection = severityColumn.isGreaterThanOrEqualTo(minSeverity);
 
             InstantColumn executedAtColumn = partitionData.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
+            Instant startTimestamp = firstSeen;
+            if (filterParameters.getDays() != null) {
+                startTimestamp = Instant.now().atZone(defaultTimeZoneId).toLocalDate()
+                        .minus(filterParameters.getDays(), ChronoUnit.DAYS).atTime(0, 0).atZone(defaultTimeZoneId)
+                        .toInstant();
+            }
+
             Selection issuesInTimeRange = executedAtColumn.isBetweenIncluding(
-                    PackedInstant.pack(firstSeen), PackedInstant.pack(incidentUntil));
+                    PackedInstant.pack(startTimestamp), PackedInstant.pack(incidentUntil));
             Selection incidentHashSelection = partitionData.longColumn(CheckResultsColumnNames.INCIDENT_HASH_COLUMN_NAME).isIn(incidentHash);
 
             Selection selectionOfMatchingIssues = minSeveritySelection.and(issuesInTimeRange).and(incidentHashSelection);

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Popover,
   PopoverHandler,
@@ -15,13 +15,15 @@ import { useError, IError } from '../../contexts/errrorContext';
 import JobItem from './JobItem';
 import ErrorItem from './ErrorItem';
 import moment from 'moment';
+import { JobApiClient } from '../../services/apiClient';
+import Switch from '../Switch';
 
 const NotificationMenu = () => {
-  const { jobs, isOpen } = useSelector((state: IRootState) => state.job);
+  const { jobs, isOpen } = useSelector((state: IRootState) => state.job || {});
 
   const dispatch = useActionDispatch();
   const { errors } = useError();
-
+  const [cronBoolean, setCronBoolean] = useState<boolean>();
   const toggleOpen = () => {
     dispatch(toggleMenu(!isOpen));
   };
@@ -32,6 +34,10 @@ const NotificationMenu = () => {
     }
     return notification.item.date;
   };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const data = useMemo(() => {
     const jobsData = jobs?.jobs
@@ -62,6 +68,29 @@ const NotificationMenu = () => {
     setSizeOfNot(data.length);
   };
 
+  const getData = async () => {
+    const res = await JobApiClient.isCronSchedulerRunning();
+    setCronBoolean(res.data);
+  };
+
+  const startCroner = async () => {
+    await JobApiClient.startCronScheduler();
+    setCronBoolean(true);
+  };
+  const stopCroner = async () => {
+    await JobApiClient.stopCronScheduler();
+    setCronBoolean(false);
+  };
+
+  const changeStatus = () => {
+    if (cronBoolean === true) {
+      stopCroner();
+    }
+    if (cronBoolean === false) {
+      startCroner();
+    }
+  };
+
   return (
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
       <PopoverHandler>
@@ -85,8 +114,22 @@ const NotificationMenu = () => {
         </IconButton>
       </PopoverHandler>
       <PopoverContent className="z-50 min-w-120 max-w-120 px-0 ">
-        <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex items-center justify-between px-4">
+        <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex flex-col gap-y-2 px-4">
           <div>Notifications ({data.length})</div>
+          <div className="flex items-center gap-x-3 text-sm">
+            <div className="whitespace-no-wrap">Jobs scheduler </div>
+            <div>
+              <Switch
+                checked={cronBoolean ? cronBoolean : false}
+                onChange={() => changeStatus()}
+              />
+            </div>
+            {cronBoolean === false && (
+              <div className="font-light text-xs text-red-500 text-center">
+                (Warning: scheduled jobs will not be executed)
+              </div>
+            )}
+          </div>
         </div>
         <div className="overflow-auto max-h-100 py-4 px-4">
           {data.map((notification: any, index) =>

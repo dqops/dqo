@@ -59,8 +59,8 @@ public class ColumnStringsDailyRecurringChecksSpec extends AbstractCheckCategory
             put("daily_string_parsable_to_integer_percent", o -> o.dailyStringParsableToIntegerPercent);
             put("daily_string_parsable_to_float_percent", o -> o.dailyStringParsableToFloatPercent);
 
-            put("daily_string_in_set_count", o -> o.dailyStringInSetCount);
-            put("daily_string_in_set_percent", o -> o.dailyStringInSetPercent);
+            put("daily_expected_strings_in_use_count", o -> o.dailyExpectedStringsInUseCount);
+            put("daily_string_value_in_set_percent", o -> o.dailyStringValueInSetPercent);
 
             put("daily_string_valid_dates_percent", o -> o.dailyStringValidDatesPercent);
             put("daily_string_valid_country_code_percent", o -> o.dailyStringValidCountryCodePercent);
@@ -77,118 +77,118 @@ public class ColumnStringsDailyRecurringChecksSpec extends AbstractCheckCategory
             put("daily_string_match_date_regex_percent", o -> o.dailyStringMatchDateRegexPercent);
             put("daily_string_match_name_regex_percent", o -> o.dailyStringMatchNameRegexPercent);
 
-            put("daily_string_most_popular_values", o -> o.dailyStringMostPopularValues);
+            put("daily_expected_strings_in_top_values_count", o -> o.dailyExpectedStringsInTopValuesCount);
 
             put("daily_string_datatype_detected", o -> o.dailyStringDatatypeDetected);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringMaxLengthCheckSpec dailyStringMaxLength;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not fall below the minimum accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the length of string in a column does not fall below the minimum accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringMinLengthCheckSpec dailyStringMinLength;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringMeanLengthCheckSpec dailyStringMeanLength;
 
-    @JsonPropertyDescription("The check counts the number of strings in the column that is below the length defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the number of strings in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringLengthBelowMinLengthCountCheckSpec dailyStringLengthBelowMinLengthCount;
 
-    @JsonPropertyDescription("The check counts the percentage of strings in the column that is below the length defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the percentage of strings in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringLengthBelowMinLengthPercentCheckSpec dailyStringLengthBelowMinLengthPercent;
 
-    @JsonPropertyDescription("The check counts the number of strings in the column that is above the length defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the number of strings in the column that is above the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringLengthAboveMaxLengthCountCheckSpec dailyStringLengthAboveMaxLengthCount;
 
-    @JsonPropertyDescription("The check counts the percentage of strings in the column that is above the length defined by the user as a parameter. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the percentage of strings in the column that is above the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec dailyStringLengthAboveMaxLengthPercent;
 
-    @JsonPropertyDescription("The check counts the percentage of those strings with length in the range provided by the user in the column. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the percentage of those strings with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringLengthInRangePercentCheckSpec dailyStringLengthInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringEmptyCountCheckSpec dailyStringEmptyCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringEmptyPercentCheckSpec dailyStringEmptyPercent;
 
-    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringWhitespaceCountCheckSpec dailyStringWhitespaceCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringWhitespacePercentCheckSpec dailyStringWhitespacePercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringSurroundedByWhitespaceCountCheckSpec dailyStringSurroundedByWhitespaceCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringSurroundedByWhitespacePercentCheckSpec dailyStringSurroundedByWhitespacePercent;
 
-    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringNullPlaceholderCountCheckSpec dailyStringNullPlaceholderCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringNullPlaceholderPercentCheckSpec dailyStringNullPlaceholderPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringBooleanPlaceholderPercentCheckSpec dailyStringBooleanPlaceholderPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringParsableToIntegerPercentCheckSpec dailyStringParsableToIntegerPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringParsableToFloatPercentCheckSpec dailyStringParsableToFloatPercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings from set in a column does not fall below the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringInSetCountCheckSpec dailyStringInSetCount;
+    @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnExpectedStringsInUseCountCheckSpec dailyExpectedStringsInUseCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings from a set in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringInSetPercentCheckSpec dailyStringInSetPercent;
+    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnStringValueInSetPercentCheckSpec dailyStringValueInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringValidDatesPercentCheckSpec dailyStringValidDatesPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringValidCountryCodePercentCheckSpec dailyStringValidCountryCodePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringValidCurrencyCodePercentCheckSpec dailyStringValidCurrencyCodePercent;
 
-    @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of invalid emails in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringInvalidEmailCountCheckSpec dailyStringInvalidEmailCount;
 
-    @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of invalid UUID in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringInvalidUuidCountCheckSpec dailyStringInvalidUuidCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid UUID in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid UUID in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringValidUuidPercentCheckSpec dailyStringValidUuidPercent;
 
-    @JsonPropertyDescription("Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringInvalidIp4AddressCountCheckSpec dailyStringInvalidIp4AddressCount;
 
-    @JsonPropertyDescription("Verifies that the number of invalid IP6 address in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of invalid IP6 address in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringInvalidIp6AddressCountCheckSpec dailyStringInvalidIp6AddressCount;
 
-    @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of strings not matching the custom regex in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringNotMatchRegexCountCheckSpec dailyStringNotMatchRegexCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the custom regex in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringMatchRegexPercentCheckSpec dailyStringMatchRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of strings not matching the date format regex in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringNotMatchDateRegexCountCheckSpec dailyStringNotMatchDateRegexCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings matching the date format regex in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the date format regex in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringMatchDateRegexPercentCheckSpec dailyStringMatchDateRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings matching the name format regex in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of strings matching the name format regex in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringMatchNameRegexPercentCheckSpec dailyStringMatchNameRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not fall below the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnStringMostPopularValuesCheckSpec dailyStringMostPopularValues;
+    @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnExpectedStringsInTopValuesCountCheckSpec dailyExpectedStringsInTopValuesCount;
 
-    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnStringDatatypeDetectedCheckSpec dailyStringDatatypeDetected;
 
     /**
@@ -537,36 +537,36 @@ public class ColumnStringsDailyRecurringChecksSpec extends AbstractCheckCategory
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnStringInSetCountCheckSpec getDailyStringInSetCount() {
-        return dailyStringInSetCount;
+    public ColumnExpectedStringsInUseCountCheckSpec getDailyExpectedStringsInUseCount() {
+        return dailyExpectedStringsInUseCount;
     }
 
     /**
      * Sets a new definition of a minimum strings in set count check.
-     * @param dailyStringInSetCount Minimum strings in set count check.
+     * @param dailyExpectedStringsInUseCount Minimum strings in set count check.
      */
-    public void setDailyStringInSetCount(ColumnStringInSetCountCheckSpec dailyStringInSetCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringInSetCount, dailyStringInSetCount));
-        this.dailyStringInSetCount = dailyStringInSetCount;
-        propagateHierarchyIdToField(dailyStringInSetCount, "daily_string_in_set_count");
+    public void setDailyExpectedStringsInUseCount(ColumnExpectedStringsInUseCountCheckSpec dailyExpectedStringsInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyExpectedStringsInUseCount, dailyExpectedStringsInUseCount));
+        this.dailyExpectedStringsInUseCount = dailyExpectedStringsInUseCount;
+        propagateHierarchyIdToField(dailyExpectedStringsInUseCount, "daily_expected_strings_in_use_count");
     }
 
     /**
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnStringInSetPercentCheckSpec getDailyStringInSetPercent() {
-        return dailyStringInSetPercent;
+    public ColumnStringValueInSetPercentCheckSpec getDailyStringValueInSetPercent() {
+        return dailyStringValueInSetPercent;
     }
 
     /**
      * Sets a new definition of a minimum strings in set percent check.
-     * @param dailyStringInSetPercent Minimum strings in set percent check.
+     * @param dailyStringValueInSetPercent Minimum strings in set percent check.
      */
-    public void setDailyStringInSetPercent(ColumnStringInSetPercentCheckSpec dailyStringInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringInSetPercent, dailyStringInSetPercent));
-        this.dailyStringInSetPercent = dailyStringInSetPercent;
-        propagateHierarchyIdToField(dailyStringInSetPercent, "daily_string_in_set_percent");
+    public void setDailyStringValueInSetPercent(ColumnStringValueInSetPercentCheckSpec dailyStringValueInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyStringValueInSetPercent, dailyStringValueInSetPercent));
+        this.dailyStringValueInSetPercent = dailyStringValueInSetPercent;
+        propagateHierarchyIdToField(dailyStringValueInSetPercent, "daily_string_value_in_set_percent");
     }
 
     /**
@@ -807,18 +807,18 @@ public class ColumnStringsDailyRecurringChecksSpec extends AbstractCheckCategory
      * Returns a count of expected values in most popular values set count check.
      * @return Most popular values count check.
      */
-    public ColumnStringMostPopularValuesCheckSpec getDailyStringMostPopularValues() {
-        return dailyStringMostPopularValues;
+    public ColumnExpectedStringsInTopValuesCountCheckSpec getDailyExpectedStringsInTopValuesCount() {
+        return dailyExpectedStringsInTopValuesCount;
     }
 
     /**
      * Sets a new definition of a most popular values count check.
-     * @param dailyStringMostPopularValues Most popular values count check.
+     * @param dailyExpectedStringsInTopValuesCount Most popular values count check.
      */
-    public void setDailyStringMostPopularValues(ColumnStringMostPopularValuesCheckSpec dailyStringMostPopularValues) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringMostPopularValues, dailyStringMostPopularValues));
-        this.dailyStringMostPopularValues = dailyStringMostPopularValues;
-        propagateHierarchyIdToField(dailyStringMostPopularValues, "daily_string_most_popular_values");
+    public void setDailyExpectedStringsInTopValuesCount(ColumnExpectedStringsInTopValuesCountCheckSpec dailyExpectedStringsInTopValuesCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyExpectedStringsInTopValuesCount, dailyExpectedStringsInTopValuesCount));
+        this.dailyExpectedStringsInTopValuesCount = dailyExpectedStringsInTopValuesCount;
+        propagateHierarchyIdToField(dailyExpectedStringsInTopValuesCount, "daily_expected_strings_in_top_values_count");
     }
 
     /**

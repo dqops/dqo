@@ -1,6 +1,6 @@
-# Working with Command Line Interface
+# Working with Command-Line Interface
 
-The DQO Command Line Interface enables you to interact with DQO using commands in Linux shells or Windows command prompt.
+The DQO Command-Line Interface enables you to interact with DQO using commands in Linux shells or Windows command prompt.
 DQO CLI is an alternative to DQO graphical user interface.
 
 ## Command structure

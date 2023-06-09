@@ -12,7 +12,7 @@ Verifies availability of the table in a database using a simple row count.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|table_availability|profiling| |[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
+|table_availability|profiling| |[table_availability](../../../../reference/sensors/Table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -569,11 +569,11 @@ ___
 ## **daily table availability**  
   
 **Check description**  
-Verifies availability on table in database using simple row count. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies availability on table in database using simple row count. Stores the most recent table availability status for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_table_availability|recurring|daily|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
+|daily_table_availability|recurring|daily|[table_availability](../../../../reference/sensors/Table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1133,11 +1133,11 @@ ___
 ## **monthly table availability**  
   
 **Check description**  
-Verifies availability on table in database using simple row count. Stores the most recent row count for each month when the data quality check was evaluated.  
+Verifies availability on table in database using simple row count. Stores the most recent table availability status for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_table_availability|recurring|monthly|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
+|monthly_table_availability|recurring|monthly|[table_availability](../../../../reference/sensors/Table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)

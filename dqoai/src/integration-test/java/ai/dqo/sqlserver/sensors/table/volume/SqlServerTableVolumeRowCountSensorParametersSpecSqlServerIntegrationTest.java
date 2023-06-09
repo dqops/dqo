@@ -17,7 +17,7 @@ package ai.dqo.sqlserver.sensors.table.volume;
 
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
-import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
+import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -52,7 +52,7 @@ public class SqlServerTableVolumeRowCountSensorParametersSpecSqlServerIntegratio
         this.sut = new TableVolumeRowCountSensorParametersSpec();
         this.checkSpec = new TableRowCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        TableProfilingVolumeChecksSpec category = new TableProfilingVolumeChecksSpec();
+        TableVolumeProfilingChecksSpec category = new TableVolumeProfilingChecksSpec();
         this.sampleTableMetadata.getTableSpec().getProfilingChecks().setVolume(category);
         category.setRowCount(this.checkSpec);
     }

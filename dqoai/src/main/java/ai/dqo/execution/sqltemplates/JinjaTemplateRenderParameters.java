@@ -116,7 +116,7 @@ public class JinjaTemplateRenderParameters {
 			setColumnName(sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().getColumnName() : null);
 			setParameters(sensorRunParameters.getSensorParameters());
             setEffectiveTimeSeries(sensorRunParameters.getTimeSeries());
-            setEffectiveDataStreams(sensorRunParameters.getDataStreams());
+            setEffectiveDataStreams(sensorRunParameters.getDataStreams() != null ? sensorRunParameters.getDataStreams().truncateToColumns() : null);
 			setSensorDefinition(sensorDefinitions.getSensorDefinitionSpec().trim());
 			setProviderSensorDefinition(sensorDefinitions.getProviderSensorDefinitionSpec().trim());
 			setDialectSettings(sensorRunParameters.getDialectSettings());

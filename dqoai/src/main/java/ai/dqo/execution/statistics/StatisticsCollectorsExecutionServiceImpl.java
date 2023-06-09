@@ -27,14 +27,9 @@ import ai.dqo.data.statistics.normalization.StatisticsResultsNormalizedResult;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshot;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshotFactory;
 import ai.dqo.execution.ExecutionContext;
-import ai.dqo.execution.checks.CheckExecutionSummary;
-import ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJob;
-import ai.dqo.execution.checks.jobs.RunChecksOnTableQueueJobParameters;
-import ai.dqo.execution.sensors.DataQualitySensorRunner;
-import ai.dqo.execution.sensors.SensorExecutionResult;
-import ai.dqo.execution.sensors.SensorExecutionRunParameters;
-import ai.dqo.execution.sensors.SensorExecutionRunParametersFactory;
+import ai.dqo.execution.sensors.*;
 import ai.dqo.execution.sensors.progress.ExecutingSensorEvent;
+import ai.dqo.execution.sensors.progress.PreparingSensorEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutedEvent;
 import ai.dqo.execution.statistics.jobs.CollectStatisticsOnTableQueueJob;
 import ai.dqo.execution.statistics.jobs.CollectStatisticsOnTableQueueJobParameters;
@@ -270,10 +265,12 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
                     continue; // the collector does not support that target
                 }
 
-                progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorRunParameters));
+                progressListener.onPreparingSensor(new PreparingSensorEvent(tableSpec, sensorRunParameters));
+                SensorPrepareResult sensorPrepareResult = this.dataQualitySensorRunner.prepareSensor(executionContext, sensorRunParameters, progressListener);
 
+                progressListener.onExecutingSensor(new ExecutingSensorEvent(tableSpec, sensorPrepareResult));
                 SensorExecutionResult sensorResult = this.dataQualitySensorRunner.executeSensor(executionContext,
-                        sensorRunParameters, progressListener, dummySensorExecution, jobCancellationToken);
+                        sensorPrepareResult, progressListener, dummySensorExecution, jobCancellationToken);
                 progressListener.onSensorExecuted(new SensorExecutedEvent(tableSpec, sensorRunParameters, sensorResult));
 
                 if (!sensorResult.isSuccess()) {

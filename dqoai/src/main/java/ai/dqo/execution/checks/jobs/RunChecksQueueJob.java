@@ -37,7 +37,7 @@ import org.springframework.stereotype.Component;
 public class RunChecksQueueJob extends ParentDqoQueueJob<CheckExecutionSummary> {
     private ExecutionContextFactory executionContextFactory;
     private CheckExecutionService checkExecutionService;
-    private RunChecksQueueJobParameters parameters;
+    private RunChecksParameters parameters;
 
     @Autowired
     public RunChecksQueueJob(
@@ -51,7 +51,7 @@ public class RunChecksQueueJob extends ParentDqoQueueJob<CheckExecutionSummary> 
      * Returns the job parameters.
      * @return Job parameters.
      */
-    public RunChecksQueueJobParameters getParameters() {
+    public RunChecksParameters getParameters() {
         return parameters;
     }
 
@@ -59,7 +59,7 @@ public class RunChecksQueueJob extends ParentDqoQueueJob<CheckExecutionSummary> 
      * Sets the job parameters.
      * @param parameters Job parameters.
      */
-    public void setParameters(RunChecksQueueJobParameters parameters) {
+    public void setParameters(RunChecksParameters parameters) {
         this.parameters = parameters;
     }
 
@@ -82,8 +82,8 @@ public class RunChecksQueueJob extends ParentDqoQueueJob<CheckExecutionSummary> 
                 jobExecutionContext.getJobId(),
                 jobExecutionContext.getCancellationToken());
 
-        RunChecksQueueJobResult jobResultSummary = RunChecksQueueJobResult.fromCheckExecutionSummary(checkExecutionSummary);
-        RunChecksQueueJobParameters clonedParameters = this.getParameters().clone();
+        RunChecksJobResult jobResultSummary = RunChecksJobResult.fromCheckExecutionSummary(checkExecutionSummary);
+        RunChecksParameters clonedParameters = this.getParameters().clone();
         clonedParameters.setRunChecksResult(jobResultSummary);
         this.setParameters(clonedParameters);
 

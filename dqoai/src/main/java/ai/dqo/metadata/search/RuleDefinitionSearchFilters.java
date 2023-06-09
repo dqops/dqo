@@ -15,12 +15,18 @@
  */
 package ai.dqo.metadata.search;
 
+import ai.dqo.metadata.search.pattern.SearchPattern;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Hierarchy node search filters.
  */
 public class RuleDefinitionSearchFilters {
     private String ruleName;
     private Boolean enabled = true;
+
+    @JsonIgnore
+    private SearchPattern ruleNameSearchPattern;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -62,5 +68,18 @@ public class RuleDefinitionSearchFilters {
      */
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
+    }
+
+    /**
+     * Returns the {@link SearchPattern} related to <code>ruleName</code>.
+     * Lazy getter, parses <code>ruleName</code> as a search pattern and returns parsed object.
+     * @return {@link SearchPattern} related to <code>ruleName</code>.
+     */
+    public SearchPattern getRuleNameSearchPattern() {
+        if (ruleNameSearchPattern == null && ruleName != null) {
+            ruleNameSearchPattern = SearchPattern.create(false, ruleName);
+        }
+
+        return ruleNameSearchPattern;
     }
 }

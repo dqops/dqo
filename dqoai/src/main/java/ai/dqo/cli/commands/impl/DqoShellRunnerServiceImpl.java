@@ -81,6 +81,7 @@ public class DqoShellRunnerServiceImpl implements DqoShellRunnerService {
                 // Ignore
                 continue;
             } catch (EndOfFileException e) {
+                log.info("EndOfFile reached, closing...");
                 return 0;
             } catch (Exception e) {
                 log.error("Command failed: " + line + ", error message: " + e.getMessage(), e);

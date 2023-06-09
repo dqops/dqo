@@ -12,7 +12,7 @@ Verifies that the percentage of values from range in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|values_in_range_numeric_percent|profiling| |[values_in_range_numeric_percent](../../../../reference/sensors/column/numeric-column-sensors/#values-in-range-numeric-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|values_in_range_numeric_percent|profiling| |[values_in_range_numeric_percent](../../../../reference/sensors/Column/numeric-column-sensors/#values-in-range-numeric-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -42,7 +42,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=values_in_r
         numeric:
           values_in_range_numeric_percent:
             warning:
-              min_percent: 1.0
+              min_percent: 0.0
             error:
               min_percent: 2.0
             fatal:
@@ -66,7 +66,7 @@ spec:
         numeric:
           values_in_range_numeric_percent:
             warning:
-              min_percent: 1.0
+              min_percent: 0.0
             error:
               min_percent: 2.0
             fatal:
@@ -321,7 +321,7 @@ spec:
             numeric:
               values_in_range_numeric_percent:
                 warning:
-                  min_percent: 1.0
+                  min_percent: 0.0
                 error:
                   min_percent: 2.0
                 fatal:
@@ -521,9 +521,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             SYSDATETIMEOFFSET() AS time_period,
             CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -577,11 +576,11 @@ ___
 ## **daily values in range numeric percent**  
   
 **Check description**  
-Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_values_in_range_numeric_percent|recurring|daily|[values_in_range_numeric_percent](../../../../reference/sensors/column/numeric-column-sensors/#values-in-range-numeric-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_values_in_range_numeric_percent|recurring|daily|[values_in_range_numeric_percent](../../../../reference/sensors/Column/numeric-column-sensors/#values-in-range-numeric-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -612,7 +611,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_value
           numeric:
             daily_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -637,7 +636,7 @@ spec:
           numeric:
             daily_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -893,7 +892,7 @@ spec:
               numeric:
                 daily_values_in_range_numeric_percent:
                   warning:
-                    min_percent: 1.0
+                    min_percent: 0.0
                   error:
                     min_percent: 2.0
                   fatal:
@@ -1093,9 +1092,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1153,7 +1151,7 @@ Verifies that the percentage of values from range in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_values_in_range_numeric_percent|recurring|monthly|[values_in_range_numeric_percent](../../../../reference/sensors/column/numeric-column-sensors/#values-in-range-numeric-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_values_in_range_numeric_percent|recurring|monthly|[values_in_range_numeric_percent](../../../../reference/sensors/Column/numeric-column-sensors/#values-in-range-numeric-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1184,7 +1182,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_val
           numeric:
             monthly_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -1209,7 +1207,7 @@ spec:
           numeric:
             monthly_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -1465,7 +1463,7 @@ spec:
               numeric:
                 monthly_values_in_range_numeric_percent:
                   warning:
-                    min_percent: 1.0
+                    min_percent: 0.0
                   error:
                     min_percent: 2.0
                   fatal:
@@ -1665,9 +1663,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-                , 
-            
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state]
         ORDER BY level_1, level_2
                 , 
             
@@ -1725,7 +1722,7 @@ Verifies that the percentage of values from range in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_values_in_range_numeric_percent|partitioned|daily|[values_in_range_numeric_percent](../../../../reference/sensors/column/numeric-column-sensors/#values-in-range-numeric-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_values_in_range_numeric_percent|partitioned|daily|[values_in_range_numeric_percent](../../../../reference/sensors/Column/numeric-column-sensors/#values-in-range-numeric-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1756,7 +1753,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_parti
           numeric:
             daily_partition_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -1781,7 +1778,7 @@ spec:
           numeric:
             daily_partition_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -2041,7 +2038,7 @@ spec:
               numeric:
                 daily_partition_values_in_range_numeric_percent:
                   warning:
-                    min_percent: 1.0
+                    min_percent: 0.0
                   error:
                     min_percent: 2.0
                   fatal:
@@ -2241,8 +2238,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             CAST([] AS date) AS time_period,
             CAST((CAST([] AS date)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY CAST([] AS date), CAST([] AS date)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], CAST([] AS date), CAST([] AS date)
         ORDER BY level_1, level_2CAST([] AS date)
         
             
@@ -2298,7 +2295,7 @@ Verifies that the percentage of values from range in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_values_in_range_numeric_percent|partitioned|monthly|[values_in_range_numeric_percent](../../../../reference/sensors/column/numeric-column-sensors/#values-in-range-numeric-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_values_in_range_numeric_percent|partitioned|monthly|[values_in_range_numeric_percent](../../../../reference/sensors/Column/numeric-column-sensors/#values-in-range-numeric-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -2329,7 +2326,7 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_par
           numeric:
             monthly_partition_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -2354,7 +2351,7 @@ spec:
           numeric:
             monthly_partition_values_in_range_numeric_percent:
               warning:
-                min_percent: 1.0
+                min_percent: 0.0
               error:
                 min_percent: 2.0
               fatal:
@@ -2614,7 +2611,7 @@ spec:
               numeric:
                 monthly_partition_values_in_range_numeric_percent:
                   warning:
-                    min_percent: 1.0
+                    min_percent: 0.0
                   error:
                     min_percent: 2.0
                   fatal:
@@ -2814,8 +2811,8 @@ spec:
             analyzed_table.[state] AS stream_level_2,
             DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1) AS time_period,
             CAST((DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)) AS DATETIME) AS time_period_utc
-        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table, 
-        GROUP BY DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
+        FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, []), 0)
         ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([] AS date)), MONTH(CAST([] AS date)), 1)
         
             

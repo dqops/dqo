@@ -39,6 +39,12 @@ public class CheckResultListFilterParameters {
     private String filter;
 
     /**
+     * Optional filter for the number of recent days (1, 7, 30, etc.) that are scanned for issues related to an incident.
+     */
+    @JsonPropertyDescription("Optional filter for the number of recent days (1, 7, 30, etc.) that are scanned for issues related to an incident.")
+    private Integer days;
+
+    /**
      * Optional filter for a single date to return data quality issues that were detected on that date. The date uses a local time zone of the DQO server.
      */
     @JsonPropertyDescription("Optional filter for a single date to return data quality issues that were detected on that date. The date uses a local time zone of the DQO server.")

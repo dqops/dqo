@@ -51,6 +51,23 @@ public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionPro
     }
 
     /**
+     * Called before a sensor is preparing for execution for a single check. The check (and sensor) is identified in the <code>sensorRunParameters</code>.
+     *
+     * @param event Log event.
+     */
+    @Override
+    public void onPreparingSensor(PreparingSensorEvent event) {
+        renderEventHeader();
+        String tableName = event.getTableSpec().getPhysicalTableName().toString();
+        SensorExecutionRunParameters sensorRunParameters = event.getSensorRunParameters();
+        String checkName = sensorRunParameters.getCheck().getCheckName();
+        String sensorDefinitionName = sensorRunParameters.getSensorParameters().getSensorDefinitionName();
+        this.terminalWriter.writeLine(String.format("Preparing a sensor for a check %s on the table %s using a sensor definition %s",
+                checkName, tableName, sensorDefinitionName));
+        renderEventFooter();
+    }
+
+    /**
      * Called before a sensor is executed for a single check. The check (and sensor) is identified in the <code>sensorRunParameters</code>.
      *
      * @param event Log event.
@@ -59,7 +76,7 @@ public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionPro
     public void onExecutingSensor(ExecutingSensorEvent event) {
         renderEventHeader();
         String tableName = event.getTableSpec().getPhysicalTableName().toString();
-        SensorExecutionRunParameters sensorRunParameters = event.getSensorRunParameters();
+        SensorExecutionRunParameters sensorRunParameters = event.getSensorPrepareResult().getSensorRunParameters();
         String checkName = sensorRunParameters.getCheck().getCheckName();
         String sensorDefinitionName = sensorRunParameters.getSensorParameters().getSensorDefinitionName();
         this.terminalWriter.writeLine(String.format("Executing a sensor for a check %s on the table %s using a sensor definition %s",

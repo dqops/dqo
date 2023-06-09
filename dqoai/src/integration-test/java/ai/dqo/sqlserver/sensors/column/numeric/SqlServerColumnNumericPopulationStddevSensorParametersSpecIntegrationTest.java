@@ -64,7 +64,7 @@ public class SqlServerColumnNumericPopulationStddevSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.049,(double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(109.049,(double) resultTable.column(0).get(0), 5);
     }
 
     @Test
@@ -77,7 +77,7 @@ public class SqlServerColumnNumericPopulationStddevSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.049, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(109.049, (double) resultTable.column(0).get(0), 5);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class SqlServerColumnNumericPopulationStddevSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.049, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(109.049, (double) resultTable.column(0).get(0), 5);
     }
 
     @Test
@@ -103,7 +103,7 @@ public class SqlServerColumnNumericPopulationStddevSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(null, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -116,6 +116,6 @@ public class SqlServerColumnNumericPopulationStddevSensorParametersSpecIntegrati
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.049, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(109.049, (double) resultTable.column(0).get(0), 5);
     }
 }

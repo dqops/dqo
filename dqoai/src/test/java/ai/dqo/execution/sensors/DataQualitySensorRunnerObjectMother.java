@@ -46,7 +46,13 @@ public class DataQualitySensorRunnerObjectMother {
     public static SensorExecutionResult executeSensor(ExecutionContext executionContext, SensorExecutionRunParameters sensorRunParameters) {
         DataQualitySensorRunnerImpl sensorRunner = getDefault();
         CheckExecutionProgressListenerStub progressListener = new CheckExecutionProgressListenerStub();
-        SensorExecutionResult sensorExecutionResult = sensorRunner.executeSensor(executionContext, sensorRunParameters, progressListener, false,
+        SensorPrepareResult sensorPrepareResult = sensorRunner.prepareSensor(executionContext, sensorRunParameters, progressListener);
+        if (!sensorPrepareResult.isSuccess()) {
+            throw new ConnectionQueryException("Failed to prepare a sensor (render the SQL): " + sensorPrepareResult.getPrepareException().getMessage(),
+                    sensorPrepareResult.getPrepareException());
+        }
+
+        SensorExecutionResult sensorExecutionResult = sensorRunner.executeSensor(executionContext, sensorPrepareResult, progressListener, false,
                 JobCancellationToken.createDummyJobCancellationToken());
         if (!sensorExecutionResult.isSuccess()) {
             throw new ConnectionQueryException("Failed to execute a sensor: " + sensorExecutionResult.getException().getMessage(), sensorExecutionResult.getException());

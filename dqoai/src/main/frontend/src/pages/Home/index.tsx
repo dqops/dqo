@@ -21,7 +21,7 @@ const HomePage = () => {
           <div className="w-full grid grid-cols-3 gap-20">
             <div className="col-span-2">
               <div className="mb-6">
-                <p className="font-semibold"><span className="mr-4">1.</span>Add a connection to your database</p>
+                <p className="font-semibold"><span className="mr-2">1.</span>Add a connection to your database</p>
                 <ul className="pl-8 list-disc list-outside">
                   <li className="mb-2">
                     <div className="inline-flex items-end gap-2">
@@ -43,7 +43,7 @@ const HomePage = () => {
                 </ul>
               </div>
               <div className="mb-6">
-                <p className="font-semibold mb-4"><span className="mr-4">2.</span>Select and run Profiling data quality checks</p>
+                <p className="font-semibold mb-4"><span className="mr-2">2.</span>Select and run Profiling data quality checks</p>
                 <ul className="pl-8 list-disc list-outside">
                   <li className="mb-2">
                     <div className="inline-flex items-end">
@@ -57,7 +57,7 @@ const HomePage = () => {
                   </li>
                   <li className="mb-2">
                     <div className="inline-flex items-end">
-                      In the list of checks on the right,  enable the selected data quality checks by clicking the switch <img src="/images/home/switch-off.png" alt="" className="inline" /> .
+                      In the list of checks on the right, enable the selected data quality checks by clicking the switch <img src="/images/home/switch-off.png" alt="" className="inline" /> .
                     </div>
                   </li>
                   <li className="mb-2">
@@ -78,7 +78,7 @@ const HomePage = () => {
                 </ul>
               </div>
               <div className="mb-6">
-                <p className="font-semibold mb-4"><span className="mr-4">3.</span>Evaluate the results</p>
+                <p className="font-semibold mb-4"><span className="mr-2">3.</span>Evaluate the results</p>
                 <ul className="pl-8 list-disc list-outside">
                   <li className="mb-2 leading-[2]">
                     The square next to the check name will indicate the results of the check run: Valid, Warning, Error or Fatal <img src="/images/home/status-bar.png" alt="" className="inline" />.
@@ -96,13 +96,13 @@ const HomePage = () => {
             <div className="flex flex-col gap-4">
               <p>Check the docs for more tutorials</p>
               <a href="https://dqops.com/docs/">
-                <img src="/images/home/book.svg" className="w-20 mb-5" alt="" />
+                <img src="/images/home/book.svg" className="w-20 mb-2" alt="" />
               </a>
               <p>
                 Download our best practices for effective <br />
                 data quality improvement
               </p>
-              <a href="https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/" className="mb-4">
+              <a href="https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/" className="mb-2">
                 <img src="/images/home/download_practice.png" alt="" />
               </a>
 

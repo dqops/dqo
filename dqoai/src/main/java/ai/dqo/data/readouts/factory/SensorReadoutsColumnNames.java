@@ -22,32 +22,33 @@ import ai.dqo.data.normalization.CommonColumnNames;
  */
 public class SensorReadoutsColumnNames {
     /**
-     * Column name for a check result id (primary key), it is a uuid of the check hash, time period and the data stream id. This value identifies a single row.
+     * The check result id (primary key), it is a uuid of the check hash, time period and the data stream id. This value identifies a single row.
      */
     public static final String ID_COLUMN_NAME = CommonColumnNames.ID_COLUMN_NAME;
 
     /**
-     * Column name that stores the actual value: actual_value.
+     * The actual sensor value that was captured.
      */
     public static final String ACTUAL_VALUE_COLUMN_NAME = "actual_value";
 
     /**
-     * Column name that stores the expected value (expected_value). It is an optional column used when the sensor will also retrieve a comparison value (for accuracy checks).
+     * The expected value (expected_value). It is an optional column used when the sensor will also retrieve a comparison value (for accuracy checks).
      */
     public static final String EXPECTED_VALUE_COLUMN_NAME = "expected_value";
 
     /**
-     * Column name that stores the time period of the sensor readout (timestamp): timestamp_period.
+     * The time period of the sensor readout (timestamp), using a local timezone from the data source.
      */
     public static final String TIME_PERIOD_COLUMN_NAME = "time_period";
 
     /**
-     * Column name that stores the time period of the sensor readout (timestamp) as a UTC timestamp: timestamp_period_utc.
+     * The time period of the sensor readout (timestamp) as a UTC timestamp.
      */
     public static final String TIME_PERIOD_UTC_COLUMN_NAME = "time_period_utc";
 
     /**
-     * Column name for a time gradient.
+     * The time gradient (daily, monthly) for recurring checks (checkpoints) and partition checks. It is a "milliseconds" for profiling checks.
+     * When the time gradient is daily or monthly, the time_period is truncated at the beginning of the time gradient.
      */
     public static final String TIME_GRADIENT_COLUMN_NAME = "time_gradient";
 
@@ -57,124 +58,149 @@ public class SensorReadoutsColumnNames {
     public static final String DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX = CommonColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX;
 
     /**
-     * Column name for a data stream hash, it is a hash of the data stream level names.
+     * The data stream hash, it is a hash of the data stream level names.
      */
     public static final String DATA_STREAM_HASH_COLUMN_NAME = CommonColumnNames.DATA_STREAM_HASH_COLUMN_NAME;
 
     /**
-     * Column name for a data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ...
+     * The data stream name, it is a concatenated name of the data stream created from [stream_level_1] / [stream_level_2] / ...
      */
     public static final String DATA_STREAM_NAME_COLUMN_NAME = CommonColumnNames.DATA_STREAM_NAME_COLUMN_NAME;
 
     /**
-     * Column name for a connection hash.
+     * The data stream configuration name, it is a name of the named data stream mapping configuration that was used to run the data quality check.
+     */
+    public static final String DATA_STREAM_MAPPING_NAME_COLUMN_NAME = CommonColumnNames.DATA_STREAM_MAPPING_NAME_COLUMN_NAME;
+
+    /**
+     * A hash calculated from the connection name (the data source name).
      */
     public static final String CONNECTION_HASH_COLUMN_NAME = CommonColumnNames.CONNECTION_HASH_COLUMN_NAME;
 
     /**
-     * Column name for a connection name.
+     * The connection name (the data source name).
      */
     public static final String CONNECTION_NAME_COLUMN_NAME = CommonColumnNames.CONNECTION_NAME_COLUMN_NAME;
 
     /**
-     * Column name for a provider name.
+     * The provider name, which is the type of the data source.
      */
     public static final String PROVIDER_COLUMN_NAME = CommonColumnNames.PROVIDER_COLUMN_NAME;
 
     /**
-     * Column name for a table hash.
+     * The table name hash.
      */
     public static final String TABLE_HASH_COLUMN_NAME = CommonColumnNames.TABLE_HASH_COLUMN_NAME;
 
     /**
-     * Column name for a table schema.
+     * The database schema name.
      */
     public static final String SCHEMA_NAME_COLUMN_NAME = CommonColumnNames.SCHEMA_NAME_COLUMN_NAME;
 
     /**
-     * Column name for a table name.
+     * The monitored table name.
      */
     public static final String TABLE_NAME_COLUMN_NAME = CommonColumnNames.TABLE_NAME_COLUMN_NAME;
 
     /**
-     * Column name for a table name pattern.
+     * The table name pattern, in case that a data quality check targets multiple tables.
      */
     public static final String TABLE_NAME_PATTERN_COLUMN_NAME = CommonColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME;
 
     /**
-     * Column name for a table stage.
+     * The stage name of the table. It is a free-form text configured on the table level that could identify the layers of the data warehouse or a data lake, for example: "landing", "staging", "cleansing", etc.
      */
     public static final String TABLE_STAGE_COLUMN_NAME = CommonColumnNames.TABLE_STAGE_COLUMN_NAME;
 
     /**
-     * Column name for a table priority.
+     * The table priority value copied from the table's definition. The table priority could be used for sorting tables by their importance.
      */
     public static final String TABLE_PRIORITY_COLUMN_NAME = CommonColumnNames.TABLE_PRIORITY_COLUMN_NAME;
 
     /**
-     * Column name for a column hash.
+     * The hash of a column.
      */
     public static final String COLUMN_HASH_COLUMN_NAME = CommonColumnNames.COLUMN_HASH_COLUMN_NAME;
 
     /**
-     * Column name for a column name.
+     * The column name for which the results are stored.
      */
     public static final String COLUMN_NAME_COLUMN_NAME = CommonColumnNames.COLUMN_NAME_COLUMN_NAME;
 
     /**
-     * Column name for a column name pattern.
+     * The column name pattern, in case that a data quality check targets multiple columns.
      */
     public static final String COLUMN_NAME_PATTERN_COLUMN_NAME = CommonColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME;
 
     /**
-     * Column name for a check hash.
+     * The hash of a data quality check.
      */
     public static final String CHECK_HASH_COLUMN_NAME = "check_hash";
 
     /**
-     * Column name for a check name.
+     * The data quality check name.
      */
     public static final String CHECK_NAME_COLUMN_NAME = "check_name";
 
     /**
-     * Column name for a check display name.
+     * The user configured display name for a data quality check, used when the user wants to use custom, user-friendly data quality check names.
      */
     public static final String CHECK_DISPLAY_NAME_COLUMN_NAME = "check_display_name";
 
     /**
-     * Column name for a check type (profiling, recurring, partitioned).
+     * The data quality check type (profiling, recurring, partitioned).
      */
     public static final String CHECK_TYPE_COLUMN_NAME = "check_type";
 
     /**
-     * Column name for a check category.
+     * The data quality check category name.
      */
     public static final String CHECK_CATEGORY_COLUMN_NAME = "check_category";
 
     /**
-     * Column name for a data quality dimension.
+     * The data quality dimension name. The popular dimensions are: Timeliness, Completeness, Consistency, Validity, Reasonableness, Uniqueness.
      */
     public static final String QUALITY_DIMENSION_COLUMN_NAME = "quality_dimension";
 
     /**
-     * Column name for a sensor name.
+     * The data quality sensor name.
      */
     public static final String SENSOR_NAME_COLUMN_NAME = CommonColumnNames.SENSOR_NAME_COLUMN_NAME;
 
     /**
-     * Column name for a time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_stream_hash.
+     * The time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_stream_hash.
      */
     public static final String TIME_SERIES_ID_COLUMN_NAME = CommonColumnNames.TIME_SERIES_ID_COLUMN_NAME;
 
     /**
-     * Column name for a sensor duration in milliseconds.
+     * The sensor (query) execution duration in milliseconds.
      */
     public static final String DURATION_MS_COLUMN_NAME = CommonColumnNames.DURATION_MS_COLUMN_NAME;
 
     /**
-     * Column name for a sensor executed at timestamp.
+     * The UTC timestamp, when the data sensor was executed.
      */
     public static final String EXECUTED_AT_COLUMN_NAME = CommonColumnNames.EXECUTED_AT_COLUMN_NAME;
+
+    /**
+     * The timestamp when the row was created at.
+     */
+    public static final String CREATED_AT_COLUMN_NAME = CommonColumnNames.CREATED_AT_COLUMN_NAME;
+
+    /**
+     * The timestamp when the row was updated at.
+     */
+    public static final String UPDATED_AT_COLUMN_NAME = CommonColumnNames.UPDATED_AT_COLUMN_NAME;
+
+    /**
+     * The login of the user that created the row.
+     */
+    public static final String CREATED_BY_COLUMN_NAME = CommonColumnNames.CREATED_BY_COLUMN_NAME;
+
+    /**
+     * The login of the user that updated the row.
+     */
+    public static final String UPDATED_BY_COLUMN_NAME = CommonColumnNames.UPDATED_BY_COLUMN_NAME;
 
     /**
      * List of column names that should be loaded from the parquet files when the recent readouts detailed view is needed.

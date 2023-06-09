@@ -14,8 +14,8 @@
 # See the License for the specific language governing permissions and
 # limit
 
-VERSION = "0.2.0-alpha0"
-PIP_VERSION = "0.2.0.1"
+VERSION = "0.2.0-beta1"
+PIP_VERSION = "0.2.0.2"
 GITHUB_RELEASE = "v" + VERSION + ""
 JAVA_VERSION = "17"
 

@@ -57,9 +57,9 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
         List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = groupSensors(sensorDocumentationModels);
 
         for (SensorGroupedDocumentationModel sensorGroupedDocumentation : sensorGroupedDocumentationModels) {
-            DocumentationMarkdownFile documentationMarkdownFile = sensorsFolder.addNestedFile(sensorGroupedDocumentation.getTarget() +
-                    "/" + sensorGroupedDocumentation.getCategory() + "-" +
-                    sensorGroupedDocumentation.getTarget().replace(' ', '-') + "-sensors" + ".md");
+            DocumentationMarkdownFile documentationMarkdownFile = sensorsFolder.addNestedFile(sensorGroupedDocumentation.getTarget()
+                    + "/" + sensorGroupedDocumentation.getCategory()
+                    + "-" + sensorGroupedDocumentation.getTarget().replace(' ', '-') + "-sensors" + ".md");
             documentationMarkdownFile.setRenderContext(sensorGroupedDocumentation);
 
             String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, sensorGroupedDocumentation);
@@ -174,8 +174,7 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
             Constructor<? extends AbstractSensorParametersSpec> defaultConstructor = sensorParametersClass.getConstructor();
             AbstractSensorParametersSpec abstractSensorParametersSpec = defaultConstructor.newInstance();
             return abstractSensorParametersSpec;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw new RuntimeException(ex.getMessage(), ex);
         }
     }

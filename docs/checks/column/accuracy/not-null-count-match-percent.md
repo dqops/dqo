@@ -8,11 +8,11 @@ ___
 ## **not null count match percent**  
   
 **Check description**  
-Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|not_null_count_match_percent|profiling| |[not_null_count_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#not-null-count-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
+|not_null_count_match_percent|profiling| |[not_null_count_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#not-null-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -551,11 +551,11 @@ ___
 ## **daily not null count match percent**  
   
 **Check description**  
-Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_not_null_count_match_percent|recurring|daily|[not_null_count_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#not-null-count-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
+|daily_not_null_count_match_percent|recurring|daily|[not_null_count_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#not-null-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
@@ -1101,7 +1101,7 @@ Verifies that the percentage of difference in row count of a column in a table a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_not_null_count_match_percent|recurring|monthly|[not_null_count_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#not-null-count-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
+|monthly_not_null_count_match_percent|recurring|monthly|[not_null_count_match_percent](../../../../reference/sensors/Column/accuracy-column-sensors/#not-null-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)

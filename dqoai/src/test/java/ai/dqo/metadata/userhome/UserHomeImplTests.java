@@ -16,7 +16,7 @@
 package ai.dqo.metadata.userhome;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.table.profiling.TableProfilingVolumeChecksSpec;
+import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.sources.*;
@@ -52,7 +52,7 @@ public class UserHomeImplTests extends BaseTest {
         ConnectionWrapper connectionWrapper = this.sut.getConnections().createAndAddNew("src");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableProfilingVolumeChecksSpec volume = new TableProfilingVolumeChecksSpec();
+        TableVolumeProfilingChecksSpec volume = new TableVolumeProfilingChecksSpec();
         tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         volume.setRowCount(check);
@@ -67,7 +67,7 @@ public class UserHomeImplTests extends BaseTest {
         ConnectionWrapper connectionWrapper = this.sut.getConnections().createAndAddNew("src");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableProfilingVolumeChecksSpec volume = new TableProfilingVolumeChecksSpec();
+        TableVolumeProfilingChecksSpec volume = new TableVolumeProfilingChecksSpec();
         tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         volume.setRowCount(check);
@@ -82,7 +82,7 @@ public class UserHomeImplTests extends BaseTest {
         ConnectionWrapper connectionWrapper = this.sut.getConnections().createAndAddNew("src");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
-        TableProfilingVolumeChecksSpec volume = new TableProfilingVolumeChecksSpec();
+        TableVolumeProfilingChecksSpec volume = new TableVolumeProfilingChecksSpec();
         tableSpec.getProfilingChecks().setVolume(volume);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         volume.setRowCount(check);

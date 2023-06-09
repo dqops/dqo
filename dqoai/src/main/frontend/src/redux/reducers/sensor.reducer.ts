@@ -22,8 +22,8 @@ import { Action, INestTab } from "./source.reducer";
 
 export interface ISensorState {
   sensorFolderTree?: SensorBasicFolderModel;
-  loading: boolean;
-  error: any;
+  loading?: boolean;
+  error?: any;
   sensorState: Record<string, boolean>;
   tabs: INestTab[];
   activeTab?: string;
