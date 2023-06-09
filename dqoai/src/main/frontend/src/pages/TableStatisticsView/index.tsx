@@ -50,7 +50,7 @@ export default function TableStatisticsView({
     }
     return value;
   };
-  console.log(jobs);
+
   if (loading) {
     return (
       <div className="flex justify-center min-h-80">

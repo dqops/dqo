@@ -24,8 +24,21 @@ interface CheckCategoriesViewProps {
   onUpdate: () => void;
   getCheckOverview: () => void;
   timeWindowFilter?: TimeWindowFilterParameters | null;
+  mode?: string;
+  changeCopyUI: (category: string, checkName: string, checked: boolean) => void;
+  copyCategory?: UIQualityCategoryModel
 }
-const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataDataStreams, onUpdate, getCheckOverview, timeWindowFilter }: CheckCategoriesViewProps) => {
+const CheckCategoriesView = ({
+  mode,
+  category,
+  checkResultsOverview,
+  handleChangeDataDataStreams,
+  onUpdate,
+  getCheckOverview,
+  timeWindowFilter,
+  changeCopyUI,
+  copyCategory
+}: CheckCategoriesViewProps) => {
   const { jobs } = useSelector((state: IRootState) => state.job || {});
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
@@ -100,6 +113,9 @@ const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataD
             getCheckOverview={getCheckOverview}
             onUpdate={onUpdate}
             timeWindowFilter={timeWindowFilter}
+            mode={mode}
+            changeCopyUI={(value: boolean) => changeCopyUI(category.category ?? '', check.check_name ?? '', value)}
+            checkedCopyUI={copyCategory?.checks?.find(item => item.check_name === check.check_name)?.configured}
           />
         ))}
       <DeleteOnlyDataDialog
