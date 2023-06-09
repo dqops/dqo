@@ -132,7 +132,7 @@ public class TablesController {
      * @param schemaName     Schema name.
      * @return List of tables inside a connection's schema.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables", produces = "application/json")
     @ApiOperation(value = "getTables", notes = "Returns a list of tables inside a connection/schema", response = TableBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -172,7 +172,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Table specification for the requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}", produces = "application/json")
     @ApiOperation(value = "getTable", notes = "Return the table specification", response = TableModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -216,7 +216,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Table basic information for the requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/basic", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/basic", produces = "application/json")
     @ApiOperation(value = "getTableBasic", notes = "Return the basic table information", response = TableBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -256,7 +256,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Table partitioning information for the requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioning", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioning", produces = "application/json")
     @ApiOperation(value = "getTablePartitioning", notes = "Return the table partitioning information", response = TablePartitioningModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -296,7 +296,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Default data streams configuration for the requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultdatastreamsmapping", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/defaultdatastreamsmapping", produces = "application/json")
     @ApiOperation(value = "getTableDefaultDataStreamsMapping", notes = "Return the default (first) data streams mapping for a table", response = DataStreamMappingSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -337,7 +337,7 @@ public class TablesController {
      * @param schedulingGroup Scheduling group name.
      * @return Overridden schedule configuration for the requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/schedulesoverride/{schedulingGroup}", produces = "application/json")
     @ApiOperation(value = "getTableSchedulingGroupOverride", notes = "Return the schedule override configuration for a table", response = RecurringScheduleSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -383,7 +383,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Incident grouping configuration for the requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/incidentgrouping", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/incidentgrouping", produces = "application/json")
     @ApiOperation(value = "getTableIncidentGrouping", notes = "Return the configuration of incident grouping on a table", response = TableIncidentGroupingSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -426,7 +426,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Labels assigned to the requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/labels", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/labels", produces = "application/json")
     @ApiOperation(value = "getTableLabels", notes = "Return the list of labels assigned to a table", response = LabelSetSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -466,7 +466,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Comments on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comments", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/comments", produces = "application/json")
     @ApiOperation(value = "getTableComments", notes = "Return the list of comments added to a table", response = CommentsListSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -507,7 +507,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Data quality checks on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling", produces = "application/json")
     @ApiOperation(value = "getTableProfilingChecks", notes = "Return the configuration of table level data quality checks on a table", response = TableProfilingCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -550,7 +550,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Daily data quality recurring on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/daily", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/daily", produces = "application/json")
     @ApiOperation(value = "getTableRecurringChecksDaily", notes = "Return the configuration of daily table level data quality recurring on a table", response = TableDailyRecurringCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -593,7 +593,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Monthly data quality recurring on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/monthly", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/monthly", produces = "application/json")
     @ApiOperation(value = "getTableRecurringChecksMonthly", notes = "Return the configuration of monthly table level data quality recurring on a table", response = TableMonthlyRecurringCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -636,7 +636,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Daily data quality partitioned checks on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/daily", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/daily", produces = "application/json")
     @ApiOperation(value = "getTablePartitionedChecksDaily", notes = "Return the configuration of daily table level data quality partitioned checks on a table", response = TableDailyPartitionedCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -679,7 +679,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Monthly data quality partitioned checks on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/monthly", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/monthly", produces = "application/json")
     @ApiOperation(value = "getTablePartitionedChecksMonthly", notes = "Return the configuration of monthly table level data quality partitioned checks on a table", response = TableMonthlyPartitionedCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -722,7 +722,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return UI friendly data quality profiling check configuration list on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/ui", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/ui", produces = "application/json")
     @ApiOperation(value = "getTableProfilingChecksUI", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -783,7 +783,7 @@ public class TablesController {
      * @param timeScale  Time scale.
      * @return UI friendly data quality recurring configuration list on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/ui", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/ui", produces = "application/json")
     @ApiOperation(value = "getTableRecurringChecksUI", notes = "Return a UI friendly model of configurations for table level data quality recurring on a table for a given time scale", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -843,7 +843,7 @@ public class TablesController {
      * @param timeScale  Time scale.
      * @return UI friendly data quality partitioned check configuration list on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/ui", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/ui", produces = "application/json")
     @ApiOperation(value = "getTablePartitionedChecksUI", notes = "Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -903,7 +903,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Simplistic UI friendly data quality profiling checks list on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/ui/basic", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/ui/basic", produces = "application/json")
     @ApiOperation(value = "getTableProfilingChecksUIBasic", notes = "Return a simplistic UI friendly model of all table level data quality profiling checks on a table", response = UICheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -952,7 +952,7 @@ public class TablesController {
      * @param timeScale  Time scale.
      * @return Simplistic UI friendly data quality recurring list on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/ui/basic", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/ui/basic", produces = "application/json")
     @ApiOperation(value = "getTableRecurringChecksUIBasic", notes = "Return a simplistic UI friendly model of table level data quality recurring on a table for a given time scale", response = UICheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1002,7 +1002,7 @@ public class TablesController {
      * @param timeScale  Time scale.
      * @return Simplistic UI friendly data quality partitioned checks list on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/ui/basic", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/ui/basic", produces = "application/json")
     @ApiOperation(value = "getTablePartitionedChecksUIBasic", notes = "Return a simplistic UI friendly model of table level data quality partitioned checks on a table for a given time scale", response = UICheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1052,7 +1052,7 @@ public class TablesController {
      * @param checkName      Check name.
      * @return UI friendly data quality profiling check configuration list on a requested table, filtered by category and check name.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/ui/filter/{checkCategory}/{checkName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/ui/filter/{checkCategory}/{checkName}", produces = "application/json")
     @ApiOperation(value = "getTableProfilingChecksUIFilter", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table passing a filter", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1119,7 +1119,7 @@ public class TablesController {
      * @param checkName      Check name.
      * @return UI friendly data quality recurring configuration list on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/ui/filter/{checkCategory}/{checkName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/ui/filter/{checkCategory}/{checkName}", produces = "application/json")
     @ApiOperation(value = "getTableRecurringChecksUIFilter", notes = "Return a UI friendly model of configurations for table level data quality recurring on a table for a given time scale, filtered by category and check name.", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1186,7 +1186,7 @@ public class TablesController {
      * @param checkName      Check name.
      * @return UI friendly data quality partitioned check configuration list on a requested table, filtered by category and check name.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/ui/filter/{checkCategory}/{checkName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/ui/filter/{checkCategory}/{checkName}", produces = "application/json")
     @ApiOperation(value = "getTablePartitionedChecksUIFilter", notes = "Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale, filtered by category and check name.", response = UICheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1249,7 +1249,7 @@ public class TablesController {
      * @param tableName      Table name
      * @return List of table level statistics.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/statistics", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/statistics", produces = "application/json")
     @ApiOperation(value = "getTableStatistics",
             notes = "Returns a list of the profiler (statistics) metrics on a chosen table captured during the most recent statistics collection.",
             response = TableStatisticsModel.class)
@@ -1318,7 +1318,7 @@ public class TablesController {
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @return UI friendly data quality profiling check configuration list on a requested schema.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/profiling/ui", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/profiling/ui", produces = "application/json")
     @ApiOperation(value = "getTableColumnsProfilingChecksUI", notes = "Return a UI friendly model of configurations for column-level data quality profiling checks on a table", response = UITableColumnChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1383,7 +1383,7 @@ public class TablesController {
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @return UI friendly data quality recurring check configuration list on a requested schema.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/recurring/{timeScale}/ui", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/recurring/{timeScale}/ui", produces = "application/json")
     @ApiOperation(value = "getTableColumnsRecurringChecksUI", notes = "Return a UI friendly model of configurations for column-level data quality recurring checks on a table", response = UITableColumnChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1450,7 +1450,7 @@ public class TablesController {
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @return UI friendly data quality partitioned check configuration list on a requested schema.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/partitioned/{timeScale}/ui", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/partitioned/{timeScale}/ui", produces = "application/json")
     @ApiOperation(value = "getTableColumnsPartitionedChecksUI", notes = "Return a UI friendly model of configurations for column-level data quality partitioned checks on a table", response = UITableColumnChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1537,7 +1537,7 @@ public class TablesController {
      * @param checkName      (Optional) Filter on check name.
      * @return Data quality checks templates on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/profiling", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/profiling", produces = "application/json")
     @ApiOperation(value = "getTableProfilingChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1577,7 +1577,7 @@ public class TablesController {
      * @param checkName      (Optional) Filter on check name.
      * @return Data quality checks templates on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/recurring/{timeScale}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/recurring/{timeScale}", produces = "application/json")
     @ApiOperation(value = "getTableRecurringChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -1618,7 +1618,7 @@ public class TablesController {
      * @param checkName      (Optional) Filter on check name.
      * @return Data quality checks templates on a requested table.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/partitioned/{timeScale}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/partitioned/{timeScale}", produces = "application/json")
     @ApiOperation(value = "getTablePartitionedChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -2656,7 +2656,7 @@ public class TablesController {
      * @param tableName      Table name.
      * @return Deferred operations job id.
      */
-    @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}", consumes = "application/json", produces = "application/json")
+    @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}", produces = "application/json")
     @ApiOperation(value = "deleteTable", notes = "Deletes a table")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {

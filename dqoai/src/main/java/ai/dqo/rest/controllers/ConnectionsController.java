@@ -74,7 +74,7 @@ public class ConnectionsController {
      * Returns a list of connections.
      * @return List of connections.
      */
-    @GetMapping(consumes = "application/json", produces = "application/json")
+    @GetMapping(produces = "application/json")
     @ApiOperation(value = "getAllConnections", notes = "Returns a list of connections (data sources)", response = ConnectionBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -97,7 +97,7 @@ public class ConnectionsController {
      * @param connectionName Connection name.
      * @return Full connection model with the connection name and the connection specification.
      */
-    @GetMapping(value = "/{connectionName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}", produces = "application/json")
     @ApiOperation(value = "getConnection", notes = "Return the full details of a connection given the connection name", response = ConnectionModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -131,7 +131,7 @@ public class ConnectionsController {
      * @param connectionName Connection name.
      * @return Connection basic model with the connection name and the connection parameters.
      */
-    @GetMapping(value = "/{connectionName}/basic", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/basic", produces = "application/json")
     @ApiOperation(value = "getConnectionBasic", notes = "Return the basic details of a connection given the connection name", response = ConnectionBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -162,7 +162,7 @@ public class ConnectionsController {
      * @param schedulingGroup Scheduling group.
      * @return Connection's schedule specification.
      */
-    @GetMapping(value = "/{connectionName}/schedules/{schedulingGroup}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schedules/{schedulingGroup}", produces = "application/json")
     @ApiOperation(value = "getConnectionSchedulingGroup", notes = "Return the schedule for a connection for a scheduling group", response = RecurringScheduleSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -198,7 +198,7 @@ public class ConnectionsController {
      * @param connectionName Connection name.
      * @return Connection's list of comments.
      */
-    @GetMapping(value = "/{connectionName}/comments", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/comments", produces = "application/json")
     @ApiOperation(value = "getConnectionComments", notes = "Return the comments for a connection", response = CommentsListSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -228,7 +228,7 @@ public class ConnectionsController {
      * @param connectionName Connection name.
      * @return Connection's list of labels.
      */
-    @GetMapping(value = "/{connectionName}/labels", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/labels", produces = "application/json")
     @ApiOperation(value = "getConnectionLabels", notes = "Return the labels for a connection", response = LabelSetSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -258,7 +258,7 @@ public class ConnectionsController {
      * @param connectionName Connection name.
      * @return Connection's default data streams configuration.
      */
-    @GetMapping(value = "/{connectionName}/defaultdatastreamsmapping", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/defaultdatastreamsmapping", produces = "application/json")
     @ApiOperation(value = "getConnectionDefaultDataStreamsMapping", notes = "Return the default data streams mapping for a connection", response = DataStreamMappingSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -288,7 +288,7 @@ public class ConnectionsController {
      * @param connectionName Connection name.
      * @return Incident grouping and notification settings.
      */
-    @GetMapping(value = "/{connectionName}/incidentgrouping", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/incidentgrouping", produces = "application/json")
     @ApiOperation(value = "getConnectionIncidentGrouping", notes = "Retrieves the configuration of data quality incident grouping and incident notifications",
             response = ConnectionIncidentGroupingSpec.class)
     @ResponseStatus(HttpStatus.OK)
@@ -319,7 +319,7 @@ public class ConnectionsController {
      * @param connectionName Connection name.
      * @return Sorted collection of most common columns.
      */
-    @GetMapping(value = "/{connectionName}/commoncolumns", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/commoncolumns", produces = "application/json")
     @ApiOperation(value = "getConnectionCommonColumns", notes = "Finds common column names that are used on one or more tables. " +
             "The list of columns is sorted in descending order by column name.", response = CommonColumnModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -820,7 +820,7 @@ public class ConnectionsController {
      * @param connectionName Connection name to delete.
      * @return Deferred operations job id.
      */
-    @DeleteMapping(value = "/{connectionName}", consumes = "application/json", produces = "application/json")
+    @DeleteMapping(value = "/{connectionName}", produces = "application/json")
     @ApiOperation(value = "deleteConnection", notes = "Deletes a connection")
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {

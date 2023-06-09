@@ -62,7 +62,7 @@ public class DashboardsController {
      * Returns a list of root folders with supported dashboards.
      * @return List of root folders with supported dashboards.
      */
-    @GetMapping(consumes = "application/json", produces = "application/json")
+    @GetMapping(produces = "application/json")
     @ApiOperation(value = "getAllDashboards", notes = "Returns a list of root folders with dashboards", response = DashboardsFolderSpec[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -85,7 +85,7 @@ public class DashboardsController {
      * @param windowLocationOrigin The value of the window.location.origin
      * @return Dashboard model with the authenticated url.
      */
-    @GetMapping(value = "/{folder}/{dashboardName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{folder}/{dashboardName}", produces = "application/json")
     @ApiOperation(value = "getDashboardLevel1", notes = "Returns a single dashboard in one folder with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -128,7 +128,7 @@ public class DashboardsController {
      * @param windowLocationOrigin The value of the window.location.origin
      * @return Dashboard model with the authenticated url.
      */
-    @GetMapping(value = "/{folder1}/{folder2}/{dashboardName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{folder1}/{folder2}/{dashboardName}", produces = "application/json")
     @ApiOperation(value = "getDashboardLevel2", notes = "Returns a single dashboard in two folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -178,7 +178,7 @@ public class DashboardsController {
      * @param windowLocationOrigin The value of the window.location.origin
      * @return Dashboard model with the authenticated url.
      */
-    @GetMapping(value = "/{folder1}/{folder2}/{folder3}/{dashboardName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{folder1}/{folder2}/{folder3}/{dashboardName}", produces = "application/json")
     @ApiOperation(value = "getDashboardLevel3", notes = "Returns a single dashboard in three folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -236,7 +236,7 @@ public class DashboardsController {
      * @param dashboardName Dashboard name.
      * @return Dashboard model with the authenticated url.
      */
-    @GetMapping(value = "/{folder1}/{folder2}/{folder3}/{folder4}/{dashboardName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{folder1}/{folder2}/{folder3}/{folder4}/{dashboardName}", produces = "application/json")
     @ApiOperation(value = "getDashboardLevel4", notes = "Returns a single dashboard in three folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {

@@ -77,7 +77,7 @@ public class IncidentsController {
      * @param incidentId Incident id.
      * @return Incident model of the loaded incident.
      */
-    @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}", produces = "application/json")
     @ApiOperation(value = "getIncident", notes = "Return a single data quality incident's details.", response = IncidentModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -116,7 +116,7 @@ public class IncidentsController {
      * @param direction Sort direction.
      * @return Incident model of the loaded incident.
      */
-    @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/issues", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/issues", produces = "application/json")
     @ApiOperation(value = "getIncidentIssues", notes = "Return a paged list of failed data quality check results that are related to an incident.",
             response = CheckResultDetailedSingleModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -202,7 +202,7 @@ public class IncidentsController {
      * @param check Optional check name filter.
      * @return Incident histogram of data quality issues.
      */
-    @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/histogram", produces = "application/json")
     @ApiOperation(value = "getIncidentHistogram", notes = "Generates histograms of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.",
             response = IncidentIssueHistogramModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -268,7 +268,7 @@ public class IncidentsController {
      * @param direction Sort direction.
      * @return List of incidents.
      */
-    @GetMapping(value = "/incidents/{connectionName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/incidents/{connectionName}", produces = "application/json")
     @ApiOperation(value = "findRecentIncidentsOnConnection", notes = "Returns a list of recent data quality incidents.",
             response = IncidentModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -333,7 +333,7 @@ public class IncidentsController {
      * Lists connections with their recent open incidents stats.
      * @return List of connections with their incidents counts.
      */
-    @GetMapping(value = "/incidentstat", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/incidentstat", produces = "application/json")
     @ApiOperation(value = "findConnectionIncidentStats", notes = "Returns a list of connection names with incident statistics - the count of recent open incidents.",
             response = IncidentsPerConnectionModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -355,7 +355,7 @@ public class IncidentsController {
      * @param status New incident status to set.
      * @return None.
      */
-    @PostMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/status", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/status", produces = "application/json")
     @ApiOperation(value = "setIncidentStatus", notes = "Changes the incident's status to a new status.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -396,7 +396,7 @@ public class IncidentsController {
      * @param issueUrl New incident's issueUrl to set.
      * @return None.
      */
-    @PostMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/issueurl", consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/incidents/{connectionName}/{year}/{month}/{incidentId}/issueurl", produces = "application/json")
     @ApiOperation(value = "setIncidentIssueUrl", notes = "Changes the incident's issueUrl to a new status.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
