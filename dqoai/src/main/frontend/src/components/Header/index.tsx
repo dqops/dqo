@@ -144,7 +144,9 @@ const Header = () => {
       );
     }
 
-    history.push(url);
+    if (url !== location.pathname) {
+      history.push(url);
+    }
   };
 
   return (

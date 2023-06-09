@@ -4,6 +4,7 @@ import CheckListItem from "./CheckListItem";
 import {
   CheckResultsOverviewDataModel,
   DqoJobHistoryEntryModelStatusEnum,
+  TimeWindowFilterParameters,
   UICheckModel,
   UIQualityCategoryModel
 } from "../../api";
@@ -13,6 +14,8 @@ import { isEqual } from "lodash";
 import { JobApiClient } from "../../services/apiClient";
 import DeleteOnlyDataDialog from "../CustomTree/DeleteOnlyDataDialog";
 import CheckMenu from "./CheckMenu";
+import { useParams } from "react-router-dom";
+import { CheckTypes } from "../../shared/routes";
 
 interface CheckCategoriesViewProps {
   category: UIQualityCategoryModel;
@@ -20,10 +23,12 @@ interface CheckCategoriesViewProps {
   handleChangeDataDataStreams: (check: UICheckModel, index: number) => void;
   onUpdate: () => void;
   getCheckOverview: () => void;
+  timeWindowFilter?: TimeWindowFilterParameters | null;
 }
-const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataDataStreams, onUpdate, getCheckOverview }: CheckCategoriesViewProps) => {
+const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataDataStreams, onUpdate, getCheckOverview, timeWindowFilter }: CheckCategoriesViewProps) => {
   const { jobs } = useSelector((state: IRootState) => state.job || {});
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
+  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
 
   const job = jobs?.jobs?.find((item) =>
     isEqual(
@@ -34,7 +39,8 @@ const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataD
 
   const onRunChecks = async () => {
     await JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: category?.run_checks_job_template
+      checkSearchFilters: category?.run_checks_job_template,
+      ... checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null ? { timeWindowFilter } : {}
     });
 
     if (getCheckOverview) {
@@ -93,6 +99,7 @@ const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataD
             checkResult={checkResultsOverview.find((item) => item.checkName === check.check_name && category.category === item.checkCategory)}
             getCheckOverview={getCheckOverview}
             onUpdate={onUpdate}
+            timeWindowFilter={timeWindowFilter}
           />
         ))}
       <DeleteOnlyDataDialog
