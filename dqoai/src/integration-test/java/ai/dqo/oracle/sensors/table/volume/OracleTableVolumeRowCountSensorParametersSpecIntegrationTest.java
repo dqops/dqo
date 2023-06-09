@@ -31,6 +31,7 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
+import ai.dqo.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,7 +68,7 @@ public class OracleTableVolumeRowCountSensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24L, resultTable.column(0).get(0));
+        Assertions.assertEquals(24L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -80,7 +81,7 @@ public class OracleTableVolumeRowCountSensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24L, resultTable.column(0).get(0));
+        Assertions.assertEquals(24L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -93,7 +94,7 @@ public class OracleTableVolumeRowCountSensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24L, resultTable.column(0).get(0));
+        Assertions.assertEquals(24L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -106,7 +107,7 @@ public class OracleTableVolumeRowCountSensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(24, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1L, resultTable.column(0).get(0));
+        Assertions.assertEquals(1L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -119,6 +120,6 @@ public class OracleTableVolumeRowCountSensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24L, resultTable.column(0).get(0));
+        Assertions.assertEquals(24L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 }

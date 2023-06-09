@@ -36,9 +36,9 @@ public class OracleConnectionSpecObjectMother {
             //noinspection resource
             sharedContainer = new OracleContainer(ORACLE_IMAGE)
                     .withExposedPorts(PORT)
-                    .withDatabaseName("db_test")
-                    .withUsername("user_test")
-                    .withPassword("passwd_test")
+                    .withDatabaseName("DB_TEST")
+                    .withUsername(getSchemaName())
+                    .withPassword("PASSWD_TEST")
                     .withReuse(TestContainersObjectMother.shouldUseReusableTestContainers());
             sharedContainer.start();
         }
@@ -79,6 +79,6 @@ public class OracleConnectionSpecObjectMother {
      * @return Schema name.
      */
     public static String getSchemaName() {
-        return "public";
+        return "USER_TEST";
     }
 }

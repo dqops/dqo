@@ -21,7 +21,7 @@
 {% endmacro %}
 
 {%- macro render_target_table() -%}
-    {{ quote_identifier(macro_database_name) }}.{{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
+    {{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
 {%- endmacro %}
 
 {%- macro render_target_column(table_alias_prefix = 'analyzed_table') -%}
@@ -215,11 +215,29 @@
     {%- endif -%}
 {% endmacro %}
 
+{% macro render_data_stream_projections_reference(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+    {%- if data_streams is not none and (data_streams | length()) > 0 -%}
+        {%- for attribute in data_streams -%}
+            {{ ',' -}}{{- eol() }}
+            {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute -}}
+        {%- endfor -%}
+        {{- eol() }}
+    {%- endif -%}
+{% endmacro %}
+
 {% macro render_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') %}
     {%- if time_series is not none -%}
         {{ ',' -}}{{- eol() -}}
         {{ indentation }}{{ render_time_dimension_expression(table_alias_prefix) }} AS time_period,{{ eol() -}}
-        {{ indentation }}CAST(({{ render_time_dimension_expression(table_alias_prefix) }}) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        {{ indentation }}CAST({{ render_time_dimension_expression(table_alias_prefix) }} AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_time_dimension_projection_reference(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+    {%- if time_series is not none -%}
+        {{ ',' -}}{{- eol() -}}
+        {{ indentation }}time_period,{{ eol() -}}
+        {{ indentation }}time_period_utc
     {%- endif -%}
 {% endmacro %}
 
@@ -283,32 +301,32 @@
                 {{ prefix_to_render -}}
                 {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                    {{ date_trunc_utc('LOCALTIMESTAMP - INTERVAL \'' ~ time_window_filter.daily_partitioning_recent_days ~ '\' DAY', 'day', 'TIMESTAMP') }}
+                    {{ date_trunc_utc('LOCALTIMESTAMP - INTERVAL \'' ~ time_window_filter.daily_partitioning_recent_days ~ '\' DAY(5)', 'day', 'TIMESTAMP') }}
                 {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.daily_partitioning_recent_days ~ '\' DAY', 'day', 'DATE') }}
+                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.daily_partitioning_recent_days ~ '\' DAY(5)', 'day', 'DATE') }}
                 {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.daily_partitioning_recent_days ~ '\' DAY', 'day', 'DATE') }}
+                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.daily_partitioning_recent_days ~ '\' DAY(5)', 'day', 'DATE') }}
                 {%- else -%}
                     CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
-                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.daily_partitioning_recent_days ~ '\' DAY', 'day', 'DATE') }}
+                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.daily_partitioning_recent_days ~ '\' DAY(5)', 'day', 'DATE') }}
                 {%- endif -%}
                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
             {%- elif time_window_filter.monthly_partitioning_recent_months | default(none, true) is not none -%}
                 {{ prefix_to_render -}}
                 {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                    {{ date_trunc_utc('LOCALTIMESTAMP - INTERVAL \'' ~ time_window_filter.monthly_partitioning_recent_months ~ '\' MONTH', 'month', 'TIMESTAMP') }}
+                    {{ date_trunc_utc('LOCALTIMESTAMP - INTERVAL \'' ~ time_window_filter.monthly_partitioning_recent_months ~ '\' MONTH(4)', 'month', 'TIMESTAMP') }}
                 {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.monthly_partitioning_recent_months ~ '\' MONTH', 'month', 'DATE') }}
+                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.monthly_partitioning_recent_months ~ '\' MONTH(4)', 'month', 'DATE') }}
                 {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.monthly_partitioning_recent_months ~ '\' MONTH', 'month', 'DATE') }}
+                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.monthly_partitioning_recent_months ~ '\' MONTH(4)', 'month', 'DATE') }}
                 {%- else -%}
                     CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
-                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.monthly_partitioning_recent_months ~ '\' MONTH', 'month', 'DATE') }}
+                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.monthly_partitioning_recent_months ~ '\' MONTH(4)', 'month', 'DATE') }}
                 {%- endif -%}
                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
             {%- else -%}
