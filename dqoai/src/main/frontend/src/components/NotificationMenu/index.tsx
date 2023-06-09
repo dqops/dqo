@@ -113,8 +113,8 @@ const NotificationMenu = () => {
           </div>
         </IconButton>
       </PopoverHandler>
-      <PopoverContent className="z-50 min-w-120 max-w-120 px-0 ">
-        <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex flex-col gap-y-2 px-4">
+      <PopoverContent className="z-30 min-w-120 max-w-120 px-0 relative">
+        <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex flex-col gap-y-2 px-4 relative">
           <div>Notifications ({data.length})</div>
           <div className="flex items-center gap-x-3 text-sm">
             <div className="whitespace-no-wrap">Jobs scheduler </div>
@@ -131,7 +131,7 @@ const NotificationMenu = () => {
             )}
           </div>
         </div>
-        <div className="overflow-auto max-h-100 py-4 px-4">
+        <div className="overflow-auto max-h-100 py-4 px-4 relative">
           {data.map((notification: any, index) =>
             notification.type === 'error' ? (
               <ErrorItem error={notification.item} key={index} />

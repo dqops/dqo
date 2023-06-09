@@ -87,28 +87,6 @@ const JobItem = ({
     await JobApiClient.cancelJob(jobId);
   };
 
-  // console.log(
-  //   jobs?.jobs?.map(
-  //     (x) => x.parameters?.runChecksParameters?.runChecksResult?.highestSeverity
-  //   )
-  // );
-
-  const job2 = jobs?.jobs
-    ?.filter((x) => x.parameters && x.jobType === 'run checks')
-    ?.map(
-      (x) => x.parameters?.runChecksParameters?.runChecksResult?.highestSeverity
-    );
-
-  const job3 = jobs?.jobs
-    ?.filter((x) => x.parameters && x.jobType === 'run checks on table')
-    ?.map(
-      (x) =>
-        x.parameters?.runChecksOnTableParameters?.runChecksResult
-          ?.highestSeverity
-    );
-
-  console.log(job3);
-
   const getColor = (status: CheckResultsOverviewDataModelStatusesEnum) => {
     switch (status) {
       case 'valid':
@@ -156,13 +134,13 @@ const JobItem = ({
   };
 
   return (
-    <Accordion open={open}>
+    <Accordion open={open} className="relative">
       {job.jobId?.parentJobId?.jobId === undefined ? (
         <AccordionHeader
           className="!outline-none"
           onClick={() => setOpen(!open)}
         >
-          <div className="flex justify-between items-center text-sm w-full text-gray-700">
+          <div className="flex justify-between items-center text-sm w-full text-gray-700 relative">
             <div className="flex space-x-1 items-center">
               <div>{job.jobType}</div>
               {renderStatus()}
@@ -179,87 +157,102 @@ const JobItem = ({
               ) : (
                 <div></div>
               )}
-              <div className="group flex items-center gap-x-3">
-                <div
-                  className={clsx(
-                    `w-3 h-3 bg-${getColor(
-                      job.parameters?.runChecksParameters?.runChecksResult
-                        ?.highestSeverity
-                        ? job.parameters?.runChecksParameters?.runChecksResult
+              <div className="group relative">
+                <div className="flex items-center gap-x-3">
+                  {job.jobType === 'run checks' && (
+                    <div
+                      className={clsx(
+                        `w-3 h-3 bg-${getColor(
+                          job.parameters?.runChecksParameters?.runChecksResult
                             ?.highestSeverity
-                        : 'error'
-                    )}`
+                            ? job.parameters?.runChecksParameters
+                                ?.runChecksResult?.highestSeverity
+                            : 'error'
+                        )}`
+                      )}
+                    />
                   )}
-                />
-                <div>
-                  {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+                  <div>
+                    {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+                  </div>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className="hidden border w-80 h-30 text-sm group-hover:block">
-            <div className="flex">
-              <div>Highest severity</div>
-              <div
-                className={clsx(
-                  `text-${getColor(
-                    job.parameters?.runChecksParameters?.runChecksResult
-                      ?.highestSeverity
-                      ? job.parameters?.runChecksParameters?.runChecksResult
-                          ?.highestSeverity
-                      : 'error'
-                  )}`
+                {job.jobType === 'run checks' && (
+                  <div className="hidden group-hover:block fixed p-2 w-50 h-40 rounded-md border border-gray-400 z-50 top-50 right-50 bg-white">
+                    <div className="flex gap-x-2">
+                      <div className="font-light">Highest severity:</div>
+                      <div
+                        className={clsx(
+                          `text-${getColor(
+                            job.parameters?.runChecksParameters?.runChecksResult
+                              ?.highestSeverity
+                              ? job.parameters?.runChecksParameters
+                                  ?.runChecksResult?.highestSeverity
+                              : 'error'
+                          )}`
+                        )}
+                      >
+                        {
+                          job.parameters?.runChecksParameters?.runChecksResult
+                            ?.highestSeverity
+                        }
+                      </div>
+                    </div>
+                    <div className="flex gap-x-2">
+                      <div className="font-light">Executed check:</div>
+                      <div>
+                        {
+                          job.parameters?.runChecksParameters?.runChecksResult
+                            ?.executedChecks
+                        }
+                      </div>
+                    </div>
+                    <div className="flex gap-x-2">
+                      <div className="font-light">Valid result:</div>
+                      <div>
+                        {
+                          job.parameters?.runChecksParameters?.runChecksResult
+                            ?.validResults
+                        }
+                      </div>
+                    </div>
+                    <div className="flex gap-x-2">
+                      <div className="font-light">Warnings:</div>
+                      <div>
+                        {
+                          job.parameters?.runChecksParameters?.runChecksResult
+                            ?.warnings
+                        }
+                      </div>
+                    </div>
+                    <div className="flex gap-x-2">
+                      <div className="font-light">Errors</div>
+                      <div>
+                        {
+                          job.parameters?.runChecksParameters?.runChecksResult
+                            ?.errors
+                        }
+                      </div>
+                    </div>
+                    <div className="flex gap-x-2">
+                      <div className="font-light">Fatals:</div>
+                      <div>
+                        {
+                          job.parameters?.runChecksParameters?.runChecksResult
+                            ?.fatals
+                        }
+                      </div>
+                    </div>
+                    <div className="flex gap-x-2">
+                      <div className="font-light">Execution Fatals:</div>
+                      <div>
+                        {
+                          job.parameters?.runChecksParameters?.runChecksResult
+                            ?.executionErrors
+                        }
+                      </div>
+                    </div>
+                  </div>
                 )}
-              >
-                {
-                  job.parameters?.runChecksParameters?.runChecksResult
-                    ?.highestSeverity
-                }
-              </div>
-            </div>
-            <div className="flex">
-              <div>Executed check</div>
-              <div>
-                {
-                  job.parameters?.runChecksParameters?.runChecksResult
-                    ?.executedChecks
-                }
-              </div>
-            </div>
-            <div className="flex">
-              <div>Valid result</div>
-              <div>
-                {
-                  job.parameters?.runChecksParameters?.runChecksResult
-                    ?.validResults
-                }
-              </div>
-            </div>
-            <div className="flex">
-              <div>Warnings</div>
-              <div>
-                {job.parameters?.runChecksParameters?.runChecksResult?.warnings}
-              </div>
-            </div>
-            <div className="flex">
-              <div>Errors</div>
-              <div>
-                {job.parameters?.runChecksParameters?.runChecksResult?.errors}
-              </div>
-            </div>
-            <div className="flex">
-              <div>Fatals</div>
-              <div>
-                {job.parameters?.runChecksParameters?.runChecksResult?.fatals}
-              </div>
-            </div>
-            <div className="flex">
-              <div>Execution Fatals</div>
-              <div>
-                {
-                  job.parameters?.runChecksParameters?.runChecksResult
-                    ?.executionErrors
-                }
               </div>
             </div>
           </div>
@@ -396,7 +389,6 @@ const JobItem = ({
                       <div key={index}>
                         <JobChild
                           job={notification.item}
-                          succeededCounter={index}
                           parentId={Number(job.jobId?.jobId)}
                         />
                       </div>
