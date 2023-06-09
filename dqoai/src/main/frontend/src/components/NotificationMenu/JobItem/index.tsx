@@ -1,4 +1,5 @@
 import {
+  CheckResultsOverviewDataModelStatusesEnum,
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
@@ -17,6 +18,7 @@ import { IRootState } from '../../../redux/reducers';
 import { reduceCounter } from '../../../redux/actions/job.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { JobApiClient } from '../../../services/apiClient';
+import clsx from 'clsx';
 
 const JobItem = ({
   job,
@@ -85,6 +87,44 @@ const JobItem = ({
     await JobApiClient.cancelJob(jobId);
   };
 
+  // console.log(
+  //   jobs?.jobs?.map(
+  //     (x) => x.parameters?.runChecksParameters?.runChecksResult?.highestSeverity
+  //   )
+  // );
+
+  const job2 = jobs?.jobs
+    ?.filter((x) => x.parameters && x.jobType === 'run checks')
+    ?.map(
+      (x) => x.parameters?.runChecksParameters?.runChecksResult?.highestSeverity
+    );
+
+  const job3 = jobs?.jobs
+    ?.filter((x) => x.parameters && x.jobType === 'run checks on table')
+    ?.map(
+      (x) =>
+        x.parameters?.runChecksOnTableParameters?.runChecksResult
+          ?.highestSeverity
+    );
+
+  console.log(job3);
+
+  const getColor = (status: CheckResultsOverviewDataModelStatusesEnum) => {
+    switch (status) {
+      case 'valid':
+        return 'teal-500';
+      case 'warning':
+        return 'yellow-900';
+      case 'error':
+        return 'orange-900';
+      case 'fatal':
+        return 'red-900';
+      case 'execution_error':
+        return 'black';
+      default:
+        return 'black';
+    }
+  };
   const renderStatus = () => {
     if (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
       return <SvgIcon name="success" className="w-4 h-4 text-primary" />;
@@ -139,8 +179,87 @@ const JobItem = ({
               ) : (
                 <div></div>
               )}
+              <div className="group flex items-center gap-x-3">
+                <div
+                  className={clsx(
+                    `w-3 h-3 bg-${getColor(
+                      job.parameters?.runChecksParameters?.runChecksResult
+                        ?.highestSeverity
+                        ? job.parameters?.runChecksParameters?.runChecksResult
+                            ?.highestSeverity
+                        : 'error'
+                    )}`
+                  )}
+                />
+                <div>
+                  {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="hidden border w-80 h-30 text-sm group-hover:block">
+            <div className="flex">
+              <div>Highest severity</div>
+              <div
+                className={clsx(
+                  `text-${getColor(
+                    job.parameters?.runChecksParameters?.runChecksResult
+                      ?.highestSeverity
+                      ? job.parameters?.runChecksParameters?.runChecksResult
+                          ?.highestSeverity
+                      : 'error'
+                  )}`
+                )}
+              >
+                {
+                  job.parameters?.runChecksParameters?.runChecksResult
+                    ?.highestSeverity
+                }
+              </div>
+            </div>
+            <div className="flex">
+              <div>Executed check</div>
               <div>
-                {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
+                {
+                  job.parameters?.runChecksParameters?.runChecksResult
+                    ?.executedChecks
+                }
+              </div>
+            </div>
+            <div className="flex">
+              <div>Valid result</div>
+              <div>
+                {
+                  job.parameters?.runChecksParameters?.runChecksResult
+                    ?.validResults
+                }
+              </div>
+            </div>
+            <div className="flex">
+              <div>Warnings</div>
+              <div>
+                {job.parameters?.runChecksParameters?.runChecksResult?.warnings}
+              </div>
+            </div>
+            <div className="flex">
+              <div>Errors</div>
+              <div>
+                {job.parameters?.runChecksParameters?.runChecksResult?.errors}
+              </div>
+            </div>
+            <div className="flex">
+              <div>Fatals</div>
+              <div>
+                {job.parameters?.runChecksParameters?.runChecksResult?.fatals}
+              </div>
+            </div>
+            <div className="flex">
+              <div>Execution Fatals</div>
+              <div>
+                {
+                  job.parameters?.runChecksParameters?.runChecksResult
+                    ?.executionErrors
+                }
               </div>
             </div>
           </div>
