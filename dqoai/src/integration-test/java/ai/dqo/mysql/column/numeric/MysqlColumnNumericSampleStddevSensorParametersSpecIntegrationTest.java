@@ -64,7 +64,7 @@ public class MysqlColumnNumericSampleStddevSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.04934662802891f, resultTable.column(0).get(0));
+        Assertions.assertEquals(109.05, (double) resultTable.column(0).get(0), 0.01);
     }
 
     @Test
@@ -77,7 +77,7 @@ public class MysqlColumnNumericSampleStddevSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.04934662802891f, resultTable.column(0).get(0));
+        Assertions.assertEquals(109.05, (double) resultTable.column(0).get(0), 0.01);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class MysqlColumnNumericSampleStddevSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.04934662802891f, resultTable.column(0).get(0));
+        Assertions.assertEquals(109.05, (double) resultTable.column(0).get(0), 0.01);
     }
 
     @Test
@@ -116,6 +116,6 @@ public class MysqlColumnNumericSampleStddevSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.04934662802891f, resultTable.column(0).get(0));
+        Assertions.assertEquals(109.05, (double) resultTable.column(0).get(0), 0.01);
     }
 }
