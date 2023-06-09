@@ -1,20 +1,24 @@
 import SvgIcon from "../SvgIcon";
 import React, { useState } from "react";
-import { DqoJobHistoryEntryModelStatusEnum, UICheckContainerModel } from "../../api";
+import { DqoJobHistoryEntryModelStatusEnum, TimeWindowFilterParameters, UICheckContainerModel } from "../../api";
 import { JobApiClient } from "../../services/apiClient";
 import { isEqual } from "lodash";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
 import DeleteOnlyDataDialog from "../CustomTree/DeleteOnlyDataDialog";
 import CategoryMenu from "./CategoryMenu";
+import { CheckTypes } from "../../shared/routes";
+import { useParams } from "react-router-dom";
 
 interface TableHeaderProps {
   checksUI: UICheckContainerModel;
+  timeWindowFilter?: TimeWindowFilterParameters | null;
 }
 
-const TableHeader = ({ checksUI }: TableHeaderProps) => {
+const TableHeader = ({ checksUI, timeWindowFilter }: TableHeaderProps) => {
   const { jobs } = useSelector((state: IRootState) => state.job || {});
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
+  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
 
   const job = jobs?.jobs?.find((item) =>
     isEqual(
@@ -25,7 +29,8 @@ const TableHeader = ({ checksUI }: TableHeaderProps) => {
 
   const onRunChecks = async () => {
     await JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: checksUI?.run_checks_job_template
+      checkSearchFilters: checksUI?.run_checks_job_template,
+      ... checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null ? { timeWindowFilter } : {}
     });
   };
 

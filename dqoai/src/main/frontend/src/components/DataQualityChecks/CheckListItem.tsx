@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
-  CheckResultsOverviewDataModel, CheckResultsOverviewDataModelStatusesEnum,
+  CheckResultsOverviewDataModel,
+  CheckResultsOverviewDataModelStatusesEnum,
   DqoJobHistoryEntryModelStatusEnum,
+  TimeWindowFilterParameters,
   UICheckModel,
   UIFieldModel
 } from '../../api';
@@ -18,6 +20,8 @@ import { isEqual } from 'lodash';
 import { Tooltip } from '@material-tailwind/react';
 import moment from "moment";
 import CheckDetails from "./CheckDetails/CheckDetails";
+import { CheckTypes } from "../../shared/routes";
+import { useParams } from "react-router-dom";
 
 interface ICheckListItemProps {
   check: UICheckModel;
@@ -26,6 +30,7 @@ interface ICheckListItemProps {
   checkResult?: CheckResultsOverviewDataModel;
   getCheckOverview: () => void;
   onUpdate: () => void;
+  timeWindowFilter?: TimeWindowFilterParameters | null;
 }
 
 export interface ITab {
@@ -35,12 +40,13 @@ export interface ITab {
   field?: UIFieldModel;
 }
 
-const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdate }: ICheckListItemProps) => {
+const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdate, timeWindowFilter }: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('data-streams');
   const [tabs, setTabs] = useState<ITab[]>([]);
   const { jobs } = useSelector((state: IRootState) => state.job || {});
   const [showDetails, setShowDetails] = useState(false);
+  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
 
   const job = jobs?.jobs?.find((item) =>
     isEqual(
@@ -116,7 +122,8 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
     }
     await onUpdate();
     JobApiClient.runChecks(false, undefined, {
-      checkSearchFilters: check?.run_checks_job_template
+      checkSearchFilters: check?.run_checks_job_template,
+      ...checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null ? { timeWindowFilter } : {}
     });
   };
 

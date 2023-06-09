@@ -6,7 +6,6 @@ import { CheckTypes } from "../../shared/routes";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
 import { closeFirstLevelTab, setActiveFirstLevelTab } from "../../redux/actions/source.actions";
-import { getFirstLevelState } from "../../redux/selectors";
 import { TabOption } from "../PageTabs/tab";
 
 interface ConnectionLayoutProps {
@@ -17,7 +16,6 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
 
   const { tabs: pageTabs, activeTab } = useSelector((state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]);
-  const firstLevelState = useSelector(getFirstLevelState(checkTypes))
 
   const dispatch= useDispatch();
   const history = useHistory();
@@ -25,7 +23,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
 
   const handleChange = (tab: TabOption) => {
     dispatch(setActiveFirstLevelTab(checkTypes, tab.value));
-    if (tab.url) {
+    if (tab.url && tab.url !== location.pathname) {
       history.push(tab.url);
     }
   };
