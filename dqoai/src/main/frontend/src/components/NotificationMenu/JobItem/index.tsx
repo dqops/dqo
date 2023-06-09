@@ -134,13 +134,13 @@ const JobItem = ({
   };
 
   return (
-    <Accordion open={open} className="relative">
+    <Accordion open={open}>
       {job.jobId?.parentJobId?.jobId === undefined ? (
         <AccordionHeader
           className="!outline-none"
           onClick={() => setOpen(!open)}
         >
-          <div className="flex justify-between items-center text-sm w-full text-gray-700 relative">
+          <div className="flex justify-between items-center text-sm w-full text-gray-700 ">
             <div className="flex space-x-1 items-center">
               <div>{job.jobType}</div>
               {renderStatus()}
@@ -177,7 +177,7 @@ const JobItem = ({
                   </div>
                 </div>
                 {job.jobType === 'run checks' && (
-                  <div className="hidden group-hover:block fixed p-2 w-50 h-40 rounded-md border border-gray-400 z-50 top-50 right-50 bg-white">
+                  <div className="hidden group-hover:block absolute p-2 w-50 h-40 rounded-md border border-gray-400 z-50 top-10 right-50 bg-white">
                     <div className="flex gap-x-2">
                       <div className="font-light">Highest severity:</div>
                       <div
