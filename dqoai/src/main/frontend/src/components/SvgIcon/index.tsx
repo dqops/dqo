@@ -85,6 +85,7 @@ import { ReactComponent as YugabyteDbSvg } from './svg/yugabyte-db.svg';
 import { ReactComponent as UserProfileSvg } from './svg/user-profile.svg';
 import { ReactComponent as BoxPlotSvg } from './svg/box-plot.svg';
 import { ReactComponent as CancelJobsSvg } from './svg/cancel-job.svg';
+import { ReactComponent as OracleSvg } from './svg/oracle.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -177,7 +178,8 @@ const iconsMap: any = {
   yugabytedb: YugabyteDbSvg,
   userprofile: UserProfileSvg,
   boxplot: BoxPlotSvg,
-  canceljobs: CancelJobsSvg
+  canceljobs: CancelJobsSvg,
+  oracle: OracleSvg,
 };
 
 interface SvgIconProps {
