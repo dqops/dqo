@@ -16,6 +16,7 @@
 package ai.dqo.metadata.dashboards;
 
 import ai.dqo.metadata.basespecs.AbstractDirtyTrackingSpecList;
+import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 
 import java.util.Objects;
@@ -67,5 +68,18 @@ public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<Dash
         }
 
         return null;
+    }
+
+    /**
+     * Collects all similar dashboards from all subfolders.
+     * @param allSimilarDashboardsContainer Target container where the dashboards should be added.
+     * @param rootNode Root node, used to find and resolve folder names. When the value is null, uses self as the top-most container.
+     */
+    public void collectSimilarDashboards(AllSimilarDashboardsContainer allSimilarDashboardsContainer, HierarchyNode rootNode) {
+        HierarchyNode effectiveRootNode = rootNode != null ? rootNode : this;
+
+        for (DashboardsFolderSpec dashboardsFolderSpec : this) {
+            dashboardsFolderSpec.collectSimilarDashboards(allSimilarDashboardsContainer, effectiveRootNode);
+        }
     }
 }

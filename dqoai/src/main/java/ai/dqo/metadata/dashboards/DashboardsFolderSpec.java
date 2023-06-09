@@ -18,6 +18,7 @@ package ai.dqo.metadata.dashboards;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -222,5 +223,18 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
         this.dashboards.add(dashboardSpec);
 
         return this;
+    }
+
+    /**
+     * Collects all similar dashboards from all subfolders.
+     * @param allSimilarDashboardsContainer Target container where the dashboards should be added.
+     * @param rootNode Root node, used to resolve folder names.
+     */
+    public void collectSimilarDashboards(AllSimilarDashboardsContainer allSimilarDashboardsContainer, HierarchyNode rootNode) {
+        for (DashboardSpec dashboardSpec : this.getDashboards()) {
+            allSimilarDashboardsContainer.addDashboard(dashboardSpec, rootNode);
+        }
+
+        this.getFolders().collectSimilarDashboards(allSimilarDashboardsContainer, rootNode);
     }
 }
