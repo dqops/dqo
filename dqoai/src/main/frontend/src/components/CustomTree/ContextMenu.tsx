@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Popover,
@@ -75,6 +75,20 @@ const ContextMenu = ({
     setOpen(!open);
     e.stopPropagation();
   };
+  const myArr: string[] = [];
+  useEffect(() => {
+    if (node.collect_statistics_job_template?.columnName) {
+      myArr.push(node.collect_statistics_job_template?.columnName);
+      //  node.data_clean_job_template?.columnNames
+    }
+  }, []);
+  // console.log(node);
+  // console.log(node.collect_statistics_job_template?.columnName);
+  console.log(
+    node.collect_statistics_job_template?.columnName && [
+      node.collect_statistics_job_template?.columnName
+    ]
+  );
 
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
@@ -83,7 +97,10 @@ const ContextMenu = ({
           <SvgIcon name="options" className="w-5 h-5 text-gray-500" />
         </div>
       </PopoverHandler>
-      <PopoverContent className="z-50 min-w-50 max-w-50 border-gray-500 p-2" onClick={(e) => e.stopPropagation()}>
+      <PopoverContent
+        className="z-50 min-w-50 max-w-50 border-gray-500 p-2"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div onClick={(e) => e.stopPropagation()}>
           {node.level !== TREE_LEVEL.COLUMNS && (
             <div
@@ -207,6 +224,34 @@ const ContextMenu = ({
                   deleteStoredData(node, params);
                   setOpen(false);
                 }}
+              />
+            </>
+          )}
+          {node.level === TREE_LEVEL.COLUMN && (
+            <>
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={() => setDeleteDataDialogOpened(true)}
+              >
+                Delete data Column
+              </div>
+              <DeleteOnlyDataDialog
+                open={deleteDataDialogOpened}
+                onClose={() => setDeleteDataDialogOpened(false)}
+                onDelete={(params) => {
+                  setDeleteDataDialogOpened(false);
+
+                  deleteStoredData(
+                    node,
+                    params,
+                    node.collect_statistics_job_template?.columnName && [
+                      node.collect_statistics_job_template?.columnName
+                    ]
+                  );
+                  setOpen(false);
+                }}
+                nameOfCol={node.collect_statistics_job_template?.columnName}
+                columnBool={true}
               />
             </>
           )}

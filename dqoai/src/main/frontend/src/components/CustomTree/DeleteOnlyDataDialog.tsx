@@ -1,44 +1,93 @@
-import { Dialog, DialogBody, DialogFooter, DialogHeader, Radio } from "@material-tailwind/react";
-import DatePicker from "../DatePicker";
-import Button from "../Button";
-import React, { useMemo, useState } from "react";
-import moment from "moment";
-import Checkbox from "../Checkbox";
+import {
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Radio
+} from '@material-tailwind/react';
+import DatePicker from '../DatePicker';
+import Button from '../Button';
+import React, { useEffect, useMemo, useState } from 'react';
+import moment from 'moment';
+import Checkbox from '../Checkbox';
+import { JobApiClient } from '../../services/apiClient';
+import { CustomTreeNode } from '../../shared/interfaces';
+import { CheckTypes } from '../../shared/routes';
 
 type DeleteOnlyDataDialogProps = {
   open: boolean;
   onClose: VoidFunction;
-  onDelete: (params: { [key: string]: string | boolean }) => void;
-}
-const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogProps) => {
+  onDelete: (
+    params: { [key: string]: string | boolean },
+    myArr?: string[]
+  ) => void;
+  columnBool?: boolean;
+  nameOfCol?: string;
+};
+const DeleteOnlyDataDialog = ({
+  open,
+  onClose,
+  onDelete,
+  columnBool,
+  nameOfCol
+}: DeleteOnlyDataDialogProps) => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [mode, setMode] = useState('all');
+  const [arrayOfCol, setArrayOfCol] = useState<string[]>([]);
   const [params, setParams] = useState({
     deleteErrors: true,
     deleteProfilingResults: true,
     deleteRuleResults: true,
-    deleteSensorReadouts: true,
+    deleteSensorReadouts: true
   });
 
-  const toUTCString = (date: Date) => moment(date).utc().format("YYYY-MM-DD");
+  // const deleteStoredData2 = async (node: CustomTreeNode, params: { [key: string]: string | boolean }) => {
+  //   if (node.data_clean_job_template) {
+
+  //     JobApiClient.deleteStoredData({
+  //       ...node.data_clean_job_template,
+  //       ...node.data_clean_job_template.columnNames = myArr,
+  //       ...params,
+  //     });
+  //     return;
+  //   }
+  // };
+
+  const myArr: string[] = [];
+  useEffect(() => {
+    if (nameOfCol && nameOfCol?.length > 0) {
+      myArr.push(nameOfCol);
+    }
+  }, [myArr]);
+
+  // console.log(myArr);
+  // console.log(columnBool);
+  const toUTCString = (date: Date) => moment(date).utc().format('YYYY-MM-DD');
   const onConfirm = () => {
     if (mode === 'all') {
       onDelete({});
+      console.log('if');
+    }
+    if (myArr.length === 1) {
+      console.log('delete column data');
+      console.log(myArr);
+      onDelete({}, myArr);
     } else {
       onDelete({
         ...params,
         dateStart: toUTCString(startDate),
-        dateEnd: toUTCString(endDate),
+        dateEnd: toUTCString(endDate)
       });
+      console.log('else');
     }
-  }
+  };
 
   const onChangeParams = (obj: { [key: string]: boolean }) => {
     setMode('part');
     setParams({
       ...params,
-      ...obj,
+      ...obj
     });
   };
 
@@ -46,7 +95,9 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
 
   return (
     <Dialog open={open} handler={onClose} className="min-w-200 p-4">
-      <DialogHeader className="font-bold text-center justify-center">Delete data</DialogHeader>
+      <DialogHeader className="font-bold text-center justify-center">
+        Delete data
+      </DialogHeader>
       <DialogBody>
         <div className="flex flex-col">
           <div>
@@ -76,7 +127,7 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
                 <div className="flex space-x-6 items-center">
                   <DatePicker
                     showIcon
-                    placeholderText='Select date start'
+                    placeholderText="Select date start"
                     onChange={setStartDate}
                     selected={startDate}
                     disabled={isDisabled}
@@ -85,7 +136,7 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
                   <span>to</span>
                   <DatePicker
                     showIcon
-                    placeholderText='Select date end'
+                    placeholderText="Select date end"
                     onChange={setEndDate}
                     selected={endDate}
                     disabled={isDisabled}
@@ -97,19 +148,25 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
             <div className="flex flex-col gap-4 px-4 my-4 text-gray-700 ml-7">
               <Checkbox
                 checked={params.deleteProfilingResults}
-                onChange={(deleteProfilingResults) => onChangeParams({ deleteProfilingResults })}
+                onChange={(deleteProfilingResults) =>
+                  onChangeParams({ deleteProfilingResults })
+                }
                 label="Basic statistics results"
                 checkClassName="bg-teal-500"
               />
               <Checkbox
                 checked={params.deleteRuleResults}
-                onChange={(deleteRuleResults) => onChangeParams({ deleteRuleResults })}
+                onChange={(deleteRuleResults) =>
+                  onChangeParams({ deleteRuleResults })
+                }
                 label="Check results"
                 checkClassName="bg-teal-500"
               />
               <Checkbox
                 checked={params.deleteSensorReadouts}
-                onChange={(deleteSensorReadouts) => onChangeParams({ deleteSensorReadouts })}
+                onChange={(deleteSensorReadouts) =>
+                  onChangeParams({ deleteSensorReadouts })
+                }
                 label="Sensor readouts"
                 checkClassName="bg-teal-500"
               />
@@ -139,7 +196,7 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
         />
       </DialogFooter>
     </Dialog>
-  )
-}
+  );
+};
 
 export default DeleteOnlyDataDialog;
