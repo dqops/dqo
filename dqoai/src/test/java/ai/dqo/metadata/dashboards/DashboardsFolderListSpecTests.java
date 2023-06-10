@@ -18,8 +18,11 @@ package ai.dqo.metadata.dashboards;
 import ai.dqo.BaseTest;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.dqohome.DqoHomeObjectMother;
+import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
+import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -27,11 +30,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class DashboardsFolderListSpecTests extends BaseTest {
     private DashboardsFolderListSpec sut;
     private DqoHome dqoHome;
+    private DqoHomeContext dqoHomeContext;
 
     @BeforeEach
     void setUp() {
         this.sut = new DashboardsFolderListSpec();
-        this.dqoHome = DqoHomeObjectMother.getDqoHome();
+        this.dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
+        this.dqoHome = this.dqoHomeContext.getDqoHome();
     }
 
     @Test
@@ -45,8 +50,42 @@ public class DashboardsFolderListSpecTests extends BaseTest {
     void collectSimilarDashboards_whenCalledOnTheBuiltinDashboardList_thenReturnsAllPossibleDashboards() {
         DashboardsFolderListSpec dqoFolderList = this.dqoHome.getDashboards().getSpec();
         AllSimilarDashboardsContainer allSimilarDashboardsContainer = new AllSimilarDashboardsContainer();
-        dqoFolderList.collectSimilarDashboards(allSimilarDashboardsContainer, null);
+        dqoFolderList.collectSimilarDashboards(allSimilarDashboardsContainer, dqoFolderList);
 
         Assertions.assertTrue(allSimilarDashboardsContainer.getSimilarDashboards().size() > 1);
     }
+
+    @Test
+    void equals_whenTwoListsEqualObjects_thenEqualsReturnsTrue() {
+        DashboardsFolderListSpec originalFolderList = this.dqoHome.getDashboards().getSpec();
+        AllSimilarDashboardsContainer container1 = new AllSimilarDashboardsContainer();
+        originalFolderList.collectSimilarDashboards(container1, originalFolderList);
+        this.sut = container1.createDashboardFolderList();
+
+        AllSimilarDashboardsContainer otherContainer = new AllSimilarDashboardsContainer();
+        originalFolderList.collectSimilarDashboards(otherContainer, originalFolderList);
+        DashboardsFolderListSpec other = otherContainer.createDashboardFolderList();
+
+        Assertions.assertEquals(this.sut, other);
+    }
+
+    @Test
+    void createExpandedDashboardTree_whenCalledForDefaultDashboardList_thenCreatesExpandedTree() {
+        this.sut = this.dqoHome.getDashboards().getSpec();
+        DashboardsFolderListSpec expandedDashboardTree = this.sut.createExpandedDashboardTree();
+        Assertions.assertNotNull(expandedDashboardTree);
+        Assertions.assertEquals(this.sut.size(), expandedDashboardTree.size());
+    }
+
+//    @Test
+//    @Disabled("This test should be disabled for regular use, it is used only for one-time migration of a folder tree that has all dashboards, into a dashboard configuration with parameter templates.")
+//    void collectSimilarDashboards_whenCalled_thenUpdatesDefaultDashboardListInDqoHome() {
+//        DashboardsFolderListSpec dqoFolderList = this.dqoHome.getDashboards().getSpec();
+//        AllSimilarDashboardsContainer allSimilarDashboardsContainer = new AllSimilarDashboardsContainer();
+//        dqoFolderList.collectSimilarDashboards(allSimilarDashboardsContainer, dqoFolderList);
+//        DashboardsFolderListSpec recreatedDashboardFolderList = allSimilarDashboardsContainer.createDashboardFolderList();
+//
+//        this.dqoHome.getDashboards().setSpec(recreatedDashboardFolderList);
+//        this.dqoHomeContext.flush();
+//    }
 }

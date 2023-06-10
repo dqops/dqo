@@ -51,4 +51,20 @@ public class AllSimilarDashboardsContainer {
 
         similarDashboardsContainer.addDashboard(dashboardSpec);
     }
+
+    /**
+     * Creates a new dashboard folder list from scratch, adding only the top-most dashboards and building aggregated dashboard parameters.
+     * @return List of root level folders with all dashboards added as templated (with parameter values that require further expansion).
+     */
+    public DashboardsFolderListSpec createDashboardFolderList() {
+        DashboardsFolderListSpec resultFolderList = new DashboardsFolderListSpec();
+
+        for (SimilarDashboardsContainer similarDashboardsContainer : this.similarDashboards.values()) {
+            DashboardsFolderSpec targetDashboardFolder = resultFolderList.getOrCreateFolderPath(similarDashboardsContainer.getFirstDashboardFolderPath());
+            DashboardSpec templatedDashboardSpec = similarDashboardsContainer.createTemplatedDashboardSpec();
+            targetDashboardFolder.getDashboards().add(templatedDashboardSpec);
+        }
+
+        return resultFolderList;
+    }
 }

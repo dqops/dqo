@@ -24,6 +24,7 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.rest.models.dashboards.AuthenticatedDashboardModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
+import ai.dqo.services.metadata.DashboardsProvider;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,19 +44,19 @@ import java.util.Optional;
 @Api(value = "Dashboards", description = "Provides access to data quality dashboards")
 public class DashboardsController {
     private final LookerStudioUrlService lookerStudioUrlService;
-    private DqoHomeContextFactory dqoHomeContextFactory;
+    private DashboardsProvider dashboardsProvider;
 
 
     /**
      * Default dependency injection constructor.
      * @param lookerStudioUrlService Looker studio URL service, creates authenticated urls.
-     * @param dqoHomeContextFactory Dqo home context factory.
+     * @param dashboardsProvider Dashboard tree provider.
      */
     @Autowired
     public DashboardsController(LookerStudioUrlService lookerStudioUrlService,
-                                DqoHomeContextFactory dqoHomeContextFactory) {
+                                DashboardsProvider dashboardsProvider) {
         this.lookerStudioUrlService = lookerStudioUrlService;
-        this.dqoHomeContextFactory = dqoHomeContextFactory;
+        this.dashboardsProvider = dashboardsProvider;
     }
 
     /**
@@ -70,10 +71,7 @@ public class DashboardsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Flux<DashboardsFolderSpec>> getAllDashboards() {
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-
-        DashboardsFolderListSpec dashboardList= dqoHome.getDashboards().getSpec();
+        DashboardsFolderListSpec dashboardList = this.dashboardsProvider.getDashboardTree();
 
         return new ResponseEntity<>(Flux.fromStream(dashboardList.stream()), HttpStatus.OK); // 200
     }
@@ -98,11 +96,7 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-
-        DashboardsFolderListSpec rootFolders= dqoHome.getDashboards().getSpec();
+        DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
 
         DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder);
         if (folder1Spec == null) {
@@ -142,10 +136,7 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-
-        DashboardsFolderListSpec rootFolders= dqoHome.getDashboards().getSpec();
+        DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
 
         DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
         if (folder1Spec == null) {
@@ -193,11 +184,7 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-
-        DashboardsFolderListSpec rootFolders= dqoHome.getDashboards().getSpec();
+        DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
 
         DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
         if (folder1Spec == null) {
@@ -252,11 +239,7 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-
-        DashboardsFolderListSpec rootFolders= dqoHome.getDashboards().getSpec();
+        DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
 
         DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
         if (folder1Spec == null) {

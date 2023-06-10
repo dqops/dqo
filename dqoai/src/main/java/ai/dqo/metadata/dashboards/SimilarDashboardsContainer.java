@@ -135,4 +135,41 @@ public class SimilarDashboardsContainer {
         this.dashboards.add(dashboardSpec);
         this.addDashboardParameters(dashboardSpec);
     }
+
+    /**
+     * Creates a single dashboard that is templated - contains all detected parameter values as a special value used for the parameter expansion and generating nested dashboards.
+     * @return Templated dashboard.
+     */
+    public DashboardSpec createTemplatedDashboardSpec() {
+        DashboardSpec dashboardSpec = new DashboardSpec();
+        dashboardSpec.setDashboardName(this.getFirstDashboardName());
+        dashboardSpec.setUrl(this.getUrl());
+        dashboardSpec.setWidth(this.getWidth());
+        dashboardSpec.setHeight(this.getHeight());
+        LinkedHashMap<String, String> dashboardParameters = new LinkedHashMap<>();
+
+        for (Map.Entry<String, LinkedHashSet<String>> parameterEntry : this.getParameters().entrySet()) {
+            String parameterName = parameterEntry.getKey();
+            LinkedHashSet<String> parameterValues = parameterEntry.getValue();
+            if (parameterValues.size() == 1) {
+                dashboardParameters.put(parameterName, parameterValues.stream().findFirst().get());
+            } else {
+                StringBuilder parameterValuesBuilder = new StringBuilder();
+                parameterValuesBuilder.append('$');
+                boolean isFirst = true;
+                for (String parameterValue : parameterValues) {
+                    if (!isFirst) {
+                        parameterValuesBuilder.append(',');
+                    }
+                    isFirst = false;
+                    parameterValuesBuilder.append(parameterValue);
+                }
+                parameterValuesBuilder.append('$');
+                dashboardParameters.put(parameterName, parameterValuesBuilder.toString());
+            }
+        }
+
+        dashboardSpec.setParameters(dashboardParameters);
+        return dashboardSpec;
+    }
 }
