@@ -894,7 +894,7 @@
 				<version>3.1.0</version>
 				<configuration>
 					<!-- If the "too many open files" error appears, download file-leak-detector-1.15-jar-with-dependencies.jar from https://github.com/jenkinsci/lib-file-leak-detector to the current folder and add "-javaagent:file-leak-detector-1.15-jar-with-dependencies.jar=http=19999" , then run tests and instantly open localhost:19999 in the browser to find another bug in Java. -->
-					<argLine>--add-opens java.base/java.nio=ALL-UNNAMED -XX:-MaxFDLimit</argLine>  <!-- Fixes an issue with snowflake on JDK 17, see: https://github.com/snowflakedb/snowflake-jdbc/issues/589#issuecomment-983944767 -->
+					<argLine>--add-opens java.base/java.nio=ALL-UNNAMED -XX:-MaxFDLimit -Xshare:off</argLine>  <!-- Fixes an issue with snowflake on JDK 17, see: https://github.com/snowflakedb/snowflake-jdbc/issues/589#issuecomment-983944767 -->
 					<environmentVariables>
 						<!-- Remember to restart IntelliJ when any environment variables are modified, they are loaded only once -->
 						<DQO_HOME>${project.basedir}/../home</DQO_HOME>

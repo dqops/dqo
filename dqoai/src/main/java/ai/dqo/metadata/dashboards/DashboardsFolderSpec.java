@@ -18,7 +18,9 @@ package ai.dqo.metadata.dashboards;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -26,8 +28,10 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -222,5 +226,131 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
         this.dashboards.add(dashboardSpec);
 
         return this;
+    }
+
+    /**
+     * Collects all similar dashboards from all subfolders.
+     * @param allSimilarDashboardsContainer Target container where the dashboards should be added.
+     * @param rootNode Root node, used to resolve folder names.
+     */
+    public void collectSimilarDashboards(AllSimilarDashboardsContainer allSimilarDashboardsContainer, HierarchyNode rootNode) {
+        for (DashboardSpec dashboardSpec : this.getDashboards()) {
+            allSimilarDashboardsContainer.addDashboard(dashboardSpec, rootNode);
+        }
+
+        this.getFolders().collectSimilarDashboards(allSimilarDashboardsContainer, rootNode);
+    }
+
+    /**
+     * Creates a copy of this object, copying all dashboards and folders. Expands templated dashboards.
+     * Expanding templated dashboards means that when a dashboard has a parameter in the form: "*default_value,value2,value3*", then
+     * a dashboard with the parameter value default_value (the first from the list) is used for the dashboard in the root folder, while variants of the dashboard
+     * with the parameters from the list are created in a nested folder named after the parameter value.
+     * @return New dashboard folder with additional expanded dashboards.
+     */
+    public DashboardsFolderSpec createExpandedDashboardFolder() {
+        DashboardsFolderSpec expandedFolder = new DashboardsFolderSpec(this.folderName);
+        expandedFolder.setFolders(this.getFolders().createExpandedDashboardTree()); // replacing with an expanded list
+
+        for (DashboardSpec templatedDashboardSpec : this.getDashboards()) {
+            LinkedHashMap<String, String> defaultParameters = createDefaultParameters(templatedDashboardSpec);
+            DashboardSpec rootDashboard = templatedDashboardSpec.deepClone();
+            rootDashboard.setParameters(defaultParameters);
+            expandedFolder.getDashboards().add(rootDashboard);
+
+            addExpandedDashboards(expandedFolder, templatedDashboardSpec, defaultParameters);
+        }
+
+        return expandedFolder;
+    }
+
+    /**
+     * Adds expanded dashboards to the target folder <code>expandedFolder</code>.
+     * @param targetFolder Target folder where child folders will be created.
+     * @param templatedDashboardSpec Templated dashboard that will be expanded.
+     * @param defaultParameters A list of default parameters (using just the first parameter value for all other parameters.
+     */
+    protected void addExpandedDashboards(DashboardsFolderSpec targetFolder, DashboardSpec templatedDashboardSpec, LinkedHashMap<String, String> defaultParameters) {
+        for (Map.Entry<String, String> templatedDashboardParameterEntry : templatedDashboardSpec.getParameters().entrySet()) {
+            String parameterName = templatedDashboardParameterEntry.getKey();
+            String templateParameterValue = templatedDashboardParameterEntry.getValue();
+            if (!(templateParameterValue.startsWith("$") || templateParameterValue.startsWith("*$")) && !templateParameterValue.endsWith("$")) {
+                continue; // not a templated (multi-value) parameter
+            }
+
+            boolean multiplicableParameter = templateParameterValue.startsWith("*$");
+            if (multiplicableParameter) {
+                templateParameterValue = templateParameterValue.substring(1);
+            }
+
+            int indexOfEndOfLabel = templateParameterValue.indexOf(':');
+            String parameterDisplayName = templateParameterValue.substring(1, indexOfEndOfLabel);
+            String parameterValuesListString = templateParameterValue.substring(indexOfEndOfLabel + 1, templateParameterValue.length() - 1);
+            int indexOfFirstAlternative = parameterValuesListString.indexOf(',');
+            String[] alternativeParameterValues = StringUtils.split(parameterValuesListString.substring(indexOfFirstAlternative + 1), ',');
+
+            String childFolderName = templatedDashboardSpec.getDashboardName() +
+                    (templatedDashboardSpec.getDashboardName().contains(" per ") ? ", " : " per ") +
+                    parameterDisplayName;
+            DashboardsFolderSpec childFolderForExpandedDashboards = targetFolder.getFolders().getOrCreateChildFolder(childFolderName);
+
+            for (String alternativeParameterValue : alternativeParameterValues) {
+                LinkedHashMap<String, String> addedDashboardParameters = (LinkedHashMap<String, String>) defaultParameters.clone();
+                DashboardSpec alternateDashboard = templatedDashboardSpec.deepClone();
+                alternateDashboard.setDashboardName(templatedDashboardSpec.getDashboardName() + " - " + alternativeParameterValue);
+                addedDashboardParameters.put(parameterName, alternativeParameterValue);
+                alternateDashboard.setParameters(addedDashboardParameters);
+                childFolderForExpandedDashboards.getDashboards().add(alternateDashboard);
+
+                if (multiplicableParameter) {
+                    DashboardSpec nestedTemplate = templatedDashboardSpec.deepClone();
+                    nestedTemplate.setDashboardName(nestedTemplate.getDashboardName() + " (" + alternativeParameterValue + ")");
+                    LinkedHashMap<String, String> nestedDefaultParameters = new LinkedHashMap<>(templatedDashboardSpec.getParameters());
+                    nestedDefaultParameters.put(parameterName, alternativeParameterValue);
+                    nestedTemplate.setParameters(nestedDefaultParameters);
+
+                    addExpandedDashboards(childFolderForExpandedDashboards, nestedTemplate, addedDashboardParameters);
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates the default parameters for the root dashboards. This dictionary of parameters will be cloned to generate alternative dashboards.
+     * @param templatedDashboardSpec Templated dashboard specification.
+     * @return Dictionary of parameter values, picking only the first (default) value from the list of alternative parameter values.
+     */
+    protected LinkedHashMap<String, String> createDefaultParameters(DashboardSpec templatedDashboardSpec) {
+        LinkedHashMap<String, String> defaultParameters = new LinkedHashMap<>();
+        for (Map.Entry<String, String> templatedDashboardParameterEntry : templatedDashboardSpec.getParameters().entrySet()) {
+            String parameterName = templatedDashboardParameterEntry.getKey();
+            String templateParameterValue = templatedDashboardParameterEntry.getValue();
+            if ((templateParameterValue.startsWith("$") || templateParameterValue.startsWith("*$")) && templateParameterValue.endsWith("$")) {
+                if (templateParameterValue.startsWith("*")) {
+                    templateParameterValue.substring(1);
+                }
+
+                int indexOfEndOfLabel = templateParameterValue.indexOf(':');
+                if (indexOfEndOfLabel < 0) {
+                    throw new DqoRuntimeException("Invalid format of a templated parameter value, must be: $Label:defaultvalue,value2,value3,value4$, but was: " + templateParameterValue);
+                }
+                String parameterValuesListString = templateParameterValue.substring(indexOfEndOfLabel + 1, templateParameterValue.length() - 1);
+                int indexOfFirstAlternative = parameterValuesListString.indexOf(',');
+                String firstParameterValue = parameterValuesListString.substring(0, indexOfFirstAlternative < 0 ? parameterValuesListString.length() : indexOfFirstAlternative);
+                defaultParameters.put(parameterName, firstParameterValue);
+            } else {
+                defaultParameters.put(parameterName, templateParameterValue);
+            }
+        }
+
+        return defaultParameters;
+    }
+
+    /**
+     * Sorts the dashboards and nested folders alphabetically, by name.
+     */
+    public void sort() {
+        this.folders.sort();
+        this.dashboards.sort();
     }
 }

@@ -141,7 +141,7 @@ public class HierarchyId {
     public HierarchyNode[] getNodesOnPath(HierarchyNode rootNode) {
         HierarchyNode[] nodesOnPath = new HierarchyNode[this.elements.length];
         HierarchyNode currentNode = rootNode;
-        for (int i = 0; i < this.elements.length; i++) {
+        for (int i = rootNode.getHierarchyId().size(); i < this.elements.length; i++) {
             HierarchyNode childNode = currentNode.getChild(this.elements[i]);
             if (childNode == null) {
                 throw new NoSuchElementException("Cannot find child named " + this.elements[i] + " on object " + currentNode);
