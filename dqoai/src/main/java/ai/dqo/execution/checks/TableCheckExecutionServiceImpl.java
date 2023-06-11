@@ -299,7 +299,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                         errorIssuesCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(2).size();
                         fatalIssuesCount += ruleEvaluationResult.getSeverityColumn().isEqualTo(3).size();
                     }
-                    catch (Exception ex) {
+                    catch (Throwable ex) {
                         log.error("Rule " + ruleDefinitionName + " failed to execute: " + ex.getMessage(), ex);
                         erroredRules++;
                         ErrorsNormalizedResult normalizedRuleErrorResults = this.errorsNormalizationService.createNormalizedRuleErrorResults(
@@ -314,7 +314,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 // ignore the error, just stop running checks
                 break;
             }
-            catch (Exception ex) {
+            catch (Throwable ex) {
                 log.error("Check runner failed to run checks: " + ex.getMessage(), ex);
                 throw new CheckExecutionFailedException("Checks on table failed to execute", ex);
             }
