@@ -18,7 +18,9 @@ package ai.dqo.metadata.dashboards;
 import ai.dqo.metadata.basespecs.AbstractDirtyTrackingSpecList;
 import ai.dqo.metadata.id.HierarchyNode;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Objects;
@@ -27,6 +29,25 @@ import java.util.Objects;
  * List of dashboard folders.
  */
 public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<DashboardsFolderSpec> implements Cloneable {
+    @JsonIgnore
+    private Instant fileLastModified;
+
+    /**
+     * Returns the last modification date of the dashboard list file.
+     * @return The lat modification date of the dashboard list file.
+     */
+    public Instant getFileLastModified() {
+        return fileLastModified;
+    }
+
+    /**
+     * Sets the last modification date of the dashboard list file.
+     * @param fileLastModified Last modification date of the dashboards file.
+     */
+    public void setFileLastModified(Instant fileLastModified) {
+        this.fileLastModified = fileLastModified;
+    }
+
     /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      *
@@ -45,6 +66,7 @@ public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<Dash
     @Override
     public DashboardsFolderListSpec deepClone() {
         DashboardsFolderListSpec cloned = new DashboardsFolderListSpec();
+        cloned.setFileLastModified(this.fileLastModified);
         if (this.getHierarchyId() != null) {
             cloned.setHierarchyId(cloned.getHierarchyId().clone());
         }
@@ -94,6 +116,7 @@ public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<Dash
         DashboardsFolderSpec childFolder = this.getFolderByName(childFolderName);
         if (childFolder == null) {
             childFolder = new DashboardsFolderSpec(childFolderName);
+            childFolder.getFolders().setFileLastModified(this.fileLastModified);
             this.add(childFolder);
         }
 
@@ -113,6 +136,7 @@ public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<Dash
             DashboardsFolderSpec childFolderByName = currentFolderList.getFolderByName(folderName);
             if (childFolderByName == null) {
                 childFolderByName = new DashboardsFolderSpec(folderName);
+                childFolderByName.getFolders().setFileLastModified(this.fileLastModified);
                 currentFolderList.add(childFolderByName);
             }
             resultFolder = childFolderByName;
@@ -129,6 +153,7 @@ public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<Dash
     public DashboardsFolderListSpec createExpandedDashboardTree() {
         DashboardsFolderListSpec expandedFolderList = new DashboardsFolderListSpec();
         expandedFolderList.setHierarchyId(this.getHierarchyId());
+        expandedFolderList.setFileLastModified(this.fileLastModified);
 
         for (DashboardsFolderSpec folderSpec : this) {
             DashboardsFolderSpec expandedFolder = folderSpec.createExpandedDashboardFolder();

@@ -62,6 +62,7 @@ public class FileDashboardFolderListSpecWrapperImpl extends DashboardFolderListS
                 String textContent = fileContent.getTextContent();
                 DashboardYaml deserialized = this.yamlSerializer.deserialize(textContent, DashboardYaml.class, fileNode.getPhysicalAbsolutePath());
                 DashboardsFolderListSpec deserializedSpec = deserialized.getSpec();
+                deserializedSpec.setFileLastModified(fileContent.getLastModified());
                 if (deserialized.getKind() != SpecificationKind.DASHBOARDS) {
                     throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                 }

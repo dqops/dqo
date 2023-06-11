@@ -27,12 +27,15 @@ import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.services.metadata.DashboardsProvider;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Optional;
 
 /**
@@ -73,7 +76,14 @@ public class DashboardsController {
     public ResponseEntity<Flux<DashboardsFolderSpec>> getAllDashboards() {
         DashboardsFolderListSpec dashboardList = this.dashboardsProvider.getDashboardTree();
 
-        return new ResponseEntity<>(Flux.fromStream(dashboardList.stream()), HttpStatus.OK); // 200
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl
+                        .maxAge(Duration.ofDays(1))
+                        .cachePublic()
+                        .mustRevalidate())
+                .lastModified(dashboardList.getFileLastModified())
+                .eTag(dashboardList.getFileLastModified().toString())
+                .body(Flux.fromStream(dashboardList.stream())); // 200
     }
 
     /**

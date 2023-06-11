@@ -24,8 +24,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  * List of custom dashboards.
  */
 public class DashboardFolderListSpecWrapperImpl extends AbstractElementWrapper<String, DashboardsFolderListSpec> implements DashboardFolderListSpecWrapper {
-
-
     @JsonIgnore
     private final static String NAME = "dashboards";
 

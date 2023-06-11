@@ -251,6 +251,7 @@ public class DashboardsFolderSpec extends AbstractSpec implements Cloneable {
     public DashboardsFolderSpec createExpandedDashboardFolder() {
         DashboardsFolderSpec expandedFolder = new DashboardsFolderSpec(this.folderName);
         expandedFolder.setFolders(this.getFolders().createExpandedDashboardTree()); // replacing with an expanded list
+        expandedFolder.getFolders().setFileLastModified(this.getFolders().getFileLastModified());
 
         for (DashboardSpec templatedDashboardSpec : this.getDashboards()) {
             LinkedHashMap<String, String> defaultParameters = createDefaultParameters(templatedDashboardSpec);
