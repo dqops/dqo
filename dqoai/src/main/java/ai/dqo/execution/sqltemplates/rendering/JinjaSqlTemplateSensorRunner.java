@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.execution.sqltemplates;
+package ai.dqo.execution.sqltemplates.rendering;
 
 import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.SourceConnection;
 import ai.dqo.core.jobqueue.JobCancellationToken;
-import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
@@ -28,7 +27,6 @@ import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import lombok.extern.slf4j.Slf4j;
@@ -37,9 +35,6 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
 
 /**
  * Sensor runner that transforms an SQL template and executes a generated SQL on a connection.

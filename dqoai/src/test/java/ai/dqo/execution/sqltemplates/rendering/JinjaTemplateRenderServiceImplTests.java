@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.execution.sqltemplates;
+package ai.dqo.execution.sqltemplates.rendering;
 
 import ai.dqo.BaseTest;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
@@ -23,6 +23,8 @@ import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
 import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
 import ai.dqo.core.configuration.DqoPythonConfigurationPropertiesObjectMother;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
+import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderParameters;
+import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderServiceImpl;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;

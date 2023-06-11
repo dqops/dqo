@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.execution.sqltemplates;
+package ai.dqo.execution.sqltemplates.rendering;
 
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResultObjectMother;
+import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderParameters;
 
 /**
  * Object mother for JinjaTemplateRenderParameters.

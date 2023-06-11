@@ -16,7 +16,7 @@
 package ai.dqo.sensors;
 
 import ai.dqo.core.secrets.SecretValueProvider;
-import ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner;
+import ai.dqo.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
@@ -104,7 +104,7 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec {
 
     /**
      * Returns the default sensor runner class that will be used to execute this sensor.
-     * The default sensor runner is {@link ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner}.
+     * The default sensor runner is {@link JinjaSqlTemplateSensorRunner}.
      * @return The default sensor runner class.
      */
     @JsonIgnore

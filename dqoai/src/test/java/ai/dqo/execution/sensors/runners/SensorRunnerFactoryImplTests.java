@@ -16,7 +16,7 @@
 package ai.dqo.execution.sensors.runners;
 
 import ai.dqo.BaseTest;
-import ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner;
+import ai.dqo.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorRunnerType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

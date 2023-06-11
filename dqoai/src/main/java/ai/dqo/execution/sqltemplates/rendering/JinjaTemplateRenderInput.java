@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.execution.sqltemplates;
+package ai.dqo.execution.sqltemplates.rendering;
 
 import ai.dqo.metadata.storage.localfiles.HomeType;
 import com.fasterxml.jackson.annotation.JsonInclude;

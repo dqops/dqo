@@ -17,7 +17,7 @@ package ai.dqo.utils.docs.checks;
 
 import ai.dqo.BaseTest;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
-import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceObjectMother;
+import ai.dqo.execution.sqltemplates.rendering.JinjaTemplateRenderServiceObjectMother;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
@@ -33,10 +33,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;

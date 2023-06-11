@@ -15,7 +15,7 @@
  */
 package ai.dqo.execution.sensors.runners;
 
-import ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner;
+import ai.dqo.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorRunnerType;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
