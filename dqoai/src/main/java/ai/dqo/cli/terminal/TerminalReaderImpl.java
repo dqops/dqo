@@ -104,47 +104,4 @@ public class TerminalReaderImpl extends TerminalReaderAbstract {
 
         return waitForAnyInputFuture;
     }
-
-    /**
-     * Hangs on waiting for the user to confirm that the application should exit.
-     *
-     * @param startMessage Message to show before waiting for the user to confirm the exit.
-     */
-    @Override
-    public void waitForExit(String startMessage) {
-        this.getWriter().writeLine(startMessage);
-        this.getWriter().writeLine("Press any key to stop the application.");
-
-        while (true) {
-            Character character = this.tryReadChar(1000);
-            if (character != null) {
-                if (this.promptBoolean("Exit the application", false)) {
-                    return;
-                }
-            }
-        }
-    }
-
-    /**
-     * Hangs on waiting for the user to confirm that the application should exit.
-     * Waits for up to <code>waitDuration</code>.
-     *
-     * @param startMessage Message to show before waiting for the user to confirm the exit.
-     * @param waitDuration Wait duration. The method will return false when the timeout elapsed.
-     * @return True - the user intentionally clicked any button to exit the application, false - the timeout elapsed.
-     */
-    @Override
-    public boolean waitForExitWithTimeLimit(String startMessage, Duration waitDuration) {
-        this.getWriter().writeLine(startMessage);
-        this.getWriter().writeLine("Press any key to stop the application.");
-
-        CompletableFuture<Boolean> booleanCompletableFuture = this.waitForConsoleInput(waitDuration.plusSeconds(10L));
-        try {
-            Boolean wasExitedByUser = booleanCompletableFuture.get(waitDuration.toMillis(), TimeUnit.MILLISECONDS);
-            return wasExitedByUser;
-        }
-        catch (InterruptedException | ExecutionException | TimeoutException e) {
-            return false;
-        }
-    }
 }

@@ -22,6 +22,9 @@ import java.time.Duration;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Terminal input reader used to ask the user to provide answers.
@@ -79,7 +82,19 @@ public abstract class TerminalReaderAbstract implements TerminalReader {
      * @param startMessage Message to show before waiting for the user to confirm the exit.
      */
     @Override
-    public abstract void waitForExit(String startMessage);
+    public void waitForExit(String startMessage) {
+        this.getWriter().writeLine(startMessage);
+        this.getWriter().writeLine("Press any key to stop the application.");
+
+        while (true) {
+            Character character = this.tryReadChar(1000);
+            if (character != null) {
+                if (this.promptBoolean("Exit the application", false)) {
+                    return;
+                }
+            }
+        }
+    }
 
     /**
      * Hangs on waiting for the user to confirm that the application should exit.
@@ -90,7 +105,19 @@ public abstract class TerminalReaderAbstract implements TerminalReader {
      * @return True - the user intentionally clicked any button to exit the application, false - the timeout elapsed.
      */
     @Override
-    public abstract boolean waitForExitWithTimeLimit(String startMessage, Duration waitDuration);
+    public boolean waitForExitWithTimeLimit(String startMessage, Duration waitDuration) {
+        this.getWriter().writeLine(startMessage);
+        this.getWriter().writeLine("Press any key to stop the application.");
+
+        CompletableFuture<Boolean> booleanCompletableFuture = this.waitForConsoleInput(waitDuration.plusSeconds(10L));
+        try {
+            Boolean wasExitedByUser = booleanCompletableFuture.get(waitDuration.toMillis(), TimeUnit.MILLISECONDS);
+            return wasExitedByUser;
+        }
+        catch (InterruptedException | ExecutionException | TimeoutException e) {
+            return false;
+        }
+    }
 
     /**
      * Asks the user to answer a question.
