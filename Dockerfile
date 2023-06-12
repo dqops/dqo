@@ -1,8 +1,7 @@
 FROM openjdk:17-jdk-slim-buster AS dqo-libs
 WORKDIR /workspace/app
 
-COPY mvnw.sh ./
-RUN chmod 755 ./mvnw.sh
+COPY --chmod=755 mvnw.sh ./
 COPY .mvn .mvn
 
 COPY pom.xml .
@@ -12,9 +11,7 @@ COPY lib lib
 
 # resolve dependencies
 ENV USER_HOME="/user/mvn"
-RUN mkdir -p "${USER_HOME}/.m2"
-RUN ./mvnw.sh dependency:resolve -pl !distribution
-RUN ./mvnw.sh dependency:resolve-plugins -pl !distribution
+RUN mkdir -p "${USER_HOME}/.m2" && ./mvnw.sh dependency:resolve -pl !distribution && ./mvnw.sh dependency:resolve-plugins -pl !distribution
 RUN ./mvnw.sh frontend:install-node-and-npm -pl dqoai
 
 # npm install
