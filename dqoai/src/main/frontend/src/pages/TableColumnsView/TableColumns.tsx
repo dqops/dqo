@@ -65,7 +65,7 @@ const TableColumns = ({
   const history = useHistory();
   const { loading } = useSelector(getFirstLevelState(CheckTypes.SOURCES));
 
-  const { jobs } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
 
   const labels = [
     'Column name',
@@ -216,7 +216,7 @@ const TableColumns = ({
 
     return max;
   };
-  const filteredJobs = jobs?.jobs?.filter(
+  const filteredJobs = Object.values(job_dictionary_state)?.filter(
     (x) =>
       x.jobType === 'collect statistics' &&
       x.parameters?.collectStatisticsParameters

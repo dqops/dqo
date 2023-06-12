@@ -25,7 +25,7 @@ const JobItem = ({
   job: DqoJobHistoryEntryModel;
   notifnumber?: number;
 }) => {
-  const { jobs } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
   const { errors } = useError();
   const dispatch = useActionDispatch();
 
@@ -46,13 +46,10 @@ const JobItem = ({
   }, []);
 
   const data = useMemo(() => {
-    const jobsData = jobs?.jobs
-      ? jobs?.jobs
-          .sort((a, b) => {
-            return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
-          })
-          .map((item) => ({ type: 'job', item }))
-      : [];
+    const jobsData = Object.values(job_dictionary_state).sort((a, b) => {
+      return (b.jobId?.jobId || 0) - (a.jobId?.jobId || 0);
+    })
+    .map((item) => ({ type: 'job', item }));
 
     const errorData = errors.map((item: IError) => ({ type: 'error', item }));
 
@@ -66,7 +63,7 @@ const JobItem = ({
     });
 
     return newData;
-  }, [jobs, errors]);
+  }, [job_dictionary_state, errors]);
 
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);

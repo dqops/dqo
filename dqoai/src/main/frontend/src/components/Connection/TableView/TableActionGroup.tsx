@@ -55,7 +55,7 @@ const TableActionGroup = ({
   const [isAddColumnDialogOpen, setIsAddColumnDialogOpen] = useState(false);
   const [loadingJob, setLoadingJob] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
-  const { jobs } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const fetchColumns = async () => {
     try {
@@ -69,7 +69,7 @@ const TableActionGroup = ({
 
   useEffect(() => {
     fetchColumns();
-  }, [connection, schema, table, jobs?.jobs]);
+  }, [connection, schema, table]);
   const fullPath = `${connection}.${schema}.${table}`;
 
   const removeTable = async () => {
@@ -93,7 +93,7 @@ const TableActionGroup = ({
     }
   };
 
-  const filteredJobs = jobs?.jobs?.filter(
+  const filteredJobs = Object.values(job_dictionary_state).filter(
     (x) =>
       x.jobType === 'collect statistics' &&
       x.parameters?.collectStatisticsParameters

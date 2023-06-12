@@ -19,7 +19,7 @@ const TableColumnsView = () => {
     schema: schemaName,
     table: tableName
   }: { connection: string; schema: string; table: string } = useParams();
-  const { jobs } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
 
   const [loadingJob, setLoadingJob] = useState(false);
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
@@ -40,7 +40,7 @@ const TableColumnsView = () => {
 
   useEffect(() => {
     fetchColumns();
-  }, [connectionName, schemaName, tableName, jobs?.jobs]);
+  }, [connectionName, schemaName, tableName]);
 
   const collectStatistics = async () => {
     try {
@@ -54,7 +54,7 @@ const TableColumnsView = () => {
     }
   };
 
-  const filteredJobs = jobs?.jobs?.filter(
+  const filteredJobs = Object.values(job_dictionary_state)?.filter(
     (x) =>
       x.jobType === 'collect statistics' &&
       x.parameters?.collectStatisticsParameters
