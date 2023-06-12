@@ -46,9 +46,10 @@ public class RuleDocumentationModelFactoryImpl implements RuleDocumentationModel
      * Creates a rule documentation model factory.
      * @param projectRoot Project root path.
      * @param dqoHomeContext DQO User home context.
-     * @param specToModelCheckMappingService Specification to UI model factory, used to get documentation of the rule parameters.
+     * @param specToModelCheckMappingService Specification to the model factory, used to get documentation of the rule parameters.
      */
-    public RuleDocumentationModelFactoryImpl(Path projectRoot, DqoHomeContext dqoHomeContext,
+    public RuleDocumentationModelFactoryImpl(Path projectRoot,
+                                             DqoHomeContext dqoHomeContext,
                                              SpecToModelCheckMappingService specToModelCheckMappingService) {
         this.projectRoot = projectRoot;
         this.dqoHomeContext = dqoHomeContext;

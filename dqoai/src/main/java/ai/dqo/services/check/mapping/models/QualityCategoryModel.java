@@ -28,12 +28,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * UI model that returns the form definition and the form data to edit all checks within a single category.
+ * Model that returns the form definition and the form data to edit all checks within a single category.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIQualityCategoryModel", description = "UI model that returns the form definition and the form data to edit all checks within a single category.")
+@ApiModel(value = "UIQualityCategoryModel", description = "Model that returns the form definition and the form data to edit all checks within a single category.")
 public class QualityCategoryModel {
     @JsonPropertyDescription("Data quality check category name.")
     private String category;
@@ -54,7 +54,7 @@ public class QualityCategoryModel {
     }
 
     /**
-     * Creates a UI check category model, given a category name.
+     * Creates a check category model, given a category name.
      * @param category Category name.
      */
     public QualityCategoryModel(String category) {

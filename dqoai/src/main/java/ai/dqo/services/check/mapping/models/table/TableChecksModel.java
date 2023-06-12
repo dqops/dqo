@@ -30,12 +30,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * UI model containing information related to table-level checks on a table.
+ * Model containing information related to table-level checks on a table.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UITableChecksModel", description = "UI model containing information related to table-level checks on a table.")
+@ApiModel(value = "TableChecksModel", description = "Model containing information related to table-level checks on a table.")
 public class TableChecksModel {
     @JsonPropertyDescription("Table name.")
     private String tableName;

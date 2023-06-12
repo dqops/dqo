@@ -77,10 +77,10 @@ public class SimilarCheckModel {
     /**
      * Creates a similar check model.
      * @param checkTarget Check target (table or column).
-     * @param checkType Check type.
-     * @param timeScale Time scale (optional, null for experiments).
-     * @param category Check category name.
-     * @param checkModel Check UI model with the check name and additional information about the check.
+     * @param checkType   Check type.
+     * @param timeScale   Time scale (optional, null for experiments).
+     * @param category    Check category name.
+     * @param checkModel  Check model with the check name and additional information about the check.
      */
     public SimilarCheckModel(CheckTarget checkTarget,
                              CheckType checkType,

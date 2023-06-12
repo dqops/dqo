@@ -38,12 +38,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * UI model that returns the form definition and the form data to edit a single data quality check.
+ * Model that returns the form definition and the form data to edit a single data quality check.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UICheckModel", description = "UI model that returns the form definition and the form data to edit a single data quality check.")
+@ApiModel(value = "CheckModel", description = "Model that returns the form definition and the form data to edit a single data quality check.")
 public class CheckModel implements Cloneable {
     /**
      * Data quality check name that is used in YAML file. Identifies the data quality check.

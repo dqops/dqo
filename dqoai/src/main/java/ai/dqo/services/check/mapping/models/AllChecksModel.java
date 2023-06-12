@@ -27,12 +27,12 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * UI model that returns the model of selected information related to all checks on a connection level.
+ * Model that returns the model of selected information related to all checks on a connection level.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIAllChecksModel", description = "UI model that returns the model of selected information related to all checks on a connection level.")
+@ApiModel(value = "AllChecksModel", description = "Model that returns the model of selected information related to all checks on a connection level.")
 public class AllChecksModel {
     @JsonPropertyDescription("Connection name.")
     private String connectionName;

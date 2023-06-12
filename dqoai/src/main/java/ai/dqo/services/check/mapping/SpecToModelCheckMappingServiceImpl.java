@@ -56,8 +56,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Service that creates the UI model from the data quality check specifications,
- * enabling transformation between the storage model (YAML compliant) with a UI friendly UI model.
+ * Service that creates a model from the data quality check specifications,
+ * enabling transformation from the storage model (YAML compliant) to a UI friendly model.
  */
 @Service
 public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappingService {
@@ -67,7 +67,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     private SimilarCheckCache similarCheckCache;
 
     /**
-     * Creates a check mapping service that exchanges the data for data quality checks between UI models and the data quality check specifications.
+     * Creates a check mapping service that exchanges the data for data quality checks between models and the data quality check specifications.
      * @param reflectionService Reflection service used to read the list of checks.
      * @param sensorDefinitionFindService Service that finds the definition of sensors, to verify their capabilities.
      * @param schedulesUtilityService Schedule specs utility service to get detailed info about CRON expressions.
@@ -85,7 +85,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     }
 
     /**
-     * Creates a check mapping service that exchanges the data for data quality checks between UI models and the data quality check specifications.
+     * Creates a check mapping service that exchanges the data for data quality checks between models and the data quality check specifications.
      * WARNING: It doesn't set the {@link SchedulesUtilityService}, therefore it's not able to resolve schedules (i.e. CRON expressions).
      * It is used for generating the documentation.
      * @param reflectionService Reflection service used to read the list of checks.
@@ -97,23 +97,23 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     }
 
     /**
-     * Creates a UI friendly model of the whole checks container on table level or column level data quality checks, divided into categories.
+     * Creates a model of the whole checks container on table level or column level data quality checks, divided into categories.
      *
      * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, recurring or partitioned check (for a specific timescale).
-     * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine-grained "run checks" job configurations. Also determines which checks will be included in the ui model.
+     * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine-grained "run checks" job configurations. Also determines which checks will be included in the model.
      * @param connectionSpec Connection specification for the connection to which the table belongs to.
      * @param tableSpec Table specification with the configuration of the parent table.
      * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
      * @param providerType Provider type from the parent connection.
-     * @return UI friendly model of data quality checks' container.
+     * @return Model of data quality checks' container.
      */
     @Override
-    public CheckContainerModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
-                                             CheckSearchFilters runChecksTemplate,
-                                             ConnectionSpec connectionSpec,
-                                             TableSpec tableSpec,
-                                             ExecutionContext executionContext,
-                                             ProviderType providerType) {
+    public CheckContainerModel createModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
+                                           CheckSearchFilters runChecksTemplate,
+                                           ConnectionSpec connectionSpec,
+                                           TableSpec tableSpec,
+                                           ExecutionContext executionContext,
+                                           ProviderType providerType) {
         CheckContainerModel checkContainerModel = new CheckContainerModel();
         checkContainerModel.setRunChecksJobTemplate(runChecksTemplate.clone());
         checkContainerModel.setPartitionByColumn(tableSpec.getTimestampColumns() != null ?
@@ -194,17 +194,17 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     }
 
     /**
-     * Creates a simplistic UI friendly model of every data quality check on table level or column level, divided into categories.
+     * Creates a simplistic model of every data quality check on table level or column level, divided into categories.
      *
      * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, recurring or partitioned check (for a specific timescale).
      * @param executionContext Check execution context with access to the check information.
      * @param providerType Provider type.
-     * @return Simplistic UI friendly model of data quality checks' container.
+     * @return Simplistic model of data quality checks' container.
      */
     @Override
-    public CheckContainerBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
-                                                       ExecutionContext executionContext,
-                                                       ProviderType providerType) {
+    public CheckContainerBasicModel createBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
+                                                     ExecutionContext executionContext,
+                                                     ProviderType providerType) {
         CheckContainerBasicModel checkContainerBasicModel = new CheckContainerBasicModel();
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
         List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, Optional.empty());
@@ -233,18 +233,18 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     }
 
     /**
-     * Creates a UI model for all data quality checks for one category.
+     * Creates a model for all data quality checks for one category.
      * @param categoryFieldInfo       Field info for the category field.
      * @param checkCategoryParentNode The current category specification object instance (an object that has fields for all data quality checks in the category).
-     * @param scheduleGroup Scheduling group relevant to this check.
+     * @param scheduleGroup           Scheduling group relevant to this check.
      * @param runChecksTemplate       Run check job template, acting as a filtering template.
      * @param tableSpec               Table specification with the configuration of the parent table.
-     * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
-     * @param providerType Provider type from the parent connection.
-     * @param checkTarget Check target.
-     * @param checkType Check type (profiling, recurring, ...).
-     * @param checkTimeScale Check time scale: null for profiling, daily/monthly for others that apply the date truncation.
-     * @return UI model for a category with all quality checks, filtered by runChecksTemplate.
+     * @param executionContext        Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
+     * @param providerType            Provider type from the parent connection.
+     * @param checkTarget             Check target.
+     * @param checkType               Check type (profiling, recurring, ...).
+     * @param checkTimeScale          Check time scale: null for profiling, daily/monthly for others that apply the date truncation.
+     * @return Model for a category with all quality checks, filtered by runChecksTemplate.
      */
     protected QualityCategoryModel createCategoryModel(FieldInfo categoryFieldInfo,
                                                        Object checkCategoryParentNode,
@@ -299,17 +299,17 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     }
 
     /**
-     * Creates a UI model for a single data quality check.
-     * @param checkFieldInfo Reflection info of the field in the parent object that stores the check specification field value.
-     * @param checkSpec Check specification instance retrieved from the object.
-     * @param scheduleGroup Scheduling group relevant to this check.
+     * Creates a model for a single data quality check.
+     * @param checkFieldInfo            Reflection info of the field in the parent object that stores the check specification field value.
+     * @param checkSpec                 Check specification instance retrieved from the object.
+     * @param scheduleGroup             Scheduling group relevant to this check.
      * @param runChecksCategoryTemplate "run check" job configuration for the parent category, used to create templates for each check.
-     * @param tableSpec Table specification with the configuration of the parent table.
-     * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
-     * @param providerType Provider type from the parent connection.
-     * @param checkTarget Check target.
-     * @param checkType Check type (profiling, recurring, ...).
-     * @param checkTimeScale Check time scale: null for profiling, daily/monthly for others that apply the date truncation.
+     * @param tableSpec                 Table specification with the configuration of the parent table.
+     * @param executionContext          Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
+     * @param providerType              Provider type from the parent connection.
+     * @param checkTarget               Check target.
+     * @param checkType                 Check type (profiling, recurring, ...).
+     * @param checkTimeScale            Check time scale: null for profiling, daily/monthly for others that apply the date truncation.
      * @return Check model.
      */
     protected CheckModel createCheckModel(FieldInfo checkFieldInfo,
@@ -416,7 +416,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     }
 
     /**
-     * Creates a simplistic UI model for a single data quality check.
+     * Creates a simplistic model for a single data quality check.
      * @param checkFieldInfo Reflection info of the field in the parent object that stores the check specification field value.
      * @param checkSpec Check specification.
      * @param executionContext Check execution context.
@@ -512,7 +512,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     /**
      * Creates a list of fields to edit all values in the rule parameters specification.
      * @param ruleParametersSpec Rule parameters specification.
-     * @return List of UI fields for all rule parameter fields.
+     * @return List of fields for all rule parameter fields.
      */
     public List<FieldModel> createFieldsForRuleParameters(AbstractRuleParametersSpec ruleParametersSpec) {
         List<FieldModel> fieldModels = new ArrayList<>();
@@ -533,7 +533,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
     /**
      * Creates a list of fields to edit all values in the sensor parameters specification.
      * @param parametersSpec Sensor parameters specification.
-     * @return List of UI fields for all sensor parameter fields.
+     * @return List of fields for all sensor parameter fields.
      */
     public List<FieldModel> createFieldsForSensorParameters(AbstractSensorParametersSpec parametersSpec) {
         List<FieldModel> fieldModels = new ArrayList<>();
@@ -554,9 +554,9 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
 
     /**
      * Creates a field model for a single field in an object.
-     * @param fieldInfo Reflection field information about the field.
+     * @param fieldInfo    Reflection field information about the field.
      * @param parentObject Parent object to retrieve the field value from.
-     * @return UI field model with properly typed field value.
+     * @return A field model with properly typed field value.
      */
     public FieldModel createFieldModel(FieldInfo fieldInfo, Object parentObject) {
         Object fieldValue = fieldInfo.getFieldValue(parentObject);

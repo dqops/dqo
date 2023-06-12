@@ -29,12 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * UI model that returns the model of selected information related to column checks on a connection level.
+ * Model containing selected information related to column checks on a connection level.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIAllColumnChecksModel", description = "UI model that returns the model of selected information related to column checks on a connection level.")
+@ApiModel(value = "AllColumnChecksModel", description = "Model containing selected information related to column checks on a connection level.")
 public class AllColumnChecksModel {
     @JsonPropertyDescription("Check target.")
     private final CheckTarget checkTarget = CheckTarget.column;

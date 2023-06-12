@@ -30,12 +30,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * UI model containing information related to checks on a column.
+ * Model containing information related to checks on a column.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIColumnChecksModel", description = "UI model containing information related to checks on a column.")
+@ApiModel(value = "ColumnChecksModel", description = "Model containing information related to checks on a column.")
 public class ColumnChecksModel {
     @JsonPropertyDescription("Column name.")
     private String columnName;

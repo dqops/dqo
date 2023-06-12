@@ -29,12 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * UI model that returns the model of selected information related to table checks on a connection level.
+ * Model containing selected information related to table checks on a connection level.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIAllTableChecksModel", description = "UI model that returns the model of selected information related to table checks on a connection level.")
+@ApiModel(value = "AllTableChecksModel", description = "Model containing selected information related to table checks on a connection level.")
 public class AllTableChecksModel {
     @JsonPropertyDescription("Check target.")
     private final CheckTarget checkTarget = CheckTarget.table;

@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Service that updates the check specification from the UI model that was filled with updates.
+ * Service that updates the check specification from a model that was filled with updates.
  */
 @Component
 public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappingService {
@@ -49,9 +49,9 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
     }
 
     /**
-     * Updates the <code>checkContainerSpec</code> with the updates received from the UI in the <code>model</code>.
+     * Updates the <code>checkContainerSpec</code> with the updates contained in the <code>model</code>.
      *
-     * @param model               Data quality check UI model with the updates.
+     * @param model              Data quality check model with the updates.
      * @param checkContainerSpec The target check container spec object that will be updated.
      */
     @Override
@@ -83,9 +83,9 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
 
     /**
      * Updates the category container specification (an object that contains data quality check specifications) with the changes
-     * received from the UI model.
+     * received from the model.
      *
-     * @param categoryModel Source UI category model with the updates.
+     * @param categoryModel Source category model with the updates.
      * @param categorySpec  Target category specification to update.
      */
     protected void updateCategoryChecksSpec(QualityCategoryModel categoryModel, AbstractSpec categorySpec) {
@@ -115,7 +115,7 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
             updateCheckSpec(checkModel, checkSpec);
 
             if (checkNodeObject.isDefault()) {
-                checkFieldInfo.setFieldValue(null, categorySpec);  // when UI has sent no configuration (all fields nulls or defaults)
+                checkFieldInfo.setFieldValue(null, categorySpec);  // when api has sent no configuration (all fields nulls or defaults)
             } else {
                 checkFieldInfo.setFieldValue(checkNodeObject, categorySpec);
             }
@@ -123,9 +123,9 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
     }
 
     /**
-     * Updates the check specification <code>checkSpec</code> from the changes in the <code>checkModel</code> UI model.
+     * Updates the check specification <code>checkSpec</code> from the changes in the <code>checkModel</code>.
      *
-     * @param checkModel Source UI model for the data quality check.
+     * @param checkModel Source model for the data quality check.
      * @param checkSpec  Target check specification to update.
      */
     protected void updateCheckSpec(CheckModel checkModel, AbstractCheckSpec<?,?,?,?> checkSpec) {
@@ -151,10 +151,10 @@ public class ModelToSpecCheckMappingServiceImpl implements ModelToSpecCheckMappi
     }
 
     /**
-     * Updates the rule thresholds from the changes in the UI model.
+     * Updates the rule thresholds from the changes in the model.
      *
      * @param ruleThresholdsModel Source rule thresholds model with changes to the low, medium and high severities.
-     * @param checkSpec  Target rule thresholds specification to update.
+     * @param checkSpec           Target rule thresholds specification to update.
      */
     protected void updateRuleThresholdsSpec(RuleThresholdsModel ruleThresholdsModel, AbstractCheckSpec<?,?,?,?> checkSpec) {
         ClassInfo ruleThresholdsClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());

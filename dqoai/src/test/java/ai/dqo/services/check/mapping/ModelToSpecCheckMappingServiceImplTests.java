@@ -71,7 +71,7 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
     @Test
     void updateAllChecksSpecs_whenEmptyTableChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
         TableProfilingCheckCategoriesSpec tableCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
-        CheckContainerModel uiModel = this.specToUiMapper.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
+        CheckContainerModel uiModel = this.specToUiMapper.createModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, null, null);
 
         this.sut.updateCheckContainerSpec(uiModel, tableCheckCategoriesSpec);
@@ -80,7 +80,7 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
     @Test
     void updateAllChecksSpecs_whenEmptyColumnChecksModelGivenJustCreated_thenExecutesWithoutErrors() {
         ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
-        CheckContainerModel uiModel = this.specToUiMapper.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
+        CheckContainerModel uiModel = this.specToUiMapper.createModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, null, null);
 
         this.sut.updateCheckContainerSpec(uiModel, columnCheckCategoriesSpec);

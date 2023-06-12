@@ -30,50 +30,50 @@ import ai.dqo.services.check.mapping.models.FieldModel;
 import java.util.List;
 
 /**
- * Service that creates a UI friendly model from the data quality check specifications,
+ * Service that creates a model from the data quality check specifications,
  * enabling transformation from the storage model (YAML compliant) to a UI friendly model.
  */
 public interface SpecToModelCheckMappingService {
     /**
-     * Creates a UI friendly model of the whole checks container of table level or column level data quality checks, divided into categories.
+     * Creates a model of the whole checks container of table level or column level data quality checks, divided into categories.
      * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, recurring or partitioned check (for a specific timescale).
-     * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine-grained "run checks" job configurations. Also determines which checks will be included in the ui model.
+     * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine-grained "run checks" job configurations. Also determines which checks will be included in the model.
      * @param connectionSpec Connection specification for the connection to which the table belongs to.
      * @param tableSpec Table specification with the configuration of the parent table.
      * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
      * @param providerType Provider type from the parent connection.
-     * @return UI friendly model of data quality checks' container.
+     * @return Model of data quality checks' container.
      */
-    CheckContainerModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
-                                      CheckSearchFilters runChecksTemplate,
-                                      ConnectionSpec connectionSpec,
-                                      TableSpec tableSpec,
-                                      ExecutionContext executionContext,
-                                      ProviderType providerType);
+    CheckContainerModel createModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
+                                    CheckSearchFilters runChecksTemplate,
+                                    ConnectionSpec connectionSpec,
+                                    TableSpec tableSpec,
+                                    ExecutionContext executionContext,
+                                    ProviderType providerType);
 
     /**
-     * Creates a simplistic UI friendly model of every data quality check on table level or column level, divided into categories.
+     * Creates a simplistic model of every data quality check on table level or column level, divided into categories.
      *
      * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, recurring or partitioned check (for a specific timescale).
      * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
      * @param providerType Provider type from the parent connection.
-     * @return Simplistic UI friendly model of data quality checks' container.
+     * @return Simplistic model of data quality checks' container.
      */
-    CheckContainerBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
-                                                ExecutionContext executionContext,
-                                                ProviderType providerType);
+    CheckContainerBasicModel createBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
+                                              ExecutionContext executionContext,
+                                              ProviderType providerType);
 
     /**
      * Creates a list of fields to edit all values in the sensor parameters specification.
      * @param parametersSpec Sensor parameters specification.
-     * @return List of UI fields for all sensor parameter fields.
+     * @return List of fields for all sensor parameter fields.
      */
     List<FieldModel> createFieldsForSensorParameters(AbstractSensorParametersSpec parametersSpec);
 
     /**
      * Creates a list of fields to edit all values in the rule parameters specification.
      * @param ruleParametersSpec Rule parameters specification.
-     * @return List of UI fields for all rule parameter fields.
+     * @return List of fields for all rule parameter fields.
      */
     List<FieldModel> createFieldsForRuleParameters(AbstractRuleParametersSpec ruleParametersSpec);
 }

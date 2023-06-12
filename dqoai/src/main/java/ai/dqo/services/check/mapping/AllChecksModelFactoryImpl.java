@@ -186,7 +186,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
         Map<CheckContainerTypeModel, CheckContainerModel> checkContainerModels = checkContainers.entrySet().stream()
                 .map(checkContainerPair -> new AbstractMap.SimpleEntry<>(
                         checkContainerPair.getKey(),
-                        this.specToModelCheckMappingService.createUiModel(
+                        this.specToModelCheckMappingService.createModel(
                                 checkContainerPair.getValue(),
                                 checkSearchFilters,
                                 connectionSpec,
@@ -285,7 +285,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
         Map<CheckContainerTypeModel, CheckContainerModel> checkContainerModels = checkContainers.entrySet().stream()
                 .map(checkContainerPair -> new AbstractMap.SimpleEntry<>(
                         checkContainerPair.getKey(),
-                        this.specToModelCheckMappingService.createUiModel(
+                        this.specToModelCheckMappingService.createModel(
                             checkContainerPair.getValue(),
                             checkSearchFilters,
                             connectionSpec,

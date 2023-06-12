@@ -26,12 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Simplistic UI model that returns the list of data quality checks, their names, categories and "configured" flag.
+ * Simplistic model that returns the list of data quality checks, their names, categories and "configured" flag.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UICheckContainerBasicModel", description = "Simplistic UI model that returns the list of data quality checks, their names, categories and \"configured\" flag.")
+@ApiModel(value = "CheckContainerBasicModel", description = "Simplistic model that returns the list of data quality checks, their names, categories and \"configured\" flag.")
 public class CheckContainerBasicModel {
     @JsonPropertyDescription("Simplistic list of all data quality checks.")
     private List<CheckBasicModel> checks = new ArrayList<>();

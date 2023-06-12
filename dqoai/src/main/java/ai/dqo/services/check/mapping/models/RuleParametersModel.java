@@ -29,12 +29,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * UI model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single severity level (low, medium, high).
+ * Model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single severity level (low, medium, high).
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIRuleParametersModel", description = "UI model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single severity level (low, medium, high).")
+@ApiModel(value = "RuleParametersModel", description = "Model that returns the form definition and the form data to edit parameters (thresholds) for a rule at a single severity level (low, medium, high).")
 public class RuleParametersModel implements Cloneable {
     @JsonPropertyDescription("Full rule name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality rule.")
     private String ruleName;
@@ -68,7 +68,7 @@ public class RuleParametersModel implements Cloneable {
             if (cloned.ruleParameters != null) {
                 cloned.ruleParameters = cloned.ruleParameters
                         .stream()
-                        .map(uiFieldModel -> uiFieldModel.cloneForUpdate())
+                        .map(fieldModel -> fieldModel.cloneForUpdate())
                         .collect(Collectors.toList());
             }
 

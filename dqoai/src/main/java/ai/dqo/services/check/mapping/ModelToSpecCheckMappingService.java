@@ -19,13 +19,13 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.services.check.mapping.models.CheckContainerModel;
 
 /**
- * Service that updates the check specification from the UI model that was filled with updates.
+ * Service that updates the check specification from a model that was filled with updates.
  */
 public interface ModelToSpecCheckMappingService {
     /**
-     * Updates the <code>checkContainerSpec</code> with the updates received from the UI in the <code>model</code>.
+     * Updates the <code>checkContainerSpec</code> with the updates contained in the <code>model</code>.
      *
-     * @param model               Data quality check UI model with the updates.
+     * @param model              Data quality check model with the updates.
      * @param checkContainerSpec The target check container spec object that will be updated.
      */
     void updateCheckContainerSpec(CheckContainerModel model, AbstractRootChecksContainerSpec checkContainerSpec);

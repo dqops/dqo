@@ -26,12 +26,12 @@ import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * UI model identifying the check type and timescale of checks belonging to a container.
+ * Model identifying the check type and timescale of checks belonging to a container.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UICheckContainerTypeModel", description = "UI model identifying the check type and timescale of checks belonging to a container.")
+@ApiModel(value = "CheckContainerTypeModel", description = "Model identifying the check type and timescale of checks belonging to a container.")
 public class CheckContainerTypeModel {
 
     public CheckContainerTypeModel(@NotNull CheckType checkType, CheckTimeScale checkTimeScale) {

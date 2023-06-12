@@ -24,12 +24,12 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * UI model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).
+ * Model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIRuleThresholdsModel", description = "UI model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).")
+@ApiModel(value = "RuleThresholdsModel", description = "Model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).")
 public class RuleThresholdsModel implements Cloneable {
     @JsonPropertyDescription("Rule parameters for the error severity rule.")
     private RuleParametersModel error;

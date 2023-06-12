@@ -83,7 +83,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiModel_whenEmptyTableChecksModelGiven_thenCreatesUiModel() {
         TableProfilingCheckCategoriesSpec tableCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
-        CheckContainerModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
+        CheckContainerModel uiModel = this.sut.createModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiModel);
@@ -93,7 +93,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiModel_whenEmptyColumnChecksModelGiven_thenCreatesUiModel() {
         ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
-        CheckContainerModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
+        CheckContainerModel uiModel = this.sut.createModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiModel);
@@ -124,9 +124,9 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiBasicModel_whenEmptyTableChecksModelGiven_thenCreatesUiBasicModel() {
         TableProfilingCheckCategoriesSpec tableCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
-        CheckContainerModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
+        CheckContainerModel uiModel = this.sut.createModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
-        CheckContainerBasicModel uiBasicModel = this.sut.createUiBasicModel(tableCheckCategoriesSpec, this.executionContext, ProviderType.bigquery);
+        CheckContainerBasicModel uiBasicModel = this.sut.createBasicModel(tableCheckCategoriesSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiBasicModel);
         Assertions.assertEquals(6, CheckContainerBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());
@@ -139,9 +139,9 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiBasicModel_whenEmptyColumnChecksModelGiven_thenCreatesUiBasicModel() {
         ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
-        CheckContainerModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
+        CheckContainerModel uiModel = this.sut.createModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
-        CheckContainerBasicModel uiBasicModel = this.sut.createUiBasicModel(columnCheckCategoriesSpec, this.executionContext, ProviderType.bigquery);
+        CheckContainerBasicModel uiBasicModel = this.sut.createBasicModel(columnCheckCategoriesSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiBasicModel);
         Assertions.assertEquals(13, CheckContainerBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());

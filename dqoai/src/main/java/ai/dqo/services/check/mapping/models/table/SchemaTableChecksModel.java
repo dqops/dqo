@@ -28,12 +28,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * UI model containing information related to table checks on a schema level.
+ * Model containing information related to table checks on a schema level.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UISchemaTableChecksModel", description = "UI model containing information related to table checks on a schema level.")
+@ApiModel(value = "SchemaTableChecksModel", description = "Model containing information related to table checks on a schema level.")
 public class SchemaTableChecksModel {
     @JsonPropertyDescription("Schema name.")
     private String schemaName;
