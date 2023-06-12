@@ -1538,10 +1538,10 @@ public class TablesController {
      * @return Data quality checks templates on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/profiling", produces = "application/json")
-    @ApiOperation(value = "getTableProfilingChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate.class)
+    @ApiOperation(value = "getTableProfilingChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate.class),
+            @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate[].class),
             @ApiResponse(code = 404, message = "Connection, schema or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -1578,10 +1578,10 @@ public class TablesController {
      * @return Data quality checks templates on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/recurring/{timeScale}", produces = "application/json")
-    @ApiOperation(value = "getTableRecurringChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate.class)
+    @ApiOperation(value = "getTableRecurringChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate.class),
+            @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate[].class),
             @ApiResponse(code = 404, message = "Connection, schema or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -1619,10 +1619,10 @@ public class TablesController {
      * @return Data quality checks templates on a requested table.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/bulkenable/partitioned/{timeScale}", produces = "application/json")
-    @ApiOperation(value = "getTablePartitionedChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate.class)
+    @ApiOperation(value = "getTablePartitionedChecksTemplates", notes = "Return available data quality checks on a requested table.", response = CheckTemplate[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate.class),
+            @ApiResponse(code = 200, message = "Potential data quality checks on a table returned", response = CheckTemplate[].class),
             @ApiResponse(code = 404, message = "Connection, schema or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
