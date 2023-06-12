@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import {
   ParameterDefinitionSpecDataTypeEnum,
   ParameterDefinitionSpecDisplayHintEnum,
-  UIFieldModel
+  FieldModel
 } from '../../api';
 import Checkbox from '../Checkbox';
 import Input from '../Input';
@@ -17,8 +17,8 @@ import FieldDatePicker from "../FieldDatePicker";
 import clsx from "clsx";
 
 interface ISensorParametersFieldSettingsProps {
-  field: UIFieldModel;
-  onChange: (field: UIFieldModel) => void;
+  field: FieldModel;
+  onChange: (field: FieldModel) => void;
   disabled?: boolean;
   className?: string;
   onSave?: () => void;

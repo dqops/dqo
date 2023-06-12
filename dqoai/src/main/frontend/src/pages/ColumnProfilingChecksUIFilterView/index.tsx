@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import { getColumnProfilingChecksUIFilter, setColumnUpdatedCheckUiFilter } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi, ColumnApiClient } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
@@ -36,7 +36,7 @@ const ColumnProfilingChecksUIFilterView = () => {
 
   const onUpdate = async () => {
     setIsUpdating(true);
-    await ColumnApiClient.updateColumnProfilingChecksUI(
+    await ColumnApiClient.updateColumnProfilingChecksModel(
       connectionName,
       schemaName,
       tableName,
@@ -55,7 +55,7 @@ const ColumnProfilingChecksUIFilterView = () => {
     );
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName]);
 
-  const onChange = (ui: UICheckContainerModel) => {
+  const onChange = (ui: CheckContainerModel) => {
     dispatch(setColumnUpdatedCheckUiFilter(checkTypes, firstLevelActiveTab, ui));
   };
 

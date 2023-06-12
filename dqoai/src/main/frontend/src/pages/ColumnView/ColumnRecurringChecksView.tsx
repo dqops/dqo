@@ -11,7 +11,7 @@ import {
   updateColumnMonthlyRecurring
 } from '../../redux/actions/column.actions';
 import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import ColumnActionGroup from './ColumnActionGroup';
 import { CheckResultOverviewApi } from "../../services/apiClient";
 import { useHistory, useParams } from "react-router-dom";
@@ -131,11 +131,11 @@ const ColumnRecurringChecksView = () => {
     }
   };
 
-  const onDailyRecurringChange = (ui: UICheckContainerModel) => {
+  const onDailyRecurringChange = (ui: CheckContainerModel) => {
     dispatch(setUpdatedDailyRecurring(checkTypes, firstLevelActiveTab, ui));
   };
 
-  const onMonthlyRecurringChange = (ui: UICheckContainerModel) => {
+  const onMonthlyRecurringChange = (ui: CheckContainerModel) => {
     dispatch(setUpdatedMonthlyRecurring(checkTypes, firstLevelActiveTab, ui));
   };
 

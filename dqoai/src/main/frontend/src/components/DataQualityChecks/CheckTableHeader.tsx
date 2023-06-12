@@ -4,8 +4,8 @@ import {
   DqoJobHistoryEntryModelStatusEnum,
   SimilarCheckModelCheckTypeEnum,
   TimeWindowFilterParameters,
-  UICheckContainerModel
-} from '../../api';
+  CheckContainerModel
+} from "../../api";
 import { JobApiClient, TableApiClient } from '../../services/apiClient';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
@@ -18,13 +18,13 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 
 interface TableHeaderProps {
-  checksUI: UICheckContainerModel;
+  checksUI: CheckContainerModel;
   timeWindowFilter?: TimeWindowFilterParameters | null;
 
   mode?: string;
   setMode: (mode?: string) => void;
-  copyUI?: UICheckContainerModel;
-  setCopyUI: (ui: UICheckContainerModel) => void;
+  copyUI?: CheckContainerModel;
+  setCopyUI: (ui: CheckContainerModel) => void;
 }
 
 const TableHeader = ({
@@ -67,9 +67,7 @@ const TableHeader = ({
 
   const onChangeMode = (newMode: string) => {
     setMode(newMode);
-
-    const newCheckUI: UICheckContainerModel = { ...checksUI };
-
+    const newCheckUI: CheckContainerModel = {...checksUI};
     setCopyUI(newCheckUI);
   };
 
@@ -95,7 +93,7 @@ const TableHeader = ({
         .filter((item) => item.checks?.length)
     };
 
-    await TableApiClient.updateTableRecurringChecksUI(
+    await TableApiClient.updateTableRecurringChecksModel(
       connection,
       schema,
       table,
@@ -150,7 +148,7 @@ const TableHeader = ({
         .filter((item) => item.checks?.length)
     };
 
-    await TableApiClient.updateTablePartitionedChecksUI(
+    await TableApiClient.updateTablePartitionedChecksModel(
       connection,
       schema,
       table,

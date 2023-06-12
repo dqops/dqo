@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import {
   getColumnPartitionedChecksUIFilter, setColumnUpdatedPartitionedChecksUiFilter,
 } from '../../redux/actions/column.actions';
@@ -39,7 +39,7 @@ const ColumnPartitionedChecksUIFilterView = () => {
   };
   const onUpdate = async () => {
     setIsUpdating(true);
-    await ColumnApiClient.updateColumnPartitionedChecksUI(
+    await ColumnApiClient.updateColumnPartitionedChecksModel(
       connectionName,
       schemaName,
       tableName,
@@ -60,7 +60,7 @@ const ColumnPartitionedChecksUIFilterView = () => {
     );
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, category, checkName]);
 
-  const onChange = (ui: UICheckContainerModel) => {
+  const onChange = (ui: CheckContainerModel) => {
     dispatch(setColumnUpdatedPartitionedChecksUiFilter(checkTypes, firstLevelActiveTab, ui));
   };
 

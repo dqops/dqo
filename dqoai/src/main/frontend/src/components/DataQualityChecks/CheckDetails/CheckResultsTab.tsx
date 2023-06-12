@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { CheckResultDetailedSingleModel, CheckResultsDetailedDataModel, UICheckModel } from "../../../api";
+import { CheckResultDetailedSingleModel, CheckResultsDetailedDataModel, CheckModel } from "../../../api";
 import Select from "../../Select";
 import { Table } from "../../Table";
 import { useTree } from "../../../contexts/treeContext";
@@ -20,7 +20,7 @@ interface CheckResultsTabProps {
   month?: string;
   onChangeMonth: (month: string) => void;
   onChangeDataStream: (name: string) => void;
-  check?: UICheckModel
+  check?: CheckModel
 }
 
 const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChangeDataStream, check }: CheckResultsTabProps) => {

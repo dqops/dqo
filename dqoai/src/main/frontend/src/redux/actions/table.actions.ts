@@ -24,7 +24,7 @@ import {
   RecurringScheduleSpec,
   TableProfilingCheckCategoriesSpec,
   TableBasicModel,
-  UICheckContainerModel, TablePartitioningModel
+  CheckContainerModel, TablePartitioningModel
 } from '../../api';
 import { CheckRunRecurringScheduleGroup } from "../../shared/enums/scheduling.enum";
 import { CheckTypes } from "../../shared/routes";
@@ -362,7 +362,7 @@ export const getTableChecksUiRequest = (checkType: CheckTypes, activeTab: string
   checkType, activeTab,
 });
 
-export const getTableChecksUiSuccess = (checkType: CheckTypes, activeTab: string, data: UICheckContainerModel) => ({
+export const getTableChecksUiSuccess = (checkType: CheckTypes, activeTab: string, data: CheckContainerModel) => ({
   type: SOURCE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_SUCCESS,
   checkType, activeTab,
   data
@@ -380,7 +380,7 @@ export const getTableProfilingChecksUI =
       dispatch(getTableChecksUiRequest(checkType, activeTab));
     }
     try {
-      const res = await TableApiClient.getTableProfilingChecksUI(
+      const res = await TableApiClient.getTableProfilingChecksModel(
         connectionName,
         schemaName,
         tableName
@@ -413,12 +413,12 @@ export const updateTableProfilingChecksUI =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    data: UICheckContainerModel
+    data: CheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableChecksUIRequest(checkType, activeTab));
     try {
-      await TableApiClient.updateTableProfilingChecksUI(
+      await TableApiClient.updateTableProfilingChecksModel(
         connectionName,
         schemaName,
         tableName,
@@ -508,7 +508,7 @@ export const getTableDailyRecurringRequest = (checkType: CheckTypes, activeTab: 
   checkType, activeTab,
 });
 
-export const getTableDailyRecurringSuccess = (checkType: CheckTypes, activeTab: string, data: UICheckContainerModel) => ({
+export const getTableDailyRecurringSuccess = (checkType: CheckTypes, activeTab: string, data: CheckContainerModel) => ({
   type: SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_SUCCESS,
   checkType, activeTab,
   data
@@ -526,7 +526,7 @@ export const getTableDailyRecurring =
       dispatch(getTableDailyRecurringRequest(checkType, activeTab));
     }
     try {
-      const res = await TableApiClient.getTableRecurringChecksUI(
+      const res = await TableApiClient.getTableRecurringChecksModel(
         connectionName,
         schemaName,
         tableName,
@@ -560,12 +560,12 @@ export const updateTableDailyRecurring =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    data: UICheckContainerModel
+    data: CheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableDailyRecurringRequest(checkType, activeTab));
     try {
-      await TableApiClient.updateTableRecurringChecksUI(
+      await TableApiClient.updateTableRecurringChecksModel(
         connectionName,
         schemaName,
         tableName,
@@ -583,7 +583,7 @@ export const getTableMonthlyRecurringRequest = (checkType: CheckTypes, activeTab
   checkType, activeTab
 });
 
-export const getTableMonthlyRecurringSuccess = (checkType: CheckTypes, activeTab: string, data: UICheckContainerModel) => ({
+export const getTableMonthlyRecurringSuccess = (checkType: CheckTypes, activeTab: string, data: CheckContainerModel) => ({
   type: SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_SUCCESS,
   data,
   checkType, activeTab
@@ -601,7 +601,7 @@ export const getTableMonthlyRecurring =
       dispatch(getTableMonthlyRecurringRequest(checkType, activeTab));
     }
     try {
-      const res = await TableApiClient.getTableRecurringChecksUI(
+      const res = await TableApiClient.getTableRecurringChecksModel(
         connectionName,
         schemaName,
         tableName,
@@ -637,12 +637,12 @@ export const updateTableMonthlyRecurring =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    data: UICheckContainerModel
+    data: CheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableMonthlyRecurringRequest(checkType, activeTab));
     try {
-      await TableApiClient.updateTableRecurringChecksUI(
+      await TableApiClient.updateTableRecurringChecksModel(
         connectionName,
         schemaName,
         tableName,
@@ -662,7 +662,7 @@ export const getTableDailyPartitionedChecksRequest = (checkType: CheckTypes, act
 });
 
 export const getTableDailyPartitionedChecksSuccess = (
-  checkType: CheckTypes, activeTab: string, data: UICheckContainerModel
+  checkType: CheckTypes, activeTab: string, data: CheckContainerModel
 ) => ({
   type: SOURCE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS_SUCCESS,
   data,
@@ -682,7 +682,7 @@ export const getTableDailyPartitionedChecks =
       dispatch(getTableDailyPartitionedChecksRequest(checkType, activeTab));
     }
     try {
-      const res = await TableApiClient.getTablePartitionedChecksUI(
+      const res = await TableApiClient.getTablePartitionedChecksModel(
         connectionName,
         schemaName,
         tableName,
@@ -718,12 +718,12 @@ export const updateTableDailyPartitionedChecks =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    data: UICheckContainerModel
+    data: CheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableDailyPartitionedChecksRequest(checkType, activeTab));
     try {
-      await TableApiClient.updateTablePartitionedChecksUI(
+      await TableApiClient.updateTablePartitionedChecksModel(
         connectionName,
         schemaName,
         tableName,
@@ -743,7 +743,7 @@ export const getTableMonthlyPartitionedChecksRequest = (checkType: CheckTypes, a
 });
 
 export const getTableMonthlyPartitionedChecksSuccess = (
-  checkType: CheckTypes, activeTab: string, data: UICheckContainerModel
+  checkType: CheckTypes, activeTab: string, data: CheckContainerModel
 ) => ({
   type: SOURCE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS_SUCCESS,
   data,
@@ -763,7 +763,7 @@ export const getTableMonthlyPartitionedChecks =
       dispatch(getTableMonthlyPartitionedChecksRequest(checkType, activeTab));
     }
     try {
-      const res = await TableApiClient.getTablePartitionedChecksUI(
+      const res = await TableApiClient.getTablePartitionedChecksModel(
         connectionName,
         schemaName,
         tableName,
@@ -799,12 +799,12 @@ export const updateTableMonthlyPartitionedChecks =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    data: UICheckContainerModel
+    data: CheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableMonthlyPartitionedChecksRequest(checkType, activeTab));
     try {
-      await TableApiClient.updateTablePartitionedChecksUI(
+      await TableApiClient.updateTablePartitionedChecksModel(
         connectionName,
         schemaName,
         tableName,
@@ -870,21 +870,21 @@ export const setUpdatedLabels = (checkType: CheckTypes, activeTab: string, label
   activeTab
 });
 
-export const setUpdatedChecksUi = (checkType: CheckTypes, activeTab: string, checksUI?: UICheckContainerModel) => ({
+export const setUpdatedChecksUi = (checkType: CheckTypes, activeTab: string, checksUI?: CheckContainerModel) => ({
   type: SOURCE_ACTION.SET_UPDATED_CHECKS_UI,
   data: checksUI,
   checkType,
   activeTab
 });
 
-export const setUpdatedDailyRecurring = (checkType: CheckTypes, activeTab: string, checksUI?: UICheckContainerModel) => ({
+export const setUpdatedDailyRecurring = (checkType: CheckTypes, activeTab: string, checksUI?: CheckContainerModel) => ({
   type: SOURCE_ACTION.SET_TABLE_DAILY_RECURRING,
   data: checksUI,
   checkType,
   activeTab
 });
 
-export const setUpdatedMonthlyRecurring = (checkType: CheckTypes, activeTab: string, checksUI?: UICheckContainerModel) => ({
+export const setUpdatedMonthlyRecurring = (checkType: CheckTypes, activeTab: string, checksUI?: CheckContainerModel) => ({
   type: SOURCE_ACTION.SET_TABLE_MONTHLY_RECURRING,
   data: checksUI,
   checkType,
@@ -892,7 +892,7 @@ export const setUpdatedMonthlyRecurring = (checkType: CheckTypes, activeTab: str
 });
 
 export const setUpdatedDailyPartitionedChecks = (
-  checkType: CheckTypes, activeTab: string, checksUI?: UICheckContainerModel
+  checkType: CheckTypes, activeTab: string, checksUI?: CheckContainerModel
 ) => ({
   type: SOURCE_ACTION.SET_TABLE_PARTITIONED_DAILY_CHECKS,
   data: checksUI,
@@ -901,7 +901,7 @@ export const setUpdatedDailyPartitionedChecks = (
 });
 
 export const setUpdatedMonthlyPartitionedChecks = (
-  checkType: CheckTypes, activeTab: string, checksUI?: UICheckContainerModel
+  checkType: CheckTypes, activeTab: string, checksUI?: CheckContainerModel
 ) => ({
   type: SOURCE_ACTION.SET_TABLE_PARTITIONED_MONTHLY_CHECKS,
   data: checksUI,
@@ -925,7 +925,7 @@ export const getTableProfilingChecksUIFilterRequest = (checkType: CheckTypes, ac
 });
 
 export const getTableProfilingChecksUIFilterSuccess = (
-  checkType: CheckTypes, activeTab: string, data: UICheckContainerModel
+  checkType: CheckTypes, activeTab: string, data: CheckContainerModel
 ) => ({
   type: SOURCE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER_SUCCESS,
   checkType,
@@ -945,7 +945,7 @@ export const getTableProfilingChecksUIFilter =
         dispatch(getTableProfilingChecksUIFilterRequest(checkType, activeTab));
       }
       try {
-        const res = await TableApiClient.getTableProfilingChecksUIFilter(
+        const res = await TableApiClient.getTableProfilingChecksModelFilter(
           connectionName,
           schemaName,
           tableName,
@@ -965,7 +965,7 @@ export const getTableRecurringChecksUIFilterRequest = (checkType: CheckTypes, ac
 });
 
 export const getTableRecurringChecksUIFilterSuccess = (
-  checkType: CheckTypes, activeTab: string, data: UICheckContainerModel
+  checkType: CheckTypes, activeTab: string, data: CheckContainerModel
 ) => ({
   type: SOURCE_ACTION.GET_TABLE_RECURRING_UI_FILTER_SUCCESS,
   checkType,
@@ -985,7 +985,7 @@ export const getTableRecurringChecksUIFilter =
         dispatch(getTableRecurringChecksUIFilterRequest(checkType, activeTab));
       }
       try {
-        const res = await TableApiClient.getTableRecurringChecksUIFilter(
+        const res = await TableApiClient.getTableRecurringChecksModelFilter(
           connectionName,
           schemaName,
           tableName,
@@ -1006,7 +1006,7 @@ export const getTablePartitionedChecksUIFilterRequest = (checkType: CheckTypes, 
 });
 
 export const getTablePartitionedChecksUIFilterSuccess = (
-  checkType: CheckTypes, activeTab: string, data: UICheckContainerModel
+  checkType: CheckTypes, activeTab: string, data: CheckContainerModel
 ) => ({
   type: SOURCE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER_SUCCESS,
   checkType,
@@ -1026,7 +1026,7 @@ export const getTablePartitionedChecksUIFilter =
         dispatch(getTablePartitionedChecksUIFilterRequest(checkType, activeTab));
       }
       try {
-        const res = await TableApiClient.getTablePartitionedChecksUIFilter(
+        const res = await TableApiClient.getTablePartitionedChecksModelFilter(
           connectionName,
           schemaName,
           tableName,
@@ -1040,20 +1040,20 @@ export const getTablePartitionedChecksUIFilter =
       }
     };
 
-export const setTableUpdatedCheckUiFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
+export const setTableUpdatedCheckUiFilter = (checkType: CheckTypes, activeTab: string, ui: CheckContainerModel) => ({
   type: SOURCE_ACTION.SET_UPDATED_CHECKS_UI_FILTER,
   checkType,
   activeTab,
   data: ui
 });
 
-export const setTableUpdatedRecurringChecksUIFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
+export const setTableUpdatedRecurringChecksUIFilter = (checkType: CheckTypes, activeTab: string, ui: CheckContainerModel) => ({
   type: SOURCE_ACTION.SET_UPDATED_RECURRING_UI_FILTER,
   checkType,
   activeTab,
   data: ui
 });
-export const setTableUpdatedPartitionedChecksUiFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
+export const setTableUpdatedPartitionedChecksUiFilter = (checkType: CheckTypes, activeTab: string, ui: CheckContainerModel) => ({
   type: SOURCE_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER,
   checkType,
   activeTab,

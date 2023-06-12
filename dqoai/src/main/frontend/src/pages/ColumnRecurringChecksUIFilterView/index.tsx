@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import {
   getColumnRecurringChecksUIFilter, setColumnUpdatedRecurringChecksUIFilter,
 } from '../../redux/actions/column.actions';
@@ -38,7 +38,7 @@ const ColumnRecurringChecksUIFilterView = () => {
   };
   const onUpdate = async () => {
     setIsUpdating(true);
-    await ColumnApiClient.updateColumnRecurringChecksUI(
+    await ColumnApiClient.updateColumnRecurringChecksModel(
       connectionName,
       schemaName,
       tableName,
@@ -58,7 +58,7 @@ const ColumnRecurringChecksUIFilterView = () => {
     );
   }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, category, checkName]);
 
-  const onChange = (ui: UICheckContainerModel) => {
+  const onChange = (ui: CheckContainerModel) => {
     dispatch(setColumnUpdatedRecurringChecksUIFilter(checkTypes, firstLevelActiveTab, ui));
   };
 

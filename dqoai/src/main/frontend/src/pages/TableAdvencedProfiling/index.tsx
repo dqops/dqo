@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
   CheckResultsOverviewDataModel,
-  UICheckContainerModel
+  CheckContainerModel
 } from '../../api';
 import TableActionGroup from '../../components/Connection/TableView/TableActionGroup';
 import DataQualityChecks from '../../components/DataQualityChecks';
@@ -85,7 +85,7 @@ const TableAdvancedProfiling = () => {
     );
   };
 
-  const handleChange = (value: UICheckContainerModel) => {
+  const handleChange = (value: CheckContainerModel) => {
     dispatch(setUpdatedChecksUi(checkTypes, firstLevelActiveTab, value));
   };
 

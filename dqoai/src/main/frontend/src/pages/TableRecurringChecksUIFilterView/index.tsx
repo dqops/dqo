@@ -6,7 +6,7 @@ import {
 } from '../../redux/actions/table.actions';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import { CheckResultOverviewApi, TableApiClient } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
@@ -36,7 +36,7 @@ const TableRecurringChecksUIFilterView = () => {
 
   const onUpdate = async () => {
     setIsUpdating(true);
-    await TableApiClient.updateTableRecurringChecksUI(
+    await TableApiClient.updateTableRecurringChecksModel(
       connectionName,
       schemaName,
       tableName,
@@ -50,7 +50,7 @@ const TableRecurringChecksUIFilterView = () => {
     setIsUpdating(false);
   };
 
-  const onChange = (ui: UICheckContainerModel) => {
+  const onChange = (ui: CheckContainerModel) => {
     dispatch(setTableUpdatedRecurringChecksUIFilter(checkTypes, firstLevelActiveTab, ui));
   };
 

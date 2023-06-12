@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Checkbox from '../Checkbox';
-import { DataStreamBasicModel, UICheckModel } from '../../api';
+import { DataStreamBasicModel, CheckModel } from '../../api';
 import TextArea from '../TextArea';
 import Select from '../Select';
 import { DataStreamsApi } from '../../services/apiClient';
@@ -10,8 +10,8 @@ import Button from "../Button";
 import Input from "../Input";
 
 interface ICheckSettingsTabProps {
-  check?: UICheckModel;
-  onChange: (item: UICheckModel) => void;
+  check?: CheckModel;
+  onChange: (item: CheckModel) => void;
 }
 
 const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {

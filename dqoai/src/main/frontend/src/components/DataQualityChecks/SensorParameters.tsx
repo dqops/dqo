@@ -1,10 +1,10 @@
 import React from 'react';
-import { UIFieldModel } from '../../api';
+import { FieldModel } from '../../api';
 import FieldControl from './FieldControl';
 
 interface ISensorParametersProps {
-  parameters: UIFieldModel[];
-  onChange: (parameters: UIFieldModel[]) => void;
+  parameters: FieldModel[];
+  onChange: (parameters: FieldModel[]) => void;
   disabled?: boolean;
   onUpdate: () => void;
 }
@@ -15,7 +15,7 @@ const SensorParameters = ({
   disabled,
   onUpdate,
 }: ISensorParametersProps) => {
-  const handleChange = (field: UIFieldModel, idx: number) => {
+  const handleChange = (field: FieldModel, idx: number) => {
     const newParameters = parameters.map((item, index) =>
       index === idx ? field : item
     );
@@ -30,7 +30,7 @@ const SensorParameters = ({
             <div key={index} className="">
               <FieldControl
                 field={item}
-                onChange={(field: UIFieldModel) => handleChange(field, index)}
+                onChange={(field: FieldModel) => handleChange(field, index)}
                 disabled={disabled}
                 onSave={onUpdate}
               />

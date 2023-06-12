@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import ColumnActionGroup from './ColumnActionGroup';
 import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, ColumnStatisticsModel, UICheckContainerModel } from '../../api';
+import { CheckResultsOverviewDataModel, ColumnStatisticsModel, CheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getColumnChecksUi,
@@ -91,7 +91,7 @@ const ColumnProfilingChecksView = ({
     );
   };
 
-  const handleChange = (value: UICheckContainerModel) => {
+  const handleChange = (value: CheckContainerModel) => {
     dispatch(setUpdatedChecksUi(checkTypes, firstLevelActiveTab, value));
   };
 

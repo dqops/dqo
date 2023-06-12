@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
-import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
+import { CheckResultsOverviewDataModel, CheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import Button from '../../components/Button';
 import {
@@ -20,7 +20,7 @@ import ColumnNavigation from "../../components/ColumnNavigation";
 const ColumnProfilingsView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
   const { checksUI, isUpdating, loading } = useSelector(getFirstLevelState(checkTypes));
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UICheckContainerModel>();
+  const [updatedChecksUI, setUpdatedChecksUI] = useState<CheckContainerModel>();
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));

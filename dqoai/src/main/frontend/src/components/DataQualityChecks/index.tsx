@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
   CheckResultsOverviewDataModel,
-  UICheckContainerModel,
-  UICheckContainerModelEffectiveScheduleEnabledStatusEnum,
-  UICheckModel,
-  UIEffectiveScheduleModelScheduleLevelEnum
+  CheckContainerModel,
+  CheckContainerModelEffectiveScheduleEnabledStatusEnum,
+  CheckModel,
+  EffectiveScheduleModelScheduleLevelEnum
 } from '../../api';
 import { useTree } from '../../contexts/treeContext';
 import clsx from 'clsx';
@@ -21,8 +21,8 @@ import Select from '../Select';
 import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
 
 interface IDataQualityChecksProps {
-  checksUI?: UICheckContainerModel;
-  onChange: (ui: UICheckContainerModel) => void;
+  checksUI?: CheckContainerModel;
+  onChange: (ui: CheckContainerModel) => void;
   className?: string;
   checkResultsOverview: CheckResultsOverviewDataModel[];
   getCheckOverview: () => void;
@@ -62,11 +62,11 @@ const DataQualityChecks = ({
     'Default incremental time window'
   );
   const [mode, setMode] = useState<string>();
-  const [copyUI, setCopyUI] = useState<UICheckContainerModel>();
+  const [copyUI, setCopyUI] = useState<CheckContainerModel>();
 
   const { sidebarWidth } = useTree();
   const handleChangeDataDataStreams = (
-    check: UICheckModel,
+    check: CheckModel,
     idx: number,
     jdx: number
   ) => {
