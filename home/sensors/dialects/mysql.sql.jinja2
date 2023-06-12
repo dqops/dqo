@@ -120,7 +120,7 @@
     {%- elif part == 'week' -%}
         DATE_SUB({{value}}, INTERVAL WEEKDAY({{value}}) DAY)
     {%- elif part == 'day' -%}
-        {{value}}
+        DATE_FORMAT({{value}}, '%Y-%m-%d 00:00:00')
     {%- elif part == 'hour' -%}
         DATE_FORMAT({{value}}, '%Y-%m-%d %H:00:00')
     {%- elif part == 'minute' -%}
@@ -135,25 +135,25 @@
 
 {% macro date_trunc_utc(value, part='day', datatype=none) %}
     {%- if part == 'year' -%}
-        CAST(DATE_FORMAT({{value}}, '%Y-01-01 00:00:00') AS DATE)
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT({{value}}, '%Y-01-01 00:00:00')))
     {%- elif part == 'quarter' -%}
-        CAST(DATE_ADD(DATE_FORMAT({{value}}, '%Y-%m-01 00:00:00'), INTERVAL (QUARTER(DATE({{value}}))-1) QUARTER) AS DATE)
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_ADD(DATE_FORMAT({{value}}, '%Y-%m-01 00:00:00'), INTERVAL (QUARTER(DATE({{value}}))-1) QUARTER)))
     {%- elif part == 'month' -%}
-        CAST(DATE_FORMAT({{value}}, '%Y-%m-01 00:00:00') AS DATE)
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT({{value}}, '%Y-%m-01 00:00:00')))
     {%- elif part == 'week' -%}
-        CAST(DATE_FORMAT(DATE_SUB({{value}}, INTERVAL WEEKDAY({{value}}) DAY), '%Y-%m-%d 00:00:00') AS DATE)
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(DATE_SUB({{value}}, INTERVAL WEEKDAY({{value}}) DAY), '%Y-%m-%d 00:00:00')))
     {%- elif part == 'day' -%}
         {%- if datatype | upper == 'DATE' -%}
-            {{value}}
+            FROM_UNIXTIME(UNIX_TIMESTAMP({{value}}))
         {%- else -%}
-            CAST(DATE_FORMAT({{value}}, '%Y-%m-%d 00:00:00') AS DATE)
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT({{value}}, '%Y-%m-%d 00:00:00')))
         {%- endif -%}
     {%- elif part == 'hour' -%}
-        CAST(DATE_FORMAT({{value}}, '%Y-%m-%d %H:00:00') AS DATE)
+        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT({{value}}, '%Y-%m-%d %H:00:00')))
     {%- elif part == 'millisecond' -%}
-        CAST(DATE_FORMAT({{value}}, '%Y-%m-%d %H:%i:%s.%f') AS DATE)
+        FROM_UNIXTIME(UNIX_TIMESTAMP({{value}}))
     {%- else -%}
-        CAST(DATE_FORMAT({{value}}, '%Y-%m-%d 00:00:00') AS DATE)
+        FROM_UNIXTIME(UNIX_TIMESTAMP({{value}}))
     {%- endif -%}
 {% endmacro %}
 
@@ -162,7 +162,7 @@
     {%- if time_series is not none-%}
         {%- if time_series.mode == 'current_time' -%}
             {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
-                {{ date_trunc('LOCALTIMESTAMP', time_series.time_gradient, 'TIMESTAMP WITH TIME ZONE') }}
+                {{ date_trunc('LOCALTIMESTAMP', time_series.time_gradient, 'TIMESTAMP') }}
             {%- else -%}
                 LOCALTIMESTAMP
             {%- endif -%}
@@ -178,7 +178,7 @@
     {%- if time_series is not none-%}
         {%- if time_series.mode == 'current_time' -%}
             {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
-                {{ date_trunc_utc('LOCALTIMESTAMP', time_series.time_gradient, 'TIMESTAMP WITH TIME ZONE') }}
+                {{ date_trunc_utc('LOCALTIMESTAMP', time_series.time_gradient, 'TIMESTAMP') }}
             {%- else -%}
                 LOCALTIMESTAMP
             {%- endif -%}
@@ -209,7 +209,7 @@
     {%- if time_series is not none -%}
         {{ ',' -}}{{- eol() -}}
         {{ indentation }}{{ render_time_dimension_expression(table_alias_prefix) }} AS time_period,{{ eol() -}}
-        {{ indentation }}CONVERT_TZ({{ render_time_dimension_expression(table_alias_prefix) }}, @@session.time_zone, '+00:00') AS time_period_utc
+        {{ indentation }}{{ render_time_dimension_expression_utc(table_alias_prefix) }} AS time_period_utc
     {%- endif -%}
 {% endmacro %}
 
@@ -231,7 +231,7 @@
                 CAST(NOW() AS DATE)
             {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
-                CAST(NOW() AS DATETIME)
+                CAST(NOW() AS DATE)
             {%- else -%}
                 CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} AS DATE){{- ' < ' -}}
                 CAST(NOW() AS DATE)
@@ -246,7 +246,7 @@
                 CAST(DATE_FORMAT(NOW(), '%Y-%m-01') AS DATE)
             {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
-                CAST(DATE_FORMAT(NOW(), '%Y-%m-01 %H:%i:%s') AS DATETIME)
+                CAST(DATE_FORMAT(NOW(), '%Y-%m-01 %H:%i:%s') AS DATE)
             {%- else -%}
                 CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} AS DATE){{- ' < ' -}}
                 CAST(DATE_FORMAT(NOW(), '%Y-%m-01') AS DATE)
@@ -288,13 +288,13 @@
                 {{ prefix_to_render -}}
                 {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS TIMESTAMP WITH TIME ZONE)
+                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
                 {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                      CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
                 {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS TIMESTAMP WITHOUT TIME ZONE)
+                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
                 {%- else -%}
                      CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
                      CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
@@ -323,13 +323,13 @@
                 {{ prefix_to_render -}}
                 {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     CAST(CAST(NOW() AS DATE) - INTERVAL {{time_window_filter.daily_partitioning_recent_days}} DAY AS DATETIME)
+                     CAST(CAST(NOW() AS DATE) - INTERVAL {{time_window_filter.daily_partitioning_recent_days}} DAY AS DATE)
                 {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                      NOW() - INTERVAL {{time_window_filter.daily_partitioning_recent_days}} DAY
                 {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     CAST(CAST(NOW() AS DATE) - INTERVAL {{time_window_filter.daily_partitioning_recent_days}} DAY AS DATETIME)
+                     CAST(CAST(NOW() AS DATE) - INTERVAL {{time_window_filter.daily_partitioning_recent_days}} DAY AS DATE)
                 {%- else -%}
                      CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
                      NOW() - INTERVAL {{time_window_filter.daily_partitioning_recent_days}} DAY
@@ -355,14 +355,14 @@
                 {{ prefix_to_render -}}
                 {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                    CAST(DATE_SUB({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }}, INTERVAL {{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS DATETIME)
+                    CAST(DATE_SUB({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }}, INTERVAL {{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS DATE)
                 {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                     DATE_SUB(DATE_FORMAT({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }},'%Y-%m-01') INTERVAL {{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS DATE)
                 {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                    CAST(DATE_SUB({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }}, INTERVAL {{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS DATETIME)
-                    CAST(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL {{ time_window_filter.monthly_partitioning_recent_months }} MONTH) AS DATETIME)
+                    CAST(DATE_SUB({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }}, INTERVAL {{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS DATE)
+                    CAST(DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-01'), INTERVAL {{ time_window_filter.monthly_partitioning_recent_months }} MONTH) AS DATE)
 
                 {%- else -%}
                     CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
