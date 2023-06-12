@@ -74,7 +74,12 @@ public abstract class TerminalReaderAbstract implements TerminalReader {
      * @return Mono that returns true when any input appeared on the console (the user clicked any key). False or cancelled when no input appeared.
      */
     @Override
-    public abstract CompletableFuture<Boolean> waitForConsoleInput(Duration waitDuration);
+    public CompletableFuture<Boolean> waitForConsoleInput(Duration waitDuration) {
+        return CompletableFuture.supplyAsync(() -> {
+            Character c = this.tryReadChar(waitDuration.toMillis());
+            return c != null;
+        });
+    }
 
     /**
      * Hangs on waiting for the user to confirm that the application should exit.

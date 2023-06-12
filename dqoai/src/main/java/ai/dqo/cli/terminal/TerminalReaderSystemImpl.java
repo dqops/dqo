@@ -98,23 +98,4 @@ public class TerminalReaderSystemImpl extends TerminalReaderAbstract {
             throw new RuntimeException(e);
         }
     }
-
-    /**
-     * Starts a background job that will wait the whole duration and always return false.
-     *
-     * @param waitDuration Wait duration.
-     * @return Mono that always returns false (no input on console).
-     */
-    @Override
-    public CompletableFuture<Boolean> waitForConsoleInput(Duration waitDuration) {
-        CompletableFuture<Boolean> waitForSomeTime = CompletableFuture.supplyAsync(() -> {
-            try {
-                Thread.sleep(waitDuration.toMillis());
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            return false;
-        });
-        return waitForSomeTime;
-    }
 }
