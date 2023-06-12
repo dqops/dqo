@@ -1,5 +1,5 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 import httpx
 
@@ -56,9 +56,14 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[CheckTemplate]:
+) -> Optional[List["CheckTemplate"]]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = CheckTemplate.from_dict(response.json())
+        response_200 = []
+        _response_200 = response.json()
+        for response_200_item_data in _response_200:
+            response_200_item = CheckTemplate.from_dict(response_200_item_data)
+
+            response_200.append(response_200_item)
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -69,7 +74,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[CheckTemplate]:
+) -> Response[List["CheckTemplate"]]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -88,7 +93,7 @@ def sync_detailed(
     ] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
-) -> Response[CheckTemplate]:
+) -> Response[List["CheckTemplate"]]:
     """getSchemaProfilingChecksTemplates
 
      Return available data quality checks on a requested schema.
@@ -105,7 +110,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[CheckTemplate]
+        Response[List['CheckTemplate']]
     """
 
     kwargs = _get_kwargs(
@@ -135,7 +140,7 @@ def sync(
     ] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
-) -> Optional[CheckTemplate]:
+) -> Optional[List["CheckTemplate"]]:
     """getSchemaProfilingChecksTemplates
 
      Return available data quality checks on a requested schema.
@@ -152,7 +157,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        CheckTemplate
+        List['CheckTemplate']
     """
 
     return sync_detailed(
@@ -175,7 +180,7 @@ async def asyncio_detailed(
     ] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
-) -> Response[CheckTemplate]:
+) -> Response[List["CheckTemplate"]]:
     """getSchemaProfilingChecksTemplates
 
      Return available data quality checks on a requested schema.
@@ -192,7 +197,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[CheckTemplate]
+        Response[List['CheckTemplate']]
     """
 
     kwargs = _get_kwargs(
@@ -220,7 +225,7 @@ async def asyncio(
     ] = UNSET,
     check_category: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
-) -> Optional[CheckTemplate]:
+) -> Optional[List["CheckTemplate"]]:
     """getSchemaProfilingChecksTemplates
 
      Return available data quality checks on a requested schema.
@@ -237,7 +242,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        CheckTemplate
+        List['CheckTemplate']
     """
 
     return (

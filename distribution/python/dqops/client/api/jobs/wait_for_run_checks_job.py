@@ -5,40 +5,33 @@ import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.run_checks_queue_job_parameters import RunChecksQueueJobParameters
 from ...models.run_checks_queue_job_result import RunChecksQueueJobResult
 from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
+    job_id: int,
     *,
     client: Client,
-    json_body: RunChecksQueueJobParameters,
-    wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
-    url = "{}/api/jobs/runchecks".format(client.base_url)
+    url = "{}/api/jobs/runchecks/{jobId}/wait".format(client.base_url, jobId=job_id)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
 
     params: Dict[str, Any] = {}
-    params["wait"] = wait
-
     params["waitTimeout"] = wait_timeout
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
-    json_json_body = json_body.to_dict()
-
     return {
-        "method": "post",
+        "method": "get",
         "url": url,
         "headers": headers,
         "cookies": cookies,
         "timeout": client.get_timeout(),
         "follow_redirects": client.follow_redirects,
-        "json": json_json_body,
         "params": params,
     }
 
@@ -68,21 +61,19 @@ def _build_response(
 
 
 def sync_detailed(
+    job_id: int,
     *,
     client: Client,
-    json_body: RunChecksQueueJobParameters,
-    wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Response[RunChecksQueueJobResult]:
-    """runChecks
+    """waitForRunChecksJob
 
-     Starts a new background job that will run selected data quality checks
+     Waits for a job to finish. Returns the status of a finished job or a current state of a job that is
+    still running, but the wait timeout elapsed.
 
     Args:
-        wait (Union[Unset, None, bool]):
+        job_id (int):
         wait_timeout (Union[Unset, None, int]):
-        json_body (RunChecksQueueJobParameters): Run checks configuration, specifies the target
-            checks that should be executed and an optional time window.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -93,9 +84,8 @@ def sync_detailed(
     """
 
     kwargs = _get_kwargs(
+        job_id=job_id,
         client=client,
-        json_body=json_body,
-        wait=wait,
         wait_timeout=wait_timeout,
     )
 
@@ -108,21 +98,19 @@ def sync_detailed(
 
 
 def sync(
+    job_id: int,
     *,
     client: Client,
-    json_body: RunChecksQueueJobParameters,
-    wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Optional[RunChecksQueueJobResult]:
-    """runChecks
+    """waitForRunChecksJob
 
-     Starts a new background job that will run selected data quality checks
+     Waits for a job to finish. Returns the status of a finished job or a current state of a job that is
+    still running, but the wait timeout elapsed.
 
     Args:
-        wait (Union[Unset, None, bool]):
+        job_id (int):
         wait_timeout (Union[Unset, None, int]):
-        json_body (RunChecksQueueJobParameters): Run checks configuration, specifies the target
-            checks that should be executed and an optional time window.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -133,29 +121,26 @@ def sync(
     """
 
     return sync_detailed(
+        job_id=job_id,
         client=client,
-        json_body=json_body,
-        wait=wait,
         wait_timeout=wait_timeout,
     ).parsed
 
 
 async def asyncio_detailed(
+    job_id: int,
     *,
     client: Client,
-    json_body: RunChecksQueueJobParameters,
-    wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Response[RunChecksQueueJobResult]:
-    """runChecks
+    """waitForRunChecksJob
 
-     Starts a new background job that will run selected data quality checks
+     Waits for a job to finish. Returns the status of a finished job or a current state of a job that is
+    still running, but the wait timeout elapsed.
 
     Args:
-        wait (Union[Unset, None, bool]):
+        job_id (int):
         wait_timeout (Union[Unset, None, int]):
-        json_body (RunChecksQueueJobParameters): Run checks configuration, specifies the target
-            checks that should be executed and an optional time window.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -166,9 +151,8 @@ async def asyncio_detailed(
     """
 
     kwargs = _get_kwargs(
+        job_id=job_id,
         client=client,
-        json_body=json_body,
-        wait=wait,
         wait_timeout=wait_timeout,
     )
 
@@ -179,21 +163,19 @@ async def asyncio_detailed(
 
 
 async def asyncio(
+    job_id: int,
     *,
     client: Client,
-    json_body: RunChecksQueueJobParameters,
-    wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Optional[RunChecksQueueJobResult]:
-    """runChecks
+    """waitForRunChecksJob
 
-     Starts a new background job that will run selected data quality checks
+     Waits for a job to finish. Returns the status of a finished job or a current state of a job that is
+    still running, but the wait timeout elapsed.
 
     Args:
-        wait (Union[Unset, None, bool]):
+        job_id (int):
         wait_timeout (Union[Unset, None, int]):
-        json_body (RunChecksQueueJobParameters): Run checks configuration, specifies the target
-            checks that should be executed and an optional time window.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -205,9 +187,8 @@ async def asyncio(
 
     return (
         await asyncio_detailed(
+            job_id=job_id,
             client=client,
-            json_body=json_body,
-            wait=wait,
             wait_timeout=wait_timeout,
         )
     ).parsed

@@ -1240,6 +1240,8 @@ from .optional_table_profiling_check_categories_spec import (
     OptionalTableProfilingCheckCategoriesSpec,
 )
 from .optional_ui_check_container_model import OptionalUICheckContainerModel
+from .oracle_parameters_spec import OracleParametersSpec
+from .oracle_parameters_spec_properties import OracleParametersSpecProperties
 from .parameter_definition_spec import ParameterDefinitionSpec
 from .parameter_definition_spec_data_type import ParameterDefinitionSpecDataType
 from .parameter_definition_spec_display_hint import ParameterDefinitionSpecDisplayHint
@@ -2162,6 +2164,8 @@ __all__ = (
     "OptionalTableMonthlyRecurringCheckCategoriesSpec",
     "OptionalTableProfilingCheckCategoriesSpec",
     "OptionalUICheckContainerModel",
+    "OracleParametersSpec",
+    "OracleParametersSpecProperties",
     "ParameterDefinitionSpec",
     "ParameterDefinitionSpecDataType",
     "ParameterDefinitionSpecDisplayHint",
