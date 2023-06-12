@@ -29,8 +29,8 @@ import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.check.CheckTemplate;
 import ai.dqo.rest.models.metadata.SchemaModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
-import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
+import ai.dqo.services.check.mapping.AllChecksModelFactory;
+import ai.dqo.services.check.mapping.models.AllChecksModel;
 import ai.dqo.services.metadata.SchemaService;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -58,15 +58,15 @@ public class SchemasController {
     private static final Logger LOG = LoggerFactory.getLogger(SchemasController.class);
     private final SchemaService schemaService;
     private final UserHomeContextFactory userHomeContextFactory;
-    private final UIAllChecksModelFactory uiAllChecksModelFactory;
+    private final AllChecksModelFactory allChecksModelFactory;
 
     @Autowired
     public SchemasController(SchemaService schemaService,
                              UserHomeContextFactory userHomeContextFactory,
-                             UIAllChecksModelFactory uiAllChecksModelFactory) {
+                             AllChecksModelFactory allChecksModelFactory) {
         this.schemaService = schemaService;
         this.userHomeContextFactory = userHomeContextFactory;
-        this.uiAllChecksModelFactory = uiAllChecksModelFactory;
+        this.allChecksModelFactory = allChecksModelFactory;
     }
 
     /**
@@ -120,14 +120,14 @@ public class SchemasController {
      * @return UI friendly data quality profiling check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/profiling/ui", produces = "application/json")
-    @ApiOperation(value = "getSchemaProfilingChecksUI", notes = "Return a UI friendly model of configurations for data quality profiling checks on a schema", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getSchemaProfilingChecksUI", notes = "Return a UI friendly model of configurations for data quality profiling checks on a schema", response = AllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of data quality profiling checks on a schema returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of data quality profiling checks on a schema returned", response = AllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UIAllChecksModel>> getSchemaProfilingChecksUI(
+    public ResponseEntity<Mono<AllChecksModel>> getSchemaProfilingChecksUI(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam(value = "Table name pattern", required = false) @RequestParam(required = false)
@@ -168,13 +168,17 @@ public class SchemasController {
         filters.setCheckName(checkName.orElse(null));
         filters.setEnabled(checkEnabled.orElse(null));
 
-        List<UIAllChecksModel> uiAllChecksModel = this.uiAllChecksModelFactory.fromCheckSearchFilters(filters);
+        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(filters);
 
-        if (uiAllChecksModel.size() == 0) {
-            return new ResponseEntity<>(Mono.just(new UIAllChecksModel()), HttpStatus.OK); // 200
+        if (allChecksModel.size() == 0) {
+            return new ResponseEntity<>(Mono.just(new AllChecksModel()), HttpStatus.OK); // 200
         }
 
-        return new ResponseEntity<>(Mono.just(uiAllChecksModel.get(0)), HttpStatus.OK); // 200
+        if (allChecksModel.size() != 1) {
+            LOG.warn("Unexpected result size in getSchemaProfilingChecksUI: " + allChecksModel.size());
+        }
+
+        return new ResponseEntity<>(Mono.just(allChecksModel.get(0)), HttpStatus.OK); // 200
     }
 
     /**
@@ -192,14 +196,14 @@ public class SchemasController {
      * @return UI friendly data quality recurring check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/recurring/{timeScale}/ui", produces = "application/json")
-    @ApiOperation(value = "getSchemaRecurringChecksUI", notes = "Return a UI friendly model of configurations for data quality recurring checks on a schema", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getSchemaRecurringChecksUI", notes = "Return a UI friendly model of configurations for data quality recurring checks on a schema", response = AllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of data quality recurring checks on a schema returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of data quality recurring checks on a schema returned", response = AllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UIAllChecksModel>> getSchemaRecurringChecksUI(
+    public ResponseEntity<Mono<AllChecksModel>> getSchemaRecurringChecksUI(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Check time-scale") @PathVariable CheckTimeScale timeScale,
@@ -242,13 +246,17 @@ public class SchemasController {
         filters.setCheckName(checkName.orElse(null));
         filters.setEnabled(checkEnabled.orElse(null));
 
-        List<UIAllChecksModel> uiAllChecksModel = this.uiAllChecksModelFactory.fromCheckSearchFilters(filters);
+        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(filters);
 
-        if (uiAllChecksModel.size() == 0) {
-            return new ResponseEntity<>(Mono.just(new UIAllChecksModel()), HttpStatus.OK); // 200
+        if (allChecksModel.size() == 0) {
+            return new ResponseEntity<>(Mono.just(new AllChecksModel()), HttpStatus.OK); // 200
         }
 
-        return new ResponseEntity<>(Mono.just(uiAllChecksModel.get(0)), HttpStatus.OK); // 200
+        if (allChecksModel.size() != 1) {
+            LOG.warn("Unexpected result size in getSchemaRecurringChecksUI: " + allChecksModel.size());
+        }
+
+        return new ResponseEntity<>(Mono.just(allChecksModel.get(0)), HttpStatus.OK); // 200
     }
 
     /**
@@ -266,14 +274,14 @@ public class SchemasController {
      * @return UI friendly data quality partitioned check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/partitioned/{timeScale}/ui", produces = "application/json")
-    @ApiOperation(value = "getSchemaPartitionedChecksUI", notes = "Return a UI friendly model of configurations for data quality partitioned checks on a schema", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getSchemaPartitionedChecksUI", notes = "Return a UI friendly model of configurations for data quality partitioned checks on a schema", response = AllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of data quality partitioned checks on a schema returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of data quality partitioned checks on a schema returned", response = AllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UIAllChecksModel>> getSchemaPartitionedChecksUI(
+    public ResponseEntity<Mono<AllChecksModel>> getSchemaPartitionedChecksUI(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Check time-scale") @PathVariable CheckTimeScale timeScale,
@@ -316,13 +324,17 @@ public class SchemasController {
         filters.setCheckName(checkName.orElse(null));
         filters.setEnabled(checkEnabled.orElse(null));
 
-        List<UIAllChecksModel> uiAllChecksModel = this.uiAllChecksModelFactory.fromCheckSearchFilters(filters);
+        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(filters);
 
-        if (uiAllChecksModel.size() == 0) {
-            return new ResponseEntity<>(Mono.just(new UIAllChecksModel()), HttpStatus.OK); // 200
+        if (allChecksModel.size() == 0) {
+            return new ResponseEntity<>(Mono.just(new AllChecksModel()), HttpStatus.OK); // 200
         }
 
-        return new ResponseEntity<>(Mono.just(uiAllChecksModel.get(0)), HttpStatus.OK); // 200
+        if (allChecksModel.size() != 1) {
+            LOG.warn("Unexpected result size in getSchemaPartitionedChecksUI: " + allChecksModel.size());
+        }
+
+        return new ResponseEntity<>(Mono.just(allChecksModel.get(0)), HttpStatus.OK); // 200
     }
 
     /**

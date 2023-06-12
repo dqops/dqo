@@ -43,10 +43,10 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.metadata.*;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
-import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
-import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
-import ai.dqo.services.check.mapping.models.UICheckContainerModel;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingService;
+import ai.dqo.services.check.mapping.ModelToSpecCheckMappingService;
+import ai.dqo.services.check.mapping.basicmodels.CheckContainerBasicModel;
+import ai.dqo.services.check.mapping.models.CheckContainerModel;
 import ai.dqo.services.metadata.ColumnService;
 import ai.dqo.statistics.StatisticsCollectorTarget;
 import com.google.common.base.Strings;
@@ -76,8 +76,8 @@ public class ColumnsController {
     private final ColumnService columnService;
     private UserHomeContextFactory userHomeContextFactory;
     private DqoHomeContextFactory dqoHomeContextFactory;
-    private SpecToUiCheckMappingService specToUiCheckMappingService;
-    private UiToSpecCheckMappingService uiToSpecCheckMappingService;
+    private SpecToModelCheckMappingService specToModelCheckMappingService;
+    private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private StatisticsDataService statisticsDataService;
 
     /**
@@ -85,22 +85,22 @@ public class ColumnsController {
      * @param columnService               Column logic service.
      * @param userHomeContextFactory      User home context factory.
      * @param dqoHomeContextFactory       DQO home context factory, used to find built-in sensors.
-     * @param specToUiCheckMappingService Check mapper to convert the check specification to a UI model.
-     * @param uiToSpecCheckMappingService Check mapper to convert the check UI model to a check specification.
+     * @param specToModelCheckMappingService Check mapper to convert the check specification to a UI model.
+     * @param modelToSpecCheckMappingService Check mapper to convert the check UI model to a check specification.
      * @param statisticsDataService       Statistics data service.
      */
     @Autowired
     public ColumnsController(ColumnService columnService,
                              UserHomeContextFactory userHomeContextFactory,
                              DqoHomeContextFactory dqoHomeContextFactory,
-                             SpecToUiCheckMappingService specToUiCheckMappingService,
-                             UiToSpecCheckMappingService uiToSpecCheckMappingService,
+                             SpecToModelCheckMappingService specToModelCheckMappingService,
+                             ModelToSpecCheckMappingService modelToSpecCheckMappingService,
                              StatisticsDataService statisticsDataService) {
         this.columnService = columnService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
-        this.specToUiCheckMappingService = specToUiCheckMappingService;
-        this.uiToSpecCheckMappingService = uiToSpecCheckMappingService;
+        this.specToModelCheckMappingService = specToModelCheckMappingService;
+        this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
         this.statisticsDataService = statisticsDataService;
     }
 
@@ -588,14 +588,14 @@ public class ColumnsController {
      * @return UI friendly model of data quality profiling checks on a requested column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui", produces = "application/json")
-    @ApiOperation(value = "getColumnProfilingChecksUI", notes = "Return a UI friendly model of data quality profiling checks on a column", response = UICheckContainerModel.class)
+    @ApiOperation(value = "getColumnProfilingChecksUI", notes = "Return a UI friendly model of data quality profiling checks on a column", response = CheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "UI model of column level data quality profiling checks on a column returned", response = UICheckContainerModel.class),
+            @ApiResponse(code = 200, message = "UI model of column level data quality profiling checks on a column returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UICheckContainerModel>> getColumnProfilingChecksUI(
+    public ResponseEntity<Mono<CheckContainerModel>> getColumnProfilingChecksUI(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -632,7 +632,7 @@ public class ColumnsController {
             setEnabled(true);
         }};
 
-        UICheckContainerModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
+        CheckContainerModel checksUiModel = this.specToModelCheckMappingService.createUiModel(
                 checks,
                 checkSearchFilters,
                 connectionWrapper.getSpec(),
@@ -653,14 +653,14 @@ public class ColumnsController {
      * @return UI friendly model of data quality recurring on a requested column for a requested time scale.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/ui", produces = "application/json")
-    @ApiOperation(value = "getColumnRecurringChecksUI", notes = "Return a UI friendly model of column level data quality recurring on a column", response = UICheckContainerModel.class)
+    @ApiOperation(value = "getColumnRecurringChecksUI", notes = "Return a UI friendly model of column level data quality recurring on a column", response = CheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "UI model of column level data quality recurring on a column returned", response = UICheckContainerModel.class),
+            @ApiResponse(code = 200, message = "UI model of column level data quality recurring on a column returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UICheckContainerModel>> getColumnRecurringChecksUI(
+    public ResponseEntity<Mono<CheckContainerModel>> getColumnRecurringChecksUI(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -697,7 +697,7 @@ public class ColumnsController {
             setEnabled(true);
         }};
 
-        UICheckContainerModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
+        CheckContainerModel checksUiModel = this.specToModelCheckMappingService.createUiModel(
                 checks,
                 checkSearchFilters,
                 connectionWrapper.getSpec(),
@@ -718,14 +718,14 @@ public class ColumnsController {
      * @return UI friendly model of data quality partitioned checks on a requested column for a requested time scale.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui", produces = "application/json")
-    @ApiOperation(value = "getColumnPartitionedChecksUI", notes = "Return a UI friendly model of column level data quality partitioned checks on a column", response = UICheckContainerModel.class)
+    @ApiOperation(value = "getColumnPartitionedChecksUI", notes = "Return a UI friendly model of column level data quality partitioned checks on a column", response = CheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "UI model of column level data quality partitioned checks on a column returned", response = UICheckContainerModel.class),
+            @ApiResponse(code = 200, message = "UI model of column level data quality partitioned checks on a column returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UICheckContainerModel>> getColumnPartitionedChecksUI(
+    public ResponseEntity<Mono<CheckContainerModel>> getColumnPartitionedChecksUI(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -763,7 +763,7 @@ public class ColumnsController {
             setEnabled(true);
         }};
 
-        UICheckContainerModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
+        CheckContainerModel checksUiModel = this.specToModelCheckMappingService.createUiModel(
                 checks,
                 checkSearchFilters,
                 connectionWrapper.getSpec(),
@@ -784,14 +784,14 @@ public class ColumnsController {
      * @return Simplistic UI friendly data quality profiling check list on a requested column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui/basic", produces = "application/json")
-    @ApiOperation(value = "getColumnProfilingChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality profiling checks on a column", response = UICheckContainerBasicModel.class)
+    @ApiOperation(value = "getColumnProfilingChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality profiling checks on a column", response = CheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Simplistic UI model of column level data quality profiling checks on a column returned", response = UICheckContainerBasicModel.class),
+            @ApiResponse(code = 200, message = "Simplistic UI model of column level data quality profiling checks on a column returned", response = CheckContainerBasicModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UICheckContainerBasicModel>> getColumnProfilingChecksUIBasic(
+    public ResponseEntity<Mono<CheckContainerBasicModel>> getColumnProfilingChecksUIBasic(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -818,7 +818,7 @@ public class ColumnsController {
         }
 
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, false);
-        UICheckContainerBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
+        CheckContainerBasicModel checksUiBasicModel = this.specToModelCheckMappingService.createUiBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
                 connectionWrapper.getSpec().getProviderType());
@@ -836,14 +836,14 @@ public class ColumnsController {
      * @return Simplistic UI friendly data quality recurring list on a requested column for a requested time scale.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/ui/basic", produces = "application/json")
-    @ApiOperation(value = "getColumnRecurringChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality recurring on a column", response = UICheckContainerBasicModel.class)
+    @ApiOperation(value = "getColumnRecurringChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality recurring on a column", response = CheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Simplistic UI model of column level data quality recurring on a column returned", response = UICheckContainerBasicModel.class),
+            @ApiResponse(code = 200, message = "Simplistic UI model of column level data quality recurring on a column returned", response = CheckContainerBasicModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UICheckContainerBasicModel>> getColumnRecurringChecksUIBasic(
+    public ResponseEntity<Mono<CheckContainerBasicModel>> getColumnRecurringChecksUIBasic(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -871,7 +871,7 @@ public class ColumnsController {
         }
 
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale, false);
-        UICheckContainerBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
+        CheckContainerBasicModel checksUiBasicModel = this.specToModelCheckMappingService.createUiBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
                 connectionWrapper.getSpec().getProviderType());
@@ -889,14 +889,14 @@ public class ColumnsController {
      * @return Simplistic UI friendly data quality partitioned checks list on a requested column for a requested time scale.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui/basic", produces = "application/json")
-    @ApiOperation(value = "getColumnPartitionedChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality partitioned checks on a column", response = UICheckContainerBasicModel.class)
+    @ApiOperation(value = "getColumnPartitionedChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality partitioned checks on a column", response = CheckContainerBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Simplistic UI model of column level data quality partitioned checks on a column returned", response = UICheckContainerBasicModel.class),
+            @ApiResponse(code = 200, message = "Simplistic UI model of column level data quality partitioned checks on a column returned", response = CheckContainerBasicModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UICheckContainerBasicModel>> getColumnPartitionedChecksUIBasic(
+    public ResponseEntity<Mono<CheckContainerBasicModel>> getColumnPartitionedChecksUIBasic(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -924,7 +924,7 @@ public class ColumnsController {
         }
 
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
-        UICheckContainerBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
+        CheckContainerBasicModel checksUiBasicModel = this.specToModelCheckMappingService.createUiBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
                 connectionWrapper.getSpec().getProviderType());
@@ -943,14 +943,14 @@ public class ColumnsController {
      * @return UI friendly model of data quality profiling checks on a requested column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/ui/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getColumnProfilingChecksUIFilter", notes = "Return a UI friendly model of data quality profiling checks on a column filtered by category and check name", response = UICheckContainerModel.class)
+    @ApiOperation(value = "getColumnProfilingChecksUIFilter", notes = "Return a UI friendly model of data quality profiling checks on a column filtered by category and check name", response = CheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "UI model of column level data quality profiling checks on a column returned", response = UICheckContainerModel.class),
+            @ApiResponse(code = 200, message = "UI model of column level data quality profiling checks on a column returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UICheckContainerModel>> getColumnProfilingChecksUIFilter(
+    public ResponseEntity<Mono<CheckContainerModel>> getColumnProfilingChecksUIFilter(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -991,7 +991,7 @@ public class ColumnsController {
             setEnabled(true);
         }};
 
-        UICheckContainerModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
+        CheckContainerModel checksUiModel = this.specToModelCheckMappingService.createUiModel(
                 checks,
                 checkSearchFilters,
                 connectionWrapper.getSpec(),
@@ -1014,14 +1014,14 @@ public class ColumnsController {
      * @return UI friendly model of data quality recurring on a requested column for a requested time scale, filtered by category and check name.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/ui/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getColumnRecurringChecksUIFilter", notes = "Return a UI friendly model of column level data quality recurring on a column filtered by category and check name", response = UICheckContainerModel.class)
+    @ApiOperation(value = "getColumnRecurringChecksUIFilter", notes = "Return a UI friendly model of column level data quality recurring on a column filtered by category and check name", response = CheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "UI model of column level data quality recurring on a column returned", response = UICheckContainerModel.class),
+            @ApiResponse(code = 200, message = "UI model of column level data quality recurring on a column returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UICheckContainerModel>> getColumnRecurringChecksUIFilter(
+    public ResponseEntity<Mono<CheckContainerModel>> getColumnRecurringChecksUIFilter(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1062,7 +1062,7 @@ public class ColumnsController {
             setEnabled(true);
         }};
 
-        UICheckContainerModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
+        CheckContainerModel checksUiModel = this.specToModelCheckMappingService.createUiModel(
                 checks,
                 checkSearchFilters,
                 connectionWrapper.getSpec(),
@@ -1085,14 +1085,14 @@ public class ColumnsController {
      * @return UI friendly model of data quality partitioned checks on a requested column for a requested time scale, filtered by category and check name.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/ui/filter/{checkCategory}/{checkName}", produces = "application/json")
-    @ApiOperation(value = "getColumnPartitionedChecksUIFilter", notes = "Return a UI friendly model of column level data quality partitioned checks on a column, filtered by category and check name", response = UICheckContainerModel.class)
+    @ApiOperation(value = "getColumnPartitionedChecksUIFilter", notes = "Return a UI friendly model of column level data quality partitioned checks on a column, filtered by category and check name", response = CheckContainerModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "UI model of column level data quality partitioned checks on a column returned", response = UICheckContainerModel.class),
+            @ApiResponse(code = 200, message = "UI model of column level data quality partitioned checks on a column returned", response = CheckContainerModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found, or invalid time scale"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UICheckContainerModel>> getColumnPartitionedChecksUIFilter(
+    public ResponseEntity<Mono<CheckContainerModel>> getColumnPartitionedChecksUIFilter(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1133,7 +1133,7 @@ public class ColumnsController {
             setEnabled(true);
         }};
 
-        UICheckContainerModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
+        CheckContainerModel checksUiModel = this.specToModelCheckMappingService.createUiModel(
                 checks,
                 checkSearchFilters,
                 connectionWrapper.getSpec(),
@@ -1707,7 +1707,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("UI model with the changes to be applied to the data quality profiling checks configuration")
-            @RequestBody Optional<UICheckContainerModel> uiCheckContainerModel) {
+            @RequestBody Optional<CheckContainerModel> uiCheckContainerModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1725,7 +1725,7 @@ public class ColumnsController {
         AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, true);
 
         if (uiCheckContainerModel.isPresent()) {
-            this.uiToSpecCheckMappingService.updateCheckContainerSpec(uiCheckContainerModel.get(), checksToUpdate);
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(uiCheckContainerModel.get(), checksToUpdate);
             if (!checksToUpdate.isDefault()) {
                 columnSpec.setColumnCheckRootContainer(checksToUpdate);
             }
@@ -1764,7 +1764,7 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("UI model with the changes to be applied to the data quality recurring configuration")
-            @RequestBody Optional<UICheckContainerModel> uiCheckContainerModel) {
+            @RequestBody Optional<CheckContainerModel> uiCheckContainerModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1782,7 +1782,7 @@ public class ColumnsController {
         AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale, true);
 
         if (uiCheckContainerModel.isPresent()) {
-            this.uiToSpecCheckMappingService.updateCheckContainerSpec(uiCheckContainerModel.get(), checksToUpdate);
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(uiCheckContainerModel.get(), checksToUpdate);
             if (!checksToUpdate.isDefault()) {
                 columnSpec.setColumnCheckRootContainer(checksToUpdate);
             }
@@ -1821,7 +1821,7 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("UI model with the changes to be applied to the data quality partitioned checks configuration")
-            @RequestBody Optional<UICheckContainerModel> uiAllChecksModel) {
+            @RequestBody Optional<CheckContainerModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1839,7 +1839,7 @@ public class ColumnsController {
         AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, true);
 
         if (uiAllChecksModel.isPresent()) {
-            this.uiToSpecCheckMappingService.updateCheckContainerSpec(uiAllChecksModel.get(), checksToUpdate);
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(uiAllChecksModel.get(), checksToUpdate);
             if (!checksToUpdate.isDefault()) {
                 columnSpec.setColumnCheckRootContainer(checksToUpdate);
             }

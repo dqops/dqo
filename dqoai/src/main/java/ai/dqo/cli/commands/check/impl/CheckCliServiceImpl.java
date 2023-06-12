@@ -24,10 +24,10 @@ import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.services.check.CheckService;
-import ai.dqo.services.check.mapping.UIAllChecksModelFactory;
+import ai.dqo.services.check.mapping.AllChecksModelFactory;
 import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.services.check.models.BulkCheckDisableParameters;
-import ai.dqo.services.check.models.UIAllChecksPatchParameters;
+import ai.dqo.services.check.models.AllChecksPatchParameters;
 import ai.dqo.utils.conversion.StringTypeCaster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,17 +40,17 @@ import java.util.*;
 @Service
 public class CheckCliServiceImpl implements CheckCliService {
     private final CheckService checkService;
-    private final UIAllChecksModelFactory uiAllChecksModelFactory;
+    private final AllChecksModelFactory allChecksModelFactory;
 
     /**
      * Default injection constructor.
-     * @param uiAllChecksModelFactory UI all checks patch factory for creating patches to be updated.
+     * @param allChecksModelFactory UI all checks patch factory for creating patches to be updated.
      */
     @Autowired
     public CheckCliServiceImpl(CheckService checkService,
-                               UIAllChecksModelFactory uiAllChecksModelFactory) {
+                               AllChecksModelFactory allChecksModelFactory) {
         this.checkService = checkService;
-        this.uiAllChecksModelFactory = uiAllChecksModelFactory;
+        this.allChecksModelFactory = allChecksModelFactory;
     }
 
     /**
@@ -87,27 +87,27 @@ public class CheckCliServiceImpl implements CheckCliService {
      * @return List of patches (by connections) of the updated configuration of all checks.
      */
     @Override
-    public List<UIAllChecksModel> updateAllChecksPatch(UIAllChecksCliPatchParameters parameters) {
-        UICheckModel sampleModel = this.getSampleCheckModelForUpdates(parameters.getCheckSearchFilters());
+    public List<AllChecksModel> updateAllChecksPatch(UIAllChecksCliPatchParameters parameters) {
+        CheckModel sampleModel = this.getSampleCheckModelForUpdates(parameters.getCheckSearchFilters());
         prepareSampleCheckModelForUpdates(sampleModel);
         patchUICheckModel(sampleModel, parameters);
 
-        UIAllChecksPatchParameters uiAllChecksPatchParameters = new UIAllChecksPatchParameters(){{
+        AllChecksPatchParameters allChecksPatchParameters = new AllChecksPatchParameters(){{
             setCheckSearchFilters(parameters.getCheckSearchFilters());
             setOverrideConflicts(parameters.isOverrideConflicts());
             setSelectedTablesToColumns(null);
-            setUiCheckModelPatch(sampleModel);
+            setCheckModelPatch(sampleModel);
         }};
 
-        return this.checkService.updateAllChecksPatch(uiAllChecksPatchParameters);
+        return this.checkService.updateAllChecksPatch(allChecksPatchParameters);
     }
 
-    protected UICheckModel getSampleCheckModelForUpdates(CheckSearchFilters checkSearchFilters) {
-        List<UIAllChecksModel> patches = this.uiAllChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
-        Optional<UICheckModel> sampleUiCheckModelFromTables = patches.stream()
-                .map(UIAllChecksModel::getTableChecksModel)
-                .flatMap(allTableChecksModel -> allTableChecksModel.getUiSchemaTableChecksModels().stream())
-                .flatMap(uiSchemaTableChecksModel -> uiSchemaTableChecksModel.getUiTableChecksModels().stream())
+    protected CheckModel getSampleCheckModelForUpdates(CheckSearchFilters checkSearchFilters) {
+        List<AllChecksModel> patches = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters);
+        Optional<CheckModel> sampleUiCheckModelFromTables = patches.stream()
+                .map(AllChecksModel::getTableChecksModel)
+                .flatMap(allTableChecksModel -> allTableChecksModel.getSchemaTableChecksModels().stream())
+                .flatMap(uiSchemaTableChecksModel -> uiSchemaTableChecksModel.getTableChecksModels().stream())
                 .flatMap(tableChecksModel -> tableChecksModel.getCheckContainers().values().stream())
                 .flatMap(uiCheckContainerModel -> uiCheckContainerModel.getCategories().stream())
                 .flatMap(uiQualityCategoryModel -> uiQualityCategoryModel.getChecks().stream())
@@ -116,10 +116,10 @@ public class CheckCliServiceImpl implements CheckCliService {
             return sampleUiCheckModelFromTables.get();
         }
 
-        Optional<UICheckModel> sampleUiCheckModelFromColumns = patches.stream()
-                .map(UIAllChecksModel::getColumnChecksModel)
-                .flatMap(allColumnChecksModel -> allColumnChecksModel.getUiTableColumnChecksModels().stream())
-                .flatMap(uiTableColumnChecksModel -> uiTableColumnChecksModel.getUiColumnChecksModels().stream())
+        Optional<CheckModel> sampleUiCheckModelFromColumns = patches.stream()
+                .map(AllChecksModel::getColumnChecksModel)
+                .flatMap(allColumnChecksModel -> allColumnChecksModel.getTableColumnChecksModels().stream())
+                .flatMap(uiTableColumnChecksModel -> uiTableColumnChecksModel.getColumnChecksModels().stream())
                 .flatMap(columnChecksModel -> columnChecksModel.getCheckContainers().values().stream())
                 .flatMap(uiCheckContainerModel -> uiCheckContainerModel.getCategories().stream())
                 .flatMap(uiQualityCategoryModel -> uiQualityCategoryModel.getChecks().stream())
@@ -128,13 +128,13 @@ public class CheckCliServiceImpl implements CheckCliService {
         return sampleUiCheckModelFromColumns.orElse(null);
     }
 
-    protected void prepareSampleCheckModelForUpdates(UICheckModel uiCheckModel) {
-        if (uiCheckModel == null) {
+    protected void prepareSampleCheckModelForUpdates(CheckModel checkModel) {
+        if (checkModel == null) {
             return;
         }
 
-        uiCheckModel.setSensorParametersSpec(null);
-        uiCheckModel.setCheckSpec(null);
+        checkModel.setSensorParametersSpec(null);
+        checkModel.setCheckSpec(null);
 
 //        for (UIFieldModel sensorParameterField: uiCheckModel.getSensorParameters()) {
 //            sensorParameterField.setValue(null);
@@ -156,45 +156,45 @@ public class CheckCliServiceImpl implements CheckCliService {
 //                rule.setRuleParametersSpec(null);
 //            }
 //        }
-        uiCheckModel.applySampleValues();
+        checkModel.applySampleValues();
 
-        uiCheckModel.setDataStreamsOverride(null);
-        uiCheckModel.setScheduleOverride(null);
-        uiCheckModel.setEffectiveSchedule(null);
-        uiCheckModel.setScheduleEnabledStatus(UIScheduleEnabledStatus.not_configured);
-        uiCheckModel.setComments(new CommentsListSpec());
+        checkModel.setDataStreamsOverride(null);
+        checkModel.setScheduleOverride(null);
+        checkModel.setEffectiveSchedule(null);
+        checkModel.setScheduleEnabledStatus(ScheduleEnabledStatusModel.not_configured);
+        checkModel.setComments(new CommentsListSpec());
 
-        uiCheckModel.setDisabled(false);
-        uiCheckModel.setExcludeFromKpi(false);
-        uiCheckModel.setIncludeInSla(false);
-        uiCheckModel.setConfigured(true);
+        checkModel.setDisabled(false);
+        checkModel.setExcludeFromKpi(false);
+        checkModel.setIncludeInSla(false);
+        checkModel.setConfigured(true);
 
-        uiCheckModel.setFilter(null);
-        uiCheckModel.setRunChecksJobTemplate(null);
-        uiCheckModel.setDataCleanJobTemplate(null);
-        uiCheckModel.setDataStream(null);
-        uiCheckModel.setConfigurationRequirementsErrors(null);
+        checkModel.setFilter(null);
+        checkModel.setRunChecksJobTemplate(null);
+        checkModel.setDataCleanJobTemplate(null);
+        checkModel.setDataStream(null);
+        checkModel.setConfigurationRequirementsErrors(null);
     }
 
-    protected void patchUICheckModel(UICheckModel model,
+    protected void patchUICheckModel(CheckModel model,
                                      UIAllChecksCliPatchParameters parameters) {
-        UIRuleThresholdsModel ruleThresholdsModel = model.getRule();
+        RuleThresholdsModel ruleThresholdsModel = model.getRule();
         patchRuleThresholdsModel(ruleThresholdsModel, parameters);
 
-        List<UIFieldModel> sensorParametersPatches = parameters.getSensorOptions() != null
+        List<FieldModel> sensorParametersPatches = parameters.getSensorOptions() != null
                 ? optionMapToFields(parameters.getSensorOptions())
                 : new ArrayList<>();
         patchSensorParametersInModel(model, sensorParametersPatches);
     }
 
-    protected void patchSensorParametersInModel(UICheckModel model,
-                                                List<UIFieldModel> sensorPatches) {
-        Map<String, UIFieldModel> modelSensorParamsByName = new HashMap<>();
-        for (UIFieldModel fieldModel: model.getSensorParameters()) {
+    protected void patchSensorParametersInModel(CheckModel model,
+                                                List<FieldModel> sensorPatches) {
+        Map<String, FieldModel> modelSensorParamsByName = new HashMap<>();
+        for (FieldModel fieldModel: model.getSensorParameters()) {
             modelSensorParamsByName.put(fieldModel.getDefinition().getDisplayName(), fieldModel);
         }
 
-        for (UIFieldModel patch: sensorPatches) {
+        for (FieldModel patch: sensorPatches) {
             String paramName = patch.getDefinition().getDisplayName();
             modelSensorParamsByName.put(paramName, patch);
         }
@@ -202,42 +202,42 @@ public class CheckCliServiceImpl implements CheckCliService {
         model.setSensorParameters(new ArrayList<>(modelSensorParamsByName.values()));
     }
 
-    protected void patchRuleThresholdsModel(UIRuleThresholdsModel ruleThresholdsModel, UIAllChecksCliPatchParameters parameters) {
+    protected void patchRuleThresholdsModel(RuleThresholdsModel ruleThresholdsModel, UIAllChecksCliPatchParameters parameters) {
         if (parameters.getWarningLevelOptions() != null) {
             Map<String, String> options = parameters.getWarningLevelOptions();
-            List<UIFieldModel> newParameterFields = this.optionMapToFields(options);
+            List<FieldModel> newParameterFields = this.optionMapToFields(options);
 
-            UIRuleParametersModel ruleParametersModel = ruleThresholdsModel.getWarning();
+            RuleParametersModel ruleParametersModel = ruleThresholdsModel.getWarning();
             this.patchRuleParameters(ruleParametersModel, newParameterFields);
         }
         if (parameters.getErrorLevelOptions() != null) {
             Map<String, String> options = parameters.getErrorLevelOptions();
-            List<UIFieldModel> newParameterFields = this.optionMapToFields(options);
+            List<FieldModel> newParameterFields = this.optionMapToFields(options);
 
-            UIRuleParametersModel ruleParametersModel = ruleThresholdsModel.getError();
+            RuleParametersModel ruleParametersModel = ruleThresholdsModel.getError();
             this.patchRuleParameters(ruleParametersModel, newParameterFields);
         }
         if (parameters.getFatalLevelOptions() != null) {
             Map<String, String> options = parameters.getFatalLevelOptions();
-            List<UIFieldModel> newParameterFields = this.optionMapToFields(options);
+            List<FieldModel> newParameterFields = this.optionMapToFields(options);
 
-            UIRuleParametersModel ruleParametersModel = ruleThresholdsModel.getFatal();
+            RuleParametersModel ruleParametersModel = ruleThresholdsModel.getFatal();
             this.patchRuleParameters(ruleParametersModel, newParameterFields);
         }
     }
 
-    protected void patchRuleParameters(UIRuleParametersModel ruleParametersModel,
-                                       List<UIFieldModel> patches) {
-        List<UIFieldModel> ruleParameterFields = ruleParametersModel.getRuleParameters();
+    protected void patchRuleParameters(RuleParametersModel ruleParametersModel,
+                                       List<FieldModel> patches) {
+        List<FieldModel> ruleParameterFields = ruleParametersModel.getRuleParameters();
 
-        for (UIFieldModel patch: patches) {
+        for (FieldModel patch: patches) {
             String patchName = patch.getDefinition().getDisplayName();
-            Optional<UIFieldModel> shouldOverride = ruleParameterFields.stream()
+            Optional<FieldModel> shouldOverride = ruleParameterFields.stream()
                     .filter(field -> field.getDefinition().getDisplayName().equals(patchName))
                     .findAny();
 
             if (shouldOverride.isPresent()) {
-                UIFieldModel substitute = shouldOverride.get();
+                FieldModel substitute = shouldOverride.get();
                 substitute.setValue(patch.getValue());
             } else {
                 ruleParameterFields.add(patch);
@@ -247,45 +247,45 @@ public class CheckCliServiceImpl implements CheckCliService {
         ruleParametersModel.setConfigured(!ruleParameterFields.isEmpty());
     }
 
-    protected List<UIFieldModel> optionMapToFields(Map<String, String> options) {
-        List<UIFieldModel> result = new ArrayList<>();
+    protected List<FieldModel> optionMapToFields(Map<String, String> options) {
+        List<FieldModel> result = new ArrayList<>();
 
         for (Map.Entry<String, String> option: options.entrySet()) {
-            UIFieldModel uiFieldModel = new UIFieldModel();
+            FieldModel fieldModel = new FieldModel();
             ParameterDefinitionSpec parameterDefinition = new ParameterDefinitionSpec();
             parameterDefinition.setDisplayName(option.getKey());
             parameterDefinition.setFieldName(option.getKey());
-            uiFieldModel.setDefinition(parameterDefinition);
+            fieldModel.setDefinition(parameterDefinition);
 
-            this.assignUiFieldModelValue(uiFieldModel, option.getValue());
-            result.add(uiFieldModel);
+            this.assignUiFieldModelValue(fieldModel, option.getValue());
+            result.add(fieldModel);
         }
         return result;
     }
 
-    protected void assignUiFieldModelValue(UIFieldModel uiFieldModel, String value) {
+    protected void assignUiFieldModelValue(FieldModel fieldModel, String value) {
         Integer valInt = StringTypeCaster.tryParseInt(value);
         if (valInt != null) {
-            uiFieldModel.setIntegerValue(valInt);
-            uiFieldModel.getDefinition().setDataType(ParameterDataType.integer_type);
+            fieldModel.setIntegerValue(valInt);
+            fieldModel.getDefinition().setDataType(ParameterDataType.integer_type);
             return;
         }
 
         Long valLong = StringTypeCaster.tryParseLong(value);
         if (valLong != null) {
-            uiFieldModel.setLongValue(valLong);
-            uiFieldModel.getDefinition().setDataType(ParameterDataType.long_type);
+            fieldModel.setLongValue(valLong);
+            fieldModel.getDefinition().setDataType(ParameterDataType.long_type);
             return;
         }
 
         Double valDouble = StringTypeCaster.tryParseDouble(value);
         if (valDouble != null) {
-            uiFieldModel.setDoubleValue(valDouble);
-            uiFieldModel.getDefinition().setDataType(ParameterDataType.double_type);
+            fieldModel.setDoubleValue(valDouble);
+            fieldModel.getDefinition().setDataType(ParameterDataType.double_type);
             return;
         }
 
-        uiFieldModel.setStringValue(value);
-        uiFieldModel.getDefinition().setDataType(ParameterDataType.string_type);
+        fieldModel.setStringValue(value);
+        fieldModel.getDefinition().setDataType(ParameterDataType.string_type);
     }
 }

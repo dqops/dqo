@@ -15,7 +15,7 @@
  */
 package ai.dqo.utils.docs.checks;
 
-import ai.dqo.services.check.mapping.models.UICheckModel;
+import ai.dqo.services.check.mapping.models.CheckModel;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class CheckDocumentationModel {
     /**
      * Check model with all remaining documentation.
      */
-    private UICheckModel checkModel;
+    private CheckModel checkModel;
 
     /**
      * Data quality check sample (for show structure of check)

@@ -33,7 +33,7 @@ import ai.dqo.rest.models.metadata.ConnectionBasicModel;
 import ai.dqo.rest.models.metadata.ConnectionModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.services.check.CheckService;
-import ai.dqo.services.check.models.UIAllChecksPatchParameters;
+import ai.dqo.services.check.models.AllChecksPatchParameters;
 import ai.dqo.services.check.models.BulkCheckDisableParameters;
 import ai.dqo.services.metadata.ConnectionService;
 import com.google.common.base.Strings;
@@ -757,7 +757,7 @@ public class ConnectionsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check name") @PathVariable String checkName,
             @ApiParam("Check search filters and rules configuration")
-            @RequestBody UIAllChecksPatchParameters updatePatchParameters) {
+            @RequestBody AllChecksPatchParameters updatePatchParameters) {
         if (updatePatchParameters == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400 - update patch parameters not supplied
         }

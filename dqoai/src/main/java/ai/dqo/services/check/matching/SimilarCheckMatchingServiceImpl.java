@@ -30,7 +30,7 @@ import ai.dqo.checks.table.recurring.TableMonthlyRecurringCheckCategoriesSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,15 +41,15 @@ import java.util.Objects;
  */
 @Component
 public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingService {
-    private SpecToUiCheckMappingService specToUiCheckMappingService;
+    private SpecToModelCheckMappingService specToModelCheckMappingService;
 
     /**
      * Creates a service given dependencies.
-     * @param specToUiCheckMappingService Check specification to UI model mapping service.
+     * @param specToModelCheckMappingService Check specification to UI model mapping service.
      */
     @Autowired
-    public SimilarCheckMatchingServiceImpl(SpecToUiCheckMappingService specToUiCheckMappingService) {
-        this.specToUiCheckMappingService = specToUiCheckMappingService;
+    public SimilarCheckMatchingServiceImpl(SpecToModelCheckMappingService specToModelCheckMappingService) {
+        this.specToModelCheckMappingService = specToModelCheckMappingService;
     }
 
     /**
@@ -66,27 +66,27 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
         }};
 
         TableProfilingCheckCategoriesSpec profilingChecks = tableSpec.getProfilingChecks();
-        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(profilingChecks,
+        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createUiModel(profilingChecks,
                 checkSearchFilters, null, tableSpec, null, null),
                 profilingChecks.getCheckTarget(), profilingChecks.getCheckType(), profilingChecks.getCheckTimeScale());
 
         TableDailyRecurringCategoriesSpec dailyRecurring = Objects.requireNonNullElseGet(tableSpec.getRecurringChecks().getDaily(), TableDailyRecurringCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyRecurring,
+        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createUiModel(dailyRecurring,
                         checkSearchFilters, null, tableSpec,null, null),
                 dailyRecurring.getCheckTarget(), dailyRecurring.getCheckType(), dailyRecurring.getCheckTimeScale());
 
         TableMonthlyRecurringCheckCategoriesSpec monthlyRecurring = Objects.requireNonNullElseGet(tableSpec.getRecurringChecks().getMonthly(), TableMonthlyRecurringCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(monthlyRecurring,
+        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createUiModel(monthlyRecurring,
                         checkSearchFilters, null, tableSpec,null, null),
                 monthlyRecurring.getCheckTarget(), monthlyRecurring.getCheckType(), monthlyRecurring.getCheckTimeScale());
 
         TableDailyPartitionedCheckCategoriesSpec dailyPartitioned = Objects.requireNonNullElseGet(tableSpec.getPartitionedChecks().getDaily(), TableDailyPartitionedCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyPartitioned,
+        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createUiModel(dailyPartitioned,
                         checkSearchFilters, null, tableSpec,null, null),
                 dailyPartitioned.getCheckTarget(), dailyPartitioned.getCheckType(), dailyPartitioned.getCheckTimeScale());
 
         TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitioned = Objects.requireNonNullElseGet(tableSpec.getPartitionedChecks().getMonthly(), TableMonthlyPartitionedCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(monthlyPartitioned,
+        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createUiModel(monthlyPartitioned,
                         checkSearchFilters, null, tableSpec,null, null),
                 monthlyPartitioned.getCheckTarget(), monthlyPartitioned.getCheckType(), monthlyPartitioned.getCheckTimeScale());
 
@@ -108,29 +108,29 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
         }};
 
         ColumnProfilingCheckCategoriesSpec profilingChecks = Objects.requireNonNullElseGet(columnSpec.getProfilingChecks(), ColumnProfilingCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(profilingChecks,
+        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createUiModel(profilingChecks,
                         checkSearchFilters, null, tableSpec,null, null),
                 profilingChecks.getCheckTarget(), profilingChecks.getCheckType(), profilingChecks.getCheckTimeScale());
 
         ColumnRecurringChecksRootSpec recurring = Objects.requireNonNullElseGet(columnSpec.getRecurringChecks(), ColumnRecurringChecksRootSpec::new);
         ColumnDailyRecurringCheckCategoriesSpec dailyRecurring = Objects.requireNonNullElseGet(recurring.getDaily(), ColumnDailyRecurringCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyRecurring,
+        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createUiModel(dailyRecurring,
                         checkSearchFilters, null, tableSpec,null, null),
                 dailyRecurring.getCheckTarget(), dailyRecurring.getCheckType(), dailyRecurring.getCheckTimeScale());
 
         ColumnMonthlyRecurringCheckCategoriesSpec monthlyRecurring = Objects.requireNonNullElseGet(recurring.getMonthly(), ColumnMonthlyRecurringCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(monthlyRecurring,
+        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createUiModel(monthlyRecurring,
                         checkSearchFilters, null, tableSpec,null, null),
                 monthlyRecurring.getCheckTarget(), monthlyRecurring.getCheckType(), monthlyRecurring.getCheckTimeScale());
 
         ColumnPartitionedChecksRootSpec partitionedChecks = Objects.requireNonNullElseGet(columnSpec.getPartitionedChecks(), ColumnPartitionedChecksRootSpec::new);
         ColumnDailyPartitionedCheckCategoriesSpec dailyPartitioned = Objects.requireNonNullElseGet(partitionedChecks.getDaily(), ColumnDailyPartitionedCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyPartitioned,
+        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createUiModel(dailyPartitioned,
                         checkSearchFilters, null, tableSpec,null, null),
                 dailyPartitioned.getCheckTarget(), dailyPartitioned.getCheckType(), dailyPartitioned.getCheckTimeScale());
 
         ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitioned = Objects.requireNonNullElseGet(partitionedChecks.getMonthly(), ColumnMonthlyPartitionedCheckCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(monthlyPartitioned,
+        similarChecksContainer.appendAllChecks(this.specToModelCheckMappingService.createUiModel(monthlyPartitioned,
                         checkSearchFilters, null, tableSpec,null, null),
                 dailyPartitioned.getCheckTarget(), monthlyPartitioned.getCheckType(), monthlyPartitioned.getCheckTimeScale());
 

@@ -22,12 +22,8 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.check.CheckTemplate;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
-import io.swagger.annotations.ApiParam;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Service that performs schema operations.

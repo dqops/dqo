@@ -24,7 +24,7 @@ import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.CustomRuleParametersSpec;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
+import ai.dqo.services.check.mapping.SpecToModelCheckMappingService;
 import ai.dqo.utils.reflection.TargetClassSearchUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,13 +44,13 @@ import java.util.stream.Collectors;
 @Component
 public class RuleDefinitionDefaultSpecUpdateServiceImpl implements RuleDefinitionDefaultSpecUpdateService {
     private DqoHomeContext dqoHomeContext;
-    private SpecToUiCheckMappingService specToUiCheckMappingService;
+    private SpecToModelCheckMappingService specToModelCheckMappingService;
 
     @Autowired
     public RuleDefinitionDefaultSpecUpdateServiceImpl(DqoHomeContext dqoHomeContext,
-                                                      SpecToUiCheckMappingService specToUiCheckMappingService) {
+                                                      SpecToModelCheckMappingService specToModelCheckMappingService) {
         this.dqoHomeContext = dqoHomeContext;
-        this.specToUiCheckMappingService = specToUiCheckMappingService;
+        this.specToModelCheckMappingService = specToModelCheckMappingService;
     }
 
     /**
@@ -91,7 +91,7 @@ public class RuleDefinitionDefaultSpecUpdateServiceImpl implements RuleDefinitio
                 }
             }
 
-            List<ParameterDefinitionSpec> fieldDefinitionList = this.specToUiCheckMappingService.createFieldsForRuleParameters(abstractRuleParametersSpec)
+            List<ParameterDefinitionSpec> fieldDefinitionList = this.specToModelCheckMappingService.createFieldsForRuleParameters(abstractRuleParametersSpec)
                     .stream()
                     .map(uiFieldModel -> uiFieldModel.getDefinition())
                     .collect(Collectors.toList());
