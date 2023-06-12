@@ -386,7 +386,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
 
         RecurringScheduleSpec scheduleOverride = checkSpec.getScheduleOverride();
         checkModel.setScheduleOverride(scheduleOverride);
-        if (scheduleOverride != null && !scheduleOverride.isDisabled() && !scheduleOverride.isDefault()) { // bug #7380, to fix
+        if (scheduleOverride != null && !scheduleOverride.isDefault()) {
                 checkModel.setEffectiveSchedule(
                         EffectiveScheduleModel.fromRecurringScheduleSpec(
                                 scheduleOverride,
@@ -676,7 +676,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 ? schedulesSpec.getScheduleForCheckSchedulingGroup(scheduleGroup)
                 : null;
 
-        if (scheduleSpec != null && !scheduleSpec.isDisabled() && !scheduleSpec.isDefault()) {
+        if (scheduleSpec != null && !scheduleSpec.isDefault()) {
             return EffectiveScheduleModel.fromRecurringScheduleSpec(
                     scheduleSpec,
                     scheduleGroup,
