@@ -24,12 +24,12 @@ import ai.dqo.metadata.sources.ConnectionSpec;
  */
 public class SnowflakeConnectionSpecObjectMother {
     /**
-     * Connection name to big query.
+     * Connection name to snowflake.
      */
     public static final String CONNECTION_NAME = "snowflake_connection";
 
     /**
-     * Creates a default connection spec to a sandbox bigquery database.
+     * Creates a default connection spec to a sandbox snowflake database.
      * @return Connection spec to a sandbox environment.
      */
     public static ConnectionSpec create() {

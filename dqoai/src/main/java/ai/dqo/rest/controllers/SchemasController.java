@@ -332,10 +332,10 @@ public class SchemasController {
      * @return Data quality checks templates on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/bulkenable/profiling", produces = "application/json")
-    @ApiOperation(value = "getSchemaProfilingChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate.class)
+    @ApiOperation(value = "getSchemaProfilingChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate.class),
+            @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate[].class),
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -371,10 +371,10 @@ public class SchemasController {
      * @return Data quality checks templates on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/bulkenable/recurring/{timeScale}", produces = "application/json")
-    @ApiOperation(value = "getSchemaRecurringChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate.class)
+    @ApiOperation(value = "getSchemaRecurringChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate.class),
+            @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate[].class),
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -411,10 +411,10 @@ public class SchemasController {
      * @return Data quality checks templates on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/bulkenable/partitioned/{timeScale}", produces = "application/json")
-    @ApiOperation(value = "getSchemaPartitionedChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate.class)
+    @ApiOperation(value = "getSchemaPartitionedChecksTemplates", notes = "Return available data quality checks on a requested schema.", response = CheckTemplate[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate.class),
+            @ApiResponse(code = 200, message = "Potential data quality checks on a schema returned", response = CheckTemplate[].class),
             @ApiResponse(code = 404, message = "Connection or schema not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })

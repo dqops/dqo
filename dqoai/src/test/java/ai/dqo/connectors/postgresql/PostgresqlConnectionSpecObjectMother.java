@@ -47,7 +47,7 @@ public class PostgresqlConnectionSpecObjectMother {
     }
 
     /**
-     * Connection name to big query.
+     * Connection name to postgresql.
      */
     public static final String CONNECTION_NAME = "postgresql_connection";
 

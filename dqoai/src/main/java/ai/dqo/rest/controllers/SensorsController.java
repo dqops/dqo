@@ -297,7 +297,7 @@ public class SensorsController {
     @ApiOperation(value = "deleteSensor", notes = "Deletes a custom sensor definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Custom sensor definition successfully deleted", response = DqoQueueJobId.class),
+            @ApiResponse(code = 204, message = "Custom sensor definition successfully deleted"),
             @ApiResponse(code = 404, message = "Custom sensor not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })

@@ -33,6 +33,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
               AlloyDB for PostgreSQL
             </div>
           </div>
+
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
@@ -46,6 +47,15 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             <div className="text-xl font-semibold text-gray-700">
               Amazon Aurora
             </div>
+          </div>
+          <div
+              className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
+              onClick={() =>
+                  onSelect(ConnectionBasicModelProviderTypeEnum.redshift)
+              }
+          >
+            <SvgIcon name="redshift" className="mb-3 w-16 text-blue-500" />
+            <div className="text-xl font-semibold text-gray-700">Amazon Redshift</div>
           </div>
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
@@ -282,6 +292,17 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             <SvgIcon name="mysql" className="mb-3 w-20 text-blue-500" />
             <div className="text-xl font-semibold text-gray-700">MySQL</div>
           </div>
+
+          <div
+              className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
+              onClick={() =>
+                  onSelect(ConnectionBasicModelProviderTypeEnum.oracle)
+              }
+          >
+            <SvgIcon name="oracle" className="mb-3 w-16 text-blue-500" />
+            <div className="text-xl font-semibold text-gray-700">Oracle Database</div>
+          </div>
+
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>
@@ -311,15 +332,6 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
             </div>
           </div>
 
-          <div
-            className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
-            onClick={() =>
-              onSelect(ConnectionBasicModelProviderTypeEnum.redshift)
-            }
-          >
-            <SvgIcon name="redshift" className="mb-3 w-16 text-blue-500" />
-            <div className="text-xl font-semibold text-gray-700">Redshift</div>
-          </div>
           <div
             className="min-w-100 max-w-100 bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 flex flex-col items-center justify-center h-40"
             onClick={() =>

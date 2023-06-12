@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Button from '../../Button';
 import Input from '../../Input';
-import BigqueryConnection from './BigqueryConnection';
-import SnowflakeConnection from './SnowflakeConnection';
 import {
   ConnectionBasicModel,
   ConnectionBasicModelProviderTypeEnum,
@@ -17,6 +15,10 @@ import { useTree } from '../../../contexts/treeContext';
 import Loader from '../../Loader';
 import ErrorModal from './ErrorModal';
 import ConfirmErrorModal from './ConfirmErrorModal';
+import BigqueryConnection from './BigqueryConnection';
+import BigqueryLogo from '../../SvgIcon/svg/bigquery.svg';
+import SnowflakeConnection from './SnowflakeConnection';
+import SnowflakeLogo from '../../SvgIcon/svg/snowflake.svg';
 import PostgreSQLConnection from './PostgreSQLConnection';
 import PostgreSQLLogo from '../../SvgIcon/svg/postgresql.svg';
 import RedshiftConnection from './RedshiftConnection';
@@ -25,6 +27,8 @@ import SqlServerConnection from './SqlServerConnection';
 import SqlServerLogo from '../../SvgIcon/svg/mssql-server.svg';
 import MySQLConnection from './MySQLConnection';
 import MySQLLogo from '../../SvgIcon/svg/mysql.svg';
+import OracleConnection from './OracleConnection';
+import OracleLogo from '../../SvgIcon/svg/oracle.svg';
 import SvgIcon from '../../SvgIcon';
 
 interface IDatabaseConnectionProps {
@@ -127,17 +131,19 @@ const DatabaseConnection = ({
   const getTitle = (provider?: ConnectionBasicModelProviderTypeEnum) => {
     switch (provider) {
       case ConnectionBasicModelProviderTypeEnum.bigquery:
-        return 'Google Bigquery Connection Settings';
+        return 'Google BigQuery Connection Settings';
       case ConnectionBasicModelProviderTypeEnum.snowflake:
         return 'Snowflake Connection Settings';
       case ConnectionBasicModelProviderTypeEnum.postgresql:
         return 'PostgreSQL Connection Settings';
       case ConnectionBasicModelProviderTypeEnum.redshift:
-        return 'Redshift Connection Settings';
+        return 'Amazon Redshift Connection Settings';
       case ConnectionBasicModelProviderTypeEnum.sqlserver:
-        return 'SQL Server Connection Settings';
+        return 'Microsoft SQL Server Connection Settings';
       case ConnectionBasicModelProviderTypeEnum.mysql:
-        return 'MYSQL Connection Settings';
+        return 'MySQL Connection Settings';
+      case ConnectionBasicModelProviderTypeEnum.oracle:
+        return 'Oracle Database Connection Settings';
       default:
         return 'Database Connection Settings';
     }
@@ -179,15 +185,21 @@ const DatabaseConnection = ({
         mysql={database.mysql}
         onChange={(mysql) => onChange({ ...database, mysql })}
       />
+    ),
+    [ConnectionBasicModelProviderTypeEnum.oracle]: (
+      <OracleConnection
+          oracle={database.oracle}
+          onChange={(oracle) => onChange({ ...database, oracle })}
+      />
     )
   };
 
   const dbImage = useMemo(() => {
     switch (database.provider_type) {
       case ConnectionBasicModelProviderTypeEnum.bigquery:
-        return '/bigQuery.png';
+        return BigqueryLogo;
       case ConnectionBasicModelProviderTypeEnum.snowflake:
-        return '/snowflake.png';
+        return SnowflakeLogo;
       case ConnectionBasicModelProviderTypeEnum.postgresql:
         return PostgreSQLLogo;
       case ConnectionBasicModelProviderTypeEnum.redshift:
@@ -196,6 +208,8 @@ const DatabaseConnection = ({
         return SqlServerLogo;
       case ConnectionBasicModelProviderTypeEnum.mysql:
         return MySQLLogo;
+      case ConnectionBasicModelProviderTypeEnum.oracle:
+        return OracleLogo;
       default:
         return '';
     }

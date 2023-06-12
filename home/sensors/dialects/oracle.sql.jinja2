@@ -1,0 +1,383 @@
+{% set macro_database_name =  connection.oracle.database -%}
+{% set macro_schema_name = target_table.schema_name -%}
+{% set macro_table_name = target_table.table_name -%}
+{% set time_series = effective_time_series | default(none, true) -%}
+{% set time_window_filter = effective_time_window_filter | default(none, true) -%}
+{% set timestamp_column_data_type = table.columns[time_series.timestamp_column].type_snapshot.column_type | upper | default(none, true) -%}
+{% set data_streams = effective_data_streams | default(none, true) -%}
+{% set target_column_data_type = table.columns[column_name].type_snapshot.column_type | default(none, true) -%}
+{% set calculated_column_expression = table.columns[column_name].sql_expression | default('', true) -%}
+
+{% macro quote_identifier(name) -%}
+    {{ dialect_settings.quote_begin }}{{ name | replace(dialect_settings.quote_end, dialect_settings.quote_escape) }}{{ dialect_settings.quote_end }}
+{%- endmacro %}
+
+{% macro make_text_constant(string) -%}
+    {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+{%- endmacro %}
+
+{% macro eol() -%}
+{{ '' }}
+{% endmacro %}
+
+{%- macro render_target_table() -%}
+    {{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
+{%- endmacro %}
+
+{%- macro render_target_column(table_alias_prefix = 'analyzed_table') -%}
+    {%- if calculated_column_expression != '' -%}
+        ({{ calculated_column_expression | replace('{column}', table_alias_prefix ~ '.' ~ quote_identifier(column_name)) | replace('{table}', render_target_table()) | replace('{alias}', table_alias_prefix) }})
+    {%- else -%}
+        {{ table_alias_prefix }}.{{ quote_identifier(column_name) }}
+    {%- endif -%}
+{%- endmacro %}
+
+{%- macro render_column(name, table_alias_prefix = '') -%}
+    {%- if table_alias_prefix != '' -%}
+        {{ table_alias_prefix }}.{{ quote_identifier(name) }}
+    {%- else -%}
+        {{ quote_identifier(name) }}
+    {%- endif -%}
+{%- endmacro %}
+
+{%- macro is_local_date(data_type) -%}
+    {#-
+    Check if a given parameter is a date.
+
+    :param data_type: The parameter to check
+    :type data_type: str
+    :return: 'true' if the parameter is a valid date, 'false' otherwise
+    :rtype: bool
+    -#}
+    {%- if data_type == 'DATE' -%}
+        {{ 'true' }}
+    {%- else -%}
+        {{ 'false' }}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro is_local_time(data_type) -%}
+    {#-
+    Check if a given parameter is a local-time.
+
+    :param data_type: The parameter to check
+    :type data_type: str
+    :return: 'true' if the parameter is a valid local-time, 'false' otherwise
+    :rtype: bool
+    -#}
+    {% if data_type == 'TIMESTAMP' -%}
+        {{- 'true' -}}
+    {%- else -%}
+        {{- 'false' -}}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro is_local_date_time(data_type) -%}
+    {#-
+    Check if a given parameter is a local-date-time.
+
+    :param data_type: The parameter to check
+    :type data_type: str
+    :return: 'true' if the parameter is a valid local-date-time, 'false' otherwise
+    :rtype: bool
+    -#}
+    {% if data_type in ('DATE', 'TIMESTAMP') -%}
+        {{- 'true' -}}
+    {%- else -%}
+        {{- 'false' -}}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro is_instant(data_type) -%}
+    {#-
+    Check if a given parameter is an instant.
+
+    :param data_type: The parameter to check
+    :type data_type: str
+    :return: 'true' if the parameter is a valid instant, 'false' otherwise
+    :rtype: bool
+    -#}
+    {% if data_type in ('TIMESTAMP WITH TIME ZONE', 'TIMESTAMP WITH LOCAL TIME ZONE') -%}
+        {{- 'true' -}}
+    {%- else -%}
+        {{- 'false' -}}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro date_trunc(value, part='day', datatype=none) %}
+    {#-
+    Treat value as a date and truncate it to requested granulation.
+
+    :param value: Date to truncate
+    :type value: Union[str, date, datetime]
+    :param part: Requested granulation (year, quarter, month, ...). 'day' by default
+    :type part: str
+    :param datatype: Type of the provided value. none by default.
+    :type datatype: Optional[str]
+    :return: Truncated date. If :param part: == 'millisecond', returns truncated timestamp.
+    :rtype: DATE, TIMESTAMP
+    -#}
+    {%- if part == 'year' -%}
+        TRUNC(CAST({{value}} AS DATE), 'YEAR')
+    {%- elif part == 'quarter' -%}
+        TRUNC(CAST({{value}} AS DATE), 'Q')
+    {%- elif part == 'month' -%}
+        TRUNC(CAST({{value}} AS DATE), 'MONTH')
+    {%- elif part == 'week' -%}
+        TRUNC(CAST({{value}} AS DATE), 'IW')
+    {%- elif part == 'day' -%}
+        TRUNC(CAST({{value}} AS DATE))
+    {%- elif part == 'hour' -%}
+        TRUNC(CAST({{value}} AS DATE), 'HH')
+    {%- elif part == 'millisecond' -%}
+        CAST({{value}} AS TIMESTAMP(3))
+    {%- else -%}
+        TRUNC(CAST({{value}} AS DATE))
+    {%- endif -%}
+{% endmacro %}
+
+{% macro date_trunc_utc(value, part='day', datatype=none) %}
+    {#-
+    Treat value as a UTC datetime and truncate it to requested granulation.
+
+    :param value: Datetime to truncate
+    :type value: Union[str, date, datetime]
+    :param part: Requested granulation (year, quarter, month, ...). 'day' by default
+    :type part: str
+    :param datatype: Type of the provided value. none by default.
+    :type datatype: Optional[str]
+    :return: Truncated timestamp without time-zone information.
+    :rtype: TIMESTAMP
+    -#}
+    {%- if part == 'year' -%}
+        CAST(TRUNC(CAST({{value}} AS DATE), 'YEAR') AS TIMESTAMP)
+    {%- elif part == 'quarter' -%}
+        CAST(TRUNC(CAST({{value}} AS DATE), 'Q') AS TIMESTAMP)
+    {%- elif part == 'month' -%}
+        CAST(TRUNC(CAST({{value}} AS DATE), 'MONTH') AS TIMESTAMP)
+    {%- elif part == 'week' -%}
+        CAST(TRUNC(CAST({{value}} AS DATE), 'IW') AS TIMESTAMP)
+    {%- elif part == 'day' -%}
+        CAST(TRUNC(CAST({{value}} AS DATE)) AS TIMESTAMP)
+    {%- elif part == 'hour' -%}
+        CAST(TRUNC(CAST({{value}} AS DATE), 'HH') AS TIMESTAMP)
+    {%- elif part == 'millisecond' -%}
+        CAST({{value}} AS TIMESTAMP(3))
+    {%- else -%}
+        CAST(TRUNC(CAST({{value}} AS DATE)) AS TIMESTAMP)
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_time_dimension_expression(table_alias_prefix = 'analyzed_table') %}
+    {%- if time_series is not none-%}
+        {%- if time_series.mode == 'current_time' -%}
+            {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
+                {{ date_trunc('CURRENT_TIMESTAMP', time_series.time_gradient, 'TIMESTAMP WITH TIME ZONE') }}
+            {%- else -%}
+                CURRENT_TIMESTAMP
+            {%- endif -%}
+        {%- elif time_series.mode == 'timestamp_column' -%}
+            {{ date_trunc(table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column), time_series.time_gradient, timestamp_column_data_type) }}
+        {%- else -%}
+            <INVALID TIME SERIES MODE: {{time_series.mode}}/>
+        {%- endif -%}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_time_dimension_expression_utc(table_alias_prefix = 'analyzed_table') %}
+    {%- if time_series is not none-%}
+        {%- if time_series.mode == 'current_time' -%}
+            {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
+                {{ date_trunc_utc('CURRENT_TIMESTAMP', time_series.time_gradient, 'TIMESTAMP WITH TIME ZONE') }}
+            {%- else -%}
+                CURRENT_TIMESTAMP
+            {%- endif -%}
+        {%- elif time_series.mode == 'timestamp_column' -%}
+            {{ date_trunc_utc(table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column), time_series.time_gradient, timestamp_column_data_type) }}
+        {%- else -%}
+            <INVALID TIME SERIES MODE: {{time_series.mode}}/>
+        {%- endif -%}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') %}
+    {%- if data_streams is not none and (data_streams | length()) > 0 -%}
+        {%- for attribute in data_streams -%}
+            {{ ',' }}
+            {%- with data_stream_level = data_streams[attribute] -%}
+                {%- if data_stream_level.source == 'tag' -%}
+                    {{ eol() }}{{ indentation }}{{ make_text_constant(data_stream_level.tag) }}
+                {%- elif data_stream_level.source == 'column_value' -%}
+                    {{ eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+                {%- endif -%}
+            {%- endwith %} AS stream_{{ attribute }}
+        {%- endfor -%}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_data_stream_projections_reference(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+    {%- if data_streams is not none and (data_streams | length()) > 0 -%}
+        {%- for attribute in data_streams -%}
+            {{ ',' -}}{{- eol() }}
+            {{ indentation }}{{ table_alias_prefix }}.stream_{{ attribute -}}
+        {%- endfor -%}
+        {{- eol() }}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') %}
+    {%- if time_series is not none -%}
+        {{ ',' -}}{{- eol() -}}
+        {{ indentation }}{{ render_time_dimension_expression(table_alias_prefix) }} AS time_period,{{ eol() -}}
+        {{ indentation }}CAST({{ render_time_dimension_expression(table_alias_prefix) }} AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_time_dimension_projection_reference(table_alias_prefix = 'grouping_table', indentation = '    ') %}
+    {%- if time_series is not none -%}
+        {{ ',' -}}{{- eol() -}}
+        {{ indentation }}time_period,{{ eol() -}}
+        {{ indentation }}time_period_utc
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_end_date_filter(prefix_to_render = none, table_alias_prefix = 'analyzed_table') %}
+    {%- if time_window_filter is not none -%}
+        {%- if time_window_filter.to_date_time_offset | default(none, true) is not none -%}
+            {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} < {{ make_text_constant(time_window_filter.to_date_time_offset) -}}
+        {%- elif time_window_filter.to_date_time | default(none, true) is not none -%}
+            {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} < {{ make_text_constant(time_window_filter.to_date_time) -}}
+        {%- elif time_window_filter.to_date | default(none, true) is not none -%}
+            {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} < {{ make_text_constant(time_window_filter.to_date) -}}
+        {%- elif time_window_filter.daily_partitioning_include_today is false -%}
+            {{ prefix_to_render -}}
+            {%- if is_instant(timestamp_column_data_type) == 'true' -%}
+                {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
+                {{ date_trunc_utc('CURRENT_TIMESTAMP', 'day', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
+            {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
+                {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
+                {{ date_trunc('CURRENT_DATE', 'day', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
+            {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
+                {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
+                {{ date_trunc('CURRENT_DATE', 'day', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
+            {%- else -%}
+                {{ date_trunc(table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column),
+                    'day', table.columns[time_series.timestamp_column].type_snapshot.column_type) -}}{{- ' < ' -}}
+                {{ date_trunc('CURRENT_DATE', 'day', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
+            {%- endif -%}
+        {%- elif time_window_filter.monthly_partitioning_include_current_month is false -%}
+            {{ prefix_to_render -}}
+            {%- if is_instant(timestamp_column_data_type) == 'true' -%}
+                {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
+                {{ date_trunc_utc('CURRENT_TIMESTAMP', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
+            {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
+                {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
+                {{ date_trunc('CURRENT_DATE', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
+            {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
+                {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
+                {{ date_trunc('CURRENT_DATE', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
+            {%- else -%}
+                {{ date_trunc(table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column),
+                    'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) -}}{{- ' < ' -}}
+                {{ date_trunc('CURRENT_DATE', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
+            {%- endif -%}
+        {%- endif -%}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_date_range_filters(prefix_to_render = none, table_alias_prefix = 'analyzed_table', indentation = '      ') %}
+    {%- if time_window_filter is not none -%}
+        {%- if (time_series.timestamp_column | default(none, true)) is not none -%}
+            {%- if time_window_filter.from_date_time_offset | default(none, true) is not none -%}
+                 {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} >= {{ make_text_constant(time_window_filter.from_date_time_offset) -}}
+                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
+            {%- elif time_window_filter.from_date_time | default(none, true) is not none -%}
+                {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} >= {{ make_text_constant(time_window_filter.from_date_time) -}}
+                {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
+            {%- elif time_window_filter.from_date | default(none, true) is not none -%}
+                {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} >= {{ make_text_constant(time_window_filter.from_date) -}}
+                {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
+            {%- elif time_window_filter.daily_partitioning_recent_days | default(none, true) is not none -%}
+                {{ prefix_to_render -}}
+                {%- if is_instant(timestamp_column_data_type) == 'true' -%}
+                    {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
+                    {{ date_trunc_utc('LOCALTIMESTAMP - INTERVAL \'' ~ time_window_filter.daily_partitioning_recent_days ~ '\' DAY(5)', 'day', 'TIMESTAMP') }}
+                {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
+                    {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
+                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.daily_partitioning_recent_days ~ '\' DAY(5)', 'day', 'DATE') }}
+                {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
+                    {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
+                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.daily_partitioning_recent_days ~ '\' DAY(5)', 'day', 'DATE') }}
+                {%- else -%}
+                    CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
+                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.daily_partitioning_recent_days ~ '\' DAY(5)', 'day', 'DATE') }}
+                {%- endif -%}
+                {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
+            {%- elif time_window_filter.monthly_partitioning_recent_months | default(none, true) is not none -%}
+                {{ prefix_to_render -}}
+                {%- if is_instant(timestamp_column_data_type) == 'true' -%}
+                    {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
+                    {{ date_trunc_utc('LOCALTIMESTAMP - INTERVAL \'' ~ time_window_filter.monthly_partitioning_recent_months ~ '\' MONTH(4)', 'month', 'TIMESTAMP') }}
+                {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
+                    {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
+                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.monthly_partitioning_recent_months ~ '\' MONTH(4)', 'month', 'DATE') }}
+                {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
+                    {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
+                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.monthly_partitioning_recent_months ~ '\' MONTH(4)', 'month', 'DATE') }}
+                {%- else -%}
+                    CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
+                    {{ date_trunc('CURRENT_DATE - INTERVAL \'' ~ time_window_filter.monthly_partitioning_recent_months ~ '\' MONTH(4)', 'month', 'DATE') }}
+                {%- endif -%}
+                {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
+            {%- else -%}
+                {{- render_end_date_filter(prefix_to_render, table_alias_prefix) -}}
+            {%- endif -%}
+        {%- endif -%}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_where_clause(extra_filter = none, table_alias_prefix = 'analyzed_table', indentation = '') %}
+    {%- with filters = [table.filter|default(none, true), parameters.filter|default(none, true), extra_filter|default(none, true)] | reject('none') | list -%}
+        {%- if (filters | length) > 0 %}
+{{ indentation ~ 'WHERE ' -}}
+            {%- for filter in filters -%}
+                {%- if not loop.first -%}
+                    {{ eol() ~ indentation ~ '      AND ' }}
+                {%- endif -%}
+                {{ filter | replace('{column}', render_target_column('analyzed_table')) | replace('{table}', render_target_table()) | replace('{alias}', table_alias_prefix) }}
+            {%- endfor -%}
+            {{ render_date_range_filters(eol() ~ indentation ~ '      AND ', table_alias_prefix, indentation ~ '      ') }}
+        {%- else -%}
+            {{ render_date_range_filters(eol() ~ indentation ~ 'WHERE ', table_alias_prefix, indentation ~ '      ') }}
+        {%- endif -%}
+    {%- endwith -%}
+{% endmacro %}
+
+{% macro render_grouping_column_names() %}
+    {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+        {%- for attribute in data_streams -%}
+            {%- if not loop.first -%}
+                {{ ', ' }}
+            {%- endif -%}
+                stream_{{ attribute }}
+        {%- endfor -%}
+    {%- endif -%}
+    {%- if time_series is not none -%}
+        {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+            {{ ', ' }}
+        {%- endif -%}
+            {{ 'time_period' }}, {{ 'time_period_utc' }}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_group_by(indentation = '') %}
+    {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series is not none %}
+{{ indentation }}GROUP BY {{ render_grouping_column_names() }}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_order_by(indentation = '') %}
+    {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series is not none %}
+{{ indentation }}ORDER BY {{ render_grouping_column_names() }}
+    {%- endif -%}
+{% endmacro %}

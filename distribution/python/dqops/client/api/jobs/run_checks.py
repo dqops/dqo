@@ -1,24 +1,33 @@
 from http import HTTPStatus
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 import httpx
 
 from ... import errors
 from ...client import Client
-from ...models.dqo_queue_job_id import DqoQueueJobId
 from ...models.run_checks_queue_job_parameters import RunChecksQueueJobParameters
-from ...types import Response
+from ...models.run_checks_queue_job_result import RunChecksQueueJobResult
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
     *,
     client: Client,
     json_body: RunChecksQueueJobParameters,
+    wait: Union[Unset, None, bool] = UNSET,
+    wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
     url = "{}/api/jobs/runchecks".format(client.base_url)
 
     headers: Dict[str, str] = client.get_headers()
     cookies: Dict[str, Any] = client.get_cookies()
+
+    params: Dict[str, Any] = {}
+    params["wait"] = wait
+
+    params["waitTimeout"] = wait_timeout
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     json_json_body = json_body.to_dict()
 
@@ -30,14 +39,15 @@ def _get_kwargs(
         "timeout": client.get_timeout(),
         "follow_redirects": client.follow_redirects,
         "json": json_json_body,
+        "params": params,
     }
 
 
 def _parse_response(
     *, client: Client, response: httpx.Response
-) -> Optional[DqoQueueJobId]:
+) -> Optional[RunChecksQueueJobResult]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = DqoQueueJobId.from_dict(response.json())
+        response_200 = RunChecksQueueJobResult.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -48,7 +58,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Client, response: httpx.Response
-) -> Response[DqoQueueJobId]:
+) -> Response[RunChecksQueueJobResult]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -61,12 +71,16 @@ def sync_detailed(
     *,
     client: Client,
     json_body: RunChecksQueueJobParameters,
-) -> Response[DqoQueueJobId]:
+    wait: Union[Unset, None, bool] = UNSET,
+    wait_timeout: Union[Unset, None, int] = UNSET,
+) -> Response[RunChecksQueueJobResult]:
     """runChecks
 
      Starts a new background job that will run selected data quality checks
 
     Args:
+        wait (Union[Unset, None, bool]):
+        wait_timeout (Union[Unset, None, int]):
         json_body (RunChecksQueueJobParameters): Run checks configuration, specifies the target
             checks that should be executed and an optional time window.
 
@@ -75,12 +89,14 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[DqoQueueJobId]
+        Response[RunChecksQueueJobResult]
     """
 
     kwargs = _get_kwargs(
         client=client,
         json_body=json_body,
+        wait=wait,
+        wait_timeout=wait_timeout,
     )
 
     response = httpx.request(
@@ -95,12 +111,16 @@ def sync(
     *,
     client: Client,
     json_body: RunChecksQueueJobParameters,
-) -> Optional[DqoQueueJobId]:
+    wait: Union[Unset, None, bool] = UNSET,
+    wait_timeout: Union[Unset, None, int] = UNSET,
+) -> Optional[RunChecksQueueJobResult]:
     """runChecks
 
      Starts a new background job that will run selected data quality checks
 
     Args:
+        wait (Union[Unset, None, bool]):
+        wait_timeout (Union[Unset, None, int]):
         json_body (RunChecksQueueJobParameters): Run checks configuration, specifies the target
             checks that should be executed and an optional time window.
 
@@ -109,12 +129,14 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        DqoQueueJobId
+        RunChecksQueueJobResult
     """
 
     return sync_detailed(
         client=client,
         json_body=json_body,
+        wait=wait,
+        wait_timeout=wait_timeout,
     ).parsed
 
 
@@ -122,12 +144,16 @@ async def asyncio_detailed(
     *,
     client: Client,
     json_body: RunChecksQueueJobParameters,
-) -> Response[DqoQueueJobId]:
+    wait: Union[Unset, None, bool] = UNSET,
+    wait_timeout: Union[Unset, None, int] = UNSET,
+) -> Response[RunChecksQueueJobResult]:
     """runChecks
 
      Starts a new background job that will run selected data quality checks
 
     Args:
+        wait (Union[Unset, None, bool]):
+        wait_timeout (Union[Unset, None, int]):
         json_body (RunChecksQueueJobParameters): Run checks configuration, specifies the target
             checks that should be executed and an optional time window.
 
@@ -136,12 +162,14 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[DqoQueueJobId]
+        Response[RunChecksQueueJobResult]
     """
 
     kwargs = _get_kwargs(
         client=client,
         json_body=json_body,
+        wait=wait,
+        wait_timeout=wait_timeout,
     )
 
     async with httpx.AsyncClient(verify=client.verify_ssl) as _client:
@@ -154,12 +182,16 @@ async def asyncio(
     *,
     client: Client,
     json_body: RunChecksQueueJobParameters,
-) -> Optional[DqoQueueJobId]:
+    wait: Union[Unset, None, bool] = UNSET,
+    wait_timeout: Union[Unset, None, int] = UNSET,
+) -> Optional[RunChecksQueueJobResult]:
     """runChecks
 
      Starts a new background job that will run selected data quality checks
 
     Args:
+        wait (Union[Unset, None, bool]):
+        wait_timeout (Union[Unset, None, int]):
         json_body (RunChecksQueueJobParameters): Run checks configuration, specifies the target
             checks that should be executed and an optional time window.
 
@@ -168,12 +200,14 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        DqoQueueJobId
+        RunChecksQueueJobResult
     """
 
     return (
         await asyncio_detailed(
             client=client,
             json_body=json_body,
+            wait=wait,
+            wait_timeout=wait_timeout,
         )
     ).parsed

@@ -147,10 +147,10 @@ public class PostgresqlConnectionProvider extends AbstractSqlConnectionProvider 
      */
     @Override
     public String formatConstant(Object constant, ColumnTypeSnapshotSpec columnType) {
-        if(constant instanceof Boolean){
-                Boolean asBoolean = (Boolean)constant;
-                return asBoolean ? "true" : "false";
-            }
+        if (constant instanceof Boolean){
+            Boolean asBoolean = (Boolean)constant;
+            return asBoolean ? "true" : "false";
+        }
         return super.formatConstant(constant, columnType);
     }
 

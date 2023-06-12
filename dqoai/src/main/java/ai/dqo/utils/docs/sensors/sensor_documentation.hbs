@@ -26,7 +26,7 @@
 {{/if}}
 **SQL Template (Jinja2)**{{#with "  "}}{{.}}{{/with}}
 {{#each sqlTemplates~}}
-=== "{{@key}}"
+=== "{{@key.providerTypeDisplayName}}"
     {{#with "  "}}{{.}}{{/with}}
     ```sql+jinja
     {{#each this~}}

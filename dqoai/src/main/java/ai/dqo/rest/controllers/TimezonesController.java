@@ -27,9 +27,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
-
-import java.util.List;
+import reactor.core.publisher.Flux;
 
 /**
  * REST api controller to return a list of available time zones.
@@ -48,7 +46,7 @@ public class TimezonesController {
             @ApiResponse(code = 200, message = "OK", response = String[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<List<String>>> getAvailableZoneIds() {
-        return new ResponseEntity<>(Mono.just(TimeZoneUtility.getAvailableZoneIds()), HttpStatus.OK);
+    public ResponseEntity<Flux<String>> getAvailableZoneIds() {
+        return new ResponseEntity<>(Flux.fromIterable(TimeZoneUtility.getAvailableZoneIds()), HttpStatus.OK);
     }
 }

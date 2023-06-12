@@ -24,6 +24,7 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
 import ai.dqo.services.check.mapping.models.UIFieldModel;
+import ai.dqo.utils.docs.ProviderTypeModel;
 import com.github.therapi.runtimejavadoc.ClassJavadoc;
 import com.github.therapi.runtimejavadoc.CommentFormatter;
 import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
@@ -99,8 +100,8 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
      * @param sensorDefinition Sensor definition wrapper.
      * @return Sql templates.
      */
-    private Map<String, List<String>> createSqlTemplates(SensorDefinitionWrapper sensorDefinition) {
-        Map<String, List<String>> sqlTemplates = new HashMap<>();
+    private Map<ProviderTypeModel, List<String>> createSqlTemplates(SensorDefinitionWrapper sensorDefinition) {
+        Map<ProviderTypeModel, List<String>> sqlTemplates = new HashMap<>();
         for (ProviderSensorDefinitionWrapper providerSensor : sensorDefinition.getProviderSensors()) {
             ProviderType provider = providerSensor.getProvider();
             String sqlTemplate = providerSensor.getSqlTemplate();
@@ -110,11 +111,11 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
             if (sqlTemplate == null) {
                 throw new RuntimeException("Sensor " + sensorDefinition.getName() + " for provider " + provider.toString() + " has no SQL template");
             }
-            sqlTemplates.put(provider.toString(), List.of(sqlTemplate.split("\\r?\\n|\\r")));
+            sqlTemplates.put(ProviderTypeModel.fromProviderType(provider), List.of(sqlTemplate.split("\\r?\\n|\\r")));
         }
 
-        Comparator<String> comparator = String::compareTo;
-        Map<String, List<String>> sortedSqlTemplates = new TreeMap<>(comparator);
+        Comparator<ProviderTypeModel> comparator = Comparator.comparing(providerTypeModel -> providerTypeModel.getProviderTypeDisplayName().toLowerCase());
+        Map<ProviderTypeModel, List<String>> sortedSqlTemplates = new TreeMap<>(comparator);
         sortedSqlTemplates.putAll(sqlTemplates);
 
         return sortedSqlTemplates;

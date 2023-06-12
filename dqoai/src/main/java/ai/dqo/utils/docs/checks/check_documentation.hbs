@@ -48,15 +48,15 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch={{checkName
 {{{sampleYaml}}}
 ```
 {{#each providerTemplates~}}
-### **{{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}{{#if (eq (lower providerType) "sqlserver")}}SQL Server{{else}}{{/if}}{{#if (eq (lower providerType) "mysql")}}MySQL{{else}}{{/if}}**
-=== "Sensor template for {{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}{{#if (eq (lower providerType) "sqlserver")}}SQL Server{{else}}{{/if}}{{#if (eq (lower providerType) "mysql")}}MySQL{{else}}{{/if}}"
+### **{{{providerTypeModel.providerTypeDisplayName}}}**
+=== "Sensor template for {{{providerTypeModel.providerTypeDisplayName}}}"
     {{#with "  "}}{{.}}{{/with}}
     ```sql+jinja
     {{#each listOfJinjaTemplate~}}
     {{{this}}}
     {{/each~}}
     ```
-=== "Rendered SQL for {{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}{{#if (eq (lower providerType) "sqlserver")}}SQL Server{{else}}{{/if}}{{#if (eq (lower providerType) "mysql")}}MySQL{{else}}{{/if}}"
+=== "Rendered SQL for {{{providerTypeModel.providerTypeDisplayName}}}"
     {{#with "  "}}{{.}}{{/with}}
     ```sql
     {{#each listOfRenderedTemplate~}}
@@ -73,15 +73,15 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch={{checkName
     {{/each~}}
     ```{{#with "  "}}{{.}}{{/with}}
     {{#each providerTemplatesDataStreams~}}
-    **{{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}{{#if (eq (lower providerType) "sqlserver")}}SQL Server{{else}}{{/if}}{{#if (eq (lower providerType) "mysql")}}MySQL{{else}}{{/if}}**{{#with "  "}}{{.}}{{/with}}
+    **{{{providerTypeModel.providerTypeDisplayName}}}**{{#with "  "}}{{.}}{{/with}}
     {{#with "  "}}{{.}}{{/with}}
-    === "Sensor template for {{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}{{#if (eq (lower providerType) "sqlserver")}}SQL Server{{else}}{{/if}}{{#if (eq (lower providerType) "mysql")}}MySQL{{else}}{{/if}}"
+    === "Sensor template for {{{providerTypeModel.providerTypeDisplayName}}}"
         ```sql+jinja
         {{#each listOfJinjaTemplate~}}
         {{{this}}}
         {{/each~}}
         ```
-    === "Rendered SQL for {{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}{{#if (eq (lower providerType) "sqlserver")}}SQL Server{{else}}{{/if}}{{#if (eq (lower providerType) "mysql")}}MySQL{{else}}{{/if}}"
+    === "Rendered SQL for {{{providerTypeModel.providerTypeDisplayName}}}"
         ```sql
         {{#each listOfRenderedTemplate~}}
         {{{this}}}

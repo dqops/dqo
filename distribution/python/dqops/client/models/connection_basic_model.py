@@ -14,6 +14,7 @@ if TYPE_CHECKING:
         DeleteStoredDataQueueJobParameters,
     )
     from ..models.mysql_parameters_spec import MysqlParametersSpec
+    from ..models.oracle_parameters_spec import OracleParametersSpec
     from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
     from ..models.redshift_parameters_spec import RedshiftParametersSpec
     from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
@@ -43,6 +44,7 @@ class ConnectionBasicModel:
         redshift (Union[Unset, RedshiftParametersSpec]):
         sqlserver (Union[Unset, SqlServerParametersSpec]):
         mysql (Union[Unset, MysqlParametersSpec]):
+        oracle (Union[Unset, OracleParametersSpec]):
         run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
             checks on which tables and columns should be executed.
         run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
@@ -65,6 +67,7 @@ class ConnectionBasicModel:
     redshift: Union[Unset, "RedshiftParametersSpec"] = UNSET
     sqlserver: Union[Unset, "SqlServerParametersSpec"] = UNSET
     mysql: Union[Unset, "MysqlParametersSpec"] = UNSET
+    oracle: Union[Unset, "OracleParametersSpec"] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_recurring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
@@ -106,6 +109,10 @@ class ConnectionBasicModel:
         mysql: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.mysql, Unset):
             mysql = self.mysql.to_dict()
+
+        oracle: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.oracle, Unset):
+            oracle = self.oracle.to_dict()
 
         run_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_job_template, Unset):
@@ -162,6 +169,8 @@ class ConnectionBasicModel:
             field_dict["sqlserver"] = sqlserver
         if mysql is not UNSET:
             field_dict["mysql"] = mysql
+        if oracle is not UNSET:
+            field_dict["oracle"] = oracle
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
@@ -193,6 +202,7 @@ class ConnectionBasicModel:
             DeleteStoredDataQueueJobParameters,
         )
         from ..models.mysql_parameters_spec import MysqlParametersSpec
+        from ..models.oracle_parameters_spec import OracleParametersSpec
         from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
         from ..models.redshift_parameters_spec import RedshiftParametersSpec
         from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
@@ -256,6 +266,13 @@ class ConnectionBasicModel:
             mysql = UNSET
         else:
             mysql = MysqlParametersSpec.from_dict(_mysql)
+
+        _oracle = d.pop("oracle", UNSET)
+        oracle: Union[Unset, OracleParametersSpec]
+        if isinstance(_oracle, Unset):
+            oracle = UNSET
+        else:
+            oracle = OracleParametersSpec.from_dict(_oracle)
 
         _run_checks_job_template = d.pop("run_checks_job_template", UNSET)
         run_checks_job_template: Union[Unset, CheckSearchFilters]
@@ -332,6 +349,7 @@ class ConnectionBasicModel:
             redshift=redshift,
             sqlserver=sqlserver,
             mysql=mysql,
+            oracle=oracle,
             run_checks_job_template=run_checks_job_template,
             run_profiling_checks_job_template=run_profiling_checks_job_template,
             run_recurring_checks_job_template=run_recurring_checks_job_template,

@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sqlserver.sensors.table.volume;
+package ai.dqo.mysql.sensors.table.sql;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
-import ai.dqo.checks.table.profiling.TableVolumeProfilingChecksSpec;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionFailedCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -25,40 +24,40 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.mysql.BaseMysqlIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
-import ai.dqo.sqlserver.BaseSqlServerIntegrationTest;
+import ai.dqo.sensors.table.sql.TableSqlConditionFailedCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
+
 @SpringBootTest
-public class SqlServerTableVolumeRowCountSensorParametersSpecSqlServerIntegrationTest extends BaseSqlServerIntegrationTest {
-    private TableVolumeRowCountSensorParametersSpec sut;
+public class MysqlTableSqlConditionFailedCountSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
+    private TableSqlConditionFailedCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableRowCountCheckSpec checkSpec;
+    private TableSqlConditionFailedCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.sqlserver);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.mysql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new TableVolumeRowCountSensorParametersSpec();
-        this.checkSpec = new TableRowCountCheckSpec();
+        this.sut = new TableSqlConditionFailedCountSensorParametersSpec();
+        this.checkSpec = new TableSqlConditionFailedCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        TableVolumeProfilingChecksSpec category = new TableVolumeProfilingChecksSpec();
-        this.sampleTableMetadata.getTableSpec().getProfilingChecks().setVolume(category);
-        category.setRowCount(this.checkSpec);
     }
 
     @Test
-    void runSensor_whenSensorExecuted_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        this.sut.setSqlCondition("{alias}.id is null");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
                 sampleTableMetadata, this.checkSpec);
 
@@ -67,11 +66,13 @@ public class SqlServerTableVolumeRowCountSensorParametersSpecSqlServerIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24L, resultTable.column(0).get(0));
+        Assertions.assertEquals(13, (double) resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
+        this.sut.setSqlCondition("{alias}.id is null");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
 
@@ -80,45 +81,51 @@ public class SqlServerTableVolumeRowCountSensorParametersSpecSqlServerIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24L, resultTable.column(0).get(0));
+        Assertions.assertEquals(13, (double) resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
+        this.sut.setSqlCondition("{alias}.id is null");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
-                sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly);
+                sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24L, resultTable.column(0).get(0));
+        Assertions.assertEquals(13, (double) resultTable.column(0).get(0));
     }
 
     @Test
-    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
+        this.sut.setSqlCondition("{alias}.id is null");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
-                sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date");
+                sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(24, resultTable.rowCount());
+        Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1L, resultTable.column(0).get(0));
+        Assertions.assertEquals(3, (double) resultTable.column(0).get(0));
     }
 
     @Test
-    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
+        this.sut.setSqlCondition("{alias}.id is null");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
-                sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly, "date");
+                sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24L, resultTable.column(0).get(0));
+        Assertions.assertEquals(13, (double) resultTable.column(0).get(0));
     }
 }

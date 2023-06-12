@@ -128,7 +128,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken());
 
         List<SourceSchemaModel> results = new ArrayList<>();
-        for (int rowIndex = 0; rowIndex < schemaRows.rowCount() ; rowIndex++) {
+        for (int rowIndex = 0; rowIndex < schemaRows.rowCount(); rowIndex++) {
             String schemaName = schemaRows.getString(rowIndex, "schema_name");
             SourceSchemaModel schemaModel = new SourceSchemaModel(schemaName);
             results.add(schemaModel);
@@ -151,12 +151,12 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         sqlBuilder.append("SELECT TABLE_CATALOG AS table_catalog, TABLE_SCHEMA AS table_schema, TABLE_NAME AS table_name FROM ");
         sqlBuilder.append(getInformationSchemaName());
         sqlBuilder.append(".TABLES\n");
-        sqlBuilder.append("WHERE TABLE_SCHEMA='");
+        sqlBuilder.append("WHERE table_schema='");
         sqlBuilder.append(schemaName.replace("'", "''"));
         sqlBuilder.append("'");
         String databaseName = this.secretValueProvider.expandValue(providerSpecificConfiguration.getDatabase());
         if (!Strings.isNullOrEmpty(databaseName)) {
-            sqlBuilder.append(" AND TABLE_CATALOG='");
+            sqlBuilder.append(" AND table_catalog='");
             sqlBuilder.append(databaseName.replace("'", "''"));
             sqlBuilder.append("'");
         }
