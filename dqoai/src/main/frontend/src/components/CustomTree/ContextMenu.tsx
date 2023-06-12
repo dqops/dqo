@@ -83,7 +83,10 @@ const ContextMenu = ({
           <SvgIcon name="options" className="w-5 h-5 text-gray-500" />
         </div>
       </PopoverHandler>
-      <PopoverContent className="z-50 min-w-50 max-w-50 border-gray-500 p-2" onClick={(e) => e.stopPropagation()}>
+      <PopoverContent
+        className="z-50 min-w-50 max-w-50 border-gray-500 p-2"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div onClick={(e) => e.stopPropagation()}>
           {node.level !== TREE_LEVEL.COLUMNS && (
             <div
@@ -190,8 +193,7 @@ const ContextMenu = ({
           )}
           {(node.level === TREE_LEVEL.DATABASE ||
             node.level === TREE_LEVEL.SCHEMA ||
-            node.level === TREE_LEVEL.TABLE ||
-            node.level === TREE_LEVEL.COLUMN) && (
+            node.level === TREE_LEVEL.TABLE) && (
             <>
               <div
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
@@ -207,6 +209,33 @@ const ContextMenu = ({
                   deleteStoredData(node, params);
                   setOpen(false);
                 }}
+              />
+            </>
+          )}
+          {node.level === TREE_LEVEL.COLUMN && (
+            <>
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={() => setDeleteDataDialogOpened(true)}
+              >
+                Delete data
+              </div>
+              <DeleteOnlyDataDialog
+                open={deleteDataDialogOpened}
+                onClose={() => setDeleteDataDialogOpened(false)}
+                onDelete={(params) => {
+                  setDeleteDataDialogOpened(false);
+
+                  deleteStoredData(
+                    node,
+                    params,
+                    node.collect_statistics_job_template?.columnName && [
+                      node.collect_statistics_job_template?.columnName
+                    ]
+                  );
+                  setOpen(false);
+                }}
+                nameOfCol={node.collect_statistics_job_template?.columnName}
               />
             </>
           )}

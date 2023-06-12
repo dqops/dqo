@@ -230,6 +230,10 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
             Object fieldValue = fieldInfo.getRawFieldValue(this);
             Object defaultValue = fieldInfo.getDefaultValue();
 
+            if (fieldValue instanceof String && ((String)fieldValue).length() == 0) {
+                continue; // this is the default value, we are not storing empty strings in Yaml
+            }
+
             if (!Objects.equals(fieldValue, defaultValue)) {
                 return false;
             }

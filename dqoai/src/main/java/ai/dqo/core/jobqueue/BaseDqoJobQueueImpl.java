@@ -208,7 +208,10 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
             return;
         }
 
-        for (int i = 0; i < this.startedThreadsCount.get(); i++) {
+        this.started = false;
+
+        int startedThreadsCount = this.startedThreadsCount.get();
+        for (int i = 0; i < startedThreadsCount; i++) {
             try {
                 DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
                 this.jobsBlockingQueue.put(new DqoJobQueueEntry(new PoisonDqoJobQueueJob(), newJobId));
@@ -217,8 +220,13 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
             }
         }
 
-        for (int i = 0; i < this.runnerThreadsFutures.size(); i++) {
-            Future<?> threadFinishFuture = this.runnerThreadsFutures.get(i);
+        List<Future<?>> threadFinishFutures = null;
+        synchronized (this.runnerThreadsFuturesLock) {
+            threadFinishFutures = new ArrayList<>(this.runnerThreadsFutures);
+        }
+
+        for (int i = 0; i < threadFinishFutures.size(); i++) {
+            Future<?> threadFinishFuture = threadFinishFutures.get(i);
             try {
                 threadFinishFuture.get(MAX_WAIT_FOR_THREAD_STOP_MS, TimeUnit.MILLISECONDS);
             }
@@ -236,7 +244,6 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
         this.jobsBlockingQueue = null;
         this.runningJobs = null;
         this.jobEntriesByJobId = null;
-        this.started = false;
     }
 
     /**

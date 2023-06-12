@@ -69,7 +69,7 @@ public class CheckResultsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent check results.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/results", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/results", produces = "application/json")
     @ApiOperation(value = "getTableProfilingChecksResults", notes = "Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -128,7 +128,7 @@ public class CheckResultsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent recurring results.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/results", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/results", produces = "application/json")
     @ApiOperation(value = "getTableRecurringChecksResults", notes = "Returns the complete results of the most recent table level recurring executions for the recurring at a requested time scale",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -188,7 +188,7 @@ public class CheckResultsController {
      * @param monthEnd       Month end boundary.
      * @return View of the most recent partitioned checks results.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/results", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/results", produces = "application/json")
     @ApiOperation(value = "getTablePartitionedChecksResults", notes = "Returns a complete view of the recent table level partitioned checks executions for a requested time scale", response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -248,7 +248,7 @@ public class CheckResultsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent check results.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/results", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/results", produces = "application/json")
     @ApiOperation(value = "getColumnProfilingChecksResults", notes = "Returns an overview of the most recent check executions for all column level data quality profiling checks on a column",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -314,7 +314,7 @@ public class CheckResultsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent recurring results.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/results", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/results", produces = "application/json")
     @ApiOperation(value = "getColumnRecurringChecksResults", notes = "Returns a complete view of the recent column level recurring executions for the recurring at a requested time scale",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -381,7 +381,7 @@ public class CheckResultsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent partitioned checks results.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/results", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/results", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedChecksResults", notes = "Returns an overview of the most recent column level partitioned checks executions for a requested time scale",
             response = CheckResultsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)

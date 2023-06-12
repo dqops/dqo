@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   CheckResultsOverviewDataModel,
   UICheckContainerModel,
@@ -17,6 +17,8 @@ import moment from 'moment/moment';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import Button from '../Button';
+import Select from '../Select';
+import { RUN_CHECK_TIME_WINDOW_FILTERS } from "../../shared/constants";
 
 interface IDataQualityChecksProps {
   checksUI?: UICheckContainerModel;
@@ -56,6 +58,9 @@ const DataQualityChecks = ({
   } = useParams();
   const history = useHistory();
   const dispatch = useActionDispatch();
+  const [timeWindow, setTimeWindow] = useState('Default incremental time window');
+  const [mode, setMode] = useState<string>();
+  const [copyUI, setCopyUI] = useState<UICheckContainerModel>();
 
   const { sidebarWidth } = useTree();
   const handleChangeDataDataStreams = (
@@ -247,6 +252,19 @@ const DataQualityChecks = ({
     history.push(url);
   };
 
+  const changeCopyUI = (category: string, checkName: string, checked: boolean) => {
+    setCopyUI({
+      ...copyUI,
+      categories: copyUI?.categories?.map((item) => item.category === category ? ({
+        ...item,
+        checks: item.checks?.map((check) => check.check_name === checkName ? ({
+          ...check,
+          configured: checked
+        }) : check)
+      }) : item)
+    })
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center min-h-80">
@@ -258,6 +276,11 @@ const DataQualityChecks = ({
   if (!checksUI?.categories) {
     return <div className="p-4">No Checks</div>;
   }
+
+  const timeWindowOptions = Object.keys(RUN_CHECK_TIME_WINDOW_FILTERS).map((item) => ({
+    label: item,
+    value: item
+  }));
 
   return (
     <div
@@ -351,21 +374,41 @@ const DataQualityChecks = ({
           >
             Configure the partition by column
           </span>
+
+          <div className="flex gap-2 text-sm items-center">
+            <span>Time window:</span>
+            <Select
+              options={timeWindowOptions}
+              value={timeWindow}
+              onChange={setTimeWindow}
+            />
+          </div>
         </div>
       )}
       <table className="w-full">
-        <TableHeader checksUI={checksUI} />
+        <TableHeader
+          checksUI={checksUI}
+          timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
+          mode={mode}
+          setMode={setMode}
+          copyUI={copyUI}
+          setCopyUI={setCopyUI}
+        />
         <tbody>
           {checksUI?.categories.map((category, index) => (
             <CheckCategoriesView
               key={index}
               category={category}
               checkResultsOverview={checkResultsOverview}
+              timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
               handleChangeDataDataStreams={(check, jIndex) =>
                 handleChangeDataDataStreams(check, index, jIndex)
               }
               onUpdate={onUpdate}
               getCheckOverview={getCheckOverview}
+              mode={mode}
+              changeCopyUI={changeCopyUI}
+              copyCategory={copyUI?.categories?.find(item => item.category === category.category)}
             />
           ))}
         </tbody>

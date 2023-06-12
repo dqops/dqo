@@ -100,7 +100,7 @@ public class DataSourcesController {
      * @param connectionName Connection name. Required import.
      * @return List of schemas inside a connection.
      */
-    @GetMapping(value = "/datasource/connections/{connectionName}/schemas", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/datasource/connections/{connectionName}/schemas", produces = "application/json")
     @ApiOperation(value = "getRemoteDataSourceSchemas",
             notes = "Introspects a list of schemas inside a remote data source, identified by an already imported connection.", response = SchemaRemoteModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -133,7 +133,7 @@ public class DataSourcesController {
      * @param schemaName     Schema name.
      * @return List of tables inside a schema.
      */
-    @GetMapping(value = "/datasource/connections/{connectionName}/schemas/{schemaName}/tables", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/datasource/connections/{connectionName}/schemas/{schemaName}/tables", produces = "application/json")
     @ApiOperation(value = "getRemoteDataSourceTables", notes = "Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQO.",
             response = TableRemoteBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)

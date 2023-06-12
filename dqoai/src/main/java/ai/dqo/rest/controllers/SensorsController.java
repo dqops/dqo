@@ -71,7 +71,7 @@ public class SensorsController {
      * @param fullSensorName Full sensor name.
      * @return Model of the sensor with specific sensor name.
      */
-    @GetMapping(value = "/sensors/{fullSensorName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/sensors/{fullSensorName}", produces = "application/json")
     @ApiOperation(value = "getSensor", notes = "Returns a sensor model", response = SensorModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -293,7 +293,7 @@ public class SensorsController {
      * @param fullSensorName  Full sensor name.
      * @return Empty response.
      */
-    @DeleteMapping(value = "/sensors/{fullSensorName}", consumes = "application/json", produces = "application/json")
+    @DeleteMapping(value = "/sensors/{fullSensorName}", produces = "application/json")
     @ApiOperation(value = "deleteSensor", notes = "Deletes a custom sensor definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -328,7 +328,7 @@ public class SensorsController {
      * Returns all combined sensor folder model.
      * @return sensor basic folder model.
      */
-    @GetMapping(value = "/definitions/sensors", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/definitions/sensors", produces = "application/json")
     @ApiOperation(value = "getSensorFolderTree", notes = "Returns a tree of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
             response = SensorBasicFolderModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -397,7 +397,7 @@ public class SensorsController {
      * Returns a flat list of all sensors.
      * @return List of all sensors.
      */
-    @GetMapping(value = "/sensors", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/sensors", produces = "application/json")
     @ApiOperation(value = "getAllSensors", notes = "Returns a flat list of all sensors available in DQO, both built-in sensors and user defined or customized sensors.",
             response = SensorBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)

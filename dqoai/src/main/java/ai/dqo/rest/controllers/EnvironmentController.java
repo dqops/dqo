@@ -70,7 +70,7 @@ public class EnvironmentController {
      * Returns all effective DQO configuration settings.
      * @return Model with a summary of all effective configuration settings.
      */
-    @GetMapping(value = "/settings", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/settings", produces = "application/json")
     @ApiOperation(value = "getDqoSettings", notes = "Returns all effective DQO configuration settings.",
             response = DqoSettingsModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -112,7 +112,7 @@ public class EnvironmentController {
      * Returns the profile of the current user.
      * @return The profile of the current user.
      */
-    @GetMapping(value = "/profile", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/profile", produces = "application/json")
     @ApiOperation(value = "getUserProfile", notes = "Returns the profile of the current user.",
             response = DqoUserProfileModel.class)
     @ResponseStatus(HttpStatus.OK)

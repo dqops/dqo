@@ -72,7 +72,7 @@ public class CheckController {
      * @param fullCheckName Full check name.
      * @return Model of the check with specific check name.
      */
-    @GetMapping(value = "/checks/{fullCheckName}",consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/checks/{fullCheckName}", produces = "application/json")
     @ApiOperation(value = "getCheck", notes = "Returns a check definition", response = CheckModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -217,7 +217,7 @@ public class CheckController {
      * @param fullCheckName  Full check name.
      * @return Empty response.
      */
-    @DeleteMapping(value = "/checks/{fullCheckName}", consumes = "application/json", produces = "application/json")
+    @DeleteMapping(value = "/checks/{fullCheckName}", produces = "application/json")
     @ApiOperation(value = "deleteCheck", notes = "Deletes a custom check definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -252,7 +252,7 @@ public class CheckController {
      * Returns all combined check folder model.
      * @return check basic tree model.
      */
-    @GetMapping(value = "/definitions/checks", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/definitions/checks", produces = "application/json")
     @ApiOperation(value = "getCheckFolderTree", notes = "Returns a tree of all checks available in DQO, both built-in checks and user defined or customized checks.",
             response = CheckBasicFolderModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -302,7 +302,7 @@ public class CheckController {
      * Returns a flat list of all checks
      * @return List of all checks
      */
-    @GetMapping(value = "/checks", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/checks", produces = "application/json")
     @ApiOperation(value = "getAllChecks", notes = "Returns a flat list of all checks available in DQO, both built-in checks and user defined or customized checks.",
             response = CheckBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)

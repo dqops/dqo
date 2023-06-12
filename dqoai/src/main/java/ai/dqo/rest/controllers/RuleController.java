@@ -67,7 +67,7 @@ public class RuleController {
      * @param fullRuleName Full rule name.
      * @return Model of the rule with specific rule name.
      */
-    @GetMapping(value = "/rules/{fullRuleName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/rules/{fullRuleName}", produces = "application/json")
     @ApiOperation(value = "getRule", notes = "Returns a rule definition", response = RuleModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -210,7 +210,7 @@ public class RuleController {
      * @param fullRuleName  Full rule name.
      * @return Empty response.
      */
-    @DeleteMapping(value = "/rules/{fullRuleName}", consumes = "application/json", produces = "application/json")
+    @DeleteMapping(value = "/rules/{fullRuleName}", produces = "application/json")
     @ApiOperation(value = "deleteRule", notes = "Deletes a custom rule definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -245,7 +245,7 @@ public class RuleController {
      * Returns all combined rule folder model.
      * @return rule basic tree model.
      */
-    @GetMapping(value = "/definitions/rules", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/definitions/rules", produces = "application/json")
     @ApiOperation(value = "getRuleFolderTree", notes = "Returns a tree of all rules available in DQO, both built-in rules and user defined or customized rules.",
             response = RuleBasicFolderModel.class)
     @ResponseStatus(HttpStatus.OK)
@@ -295,7 +295,7 @@ public class RuleController {
      * Returns a flat list of all rules.
      * @return List of all rules.
      */
-    @GetMapping(value = "/rules", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/rules", produces = "application/json")
     @ApiOperation(value = "getAllRules", notes = "Returns a flat list of all rules available in DQO, both built-in rules and user defined or customized rules.",
             response = RuleBasicModel[].class)
     @ResponseStatus(HttpStatus.OK)

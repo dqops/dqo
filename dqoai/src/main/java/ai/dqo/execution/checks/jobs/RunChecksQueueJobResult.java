@@ -16,6 +16,7 @@
 package ai.dqo.execution.checks.jobs;
 
 import ai.dqo.core.jobqueue.DqoQueueJobId;
+import ai.dqo.core.jobqueue.monitoring.DqoJobStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.swagger.annotations.ApiModel;
@@ -27,10 +28,10 @@ import lombok.EqualsAndHashCode;
  * and optionally can also contain the result of running the checks if the operation was started with wait=true parameter to wait for the "run checks" job to finish.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@ApiModel(value = "RunChecksScheduleResult", description = "Object returned from the operation that queues a \"run checks\" job. The result contains the job id that was started and optionally can also contain the result of running the checks if the operation was started with wait=true parameter to wait for the \"run checks\" job to finish.")
+@ApiModel(value = "RunChecksQueueJobResult", description = "Object returned from the operation that queues a \"run checks\" job. The result contains the job id that was started and optionally can also contain the result of running the checks if the operation was started with wait=true parameter to wait for the \"run checks\" job to finish.")
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class RunChecksScheduleResult {
+public class RunChecksQueueJobResult {
     /**
      * Job id that identifies a job that was started on the DQO job queue.
      */
@@ -45,24 +46,33 @@ public class RunChecksScheduleResult {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private RunChecksJobResult result;
 
-    public RunChecksScheduleResult() {
+    /**
+     * Job status.
+     */
+    @JsonPropertyDescription("Job status")
+    private DqoJobStatus status;
+
+
+    public RunChecksQueueJobResult() {
     }
 
     /**
      * Creates a new model given all parameters.
      * @param jobId Job id.
      * @param result Job result.
+     * @param status Job status.
      */
-    public RunChecksScheduleResult(DqoQueueJobId jobId, RunChecksJobResult result) {
+    public RunChecksQueueJobResult(DqoQueueJobId jobId, RunChecksJobResult result, DqoJobStatus status) {
         this.jobId = jobId;
         this.result = result;
+        this.status = status;
     }
 
     /**
      * Creates a new model given all parameters.
      * @param jobId Job id.
      */
-    public RunChecksScheduleResult(DqoQueueJobId jobId) {
+    public RunChecksQueueJobResult(DqoQueueJobId jobId) {
         this.jobId = jobId;
     }
 }

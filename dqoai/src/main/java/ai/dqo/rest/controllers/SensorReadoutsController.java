@@ -69,7 +69,7 @@ public class SensorReadoutsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent sensor readouts.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/readouts", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/readouts", produces = "application/json")
     @ApiOperation(value = "getTableProfilingSensorReadouts", notes = "Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table",
             response = SensorReadoutsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -128,7 +128,7 @@ public class SensorReadoutsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent sensor readouts.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/readouts", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/readouts", produces = "application/json")
     @ApiOperation(value = "getTableRecurringSensorReadouts", notes = "Returns the complete results of the most recent table level recurring executions for the recurring at a requested time scale",
             response = SensorReadoutsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -188,7 +188,7 @@ public class SensorReadoutsController {
      * @param monthEnd       Month end boundary.
      * @return View of the most recent partitioned checks results.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/readouts", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/readouts", produces = "application/json")
     @ApiOperation(value = "getTablePartitionedSensorReadouts", notes = "Returns a complete view of sensor readouts for recent table level partitioned checks executions for a requested time scale", response = SensorReadoutsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -247,7 +247,7 @@ public class SensorReadoutsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent sensor readouts.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/readouts", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/readouts", produces = "application/json")
     @ApiOperation(value = "getColumnProfilingSensorReadouts", notes = "Returns sensor results of the recent check executions for all column level data quality profiling checks on a column",
             response = SensorReadoutsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -313,7 +313,7 @@ public class SensorReadoutsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent sensor readouts.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/readouts", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/readouts", produces = "application/json")
     @ApiOperation(value = "getColumnRecurringSensorReadouts", notes = "Returns a complete view of the sensor readouts for recent column level recurring executions for the recurring at a requested time scale",
             response = SensorReadoutsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -380,7 +380,7 @@ public class SensorReadoutsController {
      * @param monthEnd       Month end boundary.
      * @return View of sensor readouts of the recent partitioned checks.
      */
-    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/readouts", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/readouts", produces = "application/json")
     @ApiOperation(value = "getColumnPartitionedSensorReadouts", notes = "Returns a view of the sensor readouts for recent column level partitioned checks executions for a requested time scale",
             response = SensorReadoutsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)

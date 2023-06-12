@@ -94,6 +94,7 @@ const connectionReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case SOURCE_ACTION.ADD_FIRST_LEVEL_TAB: {
       const existing = state[action.checkType].tabs.find((item) => item.value === action.data.value);
+      const { state: actionState, ...data } = action.data;
 
       if (existing) {
         return {
@@ -103,7 +104,7 @@ const connectionReducer = (state = initialState, action: Action) => {
             activeTab: action.data.value,
             tabs: state[action.checkType].tabs.map((item) => item.value === action.data.value ? ({
               ...item,
-              ...action.data,
+              ...data,
             }) : item)
           }
         };

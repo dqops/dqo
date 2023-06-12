@@ -24,14 +24,18 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.rest.models.dashboards.AuthenticatedDashboardModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
+import ai.dqo.services.metadata.DashboardsProvider;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Optional;
 
 /**
@@ -43,26 +47,26 @@ import java.util.Optional;
 @Api(value = "Dashboards", description = "Provides access to data quality dashboards")
 public class DashboardsController {
     private final LookerStudioUrlService lookerStudioUrlService;
-    private DqoHomeContextFactory dqoHomeContextFactory;
+    private DashboardsProvider dashboardsProvider;
 
 
     /**
      * Default dependency injection constructor.
      * @param lookerStudioUrlService Looker studio URL service, creates authenticated urls.
-     * @param dqoHomeContextFactory Dqo home context factory.
+     * @param dashboardsProvider Dashboard tree provider.
      */
     @Autowired
     public DashboardsController(LookerStudioUrlService lookerStudioUrlService,
-                                DqoHomeContextFactory dqoHomeContextFactory) {
+                                DashboardsProvider dashboardsProvider) {
         this.lookerStudioUrlService = lookerStudioUrlService;
-        this.dqoHomeContextFactory = dqoHomeContextFactory;
+        this.dashboardsProvider = dashboardsProvider;
     }
 
     /**
      * Returns a list of root folders with supported dashboards.
      * @return List of root folders with supported dashboards.
      */
-    @GetMapping(consumes = "application/json", produces = "application/json")
+    @GetMapping(produces = "application/json")
     @ApiOperation(value = "getAllDashboards", notes = "Returns a list of root folders with dashboards", response = DashboardsFolderSpec[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -70,12 +74,16 @@ public class DashboardsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Flux<DashboardsFolderSpec>> getAllDashboards() {
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
+        DashboardsFolderListSpec dashboardList = this.dashboardsProvider.getDashboardTree();
 
-        DashboardsFolderListSpec dashboardList= dqoHome.getDashboards().getSpec();
-
-        return new ResponseEntity<>(Flux.fromStream(dashboardList.stream()), HttpStatus.OK); // 200
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl
+                        .maxAge(Duration.ofDays(1))
+                        .cachePublic()
+                        .mustRevalidate())
+                .lastModified(dashboardList.getFileLastModified())
+                .eTag(dashboardList.getFileLastModified().toString())
+                .body(Flux.fromStream(dashboardList.stream())); // 200
     }
 
     /**
@@ -85,7 +93,7 @@ public class DashboardsController {
      * @param windowLocationOrigin The value of the window.location.origin
      * @return Dashboard model with the authenticated url.
      */
-    @GetMapping(value = "/{folder}/{dashboardName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{folder}/{dashboardName}", produces = "application/json")
     @ApiOperation(value = "getDashboardLevel1", notes = "Returns a single dashboard in one folder with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -98,11 +106,7 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-
-        DashboardsFolderListSpec rootFolders= dqoHome.getDashboards().getSpec();
+        DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
 
         DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder);
         if (folder1Spec == null) {
@@ -128,7 +132,7 @@ public class DashboardsController {
      * @param windowLocationOrigin The value of the window.location.origin
      * @return Dashboard model with the authenticated url.
      */
-    @GetMapping(value = "/{folder1}/{folder2}/{dashboardName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{folder1}/{folder2}/{dashboardName}", produces = "application/json")
     @ApiOperation(value = "getDashboardLevel2", notes = "Returns a single dashboard in two folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -142,10 +146,7 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-
-        DashboardsFolderListSpec rootFolders= dqoHome.getDashboards().getSpec();
+        DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
 
         DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
         if (folder1Spec == null) {
@@ -178,7 +179,7 @@ public class DashboardsController {
      * @param windowLocationOrigin The value of the window.location.origin
      * @return Dashboard model with the authenticated url.
      */
-    @GetMapping(value = "/{folder1}/{folder2}/{folder3}/{dashboardName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{folder1}/{folder2}/{folder3}/{dashboardName}", produces = "application/json")
     @ApiOperation(value = "getDashboardLevel3", notes = "Returns a single dashboard in three folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -193,11 +194,7 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-
-        DashboardsFolderListSpec rootFolders= dqoHome.getDashboards().getSpec();
+        DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
 
         DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
         if (folder1Spec == null) {
@@ -236,7 +233,7 @@ public class DashboardsController {
      * @param dashboardName Dashboard name.
      * @return Dashboard model with the authenticated url.
      */
-    @GetMapping(value = "/{folder1}/{folder2}/{folder3}/{folder4}/{dashboardName}", consumes = "application/json", produces = "application/json")
+    @GetMapping(value = "/{folder1}/{folder2}/{folder3}/{folder4}/{dashboardName}", produces = "application/json")
     @ApiOperation(value = "getDashboardLevel4", notes = "Returns a single dashboard in three folders with a temporary authenticated url", response = AuthenticatedDashboardModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -252,11 +249,7 @@ public class DashboardsController {
             @ApiParam("Dashboard name") @PathVariable String dashboardName,
             @ApiParam(name = "windowLocationOrigin", value = "Optional url of the DQO instance, it should be the value of window.location.origin.", required = false)
             @RequestParam(required = false) Optional<String> windowLocationOrigin) {
-
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-
-        DashboardsFolderListSpec rootFolders= dqoHome.getDashboards().getSpec();
+        DashboardsFolderListSpec rootFolders = this.dashboardsProvider.getDashboardTree();
 
         DashboardsFolderSpec folder1Spec = rootFolders.getFolderByName(folder1);
         if (folder1Spec == null) {
