@@ -7,7 +7,6 @@ import {
   UICheckContainerModel
 } from "../../api";
 import { JobApiClient, TableApiClient } from "../../services/apiClient";
-import { isEqual } from "lodash";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
 import DeleteOnlyDataDialog from "../CustomTree/DeleteOnlyDataDialog";
@@ -29,24 +28,20 @@ interface TableHeaderProps {
 }
 
 const TableHeader = ({ checksUI, timeWindowFilter, mode, setMode, copyUI, setCopyUI }: TableHeaderProps) => {
-  const { jobs } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const { checkTypes, connection, schema, table }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
   const dispatch = useActionDispatch();
   const history = useHistory();
-
-  const job = jobs?.jobs?.find((item) =>
-    isEqual(
-      item.parameters?.runChecksParameters?.checkSearchFilters,
-      checksUI.run_checks_job_template
-    )
-  );
+  const [jobId, setJobId] = useState<number>();
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
 
   const onRunChecks = async () => {
-    await JobApiClient.runChecks(false, undefined, {
+    const res = await JobApiClient.runChecks(false, undefined, {
       checkSearchFilters: checksUI?.run_checks_job_template,
       ... checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null ? { timeWindowFilter } : {}
     });
+    setJobId(res.data?.jobId?.jobId);
   };
 
   const onChangeMode = (newMode: string) => {

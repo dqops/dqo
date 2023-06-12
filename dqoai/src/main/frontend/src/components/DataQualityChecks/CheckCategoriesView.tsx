@@ -10,7 +10,6 @@ import {
 } from "../../api";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
-import { isEqual } from "lodash";
 import { JobApiClient } from "../../services/apiClient";
 import DeleteOnlyDataDialog from "../CustomTree/DeleteOnlyDataDialog";
 import CheckMenu from "./CheckMenu";
@@ -39,22 +38,20 @@ const CheckCategoriesView = ({
   changeCopyUI,
   copyCategory
 }: CheckCategoriesViewProps) => {
-  const { jobs } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const [jobId, setJobId] = useState<number>();
 
-  const job = jobs?.jobs?.find((item) =>
-    isEqual(
-      item.parameters?.runChecksParameters?.checkSearchFilters,
-      category.run_checks_job_template
-    )
-  );
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
 
   const onRunChecks = async () => {
-    await JobApiClient.runChecks(false, undefined, {
+    const res = await JobApiClient.runChecks(false, undefined, {
       checkSearchFilters: category?.run_checks_job_template,
       ... checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null ? { timeWindowFilter } : {}
     });
+
+    setJobId(res.data?.jobId?.jobId);
 
     if (getCheckOverview) {
       getCheckOverview();

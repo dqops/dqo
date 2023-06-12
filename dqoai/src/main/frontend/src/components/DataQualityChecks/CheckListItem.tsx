@@ -16,7 +16,6 @@ import CheckRuleItem from './CheckRuleItem';
 import { JobApiClient } from '../../services/apiClient';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { isEqual } from 'lodash';
 import { Tooltip } from '@material-tailwind/react';
 import moment from "moment";
 import CheckDetails from "./CheckDetails/CheckDetails";
@@ -58,16 +57,11 @@ const CheckListItem = ({
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('data-streams');
   const [tabs, setTabs] = useState<ITab[]>([]);
-  const { jobs } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
   const [showDetails, setShowDetails] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
-
-  const job = jobs?.jobs?.find((item) =>
-    isEqual(
-      item.parameters?.runChecksParameters?.checkSearchFilters,
-      check.run_checks_job_template
-    )
-  );
+  const [jobId, setJobId] = useState<number>();
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
 
   const openCheckSettings = () => {
     if (showDetails) {
@@ -135,10 +129,11 @@ const CheckListItem = ({
       return;
     }
     await onUpdate();
-    JobApiClient.runChecks(false, undefined, {
+    const res = await JobApiClient.runChecks(false, undefined, {
       checkSearchFilters: check?.run_checks_job_template,
       ...checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null ? { timeWindowFilter } : {}
     });
+    setJobId(res.data?.jobId?.jobId);
   };
 
   const isDisabled = !check?.configured || check?.disabled;

@@ -35,6 +35,7 @@ export interface IJobsState {
   amounthOfElements: number;
   isProfileOpen: boolean;
   areSettingsOpen: boolean;
+  job_dictionary_state: Record<string, DqoJobHistoryEntryModel>
 }
 
 const initialState: IJobsState = {
@@ -45,7 +46,8 @@ const initialState: IJobsState = {
   wasOpen: false,
   amounthOfElements: 0,
   isProfileOpen: false,
-  areSettingsOpen: false
+  areSettingsOpen: false,
+  job_dictionary_state: {}
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -79,27 +81,23 @@ const schemaReducer = (state = initialState, action: any) => {
         loading: true
       };
     case JOB_ACTION.GET_JOBS_CHANGES_SUCCESS: {
-      const newJobs: DqoJobHistoryEntryModel[] = state.jobs?.jobs || [];
       const jobChanges: DqoJobChangeModel[] = action.data.jobChanges || [];
+      const job_dictionary_state = state.job_dictionary_state;
 
       jobChanges.map((jobChange) => {
-        const existingJob = newJobs.find(
-          (job) => job.jobId?.jobId === jobChange.jobId?.jobId
-        );
-        if (existingJob) {
+        if (!jobChange.jobId?.jobId) return;
+        if (job_dictionary_state[jobChange.jobId?.jobId]) {
           if (jobChange.status) {
-            existingJob.status = jobChange.status;
+            job_dictionary_state[jobChange.jobId?.jobId].status = jobChange.status;
           }
           if (jobChange.statusChangedAt) {
-            existingJob.statusChangedAt = jobChange.statusChangedAt;
+            job_dictionary_state[jobChange.jobId?.jobId].statusChangedAt = jobChange.statusChangedAt;
           }
           if (jobChange.updatedModel) {
-            Object.assign(existingJob, jobChange.updatedModel);
+            Object.assign(job_dictionary_state[jobChange.jobId?.jobId], jobChange.updatedModel);
           }
         } else {
-          if (jobChange.updatedModel) {
-            newJobs.push(jobChange.updatedModel);
-          }
+          job_dictionary_state[jobChange.jobId.jobId] = jobChange;
         }
       });
 
@@ -107,10 +105,7 @@ const schemaReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         lastSequenceNumber: action.data.lastSequenceNumber,
-        jobs: {
-          ...state.jobs,
-          jobs: newJobs
-        },
+        job_dictionary_state,
         folderSynchronizationStatus: action.data.folderSynchronizationStatus,
         error: null
       };
