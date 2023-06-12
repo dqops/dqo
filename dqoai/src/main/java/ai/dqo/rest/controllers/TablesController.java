@@ -2657,7 +2657,7 @@ public class TablesController {
      * @return Deferred operations job id.
      */
     @DeleteMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}", produces = "application/json")
-    @ApiOperation(value = "deleteTable", notes = "Deletes a table")
+    @ApiOperation(value = "deleteTable", notes = "Deletes a table", response = DqoQueueJobId.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Table successfully deleted", response = DqoQueueJobId.class),
