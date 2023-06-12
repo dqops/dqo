@@ -13,30 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.connectors.sqlserver;
+
+package ai.dqo.connectors.oracle;
 
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.testcontainers.TestContainersObjectMother;
 import ai.dqo.metadata.sources.ConnectionSpec;
-import org.testcontainers.containers.MSSQLServerContainer;
+import org.testcontainers.containers.OracleContainer;
 
+public class OracleConnectionSpecObjectMother {
+    private static OracleContainer sharedContainer;
 
-public class SqlServerConnectionSpecObjectMother {
+    private static final String ORACLE_IMAGE = "gvenzl/oracle-xe:21-slim-faststart";
+    private static final int PORT = 1521;
 
-    private static MSSQLServerContainer<?> sharedContainer;
-    private static final int PORT = 1433;
-    private static final String SQLSERVERPASSWORD = "Te$t_sqlserver1";
     /**
-     * Creates a shared MSSQL Server container using Testcontainers. The container will be stopped when the unit/integration session will finish.
-     * @return Shared container with a started MSSQL Server instance.
+     * Creates a shared Oracle container using Testcontainers. The container will be stopped when the unit/integration session will finish.
+     * @return Shared container with a started Oracle instance.
      */
-    public static MSSQLServerContainer<?> getSharedContainer() {
+    public static OracleContainer getSharedContainer() {
         if (sharedContainer == null) {
             //noinspection resource
-            sharedContainer = new MSSQLServerContainer<>(MSSQLServerContainer.IMAGE)
+            sharedContainer = new OracleContainer(ORACLE_IMAGE)
                     .withExposedPorts(PORT)
-                    .withPassword(SQLSERVERPASSWORD)
-                    .acceptLicense()
+                    .withDatabaseName("DB_TEST")
+                    .withUsername(getSchemaName())
+                    .withPassword("PASSWD_TEST")
                     .withReuse(TestContainersObjectMother.shouldUseReusableTestContainers());
             sharedContainer.start();
         }
@@ -45,37 +47,38 @@ public class SqlServerConnectionSpecObjectMother {
     }
 
     /**
-     * Connection name to MSSQL Server.
+     * Connection name to Oracle.
      */
-    public static final String CONNECTION_NAME = "sqlserver_connection";
+    public static final String CONNECTION_NAME = "oracle_connection";
 
     /**
-     * Creates a default connection spec to sql server database that should be started by test containers.
+     * Creates a default connection spec to Oracle database that should be started by test containers.
      * @return Connection spec to a test container instance.
      */
     public static ConnectionSpec create() {
-        MSSQLServerContainer<?> testContainer = getSharedContainer();
+        OracleContainer testContainer = getSharedContainer();
 
         ConnectionSpec connectionSpec = new ConnectionSpec()
         {{
-            setProviderType(ProviderType.sqlserver);
-            setSqlserver(new SqlServerParametersSpec()
+            setProviderType(ProviderType.oracle);
+            setOracle(new OracleParametersSpec()
             {{
                 setHost("localhost");
                 setPort(testContainer.getMappedPort(PORT).toString());
-                setDatabase("master");
+                setDatabase(testContainer.getDatabaseName());
                 setUser(testContainer.getUsername());
                 setPassword(testContainer.getPassword());
+                setSsl(false);
             }});
         }};
         return connectionSpec;
     }
 
     /**
-     * Returns the default schema used for a testable sql server database. Tables are created in this schema.
+     * Returns the default schema used for a testable Oracle database. Tables are created in this schema.
      * @return Schema name.
      */
     public static String getSchemaName() {
-        return "dbo";
+        return "USER_TEST";
     }
 }

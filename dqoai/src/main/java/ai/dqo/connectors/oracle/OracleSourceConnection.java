@@ -13,104 +13,59 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.connectors;
+package ai.dqo.connectors.oracle;
 
+import ai.dqo.connectors.*;
+import ai.dqo.connectors.jdbc.AbstractJdbcSourceConnection;
+import ai.dqo.connectors.jdbc.JdbcConnectionPool;
+import ai.dqo.connectors.jdbc.JdbcQueryFailedException;
+import ai.dqo.connectors.mysql.MysqlResultSet;
+import ai.dqo.core.jobqueue.JobCancellationListenerHandle;
 import ai.dqo.core.jobqueue.JobCancellationToken;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.utils.conversion.NumericTypeConverter;
+import ai.dqo.utils.exceptions.RunSilently;
+import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.*;
 
 /**
- * Base class for source connections that are using SQL. The derived providers can reuse the logic for querying the metadata using the INFORMATION_SCHEMA management views.
+ * Oracle source connection.
  */
-public abstract class AbstractSqlSourceConnection implements SourceConnection {
-    private ConnectionSpec connectionSpec;
-    private final SecretValueProvider secretValueProvider;
-    private final ConnectionProvider connectionProvider;
-
+@Component("oracle-connection")
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class OracleSourceConnection extends AbstractJdbcSourceConnection {
     /**
-     * Creates an sql  connection source.
-     * @param secretValueProvider Secret manager to expand parameters.
-     * @param connectionProvider Connection provider that created the connection, used to get the dialect settings.
+     * Injection constructor for the oracle connection.
+     * @param jdbcConnectionPool Jdbc connection pool.
+     * @param secretValueProvider Secret value provider for the environment variable expansion.
      */
-    public AbstractSqlSourceConnection(SecretValueProvider secretValueProvider,
-									   ConnectionProvider connectionProvider) {
-        this.secretValueProvider = secretValueProvider;
-        this.connectionProvider = connectionProvider;
+    @Autowired
+    public OracleSourceConnection(JdbcConnectionPool jdbcConnectionPool,
+                                  SecretValueProvider secretValueProvider,
+                                  OracleConnectionProvider oracleConnectionProvider) {
+        super(jdbcConnectionPool, secretValueProvider, oracleConnectionProvider);
     }
-
-    /**
-     * Sets the connection spec.
-     * @param connectionSpec Connection spec.
-     */
-    public void setConnectionSpec(ConnectionSpec connectionSpec) {
-        this.connectionSpec = connectionSpec;
-    }
-
-    /**
-     * Returns a connection specification.
-     *
-     * @return Connection specification.
-     */
-    @Override
-    public ConnectionSpec getConnectionSpec() {
-        return this.connectionSpec;
-    }
-
-    /**
-     * Secret manager dependency to expand secret values.
-     * @return Secret manager.
-     */
-    public SecretValueProvider getSecretValueProvider() {
-        return secretValueProvider;
-    }
-
-    /**
-     * Parent connection provider that created this source connection.
-     * @return Connection provider to access the dialect settings.
-     */
-    public ConnectionProvider getConnectionProvider() {
-        return connectionProvider;
-    }
-
-    /**
-     * Returns the dialect settings for the current connection.
-     * @return Dialect settings.
-     */
-    public ProviderDialectSettings getDialectSettings() {
-        return this.connectionProvider.getDialectSettings(this.connectionSpec);
-    }
-
-    /**
-     * Opens a connection before it can be used for executing any statements.
-     */
-    @Override
-    public abstract void open();
-
-    /**
-     * Closes a connection.
-     */
-    @Override
-    public abstract void close();
 
     /**
      * Returns the schema name of the INFORMATION_SCHEMA. Derived classes may return a databasename.INFORMATION_SCHEMA
      * if the information schema must be retrieved at a database level.
      * @return Information schema name.
      */
+    @Override
     public String getInformationSchemaName() {
-        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
-
-        if (this.getDialectSettings().isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(providerSpecificConfiguration.getDatabase())) {
-            return this.getDialectSettings().quoteIdentifier(providerSpecificConfiguration.getDatabase()) + ".INFORMATION_SCHEMA";
-        }
-        return "INFORMATION_SCHEMA";
+        return "ALL_TABLES";
     }
 
     /**
@@ -121,9 +76,8 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
     @Override
     public List<SourceSchemaModel> listSchemas() {
         StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("SELECT CATALOG_NAME AS catalog_name, SCHEMA_NAME as schema_name FROM ");
+        sqlBuilder.append("SELECT OWNER AS schema_name FROM ");
         sqlBuilder.append(getInformationSchemaName());
-        sqlBuilder.append(".SCHEMATA WHERE SCHEMA_NAME <> 'INFORMATION_SCHEMA'");
         String listSchemataSql = sqlBuilder.toString();
         Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken());
 
@@ -148,18 +102,12 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
 
         StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("SELECT TABLE_CATALOG AS table_catalog, TABLE_SCHEMA AS table_schema, TABLE_NAME AS table_name FROM ");
+        sqlBuilder.append("SELECT OWNER AS table_schema, TABLE_NAME AS table_name FROM ");
         sqlBuilder.append(getInformationSchemaName());
-        sqlBuilder.append(".TABLES\n");
-        sqlBuilder.append("WHERE table_schema='");
+        sqlBuilder.append("\n");
+        sqlBuilder.append("WHERE OWNER='");
         sqlBuilder.append(schemaName.replace("'", "''"));
         sqlBuilder.append("'");
-        String databaseName = this.secretValueProvider.expandValue(providerSpecificConfiguration.getDatabase());
-        if (!Strings.isNullOrEmpty(databaseName)) {
-            sqlBuilder.append(" AND table_catalog='");
-            sqlBuilder.append(databaseName.replace("'", "''"));
-            sqlBuilder.append("'");
-        }
 
         String listTablesSql = sqlBuilder.toString();
         Table tablesRows = this.executeQuery(listTablesSql, JobCancellationToken.createDummyJobCancellationToken());
@@ -200,7 +148,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             for (Row colRow : tableResult) {
                 String physicalTableName = colRow.getString("table_name");
                 String columnName = colRow.getString("column_name");
-                boolean isNullable = Objects.equals(colRow.getString("is_nullable"),"YES");
+                boolean isNullable = !Objects.equals(colRow.getString("nullable"),"N");
                 String dataType = colRow.getString("data_type");
 
                 TableSpec tableSpec = tablesByTableName.get(physicalTableName);
@@ -214,33 +162,23 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
                 ColumnSpec columnSpec = new ColumnSpec();
                 ColumnTypeSnapshotSpec columnType = ColumnTypeSnapshotSpec.fromType(dataType);
 
-                if (tableResult.containsColumn("character_maximum_length") &&
-                        !colRow.isMissing("character_maximum_length")) {
-                    columnType.setLength(NumericTypeConverter.toInt(colRow.getObject("character_maximum_length")));
+                if (tableResult.containsColumn("char_length") &&
+                        !colRow.isMissing("char_length")) {
+                    columnType.setLength(NumericTypeConverter.toInt(colRow.getObject("char_length")));
                 }
-                else if (tableResult.containsColumn("character_octet_length") &&
-                        !colRow.isMissing("character_octet_length")) {
-                    columnType.setLength(NumericTypeConverter.toInt(colRow.getObject("character_octet_length")));
-                }
-
-                if (tableResult.containsColumn("numeric_precision") &&
-                        !colRow.isMissing("numeric_precision")) {
-                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("numeric_precision")));
+                else if (tableResult.containsColumn("data_length") &&
+                        !colRow.isMissing("data_length")) {
+                    columnType.setLength(NumericTypeConverter.toInt(colRow.getObject("data_length")));
                 }
 
-                if (tableResult.containsColumn("numeric_scale") &&
-                        !colRow.isMissing("numeric_scale")) {
-                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("numeric_scale")));
+                if (tableResult.containsColumn("data_precision") &&
+                        !colRow.isMissing("data_precision")) {
+                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("data_precision")));
                 }
 
-                if (tableResult.containsColumn("datetime_precision") &&
-                        !colRow.isMissing("datetime_precision")) {
-                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("datetime_precision")));
-                }
-
-                if (tableResult.containsColumn("interval_precision") &&
-                        !colRow.isMissing("interval_precision")) {
-                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("interval_precision")));
+                if (tableResult.containsColumn("data_scale") &&
+                        !colRow.isMissing("data_scale")) {
+                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("data_scale")));
                 }
 
                 columnType.setNullable(isNullable);
@@ -261,23 +199,12 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      * @param tableNames Table names to list.
      * @return SQL of the INFORMATION_SCHEMA query.
      */
+    @Override
     public String buildListColumnsSql(String schemaName, List<String> tableNames) {
-        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
-
         StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("SELECT * FROM ");
-        String databaseName = providerSpecificConfiguration.getDatabase();
-        sqlBuilder.append(getInformationSchemaName());
-        sqlBuilder.append(".COLUMNS ");
-        sqlBuilder.append("WHERE TABLE_SCHEMA='");
+        sqlBuilder.append("SELECT * FROM ALL_TAB_COLUMNS WHERE OWNER='");
         sqlBuilder.append(schemaName.replace("'", "''"));
         sqlBuilder.append("'");
-
-        if (!Strings.isNullOrEmpty(databaseName)) {
-            sqlBuilder.append(" AND TABLE_CATALOG='");
-            sqlBuilder.append(databaseName.replace("'", "''"));
-            sqlBuilder.append("'");
-        }
 
         if (tableNames != null && tableNames.size() > 0) {
             sqlBuilder.append(" AND TABLE_NAME IN (");
@@ -292,29 +219,10 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             }
             sqlBuilder.append(") ");
         }
-        sqlBuilder.append("ORDER BY TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, ORDINAL_POSITION");
+        sqlBuilder.append("ORDER BY OWNER, TABLE_NAME, COLUMN_ID");
         String sql = sqlBuilder.toString();
         return sql;
     }
-
-    /**
-     * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
-     *
-     * @param sqlQueryStatement SQL statement that returns a row set.
-     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
-     * @return Tabular result captured from the query.
-     */
-    @Override
-    public abstract Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken);
-
-    /**
-     * Executes a provider specific SQL that runs a command DML/DDL command.
-     *
-     * @param sqlStatement SQL DDL or DML statement.
-     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
-     */
-    @Override
-    public abstract long executeCommand(String sqlStatement, JobCancellationToken jobCancellationToken);
 
     /**
      * Creates a target table following the table specification.
@@ -325,13 +233,9 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
     public void createTable(TableSpec tableSpec) {
         ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
 
-        ProviderDialectSettings dialectSettings = this.connectionProvider.getDialectSettings(this.getConnectionSpec());
+        ProviderDialectSettings dialectSettings = this.getDialectSettings();
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("CREATE TABLE ");
-        if (dialectSettings.isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(providerSpecificConfiguration.getDatabase())) {
-            sqlBuilder.append(dialectSettings.quoteIdentifier(providerSpecificConfiguration.getDatabase()));
-            sqlBuilder.append(".");
-        }
         sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getSchemaName()));
         sqlBuilder.append(".");
         sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getTableName()));
@@ -377,7 +281,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         sqlBuilder.append("\n)");
 
         String createTableSql = sqlBuilder.toString();
-		this.executeCommand(createTableSql, JobCancellationToken.createDummyJobCancellationToken());
+        this.executeCommand(createTableSql, JobCancellationToken.createDummyJobCancellationToken());
     }
 
     /**
@@ -393,49 +297,136 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
         }
 
         ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
-        ProviderDialectSettings dialectSettings = this.connectionProvider.getDialectSettings(this.getConnectionSpec());
+        ProviderDialectSettings dialectSettings = this.getDialectSettings();
         StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("INSERT INTO ");
-        if (dialectSettings.isTableNameIncludesDatabaseName() && !Strings.isNullOrEmpty(providerSpecificConfiguration.getDatabase())) {
-            sqlBuilder.append(dialectSettings.quoteIdentifier(providerSpecificConfiguration.getDatabase()));
+        sqlBuilder.append("INSERT ALL\n");
+
+        for (int rowIndex = 0; rowIndex < data.rowCount(); rowIndex++) {
+            sqlBuilder.append("  INTO ");
+            sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getSchemaName()));
             sqlBuilder.append(".");
-        }
-        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getSchemaName()));
-        sqlBuilder.append(".");
-        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getTableName()));
-        sqlBuilder.append("(");
-        for (int i = 0; i < data.columnCount() ; i++) {
-            if (i > 0) {
-                sqlBuilder.append(",");
-            }
-            sqlBuilder.append(dialectSettings.quoteIdentifier(data.column(i).name()));
-        }
-        sqlBuilder.append(")");
-        sqlBuilder.append(" VALUES\n");
+            sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getTableName()));
+            sqlBuilder.append(" (");
 
-        for (int rowIndex = 0; rowIndex < data.rowCount() ; rowIndex++) {
-            if (rowIndex > 0) {
-                sqlBuilder.append(",\n");
+            for (int i = 0; i < data.columnCount(); i++) {
+                if (i > 0) {
+                    sqlBuilder.append(", ");
+                }
+                sqlBuilder.append(dialectSettings.quoteIdentifier(data.column(i).name()));
             }
-
-            sqlBuilder.append('(');
+            sqlBuilder.append(") VALUES (");
             for (int colIndex = 0; colIndex < data.columnCount() ; colIndex++) {
                 if (colIndex > 0) {
-                    sqlBuilder.append(",\n");
+                    sqlBuilder.append(", ");
                 }
 
                 Column<?> column = data.column(colIndex);
                 Object cellValue = column.isMissing(rowIndex) ? null : data.get(rowIndex, colIndex);
                 ColumnSpec columnSpec = tableSpec.getColumns().get(column.name());
 
-                String formattedConstant = this.connectionProvider.formatConstant(cellValue, columnSpec.getTypeSnapshot());
+                String formattedConstant = this.getConnectionProvider().formatConstant(cellValue, columnSpec.getTypeSnapshot());
                 sqlBuilder.append(formattedConstant);
             }
 
-            sqlBuilder.append(')');
+            sqlBuilder.append(")\n");
         }
+        sqlBuilder.append("SELECT * FROM dual");
 
         String insertValueSql = sqlBuilder.toString();
-		this.executeCommand(insertValueSql, JobCancellationToken.createDummyJobCancellationToken());
+        this.executeCommand(insertValueSql, JobCancellationToken.createDummyJobCancellationToken());
+    }
+
+    /**
+     * Creates a hikari connection pool config for the connection specification.
+     *
+     * @return Hikari config.
+     */
+    @Override
+    public HikariConfig createHikariConfig() {
+        HikariConfig hikariConfig = new HikariConfig();
+        ConnectionSpec connectionSpec = this.getConnectionSpec();
+        OracleParametersSpec oracleParametersSpec = connectionSpec.getOracle();
+
+        String host = this.getSecretValueProvider().expandValue(oracleParametersSpec.getHost());
+        StringBuilder jdbcConnectionBuilder = new StringBuilder();
+        jdbcConnectionBuilder.append("jdbc:oracle:thin:@");
+        jdbcConnectionBuilder.append(host);
+
+        String port = this.getSecretValueProvider().expandValue(oracleParametersSpec.getPort());
+        if (!Strings.isNullOrEmpty(port)) {
+            try {
+                int portNumber = Integer.parseInt(port);
+                jdbcConnectionBuilder.append(':');
+                jdbcConnectionBuilder.append(portNumber);
+            }
+            catch (NumberFormatException nfe) {
+                throw new ConnectorOperationFailedException("Cannot create a connection to Oracle, the port number is invalid: " + port, nfe);
+            }
+        }
+        jdbcConnectionBuilder.append('/');
+        String database = this.getSecretValueProvider().expandValue(oracleParametersSpec.getDatabase());
+        if (!Strings.isNullOrEmpty(database)) {
+            jdbcConnectionBuilder.append(database);
+        }
+
+        String jdbcUrl = jdbcConnectionBuilder.toString();
+        hikariConfig.setJdbcUrl(jdbcUrl);
+
+        Properties dataSourceProperties = new Properties();
+        if (oracleParametersSpec.getProperties() != null) {
+            dataSourceProperties.putAll(oracleParametersSpec.getProperties());
+        }
+
+        String userName = this.getSecretValueProvider().expandValue(oracleParametersSpec.getUser());
+        hikariConfig.setUsername(userName);
+
+        String password = this.getSecretValueProvider().expandValue(oracleParametersSpec.getPassword());
+        hikariConfig.setPassword(password);
+
+        String options =  this.getSecretValueProvider().expandValue(oracleParametersSpec.getOptions());
+        if (!Strings.isNullOrEmpty(options)) {
+            dataSourceProperties.put("options", options);
+        }
+
+        hikariConfig.setDataSourceProperties(dataSourceProperties);
+        return hikariConfig;
+    }
+
+    /**
+     * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
+     * @param sqlQueryStatement SQL statement that returns a row set.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
+     * @return Tabular result captured from the query.
+     */
+    @Override
+    public Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken) {
+        try {
+            try (Statement statement = this.getJdbcConnection().createStatement()) {
+                try (JobCancellationListenerHandle cancellationListenerHandle =
+                             jobCancellationToken.registerCancellationListener(
+                                     cancellationToken -> RunSilently.run(statement::cancel))) {
+                    try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
+                        try (OracleResultSet oracleResultSet = new OracleResultSet(results)) {
+                            Table resultTable = Table.read().db(oracleResultSet, sqlQueryStatement);
+                            for (Column<?> column : resultTable.columns()) {
+                                if (column.name() != null) {
+                                    column.setName(column.name().toLowerCase(Locale.ROOT));
+                                }
+                            }
+                            return resultTable;
+                        }
+                    }
+                }
+                finally {
+                    jobCancellationToken.throwIfCancelled();
+                }
+            }
+        }
+        catch (Exception ex) {
+            String connectionName = this.getConnectionSpec().getConnectionName();
+            throw new JdbcQueryFailedException(
+                    String.format("SQL query failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlQueryStatement),
+                    ex, sqlQueryStatement, connectionName);
+        }
     }
 }

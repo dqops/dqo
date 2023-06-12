@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.connectors.postgresql;
+package ai.dqo.connectors.oracle;
 
 import ai.dqo.cli.exceptions.CliRequiredParameterMissingException;
 import ai.dqo.cli.terminal.TerminalReader;
@@ -34,11 +34,11 @@ import tech.tablesaw.columns.Column;
 import java.util.NoSuchElementException;
 
 /**
- * Postgresql source connection provider.
+ * Oracle source connection provider.
  */
-@Component("postgresql-provider")
+@Component("oracle-provider")
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class PostgresqlConnectionProvider extends AbstractSqlConnectionProvider {
+public class OracleConnectionProvider extends AbstractSqlConnectionProvider {
     private final BeanFactory beanFactory;
     public final static ProviderDialectSettings DIALECT_SETTINGS = new ProviderDialectSettings("\"", "\"", "\"\"", false);
 
@@ -47,7 +47,7 @@ public class PostgresqlConnectionProvider extends AbstractSqlConnectionProvider 
      * @param beanFactory Bean factory used to create the connection.
      */
     @Autowired
-    public PostgresqlConnectionProvider(BeanFactory beanFactory) {
+    public OracleConnectionProvider(BeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
 
@@ -59,9 +59,9 @@ public class PostgresqlConnectionProvider extends AbstractSqlConnectionProvider 
      * @return Connection object.
      */
     @Override
-    public PostgresqlSourceConnection createConnection(ConnectionSpec connectionSpec, boolean openConnection) {
+    public OracleSourceConnection createConnection(ConnectionSpec connectionSpec, boolean openConnection) {
         assert connectionSpec != null;
-        PostgresqlSourceConnection connection = this.beanFactory.getBean(PostgresqlSourceConnection.class);
+        OracleSourceConnection connection = this.beanFactory.getBean(OracleSourceConnection.class);
         connection.setConnectionSpec(connectionSpec);
         if (openConnection) {
             connection.open();
@@ -91,50 +91,50 @@ public class PostgresqlConnectionProvider extends AbstractSqlConnectionProvider 
      */
     @Override
     public void promptForConnectionParameters(ConnectionSpec connectionSpec, boolean isHeadless, TerminalReader terminalReader, TerminalWriter terminalWriter) {
-        PostgresqlParametersSpec postgresqlSpec = connectionSpec.getPostgresql();
-        if (postgresqlSpec == null) {
-            postgresqlSpec = new PostgresqlParametersSpec();
-            connectionSpec.setPostgresql(postgresqlSpec);
+        OracleParametersSpec oracleSpec = connectionSpec.getOracle();
+        if (oracleSpec == null) {
+            oracleSpec = new OracleParametersSpec();
+            connectionSpec.setOracle(oracleSpec);
         }
 
-        if (Strings.isNullOrEmpty(postgresqlSpec.getHost())) {
+        if (Strings.isNullOrEmpty(oracleSpec.getHost())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--postgresql-host");
+                throw new CliRequiredParameterMissingException("--oracle-host");
             }
 
-            postgresqlSpec.setHost(terminalReader.prompt("PostgreSQL host name (--postgresql-host)", "${POSTGRESQL_HOST}", false));
+            oracleSpec.setHost(terminalReader.prompt("Oracle host name (--oracle-host)", "${ORACLE_HOST}", false));
         }
 
-        if (postgresqlSpec.getSsl() == null) {
+        if (oracleSpec.getSsl() == null) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--postgresql-ssl");
+                throw new CliRequiredParameterMissingException("--oracle-ssl");
             }
 
-            postgresqlSpec.setSsl(terminalReader.promptBoolean("Require SSL connection (--postgresql-ssl)", true));
+            oracleSpec.setSsl(terminalReader.promptBoolean("Require SSL connection (--oracle-ssl)", true));
         }
 
-        if (Strings.isNullOrEmpty(postgresqlSpec.getDatabase())) {
+        if (Strings.isNullOrEmpty(oracleSpec.getDatabase())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--postgresql-database");
+                throw new CliRequiredParameterMissingException("--oracle-database");
             }
 
-            postgresqlSpec.setDatabase(terminalReader.prompt("PostgreSQL database name (--postgresql-database)", "${POSTGRESQL_DATABASE}", false));
+            oracleSpec.setDatabase(terminalReader.prompt("Oracle database name (--oracle-database)", "${ORACLE_DATABASE}", false));
         }
 
-        if (Strings.isNullOrEmpty(postgresqlSpec.getUser())) {
+        if (Strings.isNullOrEmpty(oracleSpec.getUser())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--postgresql-user");
+                throw new CliRequiredParameterMissingException("--oracle-user");
             }
 
-            postgresqlSpec.setUser(terminalReader.prompt("PostgreSQL user name (--postgresql-user)", "${POSTGRESQL_USER}", false));
+            oracleSpec.setUser(terminalReader.prompt("Oracle user name (--oracle-user)", "${ORACLE_USER}", false));
         }
 
-        if (Strings.isNullOrEmpty(postgresqlSpec.getPassword())) {
+        if (Strings.isNullOrEmpty(oracleSpec.getPassword())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--postgresql-password");
+                throw new CliRequiredParameterMissingException("--oracle-password");
             }
 
-            postgresqlSpec.setPassword(terminalReader.prompt("PostgreSQL user password (--postgresql-password)", "${POSTGRESQL_PASSWORD}", false));
+            oracleSpec.setPassword(terminalReader.prompt("Oracle user password (--oracle-password)", "${ORACLE_PASSWORD}", false));
         }
     }
 
@@ -147,9 +147,9 @@ public class PostgresqlConnectionProvider extends AbstractSqlConnectionProvider 
      */
     @Override
     public String formatConstant(Object constant, ColumnTypeSnapshotSpec columnType) {
-        if (constant instanceof Boolean){
+        if (constant instanceof Boolean) {
             Boolean asBoolean = (Boolean)constant;
-            return asBoolean ? "true" : "false";
+            return asBoolean ? "1" : "0";
         }
         return super.formatConstant(constant, columnType);
     }
@@ -165,40 +165,40 @@ public class PostgresqlConnectionProvider extends AbstractSqlConnectionProvider 
         ColumnType columnType = dataColumn.type();
 
         if (columnType == ColumnType.SHORT) {
-            return new ColumnTypeSnapshotSpec("smallint");
+            return new ColumnTypeSnapshotSpec("NUMBER", null, 10, 0);
         }
         else if (columnType == ColumnType.INTEGER) {
-            return new ColumnTypeSnapshotSpec("integer");
+            return new ColumnTypeSnapshotSpec("NUMBER", null, 20, 0);
         }
         else if (columnType == ColumnType.LONG) {
-            return new ColumnTypeSnapshotSpec("bigint");
+            return new ColumnTypeSnapshotSpec("NUMBER", null, 38, 0);
         }
         else if (columnType == ColumnType.FLOAT) {
-            return new ColumnTypeSnapshotSpec("real");
+            return new ColumnTypeSnapshotSpec("BINARY_FLOAT");
         }
         else if (columnType == ColumnType.BOOLEAN) {
-            return new ColumnTypeSnapshotSpec("boolean");
+            return new ColumnTypeSnapshotSpec("NUMBER", null, 1, 0);
         }
         else if (columnType == ColumnType.STRING) {
-            return new ColumnTypeSnapshotSpec("varchar");
+            return new ColumnTypeSnapshotSpec("NVARCHAR2", 255);
         }
         else if (columnType == ColumnType.DOUBLE) {
-            return new ColumnTypeSnapshotSpec("double precision");
+            return new ColumnTypeSnapshotSpec("BINARY_DOUBLE");
         }
         else if (columnType == ColumnType.LOCAL_DATE) {
-            return new ColumnTypeSnapshotSpec("date");
+            return new ColumnTypeSnapshotSpec("DATE");
         }
         else if (columnType == ColumnType.LOCAL_TIME) {
-            return new ColumnTypeSnapshotSpec("time without time zone");
+            return new ColumnTypeSnapshotSpec("TIMESTAMP");
         }
         else if (columnType == ColumnType.LOCAL_DATE_TIME) {
-            return new ColumnTypeSnapshotSpec("timestamp without time zone");
+            return new ColumnTypeSnapshotSpec("TIMESTAMP");
         }
         else if (columnType == ColumnType.INSTANT) {
-            return new ColumnTypeSnapshotSpec("timestamp with time zone");
+            return new ColumnTypeSnapshotSpec("TIMESTAMP WITH TIME ZONE");
         }
         else if (columnType == ColumnType.TEXT) {
-            return new ColumnTypeSnapshotSpec("text");
+            return new ColumnTypeSnapshotSpec("NCLOB");
         }
         else {
             throw new NoSuchElementException("Unsupported column type: " + columnType.name());

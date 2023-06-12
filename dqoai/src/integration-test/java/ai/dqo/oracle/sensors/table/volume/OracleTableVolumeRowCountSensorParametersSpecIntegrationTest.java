@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sqlserver.sensors.table.volume;
+package ai.dqo.oracle.sensors.table.volume;
 
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.table.checkspecs.volume.TableRowCountCheckSpec;
@@ -25,12 +25,13 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.oracle.BaseOracleIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
-import ai.dqo.sqlserver.BaseSqlServerIntegrationTest;
+import ai.dqo.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class SqlServerTableVolumeRowCountSensorParametersSpecSqlServerIntegrationTest extends BaseSqlServerIntegrationTest {
+public class OracleTableVolumeRowCountSensorParametersSpecIntegrationTest extends BaseOracleIntegrationTest {
     private TableVolumeRowCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TableRowCountCheckSpec checkSpec;
@@ -46,7 +47,7 @@ public class SqlServerTableVolumeRowCountSensorParametersSpecSqlServerIntegratio
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.sqlserver);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.oracle);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableVolumeRowCountSensorParametersSpec();
@@ -67,7 +68,7 @@ public class SqlServerTableVolumeRowCountSensorParametersSpecSqlServerIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24L, resultTable.column(0).get(0));
+        Assertions.assertEquals(24L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -80,7 +81,7 @@ public class SqlServerTableVolumeRowCountSensorParametersSpecSqlServerIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24L, resultTable.column(0).get(0));
+        Assertions.assertEquals(24L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -93,7 +94,7 @@ public class SqlServerTableVolumeRowCountSensorParametersSpecSqlServerIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24L, resultTable.column(0).get(0));
+        Assertions.assertEquals(24L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -106,7 +107,7 @@ public class SqlServerTableVolumeRowCountSensorParametersSpecSqlServerIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(24, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1L, resultTable.column(0).get(0));
+        Assertions.assertEquals(1L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -119,6 +120,6 @@ public class SqlServerTableVolumeRowCountSensorParametersSpecSqlServerIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24L, resultTable.column(0).get(0));
+        Assertions.assertEquals(24L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 }

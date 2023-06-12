@@ -21,6 +21,7 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.sensors.column.strings.ColumnStringsStringMatchRegexPercentSensorParametersSpec;
+import ai.dqo.utils.docs.ProviderTypeModel;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +58,9 @@ public class SensorDocumentationModelFactoryImplTests extends BaseTest {
 
         Assertions.assertNotNull(sensorDocumentation.getSqlTemplates());
         Assertions.assertEquals(6,sensorDocumentation.getSqlTemplates().keySet().size());
-        Assertions.assertTrue(sensorDocumentation.getSqlTemplates().keySet().stream().anyMatch(k->Objects.equals("bigquery", k)));
+        Assertions.assertTrue(sensorDocumentation.getSqlTemplates().keySet().stream()
+                .map(ProviderTypeModel::getProviderTypeName)
+                .anyMatch(provider -> provider.equals("bigquery")));
         Assertions.assertEquals(6,sensorDocumentation.getSqlTemplates().values().size());
 
         Assertions.assertNotNull(sensorDocumentation.getDefinition());
